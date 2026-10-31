@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+<path d="M -20 60 L 5.391 43.859 L 41.875 40.125 L 82.422 42.328 L 120 44 L 153.672 44.062 L 186.875 45.75 L 219.141 49.062 L 250 54 L 279.844 60.375 L 308.75 68.25 L 335.781 78 L 360 90 L 381.484 104.875 L 400.625 122.25 L 416.953 141 L 430 160 L 450 181.172 L 473.75 204.375 L 480.625 225.391 L 450 240 L 355.938 249.844 L 216.25 256.25 L 75.938 254.531 L -20 240 L -56.328 203.812 L -58.125 151 L -40.859 97.688 Z" fill="#4B4B4B" stroke="none"/>
+<path d="M -20 110 L 5.859 96.203 L 43.125 90.375 L 83.828 88.859 L 120 88 L 150.547 87.328 L 179.375 88.625 L 206.016 91.609 L 230 96 L 251.25 101.844 L 270 109.25 L 286.25 118.031 L 300 128 L 311.25 139.406 L 320 152.25 L 326.25 165.969 L 330 180 L 338.047 195.844 L 348.125 213.25 L 346.641 229.031 L 320 240 L 250.234 247.266 L 149.375 251.875 L 48.828 250.547 L -20 240 L -47.188 214.109 L -50 176.375 L -37.812 137.953 Z" fill="#646464" stroke="none"/>
+<path d="M 350.455 113.623 L 353.812 107.86 L 357.2 102.661 L 360.88 97.518 L 364.82 92.402 L 368.995 87.288 L 373.378 82.155 L 377.942 76.981 L 382.657 71.743 L 387.495 66.417 L 392.423 60.977 L 397.412 55.399 L 402.43 49.657 L 407.446 43.725 L 412.429 37.576 L 417.35 31.185 L 422.179 24.528 L 426.888 17.578 L 431.453 10.313 L 435.849 2.706 L 439.95 -5.101 L 424.85 -14.899 L 419.609 -8.311 L 414.361 -2.325 L 409.015 3.265 L 403.581 8.501 L 398.069 13.428 L 392.485 18.088 L 386.834 22.523 L 381.122 26.774 L 375.352 30.884 L 369.527 34.893 L 363.651 38.843 L 357.727 42.776 L 351.759 46.735 L 345.752 50.762 L 339.711 54.903 L 333.644 59.203 L 327.558 63.706 L 321.462 68.458 L 315.359 73.495 L 309.545 78.377 Z" fill="#969696" stroke="none"/>
+<path d="M 355.518 101.553 L 323.144 69.566" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 367.703 86.101 L 341.003 56.09" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 381.659 70.586 L 358.725 43.933" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 396.612 54.344 L 376.152 31.939" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 411.754 36.67 L 393.16 18.994" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 426.294 16.853 L 409.61 3.99" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 160.4 153.6 L 165.016 155.186 L 171 157.612 L 178.109 160.533 L 186.1 163.6 L 194.728 166.467 L 203.75 168.787 L 212.922 170.214 L 222 170.4 L 231.801 169.054 L 242.906 166.381 L 254.721 162.78 L 266.65 158.65 L 278.098 154.388 L 288.469 150.394 L 297.168 147.065 L 303.6 144.8" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 154.8 155.7 L 159.872 157.535 L 166.488 160.33 L 174.353 163.693 L 183.169 167.231 L 192.638 170.553 L 202.465 173.266 L 212.351 174.979 L 222 175.3 L 232.245 173.912 L 243.727 171.052 L 255.857 167.16 L 268.05 162.675 L 279.718 158.037 L 290.273 153.686 L 299.13 150.06 L 305.7 147.6" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 149.2 157.8 L 154.728 159.885 L 161.977 163.048 L 170.597 166.853 L 180.237 170.863 L 190.549 174.639 L 201.18 177.745 L 211.78 179.745 L 222 180.2 L 232.689 178.769 L 244.547 175.722 L 256.993 171.539 L 269.45 166.7 L 281.338 161.686 L 292.078 156.978 L 301.092 153.056 L 307.8 150.4" fill="none" stroke="#7D7D7D" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 160 140 L 162.48 136.041 L 167.68 131.444 L 174.64 126.774 L 182.4 122.593 L 190 119.464 L 197.6 117.463 L 205.84 116.215 L 214.48 115.605 L 223.28 115.519 L 232 115.84 L 241.152 116.713 L 250.896 118.214 L 260.464 120.128 L 269.088 122.24 L 276 124.336 L 280.944 126.653 L 284.432 129.333 L 286.848 132.022 L 288.576 134.363 L 290 136 L 291.344 136.49 L 292.352 136.072 L 292.688 135.408 L 292.016 135.163 L 290 136 L 286.416 138.304 L 281.488 141.632 L 275.552 145.408 L 268.944 149.056 L 262 152 L 254.432 154.336 L 246.016 156.448 L 237.184 158.192 L 228.368 159.424 L 220 160 L 211.888 159.824 L 203.744 158.992 L 195.856 157.648 L 188.512 155.936 L 182 154 L 175.744 151.817 L 169.552 149.29 L 164.288 146.455 L 160.816 143.346 Z" fill="#969696" stroke="none"/>
+<path d="M 247 140 L 246.577 144.292 L 245.325 148.419 L 243.292 152.223 L 240.556 155.556 L 237.223 156 L 233.419 156 L 229.292 156 L 225 156 L 220.708 156 L 216.581 156 L 212.777 156 L 209.444 155.556 L 206.708 152.223 L 204.675 148.419 L 203.423 144.292 L 203 140 L 203.423 135.708 L 204.675 131.581 L 206.708 127.777 L 209.444 124.444 L 212.777 121.708 L 216.581 119.675 L 220.708 118.423 L 225 118 L 229.292 118.423 L 233.419 119.675 L 237.223 121.708 L 240.556 124.444 L 243.292 127.777 L 245.325 131.581 L 246.577 135.708 Z" fill="#323232" stroke="none"/>
+<path d="M 208 136 L 242 136 L 242 144 L 208 144 Z" fill="#000000" stroke="none"/>
+<path d="M 238.368 130 L 238.051 131.184 L 237.184 132.051 L 236 132.368 L 234.816 132.051 L 233.949 131.184 L 233.632 130 L 233.949 128.816 L 234.816 127.949 L 236 127.632 L 237.184 127.949 L 238.051 128.816 Z" fill="#CDCDCD" stroke="none"/>
+<path d="M 160 140 L 163.125 137.57 L 167.333 134.049 L 172.375 129.958 L 178 125.817 L 183.958 122.146 L 190 119.464 L 196.282 117.741 L 203.037 116.554 L 210.125 115.838 L 217.407 115.524 L 224.745 115.547 L 232 115.84 L 239.565 116.518 L 247.63 117.657 L 255.75 119.133 L 263.481 120.82 L 270.38 122.596 L 276 124.336 L 280.231 126.232 L 283.407 128.421 L 285.75 130.699 L 287.481 132.859 L 288.824 134.694 L 290 136" fill="none" stroke="#AFAFAF" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 167.333 134.049 L 173.813 125.289" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 183.958 122.146 L 190.818 113.576" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 196.282 117.741 L 203.522 109.361" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 210.125 115.838 L 217.745 107.648" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 232 115.84 L 240 107.84" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 247.63 117.657 L 256.01 109.847" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 263.481 120.82 L 272.241 113.2" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 276 124.336 L 285.14 116.906" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 285.75 130.699 L 295.27 123.459" fill="none" stroke="#AFAFAF" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 157.117 195.504 L 162.117 192.504" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 216.587 167.7 L 221.587 164.7" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 13.367 180.237 L 18.367 177.237" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 94.955 203.759 L 99.955 200.759" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 224.084 192.479 L 229.084 189.479" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 183.039 195.711 L 188.039 192.711" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 55.044 183.763 L 60.044 180.763" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 60.303 208.923 L 65.303 205.923" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 28.236 204.216 L 33.236 201.216" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 33.129 197.095 L 38.129 194.095" fill="none" stroke="#7D7D7D" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+<g id="preview_header">
+<rect x="0" y="0" width="480" height="38" fill="#000000" stroke="none"/>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">spread</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">1.03</text>
+<text transform="matrix(1 0 0 1 5 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">shape</text>
+<text transform="matrix(1 0 0 1 65 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">fold</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">18</text>
+<text transform="matrix(1 0 0 1 125 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">noise</text>
+<text transform="matrix(1 0 0 1 185 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">cutoff</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">55</text>
+<text transform="matrix(1 0 0 1 245 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">drive</text>
+<text transform="matrix(1 0 0 1 305 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">res</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">24</text>
+<text transform="matrix(1 0 0 1 365 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">aphx</text>
+<text transform="matrix(1 0 0 1 425 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+</g>
+</svg>
