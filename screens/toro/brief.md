@@ -136,7 +136,9 @@ Unchanged from the current port: 2 paths (now used for the ecliptic instead of p
 | --- | --- |
 | at rest | **0** (no idle comet, no twinkle without notes, nothing easing) |
 | turning a control | the nodes on that control's row above, for 0.15–0.2 s; fold re-keys 2 paths once per detent |
-| playing, defaults, 16ths at 120 BPM | avg ~12 · peak ~19 (Aldebaran 3, ecliptic shade 2, Pleiades 7, ≤ 3 twinkles) |
-| playing, heaviest (noise, res, aphx 100) | avg ~17 · peak ~22 (adds 2 comets × 2 nodes; twinkle capped at 3 changes per frame) |
+| playing, defaults, 16ths at 120 BPM | avg 11.7 · peak 16 |
+| sweeping one control with notes playing | avg 12.4–15.6 · peak 16–20, except res |
+| sweeping res with notes playing (heaviest) | avg 19.8 · peak 24 |
+| after the last note | 0 within ~1 s (comets finish their flight) |
 
-Estimates from the motion spec; **measure on the host** with `display()` before submitting.
+Measured in the prototype model (`prototype.html`, 60 fps, quantised to 1/1024 px), not on the device. Res is the heaviest: the Pleiades (7) and ring (8) move together while the cluster turns. If the host measurement agrees, drop the ring's scale during a note turn to bring the peak under ~20. **Confirm on the host** with `display()` before submitting.

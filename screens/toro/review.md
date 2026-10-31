@@ -31,7 +31,7 @@ Evidence is a frame name in `frames/`, a number, or a tool result. **Pending dev
 | Contact sheet of every control at 0, 50, 100, at 1:1, in the device font | done at 1:1; text renders in a fallback font locally, **device font pending** |
 | Every caption measured | estimated; **pending device** |
 | Outlines checked across a sweep of every control and every pair | single-control sweeps linted; pairs not yet. The ecliptic is the only reshaping outline and depends on fold alone, so pairs can't change its topology. **Pending: run `sdk.py test` preview frames** |
-| Redraw measured at the heaviest setting | estimated ~17 avg / ~22 peak; **pending host measurement** |
+| Redraw measured at the heaviest setting | prototype model: res sweep 19.8 avg / 24 peak, others ≤ 15.6 avg; **host `display()` measurement pending** |
 | Photos on a device | **pending device** |
 | CPU readout | unchanged DSP; **pending device** per profiling.md |
 | Presets by ear, clean defaults | defaults pass; presets **pending device**; see the APHX parity note in the brief |

@@ -1,0 +1,468 @@
+<title>Toro Taurus Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a hardware bench. The 1:1 screen sits in a matte panel; the stepped-grey bar from the
+   OP-XY header becomes the page's motif for encoders and the redraw meter. Single dark theme by choice:
+   the subject is a black screen on a black instrument. */
+:root {
+  color-scheme: dark;
+  --bg: #111213;
+  --panel: #1a1b1d;
+  --well: #000000;
+  --line: #2b2d30;
+  --fg: #d6d7d8;
+  --muted: #8c9095;
+  --accent: #a9bcc8;       /* steel: page UI only, never on the device screen */
+  --warn: #d3a24f;         /* over budget */
+  --display: "Archivo", "Helvetica Neue", Arial Narrow, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Helvetica, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 22px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+h1 { margin: 0; font-family: var(--display); font-stretch: 72%; font-weight: 600; font-size: 34px; letter-spacing: 0.01em; text-transform: lowercase; text-wrap: balance; }
+h1 span { color: var(--muted); font-weight: 300; }
+.sub { color: var(--muted); max-width: 62ch; margin: 0; }
+
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; align-items: start; }
+@media (max-width: 900px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 14px; min-width: 0; }
+.screenwell { overflow-x: auto; background: linear-gradient(#0b0b0c, #050505); border-radius: 4px; padding: 14px; }
+.screenwell svg { display: block; background: var(--well); }
+.caption { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; min-height: 2.9em; }
+.caption .phase { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.04em; text-transform: lowercase; }
+.caption .what { color: var(--fg); }
+
+.transport { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+button, .seg label { font: 500 13px/1 var(--mono); color: var(--fg); background: #232528; border: 1px solid var(--line); border-radius: 4px; padding: 9px 12px; cursor: pointer; text-transform: lowercase; }
+button:hover, .seg label:hover { border-color: #44484d; }
+button:focus-visible, .seg input:focus-visible + label, input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--accent); color: #0d1114; border-color: var(--accent); }
+.seg { display: inline-flex; border: 0; padding: 0; margin: 0; gap: 0; }
+.seg legend { font: 11px var(--mono); color: var(--muted); text-transform: lowercase; letter-spacing: 0.06em; padding: 0 0 4px; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label { border-radius: 0; margin-left: -1px; }
+.seg label:first-of-type { border-radius: 4px 0 0 4px; margin-left: 0; }
+.seg label:last-of-type { border-radius: 0 4px 4px 0; }
+.seg input:checked + label { background: var(--accent); color: #0d1114; border-color: var(--accent); }
+.field { display: grid; gap: 4px; }
+
+.encoders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 12px; }
+@media (max-width: 560px) { .encoders { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.enc { display: grid; gap: 4px; padding: 8px 10px; border-radius: 4px; background: #141517; border-top: 3px solid var(--step); }
+.enc.p2 { opacity: 0.86; }
+.enc .top { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; }
+.enc .top b { font-weight: 500; color: var(--fg); }
+.enc .top span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.enc.live { box-shadow: inset 0 0 0 1px var(--accent); }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.pagelabel { font: 11px var(--mono); color: var(--muted); text-transform: lowercase; letter-spacing: 0.06em; grid-column: 1 / -1; margin-top: 2px; }
+
+.meter .big { display: flex; align-items: baseline; gap: 10px; }
+.meter .num { font: 500 54px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.meter .num.over { color: var(--warn); }
+.meter .unit { color: var(--muted); font-size: 13px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-family: var(--mono); font-size: 12px; }
+.stats div { display: grid; gap: 2px; }
+.stats span { color: var(--muted); text-transform: lowercase; }
+.stats b { font-weight: 500; font-size: 16px; font-variant-numeric: tabular-nums; }
+canvas { width: 100%; height: 64px; display: block; }
+.note { color: var(--muted); font-size: 13px; margin: 0; }
+h2 { margin: 0; font: 600 13px var(--mono); text-transform: lowercase; letter-spacing: 0.06em; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>toro <span>/ taurus, revised</span></h1>
+    <p class="sub">The OP-XY screen at 1:1, running the same model as the frames. It sweeps each control 0 → 100 with notes playing and counts the nodes the device would redraw each frame.</p>
+  </header>
+
+  <div class="bench">
+    <section class="panel" aria-label="Screen">
+      <div class="screenwell" id="well"><svg id="screen" width="480" height="220" viewBox="0 0 480 220" role="img" aria-label="Toro's Taurus screen"></svg></div>
+      <div class="caption" aria-live="polite"><span class="phase" id="phase">rest</span><span class="what" id="what"></span></div>
+      <div class="transport">
+        <button id="play" aria-pressed="true">sweep</button>
+        <button id="notes" aria-pressed="false">notes</button>
+        <fieldset class="seg"><legend>tempo</legend>
+          <input type="radio" name="tempo" id="t8" value="0.25"><label for="t8">8ths</label>
+          <input type="radio" name="tempo" id="t16" value="0.125" checked><label for="t16">16ths</label>
+        </fieldset>
+        <fieldset class="seg"><legend>labels</legend>
+          <input type="radio" name="labels" id="lf" value="full" checked><label for="lf">full</label>
+          <input type="radio" name="labels" id="lm" value="minimal"><label for="lm">minimal</label>
+          <input type="radio" name="labels" id="ln" value="none"><label for="ln">none</label>
+        </fieldset>
+        <fieldset class="seg"><legend>size</legend>
+          <input type="radio" name="zoom" id="z1" value="1" checked><label for="z1">1:1</label>
+          <input type="radio" name="zoom" id="z2" value="2"><label for="z2">2×</label>
+        </fieldset>
+        <button id="rm" aria-pressed="false">reduced motion</button>
+      </div>
+      <div class="encoders" id="encoders"></div>
+    </section>
+
+    <aside class="panel meter" aria-label="Redraw meter">
+      <h2>changed nodes this frame</h2>
+      <div class="big"><span class="num" id="now">0</span><span class="unit">of 68 · budget ~20</span></div>
+      <canvas id="spark" width="600" height="128" aria-label="Changed nodes over the last few seconds"></canvas>
+      <div class="stats">
+        <div><span>avg 1 s</span><b id="avg">0</b></div>
+        <div><span>peak 4 s</span><b id="peak">0</b></div>
+        <div><span>text slots</span><b id="texts">0</b></div>
+      </div>
+      <p class="note">Counts nodes whose position, turn, scale, shade or visibility changed since the last frame, quantised to the device's 1/1024 px. Fold re-keys the two ecliptic outlines. Header text slots are counted separately. Browser timing isn't device timing; measure <code>display()</code> on the host before submitting.</p>
+    </aside>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+const NS = "http://www.w3.org/2000/svg";
+const G = ["#000000", "#323232", "#4B4B4B", "#646464", "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD"];
+const grey = l => G[Math.max(0, Math.min(7, Math.round(l * 7)))];
+
+// ---- model constants: screens/toro/gen_frames.py (geometry from labyrinth gen_panel.py, MIT) ----
+const CX = 240, CY = 134;
+const STARS = { ald: [18, 2, 3.6], g1: [-6, -14, 2.1], g2: [-26, -24, 1.8], g3: [-4, 16, 1.9], g4: [-28, 28, 1.7],
+  beta: [110, -56, 2.7], zeta: [96, 44, 2.3], back: [-70, -6, 1.6], tail: [-150, 22, 1.6] };
+const ORDER = ["g1", "g2", "g3", "g4", "beta", "zeta", "back", "tail"];
+const JOINS = [["ald", "g1"], ["g1", "g2"], ["ald", "g3"], ["g3", "g4"], ["g1", "beta"], ["g3", "zeta"], ["g2", "back"], ["g4", "back"], ["back", "tail"]];
+const JOIN_AUTH = [30, 30, 30, 30, 100, 100, 30, 30, 100];
+const PLE = [CX - 120, CY - 28];
+const PLE7 = [[-8, -4, 1.8], [-2, -7, 1.7], [5, -5, 1.9], [9, 1, 1.7], [3, 5, 1.8], [-5, 6, 1.7], [0, 0, 2.1]];
+const ECL = { y: 204, a: 11, x0: 24, x1: 456, half: 0.9 };
+const COMET_HEAD = [432, 152], COMET_DIR = -75;
+const BAND_A = [0, 124], BAND_B = [150, 52], BAND_SPREAD = 12;
+const FIELD = [[93.682,114.548],[51.673,87.442],[50.071,153.254],[463.738,173.419],[253.169,55.742],[96.257,79.453],[21.958,108.311],[239.895,134.118],[220.201,84.161],[470.912,177.44],[397.86,140.015],[154.289,77.857],[142.115,57.129],[8.253,75.263],[41.89,129.829],[48.435,91.236],[62.748,80.03],[267.513,106.165],[96.478,143.146],[68.769,131.683],[62.06,102.698],[106.77,83.073]];
+const TWINKLE = [[149.12,163.03],[404.43,131.44],[54.55,176.61],[106.94,81.58],[145.49,57.54],[49.81,123.76],[180.47,106.92],[92.83,68.04],[123.77,72.67],[99.22,171.52],[203.56,61.5],[25.96,173.15]];
+const CONTROLS = ["spread", "fold", "cutoff", "res", "shape", "noise", "drive", "aphx"];
+const DEFAULTS = { spread: 0.06, fold: 0.18, cutoff: 0.55, res: 0.24, shape: 0, noise: 0, drive: 0, aphx: 0 };
+const WHAT = {
+  spread: "β and ζ, the horn stars, move out from the head",
+  fold: "the ecliptic folds back on itself, 1× to 8×",
+  cutoff: "Aldebaran grows from a point to a blaze",
+  res: "the Pleiades pull tight and their ring lights",
+  shape: "the horn tips lift",
+  noise: "more field stars come out",
+  drive: "the Milky Way spreads into three lines and brightens",
+  aphx: "the standing comet's tail lengthens and tangles",
+};
+
+// ---- geometry helpers ----
+const f = v => (Math.round(v * 1000) / 1000).toString();
+const poly = pts => "M " + pts.map(([x, y]) => f(x) + " " + f(y)).join(" L ") + " Z";
+const dot = (r, n = 10) => Array.from({ length: n }, (_, k) => [Math.cos(k * 2 * Math.PI / n) * r, Math.sin(k * 2 * Math.PI / n) * r]);
+const spike = (r, inner = 0.35) => Array.from({ length: 8 }, (_, k) => { const a = -Math.PI / 2 + k * Math.PI / 4, rr = k % 2 ? r * inner : r; return [Math.cos(a) * rr, Math.sin(a) * rr]; });
+function ringPts(r, w, n = 24) {
+  const out = [], inn = [];
+  for (let k = 0; k < n; k++) { const a = k * 2 * Math.PI / n; out.push([Math.cos(a) * (r + w / 2), Math.sin(a) * (r + w / 2)]); inn.push([Math.cos(a) * (r - w / 2), Math.sin(a) * (r - w / 2)]); }
+  return out.slice(0, -1).concat(inn.slice(0, -1).reverse());
+}
+function ribbon(pts, w) {
+  const ns = pts.map((_, i) => { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)]; const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [-dy / l * w / 2, dx / l * w / 2]; });
+  return pts.map(([x, y], i) => [x + ns[i][0], y + ns[i][1]]).concat(pts.map(([x, y], i) => [x - ns[i][0], y - ns[i][1]]).reverse());
+}
+const taper = (len, w0, w1) => [[0, -w0 / 2], [len, -w1 / 2], [len, w1 / 2], [0, w0 / 2]];
+function foldSignal(s) { while (s > 1 || s < -1) s = s > 1 ? 2 - s : -2 - s; return s; }
+
+// ---- screen setup: static sky, then nodes in the panel's order ----
+const svg = document.getElementById("screen");
+const el = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+el("rect", { x: 0, y: 0, width: 480, height: 220, fill: "#000000" });
+for (let k = 1; k <= 3; k++) {
+  const y = 52 + k * 40, pts = [];
+  for (let x = 0; x <= 480; x += 30) pts.push([x, y - 8 * Math.sin(Math.PI * x / 480)]);
+  el("path", { d: poly(ribbon(pts, 1)), fill: G[1] });
+}
+for (const [x, y] of FIELD) el("path", { d: poly(dot(1.6, 6)), transform: `translate(${x} ${y})`, fill: G[2] });
+const labelGroups = {};
+const LABELS = [
+  ["TAURUS", 16, 62, 13, G[6], "start", ["full", "minimal"]],
+  ["α Aldebaran", CX + 28, CY + 5.5, 10, G[4], "start", ["full"]],
+  ["α", CX + 28, CY + 5.5, 10, G[4], "start", ["minimal"]],
+  ["ο", CX - 154, CY + 36, 10, G[4], "end", ["full"]],
+  ["Pleiades", PLE[0], PLE[1] + 28, 10, G[4], "middle", ["full"]],
+];
+const labelEls = LABELS.map(([t, x, y, size, fill, anchor, sets]) => {
+  const e = el("text", { x, y, fill, "font-size": size, "text-anchor": anchor, "font-family": "UniversNextPro-Light, Helvetica Neue, Helvetica, Arial, sans-serif", "font-weight": 300 });
+  e.textContent = t; return { e, sets };
+});
+
+// nodes: each authored once at its origin; frames change only transform, fill and visibility (retained drawing)
+const nodes = [];
+function node(pts, extra = {}) { const e = el("path", Object.assign({ d: poly(pts), fill: G[5] }, extra)); const n = { e, key: "" }; nodes.push(n); return n; }
+const band = [0, 1, 2].map(() => node(ribbon([[0, 0], [BAND_B[0] - BAND_A[0], BAND_B[1] - BAND_A[1]]], 2)));
+const ecl = [0, 1].map(() => { const e = el("path", { d: "", fill: "none", stroke: G[5], "stroke-width": 1.5 }); const n = { e, key: "", path: true }; nodes.push(n); return n; });
+const aldSpike = node(spike(6)), aldCore = node(dot(2.52)), aldHalo = node(ringPts(8, 1.2));
+const stars = ORDER.map(n => node(dot(STARS[n][2]), { fill: G[6] }));
+const joins = JOIN_AUTH.map(len => node(ribbon([[0, 0], [len, 0]], 1.4), { fill: G[3] }));
+const ple = PLE7.map(([, , r]) => node(dot(r), { fill: G[6] }));
+const ring = Array.from({ length: 8 }, (_, k) => { const a = k * 2 * Math.PI / 8; return node(ribbon([0, 0.22, 0.44].map(t => [Math.cos(a + t) * 17, Math.sin(a + t) * 12]), 1.4)); });
+const cseg = [0, 1, 2].map(k => node(taper(14, 2.6 - 0.6 * k, 2.0 - 0.6 * k)));
+const chead = node(dot(2.4));
+const comets = [0, 1].map(() => ({ tail: node([[0, -1.6], [-26, -0.9], [-48, -0.4], [-48, 0.4], [-26, 0.9], [0, 1.6]]), head: node(dot(2.2), { fill: G[7] }) }));
+const twinkles = TWINKLE.map(() => node(dot(2.0)));
+
+// header preview (two pages, page 1 edited): stock bar and 16 text slots
+const hdr = el("g", {});
+el("rect", { x: 0, y: 0, width: 480, height: 38, fill: "#000000" }, hdr);
+G.forEach((c, i) => el("rect", { x: 60 * i, y: 0, width: 60, height: 20, fill: c }, hdr));
+const slotFont = "UniversNextPro-Light, Helvetica Neue, Helvetica, Arial, sans-serif";
+const hdrText = { title: [], value: [], title2: [], value2: [] };
+for (let col = 0; col < 4; col++) {
+  const light = col < 2 ? "#CBCBCB" : "#000000";
+  const mk = (x, y, size, fill, txt) => { const e = el("text", { x, y, "font-size": size, fill, "font-family": slotFont, "font-weight": 300 }, hdr); e.textContent = txt; return e; };
+  hdrText.title.push(mk(5 + 120 * col, 10, 10, light, CONTROLS[col]));
+  hdrText.value.push(mk(65 + 120 * col, 17.4, 20, light, ""));
+  hdrText.title2.push(mk(5 + 120 * col, 33, 10, "#5A5A5A", CONTROLS[col + 4]));
+  hdrText.value2.push(mk(65 + 120 * col, 33, 13, "#707070", ""));
+}
+
+// ---- state ----
+const target = Object.assign({}, DEFAULTS), eased = Object.assign({}, DEFAULTS);
+const S = { notes: false, interval: 0.125, reduced: false, sweeping: true, t: 0, serial: 0, noteAge: 9, held: false,
+  pleBase: 0, pleTarget: 0, comets: [null, null], lit: new Array(12).fill(false), litAt: new Array(12).fill(-9), clock: 0, nextNote: 0, foldKey: "" };
+const q = v => Math.round(v * 1024) / 1024;
+
+// ---- sweep timeline ----
+const PHASES = [{ name: "rest", dur: 2.5, notes: false }, { name: "playing", dur: 3, notes: true }]
+  .concat(CONTROLS.map(c => ({ name: c, control: c, dur: 4.8, notes: true })));
+const TOTAL = PHASES.reduce((a, p) => a + p.dur, 0);
+function sweepAt(t) {
+  let tt = t % TOTAL;
+  for (const p of PHASES) { if (tt < p.dur) return [p, tt]; tt -= p.dur; }
+  return [PHASES[0], 0];
+}
+function keyframe(def, u) {   // default → 0 → hold → 100 → hold → default, over 4.8 s
+  const k = [[0, def], [0.8, 0], [1.2, 0], [3.0, 1], [3.6, 1], [4.8, def]];
+  for (let i = 1; i < k.length; i++) if (u <= k[i][0]) { const [t0, v0] = k[i - 1], [t1, v1] = k[i]; return v0 + (v1 - v0) * (u - t0) / (t1 - t0); }
+  return def;
+}
+
+// ---- the frame: mirrors display.cpp per motion.md ----
+function hash(n) { let x = Math.sin(n * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); }
+function place(n, x, y, a, s, fill, visible = true) {
+  const key = visible ? `${q(x)},${q(y)},${Math.round(a * 10)},${q(s)},${fill}` : "hidden";
+  if (key === n.key) return 0;
+  n.key = key;
+  if (!visible) { n.e.setAttribute("visibility", "hidden"); return 1; }
+  n.e.setAttribute("visibility", "visible");
+  n.e.setAttribute("transform", `translate(${f(x)} ${f(y)}) rotate(${f(a)}) scale(${f(s)})`);
+  n.e.setAttribute("fill", fill);
+  return 1;
+}
+
+function frame(dt) {
+  S.clock += dt;
+  // controls ease (0.15 s settle) or jump under reduced motion
+  for (const c of CONTROLS) {
+    if (S.reduced) eased[c] = target[c];
+    else { eased[c] += (target[c] - eased[c]) * (1 - Math.exp(-dt / 0.035)); if (Math.abs(target[c] - eased[c]) < 0.0015) eased[c] = target[c]; }
+  }
+  // notes
+  let noteOn = false;
+  if (S.notes) {
+    S.nextNote -= dt;
+    if (S.nextNote <= 0) { S.nextNote += S.interval; S.serial++; noteOn = true; S.noteAge = 0; }
+    S.held = (S.interval - S.nextNote) < S.interval * 0.55;
+  } else { S.held = false; S.nextNote = 0; }
+  if (!noteOn) S.noteAge += dt;
+  const v = eased, motion = !S.reduced;
+  const flareK = motion ? Math.exp(-S.noteAge / 0.045) : 0;   // settles inside 0.2 s
+  let changed = 0;
+
+  // drive: Milky Way
+  const d = v.drive * BAND_SPREAD, dx = BAND_B[0] - BAND_A[0], dy = BAND_B[1] - BAND_A[1], ln = Math.hypot(dx, dy), px = -dy / ln, py = dx / ln;
+  [-1, 0, 1].forEach((off, k) => {
+    const shade = off === 0 ? grey((2 + 3 * v.drive) / 7) : grey((1 + 2 * v.drive) / 7);
+    changed += place(band[k], BAND_A[0] + px * d * off, BAND_A[1] + py * d * off, 0, 1, shade);
+  });
+
+  // fold: the ecliptic re-keys only when fold's detent value changes; a note flares its shade
+  const foldKey = Math.round(v.fold * 100).toString();
+  const eclShade = grey((5 + 2 * flareK) / 7);
+  const gain = 1 + 7 * Math.round(v.fold * 100) / 100;
+  [[ECL.x0, 240], [240, ECL.x1]].forEach(([x0, x1], half) => {
+    const n = ecl[half];
+    const rekey = n.fold !== foldKey, reshade = n.shade !== eclShade;
+    if (rekey) {
+      const pts = [];
+      for (let k = 0; k < 32; k++) { const x = x0 + (x1 - x0) * k / 31, u = (x - ECL.x0) / (ECL.x1 - ECL.x0); pts.push([x, ECL.y - ECL.a * foldSignal(gain * Math.sin(Math.PI * u))]); }
+      n.e.setAttribute("d", poly(ribbon(pts, 2 * ECL.half)));
+      n.fold = foldKey;
+    }
+    if (reshade) { n.e.setAttribute("stroke", eclShade); n.shade = eclShade; }
+    if (rekey || reshade) changed++;
+  });
+
+  // spread + shape: horn stars
+  const pos = {};
+  for (const name in STARS) {
+    let [sx, sy] = STARS[name], x = CX + sx, y = CY + sy;
+    if (name === "beta" || name === "zeta") { x += v.spread * 44; y += (name === "beta" ? -8 : 2) * v.spread - v.shape * 22; }
+    pos[name] = [x, y];
+  }
+  // cutoff: Aldebaran
+  const flare = 0.6 * flareK, mag = 0.5 + 1.4 * v.cutoff + flare, [ax, ay] = pos.ald;
+  const sk = Math.min(2, 0.3 + 1.2 * v.cutoff + flare);
+  changed += place(aldSpike, ax, ay, 0, (3.6 * sk + 2) / 6, grey((2 + 5 * v.cutoff) / 7));
+  changed += place(aldCore, ax, ay, 0, Math.max(1.7, 2.52 * Math.min(2, mag)) / 2.52, G[7]);
+  changed += place(aldHalo, ax, ay, 0, Math.max(0.5, Math.min(2, mag)), grey((1 + 3 * v.cutoff + 2 * flareK) / 7));
+  ORDER.forEach((name, k) => { changed += place(stars[k], pos[name][0], pos[name][1], 0, 1, G[6]); });
+  JOINS.forEach(([a, b], k) => {
+    const [xa, ya] = pos[a], [xb, yb] = pos[b];
+    changed += place(joins[k], xa, ya, Math.atan2(yb - ya, xb - xa) * 180 / Math.PI, Math.hypot(xb - xa, yb - ya) / JOIN_AUTH[k], G[3]);
+  });
+
+  // res: Pleiades tighten; a note gives a short decelerating turn
+  if (noteOn && motion) { S.pleBase += S.pleTarget; S.pleTarget = 15 + 45 * v.res; }
+  if (!motion) { S.pleBase = 0; S.pleTarget = 0; }
+  const turn = S.pleBase + S.pleTarget * (1 - flareK), tight = 1 - 0.4 * v.res;
+  const c = Math.cos(turn * Math.PI / 180), s = Math.sin(turn * Math.PI / 180);
+  PLE7.forEach(([dx2, dy2], k) => {
+    const rx = dx2 * tight, ry = dy2 * tight;
+    changed += place(ple[k], PLE[0] + rx * c - ry * s, PLE[1] + rx * s + ry * c, 0, 1, flareK > 0.3 ? G[7] : G[6]);
+  });
+  ring.forEach(n => { changed += place(n, PLE[0], PLE[1], 0, tight, grey((1 + 3 * v.res) / 7)); });
+
+  // aphx: standing comet
+  const a = v.aphx, kink = 0.4 * a + 0.6 * a ** 3, segLen = 14 * (1 + kink);
+  let x = COMET_HEAD[0], y = COMET_HEAD[1];
+  cseg.forEach((n, k) => {
+    const heading = COMET_DIR + (k % 2 === 0 ? 1 : -1) * kink * 35 * (k + 1) / 2;
+    changed += place(n, x, y, heading, 1 + kink, grey((1 + 4 * a - 0.5 * k) / 7));
+    x += Math.cos(heading * Math.PI / 180) * segLen; y += Math.sin(heading * Math.PI / 180) * segLen;
+  });
+  changed += place(chead, COMET_HEAD[0], COMET_HEAD[1], 0, 1, grey((3 + 4 * a) / 7));
+
+  // launched comets: a note may send one (odds rise with aphx); none at rest
+  if (noteOn && motion && hash(S.serial) < 0.25 + 0.7 * a) {
+    const slot = S.comets.findIndex(cm => !cm);
+    if (slot >= 0) S.comets[slot] = { t: 0, life: 0.7 + 0.5 * hash(S.serial + 1), x: 40 + 380 * hash(S.serial + 2), y: 50 + 120 * hash(S.serial + 3), ang: 360 * hash(S.serial + 4) };
+  }
+  S.comets.forEach((cm, k) => {
+    const pair = comets[k];
+    if (!cm || !motion) { S.comets[k] = null; changed += place(pair.tail, 0, 0, 0, 1, G[5], false) + place(pair.head, 0, 0, 0, 1, G[7], false); return; }
+    cm.t += dt;
+    const u = cm.t / cm.life;
+    if (u >= 1) { S.comets[k] = null; changed += place(pair.tail, 0, 0, 0, 1, G[5], false) + place(pair.head, 0, 0, 0, 1, G[7], false); return; }
+    const hx = cm.x + Math.cos(cm.ang * Math.PI / 180) * 260 * (u - 0.5), hy = cm.y + Math.sin(cm.ang * Math.PI / 180) * 260 * (u - 0.5);
+    const fade = Math.exp(-u * 2);
+    changed += place(pair.tail, hx, hy, cm.ang, 1, fade > 0.5 ? G[5] : G[3]);
+    changed += place(pair.head, hx, hy, 0, 1, fade > 0.3 ? G[7] : G[6]);
+  });
+
+  // noise: how many field stars are out; while held, up to 3 per frame brighten, each at most every 350 ms
+  const shown = 2 + Math.round(10 * v.noise);
+  let budget = 3;
+  twinkles.forEach((n, k) => {
+    if (k >= shown) { S.lit[k] = false; changed += place(n, TWINKLE[k][0], TWINKLE[k][1], 0, 1, G[5], false); return; }
+    if (motion && S.held && v.noise > 0) {
+      if (budget > 0 && S.clock - S.litAt[k] > 0.35 && hash(k * 31 + Math.floor(S.clock * 6)) < v.noise * 0.5) { S.lit[k] = !S.lit[k]; S.litAt[k] = S.clock; budget--; }
+    } else if (S.lit[k]) { S.lit[k] = false; }
+    changed += place(n, TWINKLE[k][0], TWINKLE[k][1], 0, S.lit[k] ? 1.3 : 1, S.lit[k] ? G[7] : G[5]);
+  });
+
+  // header text slots
+  let texts = 0;
+  const caps = {}; CONTROLS.forEach(k => caps[k] = String(Math.round(target[k] * 100)));
+  caps.spread = (1 + 0.5 * target.spread).toFixed(2);
+  for (let col = 0; col < 4; col++) {
+    for (const [arr, name] of [[hdrText.value, CONTROLS[col]], [hdrText.value2, CONTROLS[col + 4]]]) {
+      if (arr[col].textContent !== caps[name]) { arr[col].textContent = caps[name]; texts++; }
+    }
+  }
+  return [changed, texts];
+}
+
+// ---- UI ----
+const $ = id => document.getElementById(id);
+const encWrap = $("encoders");
+const encs = {};
+const steps = ["#000000", "#323232", "#4B4B4B", "#646464", "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD"];
+[["page 1", 0], ["page 2", 4]].forEach(([label, off]) => {
+  const pl = document.createElement("div"); pl.className = "pagelabel"; pl.textContent = label; encWrap.appendChild(pl);
+  for (let i = 0; i < 4; i++) {
+    const name = CONTROLS[off + i];
+    const box = document.createElement("label");
+    box.className = "enc" + (off ? " p2" : "");
+    box.style.setProperty("--step", steps[Math.min(7, i * 2 + 1)]);
+    box.innerHTML = `<div class="top"><b>${name}</b><span id="v-${name}"></span></div><input type="range" id="r-${name}" min="0" max="100" step="1" aria-label="${name}">`;
+    encWrap.appendChild(box);
+    const r = box.querySelector("input");
+    r.value = Math.round(DEFAULTS[name] * 100);
+    r.addEventListener("input", () => { stopSweep(); target[name] = r.value / 100; });
+    encs[name] = { box, r, out: box.querySelector("span") };
+  }
+});
+function setPressed(btn, on) { btn.setAttribute("aria-pressed", on ? "true" : "false"); }
+function stopSweep() { if (S.sweeping) { S.sweeping = false; setPressed($("play"), false); $("phase").textContent = "manual"; $("what").textContent = "turn any control; notes stay as set"; } }
+$("play").addEventListener("click", () => {
+  S.sweeping = !S.sweeping; setPressed($("play"), S.sweeping);
+  if (S.sweeping) S.t = 0; else { $("phase").textContent = "manual"; $("what").textContent = "turn any control; notes stay as set"; }
+});
+$("notes").addEventListener("click", () => { S.notes = !S.notes; S.manualNotes = true; setPressed($("notes"), S.notes); });
+$("rm").addEventListener("click", () => { S.reduced = !S.reduced; setPressed($("rm"), S.reduced); });
+document.querySelectorAll('input[name="tempo"]').forEach(r => r.addEventListener("change", () => { S.interval = parseFloat(r.value); }));
+function applyLabels(set) { labelEls.forEach(({ e, sets }) => e.setAttribute("visibility", sets.includes(set) ? "visible" : "hidden")); }
+document.querySelectorAll('input[name="labels"]').forEach(r => r.addEventListener("change", () => applyLabels(r.value)));
+applyLabels("full");
+document.querySelectorAll('input[name="zoom"]').forEach(r => r.addEventListener("change", () => { const z = parseFloat(r.value); svg.setAttribute("width", 480 * z); svg.setAttribute("height", 220 * z); }));
+if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { S.reduced = true; setPressed($("rm"), true); }
+
+// ---- meter ----
+const spark = $("spark"), ctx = spark.getContext("2d"), hist = [];
+function drawSpark() {
+  const w = spark.width, h = spark.height, max = 40;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "#141517"; ctx.fillRect(0, 0, w, h);
+  const bw = w / 240;
+  hist.forEach((n, i) => { ctx.fillStyle = n > 20 ? "#d3a24f" : "#7d8a93"; const bh = Math.min(h, n / max * h); ctx.fillRect(i * bw, h - bh, Math.max(1, bw - 0.5), bh); });
+  const y20 = h - 20 / max * h;
+  ctx.strokeStyle = "#a9bcc8"; ctx.setLineDash([6, 6]); ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, y20); ctx.lineTo(w, y20); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = "#8c9095"; ctx.font = "20px IBM Plex Mono, monospace"; ctx.fillText("20", 6, y20 - 6);
+}
+const times = [];
+
+// ---- loop ----
+let last = performance.now(), textsShown = 0;
+function tick(now) {
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (S.sweeping) {
+    S.t += dt;
+    const [p, u] = sweepAt(S.t);
+    if (!S.manualNotes) { S.notes = p.notes; setPressed($("notes"), S.notes); }
+    for (const c of CONTROLS) target[c] = DEFAULTS[c];
+    if (p.control) target[p.control] = keyframe(DEFAULTS[p.control], u);
+    $("phase").textContent = p.control ? `${p.name} · ${Math.round(target[p.control] * 100)}` : p.name;
+    $("what").textContent = p.control ? WHAT[p.control] : (p.notes ? "defaults, notes playing: Aldebaran flares, the ecliptic brightens, the Pleiades turn" : "defaults, no notes: nothing should move");
+    for (const c of CONTROLS) { encs[c].r.value = Math.round(target[c] * 100); encs[c].box.classList.toggle("live", p.control === c); }
+  } else for (const c of CONTROLS) encs[c].box.classList.remove("live");
+  for (const c of CONTROLS) encs[c].out.textContent = c === "spread" ? (1 + 0.5 * target[c]).toFixed(2) : Math.round(target[c] * 100);
+
+  const [changed, texts] = frame(dt);
+  hist.push(changed); if (hist.length > 240) hist.shift();
+  times.push([now, changed]); while (times.length && now - times[0][0] > 4000) times.shift();
+  const last1 = times.filter(([t]) => now - t <= 1000);
+  const avg = last1.reduce((a, [, n]) => a + n, 0) / Math.max(1, last1.length);
+  const peak = times.reduce((m, [, n]) => Math.max(m, n), 0);
+  $("now").textContent = changed; $("now").classList.toggle("over", changed > 20);
+  $("avg").textContent = avg.toFixed(1); $("peak").textContent = peak;
+  if (texts) textsShown = texts; $("texts").textContent = texts;
+  drawSpark();
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+})();
+</script>
