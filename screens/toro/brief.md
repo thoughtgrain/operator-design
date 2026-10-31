@@ -1,7 +1,7 @@
 # Toro · screen brief
 
 > Source: `thoughtgrain/labyrinth` → `opxy/machines/toro` (definition.json, engine.cpp, display.cpp, gen_panel.py), read 2026-10-31. Protocol: `opxy/protocol.md`.
-> Status: **revision 3**, phases 3–8 redone after the craft review (2026-10-31). Passes lint, the perceptibility gate and the side-by-side craft review. Device checks pending (see `review.md`).
+> Status: **reset to phase 3** (2026-10-31). Five new concepts in `concepts.md`; waiting on a choice. Revision 3 (the Taurus atlas) below is the fallback.
 
 ## 0 · Screen or stock page?
 
