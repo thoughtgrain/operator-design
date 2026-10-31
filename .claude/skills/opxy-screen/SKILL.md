@@ -18,14 +18,16 @@ You're running the protocol in `opxy/protocol.md`. Read `opxy/constraints.md` an
 7. **Map + budget.** One channel per control, travel scaled to score with a visible floor, no on/off-only controls. Fill `resources.display` and re-run `lint_definition.py`. Rest = 0 changed nodes; heaviest playing ≈ 20 average.
 8. **Frames.** Start from `opxy/templates/frame.svg`. Draw `rest`, `playing`, and `c<N>-000/050/100` per control. Generate frames from one script when there are many, so they stay consistent; never hand-patch a single frame out of sync with the brief.
 9. **Lint.** `python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definition.json>` (the definition tells it which nodes are mutable outlines and how many points they need; `--two-page` for 5–8 controls, `--own-header` if covering the header). Fix every error; fix or justify every warning in `review.md`.
-10. **Contact sheet.** `python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png`, then look at the PNG at 1:1. If any control's three frames look alike, go back to step 7.
-11. **Motion, review, handoff.** Write `motion.md`, `review.md` (checklist from `accessibility.md`), `handoff.md` per protocol phase 8.
+10. **Perceptibility.** `python3 opxy/tools/perceptibility.py screens/<id>/frames --scores <scores> --names <labels>`. Every control and the note response must pass. Under the floor → back to step 7 with more travel or a stronger channel; never lower a score to pass.
+11. **Contact sheet.** `python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png`, then look at the PNG at 1:1. If any control's three frames look alike, go back to step 7.
+12. **Motion, review, handoff.** Write `motion.md`, `review.md` (checklist from `accessibility.md`), `handoff.md` per protocol phase 8.
 
 ## Hard rules
 
 - 480 × 220, grey only, never red. Univers Next Pro Light, ≥ 8 px.
 - Bound mutable outlines: `M L… Z`, `fill="none"`, distinct points ≥ 1/8 px apart, closing edge ≥ 1/4 px, no turn within 2.5° of straight back, ≤ 64 points, one subpath.
 - Lines are closed ribbons. Parts that meet share an outline or pivot.
+- Every control clears the perceptibility floors (tokens.json `perceptibility`).
 - Nothing moves at rest. Eases settle in 0.15–0.2 s. Reduced motion jumps.
 - Don't copy stock artwork or other machines' drawings.
 - Device-only checks (caption widths in the real font, rasterization, redraw on hardware, photos) are **pending device** until someone does them. Never mark them done.

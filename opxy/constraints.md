@@ -84,6 +84,30 @@ Sources, pinned to what I read on 2026-10-31:
 | Hatching | Avoid lines closer than ~3 px | [ux] |
 | Grey-only differences | Don't show a difference only with a slightly dimmer grey | [ux] |
 
+## Perceptible change
+
+This one is mine, not open-xy's. ux.md says a control must visibly change the screen and that "too subtle reads as broken", but gives no number. These floors make it testable. They live in `tokens.json` → `perceptibility`, and `tools/perceptibility.py` measures them on 1:1 renders.
+
+| Rule | Value |
+| --- | --- |
+| What counts as changed | A pixel in the body (below the header) whose brightness moves by ≥ 24/255, about one stock grey step |
+| Area changed, 0 → 100, by audible score | score 1: 1.5 % · 2: 2 % · 3: 3 % · 4: 4 % · 5: 5 % of the body |
+| Each half (0 → 50, 50 → 100) | ≥ 40 % of the full-range floor, so a control doesn't do all its work at one end |
+| Spread of the change | Its bounding box spans ≥ 40 px, so a big change in one tiny spot doesn't pass |
+| Note response (rest → playing) | ≥ 3 % of the body, spanning ≥ 40 px |
+
+Design-time floors per channel, the travel a control needs before it has a chance of passing:
+
+| Channel | Floor over the full range |
+| --- | --- |
+| Position | ≥ 24 px |
+| Rotation | ≥ 30° |
+| Scale | ≥ 1.6× |
+| Shade | ≥ 3 grey steps, and never alone |
+| Count | ≥ 12 items, or doubling |
+| Shape | some point moves ≥ 16 px |
+| Note flare | ≥ 1.4× scale or ≥ 2 grey steps on top of a position or scale change |
+
 ## Motion
 
 | Rule | Value | Source |

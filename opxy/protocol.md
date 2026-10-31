@@ -97,7 +97,7 @@ Fill the mapping table in `brief.md`:
 Rules:
 
 - One primary channel per control, no two controls on the same channel of the same part.
-- Travel scales with the score, floor of ~12 px movement or ~20° rotation or a two-step shade change, whichever applies, so score-1 controls still visibly move.
+- Travel scales with the score and clears the channel floors in `constraints.md` → Perceptible change (≥ 24 px, ≥ 30°, ≥ 1.6×, ≥ 12 items, shape ≥ 16 px). A score-1 control still has to read at arm's length.
 - No control is only an on/off change in the drawing.
 
 Then the budget: declare `paths`, `points`, `nodes`, `texts`, `palette` (this fills the `resources.display` placeholder from 1A; re-run `lint_definition.py` after), and estimate changed nodes per frame at rest (must be 0), playing at defaults, and playing at the heaviest setting (target ~20 average).
@@ -126,7 +126,13 @@ python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definit
 python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg
 ```
 
-**Gate:** zero lint errors; warnings either fixed or explained in `review.md`; every control visibly different across its three frames on the contact sheet at 1:1.
+Then check that every control changes enough of the screen for its audible score:
+
+```sh
+python3 opxy/tools/perceptibility.py screens/<id>/frames --scores <phase 2 scores, in control order> --names <labels>
+```
+
+**Gate:** zero lint errors; warnings either fixed or explained in `review.md`; `perceptibility.py` passes for every control and the note response. If a control is under its floor, go back to phase 4 and give it more travel or a stronger channel; don't lower the score to make it pass.
 
 ## Phase 6 · Motion
 

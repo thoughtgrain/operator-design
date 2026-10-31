@@ -12,17 +12,20 @@ operators/
 ├── AGENTS.md                      ← agent entry point: what to load for which task
 ├── CLAUDE.md                      ← imports AGENTS.md for Claude Code
 ├── .claude/skills/opxy-screen/    ← skill that runs the screen protocol end to end
+├── .claude/skills/opxy-audit/     ← skill that audits a finished screen and adds passing ones to the library
 ├── opxy/
 │   ├── README.md                  ← module index and reading order
 │   ├── protocol.md                ← the phases, gates and outputs
 │   ├── patterns.md                ← composition patterns and the visual-channel table
 │   ├── constraints.md             ← hard limits distilled from open-xy, with sources
 │   ├── accessibility.md           ← legibility, contrast and motion on a 480 × 220 grey screen
+│   ├── audit.md                   ← how a finished screen is judged and enters the library
 │   ├── tokens.json                ← machine-readable numbers the tools and agents use
 │   ├── templates/                 ← brief and starter frame
 │   ├── tools/                     ← frame linter and contact-sheet builder (stdlib Python)
 │   └── reference/                 ← annotated reference screens
-└── screens/                       ← one folder per machine I design
+├── screens/                       ← work in progress, one folder per machine
+└── library/                       ← audited screens that met the guidelines, kept as references
 ```
 
 ## How it relates to open-xy

@@ -59,7 +59,7 @@ Copy into `review.md` and answer each with evidence.
 - [ ] Meaningful non-text parts ≥ 3:1 on their background
 - [ ] No part under ~3 px; no repeated lines closer than ~3 px
 - [ ] No state or control effect shown by shade alone
-- [ ] Each control visibly different at 0 / 50 / 100 on the contact sheet
+- [ ] Each control visibly different at 0 / 50 / 100 on the contact sheet, and `perceptibility.py` passes
 - [ ] Visual travel matches the audible score from the brief
 - [ ] Nothing moves at rest; nothing flashes more than 3×/s
 - [ ] Reduced-motion end states differ by more than shade

@@ -18,7 +18,7 @@ Before any pattern, this is the menu. Each control gets **one primary channel**,
 | **Count** | `hide` / `place` a set of nodes | 1 node per toggled part | voices, steps, partials, grains | Step in with an ease so the control isn't an on/off change |
 | **Text** | text slot or header value | 1 slot | modes, enums, codes | Header already shows values; use body text only for named states (a vowel, a model) |
 
-Proportion rule from ux.md: the channel's travel scales with how much the control changes the sound, with a generous floor. I score each control's audible impact 1–5 in the brief and use that score to size its travel.
+Proportion rule from ux.md: the channel's travel scales with how much the control changes the sound, with a generous floor. I score each control's audible impact 1–5 in the brief and use that score to size its travel. The floors are numbers, not taste: `constraints.md` → Perceptible change lists them per channel (position ≥ 24 px, rotation ≥ 30°, scale ≥ 1.6×, count ≥ 12, shape ≥ 16 px), and `perceptibility.py` checks the result. Shade on its own never clears a floor.
 
 ## Gate 0: stock page
 

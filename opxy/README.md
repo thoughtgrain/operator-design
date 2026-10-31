@@ -10,7 +10,8 @@ The device rules come from open-xy. What this module adds is the process: choosi
 2. **[protocol.md](protocol.md)** — the phases (0 screen-or-stock, 1 intake with 1A definition from a port and 1B definition review, 2 rank, 3 subject, 4 map + budget, 5 frames, 6 motion, 7 review, 8 handoff), each with an output and a gate.
 3. **[patterns.md](patterns.md)** — the visual-channel table and the composition patterns (section drawing, diagram + trace, trace as subject, stack in depth, field and figure, figures, column affinity, headers).
 4. **[accessibility.md](accessibility.md)** — contrast for every grey, sizes, single-cue rules, motion, caption widths, and the review checklist.
-5. **[reference/](reference/)** — annotated screens and links to MNMD, Found Motive and the core machines.
+5. **[audit.md](audit.md)** — how a finished screen (yours or one handed over) is judged, and how passing ones enter `library/`.
+6. **[reference/](reference/)** — annotated screens and links to MNMD, Found Motive and the core machines.
 
 ## Files
 
@@ -18,9 +19,12 @@ The device rules come from open-xy. What this module adds is the process: choosi
 | --- | --- |
 | `tokens.json` | The numbers as data. Tools read it; update it with `constraints.md`. |
 | `templates/brief.md` | Phases 0–4 as a fill-in document |
+| `templates/audit.md` | The audit report |
+| `templates/library-card.md` | The library entry for a screen that passed |
 | `templates/frame.svg` | 480 × 220 starter with a preview-only stock header and the authoring rules in a comment |
 | `tools/lint_definition.py` | Reviews `definition.json`: mirrors the SDK validator's main rules (fields, labels, ranges, mappings, displays, pages, presets, display limits, sdk versions) and flags ux.md review issues (colouring defaults on, envelope/LFO on the engine page, `percent` over non-unit ranges, long enum captions) |
 | `tools/lint_frame.py` | Checks frames against device rules: canvas, grey-only/no red, explicit paint, one subpath ≤ 64 points, closed ribbons, point spacing, closing edge, near-reversal turns, bound-id topology and transforms, number format, text size/font/length, header zone, small parts |
+| `tools/perceptibility.py` | Renders each control's 0/50/100 frames at 1:1 and measures how much of the screen changes, against floors scaled by the control's audible score; also checks the note response |
 | `tools/contact_sheet.py` | Tiles `rest`, `playing` and `c<N>-000/050/100` frames into a 1:1 contact sheet (SVG, PNG with `--png`) |
 
 ## Quick start
@@ -32,6 +36,7 @@ cp opxy/templates/frame.svg screens/<id>/frames/rest.svg
 
 python3 opxy/tools/lint_definition.py <definition.json>
 python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definition.json>   # add --two-page for 5–8 controls
+python3 opxy/tools/perceptibility.py screens/<id>/frames --scores 4,5,5,3 --names a,b,c,d
 python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png
 ```
 
