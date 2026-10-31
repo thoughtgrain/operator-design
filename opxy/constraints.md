@@ -91,10 +91,10 @@ This one is mine, not open-xy's. ux.md says a control must visibly change the sc
 | Rule | Value |
 | --- | --- |
 | What counts as changed | A pixel in the body (below the header) whose brightness moves by ≥ 24/255, about one stock grey step |
-| Area changed, 0 → 100, by audible score | score 1: 1.5 % · 2: 2 % · 3: 3 % · 4: 4 % · 5: 5 % of the body |
+| Area changed, 0 → 100, by audible score | score 1: 0.5 % · 2: 0.8 % · 3: 1.2 % · 4: 1.6 % · 5: 2.5 % of the body (the body is ~87,000 px, so 2.5 % is ~2,200 px) |
 | Each half (0 → 50, 50 → 100) | ≥ 40 % of the full-range floor, so a control doesn't do all its work at one end |
 | Spread of the change | Its bounding box spans ≥ 40 px, so a big change in one tiny spot doesn't pass |
-| Note response (rest → playing) | ≥ 3 % of the body, spanning ≥ 40 px |
+| Note response (rest → playing) | ≥ 2 % of the body, spanning ≥ 40 px |
 
 Design-time floors per channel, the travel a control needs before it has a chance of passing:
 
