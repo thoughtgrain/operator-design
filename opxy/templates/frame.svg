@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <!--
+    Starter frame for an OP-XY machine screen. 480 x 220, judged at 1:1.
+
+    preview_* groups are scaffolding for previews and contact sheets only.
+    The device supplies the black canvas and stock header itself, so strip
+    every preview_* group when turning frames into panel.svg.fragment.
+    The linter skips them.
+
+    Zones (tokens.json):
+      header      y 0-20 (stock) or 0-38 (two-page header)
+      body        y 38-214, subject lives here
+      strip       y 196-212, optional activity strip
+      columns     x 0 / 120 / 240 / 360, one per encoder
+
+    Authoring rules (constraints.md):
+      - every leaf has explicit fill, stroke, stroke-width; no group styles
+      - bound ids: <prefix>_node_<i>, <prefix>_text_<i>, <prefix>_palette_<i>
+      - mutable outlines: exactly M, L..., Z, fill="none", distinct points
+      - lines are thin closed ribbons, never strokes traced out and back
+      - grey only, no red; at most 4 fractional digits, no exponents
+  -->
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p1</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p2</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p3</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p4</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+  </g>
+
+  <!-- Palette entries: parked off screen, lend paint to nodes that select them. -->
+  <path id="mach_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="mach_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#646464" stroke="#646464" stroke-width="2"/>
+
+  <!-- Node 0: a mutable outline drawn as a closed ribbon (replace with the subject). -->
+  <path id="mach_node_0" d="M 120 120 L 240 104 L 360 120 L 360 122 L 240 106 L 120 122 Z" fill="none" stroke="#CDCDCD" stroke-width="2"/>
+</svg>
