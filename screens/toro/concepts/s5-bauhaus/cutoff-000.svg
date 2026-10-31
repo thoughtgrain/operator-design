@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 67.15 60 L 71.15 60 L 71.15 206 L 67.15 206 Z" fill="#646464" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 77.71 60 L 81.71 60 L 81.71 206 L 77.71 206 Z" fill="#646464" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 102.57 60 L 106.57 60 L 106.57 206 L 102.57 206 Z" fill="#646464" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 127.43 60 L 131.43 60 L 131.43 206 L 127.43 206 Z" fill="#646464" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 152.29 60 L 156.29 60 L 156.29 206 L 152.29 206 Z" fill="#646464" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 162.85 60 L 166.85 60 L 166.85 206 L 162.85 206 Z" fill="#646464" stroke="none"/>
+<path transform="matrix(1 0 0 1 300 128)" d="M 22 0 L 21.812 2.872 L 21.25 5.694 L 20.325 8.419 L 19.053 11 L 17.454 13.393 L 15.556 15.556 L 13.393 17.454 L 11 19.053 L 8.419 20.325 L 5.694 21.25 L 2.872 21.812 L 0 22 L -2.872 21.812 L -5.694 21.25 L -8.419 20.325 L -11 19.053 L -13.393 17.454 L -15.556 15.556 L -17.454 13.393 L -19.053 11 L -20.325 8.419 L -21.25 5.694 L -21.812 2.872 L -22 0 L -21.812 -2.872 L -21.25 -5.694 L -20.325 -8.419 L -19.053 -11 L -17.454 -13.393 L -15.556 -15.556 L -13.393 -17.454 L -11 -19.053 L -8.419 -20.325 L -5.694 -21.25 L -2.872 -21.812 L 0 -22 L 2.872 -21.812 L 5.694 -21.25 L 8.419 -20.325 L 11 -19.053 L 13.393 -17.454 L 15.556 -15.556 L 17.454 -13.393 L 19.053 -11 L 20.325 -8.419 L 21.25 -5.694 L 21.812 -2.872 Z" fill="#AFAFAF" stroke="none"/>
+<path transform="matrix(1 0 0 1 236 150)" d="M -144.486 40.495 L 142.122 -48.138 L 144.486 -40.495 L -142.122 48.138 Z" fill="#CDCDCD" stroke="none"/>
+<path transform="matrix(1 0 0 1 236 136)" d="M -142.289 47.644 L 139.547 -55.159 L 142.289 -47.644 L -139.547 55.159 Z" fill="#7D7D7D" stroke="none"/>
+<path transform="matrix(1 0 0 1 0 0)" d="M 384 206 L 436 206 L 384 132 Z" fill="#969696" stroke="none"/>
+<path transform="matrix(1 0 0 1 334.215 107.279)" d="M 5.96 0 L 5.506 2.281 L 4.214 4.214 L 2.281 5.506 L 0 5.96 L -2.281 5.506 L -4.214 4.214 L -5.506 2.281 L -5.96 0 L -5.506 -2.281 L -4.214 -4.214 L -2.281 -5.506 L 0 -5.96 L 2.281 -5.506 L 4.214 -4.214 L 5.506 -2.281 Z" fill="#CDCDCD" stroke="none"/>
+<g id="preview_header">
+<rect x="0" y="0" width="480" height="38" fill="#000000" stroke="none"/>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">spread</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">1.03</text>
+<text transform="matrix(1 0 0 1 5 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">shape</text>
+<text transform="matrix(1 0 0 1 65 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">fold</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">18</text>
+<text transform="matrix(1 0 0 1 125 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">noise</text>
+<text transform="matrix(1 0 0 1 185 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">cutoff</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">0</text>
+<text transform="matrix(1 0 0 1 245 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">drive</text>
+<text transform="matrix(1 0 0 1 305 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">res</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">24</text>
+<text transform="matrix(1 0 0 1 365 33)" fill="#5A5A5A" font-family="UniversNextPro-Light" font-size="10px">aphx</text>
+<text transform="matrix(1 0 0 1 425 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">0</text>
+</g>
+</svg>
