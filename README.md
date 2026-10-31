@@ -18,6 +18,7 @@ operators/
 │   ├── protocol.md                ← the phases, gates and outputs
 │   ├── patterns.md                ← composition patterns and the visual-channel table
 │   ├── constraints.md             ← hard limits distilled from open-xy, with sources
+│   ├── craft.md                   ← one drawing language, line weights, the side-by-side review
 │   ├── accessibility.md           ← legibility, contrast and motion on a 480 × 220 grey screen
 │   ├── audit.md                   ← how a finished screen is judged and enters the library
 │   ├── tokens.json                ← machine-readable numbers the tools and agents use

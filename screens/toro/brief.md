@@ -1,7 +1,7 @@
 # Toro · screen brief
 
 > Source: `thoughtgrain/labyrinth` → `opxy/machines/toro` (definition.json, engine.cpp, display.cpp, gen_panel.py), read 2026-10-31. Protocol: `opxy/protocol.md`.
-> Status: **revision 2**, phases 3–8 redone after review (2026-10-31). Passes lint and the perceptibility gate. Device checks pending (see `review.md`).
+> Status: **revision 3**, phases 3–8 redone after the craft review (2026-10-31). Passes lint, the perceptibility gate and the side-by-side craft review. Device checks pending (see `review.md`).
 
 ## 0 · Screen or stock page?
 
@@ -110,51 +110,52 @@ Taurus is a strong subject: points and hairlines on black suit the screen, and C
 
 **Chosen:** A, Taurus revised (2026-10-31). Phase 2 scores confirmed as written.
 
-### Revision 2 · what changed and why
+### Revision 3 · what changed and why
 
-Feedback on revision 1:
+Revision 2 passed every gate and still looked childish. Side by side with labyrinth's first Taurus chart and MNMD at 1:1, the gap was craft, not function:
 
-- **Changes and motion weren't noticeable enough.** The new perceptibility gate agrees: spread, cutoff, res, noise and aphx were all under their floors. Cutoff, the loudest control, changed 0.3 % of the screen.
-- **The Taurus chart shouldn't change.** Revision 1 moved the horn stars (spread, shape), grew Aldebaran and squeezed the Pleiades.
-- **Noise needs far more stars.**
-- **The folded line along the bottom didn't fit the theme.**
-- **Suggested:** moving in and out to a star in Taurus, and showing the star.
+- **It mixed languages.** A flat cartoon moon, a sunburst nebula, a fan of meteor wedges, bullseye shock rings and a nested "target" disk.
+- **Lines thickened into wedges** under the zoom.
+- **It lost the chart's authenticity:** no grid, no labels.
 
-So the chart (its stars, lines and the Pleiades) is now fixed, and every control acts on the sky around it. Cutoff is the camera. The chart labels are gone too: the header already names every control, and the labels crowded the zoom.
+So `opxy/craft.md` now sets the rules: one drawing language, three line weights that never thicken, one brightest element, no icons, and a side-by-side review before phase 7. Revision 3 redraws everything as a **star-atlas page**:
+
+- **Restored:** your original grid, labels and figure, now completely static.
+- **Cutoff:** an atlas detail inset with a leader line to Aldebaran, instead of moving the whole camera.
+- **Fold:** moves to the Milky Way, drawn as isophote contours.
+- **Drive:** plotted meteor trails.
+- **The Moon:** an outline on a dotted ephemeris track.
+
+Drawing language: **star atlas** (Tirion and Bečvář conventions). References: labyrinth `opxy/docs/toro_rest.png`, MNMD's MD KIT and FM STAT for line weight and restraint.
 
 ## 4 · Map and budget
 
 | # | score | channel | part (nodes) | travel 0 → 100 | what the player sees | gate (need → got) |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 spread | 4 | position | the Moon (46–54) | slides 116 px, from beside the chart up to the top right | the Moon pulls away as the oscillators detune | 1.6 → 2.90 % |
-| 2 fold | 5 | **shape** + scale | M1, the Crab Nebula: 2 mutable outlines (0, 1) and core (45) | edge = wavefold of a sine wrapped into a ring, gain 1× → 8×; radius 10 → 29 px | a smooth trefoil frays into a ragged, bigger nebula | 2.5 → 2.74 % |
-| 3 cutoff | 5 | camera (position + scale of the chart) | everything in Taurus | zoom 1× → 3.2× on Aldebaran (cubic, like the filter's squared response); past 2× the star shows as a shaded disk | you move in on Aldebaran until it's a star, not a point | 2.5 → 12.2 % |
-| 4 res | 3 | count + shade | 4 diffraction rings round Aldebaran (15–18) | 1 → 4 rings, each brightening in turn | the star rings like a struck bell | 1.2 → 2.65 % |
-| 5 shape | 3 | shape (stepped) | the Moon's phase (8 phase nodes over earthshine) | crescent → full, 8 steps | saw → triangle reads as sharp crescent → round full moon | 1.2 → 1.30 % |
-| 6 noise | 2 | count | field stars (71–250) | 40 → 180 stars | the sky fills | 0.8 → 1.74 % |
-| 7 drive | 3 | count + length + shade | Taurid radiant, 12 streaks (55–66) | 3 → 12 streaks, 18 → 60 px, brighter | the meteor shower opens up | 1.2 → 2.18 % |
-| 8 aphx | 2→5 | position | the field stars | each drifts 0 → 7–29 px on the engine's gentle-then-wild curve | stars wander off their places | 0.8 → 1.02 % |
-| note | | scale + shade + position | Aldebaran core, spikes, rings; 2 shock rings (19, 20); one meteor; twinkle; comets | flare 1.4×, shock rings run out 12 → 72 px in 0.3 s | every note visibly hits Aldebaran | 2.0 → 2.96 % |
-
-Spread and shape share the Moon on different channels (position vs phase). Res and cutoff share Aldebaran on different channels (rings vs camera).
+| 1 spread | 4 | position | the Moon: body, phase, limb (38–47) | slides 142 px along its dotted ephemeris track | the Moon pulls away as the oscillators detune | 1.6 → 3.36 % |
+| 2 fold | 5 | **shape** + shade | Milky Way isophote contours, 3 mutable outlines (0–2) | edges fold 1× → 8× (wavefolded sine), inner contours brighten as the band thickens | a soft irregular band frays into folded edges | 2.5 → 3.02 % |
+| 3 cutoff | 5 | scale | the magnifier on Aldebaran: star, core, spikes, 2 neighbours (29–31, 36–37) | star radius 1.8 → 27 px; neighbours move out of the window | moving in on Aldebaran: a point becomes the star's disk | 2.5 → 3.45 % |
+| 4 res | 3 | count + shade | Airy rings round the magnified star (32–35) | 1 → 4 rings, fading outward | the star rings | 1.2 → 1.35 % |
+| 5 shape | 3 | shape (stepped) | Moon phase (8 phase nodes) | crescent → full | saw → triangle: sharp crescent → round | 1.2 → 1.37 % |
+| 6 noise | 2 | count | faint stars (64–228) | 40 → 165 | the sky fills | 0.8 → 1.59 % |
+| 7 drive | 3 | count + shade | plotted Taurid trails (48–63) | 2 → 16 trails, brighter | more meteors traced back to the radiant | 1.2 → 1.30 % |
+| 8 aphx | 2→5 | position | faint stars | drift 0 → 6–26 px on the engine's curve | stars wander off their places | 0.8 → 0.98 % |
+| note | | shade + scale | figure lines (20–28), Aldebaran, magnified star and spikes, one trail, Milky Way core contour, twinkle | 0.2 s brighten | the bull lights for a beat on every note | 2.0 → 2.01 % |
 
 ```json
-"display": {"stateBytes": 200, "stateAlignment": 4,
-            "paths": 2, "points": 64, "nodes": 251, "texts": 16, "palette": 16}
+"display": {"stateBytes": 180, "stateAlignment": 4,
+            "paths": 3, "points": 64, "nodes": 229, "texts": 16, "palette": 16}
 ```
-
-251 of 256 nodes: 180 are field stars. `stateBytes` is an estimate (see handoff.md).
 
 | case (prototype model, 60 fps, 16ths at 120 BPM) | changed nodes / frame |
 | --- | --- |
-| at rest | 0, within ~1 s of the last note |
-| playing, defaults | avg 7.8 · peak 15 |
-| playing, each control held at 100 | avg 5.1–9.5 · peak 10–16 |
-| turning cutoff (the camera moves ~30 nodes) | avg 27 · peak 41, for the 0.2 s ease |
-| turning aphx (every visible star drifts) | avg 34 · peak 51, for the 0.2 s ease; batch it (handoff.md) |
+| at rest | 0 |
+| playing, each control held at 100 | avg 8.3–9.6 · peak 16–19 |
+| turning aphx (every visible star drifts) | avg ~34 · peak ~55 for the ease; batch it (handoff.md) |
 
 **Confirm on the host** with `display()` before submitting.
 
-### Revision 1 (superseded)
+### Earlier revisions (superseded, in git history)
 
-Horn stars moved for spread and shape, Aldebaran's magnitude for cutoff, the Pleiades tightened for res, a folded ecliptic line along the bottom for fold, 2 → 12 field stars for noise, three Milky Way lines for drive and a kinking standing comet for aphx. It failed the perceptibility gate on five controls. Its frames are in git history (commit `c4aa8e9`).
+- **Revision 2** (`8a66b56`): a fixed chart with a full-screen camera on Aldebaran, and the sky drawn as icons. It passed the gates and failed the craft review.
+- **Revision 1** (`c4aa8e9`): the chart itself changed with the controls, and it failed the perceptibility gate on five controls.

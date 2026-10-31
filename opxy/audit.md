@@ -28,9 +28,10 @@ Run in this order; each one's findings go in the audit report (`templates/audit.
 3. **Artwork** (if given): `lint_frame.py` on the frames or fragment, with `--definition` and `--two-page` when they apply.
 4. **Perceptibility:** `perceptibility.py` with the audible scores. If the author hasn't scored their controls, score them from the sound (or the DSP) and ask them to confirm, as protocol phase 2 does. Scores are never lowered to make a control pass.
 5. **Contact sheet** at 1:1, looked at by eye: one subject, every control reads, no dashboard.
-6. **Accessibility checklist** from `accessibility.md`.
-7. **Motion:** from the author's description, a video or the preview. Still at rest, short eases, reduced motion jumps, no flashing.
-8. **ux.md "before you submit"** items, each answered or marked **pending device**.
+6. **Craft** (`craft.md`): rest frame beside a reference at 1:1. One drawing language, the line-weight table, one brightest element, no icons.
+7. **Accessibility checklist** from `accessibility.md`.
+8. **Motion:** from the author's description, a video or the preview. Still at rest, short eases, reduced motion jumps, no flashing.
+9. **ux.md "before you submit"** items, each answered or marked **pending device**.
 
 ## Verdicts
 
@@ -38,7 +39,7 @@ Run in this order; each one's findings go in the audit report (`templates/audit.
 | --- | --- | --- |
 | **Meets the guidelines** | No errors, every perceptibility floor cleared, every checklist item answered. Device items may be pending. | Yes, marked "device pending" until photos exist |
 | **Meets, with notes** | As above, plus warnings the author has justified in writing | Yes, with the notes on the card |
-| **Not yet** | Any lint error, any control or the note response under its floor, or a checklist item that fails | No. The report lists what to change, in order of impact |
+| **Not yet** | Any lint error, any control or the note response under its floor, a checklist item that fails, or a craft question answered "no" | No. The report lists what to change, in order of impact |
 
 ## Adding to the library
 

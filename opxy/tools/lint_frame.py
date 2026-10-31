@@ -412,6 +412,12 @@ class FrameLinter:
                 self.add("error", where, "mutable-topology", "mutable outline must be exactly M, L…, Z (no H/V/curves)")
             if el.get("fill", "").strip().lower() != "none":
                 self.add("error", where, "mutable-topology", "mutable outline must have fill=\"none\"; mutable outlines draw hollow")
+            extent = self.t["frame"]["pathExtent"]
+            far = max((max(abs(x), abs(y)) for x, y in pts), default=0)
+            if far > extent:
+                self.add("error", where, "path-extent",
+                         f"mutable outline reaches {far:.1f} px from its node origin; frame points must stay within ±{extent}. "
+                         "Place the node with transform=\"matrix(1 0 0 1 x y)\" and author points relative to it")
             if self.points is not None and len(pts) != self.points:
                 self.add("error", where, "mutable-topology",
                          f"mutable outline has {len(pts)} points; the definition declares {self.points}, and the device binds exactly that many")

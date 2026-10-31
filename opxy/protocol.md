@@ -85,7 +85,9 @@ Write two or three candidate subjects, each in one sentence, each tied to a patt
 
 This is where I stop and ask if the person hasn't already chosen. The subject is the biggest creative decision and the hardest to change later.
 
-**Gate:** one subject, one pattern, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
+Name the drawing language too (`craft.md`: an atlas, a patent section, a schematic) and one or two references it should sit beside.
+
+**Gate:** one subject, one pattern, one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
 
 ## Phase 4 · Map and budget
 
@@ -141,6 +143,9 @@ Write `motion.md`: for each trigger (turn per control, note on, held, hold ended
 **Gate:** nothing moves at rest; every ease settles in 0.15–0.2 s; held-note motion lasts as long as notes are held; reduced motion and track change jump to the end state.
 
 ## Phase 7 · Review
+
+Start with the craft review in `craft.md`: the rest frame beside a reference at 1:1, five questions, any "no" back to phase 5. Gates prove a screen works; this is where it's judged for whether it looks authored.
+
 
 Copy `checklists` from `accessibility.md` and the "before you submit" items from ux.md into `review.md` and answer each one with evidence (a frame name, a number). Anything only provable on hardware is marked **pending device**, never ticked.
 

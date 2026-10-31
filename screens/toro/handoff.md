@@ -1,71 +1,54 @@
-# Toro · handoff (revision 2)
+# Toro · handoff (revision 3)
 
-For implementing the TAURUS screen in `thoughtgrain/labyrinth` → `opxy/machines/toro`. The frames are the target poses and `prototype.html` is the moving reference. `gen_frames.py` holds the exact geometry and maths, so port from it rather than measuring pictures.
+For implementing the TAURUS atlas screen in `thoughtgrain/labyrinth` → `opxy/machines/toro`. The frames are the target poses, and `prototype.html` is the moving reference, built from the same model. `gen_frames.py` holds the exact geometry and maths, so port from it rather than measuring pictures.
 
 ## What changes in the machine
 
 | File | Change |
 | --- | --- |
-| `gen_panel.py` | New node order (below). Chart stars, joins and Pleiades as before, but joins authored 50 px (the four short ones) or 100 px wide 2.6 px, so zoom keeps uniform scale ≤ 2. Paths 0/1 become M1's outlines. New: Aldebaran disk (3 nested discs r 36/29/19), spike r 12, 4 ring annuli r 30 (1.5° slit, one subpath), 2 shock-ring annuli r 30, M1 core r 10, Moon earthshine r 20 plus 8 phase shapes, 12 radiant streaks, 2 comets, 180 field stars. Remove the static field, Milky Way scatter, grid arcs and all labels. Header cover path gets `stroke="none"`. Greys limited to the stock ramp. |
-| `display.cpp` | Rewrite the drawing per this handoff and `motion.md`. The camera is one function: `screen = ALD + offset × Z`, `Z = 1 + 2.2·cutoff³`. |
+| `gen_panel.py` | Static artwork, from `gen_frames.static_back()`, `labels()` and `inset_frame()`: the grid (3 declination arcs, 6 hour lines, 1 px `#323232` filled ribbons), Pleiades, the Moon's dashed ephemeris track, the radiant symbol, labels (10 px `#7D7D7D`, `TAURUS` 12 px `#AFAFAF`), black halos behind chart stars, and the magnifier (black window, rim, 4 reticle ticks, leader to Aldebaran, "α Tau"). Nodes as in the map below. Remove the old field scatter, Milky Way scatter, sky band, comets and Pleiades ring. Header cover path gets `stroke="none"`. Greys limited to the stock ramp. |
+| `display.cpp` | Rewrite the drawing per this handoff and `motion.md`. No camera: the chart is fixed. |
 | `display.h` | New `DisplayState` (below). |
 | `definition.json` | `resources.display` → the block below. Parameters unchanged. |
 
 ## Display block
 
 ```json
-"display": {"stateBytes": 200, "stateAlignment": 4,
-            "paths": 2, "points": 64, "nodes": 251, "texts": 16, "palette": 16}
+"display": {"stateBytes": 180, "stateAlignment": 4,
+            "paths": 3, "points": 64, "nodes": 229, "texts": 16, "palette": 16}
 ```
 
 ## Node map
 
 | Nodes | Part | Driven by | Channel |
 | --- | --- | --- | --- |
-| 0, 1 | M1 outer and inner outline (mutable, 64 points) | fold, cutoff | shape: `r(θ) = R·rr·(1 + 0.32·fold(g·sin(3θ + φ)))`, `g = 1 + 7·fold`, `R = (10 + 19·fold)·Z/Z₀`; rr 1.0/0.62, φ 0/0.7 |
-| 2–9 | header bar | `page_header.hpp` | stock |
-| 10 | Aldebaran core | cutoff, note | scale `min(2, Z·(1 + 0.4·flare))` |
-| 11–13 | Aldebaran disk (r 36, 29, 19) | cutoff | scale `clamp((Z − 1.6)/1.6, 0, 1)`; hidden under 0.05 |
-| 14 | Aldebaran spike | cutoff, note | scale `min(2, 0.5 + 0.47·Z + 0.5·flare)`, grey `(4 + 3·cutoff)/7` |
-| 15–18 | diffraction rings | res, cutoff, note | ring i brightness `clamp(4·res − i + 0.25)`; radius `min(60, 14 + 34·disk + 2(Z − 1) + 12i)` → scale radius/30 |
-| 19, 20 | shock rings | note | radius 12 → 52 / 72 px over 0.22 / 0.30 s, fading; hidden at rest |
-| 21–28 | chart stars g1–g4, β, ζ, back, tail | cutoff | position `ALD + off·Z`, scale `1 + 0.25(Z − 1)`; hidden off screen |
-| 29–37 | joins | cutoff | place at A, turn to B, scale dist/authored ≤ 2; pointing up, stop at y 40; hidden when both ends are off screen |
-| 38–44 | Pleiades | cutoff | position `ALD + PLE_OFF·Z + d·Z` |
-| 45 | M1 core | fold, cutoff | scale `0.72·R/10`, grey `(1.5 + 2.5·fold)/7` |
-| 46 | Moon earthshine | spread | position y `186 − 116·spread` |
-| 47–54 | Moon phases (lit 0.12 → 1.0) | shape, spread | show phase `round(7·shape)`, same position |
-| 55–66 | Taurid radiant streaks | drive, note | show `3 + round(9·drive)`; length `18 + 42·drive`; grey `(3 + 3·drive)/7`; fan 200°–340° from (150, 214) |
-| 67–70 | launched comets (2 × tail, head) | note × aphx | odds `0.25 + 0.7·aphx` per note |
-| 71–250 | field stars | noise, aphx, held | show `40 + round(140·noise)` in fixed order; drift `kink·(7 + 22·h₁)` along `360°·h₂`, `kink = 0.4a + 0.6a³` |
-
-Streak length changes with drive. Author streaks at 60 px and scale (0.3–1.0) rather than reshaping, since there are no paths to spare.
+| 0–2 | Milky Way contours: outer, mid, core (mutable, 64 points, node at (440, 102), points within ±64) | fold, note | shape `w = (half·(1 + lump) + fold(g·sin(…))·amp·(c+1)/3)·taper`, `g = 1 + 7·fold`, `amp = 0.6 + 17·fold^1.4`; shrink to fit ±63.5, never clamp points. Shades `#323232`, `(2 + 1.5·fold)/7`, `(3 + 2·fold + note)/7` |
+| 3–10 | header bar | `page_header.hpp` | stock |
+| 11–19 | chart stars (ald, g1–g4, β, ζ, back, tail) | note (Aldebaran only) | Aldebaran 1.3× on a note |
+| 20–28 | figure lines | note | shade `(3 + 3·flash)/7` |
+| 29 | magnified star | cutoff, note | scale: radius `1.8 + 25·cutoff` (+12 % on a note); author r 30 |
+| 30 | its bright core | cutoff | radius `max(1.6, 0.78·r)` |
+| 31 | its diffraction spikes (drawn under the disk) | cutoff, note | length `min(38, r + 9 + 7·flash)` |
+| 32–35 | Airy rings | res, cutoff, note | ring i: brightness `clamp(4·res − i + 0.25)`, shade `(1 + 3.5·b·(1 − 0.12i))/7`; radius `r + 5 + 5.5i`; hidden past the window |
+| 36, 37 | neighbour stars in the window | cutoff | offset × `(1 + 3.5·cutoff²)`; hidden outside the window |
+| 38 | Moon body (`#323232`) | spread | x `170 + 142·spread`, y 63 |
+| 39 | Moon limb (`#AFAFAF` annulus) | spread | same position |
+| 40–47 | Moon phases (lit 0.1 → 1.0, `#646464`) | shape, spread | show `round(7·shape)`; cusps end at ±78° |
+| 48–63 | meteor trails | drive, note | show `2 + round(14·drive)`; shade `(3 + 2·drive)/7`; a note lights one in fixed rotation |
+| 64–228 | faint stars | noise, aphx, held | show `40 + round(125·noise)` in fixed order; drift `kink·(6 + 20·h₁)` along `360°·h₂`, `kink = 0.4a + 0.6a³` |
 
 ## Palette
 
-Entries 0–7 are the stock ramp `#000000 #323232 #4B4B4B #646464 #7D7D7D #969696 #AFAFAF #CDCDCD`; 8–15 spare.
+Entries 0–7: the stock ramp `#000000 #323232 #4B4B4B #646464 #7D7D7D #969696 #AFAFAF #CDCDCD`. 8–15 spare.
 
-## DisplayState (estimate: 200 bytes)
+## DisplayState (estimate 180 bytes)
 
-| Field | Bytes |
-| --- | --- |
-| `PageHeader header` | 20 |
-| `NoteTracker notes` | 16 |
-| `u32 serial`, `i32 note_ms` | 8 |
-| `i32 eased[8]` | 32 |
-| `u32 m1_key`, `i32 m1_fold`, `i32 m1_zoom` | 12 |
-| `u8 star_lit[23]` bitfield for 180 stars, `u16 twinkle_ms[3]` round-robin | 30 |
-| `i32 drift_cursor` (batched aphx updates) | 4 |
-| comets 2 × (`t`, `x`, `y`, `angle`, `life`) | 40 |
-| `u32 seed`, `u32 clock`, `u32 meteor_next`, `u32 initialized` | 16 |
-| padding to 200 | 22 |
-
-Set `stateBytes` to `sizeof(DisplayState)` and let the SDK check it.
+`PageHeader` 20 · `NoteTracker` 16 · serial and note age 8 · eased controls 32 · contour key 8 · faint-star lit bits 21 plus 3 twinkle timers 6 · drift cursor 4 · trail rotation 4 · seed and clock 8 · padding. Set `stateBytes` to `sizeof(DisplayState)`.
 
 ## Path key policy
 
-M1's outlines re-key when fold's detent value or the eased zoom changes, never on time. A note never re-keys them.
+The contours re-key when fold's detent value changes, never on time. A note only changes their shade.
 
 ## Open device checks
 
-Photos (rest, playing, heaviest) · caption `1.25` in the device font · host `display()` redraw at heaviest and while turning aphx · `sdk.py test` frames for fold × cutoff · CPU readout · presets by ear.
+Photos (rest, playing, heaviest) · caption `1.25` in the device font · host `display()` redraw, including while turning aphx · `sdk.py test` preview frames · CPU readout · presets by ear.

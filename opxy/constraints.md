@@ -71,6 +71,7 @@ Sources, pinned to what I read on 2026-10-31:
 | Touching parts | Parts that meet share one outline or the same pivot/transform | [display] |
 | Bound path shape | Exactly `M`, `points − 1` × `L`, `Z`; no fill; every point distinct | [display] |
 | Bound transforms | `matrix(1 0 0 1 x y)` or none | [display] |
+| Mutable outline extent | Points within ±64 px of the node's origin (place the node, author points relative to it) | [display] |
 | Numbers | ≤ 4 fractional digits, no exponent notation | [display] |
 | Paint | Explicit fill and stroke on every leaf; no group style inheritance, no browser-only features | [display] |
 | IDs | `<prefix>_node_<i>`, `<prefix>_text_<i>`, `<prefix>_palette_<i>` (palette entries parked off screen) | [display] |
