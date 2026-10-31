@@ -122,7 +122,7 @@ Authoring rules for frames (they're meant to become `panel.svg.fragment`, so I a
 Run the linter on every frame, then build the contact sheet:
 
 ```sh
-python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg
+python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definition.json>   # + --two-page for 5–8 controls
 python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg
 ```
 

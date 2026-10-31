@@ -17,7 +17,7 @@ You're running the protocol in `opxy/protocol.md`. Read `opxy/constraints.md` an
 6. **Subject.** Propose 2–3 candidates tied to patterns. When revising an existing screen, score it against the protocol as candidate A. **Ask the person to choose** unless they already have.
 7. **Map + budget.** One channel per control, travel scaled to score with a visible floor, no on/off-only controls. Fill `resources.display` and re-run `lint_definition.py`. Rest = 0 changed nodes; heaviest playing ≈ 20 average.
 8. **Frames.** Start from `opxy/templates/frame.svg`. Draw `rest`, `playing`, and `c<N>-000/050/100` per control. Generate frames from one script when there are many, so they stay consistent; never hand-patch a single frame out of sync with the brief.
-9. **Lint.** `python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg` (`--two-page` for 5–8 controls, `--own-header` if covering the header). Fix every error; fix or justify every warning in `review.md`.
+9. **Lint.** `python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definition.json>` (the definition tells it which nodes are mutable outlines and how many points they need; `--two-page` for 5–8 controls, `--own-header` if covering the header). Fix every error; fix or justify every warning in `review.md`.
 10. **Contact sheet.** `python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png`, then look at the PNG at 1:1. If any control's three frames look alike, go back to step 7.
 11. **Motion, review, handoff.** Write `motion.md`, `review.md` (checklist from `accessibility.md`), `handoff.md` per protocol phase 8.
 

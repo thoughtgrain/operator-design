@@ -30,7 +30,8 @@ mkdir -p screens/<id>/frames
 cp opxy/templates/brief.md screens/<id>/brief.md
 cp opxy/templates/frame.svg screens/<id>/frames/rest.svg
 
-python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg          # add --two-page for 5–8 controls
+python3 opxy/tools/lint_definition.py <definition.json>
+python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definition.json>   # add --two-page for 5–8 controls
 python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png
 ```
 
