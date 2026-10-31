@@ -15,6 +15,36 @@
 | Kind | synth / effect / sample |
 | Sounds like | two sentences |
 | Controls | N (≤ 4 stock header, 5–8 two pages) |
+| Control source | existing XY definition / port of … / new |
+
+### 1A · Port map (skip if an XY definition already exists)
+
+| source control | source range / curve / default | XY slot | label | mapping | display | default | fate | notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| | | | | | | | keep / split / merge / drop | |
+
+Integer conversion (e.g. OP-1 0..32767 from the top 15 bits of Q31): …
+
+### 1B · Definition review
+
+`python3 opxy/tools/lint_definition.py <definition.json>` → … errors, … warnings. Warnings resolved or justified:
+
+| warning | resolution |
+| --- | --- |
+| | |
+
+| check | verdict | reason |
+| --- | --- | --- |
+| Names say what rises clockwise | | |
+| Header values in real units, ≤ ~5 chars | | |
+| Defaults plainest useful; presets sound good (by ear) | | |
+| Engine page holds only the sound's own parameters | | |
+| Page 1 holds what's played most | | |
+| Port parity: nothing silently lost | | |
+| Saved sounds compatible (if released) | | |
+| `id` final | | |
+
+### Captions
 
 | # | label (≤ 8, lower) | range | unit | default | caption at 0 / 50 / 100 | est. width @20px | fits 53px? |
 | --- | --- | --- | --- | --- | --- | --- | --- |

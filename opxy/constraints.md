@@ -95,6 +95,25 @@ Sources, pinned to what I read on 2026-10-31:
 | Note serial | Counts per track, not per key | [display] |
 | No on/off controls | Every control eases through its range visually; none is only an on/off change in the drawing | [ux] |
 
+## Definition (`definition.json`)
+
+Source **[api]**: open-xy `docs/api.md` § Definition and `tooling/definitions.py` (PR #260 branch).
+
+| Rule | Value | Source |
+| --- | --- | --- |
+| Top-level fields | Exactly `schema` (1), `id`, `name`, `parameters`, `presets`, `resources`, optional `press` | [api] |
+| `id` | Lowercase letter then letters/digits/_, ≤ 15. Presets store it, so it never changes once published | [api] |
+| Parameter count | Synth 4–8; sample/effect 1–8 | [api] |
+| Parameter fields | `id`, `label`, `default`, `mapping`, `display`; synth alternates (index ≥ 4) also `control` 0..3 | [api] |
+| Labels | ≤ 8 letters, digits or spaces; shown lower case | [api] |
+| Values | Defaults and preset values in [0, 1]; presets hold exactly the declared controls, ≤ 64 presets | [api] |
+| Mappings | `linear` (increasing), `anchors` (3–256 increasing), `power` (exponent ≠ 1), `exponential` (0 < min ≤ max), `enum` (2–256 unique labels ≤ 15 chars) | [api] |
+| Display formats | `ratio`, `percent`, `bipolar`, `duration`, `semitones`, `enum`, `division` (division maps linear 0..1) | [api] |
+| Two pages | `"press": "page"`: synth, 5–8 parameters, ≤ 1 alternate per position; 8 parameters need sdk 1.3, 5–7 need sdk 1.4 | [api] |
+| Text slots | > 4 need sdk 1.3 | [api] |
+| Voice capacity | 1–256; 8 covers one track (stock plays ≤ 8 notes per track) | [api] |
+| Saved sounds | Order and mapping changes affect saved sounds; a new slot at 0 must sound as before | [api], [ux] |
+
 ## Controls
 
 | Rule | Value | Source |

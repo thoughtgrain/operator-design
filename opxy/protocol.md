@@ -6,7 +6,8 @@ Everything lands in `screens/<machine-id>/`:
 
 ```
 screens/<machine-id>/
-├── brief.md          ← phases 1–4, from templates/brief.md
+├── brief.md          ← phases 0–4 (incl. port map and definition review), from templates/brief.md
+├── definition.json   ← phase 1A draft, when the machine has no XY definition yet
 ├── frames/           ← phase 5: rest.svg, playing.svg, c<N>-000.svg, c<N>-050.svg, c<N>-100.svg
 ├── contact.svg       ← phase 5: tools/contact_sheet.py output (+ contact.png if rsvg-convert exists)
 ├── motion.md         ← phase 6
@@ -22,11 +23,53 @@ Read the sound. Ask: is there one object or scene this sound acts on? If not, it
 
 ## Phase 1 · Intake
 
-Fill in the top of `brief.md`: machine id, kind (synth, effect), what it sounds like in two sentences, and every parameter with range, real unit, default, and the header caption it will show.
+Fill in the top of `brief.md`: machine id, kind (synth, effect), what it sounds like in two sentences, and where the controls come from: an existing XY `definition.json`, a port from another platform (OP-1 plugin, Eurorack module, plugin code), or a new machine.
 
-Why the captions now: they're the first thing that breaks. ux.md caps labels at 8 characters and values at about 5, measured in Univers Next Pro Light. If `dew point` doesn't fit, I find out before I've drawn anything.
+If the machine is a port and has no XY definition yet, do 1A. If an XY definition already exists, skip to 1B and review it. A new machine with no source starts its definition in 1A too, with "source" meaning the DSP I'm writing.
 
-**Gate:** every label ≤ 8 characters, lower case; every value caption estimated to fit its column (see the width note in `accessibility.md`); 1–8 parameters, with page 1 holding what's played most if there are more than 4.
+### Phase 1A · Definition from the port
+
+The screen can only show what the controls do, so the definition comes before the design. I build `definition.json` from the source engine's code, not its manual, because the code is what sounds:
+
+1. **Inventory the source controls.** Every knob, page-2 word, shift function and hidden mode, with its range, curve and default as the source implements it. Note any controls that share a knob (toro's OP-1 DRIV/APHX split one knob down the middle).
+2. **Decide each one's fate:** keep, split (one shared source knob becomes two XY slots), merge, or drop. Dropped controls need a reason ("velocity accent: the XY applies velocity after the engine").
+3. **Map ranges and curves.** Keep the source's response where the sound depends on it: same min/max, same curve (`linear`, `anchors`, `power`, `exponential`, `enum`). When the source works in a different integer range (OP-1 0..32767), say how the port converts it.
+4. **Choose display formats in real units.** `ratio`, `semitones`, `duration`, `enum` over `percent` whenever the musician thinks in that unit. A `percent` display on a non-0..1 range shows the wrong number.
+5. **Lay out the pages.** ≤ 4 controls use one page. 5–8 use `"press": "page"`: page 1 is what's played most, each page-2 control names its `control` position, at most one alternate per position, no filler parameters.
+6. **Set defaults to the plainest useful sound.** Colouring or degrading controls (drive, noise, drift, crush, mod depth) default to 0.
+7. **Carry presets across** with exactly the declared controls, values in [0, 1].
+8. **Leave `resources.display` as a placeholder.** Phase 4 sets it from the screen budget.
+
+Output: the draft `definition.json` and a **port map** table in `brief.md`: source control → XY slot, range, curve, default, fate, notes.
+
+**Gate:** every source control appears in the port map with a fate; the draft passes `lint_definition.py` with no errors.
+
+### Phase 1B · Definition review
+
+A definition is a contract with every saved project, so I review it before designing on top of it. Run the checker, then answer the human half:
+
+```sh
+python3 opxy/tools/lint_definition.py path/to/definition.json   # reads machine.json beside it
+```
+
+The checker covers structure (mirroring the SDK validator: fields, ids, labels ≤ 8 letters/digits/spaces, defaults and presets in [0, 1], mapping kinds, display formats, alternate positions, page rules and the sdk versions they need, display limits) and flags likely review problems (colouring controls defaulting on, envelope/LFO controls on the engine page, `percent` over non-unit ranges, long enum captions).
+
+The judgement calls it can't make go in the brief's review table, each with a verdict and a reason:
+
+| Check | Source |
+| --- | --- |
+| Every control's name says what rises when turned clockwise | ux.md Controls |
+| Header values in real units, ≤ ~5 characters, measured in the device font | ux.md Controls, Screens |
+| Defaults are the plainest useful setting; presets sound good straight away (by ear) | ux.md Principles, Controls |
+| The engine page holds the sound's own parameters; any envelope/LFO kept has a reason no stock module covers | ux.md Controls |
+| Page 1 holds what's played most | ux.md More than four controls |
+| Port parity: nothing the source did is silently lost; changes are listed | port map |
+| Saved sounds: if the machine is already released, parameter order and mappings are unchanged, and 0 in a new slot sounds as before | ux.md Saved sounds, api.md |
+| `id` is final (presets store it forever) | api.md Identity |
+
+**Gate:** zero checker errors; every warning resolved or justified in the brief; every review row has a verdict. Anything only provable by ear on a device stays **pending device**.
+
+After 1B, the header captions come straight from the reviewed definition, which is why caption widths are checked here and not later: labels ≤ 8 characters, values estimated to fit their column (see the width note in `accessibility.md`).
 
 ## Phase 2 · Listen and rank
 
@@ -57,7 +100,7 @@ Rules:
 - Travel scales with the score, floor of ~12 px movement or ~20° rotation or a two-step shade change, whichever applies, so score-1 controls still visibly move.
 - No control is only an on/off change in the drawing.
 
-Then the budget: declare `paths`, `points`, `nodes`, `texts`, `palette`, and estimate changed nodes per frame at rest (must be 0), playing at defaults, and playing at the heaviest setting (target ~20 average).
+Then the budget: declare `paths`, `points`, `nodes`, `texts`, `palette` (this fills the `resources.display` placeholder from 1A; re-run `lint_definition.py` after), and estimate changed nodes per frame at rest (must be 0), playing at defaults, and playing at the heaviest setting (target ~20 average).
 
 **Gate:** budget fits `constraints.md`, rest cost is 0, heaviest playing estimate ≤ ~20 average with a stated peak.
 
