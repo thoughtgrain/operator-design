@@ -1,7 +1,7 @@
 # Toro · screen brief
 
 > Source: `thoughtgrain/labyrinth` → `opxy/machines/toro` (definition.json, engine.cpp, display.cpp, gen_panel.py), read 2026-10-31. Protocol: `opxy/protocol.md`.
-> Status: phases 0–3 drafted, definition reviewed (1B). **Waiting on subject choice** before phase 4.
+> Status: phases 0–8 done for candidate A. Device checks pending (see `review.md`).
 
 ## 0 · Screen or stock page?
 
@@ -108,4 +108,35 @@ Taurus is a strong subject: points and hairlines on black suit the screen, and C
 | **B · The bull, rebuilt** | P1/P6 figure | the OP-1 rig in grey ribbons: horns spread, plate folds, eyes for cutoff, lasso for res | Continuity with the OP-1 plugin, but the README already tried and dropped it. It's figure-heavy on nodes, and the original art is mine to reuse but was drawn for 320 × 160 colour. |
 | **C · Fold diagram + trace** | P2 diagram + trace | left: a wave hitting two mirrors that fold it (fold, shape, noise); right: the output trace (cutoff, res, drive) | The clearest teacher of what toro does, and cheap. It loses the character, and it looks like every other synth. |
 
-**Chosen:** pending your call.
+**Chosen:** A, Taurus revised (chosen 2026-10-31). Scores in phase 2 confirmed as written.
+
+## 4 · Map and budget
+
+| # | score | channel | part (node) | travel 0 → 100 | what the player sees |
+| --- | --- | --- | --- | --- | --- |
+| 1 spread | 4 | position | β, ζ (17, 18) + their joins | β +44 px out, −8 px up; ζ +44 px out, +2 px down | the horns open |
+| 2 fold | 5 | **shape** | ecliptic, mutable outlines (0, 1) | an arch (1×) → 8 folds across 432 px | the ecliptic folds back on itself, like the wave does |
+| 3 cutoff | 5 | scale + shade | Aldebaran spike, core, halo (10–12) | core 0.5 → 1.9×, spike 0.3 → 1.5×, `#4B4B4B` → `#CDCDCD` | the eye star goes from a point to a blaze |
+| 4 res | 3 | scale + shade | Pleiades (30–36), ring (37–44) | cluster 1.0 → 0.6×, ring `#323232` → `#7D7D7D` | the cluster pulls tight and its ring lights |
+| 5 shape | 3 | position | β, ζ (17, 18) | both tips lift 22 px | the horns curl up |
+| 6 noise | 2 | count | field stars (53–64) | 2 → 12 stars out | the sky fills with stars |
+| 7 drive | 3 | position + shade | Milky Way, 3 lines (65–67) | lines spread 0 → ±12 px, `#323232` → `#7D7D7D` | the band widens and brightens |
+| 8 aphx | 2→5 | rotation + scale + shade | standing comet (45–48) | tail 42 → 84 px, kinks 0 → ±35°, following the engine's gentle-then-wild curve | the comet's tail goes from straight to tangled |
+
+Spread and shape share the horn stars but on different axes (out vs up); the contact sheet shows they stay distinct.
+
+```json
+"display": {"stateBytes": 156, "stateAlignment": 4,
+            "paths": 2, "points": 64, "nodes": 68, "texts": 16, "palette": 16}
+```
+
+Unchanged from the current port: 2 paths (now used for the ecliptic instead of parked), 68 nodes, all 16 text slots for the two-page header. `stateBytes` will change with the new state (handoff.md lists it); re-run `lint_definition.py` after.
+
+| case | changed nodes / frame |
+| --- | --- |
+| at rest | **0** (no idle comet, no twinkle without notes, nothing easing) |
+| turning a control | the nodes on that control's row above, for 0.15–0.2 s; fold re-keys 2 paths once per detent |
+| playing, defaults, 16ths at 120 BPM | avg ~12 · peak ~19 (Aldebaran 3, ecliptic shade 2, Pleiades 7, ≤ 3 twinkles) |
+| playing, heaviest (noise, res, aphx 100) | avg ~17 · peak ~22 (adds 2 comets × 2 nodes; twinkle capped at 3 changes per frame) |
+
+Estimates from the motion spec; **measure on the host** with `display()` before submitting.

@@ -7,7 +7,8 @@ check: open-xy's `sdk.py test` and photos of the real screen stay the authority.
 
 Usage:
     python3 opxy/tools/lint_frame.py FRAME.svg [FRAME.svg ...]
-        [--fragment] [--two-page] [--own-header] [--strict] [--json]
+        [--fragment] [--two-page] [--own-header] [--paths N | --definition PATH]
+        [--strict] [--json]
         [--tokens PATH]
 
 Exit codes: 0 clean (warnings allowed unless --strict), 1 lint errors,
@@ -191,9 +192,12 @@ def angle_turn_back(a: tuple, b: tuple, c: tuple) -> float | None:
 
 
 class FrameLinter:
-    def __init__(self, tokens: dict, *, fragment: bool, two_page: bool, own_header: bool):
+    def __init__(self, tokens: dict, *, fragment: bool, two_page: bool, own_header: bool, paths: int = 0,
+                 points: int | None = None):
         self.t = tokens
         self.fragment = fragment
+        self.paths = paths            # nodes 0..paths-1 are mutable outlines (definition resources.display.paths)
+        self.points = points          # declared points per mutable outline
         self.header_bottom = tokens["header"]["twoPage" if two_page else "stock"]["bottom"]
         self.own_header = own_header
         self.known_greys = {k.upper() for k in tokens["greys"]}
@@ -222,7 +226,24 @@ class FrameLinter:
             self.add("warn", "svg", "one-prefix",
                      f"bound ids use several prefixes {sorted(self.stats['prefixes'])}; a machine uses one")
         stats = dict(self.stats, prefixes=sorted(self.stats["prefixes"]))
-        return self.findings, stats
+        return self.collapse(self.findings), stats
+
+    @staticmethod
+    def collapse(findings: list[Finding], keep: int = 3) -> list[Finding]:
+        """Keep every error; fold repeated warnings of one rule into the first few plus a count."""
+        out: list[Finding] = []
+        seen: dict[str, int] = {}
+        for f in findings:
+            if f.level == "error":
+                out.append(f)
+                continue
+            seen[f.rule] = seen.get(f.rule, 0) + 1
+            if seen[f.rule] <= keep:
+                out.append(f)
+        for rule, count in seen.items():
+            if count > keep:
+                out.append(Finding(findings[0].file, "warn", "(more)", rule, f"…and {count - keep} more '{rule}' warnings"))
+        return out
 
     def add(self, level: str, where: str, rule: str, message: str) -> None:
         self.findings.append(Finding(self.file, level, where, rule, message))
@@ -317,9 +338,12 @@ class FrameLinter:
         for attr in ("fill", "stroke"):
             value = el.get(attr)
             if value is None:
+                if tag == "text" and attr == "stroke":
+                    continue  # the SDK screen template styles text with fill only
                 self.add("error", where, "explicit-paint", f"missing {attr}=; every leaf needs explicit paint (use \"none\" for no {attr})")
                 continue
             self.check_colour(value, where, attr)
+        stroke_only = el.get("fill", "none").strip().lower() == "none"
         if el.get("stroke", "none").strip().lower() != "none":
             sw = el.get("stroke-width")
             if sw is None:
@@ -330,7 +354,7 @@ class FrameLinter:
                 except ValueError:
                     self.add("error", where, "explicit-paint", f"stroke-width isn't a number ({sw!r})")
                 else:
-                    if not (bound and bound["kind"] == "palette") and width < self.t["legibility"]["secondaryStrokeMin"]:
+                    if stroke_only and not (bound and bound["kind"] == "palette") and width < self.t["legibility"]["secondaryStrokeMin"]:
                         self.add("warn", where, "legibility", f"stroke-width {width} is under {self.t['legibility']['secondaryStrokeMin']} px; thin lines vanish at 1:1")
 
     def check_colour(self, value: str, where: str, attr: str) -> None:
@@ -379,14 +403,18 @@ class FrameLinter:
             self.add("error", where, "max-points", f"{len(pts)} points; at most {dev['maxPointsPerPath']} per path")
 
         is_node = bound is not None and bound["kind"] == "node"
+        is_mutable = is_node and int(bound["index"]) < self.paths
         outline_level = "error" if is_node else "warn"
 
-        if is_node:
+        if is_mutable:
             letters = "".join(commands).upper()
             if not re.fullmatch(r"ML*Z", letters):
-                self.add("error", where, "bound-topology", "bound path must be exactly M, L…, Z (no H/V/curves)")
+                self.add("error", where, "mutable-topology", "mutable outline must be exactly M, L…, Z (no H/V/curves)")
             if el.get("fill", "").strip().lower() != "none":
-                self.add("error", where, "bound-topology", "bound (mutable) path must have fill=\"none\"; mutable outlines draw hollow")
+                self.add("error", where, "mutable-topology", "mutable outline must have fill=\"none\"; mutable outlines draw hollow")
+            if self.points is not None and len(pts) != self.points:
+                self.add("error", where, "mutable-topology",
+                         f"mutable outline has {len(pts)} points; the definition declares {self.points}, and the device binds exactly that many")
 
         if not sp["closed"] and el.get("stroke", "none").lower() != "none":
             self.add(outline_level, where, "closed-ribbon",
@@ -492,13 +520,26 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--fragment", action="store_true", help="artwork fragment: skip the 480 × 220 canvas check")
     ap.add_argument("--two-page", action="store_true", help="two-page header: reserve y 0–38 instead of 0–20")
     ap.add_argument("--own-header", action="store_true", help="the machine draws its own header; allow artwork in the header zone")
+    ap.add_argument("--paths", type=int, default=None, help="mutable outlines declared (nodes 0..paths-1); default from --definition, else 0")
+    ap.add_argument("--definition", type=Path, help="definition.json: read paths and points from resources.display")
     ap.add_argument("--strict", action="store_true", help="treat warnings as failures")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     args = ap.parse_args(argv)
 
     try:
         tokens = load_tokens(args.tokens)
-        linter = FrameLinter(tokens, fragment=args.fragment, two_page=args.two_page, own_header=args.own_header)
+        paths, points = args.paths or 0, None
+        if args.definition:
+            try:
+                disp = json.loads(args.definition.read_text(encoding="utf-8"))["resources"]["display"]
+            except FileNotFoundError as exc:
+                raise LintError(f"definition not found: {args.definition}") from exc
+            except (json.JSONDecodeError, KeyError, TypeError) as exc:
+                raise LintError(f"can't read resources.display from {args.definition}: {exc}") from exc
+            paths = args.paths if args.paths is not None else int(disp.get("paths", 0))
+            points = int(disp.get("points", 0)) or None
+        linter = FrameLinter(tokens, fragment=args.fragment, two_page=args.two_page, own_header=args.own_header,
+                             paths=paths, points=points)
     except (LintError, KeyError) as exc:
         print(f"lint_frame: {exc}", file=sys.stderr)
         return 2
