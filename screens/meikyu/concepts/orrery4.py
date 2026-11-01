@@ -10,7 +10,8 @@ and velocity all need a visible effect, and with Drum on, Scal should mean somet
             with a ring opening at the target. On the device: three graded mutable outlines plus the ring.
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
   Crpt      rewrites steps after each phrase, so fills change between phrases; and it jostles the belt every hop
-  Scal      normal mode: spreads the orbits, pentatonic tightest → minor → major → chromatic widest (eased)
+  Scal      normal mode: spreads the orbits and the asteroid belt with them, pentatonic tightest → minor → major →
+            chromatic widest (eased)
             drum mode: Scal becomes Kit (kit 1–4): it picks the pad set and spreads the asteroid belt instead
   Drum      on: the belt rises out of the orbit plane (it's the kit now), planets stop filling, and each hit makes its
             step's rocks jump up and fall back. Off: the belt settles back down and planets fill again.
@@ -199,7 +200,7 @@ def scene(p, last, t, presses):
         a = 2 * math.pi * ((phase + direction * hops * M3.HOP / M3.ROCK_PERIOD) % 1.0)
         jr = random.Random(seed * 7919 + hops)
         k = M3.JOSTLE * p.corrupt
-        rr_ = mid + (rho - mid) * belt
+        rr_ = (mid + (rho - mid) * belt) * spread                    # the belt scales out with the orbits (Scal), plus the kit spread in drum mode
         hop_up = BOUNCE_UP * math.sin(math.pi * struck[step] / PULSE) if step in struck else 0.0   # a hit: up and back down
         p3 = M3.orbit_point(rr_ + jr.uniform(-k, k), a + jr.uniform(-k, k) / rho,
                             h * belt + lift + hop_up + jr.uniform(-k, k) * 0.5)

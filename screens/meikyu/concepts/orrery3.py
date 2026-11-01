@@ -44,7 +44,7 @@ path = O.path
 SUN_R = 60.0                                     # world units
 SUN_SCREEN = (6.0, 116.0, 62.0)                  # where the sun must land: centre x, y and radius in px
 HOP, PERIOD = 0.75, 120.0
-DEPTH_CUE = 2.0                                  # extra powers of (sun depth / depth) on body sizes: size ∝ depth⁻³
+DEPTH_CUE = 0.0                                  # extra powers of (sun depth / depth) on body sizes (0: true perspective)
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
 ORBIT_RADII = [92, 128, 198, 300, 340, 380, 414]            # three inside the belt, four outside
