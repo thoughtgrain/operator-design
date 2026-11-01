@@ -169,9 +169,12 @@ def page_at(t, presses):
     return p, last
 
 
+RHYTHM_LABEL = "Rthm"                                  # the fourth control's label (was Drum), in the header's 4-letter style
+
+
 def header(p):
-    """the stock header; with Drum on, Scal reads as the kit"""
-    o = P.header(p)
+    """the stock header; the fourth control reads Rthm, and with it on, Scal reads as the kit"""
+    o = [line.replace(">Drum<", f">{RHYTHM_LABEL}<") for line in P.header(p)]
     if p.drum:
         o = [line.replace(f">{P.SCALES[p.scale]}<", f">kit {p.scale + 1}<").replace(">Scal<", ">Kit<") for line in o]
     return o
@@ -371,9 +374,9 @@ def M3_ring(x, y, r):
 
 
 def frame(p, body):
-    line = f'<text transform="matrix(1 0 0 1 240 {S.TEXT_Y})" fill="#F2F2F2" font-family="UniversNextPro-Light" font-size="16px" text-anchor="middle">{p.line()}</text>'
+    """the page: the scene and the header; no text line along the bottom"""
     return "\n".join(['<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',
-                      '<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>'] + body + [line] + header(p) + ["</svg>"])
+                      '<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>'] + body + header(p) + ["</svg>"])
 
 
 def main():
