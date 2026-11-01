@@ -4,12 +4,12 @@ The direction Brian picked from round 3 (`concepts/s4-iso`), taken through the p
 
 ## The idea
 
-An isometric field of seventy grey columns whose heights are a small model of toro's voice. I didn't want the blocks to be decoration with knobs bolted on, so each control changes the field the way it changes the sound:
+An isometric field of seventy grey slab blocks whose heights are a small model of toro's voice. I didn't want the blocks to be decoration with knobs bolted on, so each control changes the field the way it changes the sound:
 
 | Control | Score | What the field does | Why |
 | --- | --- | --- | --- |
 | spread | 4 | a second wave runs across the field at the oscillator ratio, beating against the first into a moiré of ridges | spread is osc 2's ratio; two waves at a ratio beat |
-| fold | 5 | heights fold back on themselves, ridges split into terraces | the wavefolder does exactly this to the signal |
+| fold | 5 | heights fold back on themselves into terraces, and the whole field rolls up into a drum (flat at 0, ~340° at 100); the voice's relief sinks into the drum and notes push blocks out of it | the wavefolder folds the signal back on itself; the field folds back on itself |
 | cutoff | 5 | 0: only the two broad waves; 100: a fine ripple of harmonics on top | the filter decides how much fine detail gets through |
 | res | 3 | one row of tops lights up, moving front to back | a resonant peak is one bright band |
 | shape | 3 | the main wave's ridges go from a sharp leading edge to symmetric | saw → triangle |
@@ -22,11 +22,13 @@ All eight and the note pass `opxy/tools/perceptibility.py`. Every frame and the 
 
 ## How it's built for the device
 
-Every column is three nodes: the top, the left face and the right face. The faces are fixed-length pillars (64 px) that move with the top, so a column changes height by translation alone. Nothing is ever reshaped, so there are no mutable outlines (`paths: 0`).
+Every block is three nodes: the top, the left face and the right face. The faces are a 12 px slab (`PILLAR`) that moves with the top, so a block changes height, or position, by translation alone. Nothing is ever reshaped, so there are no mutable outlines (`paths: 0`).
 
-That works because of draw order. Columns are drawn back to front, so the part of each pillar that hangs below its column's base is always covered by the columns in front of it. The front row's overhang is covered by two black skirt nodes drawn last.
+I started with 64 px pillars running to the floor, which made heights read as solid columns. They broke the fold roll: a node can't tilt, so pillars hanging off a curved field filled the drum in as a mound. Slabs leave the floor freely. The two skirt nodes that masked the pillars' overhang are still in the budget but always hidden.
 
-Budget: 220 nodes (8 header steps, 210 column faces, 2 skirts), 0 paths, 16 texts, 8 palette entries, no static art. `stateBytes` 136: the page header's 20, eased control values, the note serial and time, and one eased height byte per column.
+The roll (`roll_amount`, `rolled_top`): fold bends the field into an arc of up to 1.9π with its middle row on top, its radius shrinking as the arc grows, and the ends resting on the floor. Each block slides to its point on the circle and out along the radius by its height. As it wraps, the rows part by up to half a row so the staves read, the relief shrinks by 92% so the drum doesn't read as a heap, and tops on the underside go dark. Note lifts and ripples are added after the shrink, so notes push blocks out of the drum at full size. Draw order is fixed back to front, which keeps the drum's back behind its front; the lower-front staves are drawn last but only overlap slab sides.
+
+Budget: 220 nodes (8 header steps, 210 block faces, 2 hidden skirts), 0 paths, 16 texts, 8 palette entries, no static art. `stateBytes` 136: the page header's 20, eased control values, the note serial and time, and one eased height byte per column.
 
 Redraw: Brian asked for more movement, and movement costs nodes. With the roll and the ripple a note changes about 72 nodes per frame averaged over the second after it (135 in the first half second, peaking near 190), against ux.md's ~20. Heights snap to whole pixels, so a column only redraws when it really moves. Idle moves none. This is the first thing to check on hardware; the lighter fallbacks, in order, are dropping the roll (`PHASE_STEP = 0`), then narrowing the ripple. A control turn moves every column while it eases (~0.15 s), which is a turn, not a held note, so it sits outside the per-note budget, but it's the frame to watch on hardware.
 

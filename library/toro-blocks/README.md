@@ -10,18 +10,18 @@
 | Audit | **meets, with notes** · 2026-10-31 · tokens `source.ref` pull/260 · [audit.md](audit.md) |
 | Device | **device pending** |
 | Source | `screens/toro/gen_blocks.py` (frames, fragment, prototype); `screens/toro/blocks/` |
-| Video | [toro-blocks.mp4](toro-blocks.mp4), with toro's own engine as the soundtrack (`screens/toro/blocks_av.py`) |
+| Video | [toro-blocks.mp4](toro-blocks.mp4), every control swept with toro's own engine as the soundtrack (`screens/toro/blocks_av.py`); [toro-drum.mp4](toro-drum.mp4), fold rolling the field into a drum (`screens/toro/curl_av.py`) |
 
 ## The screen
 
-An isometric field of seventy grey columns whose heights are a small model of toro's voice: two oscillators at the spread ratio, a folder, a filter's fine detail, a soft clip, noise and per-key drift. Turning a knob reshapes the field the way it reshapes the sound, and every note rolls the field forward and rings a ripple out from where the key lands.
+An isometric field of seventy grey slab blocks whose heights are a small model of toro's voice: two oscillators at the spread ratio, a folder, a filter's fine detail, a soft clip, noise and per-key drift. Turning a knob reshapes the field the way it reshapes the sound, and every note rolls the field forward and rings a ripple out from where the key lands. Fold goes furthest: it bends the whole field round a drum, nearly closed at 100, and notes push blocks straight out of the drum's surface.
 
 ## Controls
 
 | control | score | channel | what the player sees |
 | --- | --- | --- | --- |
 | spread | 4 | shape (heights) | a second wave beats against the first |
-| fold | 5 | shape | ridges fold back into terraces |
+| fold | 5 | shape + position | ridges fold into terraces while the field rolls up into a drum; notes push blocks out of it |
 | cutoff | 5 | shape | broad waves at 0, fine ripple on top at 100 |
 | res | 3 | shade + position | one row of tops lights up, front to back |
 | shape | 3 | shape | ridges go from a sharp edge to symmetric |
@@ -32,10 +32,11 @@ An isometric field of seventy grey columns whose heights are a small model of to
 ## What makes it work
 
 - **The model is the drawing.** Heights come from the same signal path the sound does, so the mapping explains itself and no control needs a legend.
-- **Pillars and skirts.** Each column is three nodes (top, left, right). The faces are fixed-length pillars that only ever translate. Drawing back to front hides their overhang, and two black skirts hide the front row's. There are no mutable outlines and no static art, so the whole screen can move.
+- **Slabs, not pillars.** Each block is three nodes (top, left, right) whose faces are a 12 px slab that only ever translates. An earlier version hung 64 px pillars to the floor so heights read as solid columns, but pillars can't follow a curve: any wrap filled in as a mound. Slabs let the field leave the floor entirely. The two skirt nodes that masked the pillars stay in the budget, hidden.
+- **Rolling with translation alone.** The device can't tilt a node, so the drum is built by sliding each upright block to its place on the circle and pushing it out along the radius by its height. Rows are drawn back to front, so the drum's back is drawn first. The voice's relief sinks into the surface as it wraps (an un-flattened drum reads as a heap), leaving notes to push blocks out.
 - **Whole-pixel heights.** Snapping heights keeps edges crisp and means a column only redraws when it actually moves.
 
 ## Notes
 
-- Over the redraw guideline by request; see the audit.
+- Over the redraw guideline by request; see the audit. The fold roll moves every block while fold is turning, like any control turn.
 - Device pending.

@@ -136,6 +136,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Draw back to front.** Each pillar's overhang is then hidden by the columns in front of it. Two black skirt nodes, drawn last, hide the front row's.
 - **Snap to whole pixels.** Edges stay crisp, and a part only redraws when it really moves.
 - **Check the count.** Seventy columns is 210 nodes; keep the grid at 70–75 columns with the 8-node two-page header.
+- **Pillars or slabs.** Floor-length pillars (with black skirts drawn last) make heights read as solid columns, but they pin the field to the floor. If a control should lift, bend or roll the field, use short slabs: toro's fold wraps the field round a drum, which pillars can't follow because a node never tilts. Slide each upright block to its point on the curve, push it out along the normal by its height, and shrink the relief as it wraps so the curve reads before the texture.
 
 **Pitfalls.**
 
