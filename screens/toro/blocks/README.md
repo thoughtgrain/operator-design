@@ -45,3 +45,11 @@ Redraw: Brian asked for more movement, and movement costs nodes. With the roll a
 - **Each frame:** for each column, compute the height, place all three nodes at `(base_x, base_y - h)`, and set the top's shade: low, mid or high by height, lit on the res row, white during the note flash.
 - **Fixed nodes:** the side faces never change shade, and the skirts never move.
 - **Pending device checks:** the cost of a full-field ease on a control turn, and whether the 0.3 px same-colour strokes leave hairline seams between faces on the panel.
+
+## Sound
+
+`toro-blocks.mp4` has a soundtrack from toro's own engine (`labyrinth/opxy/machines/toro/engine.cpp`). `blocks_av.py` holds one score: a D minor pentatonic riff, a note every 300 ms, with each control swept up and back while it plays. It draws the frames from that score with `gen_blocks` and renders the audio from the same score through `audio/render.cpp`, so every change on screen is a change you hear.
+
+The order is drive, spread, cutoff up then down, fold, res, shape, noise, then aphx. Each of the eight keys plays its own pitch and lands its patch on its own spot on the field.
+
+toro has no amplitude envelope of its own (the OP-XY's comes after), so the harness applies a plain one: 6 ms attack, full sustain, 280 ms release.

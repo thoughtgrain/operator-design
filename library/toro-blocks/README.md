@@ -10,6 +10,7 @@
 | Audit | **meets, with notes** · 2026-10-31 · tokens `source.ref` pull/260 · [audit.md](audit.md) |
 | Device | **device pending** |
 | Source | `screens/toro/gen_blocks.py` (frames, fragment, prototype); `screens/toro/blocks/` |
+| Video | [toro-blocks.mp4](toro-blocks.mp4), with toro's own engine as the soundtrack (`screens/toro/blocks_av.py`) |
 
 ## The screen
 
