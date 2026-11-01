@@ -9,15 +9,17 @@ back, tumbling to fill the space. So:
             3.5 px to 25 px. They share one cycle with phases chosen by search so no two ever touch, and none touches
             the ringed planet. Each spins: two front meridians step round a quarter turn through four pre-drawn
             variants of the same one-path wireframe (one shown at a time). A planet fills while its step plays.
-  belt      the B half: 32 wire rocks in four lanes in the middle of the planets (four orbits inside, four outside);
-            four rocks per step, of varied shape (5–9 corners, round to shard-like) and size,
+  belt      the B half: 56 wire rocks filling the ring between the fourth and fifth planets, each at its own random
+            radius, phase and size (seven per step, varied shape: 5–9 corners, round to shard-like). Crpt jostles
+            the belt: each hop, rocks are knocked up to 7 px off their paths in proportion to corruption.
+           
             each filling while its step plays. Rocks tumble through three rotated variants. The outer and inner
             lanes roll front to back, the middle lane back to front, all hopping like the planets.
   sun       the corona as picked, static, drawn over everything so planets and rocks pass behind it
   phrase    the ringed planet as before; its segments light for the tones that sounded
 
-Node cost if the player page gets bound nodes (see README.md): planets 8 × 4 variants, rocks 32 × 3, ring 8:
-136 nodes. Hops are staggered; a hop redraws a node pair (hide one variant, show the next).
+Node cost if the player page gets bound nodes (see README.md): planets 8 × 4 variants, rocks 56 × 3, ring 8:
+208 nodes. Hops are staggered; a hop redraws a node pair (hide one variant, show the next).
 
     python3 orrery2.py <tmpdir>      → orrery2.mp4, orrery2-stills.png
 """
@@ -41,7 +43,6 @@ path, ell = O.path, O.ell
 SX, SY, SR = S.SX, S.SY, S.SR
 HOP = 0.75                                   # seconds between hops
 CYCLE = 64.0                                 # seconds for a planet to cross its path (same for all: spacing holds)
-ROCK_CYCLE = 30.0
 WIRE = ("#000000", "#7A7A7A")
 FILLED = ("#BEBEBE", "#4A4A4A")
 ROCK_WIRE = ("#000000", "#6E6E6E")
@@ -50,8 +51,6 @@ GAP = 4.0                                    # px kept clear between any two bod
 
 # eight planets: (orbit rx, radius px). Two inside the belt, six outside; sizes deliberately uneven.
 PLANETS = [(86, 5.0), (122, 12.0), (164, 3.5), (200, 18.0), (330, 7.5), (368, 25.0), (418, 4.5), (452, 13.0)]
-LANES = [(240, 1), (258, -1), (276, 1), (294, -1)]   # belt lanes, in the middle of the planets: rx and direction (1: back to front, -1: front to back)
-ROCKS_PER_LANE = 8
 RING = (446, 200, 26)                        # the ringed planet's centre and reach, an obstacle (bottom-right corner)
 
 
@@ -176,20 +175,30 @@ def choose_phases(tries=3000):
 PHASES, CLEAR = choose_phases()
 
 
+BELT = (232, 300)                            # the asteroid ring: inner and outer orbit radius (rx), between planets 4 and 5
+N_ROCKS = 56                                 # seven per B step
+ROCK_PX = 4.0                                # how far a rock moves along its path per hop
+JOSTLE = 7.0                                 # px a rock can be knocked off its path at Crpt 100
+
+
 def rocks():
-    """(lane, index, seed, size, step) for every rock: mostly small, a few big ones, four rocks per B step"""
+    """(seed, rx, phase, direction, size, step, path) for every rock: scattered through the whole ring at random radii
+    and phases, mostly small with a few big ones, most rolling back to front and some front to back"""
     out = []
     rnd = random.Random(23)
-    for lane in range(len(LANES)):
-        for j in range(ROCKS_PER_LANE):
-            n = lane * ROCKS_PER_LANE + j
-            size = rnd.uniform(7.0, 10.5) if rnd.random() < 0.18 else rnd.uniform(2.6, 6.0)
-            out.append((lane, j, 100 + n, size, 8 + (n * 3) % 8))
+    for n in range(N_ROCKS):
+        rx = rnd.uniform(*BELT)
+        roll = rnd.random()
+        size = rnd.uniform(7.0, 11.0) if roll < 0.12 else rnd.uniform(4.5, 7.0) if roll < 0.4 else rnd.uniform(2.0, 4.5)
+        lo, hi = visible_arc(rx, size)
+        length = sum(math.hypot(rx * (math.cos(lo + (hi - lo) * (k + 1) / 120) - math.cos(lo + (hi - lo) * k / 120)),
+                                ry_of(rx) * (math.sin(lo + (hi - lo) * (k + 1) / 120) - math.sin(lo + (hi - lo) * k / 120)))
+                     for k in range(120))
+        out.append((100 + n, rx, rnd.random(), 1 if rnd.random() < 0.7 else -1, size, 8 + n % 8, (lo, hi, length)))
     return out
 
 
 ROCKS = rocks()
-FIELD = (-0.62, 0.62)                        # the stretch of each lane the asteroid field occupies (radians, 0 = right)
 
 
 def stagger(n):
@@ -209,17 +218,16 @@ def scene(p, t):
         lit = p.step_lit(k)
         fill, line = FILLED if lit else WIRE
         bodies.append((y, node(planet_glyph(hops % 4), x, y, rr / 10, fill, line, 0.9)))
-    for lane, j, seed, size, step in ROCKS:
-        rx, direction = LANES[lane]
-        lo, hi = FIELD
-        n = lane * ROCKS_PER_LANE + j
+    for n, (seed, rx, phase, direction, size, step, (lo, hi, length)) in enumerate(ROCKS):
         hops = math.floor((t + stagger(n + 8)) / HOP)
-        u = (j / ROCKS_PER_LANE + direction * hops * HOP / ROCK_CYCLE + lane * 0.13) % 1.0
+        u = (phase + direction * hops * ROCK_PX / length) % 1.0
         a = lo + (hi - lo) * u
         x, y = SX + rx * math.cos(a), SY + ry_of(rx) * math.sin(a)
-        # the field lives on the right-hand stretch of the lanes; rocks grow in from specks at one end of it and
-        # shrink away at the other, so none pops in or out at full size
-        s = size * depth_scale(a) * max(0.12, math.sin(math.pi * u)) ** 0.7 / 10
+        # Crpt jostles the belt: every hop each rock is knocked a little off its path, more as corruption rises
+        jr = random.Random(seed * 7919 + hops)
+        k = JOSTLE * p.corrupt
+        x, y = x + jr.uniform(-k, k), y + jr.uniform(-k, k) * 0.6
+        s = size * depth_scale(a) / 10
         fill, line = ROCK_FILLED if p.step_lit(step) else ROCK_WIRE
         bodies.append((y, node(rock_glyph(seed, hops % 3), x, y, s, fill, line, 0.8)))
     o += [svg for _, svg in sorted(bodies, key=lambda b: b[0])]
