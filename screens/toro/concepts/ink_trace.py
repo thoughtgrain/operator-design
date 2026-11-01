@@ -53,6 +53,8 @@ WAVE = (78, 165, 150, 200)
 WAVE_SMALL = (400, 98, 452, 130)
 BLOCKS = [(90, 42, 128, 80), (90, 102, 125, 135), (362, 58, 396, 92), (366, 120, 398, 152)]
 SQUIGGLES = [(140, 100), (62, 128), (345, 92), (300, 182)]
+HEAD = (138, 42, 334, 180)                    # horns, ears, face and muzzle; the neck at the bottom edge stays put
+TUFT = (368, 52, 404, 94)
 PLUMES = [(44, 78), (120, 76), (152, 98), (226, 148), (226, 180), (150, 172), (88, 162), (40, 130)], \
          [(254, 150), (300, 118), (360, 98), (392, 76), (434, 82), (438, 120), (402, 142), (332, 160), (254, 180)]
 
@@ -149,6 +151,19 @@ def scale_region(px: np.ndarray, b, sx: float, sy: float, anchor: str) -> None:
     px[:] = regularise(px, m)
 
 
+def skew_region(px: np.ndarray, b, amp: float) -> None:
+    """lean a box sideways: each row shifts by amp at the top, tapering to 0 at the bottom (a head on a neck)"""
+    x0, y0, x1, y1 = b
+    src = px[y0:y1, x0:x1].copy()
+    px[y0:y1, x0:x1] = False
+    for i in range(y1 - y0):
+        dx = int(round(amp * (1 - i / (y1 - y0))))
+        tx = x0 + dx
+        row = src[i]
+        lo, hi = max(0, tx), min(W, tx + row.shape[0])
+        px[y0 + i, lo:hi] |= row[lo - tx:hi - tx]
+
+
 def shift_region(px: np.ndarray, b, dx: int, dy: int = 0) -> None:
     x0, y0, x1, y1 = b
     src = px[y0:y1, x0:x1].copy()
@@ -199,10 +214,10 @@ class Pen:
         pts = [(x + amp * math.sin(t / length * turns * 2 * math.pi), y + t) for t in range(0, int(length) + 1, 2)]
         self.line(pts, 2)
 
-    def wave(self, b, shape_v, bar=4):
+    def wave(self, b, shape_v, bar=4, gain=1.0):
         """the reference's bar glyph: a symmetric envelope that shape morphs from a saw ramp to a triangle"""
         x0, y0, x1, y1 = b
-        self.px[y0:y1, x0:x1] = False
+        self.px[y0 - 4:y1 + 4, x0:x1] = False
         n = (x1 - x0) // bar
         cy = (y0 + y1) / 2
         hmax = (y1 - y0) / 2 - 1
@@ -212,7 +227,7 @@ class Pen:
             saw = (u * 2) if u < 0.5 else 1 - ((u - 0.5) * 2)
             saw = saw ** 3                                            # a sharp spike, the saw's edge
             env = tri * shape_v + saw * (1 - shape_v)
-            h = max(1.5, hmax * (0.12 + 0.88 * env))
+            h = max(1.5, min(hmax + 4, hmax * (0.12 + 0.88 * env) * gain))
             x = x0 + i * bar + 1
             self.line([(x, cy - h), (x, cy + h)], 2)
 
@@ -222,13 +237,26 @@ def kink(a):
     return 0.4 * a + 0.6 * a ** 3
 
 
+def note(t):
+    """what a note does over time t (s): a decaying side-to-side wobble, a flash, a flare of steam"""
+    if t is None:
+        return dict(wobble=0.0, flash=0.0, flare=0.0, pulse=0.0)
+    env = math.exp(-t / 0.5)
+    return dict(wobble=7 * math.sin(2 * math.pi * 2.2 * t) * env, flash=1.0 if t < 0.15 else 0.0,
+                flare=0.25 * math.exp(-t / 0.6), pulse=env)
+
+
 def frame(v, playing=False, key=0) -> np.ndarray:
+    """`playing` is False, or the time in seconds since note-on (True means 0.05 s)"""
+    t = None if playing is False else (0.05 if playing is True else float(playing))
+    n = note(t)
+    playing = t is not None
     px = base().copy()
     pen = Pen(px)
     D = g.DEFAULTS
 
     # drive: the steam comes out of the nostrils and reaches further the harder toro is driven; a note flares it
-    reach = v["drive"] + (0.2 if playing else 0)
+    reach = v["drive"] + n["flare"]
     if reach > 0.02:
         s, m = smoke()
         dist = np.hypot(_xx - NOSE[0], _yy - NOSE[1])
@@ -242,9 +270,9 @@ def frame(v, playing=False, key=0) -> np.ndarray:
         scale_region(px, HORN_R, k, 1 + (k - 1) * 0.5, "bl")
 
     # cutoff: the eyes. dead at 0, the reference's glint by the middle, wide open at 100; a note flashes them
-    cut = min(1.0, v["cutoff"] + (0.25 if playing else 0))
+    cut = v["cutoff"]
     d0 = D["cutoff"]
-    open_ = 1.0 if playing else max(0.0, (cut - d0) / (1 - d0))   # above the default the white of the eye fills in; a note: wide
+    open_ = max(n["flash"], (cut - d0) / (1 - d0))                 # above the default the white fills in; a note flashes them wide
     glint = 3 * min(1.0, cut / d0)                                 # below it the glint shrinks away: dead eyes at 0
     for (ex, ey, er) in EYES:
         pen.disc(ex, ey, er + 1, False)
@@ -255,6 +283,11 @@ def frame(v, playing=False, key=0) -> np.ndarray:
         elif glint >= 1:
             gx, gy = int(ex + 2 - glint / 2), int(ey - 1 - glint / 2)
             px[gy:gy + int(round(glint)), gx:gx + int(round(glint))] = True   # the reference's square glint
+
+    # a note: the head wobbles side to side on its neck (horns, ears and face lean together) and the tail tuft flicks
+    if abs(n["wobble"]) >= 0.5:
+        skew_region(px, HEAD, n["wobble"])
+        shift_region(px, TUFT, int(round(-n["wobble"] * 0.3)), int(round(-abs(n["wobble"]) * 0.3)))
 
     # res: the burst beside the muzzle grows
     pen.burst(*BURST, 4 + 10 * v["res"], rays=8 if v["res"] > 0.5 else 6)
@@ -275,11 +308,11 @@ def frame(v, playing=False, key=0) -> np.ndarray:
             px[int(y), int(x)] = True
 
     # shape: the waveform glyphs morph
-    pen.wave(WAVE, 1 - v["shape"])
-    pen.wave(WAVE_SMALL, 1 - v["shape"], bar=3)
+    pen.wave(WAVE, 1 - v["shape"], gain=1 + 0.35 * n["pulse"])
+    pen.wave(WAVE_SMALL, 1 - v["shape"], bar=3, gain=1 + 0.35 * n["pulse"])
 
     # aphx: the dither swatches slip, per key, with a torn scanline
-    slip = kink(v["aphx"]) * (1.3 if playing else 1)
+    slip = kink(v["aphx"]) * (1 + 0.3 * n["pulse"])
     if slip > 0.03:
         rk = random.Random(21 + key)
         for b in BLOCKS:
@@ -332,7 +365,8 @@ def main():
     D = dict(g.DEFAULTS)
     poses = {"rest": (D, False), "spread-100": (dict(D, spread=1), False), "cutoff-000": (dict(D, cutoff=0), False),
              "cutoff-100": (dict(D, cutoff=1), False), "fold-shape-100": (dict(D, fold=1, shape=1), False), "drive-50": (dict(D, drive=0.5), False),
-             "drive-res-100": (dict(D, drive=1, res=1), False), "noise-aphx-100": (dict(D, noise=1, aphx=1), False), "playing": (D, True)}
+             "drive-res-100": (dict(D, drive=1, res=1), False), "noise-aphx-100": (dict(D, noise=1, aphx=1), False),
+             "note-0.05s": (D, 0.05), "note-0.25s": (D, 0.25), "note-0.6s": (D, 0.6)}
     d = HERE / "i2-trace"
     d.mkdir(exist_ok=True)
     tiles = []
