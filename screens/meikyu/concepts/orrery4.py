@@ -25,7 +25,8 @@ and velocity all need a visible effect, and with Drum on, Scal should mean somet
 The sound comes from a port of meikyu's press() with one proposed change: in drum mode Scal selects one of four pad
 sets (KITS) instead of being ignored. That needs the same change in labyrinth's player.cpp.
 
-    python3 orrery4.py <tmpdir>      → orrery4.mp4, orrery4-stills.png
+    python3 orrery4.py <tmpdir>                         → orrery4.mp4, orrery4-stills.png
+    MEIKYU_VARIANT=no-belt python3 orrery4.py <tmpdir>  → orrery5-nobelt.mp4: no asteroids, a sixth orbit instead
 """
 from __future__ import annotations
 
@@ -48,10 +49,12 @@ import suns as S
 HERE = Path(__file__).resolve().parent
 path = O.path
 LENGTH = 44.0
+OUT = "orrery5-nobelt" if M3.VARIANT == "no-belt" else "orrery4"   # MEIKYU_VARIANT=no-belt → the asteroid-free version
 STEP = A.STEP
 SPREAD = {2: 0.86, 0: 0.93, 1: 1.0, 3: 1.07}      # Scal → orbit spread: pentatonic, minor, major, chromatic
                                                     # (planet sizes scale with it, so spacing scales instead of closing)
 BELT_SPREAD = [0.85, 1.0, 1.15, 1.3]               # Kit → belt spread (drum mode)
+KIT_SPREAD = [0.86, 0.93, 1.0, 1.07]               # Kit → orbit spread (drum mode, no-belt version)
 KITS = [[0, 5, 7, 12, 17, 24, 31, 36],             # kit 1: meikyu's own pads
         [0, 3, 7, 10, 12, 15, 19, 24],             # kit 2: tighter, minor-ish toms
         [0, 7, 12, 19, 24, 31, 36, 43],            # kit 3: wide, fifths and octaves
@@ -175,7 +178,10 @@ def planet_pos(k, t, spread):
 
 def scene(p, last, t, presses):
     c = controls(t)
-    spread = eased(t, lambda tt: 1.0 if controls(tt)["drum"] else SPREAD[controls(tt)["scal"]])
+    if M3.VARIANT == "no-belt":                                      # no belt: in drum mode Kit spreads the orbits instead
+        spread = eased(t, lambda tt: KIT_SPREAD[controls(tt)["scal"]] if controls(tt)["drum"] else SPREAD[controls(tt)["scal"]])
+    else:
+        spread = eased(t, lambda tt: 1.0 if controls(tt)["drum"] else SPREAD[controls(tt)["scal"]])
     belt = eased(t, lambda tt: BELT_SPREAD[controls(tt)["scal"]] if controls(tt)["drum"] else 1.0)
     lift = eased(t, lambda tt: DRUM_LIFT if controls(tt)["drum"] else 0.0)    # the belt rises when it becomes the kit
     back, front = [], []
@@ -280,7 +286,7 @@ def main():
     tmp.mkdir(parents=True, exist_ok=True)
     presses, tones = run()
     A.LENGTH = LENGTH
-    wav = HERE / "orrery4.wav"
+    wav = HERE / f"{OUT}.wav"
     A.sound(wav, tones)
     n = int(LENGTH * A.FPS)
 
@@ -297,14 +303,14 @@ def main():
         list(ex.map(render, range(n)))
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-framerate", str(A.FPS), "-i", str(tmp / "f%04d.png"), "-i", str(wav),
                     "-vf", "scale=960:440:flags=neighbor", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-pix_fmt", "yuv420p",
-                    "-c:a", "aac", "-b:a", "192k", "-shortest", str(HERE / "orrery4.mp4")], check=True)
+                    "-c:a", "aac", "-b:a", "192k", "-shortest", str(HERE / f"{OUT}.mp4")], check=True)
     picks = (100, 250, 500, 620, 760, 1080)                          # defaults, dens, scal pent, scal chrom, drum kit 1, drum off
     ims = [Image.open(tmp / f"f{i:04d}.png") for i in picks]
     sheet = Image.new("RGB", (960, 660))
     for k, im in enumerate(ims):
         sheet.paste(im, (480 * (k % 2), 220 * (k // 2)))
-    sheet.save(HERE / "orrery4-stills.png")
-    print("wrote orrery4.mp4")
+    sheet.save(HERE / f"{OUT}-stills.png")
+    print(f"wrote {OUT}.mp4")
 
 
 if __name__ == "__main__":

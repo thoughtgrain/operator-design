@@ -26,6 +26,7 @@ ellipses bent by hand. So this one is built as a scene and projected, nothing dr
 from __future__ import annotations
 
 import math
+import os
 import random
 import subprocess
 import sys
@@ -53,12 +54,21 @@ ORBIT_RADII = [138, 198, 320, 380, 440]                      # two inside the be
 # when the sequence moves on to the next orbit, no line crosses: that planet fills and the next link starts from it.
 ORBIT_PLANETS = {138: [5.0, 8.0, 4.0], 198: [9.0, 4.5, 7.0], 320: [12.0, 5.0, 9.0], 380: [14.0, 6.0, 10.0],
                  440: [8.0, 3.5, 11.0, 5.0]}                       # 440's 3.5 is Pluto
+# variant "no-belt" (MEIKYU_VARIANT=no-belt): no asteroids; a sixth orbit takes the belt's place, and the sixteen
+# planets spread two to each inner orbit and three to each outer one
+VARIANT = os.environ.get("MEIKYU_VARIANT", "")
+if VARIANT == "no-belt":
+    ORBIT_RADII = [130, 186, 252, 318, 380, 440]
+    ORBIT_PLANETS = {130: [5.0, 8.0], 186: [9.0, 4.5], 252: [7.0, 12.0, 5.0], 318: [10.0, 4.5, 14.0],
+                     380: [6.0, 13.0, 8.0], 440: [11.0, 3.5, 7.0]}  # 440's 3.5 is Pluto
 BODIES = [(rho, r) for rho in ORBIT_RADII for r in ORBIT_PLANETS[rho]]
 ORBIT_OF = [ORBIT_RADII.index(rho) for rho, _ in BODIES]
 SLOT = [(i, len(ORBIT_PLANETS[rho])) for rho in ORBIT_RADII for i in range(len(ORBIT_PLANETS[rho]))]
 PLANETS = list(BODIES)                           # planet k carries step k
 BELT = (214, 288, 14.0)                          # inner and outer radius, half thickness: wide by default
 N_ROCKS, JOSTLE = 76, 6.0
+if VARIANT == "no-belt":
+    N_ROCKS = 0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
 CAM = (CAM_D * math.cos(math.radians(CAM_EL)) * math.cos(math.radians(CAM_AZ)), CAM_D * math.sin(math.radians(CAM_EL)),
        -CAM_D * math.cos(math.radians(CAM_EL)) * math.sin(math.radians(CAM_AZ)))
