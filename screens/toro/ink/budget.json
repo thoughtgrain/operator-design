@@ -1,11 +1,18 @@
 {
-  "nodes": 79,
+  "nodes": 235,
   "paths": 3,
   "points": 64,
   "texts": 16,
-  "palette": 9,
-  "staticRects": 1847,
-  "staticRectsCell2": 430,
+  "palette": 14,
+  "staticRects": 1476,
+  "headNodes": 122,
+  "steamNodes": 37,
+  "tuftNodes": 4,
+  "maxPoints": 60,
+  "smokeShift": [
+    3,
+    1
+  ],
   "controls": [
     "spread",
     "fold",

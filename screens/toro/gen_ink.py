@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
-"""Toro's screen: the owner's one-bit bull, built for the open-xy display ABI.
+"""Toro's screen: the owner's one-bit bull, rebuilt for the open-xy display ABI from the photos of the device.
 
-Why it's split the way it is. On the device only nodes change at runtime, and a node is one path or circle of at
-most 64 points. A dithered area is hundreds of one-pixel marks, so dither can only live in things that never move.
-So the screen is two layers:
+v2. The first build traced the photo by box-averaging it, which turned every 2 px line into a dotted one, and then
+redrew the head by hand as a cartoon. Both were wrong. This build takes its art from ink_art.py, which point-samples
+the photos at display-pixel centres and rebuilds them pixel-exact (clean 2 px lines, clean dither, the fine checker as
+the flat grey it reads as on the panel). Nothing is redrawn by hand: every node's outline is the contour of a cell
+of the owner's drawing.
 
-  static artwork   the body, legs, hump, tail, swatches, ground dots and both bar glyphs, straight from the trace of
-                   the owner's photo (opxy/reference/toro-ink-rest.jpg) as run-length <rect>s in white, 1 px dither
-  nodes            everything that moves or changes: the head group (face, brow, ears, horns, eyes, muzzle, nostrils),
-                   the tail tuft, the steam puffs, sparkles, grain and the torn scanlines. These are flat palette
-                   greys with a 2 px white outline, matched to the dither density they replace
+The split is the same as before, for the same reason (only nodes move, and a node is one path of ≤ 64 points, so
+dither can only live in still art):
+
+  static artwork   everything that never moves, pixel for pixel from the rest photo: white as run-length <rect>s,
+                   the fine-checker grey as <rect>s in #4B4B4B. Includes the face's dot grid
+  head nodes       each cell of the head (horns, forehead cap, face, ears, eye patches, muzzle) as its own outline,
+                   pushed out 1 px so its 2 px white stroke lands exactly on the drawing's line; eye whites and nostrils
+                   as white shapes. Flat-grey cells keep their exact grey; the cap and the left horn are the only two
+                   dithered cells that move, so they become flat greys of the same brightness
+  steam nodes      the cells of the steam, from the smoke photo, revealed by drive from the nostrils outward
+  tail tuft        its cells as nodes, so it can flick
   mutable outlines the burst beside the muzzle (res) and two heat squiggles (fold)
 
-Controls (the OP-1 order the header shows):
-  spread  horns scale out from their roots             shape   horn tips turn up and out
-  fold    the head lowers and tilts forward to charge; heat squiggles appear and tighten
-  cutoff  0: dead eyes, dark horns, ears flat · default: the photo · 100: eyes wide, face lit
-  res     the muzzle flushes bright, the nostrils flare, the burst grows
-  noise   sparkles and grain                            drive   steam, puff by puff from the nostrils
-  aphx    torn scanlines slip across the swatches, per key; one horn turns off on its own
-  a note  the head wobbles on its neck (3.5° at 2.2 Hz, settling in ~0.5 s), the eyes flash wide, one more puff
-
-    python3 screens/toro/gen_ink.py            # frames into screens/toro/ink/frames, fragment, board
-    python3 screens/toro/gen_ink.py --debug    # the vector parts over the trace at 4×
+    python3 screens/toro/gen_ink.py            # frames, fragment, board, model.json for the prototype
 """
 from __future__ import annotations
 
@@ -33,72 +31,46 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw
-from scipy.ndimage import binary_dilation
+from scipy.ndimage import binary_dilation, binary_erosion, binary_fill_holes, label
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(HERE / "concepts"))
 import gen_frames as g  # noqa: E402  (helpers: f, poly, header preview, DEFAULTS, CONTROLS)
-import ink_trace  # noqa: E402  (the trace of the owner's photo)
+import ink_art as A  # noqa: E402
 
 W, H, TOP = 480, 220, 40
 OUT = HERE / "ink"
 PREFIX = "toro"
 PATHS = 3                                                  # mutable outlines: burst, squiggle A, squiggle B
-HEADER_FIRST = PATHS                                       # the two-page header's 8 bar nodes follow the outlines
-FIRST_ART = HEADER_FIRST + 8
-
+HEADER_FIRST = PATHS
 f, poly = g.f, g.poly
 WHITE, BLACK = "#FFFFFF", "#000000"
-# palette: (fill, stroke, width). Greys match the dither densities they stand in for: 25 % → #4B4B4B, 50 % → #7D7D7D, 75 % → #AFAFAF
-PALETTE = [(BLACK, WHITE, 2), ("#7D7D7D", WHITE, 2), ("#AFAFAF", WHITE, 2), (WHITE, WHITE, 2), ("#4B4B4B", WHITE, 2),
-           ("#323232", WHITE, 2), ("#646464", WHITE, 2), (WHITE, WHITE, 1), (BLACK, WHITE, 2)]
-P_INK, P_MID, P_LIGHT, P_WHITE, P_DARK, P_LIT1, P_LIT2, P_GRAIN, P_OUTLINE = range(9)
+GREY_FINE = "#4B4B4B"                                      # A.G_FINE: the fine checker on the panel
 
-# ---- geometry, absolute px, read off the trace at 4× ---------------------------------------------------------------
-PIVOT = (238, 174)                                         # the neck: the head wobbles and lowers about this
-FACE = [(188, 77), (194, 64), (206, 55), (224, 50), (245, 50), (264, 54), (278, 62), (287, 72), (290, 78), (281, 81),
-        (281, 108), (290, 120), (290, 140), (282, 152), (266, 155), (212, 174), (205, 174), (192, 166), (182, 152),
-        (177, 134), (181, 118), (194, 110), (194, 81)]
-BROW = [(194, 78), (281, 78)]
-EYE_L = [(196, 108), (220, 107), (224, 114), (223, 134), (214, 138), (199, 136), (195, 126)]
-EYE_R = [(252, 107), (276, 108), (280, 120), (279, 134), (266, 138), (254, 135), (251, 116)]
-EYE_C = ((210, 124), (265, 124))
-MUZZLE = [(216, 152), (261, 152), (266, 158), (266, 168), (261, 173), (216, 173), (211, 168), (211, 158)]
-NOSTRILS = ((226, 164), (249, 164))
-EAR_L = [(196, 100), (183, 101), (172, 109), (172, 119), (182, 126), (196, 124)]
-EAR_R = [(475 - x, y) for x, y in EAR_L]
-HORN_L = [(192, 101), (176, 104), (160, 101), (148, 92), (142, 78), (143, 63), (149, 52), (157, 45), (164, 45),
-          (162, 56), (161, 68), (166, 78), (177, 83), (190, 80)]
-HORN_R = [(475 - x, y) for x, y in HORN_L]
-HORN_ROOT = ((191, 90), (284, 90))
-EAR_ROOT = ((194, 112), (281, 112))
-TUFT = [(387, 56), (393, 66), (396, 78), (392, 88), (383, 92), (374, 88), (371, 77), (376, 66)]
-TUFT_ROOT = (380, 92)
-BURST = (150, 150)
-SQUIGGLES = ((140, 112), (345, 104))
-PUFFS_L = [(214, 166, 4), (199, 165, 5), (184, 161, 6), (168, 154, 7), (152, 146, 8), (136, 138, 8), (120, 128, 9),
-           (105, 117, 9), (92, 105, 10), (84, 92, 10), (76, 80, 9), (62, 86, 7), (52, 100, 6), (60, 112, 5)]
-PUFFS_R = [(262, 166, 4), (278, 163, 5), (294, 157, 6), (310, 149, 7), (326, 140, 8), (342, 130, 8), (356, 119, 9),
-           (368, 108, 9), (380, 96, 10), (392, 85, 10), (406, 80, 9), (418, 90, 7), (424, 104, 6), (414, 112, 5)]
-SPARKLES = [(60, 70), (430, 60), (70, 180), (420, 150), (120, 60), (330, 200), (40, 120), (450, 110)]
-GRAIN = [(32, 90), (90, 200), (160, 60), (300, 50), (440, 190), (380, 190), (20, 170), (200, 205), (270, 205), (460, 80), (130, 150), (350, 60)]
-SWATCHES = [(90, 42, 128, 80), (90, 102, 125, 135), (362, 58, 396, 92), (366, 120, 398, 152)]
-STATIC_CLEAR = [(142, 142, 158, 158)]                      # where the trace has the burst; it's a mutable outline now
+# palette: (fill, stroke, width, paint). paint "stroke" draws the outline only (a hollow cell); "fill" fills and strokes
+PALETTE = [(BLACK, WHITE, 2, "stroke"), (GREY_FINE, GREY_FINE, 0.1, "fill"), ("#3A3A3A", "#3A3A3A", 0.1, "fill"), ("#6E6E6E", "#6E6E6E", 0.1, "fill"),
+           (WHITE, WHITE, 1, "fill"), ("#262626", "#262626", 0.1, "fill"), ("#8C8C8C", "#8C8C8C", 0.1, "fill"), ("#AFAFAF", "#AFAFAF", 0.1, "fill"),
+           (WHITE, WHITE, 1, "fill"), (BLACK, WHITE, 2, "stroke"), (WHITE, WHITE, 0.1, "fill"), (GREY_FINE, GREY_FINE, 0.1, "fill"), ("#7D7D7D", "#7D7D7D", 0.1, "fill"), ("#4B4B4B", WHITE, 2, "fill")]
+P_HOLLOW, P_FINE, P_D25, P_D50, P_WHITE, P_DIM, P_LIT1, P_LIT2, P_GRAIN, P_OUTLINE, P_WHITE_EXACT, P_FINE_EXACT, P_ECHO, P_STEAM = range(14)
+KIND_PALETTE = {A.DARK: P_HOLLOW, A.FLAT: P_FINE, A.D25: P_D25, A.D50: P_D50}
 
-
-def smooth(pts, per=3):
-    """Catmull-Rom through a closed polygon: authored as a few corners, drawn rounded like the photo"""
-    n = len(pts)
-    out = []
-    for i in range(n):
-        p0, p1, p2, p3 = pts[(i - 1) % n], pts[i], pts[(i + 1) % n], pts[(i + 2) % n]
-        for k in range(per):
-            t = k / per
-            t2, t3 = t * t, t * t * t
-            out.append(tuple(0.5 * ((2 * p1[c]) + (-p0[c] + p2[c]) * t + (2 * p0[c] - 5 * p1[c] + 4 * p2[c] - p3[c]) * t2
-                                    + (-p0[c] + 3 * p1[c] - 3 * p2[c] + p3[c]) * t3) for c in (0, 1)))
-    return out
+# ---- where things are, absolute px on the rest photo -------------------------------------------------------------------
+PIVOT = (238, 186)                                         # the neck: the head wobbles and lowers about this
+HEAD_SEEDS = {"horn_l": (160, 85), "horn_r": (300, 80), "cap": (235, 65), "ear_l": (183, 110), "ear_r": (290, 108),
+              "face": (235, 132), "patch_l": (205, 140), "patch_r": (265, 140), "muzzle": (238, 166)}
+HORN_ROOTS = {"horn_l": (195, 88), "horn_r": (281, 80)}
+NOSTRIL_AT = (238, 165)
+TUFT_BOX = (372, 54, 402, 92)
+TUFT_ROOT = (382, 92)
+BURST_BOX = (136, 134, 166, 166)
+GLYPH_BOXES = ((70, 158, 160, 206), (396, 95, 465, 135))  # the two bar glyphs: shape reshapes their envelopes
+BURST = (151, 150)
+SQUIGGLES = ((140, 102), (345, 96))
+PLUMES = ([(38, 76), (132, 74), (162, 100), (162, 157), (229, 159), (229, 182), (150, 178), (88, 166), (34, 132)],
+          [(251, 160), (300, 157), (300, 122), (360, 98), (392, 72), (411, 72), (411, 140), (332, 164), (251, 182)])
+SPARKLES = [(60, 70), (430, 60), (70, 180), (420, 150), (120, 60), (330, 205), (40, 120), (450, 110)]
+GRAIN = [(32, 90), (90, 205), (160, 60), (300, 50), (440, 195), (380, 195), (20, 170), (200, 210), (270, 210), (460, 80), (130, 150), (350, 60)]
+SWATCHES = [(90, 46, 126, 74), (88, 104, 124, 136), (350, 58, 388, 92), (362, 122, 394, 162)]
 
 
 def centroid(pts):
@@ -110,16 +82,15 @@ def rel(pts, o):
 
 
 def ribbon(pts, w):
-    """a line as one closed outline"""
     n = len(pts)
-    out_l, out_r = [], []
+    a_, b_ = [], []
     for i, (x, y) in enumerate(pts):
         a, b = pts[max(0, i - 1)], pts[min(n - 1, i + 1)]
         dx, dy = b[0] - a[0], b[1] - a[1]
         ln = math.hypot(dx, dy) or 1
-        out_l.append((x - dy / ln * w / 2, y + dx / ln * w / 2))
-        out_r.append((x + dy / ln * w / 2, y - dx / ln * w / 2))
-    return out_l + out_r[::-1]
+        a_.append((x - dy / ln * w / 2, y + dx / ln * w / 2))
+        b_.append((x + dy / ln * w / 2, y - dx / ln * w / 2))
+    return a_ + b_[::-1]
 
 
 def star4(r):
@@ -127,11 +98,10 @@ def star4(r):
 
 
 def burst_outline(r, rays=8):
-    """rays with a hollow centre, as one closed outline; each tip has a small flat end (no reversal)"""
-    pts = []
-    r_in, half = r * 0.42, 0.4
+    """rays round a hollow centre as one closed outline, each tip squared off (no reversal)"""
+    pts, r_in, half = [], max(1.6, r * 0.42), 0.6
     for k in range(rays):
-        a = 2 * math.pi * k / rays
+        a = 2 * math.pi * k / rays + math.pi / rays
         c, s = math.cos(a), math.sin(a)
         nx, ny = -s * half, c * half
         pts += [(c * r_in - nx, s * r_in - ny), (c * r - nx, s * r - ny), (c * r + nx, s * r + ny), (c * r_in + nx, s * r_in + ny)]
@@ -143,103 +113,235 @@ def squiggle_outline(length, amp, turns, w=2.0):
     return ribbon(pts, w)
 
 
-def cloud(r, lobes=5, n=40):
-    """a puff of steam: a circle with soft lobes, one closed outline"""
-    pts = []
-    for k in range(n):
-        a = 2 * math.pi * k / n
-        rr = r * (0.86 + 0.14 * abs(math.cos(lobes * a / 2)) ** 0.6)
-        pts.append((math.cos(a) * rr, math.sin(a) * rr))
-    return pts
-
-
-def circle_pts(r, n=12):
+def tiny(r, n=10):
     return [(math.cos(2 * math.pi * k / n) * r, math.sin(2 * math.pi * k / n) * r) for k in range(n)]
 
 
-# ---- the parts (node table) -------------------------------------------------------------------------------------------
+# ---- the parts, all cut from the owner's drawing -------------------------------------------------------------------------
 class Part:
-    def __init__(self, name, origin, pts=None, palette=P_INK, r=None, group="free"):
-        self.name, self.origin, self.pts, self.palette, self.r, self.group = name, origin, pts, palette, r, group
+    def __init__(self, name, pts, palette, group="free", origin=None, order=0):
+        self.name, self.palette, self.group, self.order = name, palette, group, order
+        self.origin = origin or centroid(pts)
+        self.pts = rel(pts, self.origin)
+        self.abs = pts
 
 
-def parts() -> list[Part]:
-    P = []
-    P.append(Part("burst", BURST, burst_outline(6), P_OUTLINE))                    # mutable 0
-    P.append(Part("squiggle_a", SQUIGGLES[0], squiggle_outline(26, 3.5, 1.5), P_OUTLINE))
-    P.append(Part("squiggle_b", SQUIGGLES[1], squiggle_outline(26, 3.5, 1.5), P_OUTLINE))
-    for i in range(8):                                                             # header bar steps (SDK two-page header)
-        P.append(Part(f"header_{i}", (60 * i, 0), [(0, 0), (60, 0), (60, 20), (0, 20)], P_INK, group="header"))
-    head = "head"
-    P.append(Part("horn_l", HORN_ROOT[0], rel(smooth(HORN_L, 3), HORN_ROOT[0]), P_MID, group=head))
-    P.append(Part("horn_r", HORN_ROOT[1], rel(smooth(HORN_R, 3), HORN_ROOT[1]), P_MID, group=head))
-    P.append(Part("ear_l", EAR_ROOT[0], rel(smooth(EAR_L, 4), EAR_ROOT[0]), P_MID, group=head))
-    P.append(Part("ear_r", EAR_ROOT[1], rel(smooth(EAR_R, 4), EAR_ROOT[1]), P_MID, group=head))
-    c = centroid(FACE)
-    P.append(Part("face", c, rel(smooth(FACE, 2), c), P_INK, group=head))
-    P.append(Part("brow", (237.5, 78), rel(ribbon(BROW, 2), (237.5, 78)), P_WHITE, group=head))
-    for n, (patch, ec) in (("l", (EYE_L, EYE_C[0])), ("r", (EYE_R, EYE_C[1]))):
-        P.append(Part(f"eye_{n}", ec, rel(smooth(patch, 4), ec), P_INK, group=head))
-    for n, ec in (("l", EYE_C[0]), ("r", EYE_C[1])):
-        P.append(Part(f"white_{n}", ec, None, P_WHITE, r=6, group=head))                   # the photo's white disc
-    for n, ec in (("l", EYE_C[0]), ("r", EYE_C[1])):
-        P.append(Part(f"pupil_{n}", (ec[0] + 1, ec[1] - 1), None, P_INK, r=3.5, group=head))
-    c = centroid(MUZZLE)
-    P.append(Part("muzzle", c, rel(smooth(MUZZLE, 4), c), P_LIGHT, group=head))
-    for n, nc in (("l", NOSTRILS[0]), ("r", NOSTRILS[1])):
-        P.append(Part(f"nostril_{n}", nc, None, P_WHITE, r=5, group=head))
-    P.append(Part("tuft", TUFT_ROOT, rel(smooth(TUFT, 4), TUFT_ROOT), P_MID))
-    for side, puffs in (("l", PUFFS_L), ("r", PUFFS_R)):
-        for i, (x, y, r) in enumerate(puffs):
-            P.append(Part(f"puff_{side}{i}", (x, y), cloud(6, lobes=4 + i % 3), P_MID, group="steam"))
-            P[-1].puff_scale = r / 6
+def register(a: np.ndarray, b: np.ndarray, r=5):
+    """the (dx, dy) that best lays mask b over mask a"""
+    best = (-1, 0, 0)
+    for dy in range(-r, r + 1):
+        for dx in range(-r, r + 1):
+            sh = np.roll(np.roll(b, dy, 0), dx, 1)
+            score = (a & sh).sum()
+            if score > best[0]:
+                best = (score, dx, dy)
+    return best[1], best[2]
+
+
+def build():
+    img, cells, kind, solid = A.load("rest")
+    parts, head_mask = [], np.zeros((H, W), bool)
+
+    # mutable outlines first: they are nodes 0..PATHS-1
+    parts.append(Part("burst", [(BURST[0] + x, BURST[1] + y) for x, y in burst_outline(3 + 24 * g.DEFAULTS["res"])], P_OUTLINE, "path", BURST))
+    for i, (x, y) in enumerate(SQUIGGLES):
+        parts.append(Part(f"squiggle_{'ab'[i]}", [(x + px, y + py) for px, py in squiggle_outline(26, 3.5, 1.5)], P_OUTLINE, "path", (x, y)))
+    for i in range(8):                                       # the SDK's two-page header bar
+        parts.append(Part(f"header_{i}", [(60 * i, 0), (60 * i + 60, 0), (60 * i + 60, 20), (60 * i, 20)], P_HOLLOW, "header", (60 * i, 0)))
+
+    # the head, pixel-exact: its fills and its lines as staircase outlines at whole-pixel coordinates, so at rest it
+    # draws exactly like the photo, and a whole-pixel move (the wobble, the drop) keeps it exact
+    head_cells = {name: A.cell_at(cells, x, y) for name, (x, y) in HEAD_SEEDS.items()}
+    region = {name: binary_dilation(A.region(cells, k), iterations=2) for name, k in head_cells.items()}
+    head_mask = np.zeros((H, W), bool)
+    for m in region.values():
+        head_mask |= m
+    core = {name: A.region(cells, k) for name, k in head_cells.items()}
+    horn_zone = {}
+    for name, ear in (("horn_l", "ear_l"), ("horn_r", "ear_r")):
+        others = binary_dilation(core["cap"] | core["face"] | core[ear], iterations=1)
+        horn_zone[name] = binary_dilation(core[name], iterations=2) & ~others
+
+    def group_of(piece):
+        ys, xs = np.nonzero(piece)
+        for name in ("horn_l", "horn_r"):
+            if (piece & horn_zone[name]).sum() >= 0.5 * piece.sum():
+                return name
+        return "head"
+
+    def add(piece, corners, palette, kind_name, order, grp=None):
+        grp = grp or group_of(piece)
+        order = order + (0 if grp in HORN_ROOTS else 1000 if kind_name != "line" else 2000)
+        if grp in HORN_ROOTS:
+            origin = HORN_ROOTS[grp]
+            p = Part(f"{grp}_{kind_name}_{order}", [(float(x), float(y)) for x, y in corners], palette, "head", origin, order)
+            p.horn = grp
+        else:
+            ox, oy = min(x for x, _ in corners), min(y for _, y in corners)
+            p = Part(f"head_{kind_name}_{order}", [(float(x), float(y)) for x, y in corners], palette, "head", (ox, oy), order)
+            p.horn = None
+        parts.append(p)
+
+    order = 0
+    # fills first: the flat cells keep their exact grey; the two dithered cells that move become flat greys; the face
+    # is filled black so the horns can slide out from under it
+    for name, k in head_cells.items():
+        if kind[k] == A.DARK:
+            continue
+        zl, zr = horn_zone["horn_l"], horn_zone["horn_r"]
+        for piece, corners in [pc for zone in (zl, zr, ~(zl | zr)) for pc in A.pieces((cells == k) & zone)]:
+            add(piece, corners, {A.FLAT: P_FINE, A.D25: P_D25, A.D50: P_D50}[int(kind[k])], name, order)
+            order += 1
+    # the eye whites and nostrils, each a single node so cutoff and res can scale them
+    sl, n = label(solid)
+    specials = np.zeros((H, W), bool)
+    for name_, k_name in (("white_l", "patch_l"), ("white_r", "patch_r"), ("nostril_l", "muzzle"), ("nostril_r", "muzzle")):
+        holder = A.region(cells, head_cells[k_name])
+        cand = [j for j in range(1, n + 1) if ((sl == j) & holder).sum() >= 0.8 * (sl == j).sum() and (sl == j).sum() >= 12]
+        cand.sort(key=lambda j: np.where(sl == j)[1].mean())
+        j = cand[0] if name_.endswith("_l") else cand[-1]
+        m = sl == j
+        specials |= m
+        corners = A.loops(m)[0]
+        parts.append(Part(name_, [(float(x), float(y)) for x, y in corners], P_WHITE_EXACT, "head", None, 3000 + order))
+        parts[-1].horn = None
+        parts[-1].special = True
+        order += 1
+    # the lines (and the face's dot grid)
+    lines = solid & head_mask & ~specials
+    zl, zr = horn_zone["horn_l"], horn_zone["horn_r"]
+    for zone in (zl, zr, ~(zl | zr)):
+        for piece, corners in A.pieces(lines & zone):
+            add(piece, corners, P_WHITE_EXACT, "line", 500 + order)
+            order += 1
+    # spread: an echo of each horn's line, in a dim grey, drawn behind the horns. At the default it sits exactly
+    # under the horn; spread slides the echoes apart, the two oscillators detuning into a double image
+    for horn in ("horn_l", "horn_r"):
+        body = (A.region(cells, head_cells[horn]) | (lines & horn_zone[horn]))
+        for piece, corners in A.pieces(body):
+            p = Part(f"echo_{horn}_{order}", [(float(x), float(y)) for x, y in corners], P_ECHO, "head",
+                     (min(x for x, _ in corners), min(y for _, y in corners)), -500 + order)
+            p.horn = None
+            p.echo = horn
+            parts.append(p)
+            order += 1
+
+    # the tail tuft, pixel-exact too, turning about its root on a note
+    x0, y0, x1, y1 = TUFT_BOX
+    tuft_mask = np.zeros((H, W), bool)
+    tuft_mask[y0:y1, x0:x1] = True
+    tuft_px = (img > 0) & tuft_mask
+    tuft_fill = np.zeros((H, W), bool)
+    for k in np.unique(cells[y0:y1, x0:x1]):
+        if k > 1 and kind[k] != A.DARK and (cells == k)[y0:y1, x0:x1].sum() >= 0.9 * (cells == k).sum():
+            tuft_fill |= cells == k
+    for piece, corners in A.pieces(tuft_fill):            # its dither becomes a flat grey so it can flick
+        parts.append(Part(f"tuft_fill_{len(parts)}", [(float(x), float(y)) for x, y in corners], P_D50, "tuft", TUFT_ROOT))
+    for piece, corners in A.pieces(solid & tuft_mask):
+        parts.append(Part(f"tuft_line_{len(parts)}", [(float(x), float(y)) for x, y in corners], P_WHITE_EXACT, "tuft", TUFT_ROOT))
+    tuft_mask = tuft_fill | (solid & tuft_mask)
+
+    # steam: cells of the smoke photo inside the plumes, laid over the rest drawing
+    s_img, s_cells, s_kind, s_solid = A.load("smoke")
+    dx, dy = register(solid, s_solid)
+    plume = np.zeros((H, W), bool)
+    for pl in PLUMES:
+        im = Image.new("L", (W, H), 0)
+        ImageDraw.Draw(im).polygon(pl, fill=255)
+        plume |= np.array(im) > 0
+    # the steam as the photo draws it: one silhouette per cloud (where the smoke photo is brighter than the black
+    # ground), its outline and inner curls in white, its body in the grey the photo's dither reads as
+    from scipy.ndimage import binary_closing, binary_opening, gaussian_filter
+    raw = np.roll(np.roll(A.sample("smoke"), dy, 0), dx, 1)
+    soft = gaussian_filter(raw, 1.0)
+    sil = binary_fill_holes(binary_opening(binary_closing((soft > 48) & plume, iterations=1), iterations=1))
+    lab_, n_ = label(sil)
+    sz = np.bincount(lab_.ravel())
+    sil = np.isin(lab_, [k for k in range(1, n_ + 1) if sz[k] >= 80])
+    # each cloud is one node: its silhouette, eased, filled grey and stroked with the 2 px white outline. Its inner
+    # curls are pixel-exact line pieces on top
+    curls = binary_opening(raw > 175, structure=np.ones((2, 2))) & binary_erosion(sil, iterations=3)
+    puffs = []
+    lab_, n_ = label(sil)
+    for k in range(1, n_ + 1):
+        comp = lab_ == k
+        ys, xs = np.nonzero(comp)
+        puffs.append((math.dist((xs.mean(), ys.mean()), NOSTRIL_AT), A.outline(comp, grow=0, smooth=1.0), P_STEAM))
+    for piece, corners in A.pieces(curls, min_px=14):
+        ys, xs = np.nonzero(piece)
+        puffs.append((math.dist((xs.mean(), ys.mean()), NOSTRIL_AT), corners, P_WHITE_EXACT))
+    for i, (d, corners, pal) in enumerate(sorted(puffs, key=lambda p: ({P_STEAM: 0}.get(p[2], 1), p[0]))):
+        parts.append(Part(f"puff_{i}", [(float(x), float(y)) for x, y in corners], pal, "steam", (round(min(x for x, _ in corners)), round(min(y for _, y in corners)))))
+        parts[-1].reach = d
+
+    glyph_mask = np.zeros((H, W), bool)
+    for gi, (gx0, gy0, gx1, gy1) in enumerate(GLYPH_BOXES):
+        gm = np.zeros((H, W), bool)
+        gm[gy0:gy1, gx0:gx1] = img[gy0:gy1, gx0:gx1] == 255
+        glyph_mask |= gm
+        for piece, corners in sorted(A.pieces(gm), key=lambda pc: np.nonzero(pc[0])[1].mean()):
+            ys, xs = np.nonzero(piece)
+            p = Part(f"bar_{gi}_{len([q for q in parts if q.group == 'bar'])}", [(float(x), float(y)) for x, y in corners], P_WHITE_EXACT, "bar",
+                     ((xs.min() + xs.max() + 1) / 2, (ys.min() + ys.max() + 1) / 2))
+            p.height, p.glyph = ys.max() - ys.min() + 1, gi
+            parts.append(p)
+
     for i, (x, y) in enumerate(SPARKLES):
-        P.append(Part(f"sparkle_{i}", (x, y), star4(5), P_WHITE, group="sparkle"))
+        parts.append(Part(f"sparkle_{i}", [(x + px, y + py) for px, py in star4(5)], P_WHITE, "sparkle", (x, y)))
     for i, (x, y) in enumerate(GRAIN):
-        P.append(Part(f"grain_{i}", (x, y), None, P_GRAIN, r=1, group="grain"))
+        parts.append(Part(f"grain_{i}", [(x + px, y + py) for px, py in tiny(1.1, 6)], P_GRAIN, "grain", (x, y)))
     for i, (x0, y0, x1, y1) in enumerate(SWATCHES):
-        P.append(Part(f"scan_{i}", ((x0 + x1) / 2, (y0 + y1) / 2), [(-(x1 - x0) / 2, -1), ((x1 - x0) / 2, -1), ((x1 - x0) / 2, 1), (-(x1 - x0) / 2, 1)], P_WHITE, group="scan"))
-    return P
+        cy = (y0 + y1) / 2
+        parts.append(Part(f"scan_{i}", [(x0 - 6, cy - 1.5), (x1 + 6, cy - 1.5), (x1 + 6, cy + 1.5), (x0 - 6, cy + 1.5)], P_WHITE, "scan"))
+
+    # the still art: the rest drawing minus everything a node now draws
+    still = img.copy()
+    still[head_mask | tuft_mask | glyph_mask] = 0
+    bx0, by0, bx1, by1 = BURST_BOX
+    still[by0:by1, bx0:bx1] = 0
+    return parts, still, (dx, dy)
 
 
-PARTS = parts()
+PARTS, STILL, SMOKE_SHIFT = build()
 INDEX = {p.name: i for i, p in enumerate(PARTS)}
+GROUP = lambda name: [i for i, p in enumerate(PARTS) if p.group == name]
+MAX_REACH = max(p.reach for p in PARTS if p.group == "steam")
 
 
-# ---- the static layer ------------------------------------------------------------------------------------------------
-def static_pixels() -> np.ndarray:
-    """the trace minus everything a node now draws"""
-    base = ink_trace.base().copy()
-    im = Image.new("L", (W, H), 0)
-    d = ImageDraw.Draw(im)
-    for pts in (FACE, HORN_L, HORN_R, EAR_L, EAR_R, MUZZLE, TUFT, EYE_L, EYE_R):
-        d.polygon([(round(x), round(y)) for x, y in pts], fill=255)
-    for x0, y0, x1, y1 in STATIC_CLEAR:
-        d.rectangle([x0, y0, x1, y1], fill=255)
-    m = binary_dilation(np.array(im) > 0, iterations=3)
-    base[m] = False
-    base[:TOP] = False
-    return base
-
-
-def static_rects(px: np.ndarray, cell: int = 1) -> list[tuple[int, int, int, int]]:
-    """horizontal runs of white as (x, y, w, h); cell=2 coarsens the dither to 2 × 2 blocks"""
-    if cell > 1:
-        hh, ww = H // cell, W // cell
-        px = px[:hh * cell, :ww * cell].reshape(hh, cell, ww, cell).mean(axis=(1, 3)) > 0.5
-    rects = []
-    for y, row in enumerate(px):
-        x = 0
-        n = len(row)
-        while x < n:
-            if row[x]:
+def still_rects(still: np.ndarray):
+    """runs of each value per row, merged down while a run repeats exactly: (x, y, w, h, value)"""
+    rows = []
+    for y in range(H):
+        row, runs, x = still[y], [], 0
+        while x < W:
+            v = int(row[x])
+            if v:
                 x0 = x
-                while x < n and row[x]:
+                while x < W and row[x] == v:
                     x += 1
-                rects.append((x0 * cell, y * cell, (x - x0) * cell, cell))
+                runs.append((x0, x - x0, v))
             else:
                 x += 1
-    return rects
+        rows.append(runs)
+    out, open_ = [], {}
+    for y, runs in enumerate(rows):
+        nxt = {}
+        for x0, w, v in runs:
+            key = (x0, w, v)
+            if key in open_:
+                nxt[key] = open_[key]
+            else:
+                nxt[key] = y
+        for key, y0 in open_.items():
+            if key not in nxt:
+                out.append((key[0], y0, key[1], y - y0, key[2]))
+        open_ = nxt
+    for key, y0 in open_.items():
+        out.append((key[0], y0, key[1], H - y0, key[2]))
+    return out
+
+
+RECTS = still_rects(STILL)
 
 
 # ---- posing ----------------------------------------------------------------------------------------------------------
@@ -249,9 +351,9 @@ def kink(a):
 
 def note(t):
     if t is None:
-        return dict(wobble=0.0, flash=0.0, flare=0)
+        return dict(wobble=0.0, flash=0.0, flare=0.0)
     env = math.exp(-t / 0.5)
-    return dict(wobble=3.5 * math.sin(2 * math.pi * 2.2 * t) * env, flash=1.0 if t < 0.15 else 0.0, flare=1 if t < 0.6 else 0)
+    return dict(wobble=3.0 * math.sin(2 * math.pi * 2.2 * t) * env, flash=1.0 if t < 0.15 else 0.0, flare=0.12 * math.exp(-t / 0.6))
 
 
 def rot(pts, deg):
@@ -260,110 +362,111 @@ def rot(pts, deg):
 
 
 class Pose:
-    """one node's frame: origin, uniform scale, turn, palette, visible; `pts` only for mutable outlines"""
-
-    def __init__(self, x, y, scale=1.0, turn=0.0, palette=None, visible=True, pts=None):
-        self.x, self.y, self.scale, self.turn, self.palette, self.visible, self.pts = x, y, scale, turn, palette, visible, pts
+    def __init__(self, x, y, palette):
+        self.x, self.y, self.scale, self.turn, self.palette, self.visible, self.pts = x, y, 1.0, 0.0, palette, True, None
 
 
 def pose(v: dict, t=None, key: int = 0) -> list[Pose]:
     D = g.DEFAULTS
     n = note(t)
-    out = [Pose(p.origin[0], p.origin[1], palette=p.palette) for p in PARTS]
+    out = [Pose(p.origin[0], p.origin[1], p.palette) for p in PARTS]
     cut, res, fold = v["cutoff"], v["res"], v["fold"]
 
-    # the head group: lowered and tilted by fold, wobbling with the note, all about the neck
-    tilt = 4 * fold + n["wobble"]
-    drop = 10 * fold
-    c, s = math.cos(math.radians(tilt)), math.sin(math.radians(tilt))
-    for i, p in enumerate(PARTS):
-        if p.group != "head":
-            continue
-        dx, dy = p.origin[0] - PIVOT[0], p.origin[1] - PIVOT[1]
-        out[i].x, out[i].y = PIVOT[0] + dx * c - dy * s, PIVOT[1] + drop + dx * s + dy * c
-        out[i].turn = tilt
+    # the head moves by whole pixels only, so it stays pixel-exact: a note jolts it side to side, fold drops it
+    ox = int(round(n["wobble"]))
+    oy = int(round(6 * fold + (1 if n["flash"] else 0)))
+    for i in GROUP("head"):
+        out[i].x += ox
+        out[i].y += oy
+    # spread slides the horns' echoes apart by whole pixels (the horns themselves never move off the drawing);
+    # aphx nudges the right echo a pixel or two per key
+    sp = v["spread"]
+    apart = round(14 * (sp - D["spread"]) / (1 - D["spread"])) if sp >= D["spread"] else 0
+    nudge = round(kink(v["aphx"]) * 3 * ((((key * 7919) % 11) / 10) - 0.5) * 2)
+    for i in GROUP("head"):
+        echo = getattr(PARTS[i], "echo", None)
+        if echo == "horn_l":
+            out[i].x -= apart
+            out[i].y -= apart // 2
+        elif echo == "horn_r":
+            out[i].x += apart + nudge
+            out[i].y -= apart // 2
+    # cutoff: the light on the head. The cap, horn and ears go dark toward 0 and light up toward 100; the eyes
+    # narrow toward 0 and open wide toward 100
+    lift = (cut - D["cutoff"]) / (1 - D["cutoff"]) if cut > D["cutoff"] else 0.0
+    dim = (D["cutoff"] - cut) / D["cutoff"] if cut < D["cutoff"] else 0.0
+    for i in GROUP("head"):
+        nm = PARTS[i].name
+        if nm.startswith("head_cap_"):
+            out[i].palette = P_DIM if dim > 0.5 else P_D25 if lift < 0.5 else P_LIT1
+        elif nm.startswith("horn_l_horn_l_"):
+            out[i].palette = P_DIM if dim > 0.5 else P_D50 if lift < 0.5 else P_LIT2
+        elif nm.startswith("head_ear_") or nm.startswith("head_patch_"):
+            out[i].palette = P_DIM if dim > 0.6 else P_FINE if lift < 0.5 else P_LIT1
+    for side in "lr":
+        out[INDEX[f"white_{side}"]].scale = max(0.25, 1 - 0.75 * dim) * (1 + 0.55 * max(lift, n["flash"]))
+    # res: the muzzle flushes and the nostrils flare; the burst grows
+    for i in GROUP("head"):
+        if PARTS[i].name.startswith("head_muzzle_"):
+            out[i].palette = P_FINE if res < 0.6 else P_LIT2
+    flare = 1 + 0.55 * (res - D["res"]) / (1 - D["res"]) if res >= D["res"] else 1 - 0.35 * (D["res"] - res) / D["res"]
+    for side in "lr":
+        out[INDEX[f"nostril_{side}"]].scale = flare
+    out[INDEX["burst"]].pts = burst_outline(3 + 24 * res, rays=8 if res > 0.4 else 6)
+    # shape: the bar glyph's envelope morphs from the photo's two spikes (a saw's edges) to one broad triangle
+    for gi in range(len(GLYPH_BOXES)):
+        bars = [i for i in GROUP("bar") if PARTS[i].glyph == gi]
+        xs = [PARTS[i].origin[0] for i in bars]
+        cx, half = (min(xs) + max(xs)) / 2, (max(xs) - min(xs)) / 2
+        tallest = max(PARTS[i].height for i in bars)
+        for i in bars:
+            h0 = PARTS[i].height
+            tri = max(2.0, tallest * (1 - abs(PARTS[i].origin[0] - cx) / (half + 4)))
+            out[i].scale = min(2.0, max(0.4, 1 + (tri / h0 - 1) * v["shape"]))
 
-    # spread scales the horns from their roots; shape turns their tips up and out; aphx lets one horn go its own way
-    k = 0.9 + 0.5 * v["spread"]
-    curl = 35 * v["shape"]
-    drift = kink(v["aphx"]) * 18 * (((key * 7919) % 11) / 10 - 0.5) * 2
-    out[INDEX["horn_l"]].scale, out[INDEX["horn_l"]].turn = k, tilt - curl
-    out[INDEX["horn_r"]].scale, out[INDEX["horn_r"]].turn = k, tilt + curl + drift
-    # cutoff: horns and ears darken toward 0 and the ears go flat; the face lights up toward 100
-    horn_pal = P_MID if cut >= 0.3 else P_DARK
-    for nm in ("horn_l", "horn_r", "ear_l", "ear_r"):
-        out[INDEX[nm]].palette = horn_pal
-    droop = 25 * max(0.0, (D["cutoff"] - cut) / D["cutoff"])
-    out[INDEX["ear_l"]].turn += -droop
-    out[INDEX["ear_r"]].turn += droop
-    out[INDEX["face"]].palette = P_INK if cut < 0.7 else P_LIT1 if cut < 0.85 else P_LIT2
-    # the eyes: dead at 0, the photo's glint by default, wide open at 100; a note flashes them wide
-    open_ = max(n["flash"], (cut - D["cutoff"]) / (1 - D["cutoff"]))   # above the default the white disc grows to fill the eye
-    eye = (0.15 + 0.85 * min(1.0, cut / D["cutoff"])) * (1 + 0.7 * max(0.0, open_))   # below it, it shrinks toward dead
-    for side in "lr":
-        out[INDEX[f"white_{side}"]].visible = cut > 0.03 or n["flash"] > 0
-        out[INDEX[f"white_{side}"]].scale = min(1.7, eye)
-        out[INDEX[f"pupil_{side}"]].visible = open_ > 0.6
-    # res: the muzzle flushes, the nostrils flare, the burst grows
-    out[INDEX["muzzle"]].palette = P_LIGHT if res < 0.5 else P_WHITE
-    for side in "lr":
-        out[INDEX[f"nostril_{side}"]].scale = 1 + 0.6 * res
-        out[INDEX[f"nostril_{side}"]].palette = P_WHITE if res < 0.5 else P_INK
-    out[INDEX["burst"]].pts = burst_outline(4 + 12 * res, rays=8 if res > 0.5 else 6)
-    # fold: heat squiggles
+    # fold: heat squiggles appear and tighten
     for nm, k_ in (("squiggle_a", 0.3), ("squiggle_b", 0.65)):
         out[INDEX[nm]].visible = fold >= k_
         out[INDEX[nm]].pts = squiggle_outline(26, 3.5, 1.5 + 1.5 * fold)
-    # drive: steam, puff by puff; the note flares one more
-    shown = round(len(PUFFS_L) * min(1.0, v["drive"])) + n["flare"] * (1 if v["drive"] > 0.02 or t is not None else 0)
-    for side, puffs in (("l", PUFFS_L), ("r", PUFFS_R)):
-        for i in range(len(puffs)):
-            q = out[INDEX[f"puff_{side}{i}"]]
-            q.visible = i < shown
-            q.scale = PARTS[INDEX[f"puff_{side}{i}"]].puff_scale
-            q.turn = 37 * i
+    # drive: the steam reaches further from the nostrils; a note flares it a step
+    reach = min(1.0, v["drive"] + n["flare"]) if v["drive"] > 0.02 else 0.0   # no steam at all without drive
+    for i in GROUP("steam"):
+        out[i].visible = PARTS[i].reach <= 6 + reach ** 0.6 * (MAX_REACH - 6) and reach > 0
     # noise: sparkles and grain
     ns = round(len(SPARKLES) * v["noise"])
-    for i in range(len(SPARKLES)):
-        out[INDEX[f"sparkle_{i}"]].visible = i < ns
-        out[INDEX[f"sparkle_{i}"]].scale = 0.6 + 0.9 * v["noise"]
+    for j, i in enumerate(GROUP("sparkle")):
+        out[i].visible = j < ns
+        out[i].scale = 0.6 + 0.9 * v["noise"]
     ng = round(len(GRAIN) * v["noise"])
-    for i in range(len(GRAIN)):
-        out[INDEX[f"grain_{i}"]].visible = i < ng
-    # aphx: torn scanlines across the swatches
+    for j, i in enumerate(GROUP("grain")):
+        out[i].visible = j < ng
+    # aphx: torn scanlines slip across the swatches, per key
     slip = kink(v["aphx"])
-    for i, (x0, y0, x1, y1) in enumerate(SWATCHES):
-        p = out[INDEX[f"scan_{i}"]]
-        p.visible = slip > 0.05
-        p.x += slip * 14 * ((((key + i) * 7919) % 11) / 10 - 0.5) * 2
-        p.y += (i - 1.5) * 2 * slip
+    for j, i in enumerate(GROUP("scan")):
+        out[i].visible = slip > 0.05
+        out[i].x += slip * 14 * (((((key + j) * 7919) % 11) / 10) - 0.5) * 2
     # a note: the tuft flicks against the wobble
-    out[INDEX["tuft"]].turn = -n["wobble"] * 3
+    for i in GROUP("tuft"):
+        out[i].turn = -n["wobble"] * 4
     return out
 
 
 # ---- rendering -------------------------------------------------------------------------------------------------------
 def node_svg(i: int, p: Part, q: Pose, fragment: bool) -> str:
-    fill, stroke, width = PALETTE[q.palette if q.palette is not None else p.palette]
-    if i < PATHS:
+    fill, stroke, width, paint = PALETTE[q.palette]
+    if i < PATHS or paint == "stroke":
         fill = "none"
-    if not q.visible and not fragment:
-        x, y = 640, 320
-    else:
-        x, y = q.x, q.y
-    ident = f'id="{PREFIX}_node_{i}" '
-    if p.r is not None:
-        r = p.r * (1 if fragment else q.scale)
-        return f'<circle {ident}transform="matrix(1 0 0 1 {f(x)} {f(y)})" cx="0" cy="0" r="{f(r)}" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>'
+    x, y = (640, 320) if (not q.visible and not fragment) else (q.x, q.y)
     pts = q.pts if (q.pts is not None and not fragment) else p.pts
     if not fragment:
         pts = rot([(px * q.scale, py * q.scale) for px, py in pts], q.turn)
-    return f'<path {ident}transform="matrix(1 0 0 1 {f(x)} {f(y)})" d="{poly(pts)}" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>'
+    if fragment and fill == "none" and i >= PATHS:
+        fill = BLACK                                       # the authored element carries its palette's fill; paint decides
+    return f'<path id="{PREFIX}_node_{i}" transform="matrix(1 0 0 1 {f(x)} {f(y)})" d="{poly(pts)}" fill="{fill}" stroke="{stroke}" stroke-width="{width}" stroke-linejoin="round"/>'
 
 
-def body_svg(v, t=None, key=0, fragment=False, cell=1) -> list[str]:
+def body_svg(v, t=None, key=0, fragment=False) -> list[str]:
     poses = pose(v, t, key)
-    rects = static_rects(static_pixels(), cell)
     o = []
     if fragment:
         o.append('<!-- SDK two-page header: keep this block before machine artwork below y=38. -->')
@@ -379,14 +482,16 @@ def body_svg(v, t=None, key=0, fragment=False, cell=1) -> list[str]:
         for k in range(4):
             o.append(f'<text id="{PREFIX}_text_{12 + k}" transform="matrix(1 0 0 1 {65 + 120 * k} 33)" fill="#707070" font-family="UniversNextPro-Light" font-size="13px">-</text>')
     o.append(f'<g id="{PREFIX}_static">')
-    o += [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{WHITE}" stroke="none"/>' for x, y, w, h in rects]
+    for x, y, w, h, val in RECTS:
+        col = WHITE if val == 255 else GREY_FINE
+        o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{col}" stroke="none"/>')
     o.append("</g>")
-    order = [i for i, p in enumerate(PARTS) if p.group == "steam"] + [i for i, p in enumerate(PARTS) if p.group == "head"] + \
-            [INDEX["tuft"]] + [i for i, p in enumerate(PARTS) if p.group in ("sparkle", "grain", "scan")] + list(range(PATHS))
+    head = sorted(GROUP("head"), key=lambda i: PARTS[i].order)
+    order = GROUP("steam") + head + GROUP("tuft") + GROUP("bar") + GROUP("sparkle") + GROUP("grain") + GROUP("scan") + list(range(PATHS))
     for i in order:
         o.append(node_svg(i, PARTS[i], poses[i], fragment))
     if fragment:
-        for i, (fill, stroke, width) in enumerate(PALETTE):
+        for i, (fill, stroke, width, _) in enumerate(PALETTE):
             o.append(f'<path id="{PREFIX}_palette_{i}" transform="matrix(1 0 0 1 640 320)" d="M0,0 L4,0 L4,4 L0,4 Z" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>')
     return o
 
@@ -396,68 +501,25 @@ def frame_svg(v, t=None, key=0) -> str:
                       '<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>'] + body_svg(v, t, key) + g.header(v) + ["</svg>"])
 
 
-def fragment_svg(cell=1) -> str:
-    return "\n".join([f'<g id="{PREFIX}_panel">'] + body_svg(dict(g.DEFAULTS), None, 0, fragment=True, cell=cell) + ["</g>"])
-
-
-def debug_png() -> Image.Image:
-    base = ink_trace.base()
-    rgb = np.zeros((H, W, 3), np.uint8)
-    rgb[base] = (90, 90, 90)
-    im = Image.fromarray(rgb).resize((W * 4, H * 4), Image.NEAREST)
-    d = ImageDraw.Draw(im)
-    S = lambda pts: [(x * 4, y * 4) for x, y in pts]
-    for pts, col in ((FACE, (255, 90, 90)), (EYE_L, (90, 255, 90)), (EYE_R, (90, 255, 90)), (MUZZLE, (90, 160, 255)),
-                     (EAR_L, (255, 255, 90)), (EAR_R, (255, 255, 90)), (HORN_L, (255, 150, 60)), (HORN_R, (255, 150, 60)), (TUFT, (255, 90, 255))):
-        d.polygon(S(pts), outline=col)
-    for (x, y, r) in PUFFS_L + PUFFS_R:
-        d.ellipse([(x - r) * 4, (y - r) * 4, (x + r) * 4, (y + r) * 4], outline=(120, 200, 255))
-    return im.crop((100, 150, 1760, 880))
+def fragment_svg() -> str:
+    return "\n".join([f'<g id="{PREFIX}_panel">'] + body_svg(dict(g.DEFAULTS), None, 0, fragment=True) + ["</g>"])
 
 
 def export_model() -> dict:
-    """everything the browser prototype needs: the static layer, the node table and the constants pose() uses"""
-    px = static_pixels()
-    parts_ = []
-    for i, p in enumerate(PARTS):
-        parts_.append({"i": i, "name": p.name, "origin": p.origin, "pts": p.pts, "r": p.r, "palette": p.palette,
-                       "group": p.group, "puffScale": getattr(p, "puff_scale", None)})
-    return {"static": static_rects(px), "parts": parts_, "palette": PALETTE, "paths": PATHS, "pivot": PIVOT,
-            "defaults": g.DEFAULTS, "controls": g.CONTROLS, "swatches": SWATCHES, "puffs": len(PUFFS_L),
-            "sparkles": len(SPARKLES), "grain": len(GRAIN), "greys": g.G}
+    parts_ = [{"i": i, "name": p.name, "origin": [float(c) for c in p.origin], "pts": [[float(x), float(y)] for x, y in p.pts],
+               "palette": p.palette, "group": p.group, "order": p.order, "reach": getattr(p, "reach", None),
+               "horn": getattr(p, "horn", None), "echo": getattr(p, "echo", None), "glyph": getattr(p, "glyph", None),
+               "height": int(p.height) if hasattr(p, "height") else None} for i, p in enumerate(PARTS)]
+    head = sorted(GROUP("head"), key=lambda i: PARTS[i].order)
+    draw_order = GROUP("steam") + head + GROUP("tuft") + GROUP("bar") + GROUP("sparkle") + GROUP("grain") + GROUP("scan") + list(range(PATHS))
+    return {"static": [[int(c) for c in r] for r in RECTS], "parts": parts_, "order": draw_order, "glyphs": len(GLYPH_BOXES),
+            "sparkles": len(SPARKLES), "grain": len(GRAIN), "index": {k: INDEX[k] for k in ("burst", "squiggle_a", "squiggle_b", "white_l", "white_r", "nostril_l", "nostril_r")}, "palette": PALETTE, "paths": PATHS, "pivot": PIVOT, "maxReach": MAX_REACH,
+            "defaults": g.DEFAULTS, "controls": g.CONTROLS, "greys": g.G, "greyFine": GREY_FINE}
 
 
-def main():
-    OUT.mkdir(exist_ok=True)
-    (OUT / "frames").mkdir(exist_ok=True)
-    if "--debug" in sys.argv:
-        debug_png().save(OUT / "debug.png")
-        print("wrote", OUT / "debug.png")
-        return
-    D = dict(g.DEFAULTS)
-    frames = {"rest": (D, None), "playing": (D, 0.05), "note-0.25s": (D, 0.25), "note-0.6s": (D, 0.6)}
-    for i, name in enumerate(g.CONTROLS):
-        for val in (0, 50, 100):
-            frames[f"c{i + 1}-{val:03d}"] = (dict(D, **{name: val / 100}), None)
-    for name, (vals, t) in frames.items():
-        (OUT / "frames" / f"{name}.svg").write_text(frame_svg(vals, t), encoding="utf-8")
-    (OUT / "panel.svg.fragment").write_text(fragment_svg(), encoding="utf-8")
-    (OUT / "panel-lint.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">\n' + fragment_svg() + "\n</svg>", encoding="utf-8")
-    (OUT / "panel-cell2.svg.fragment").write_text(fragment_svg(cell=2), encoding="utf-8")
-    px = static_pixels()
-    info = {"nodes": len(PARTS), "paths": PATHS, "points": 64, "texts": 16, "palette": len(PALETTE),
-            "staticRects": len(static_rects(px)), "staticRectsCell2": len(static_rects(px, 2)),
-            "controls": g.CONTROLS}
-    (OUT / "budget.json").write_text(json.dumps(info, indent=2))
-    print(json.dumps(info))
-    (OUT / "model.json").write_text(json.dumps(export_model()))
-    board(frames)
-
-
-def board(frames):
-    """every frame at 1:1 on one sheet: the controls in rows of three (0, 50, 100), the note frames on top"""
-    import subprocess, tempfile
-    names = ["rest", "playing", "note-0.25s", "note-0.6s"] + [f"c{i + 1}-{v:03d}" for i in range(8) for v in (0, 50, 100)]
+def board(names, out):
+    import subprocess
+    import tempfile
     cols, P_ = 4, 8
     rows = math.ceil(len(names) / cols)
     sheet = Image.new("RGB", (P_ + cols * (W + P_), P_ + rows * (H + 18 + P_)), (40, 40, 40))
@@ -467,10 +529,32 @@ def board(frames):
             png = Path(tmp) / f"{name}.png"
             subprocess.run(["rsvg-convert", "-w", "480", "-h", "220", str(OUT / "frames" / f"{name}.svg"), "-o", str(png)], check=True)
             x, y = P_ + (k % cols) * (W + P_), P_ + (k // cols) * (H + 18 + P_)
-            label = name if k < 4 else f"{g.CONTROLS[int(name[1]) - 1]} {int(name[-3:])}"
-            d.text((x, y), label, fill=(200, 200, 200))
+            label_ = name if not name.startswith("c") else f"{g.CONTROLS[int(name[1]) - 1]} {int(name[-3:])}"
+            d.text((x, y), label_, fill=(200, 200, 200))
             sheet.paste(Image.open(png).convert("RGB"), (x, y + 18))
-    sheet.save(OUT / "board.png")
+    sheet.save(out)
+
+
+def main():
+    (OUT / "frames").mkdir(parents=True, exist_ok=True)
+    D = dict(g.DEFAULTS)
+    frames = {"rest": (D, None), "playing": (D, 0.05), "note-0.25s": (D, 0.25), "note-0.6s": (D, 0.6)}
+    for i, name in enumerate(g.CONTROLS):
+        for val in (0, 50, 100):
+            frames[f"c{i + 1}-{val:03d}"] = (dict(D, **{name: val / 100}), None)
+    for name, (vals, t) in frames.items():
+        (OUT / "frames" / f"{name}.svg").write_text(frame_svg(vals, t), encoding="utf-8")
+    (OUT / "panel.svg.fragment").write_text(fragment_svg(), encoding="utf-8")
+    (OUT / "panel-lint.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">\n' + fragment_svg() + "\n</svg>", encoding="utf-8")
+    for old in ("panel-cell2.svg.fragment", "debug.png"):
+        (OUT / old).unlink(missing_ok=True)
+    info = {"nodes": len(PARTS), "paths": PATHS, "points": 64, "texts": 16, "palette": len(PALETTE), "staticRects": len(RECTS),
+            "headNodes": len(GROUP("head")), "steamNodes": len(GROUP("steam")), "tuftNodes": len(GROUP("tuft")),
+            "maxPoints": max(len(p.pts) for p in PARTS), "smokeShift": [int(c) for c in SMOKE_SHIFT], "controls": g.CONTROLS}
+    (OUT / "budget.json").write_text(json.dumps(info, indent=2))
+    (OUT / "model.json").write_text(json.dumps(export_model()))
+    print(json.dumps(info))
+    board(["rest", "playing", "note-0.25s", "note-0.6s"] + [f"c{i + 1}-{v:03d}" for i in range(8) for v in (0, 50, 100)], OUT / "board.png")
 
 
 if __name__ == "__main__":
