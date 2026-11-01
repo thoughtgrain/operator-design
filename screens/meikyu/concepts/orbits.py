@@ -41,7 +41,7 @@ def f(v):
 
 def path(pts, stroke, w=1.0, fill="none", close=False):
     d = "M" + " L".join(f"{f(x)},{f(y)}" for x, y in pts) + (" Z" if close else "")
-    return f'<path d="{d}" fill="{fill}" stroke="{stroke}" stroke-width="{w}" stroke-linejoin="round" stroke-linecap="round"/>'
+    return f'<path d="{d}" fill="{fill}" stroke="{stroke}" stroke-width="{f(w)}" stroke-linejoin="round" stroke-linecap="round"/>'
 
 
 def ell(cx, cy, rx, ry, a0=0.0, a1=2 * math.pi, n=40):
