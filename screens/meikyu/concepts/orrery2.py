@@ -15,7 +15,8 @@ back, tumbling to fill the space. So:
            
             each filling while its step plays. Rocks tumble through three rotated variants. The outer and inner
             lanes roll front to back, the middle lane back to front, all hopping like the planets.
-  sun       the corona as picked, static, drawn over everything so planets and rocks pass behind it
+  sun       the corona as picked, static. Planets and rocks orbit it fully: in front of it on the near half of
+            each orbit, behind it on the far half
   phrase    the ringed planet as before; its segments light for the tones that sounded
 
 Node cost if the player page gets bound nodes (see README.md): planets 8 × 4 variants, rocks 56 × 3, ring 8:
@@ -42,7 +43,7 @@ HERE = Path(__file__).resolve().parent
 path, ell = O.path, O.ell
 SX, SY, SR = S.SX, S.SY, S.SR
 HOP = 0.75                                   # seconds between hops
-CYCLE = 64.0                                 # seconds for a planet to cross its path (same for all: spacing holds)
+CYCLE = 150.0                                # seconds per orbit, the same for every planet, so their spacing never changes
 WIRE = ("#000000", "#7A7A7A")
 FILLED = ("#BEBEBE", "#4A4A4A")
 ROCK_WIRE = ("#000000", "#6E6E6E")
@@ -50,7 +51,7 @@ ROCK_FILLED = ("#D0D0D0", "#5A5A5A")
 GAP = 4.0                                    # px kept clear between any two bodies
 
 # eight planets: (orbit rx, radius px). Two inside the belt, six outside; sizes deliberately uneven.
-PLANETS = [(86, 5.0), (122, 12.0), (164, 3.5), (200, 18.0), (330, 7.5), (368, 25.0), (418, 4.5), (452, 13.0)]
+PLANETS = [(64, 5.0), (90, 12.0), (114, 3.5), (136, 18.0), (196, 7.5), (214, 25.0), (232, 4.5), (248, 13.0)]   # (semi-major axis, radius)
 RING = (446, 200, 26)                        # the ringed planet's centre and reach, an obstacle (bottom-right corner)
 
 
@@ -59,8 +60,21 @@ def f(v):
     return "0" if s in ("-0", "") else s
 
 
+ECC, TILT = 0.84, 0.3                        # orbit eccentricity (the sun at the left focus) and how flat we see them
+
+
 def ry_of(rx):
-    return rx * 0.24
+    return rx * TILT * math.sqrt(1 - ECC * ECC) * 1.9
+
+
+def orbit_xy(rx, a):
+    """a point on an orbit of semi-major axis rx with the sun at its left focus: a = 0 is aphelion (far right),
+    a = π perihelion (just left of the sun); sin(a) > 0 is the near half"""
+    return SX + ECC * rx + rx * math.cos(a), SY + ry_of(rx) * math.sin(a)
+
+
+def orbit_line(rx, a0, a1, n=40):
+    return [orbit_xy(rx, a0 + (a1 - a0) * k / n) for k in range(n + 1)]
 
 
 # ---- shapes: each one path ≤ 64 points, loops all clockwise so a nonzero fill covers the body --------------------------
@@ -113,44 +127,36 @@ def depth_scale(a):
     return 0.7 + 0.3 * (math.sin(a) + 1) / 2
 
 
-def hidden(x, y, r):
-    return math.hypot(x - SX, y - SY) + r <= SR or y + r <= 20 or y - r >= 220 or x + r <= 0
+def hidden(x, y, r, a):
+    """out of sight: behind the sun on the far half of the orbit, under the header, below the screen or off left"""
+    behind = math.sin(a) < 0 and math.hypot(x - SX, y - SY) + r <= SR
+    return behind or y + r <= 20 or y - r >= 220 or x + r <= 0
 
 
-def visible_arc(rx, r):
-    ends = []
-    for sign in (-1, 1):
-        a = 0.0
-        while abs(a) < math.pi:
-            a += sign * 0.005
-            if hidden(SX + rx * math.cos(a), SY + ry_of(rx) * math.sin(a), r * depth_scale(a)):
-                break
-        ends.append(a)
-    lo, hi = ends
-    margin = (hi - lo) * 0.05
-    return lo - margin, hi + margin                       # a little past both ends: the wrap happens out of sight
-
-
-ARCS = [visible_arc(rx, r) for rx, r in PLANETS]
+def ellipse_length(rx):
+    return sum(math.hypot(rx * (math.cos(2 * math.pi * (k + 1) / 240) - math.cos(2 * math.pi * k / 240)),
+                          ry_of(rx) * (math.sin(2 * math.pi * (k + 1) / 240) - math.sin(2 * math.pi * k / 240))) for k in range(240))
 
 
 def planet_at(k, u):
-    """planet k at path fraction u (0 entering, 1 leaving): (x, y, radius, angle)"""
+    """planet k a fraction u round its full orbit, travelling down the near side (toward the viewer): (x, y, r, a).
+    a = 0 is the far right; sin(a) > 0 is the near half, drawn in front of the sun; sin(a) < 0 the far half."""
     rx, r = PLANETS[k]
-    lo, hi = ARCS[k]
-    a = lo + (hi - lo) * (u % 1.0)
-    return SX + rx * math.cos(a), SY + ry_of(rx) * math.sin(a), r * depth_scale(a), a
+    a = 2 * math.pi * (u % 1.0)
+    x, y = orbit_xy(rx, a)
+    return x, y, r * depth_scale(a), a
 
 
 def clearance(phases, samples=240):
-    """the closest any two visible planets (or a planet and the ringed planet) come, over a whole cycle"""
+    """the closest any two visible planets (or a planet and the ringed planet) come, over a whole orbit. Every
+    planet takes the same CYCLE per orbit, so their arrangement turns as one and this holds for all time."""
     worst = 1e9
     for s in range(samples):
         u = s / samples
         bodies = []
         for k, ph in enumerate(phases):
             x, y, r, a = planet_at(k, u + ph)
-            if not hidden(x, y, r):
+            if not hidden(x, y, r, a):
                 bodies.append((x, y, r))
         for i in range(len(bodies)):
             x, y, r = bodies[i]
@@ -175,7 +181,7 @@ def choose_phases(tries=3000):
 PHASES, CLEAR = choose_phases()
 
 
-BELT = (232, 300)                            # the asteroid ring: inner and outer orbit radius (rx), between planets 4 and 5
+BELT = (152, 182)                            # the asteroid ring: inner and outer semi-major axis, between planets 4 and 5
 N_ROCKS = 56                                 # seven per B step
 ROCK_PX = 4.0                                # how far a rock moves along its path per hop
 JOSTLE = 7.0                                 # px a rock can be knocked off its path at Crpt 100
@@ -190,11 +196,8 @@ def rocks():
         rx = rnd.uniform(*BELT)
         roll = rnd.random()
         size = rnd.uniform(7.0, 11.0) if roll < 0.12 else rnd.uniform(4.5, 7.0) if roll < 0.4 else rnd.uniform(2.0, 4.5)
-        lo, hi = visible_arc(rx, size)
-        length = sum(math.hypot(rx * (math.cos(lo + (hi - lo) * (k + 1) / 120) - math.cos(lo + (hi - lo) * k / 120)),
-                                ry_of(rx) * (math.sin(lo + (hi - lo) * (k + 1) / 120) - math.sin(lo + (hi - lo) * k / 120)))
-                     for k in range(120))
-        out.append((100 + n, rx, rnd.random(), 1 if rnd.random() < 0.7 else -1, size, 8 + n % 8, (lo, hi, length)))
+        length = ellipse_length(rx)
+        out.append((100 + n, rx, rnd.random(), 1 if rnd.random() < 0.7 else -1, size, 8 + n % 8, length))
     return out
 
 
@@ -207,31 +210,30 @@ def stagger(n):
 
 # ---- the scene ----------------------------------------------------------------------------------------------------------
 def scene(p, t):
+    """orbits, then everything on the far halves (behind the sun), the sun, then everything on the near halves"""
     o = []
     for rx, _ in PLANETS:                                                    # orbits: far half dim, near half a little brighter
-        o.append(path(ell(SX, SY, rx, ry_of(rx), math.pi, 2 * math.pi, 40), "#1C1C1C", 0.8))
-        o.append(path(ell(SX, SY, rx, ry_of(rx), 0, math.pi, 40), "#2E2E2E", 0.9))
-    bodies = []
+        o.append(path(orbit_line(rx, math.pi, 2 * math.pi), "#1C1C1C", 0.8))
+        o.append(path(orbit_line(rx, 0, math.pi), "#2E2E2E", 0.9))
+    far, near = [], []
     for k, (rx, r) in enumerate(PLANETS):
         hops = math.floor((t + stagger(k)) / HOP)
         x, y, rr, a = planet_at(k, PHASES[k] + hops * HOP / CYCLE)
-        lit = p.step_lit(k)
-        fill, line = FILLED if lit else WIRE
-        bodies.append((y, node(planet_glyph(hops % 4), x, y, rr / 10, fill, line, 0.9)))
-    for n, (seed, rx, phase, direction, size, step, (lo, hi, length)) in enumerate(ROCKS):
+        fill, line = FILLED if p.step_lit(k) else WIRE
+        (near if math.sin(a) >= 0 else far).append((y, node(planet_glyph(hops % 4), x, y, rr / 10, fill, line, 0.9)))
+    for n, (seed, rx, phase, direction, size, step, length) in enumerate(ROCKS):
         hops = math.floor((t + stagger(n + 8)) / HOP)
-        u = (phase + direction * hops * ROCK_PX / length) % 1.0
-        a = lo + (hi - lo) * u
-        x, y = SX + rx * math.cos(a), SY + ry_of(rx) * math.sin(a)
+        a = 2 * math.pi * ((phase + direction * hops * ROCK_PX / length) % 1.0)
+        x, y = orbit_xy(rx, a)
         # Crpt jostles the belt: every hop each rock is knocked a little off its path, more as corruption rises
         jr = random.Random(seed * 7919 + hops)
         k = JOSTLE * p.corrupt
         x, y = x + jr.uniform(-k, k), y + jr.uniform(-k, k) * 0.6
-        s = size * depth_scale(a) / 10
         fill, line = ROCK_FILLED if p.step_lit(step) else ROCK_WIRE
-        bodies.append((y, node(rock_glyph(seed, hops % 3), x, y, s, fill, line, 0.8)))
-    o += [svg for _, svg in sorted(bodies, key=lambda b: b[0])]
-    o += S.sun_corona()                                                      # the corona sun as picked, over the bodies
+        (near if math.sin(a) >= 0 else far).append((y, node(rock_glyph(seed, hops % 3), x, y, size * depth_scale(a) / 10, fill, line, 0.8)))
+    o += [svg for _, svg in sorted(far, key=lambda b: b[0])]
+    o += S.sun_corona()                                                      # the corona sun as picked
+    o += [svg for _, svg in sorted(near, key=lambda b: b[0])]
     return o + O.ringed(RING[0], RING[1], 12, p, ring=(1.5, 2.3), tilt=0.3)
 
 
