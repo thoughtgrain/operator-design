@@ -200,9 +200,10 @@ def right_fill(phases, samples=60):
 
 
 def orbit_phases(bases):
-    """every planet's starting point: its orbit's base angle plus its even slot round the orbit. Slots run backwards
-    in angle so that, as the planets orbit, step k+1 is the next planet coming round in the direction of travel."""
-    return [(bases[o] - i / n) % 1.0 for o, (i, n) in zip(ORBIT_OF, SLOT)]
+    """every planet's starting point: its orbit's base angle plus its even slot round the orbit. Slots run forward
+    in angle, the way the planets travel, so step k+1 is the planet just ahead and a link from k to k+1 moves the
+    same way the planets do."""
+    return [(bases[o] + i / n) % 1.0 for o, (i, n) in zip(ORBIT_OF, SLOT)]
 
 
 def choose_phases(tries=4000):
