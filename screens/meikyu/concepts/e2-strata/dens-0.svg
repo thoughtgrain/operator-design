@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+<path d="M80,36 L380,36" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M113.72,42.6 L429.99,42.6" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M71.31,49.2 L413.36,49.2" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M48.52,55.8 L385.53,55.8" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M96.8,62.4 L439.25,62.4" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M107.15,69 L395.5,69" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M56.2,75.6 L400.08,75.6" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M58.98,82.2 L437.72,82.2" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M109.21,94.8 L382.98,94.8" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M93.49,101.4 L418.28,101.4" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M47.31,108 L425.98,108" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M74.93,114.6 L380.42,114.6" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M113.99,121.2 L433.43,121.2" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M76.31,127.8 L408.35,127.8" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M46.96,134.4 L388.76,134.4" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M92.21,141 L439.95,141" fill="none" stroke="#2E2E2E" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M110,30 L116,88 L108,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M147,30 L153,88 L145,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M184,30 L190,88 L182,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M221,30 L227,88 L219,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M258,30 L264,88 L256,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M295,30 L301,88 L293,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M332,30 L338,88 L330,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M369,30 L375,88 L367,142" fill="none" stroke="#2E2E2E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text transform="matrix(1 0 0 1 240 160)" fill="#F2F2F2" font-family="UniversNextPro-Light" font-size="18px" text-anchor="middle">D B phrase 7</text>
+<rect x="0.5" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="34.786" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="69.071" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="103.357" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="137.643" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="171.929" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="206.214" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="240.5" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="274.786" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="309.071" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="343.357" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="377.643" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="411.929" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="446.214" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="24" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="58.286" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="92.571" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="161.143" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="195.429" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="264" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="298.286" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="332.571" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="401.143" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="435.429" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="0" y="0" width="480" height="20" fill="#000000" stroke="none"/>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">Dens</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">0</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">Scal</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="13px">minor</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">Crpt</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">20</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">Drum</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">off</text>
+</svg>
