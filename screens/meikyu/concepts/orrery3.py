@@ -48,8 +48,15 @@ GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
 ORBIT_RADII = [92, 128, 162, 198, 300, 340, 380, 414]       # four inside the belt, four outside
 # sixteen planets, two per orbit on roughly opposite sides: (orbit radius, planet radius); planet k carries step k
-PLANETS = [(92, 5.0), (128, 11.0), (162, 3.5), (198, 16.0), (300, 7.0), (340, 22.0), (380, 4.5), (414, 12.0),
-           (92, 3.0), (128, 6.5), (162, 9.0), (198, 4.0), (300, 13.0), (340, 5.5), (380, 15.0), (414, 3.5)]
+# the inner four orbits carry one small or medium planet each; the outer four carry three each, a small, a medium and
+# a large spaced a third of an orbit apart, so the weight sits outside the belt and the right side stays full
+_SIZES = {92: [4.0], 128: [6.5], 162: [5.0], 198: [8.0],
+          300: [4.0, 8.0, 12.0], 340: [9.0, 4.5, 13.5], 380: [13.0, 5.0, 8.5], 414: [8.0, 14.5, 4.0]}
+PLANETS = [(rho, r) for rho in ORBIT_RADII for r in _SIZES[rho]]                 # sixteen; planet k carries step k
+SLOTS = [(i, len(_SIZES[rho])) for rho in ORBIT_RADII for i in range(len(_SIZES[rho]))]
+# Pluto: small, on its own outermost orbit, tilted out of the plane and reaching the right edge. The real tilt is
+# 17°, but at that angle its path can't avoid touching other planets on screen; 8° is the steepest that stays clear.
+PLUTO = dict(r=3.5, a=428.0, e=0.05, incl=math.radians(8))
 BELT = (225, 275, 9.0)                           # inner and outer radius, half thickness
 N_ROCKS, JOSTLE = 90, 6.0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
@@ -136,10 +143,29 @@ def on_screen(x, y, r):
     return x + r > 0 and x - r < 480 and y + r > 20 and y - r < 220
 
 
+def pluto_point(a, scale=1.0):
+    """Pluto's orbit: an ellipse with the sun at a focus, aphelion out toward the right of the screen (this camera's
+    right is world +z), its near/far axis tilted out of the ecliptic by the inclination"""
+    A_, e = PLUTO["a"] * scale, PLUTO["e"]
+    b = A_ * math.sqrt(1 - e * e)
+    across = A_ * math.cos(a) + A_ * e                                  # along the screen: aphelion (a = 0) right
+    depth = b * math.sin(a)                                             # toward / away from the camera
+    ci, si = math.cos(PLUTO["incl"]), math.sin(PLUTO["incl"])
+    return (depth * ci, depth * si, across)
+
+
+def body_point(k, a, scale=1.0):
+    return pluto_point(a, scale) if k == len(PLANETS) else orbit_point(PLANETS[k][0] * scale, a)
+
+
+def body_radius(k):
+    return PLUTO["r"] if k == len(PLANETS) else PLANETS[k][1]
+
+
 def planet_at(k, u):
-    rho, r = PLANETS[k]
+    r = body_radius(k)
     a = 2 * math.pi * (u % 1.0)
-    p = orbit_point(rho, a)
+    p = body_point(k, a)
     x, y, z, ppu = project(p)
     return x, y, r * ppu, z, p
 
@@ -162,19 +188,40 @@ def clearance(phases, samples=240):
     return worst
 
 
-def choose_phases(tries=6000):
+def right_fill(phases, samples=60):
+    """on average, how many visible planets sit on the right half of the screen"""
+    n = 0
+    for s in range(samples):
+        for k, ph in enumerate(phases):
+            x, y, r, z, p = planet_at(k, s / samples + ph)
+            n += on_screen(x, y, r) and not occluded(p) and x > 240
+    return n / samples
+
+
+def choose_phases(tries=4000):
+    """keep every pair of planets at least GAP apart, and among arrangements that do, fill the right side most"""
     rnd = random.Random(11)
-    best, best_c = None, -1e9
+    best, best_score = None, -1e9
     for _ in range(tries):
-        first = [rnd.random() for _ in ORBIT_RADII]                      # each orbit's pair: roughly opposite
-        ph = first + [(f + 0.5 + rnd.uniform(-0.2, 0.2)) % 1.0 for f in first]
-        c = clearance(ph, 60)
-        if c > best_c:
-            best, best_c = ph, c
+        base = {rho: rnd.random() for rho in ORBIT_RADII}                # planets sharing an orbit are spread evenly
+        ph = [(base[rho] + i / n + (rnd.uniform(-0.1, 0.1) if n > 1 else 0)) % 1.0
+              for (rho, _), (i, n) in zip(PLANETS, SLOTS)] + [rnd.random()]   # + Pluto
+        c = clearance(ph, 120)
+        score = c - 100 if c < GAP + 0.5 else right_fill(ph)
+        if score > best_score:
+            best, best_score = ph, score
     return best, clearance(best)
 
 
+def place_pluto(phases, steps=240):
+    """with the others fixed, slide Pluto's starting point round its orbit to where it stays clearest of them"""
+    best = max(((clearance(phases[:-1] + [k / steps], 480), k / steps) for k in range(steps)))
+    return phases[:-1] + [best[1]]
+
+
 PHASES, CLEAR = choose_phases()
+PHASES = place_pluto(PHASES)
+CLEAR = clearance(PHASES, 480)
 
 
 def rocks():
@@ -197,12 +244,12 @@ def stagger(n):
     return (n * 0.37) % 1.0 * HOP
 
 
-def orbit_segments(rho, n=96):
+def orbit_segments(rho, n=96, point=None):
     """an orbit as projected polylines, split into runs that are nearer than the sun (front) or further (back),
     each ≤ 60 points"""
     pts = []
     for k in range(n + 1):
-        p = orbit_point(rho, 2 * math.pi * k / n)
+        p = point(2 * math.pi * k / n) if point else orbit_point(rho, 2 * math.pi * k / n)
         x, y, z, _ = project(p)
         pts.append((x, y, nearer_than_sun(p)))
     runs, cur, side = [], [], None
@@ -221,8 +268,8 @@ def orbit_segments(rho, n=96):
     return runs
 
 
-ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII]
-GLYPHS = {k: [R2.planet_glyph(s, r=10.0) for s in range(4)] for k in range(len(PLANETS))}
+ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII] + [orbit_segments(0, 120, pluto_point)]
+GLYPHS = {k: [R2.planet_glyph(s, r=10.0) for s in range(4)] for k in range(len(PLANETS) + 1)}
 
 
 def scene(p, t):

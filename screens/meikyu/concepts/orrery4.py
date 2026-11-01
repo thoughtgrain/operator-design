@@ -15,7 +15,8 @@ and velocity all need a visible effect, and with Drum on, Scal should mean somet
   Drum      on: the belt rises out of the orbit plane (it's the kit now), planets stop filling, and each hit makes its
             step's rocks jump up and fall back. Off: the belt settles back down and planets fill again.
   velocity  how far the ring planet's lit segments reach: soft presses short, hard presses long
-  a press   the ring segments light for the tones that sounded; the text line names root, half and phrase count
+  a press   the ring segments light for the tones that sounded; the text line names root, half and phrase count;
+            Pluto (small, on its own tilted, eccentric outermost orbit) glows while the phrase plays
 
 The sound comes from a port of meikyu's press() with one proposed change: in drum mode Scal selects one of four pad
 sets (KITS) instead of being ignored. That needs the same change in labyrinth's player.cpp.
@@ -159,10 +160,10 @@ def header(p):
 
 # ---- scene ----------------------------------------------------------------------------------------------------------------
 def planet_pos(k, t, spread):
-    rho, r = M3.PLANETS[k]
+    r = M3.body_radius(k)
     hops = math.floor((t + M3.stagger(k)) / M3.HOP)
     a = 2 * math.pi * ((M3.PHASES[k] + hops * M3.HOP / M3.PERIOD) % 1.0)
-    p3 = M3.orbit_point(rho * spread, a)
+    p3 = M3.body_point(k, a, spread)
     x, y, z, ppu = M3.project(p3)
     return x, y, r * spread * ppu, p3, hops
 
@@ -173,16 +174,22 @@ def scene(p, last, t, presses):
     belt = eased(t, lambda tt: BELT_SPREAD[controls(tt)["scal"]] if controls(tt)["drum"] else 1.0)
     lift = eased(t, lambda tt: DRUM_LIFT if controls(tt)["drum"] else 0.0)    # the belt rises when it becomes the kit
     back, front = [], []
-    for rho in M3.ORBIT_RADII:                                       # orbit lines, split near/far of the sun
-        for is_front, pts in M3.orbit_segments(rho * spread):
+    orbit_lines = [M3.orbit_segments(rho * spread) for rho in M3.ORBIT_RADII]
+    orbit_lines.append(M3.orbit_segments(0, 120, lambda a: M3.pluto_point(a, spread)))
+    for runs in orbit_lines:                                         # orbit lines, split near/far of the sun
+        for is_front, pts in runs:
             (front if is_front else back).append((1e9, path(pts, "#3E3E3E" if is_front else "#1E1E1E", 0.9 if is_front else 0.8)))
     pos = {}
-    for k in range(len(M3.PLANETS)):
+    phrase_on = last is not None and t - last["t"] < 8 * STEP
+    for k in range(len(M3.PLANETS) + 1):                              # sixteen step planets, then Pluto
         x, y, rr, p3, hops = planet_pos(k, t, spread)
         pos[k] = (x, y)
-        lit = p.step_lit(k) and not c["drum"]                        # drum mode: planets stop filling
+        if k == len(M3.PLANETS):
+            lit = phrase_on                                          # Pluto glows while a phrase is playing
+        else:
+            lit = p.step_lit(k) and not c["drum"]                    # drum mode: planets stop filling
         fill, line = R2.FILLED if lit else R2.WIRE
-        svg = R2.node(M3.GLYPHS[k % 8][hops % 4], x, y, rr / 10, fill, line, 0.9)
+        svg = R2.node(M3.GLYPHS[k][hops % 4], x, y, rr / 10, fill, line, 0.9)
         (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
     struck = {}                                                      # drum mode: step → seconds since its hit
     if c["drum"] and last:
