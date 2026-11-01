@@ -415,6 +415,18 @@ def debug_png() -> Image.Image:
     return im.crop((100, 150, 1760, 880))
 
 
+def export_model() -> dict:
+    """everything the browser prototype needs: the static layer, the node table and the constants pose() uses"""
+    px = static_pixels()
+    parts_ = []
+    for i, p in enumerate(PARTS):
+        parts_.append({"i": i, "name": p.name, "origin": p.origin, "pts": p.pts, "r": p.r, "palette": p.palette,
+                       "group": p.group, "puffScale": getattr(p, "puff_scale", None)})
+    return {"static": static_rects(px), "parts": parts_, "palette": PALETTE, "paths": PATHS, "pivot": PIVOT,
+            "defaults": g.DEFAULTS, "controls": g.CONTROLS, "swatches": SWATCHES, "puffs": len(PUFFS_L),
+            "sparkles": len(SPARKLES), "grain": len(GRAIN), "greys": g.G}
+
+
 def main():
     OUT.mkdir(exist_ok=True)
     (OUT / "frames").mkdir(exist_ok=True)
@@ -438,6 +450,7 @@ def main():
             "controls": g.CONTROLS}
     (OUT / "budget.json").write_text(json.dumps(info, indent=2))
     print(json.dumps(info))
+    (OUT / "model.json").write_text(json.dumps(export_model()))
     board(frames)
 
 
