@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+<rect x="0" y="20" width="480" height="200" fill="#000000" stroke="none"/>
+<path d="M188,88 L187.521,95.309 L186.092,102.494 L183.737,109.43 L180.497,116 L176.428,122.091 L171.598,127.598 L166.091,132.428 L160,136.497 L153.43,139.737 L146.494,142.092 L139.309,143.521 L132,144 L124.691,143.521 L117.506,142.092 L110.57,139.737 L104,136.497 L97.909,132.428 L92.402,127.598 L87.572,122.091 L83.503,116 L80.263,109.43 L77.908,102.494 L76.479,95.309 L76,88 L76.479,80.691 L77.908,73.506 L80.263,66.57 L83.503,60 L87.572,53.909 L92.402,48.402 L97.909,43.572 L104,39.503 L110.57,36.263 L117.506,33.908 L124.691,32.479 L132,32 L139.309,32.479 L146.494,33.908 L153.43,36.263 L160,39.503 L166.091,43.572 L171.598,48.402 L176.428,53.909 L180.497,60 L183.737,66.57 L186.092,73.506 L187.521,80.691 L188,88 Z" fill="none" stroke="#6E6E6E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M169,88 L168.683,92.829 L167.739,97.576 L166.184,102.159 L164.043,106.5 L161.354,110.524 L158.163,114.163 L154.524,117.354 L150.5,120.043 L146.159,122.184 L141.576,123.739 L136.829,124.683 L132,125 L127.171,124.683 L122.424,123.739 L117.841,122.184 L113.5,120.043 L109.476,117.354 L105.837,114.163 L102.646,110.524 L99.957,106.5 L97.816,102.159 L96.261,97.576 L95.317,92.829 L95,88 L95.317,83.171 L96.261,78.424 L97.816,73.841 L99.957,69.5 L102.646,65.476 L105.837,61.837 L109.476,58.646 L113.5,55.957 L117.841,53.816 L122.424,52.261 L127.171,51.317 L132,51 L136.829,51.317 L141.576,52.261 L146.159,53.816 L150.5,55.957 L154.524,58.646 L158.163,61.837 L161.354,65.476 L164.043,69.5 L166.184,73.841 L167.739,78.424 L168.683,83.171 L169,88 Z" fill="none" stroke="#6E6E6E" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M146,88 L145.88,89.827 L145.523,91.623 L144.934,93.358 L144.124,95 L143.107,96.523 L141.899,97.899 L140.523,99.107 L139,100.124 L137.358,100.934 L135.623,101.523 L133.827,101.88 L132,102 L130.173,101.88 L128.377,101.523 L126.642,100.934 L125,100.124 L123.477,99.107 L122.101,97.899 L120.893,96.523 L119.876,95 L119.066,93.358 L118.477,91.623 L118.12,89.827 L118,88 L118.12,86.173 L118.477,84.377 L119.066,82.642 L119.876,81 L120.893,79.477 L122.101,78.101 L123.477,76.893 L125,75.876 L126.642,75.066 L128.377,74.477 L130.173,74.12 L132,74 L133.827,74.12 L135.623,74.477 L137.358,75.066 L139,75.876 L140.523,76.893 L141.899,78.101 L143.107,79.477 L144.124,81 L144.934,82.642 L145.523,84.377 L145.88,86.173 L146,88 Z" fill="none" stroke="#6E6E6E" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M132,74 L132,32" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M141.899,78.101 L171.598,48.402" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M146,88 L188,88" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M141.899,97.899 L171.598,127.598" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M132,102 L132,144" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M122.101,97.899 L92.402,127.598" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M118,88 L76,88" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M122.101,78.101 L92.402,48.402" fill="none" stroke="#4A4A4A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M128,26 L132,31 L136,26" fill="none" stroke="#A4A4A4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text transform="matrix(1 0 0 1 141 31)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="11" text-anchor="start">A</text>
+<text transform="matrix(1 0 0 1 132 92)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="11" text-anchor="middle">B</text>
+<circle cx="149.603" cy="45.502" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="174.498" cy="70.397" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="174.498" cy="105.603" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="149.603" cy="130.498" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="114.397" cy="130.498" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="89.502" cy="105.603" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="89.502" cy="70.397" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="114.397" cy="45.502" r="6.2" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="142.332" cy="63.055" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="156.945" cy="77.668" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="156.945" cy="98.332" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="142.332" cy="112.945" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="121.668" cy="112.945" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="107.055" cy="98.332" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="107.055" cy="77.668" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<circle cx="121.668" cy="63.055" r="5.4" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<path d="M259.983,122.635 L261.924,116.798 L264.236,111.097 L266.907,105.556 L269.928,100.198 L273.286,95.044 L276.967,90.116 L280.956,85.434 L285.237,81.016 L289.792,76.882 L294.603,73.048 L299.649,69.531 L304.91,66.343 L310.364,63.499 L315.989,61.01 L321.762,58.886 L327.659,57.137 L333.657,55.769 L339.729,54.787 L345.852,54.197 L352,54 L358.148,54.197 L364.271,54.787 L370.343,55.769 L376.341,57.137 L382.238,58.886 L388.011,61.01 L393.636,63.499 L399.09,66.343 L404.351,69.531 L409.397,73.048 L414.208,76.882 L418.763,81.016 L423.044,85.434 L427.033,90.116 L430.714,95.044 L434.072,100.198 L437.093,105.556 L439.764,111.097 L442.076,116.798 L444.017,122.635" fill="none" stroke="#6E6E6E" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="273.066" cy="121.27" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 288.101 130.243)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">1</text>
+<circle cx="287.652" cy="96.006" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 299.909 109.79)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">2</text>
+<circle cx="310" cy="77.254" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 318 94.61)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">3</text>
+<circle cx="337.414" cy="67.276" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 340.192 86.533)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">4</text>
+<circle cx="366.586" cy="67.276" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 363.808 86.533)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">5</text>
+<circle cx="394" cy="77.254" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 386 94.61)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">6</text>
+<circle cx="416.348" cy="96.006" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 404.091 109.79)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">7</text>
+<circle cx="430.934" cy="121.27" r="7" fill="#000000" stroke="#4A4A4A" stroke-width="1"/>
+<text transform="matrix(1 0 0 1 415.899 130.243)" fill="#A4A4A4" font-family="UniversNextPro-Light" font-size="9" text-anchor="middle">8</text>
+<circle id="meikyu_dot_0" transform="matrix(1 0 0 1 149.603 45.502)" cx="0" cy="0" r="4.6" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_1" transform="matrix(1 0 0 1 174.498 70.397)" cx="0" cy="0" r="4.6" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_2" transform="matrix(1 0 0 1 174.498 105.603)" cx="0" cy="0" r="4.6" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_4" transform="matrix(1 0 0 1 114.397 130.498)" cx="0" cy="0" r="4.6" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_5" transform="matrix(1 0 0 1 89.502 105.603)" cx="0" cy="0" r="4.6" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_7" transform="matrix(1 0 0 1 114.397 45.502)" cx="0" cy="0" r="4.6" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_8" transform="matrix(1 0 0 1 142.332 63.055)" cx="0" cy="0" r="3.8" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_10" transform="matrix(1 0 0 1 156.945 98.332)" cx="0" cy="0" r="3.8" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_12" transform="matrix(1 0 0 1 121.668 112.945)" cx="0" cy="0" r="3.8" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_13" transform="matrix(1 0 0 1 107.055 98.332)" cx="0" cy="0" r="3.8" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_14" transform="matrix(1 0 0 1 107.055 77.668)" cx="0" cy="0" r="3.8" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_15" transform="matrix(1 0 0 1 121.668 63.055)" cx="0" cy="0" r="3.8" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_16" transform="matrix(1 0 0 1 273.066 121.27)" cx="0" cy="0" r="5.4" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_17" transform="matrix(1 0 0 1 287.652 96.006)" cx="0" cy="0" r="5.4" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_18" transform="matrix(1 0 0 1 310 77.254)" cx="0" cy="0" r="5.4" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_20" transform="matrix(1 0 0 1 366.586 67.276)" cx="0" cy="0" r="5.4" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_21" transform="matrix(1 0 0 1 394 77.254)" cx="0" cy="0" r="5.4" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<circle id="meikyu_dot_23" transform="matrix(1 0 0 1 430.934 121.27)" cx="0" cy="0" r="5.4" fill="#F0F0F0" stroke="#F0F0F0" stroke-width="0.5"/>
+<text transform="matrix(1 0 0 1 240 160)" fill="#F2F2F2" font-family="UniversNextPro-Light" font-size="18px" text-anchor="middle">D A phrase 5</text>
+<rect x="0.5" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="34.786" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="69.071" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="103.357" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="137.643" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="171.929" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="206.214" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="240.5" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="274.786" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="309.071" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="343.357" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="377.643" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="411.929" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="446.214" y="174" width="33.286" height="44" fill="#F0F0F0" stroke="none"/>
+<rect x="24" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="58.286" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="92.571" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="161.143" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="195.429" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="264" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="298.286" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="332.571" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="401.143" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<rect x="435.429" y="174" width="20.571" height="26" fill="#1A1A1A" stroke="none"/>
+<circle cx="51.429" cy="208" r="2.5" fill="#000000" stroke="none"/>
+<circle cx="188.571" cy="208" r="2.5" fill="#000000" stroke="none"/>
+<circle cx="257.143" cy="208" r="2.5" fill="#000000" stroke="none"/>
+<circle cx="291.429" cy="208" r="2.5" fill="#000000" stroke="none"/>
+<circle cx="394.286" cy="208" r="2.5" fill="#000000" stroke="none"/>
+<circle cx="428.571" cy="208" r="2.5" fill="#000000" stroke="none"/>
+<rect x="0" y="0" width="480" height="20" fill="#000000" stroke="none"/>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">Dens</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">60</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">Scal</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="13px">minor</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">Crpt</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">20</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">Drum</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">off</text>
+</svg>
