@@ -47,23 +47,19 @@ HOP, PERIOD = 0.75, 120.0
 DEPTH_CUE = 0.0                                  # extra powers of (sun depth / depth) on body sizes (0: true perspective)
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
-ORBIT_RADII = [86, 138, 198, 300, 340, 380, 414, 446]       # three inside the belt, four outside, Pluto's at the edge
-# eight planets, one per orbit, carrying the A half of the register (steps 0-7) in outward order; Pluto is step 7.
-# They sit on one spiral arm going once round the sun (45° further round per orbit outward), so they're spread
-# evenly in angle and a phrase steps outward planet by planet. Sizes mix small, medium and large. The B half (steps 8-15) is the asteroid belt,
-# eight sectors round the sun.
-STEPS = [(86, 4.0, 0), (138, 7.0, 0), (198, 9.0, 0), (300, 12.0, 0), (340, 6.0, 0), (380, 13.5, 0), (414, 8.0, 0),
-         (446, 3.5, 0)]
-PLANETS = [(rho, r) for rho, r, _ in STEPS]                                        # planet k carries step k
-ARMS = [arm for _, _, arm in STEPS]
-PLUTO_STEP = 7
+ORBIT_RADII = [138, 198, 300, 340, 380, 414, 446]            # two inside the belt, five outside (Pluto's at the edge)
+# eight planets carrying the A half of the register (steps 0-7). Two orbits carry two planets each, opposite-ish; the
+# rest one. Starting angles are searched for the widest spacing, then steps are numbered round the sun in angle
+# order, so a phrase's links sweep round the system in one direction. Sizes mix small, medium and large.
+BODIES = [(138, 7.0), (198, 9.0), (300, 12.0), (300, 5.0), (340, 6.0), (380, 13.5), (380, 4.5), (446, 3.5)]   # last: Pluto
+PLANETS = list(BODIES)                           # reordered by angle once the phases are chosen (below)
 BELT = (214, 288, 14.0)                          # inner and outer radius, half thickness: wide by default
 N_ROCKS, JOSTLE = 76, 6.0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
 CAM = (CAM_D * math.cos(math.radians(CAM_EL)) * math.cos(math.radians(CAM_AZ)), CAM_D * math.sin(math.radians(CAM_EL)),
        -CAM_D * math.cos(math.radians(CAM_EL)) * math.sin(math.radians(CAM_AZ)))
 LOOK = (0.0, 0.0, 0.0)
-RING = (452, 206, 26)                            # the ringed phrase planet (screen px), kept as before
+RING = (446, 40, 26)                             # the ringed phrase planet (screen px), kept as before
 
 
 # ---- camera ---------------------------------------------------------------------------------------------------------------
@@ -189,24 +185,32 @@ def right_fill(phases, samples=60):
     return n / samples
 
 
-def arm_phases(theta, twist):
-    """each planet's starting point: its arm's angle plus a small twist per orbit outward (turns)"""
-    return [(theta[arm] + twist * ORBIT_RADII.index(rho)) % 1.0 for (rho, _), arm in zip(PLANETS, ARMS)]
-
-
-TWIST = -0.125                                   # turns per orbit outward: 45°, so the eight planets go once round
-
-
-def choose_phases(steps=200):
-    """one spiral arm going once round the sun: each planet one orbit further out and 45° further round, so the
-    eight are spread evenly in angle (some are always on screen) and every link is one orbit out and 45° round.
-    Only the arm's starting angle is searched, for the widest spacing."""
-    best = max((clearance(arm_phases([b / steps], TWIST), 120), b / steps) for b in range(steps))
-    ph = arm_phases([best[1]], TWIST)
-    return ph, clearance(ph, 480)
+def choose_phases(tries=8000):
+    """free starting angles for the eight planets, searched for the widest spacing; planets sharing an orbit start
+    roughly opposite so they never crowd each other"""
+    rnd = random.Random(11)
+    best, best_c = None, -1e9
+    for _ in range(tries):
+        ph, seen = [], {}
+        for rho, _ in PLANETS:
+            if rho in seen:
+                ph.append((seen[rho] + 0.5 + rnd.uniform(-0.12, 0.12)) % 1.0)
+            else:
+                seen[rho] = rnd.random()
+                ph.append(seen[rho])
+        c = clearance(ph, 90)
+        if c > best_c:
+            best, best_c = ph, c
+    return best, clearance(best, 480)
 
 
 PHASES, CLEAR = choose_phases()
+# number the steps round the sun in angle order, starting just past the sun's far side, so step k+1 is always the
+# next planet round (they all orbit at the same rate, so the order holds)
+_order = sorted(range(len(PLANETS)), key=lambda k: (PHASES[k] - 0.3) % 1.0)
+PLANETS = [PLANETS[k] for k in _order]
+PHASES = [PHASES[k] for k in _order]
+PLUTO_STEP = next(k for k, (rho, _) in enumerate(PLANETS) if rho == 446)
 
 
 def rocks():
