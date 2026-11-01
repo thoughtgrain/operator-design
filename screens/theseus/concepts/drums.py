@@ -40,7 +40,7 @@ def ellipse(cx, cy, rx, ry, n=36, a0=0.0, a1=2 * math.pi):
     return [(cx + rx * math.cos(a0 + (a1 - a0) * k / n), cy + ry * math.sin(a0 + (a1 - a0) * k / n)) for k in range(n + (0 if a1 - a0 >= 2 * math.pi - 1e-6 else 1))]
 
 
-def ring(cx, cy, rx, ry, w, n=36):
+def ring(cx, cy, rx, ry, w, n=28):
     """an elliptical ring as one outline (outer round, a hairline seam, inner round back)"""
     out = ellipse(cx, cy, rx, ry, n)
     inn = ellipse(cx, cy, max(0.5, rx - w), max(0.3, ry - w * ry / rx), n)
