@@ -17,7 +17,9 @@ ellipses bent by hand. So this one is built as a scene and projected, nothing dr
   size      planet and rock sizes come from their distance to the camera.
   motion    every planet takes the same period, so the arrangement turns as one and the phases chosen to keep planets
             apart on screen hold for all time. Hops every HOP s; a planet's spin and a rock's tumble step per hop.
-  belt      56 rocks scattered through a 3D ring (radius and height), seven per B step; Crpt jostles them in 3D.
+  planets   sixteen, two per orbit on roughly opposite sides; planet k carries register step k
+  belt      90 rocks scattered through a 3D ring (radius and height), each tied to a step (n mod 16); Crpt jostles them
+            in 3D. Two tumble variants per rock (half turns) keep the device budget at 16×4 + 90×2 + 8 = 252 nodes.
 
     python3 orrery3.py <tmpdir>      → orrery3.mp4, orrery3-stills.png, orrery3-sun.png
 """
@@ -44,9 +46,12 @@ SUN_SCREEN = (6.0, 116.0, 62.0)                  # where the sun must land: cent
 HOP, PERIOD = 0.75, 120.0
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
-PLANETS = [(92, 5.0), (128, 11.0), (162, 3.5), (198, 16.0), (300, 7.0), (340, 22.0), (380, 4.5), (414, 12.0)]
+ORBIT_RADII = [92, 128, 162, 198, 300, 340, 380, 414]       # four inside the belt, four outside
+# sixteen planets, two per orbit on roughly opposite sides: (orbit radius, planet radius); planet k carries step k
+PLANETS = [(92, 5.0), (128, 11.0), (162, 3.5), (198, 16.0), (300, 7.0), (340, 22.0), (380, 4.5), (414, 12.0),
+           (92, 3.0), (128, 6.5), (162, 9.0), (198, 4.0), (300, 13.0), (340, 5.5), (380, 15.0), (414, 3.5)]
 BELT = (225, 275, 9.0)                           # inner and outer radius, half thickness
-N_ROCKS, JOSTLE = 56, 6.0
+N_ROCKS, JOSTLE = 90, 6.0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
 CAM = (CAM_D * math.cos(math.radians(CAM_EL)) * math.cos(math.radians(CAM_AZ)), CAM_D * math.sin(math.radians(CAM_EL)),
        -CAM_D * math.cos(math.radians(CAM_EL)) * math.sin(math.radians(CAM_AZ)))
@@ -157,11 +162,12 @@ def clearance(phases, samples=240):
     return worst
 
 
-def choose_phases(tries=2500):
+def choose_phases(tries=6000):
     rnd = random.Random(11)
     best, best_c = None, -1e9
     for _ in range(tries):
-        ph = [rnd.random() for _ in PLANETS]
+        first = [rnd.random() for _ in ORBIT_RADII]                      # each orbit's pair: roughly opposite
+        ph = first + [(f + 0.5 + rnd.uniform(-0.2, 0.2)) % 1.0 for f in first]
         c = clearance(ph, 60)
         if c > best_c:
             best, best_c = ph, c
@@ -179,7 +185,7 @@ def rocks():
         h = rnd.uniform(-BELT[2], BELT[2])
         roll = rnd.random()
         size = rnd.uniform(7.0, 10.5) if roll < 0.12 else rnd.uniform(4.5, 7.0) if roll < 0.4 else rnd.uniform(2.0, 4.5)
-        out.append((100 + n, rho, h, rnd.random(), 1 if rnd.random() < 0.7 else -1, size, 8 + n % 8))
+        out.append((100 + n, rho, h, rnd.random(), 1 if rnd.random() < 0.7 else -1, size, n % 16))
     return out
 
 
@@ -215,7 +221,7 @@ def orbit_segments(rho, n=96):
     return runs
 
 
-ORBITS = [orbit_segments(rho) for rho, _ in PLANETS]
+ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII]
 GLYPHS = {k: [R2.planet_glyph(s, r=10.0) for s in range(4)] for k in range(len(PLANETS))}
 
 
@@ -238,7 +244,7 @@ def scene(p, t):
         p3 = orbit_point(rho + jr.uniform(-k, k), a + jr.uniform(-k, k) / rho, h + jr.uniform(-k, k) * 0.5)
         x, y, z, ppu = project(p3)
         fill, line = R2.ROCK_FILLED if p.step_lit(step) else R2.ROCK_WIRE
-        svg = R2.node(R2.rock_glyph(seed, hops % 3), x, y, size * ppu / 10, fill, line, 0.8)
+        svg = R2.node(R2.rock_glyph(seed, (hops % 2) * 1.5), x, y, size * ppu / 10, fill, line, 0.8)   # two half-turn variants
         (front if nearer_than_sun(p3) else back).append((math.dist(CAM, p3), svg))
     o = [svg for _, svg in sorted(back, key=lambda q: -q[0])]          # far to near
     o += S.sun_corona()
