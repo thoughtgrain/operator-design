@@ -50,8 +50,8 @@ def ell(cx, cy, rx, ry, a0=0.0, a1=2 * math.pi, n=40):
 
 def wire_sphere(cx, cy, r, color=WIRE, w=0.8, tilt=0.32):
     """static art: a sphere as lines, drawn over its disc. Back halves of latitudes are skipped (hidden-line)."""
-    o = [path(ell(cx, cy, r, r, n=max(16, int(r * 2))), color, w + 0.2, close=True)]
-    n = max(8, int(r))
+    o = [path(ell(cx, cy, r, r, n=min(60, max(16, int(r * 2)))), color, w + 0.2, close=True)]
+    n = min(40, max(8, int(r)))
     lats, mers = ((-0.55, 0.0, 0.55), (0.38, 0.8)) if r >= 11 else ((0.0,), (0.5,))   # small spheres get fewer lines
     for lat in lats:                                                      # latitudes: front halves only
         rr, yy = r * math.cos(lat * math.pi / 2), cy + r * math.sin(lat * math.pi / 2)
@@ -64,11 +64,11 @@ def wire_sphere(cx, cy, r, color=WIRE, w=0.8, tilt=0.32):
 
 def disc(cx, cy, r, lit, fill=BODY):
     """the dot: the planet's disc, drawn under its wireframe"""
-    return [path(ell(cx, cy, r, r, n=max(16, int(r * 2))), fill, 0.5, fill=fill, close=True)] if lit else []
+    return [path(ell(cx, cy, r, r, n=min(60, max(16, int(r * 2)))), fill, 0.5, fill=fill, close=True)] if lit else []
 
 
 def planet(cx, cy, r, lit, solid_back=True):
-    o = [path(ell(cx, cy, r, r, n=max(16, int(r * 2))), INK, 0.5, fill=INK, close=True)] if solid_back else []
+    o = [path(ell(cx, cy, r, r, n=min(60, max(16, int(r * 2)))), INK, 0.5, fill=INK, close=True)] if solid_back else []
     return o + disc(cx, cy, r, lit) + wire_sphere(cx, cy, r)
 
 
