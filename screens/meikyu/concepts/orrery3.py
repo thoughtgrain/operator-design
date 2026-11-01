@@ -62,24 +62,25 @@ if VARIANT == "no-belt":
     ORBIT_RADII = [130, 186, 252, 318, 380, 440]
     # twenty-four slots: the sixteen step planets ("s"), two of them ringed ("r"), and eight extra planets ("x") that
     # carry no step and join as Dens rises. Sizes run from tiny to big. Slots go evenly round each orbit.
-    # forty slots: the sixteen step planets ("s", or "r" with a ring) and twenty-four extras ("x", or "xr" with a
+    # a hundred slots: the sixteen step planets ("s", or "r" with a ring) and twenty-four extras ("x", or "xr" with a
     # ring) that join as Dens rises; four to ten per orbit, steps spread evenly among them. Built below.
     _rnd = random.Random(41)
-    _SLOTS = {130: (4, 2), 186: (5, 2), 252: (6, 3), 318: (7, 3), 380: (8, 3), 440: (10, 3)}   # slots, steps
-    _RING_AT = {(252, 1), (318, 6), (380, 1), (380, 5), (440, 7)}                             # (orbit, slot) ringed
+    _SLOTS = {130: (7, 2), 186: (10, 2), 252: (15, 3), 318: (19, 3), 380: (22, 3), 440: (27, 3)}  # slots, steps
+    _RING_AT = {(252, 2), (318, 9), (380, 1), (380, 12), (440, 7), (440, 17)}                 # (orbit, slot) ringed
     ORBIT_PLANETS = {}
     for _rho, (_n, _steps) in _SLOTS.items():
         _step_slots = {round(j * _n / _steps) for j in range(_steps)}
         _row = []
         for _i in range(_n):
             _is_step = _i in _step_slots
-            _size = _rnd.choice([3.0, 4.5, 6.0, 7.5, 9.0, 11.0, 13.5]) if _is_step else _rnd.choice([1.8, 2.3, 3.0, 3.8, 4.8, 6.0])
+            _size = _rnd.choice([3.0, 4.5, 6.0, 7.5, 9.0, 11.0, 13.5]) if _is_step else _rnd.choice([1.5, 1.8, 2.3, 2.8, 3.5, 4.5, 5.5])
             if (_rho, _i) in _RING_AT:
                 _size = max(_size, 6.0)
             _kind = ("r" if _is_step else "xr") if (_rho, _i) in _RING_AT else ("s" if _is_step else "x")
             _row.append((_kind, _size))
         ORBIT_PLANETS[_rho] = _row
-    ORBIT_PLANETS[440][3] = ("s", 3.5)                                 # Pluto: small, smooth, a step, at the edge
+    _pluto_slot = round(1 * 27 / 3)                                  # a step slot on the outermost orbit
+    ORBIT_PLANETS[440][_pluto_slot] = ("s", 3.5)                       # Pluto: small, smooth, a step, at the edge
 ORBIT_PLANETS = {rho: [(e if isinstance(e, tuple) else ("s", e)) for e in v] for rho, v in ORBIT_PLANETS.items()}
 _ENTRIES = [(rho, kind, r) for rho in ORBIT_RADII for kind, r in ORBIT_PLANETS[rho]]
 BODIES = [(rho, r) for rho, _, r in _ENTRIES]
@@ -325,6 +326,12 @@ if VARIANT == "no-belt":
         KIND[_k] = _krnd.choice(["smooth", "banded"])                 # ringed worlds read best as plain or banded
     KIND[PLUTO_BODY] = "smooth"
 GLYPHS = {k: [PK.glyph(KIND[k], v, 300 + k) for v in range(PK.SPINS[KIND[k]])] for k in range(len(PLANETS))}
+
+
+def device_parts():
+    """display parts the page needs on the device: 4 sequence lines, the phrase planet's 8 ring segments, every
+    planet's look variants (one node each), and 4 ring halves per ringed planet"""
+    return 4 + 8 + sum(len(GLYPHS[k]) for k in range(len(PLANETS))) + 4 * len(RINGED)
 TUMBLE_MIN = 3.0                                 # rocks smaller than this don't tumble: the turn isn't visible
 
 
