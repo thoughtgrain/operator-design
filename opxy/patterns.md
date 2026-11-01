@@ -128,7 +128,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 **Why it works.** The mapping explains itself, so nothing on screen needs a label. It's also abstract enough that drawing quality never becomes the question, which is where figurative subjects kept failing. Toro went through nine rounds of bulls before landing here.
 
-**Channel fit.** Shape (heights) carries the big controls; shade on a row or band carries one control at most; count and position come from the note.
+**Channel fit.** Shape (heights) carries the big controls; shade on a row or band carries one control at most; count and position come from the note. One control can also act on the whole field's form rather than its heights: in toro, fold rolls the field up into a drum, because a folder folds the signal back on itself.
 
 **Budget.**
 
@@ -136,6 +136,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Draw back to front.** Each pillar's overhang is then hidden by the columns in front of it. Two black skirt nodes, drawn last, hide the front row's.
 - **Snap to whole pixels.** Edges stay crisp, and a part only redraws when it really moves.
 - **Check the count.** Seventy columns is 210 nodes; keep the grid at 70–75 columns with the 8-node two-page header.
+- **Mix solid and wireframe.** Give parts two looks from the palette, solid faces or a hidden-line wireframe (black fill, grey edge), and swap a part's palette instead of reshaping it. Toro hollows the quiet part of the wave (the lowest 35% of the voice's range) plus a fixed seeded scatter of about a quarter of the rest, so the wireframe reads as texture everywhere and still moves with the sound. Decide it on the voice's own value, before note lifts, so notes don't flicker parts between looks; keep struck and lit parts solid. Wireframes must keep their black fill: see-through wireframes turn a dense field into a tangle at 1:1. It costs two palette entries and no extra redraw.
 - **Pillars or slabs.** Floor-length pillars (with black skirts drawn last) make heights read as solid columns, but they pin the field to the floor. If a control should lift, bend or roll the field, use short slabs: toro's fold wraps the field round a drum, which pillars can't follow because a node never tilts. Slide each upright block to its point on the curve, push it out along the normal by its height, and shrink the relief as it wraps so the curve reads before the texture.
 
 **Pitfalls.**
@@ -143,6 +144,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Field-wide motion is expensive.** A note that moves the whole field (a roll, a ripple) changes far more than ~20 nodes a frame. Make it a decision with the owner, and write down the fallbacks.
 - **Hairline seams between faces.** Use same-colour strokes (~0.3 px) and check them on the device.
 - **Shade can't be the only signal.** Don't let a control's whole effect be a shade change; put it on geometry too.
+- **Nodes slide, they never tilt.** Anything that should rotate (a roll, a curl, a flap) is faked by moving upright parts along the curve. What failed for toro's roll, so you don't repeat it: flat tiles wound into a spiral read as floating slats ("lilies"); curling the *front* edge back paints the lifted rows over everything, because the fixed draw order puts them last; a hinged flap with floor-length pillars reads as a slab. What worked: slabs, a curve that keeps back rows drawn first, and relief flattened as the field wraps. Watch for leftover masks too: the skirts that hid pillar overhang cut into the drum until they were hidden.
 
 ## P11 · Instrument stack
 

@@ -28,6 +28,7 @@ A part that's scaled for motion is authored so its stroke stays inside this tabl
 - Secondary marks in the mid greys, ground at `#323232`–`#4B4B4B`.
 - Outlines first. Fills only as dark bodies behind bright outlines (MNMD's operator circles, the Moon's earthshine) or as the subject's single bright mass.
 - No nested bands of contrasting grey. They read as a target.
+- Solid and wireframe can share a figure when they mean something different (toro: quiet parts hollow, loud parts solid; meikyu's planets: a step that plays fills in). Keep wireframes hidden-line, with a black fill so they still hide what's behind them, and keep the edge a mid grey so a solid part stays the brightest thing.
 
 ## Composition
 
