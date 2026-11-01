@@ -54,7 +54,9 @@ PALETTE = [(G[1], G[1], 0.3), (G[3], G[3], 0.3), (G[4], G[4], 0.3), (G[5], G[5],
            (G[7], G[7], 0.3), ("#000000", "#000000", 0.3), ("#FFFFFF", "#FFFFFF", 0.3),
            ("#000000", G[4], 0.9), ("#000000", G[6], 0.9)]
 P_RIGHT, P_LEFT, P_TOP_LO, P_TOP_MID, P_TOP_HI, P_LIT, P_BLACK, P_FLASH, P_WIRE, P_WIRE_TOP = range(10)
-WIRE_BELOW = 0.3                                           # cubes in the lowest 30% of the voice's range are drawn hollow
+WIRE_BELOW = 0.35                                          # cubes in the lowest 35% of the voice's range are drawn hollow
+WIRE_SCATTER = 0.28                                        # ...and so is a fixed scatter of about this share of the rest
+WIRE_SET = {(i, j) for i in range(NX) for j in range(NY) if random.Random(i * 31 + j * 7 + 3).random() < WIRE_SCATTER}
 KEY_SPOTS = [(2, 2), (6, 1), (4, 4), (8, 3), (1, 5), (5, 6), (7, 5), (3, 1)]   # where each key's patch lands
 
 
@@ -203,7 +205,7 @@ def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
             top = P_FLASH
         # the quiet part of the wave is hollow: black faces with grey edges. Decided on the voice's own height (before
         # notes and the drum's flattening), so it follows the sound; a struck or lit cube stays solid
-        wire = hs[i][j] < H_MIN + WIRE_BELOW * (H_MAX - H_MIN) and top not in (P_FLASH, P_LIT)
+        wire = (hs[i][j] < H_MIN + WIRE_BELOW * (H_MAX - H_MIN) or (i, j) in WIRE_SET) and top not in (P_FLASH, P_LIT)
         out[n] = Pose(tx, ty, P_WIRE if wire else P_LEFT)
         out[n + 1] = Pose(tx, ty, P_WIRE if wire else P_RIGHT)
         out[n + 2] = Pose(tx, ty, P_WIRE_TOP if wire else top)
