@@ -5,15 +5,15 @@ beams that follow the sound from step to step.
 Brian's direction after reading what each control did: lines should move to where the sound is going, Scal, Drum
 and velocity all need a visible effect, and with Drum on, Scal should mean something else. So:
 
-  beams     as each tone of a phrase sounds, a bright beam jumps from the planet of the previous sounding step to the
-            planet of this one; the beam before it dims, older ones go. On the device these are mutable outlines
-            (a synth display has four): the live beam, the one before it, and spare.
+  beams     between triggers a comet travels a curved path from the previous sounding step's planet to the next,
+            arriving exactly on the trigger; its tail grades dark to bright and it fades in leaving and out landing,
+            with a ring opening at the target. On the device: three graded mutable outlines plus the ring.
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
   Crpt      rewrites steps after each phrase, so fills change between phrases; and it jostles the belt every hop
   Scal      normal mode: spreads the orbits, pentatonic tightest → minor → major → chromatic widest (eased)
             drum mode: Scal becomes Kit (kit 1–4): it picks the pad set and spreads the asteroid belt instead
-  Drum      on: planets stop filling; the struck step's rocks pulse (swell and flash) as each hit lands, because the
-            belt is now the kit. Off: back to planets filling.
+  Drum      on: the belt rises out of the orbit plane (it's the kit now), planets stop filling, and each hit makes its
+            step's rocks jump up and fall back. Off: the belt settles back down and planets fill again.
   velocity  how far the ring planet's lit segments reach: soft presses short, hard presses long
   a press   the ring segments light for the tones that sounded; the text line names root, half and phrase count
 
@@ -52,8 +52,10 @@ KITS = [[0, 5, 7, 12, 17, 24, 31, 36],             # kit 1: meikyu's own pads
         [0, 7, 12, 19, 24, 31, 36, 43],            # kit 3: wide, fifths and octaves
         [0, 1, 6, 7, 12, 13, 18, 19]]              # kit 4: clangy semitone pairs
 EASE = 0.35                                         # seconds for spreads to settle
-PULSE = 0.22                                        # seconds a struck rock stays swollen
-BEAM_LIVE, BEAM_TAIL = 0.28, 0.6                    # seconds a beam is bright, then dim
+PULSE = 0.26                                        # seconds a struck rock's bounce lasts
+BOUNCE_UP = 16.0                                    # world units a struck rock jumps
+DRUM_LIFT = 10.0                                    # world units the whole belt rises while Drum is on
+TAIL, LAND = 0.7, 0.22                              # comet tail (fraction of the path); seconds it takes to land
 
 
 # ---- the score ------------------------------------------------------------------------------------------------------------
@@ -169,6 +171,7 @@ def scene(p, last, t, presses):
     c = controls(t)
     spread = eased(t, lambda tt: 1.0 if controls(tt)["drum"] else SPREAD[controls(tt)["scal"]])
     belt = eased(t, lambda tt: BELT_SPREAD[controls(tt)["scal"]] if controls(tt)["drum"] else 1.0)
+    lift = eased(t, lambda tt: DRUM_LIFT if controls(tt)["drum"] else 0.0)    # the belt rises when it becomes the kit
     back, front = [], []
     for rho in M3.ORBIT_RADII:                                       # orbit lines, split near/far of the sun
         for is_front, pts in M3.orbit_segments(rho * spread):
@@ -193,11 +196,12 @@ def scene(p, last, t, presses):
         jr = random.Random(seed * 7919 + hops)
         k = M3.JOSTLE * p.corrupt
         rr_ = mid + (rho - mid) * belt
-        p3 = M3.orbit_point(rr_ * (1 + 0 * k) + jr.uniform(-k, k), a + jr.uniform(-k, k) / rho, h * belt + jr.uniform(-k, k) * 0.5)
+        hop_up = BOUNCE_UP * math.sin(math.pi * struck[step] / PULSE) if step in struck else 0.0   # a hit: up and back down
+        p3 = M3.orbit_point(rr_ + jr.uniform(-k, k), a + jr.uniform(-k, k) / rho,
+                            h * belt + lift + hop_up + jr.uniform(-k, k) * 0.5)
         x, y, z, ppu = M3.project(p3)
         s = size * ppu / 10
-        if step in struck:                                           # a hit: swell and flash, then settle
-            s *= 1.0 + 0.9 * (1 - struck[step] / PULSE)
+        if step in struck:
             fill, line = ("#F0F0F0", "#8A8A8A")
         else:
             fill, line = R2.ROCK_FILLED if p.step_lit(step) else R2.ROCK_WIRE
@@ -212,22 +216,41 @@ def scene(p, last, t, presses):
 
 
 def beams(t, presses, pos):
-    """lines that follow the sound: each hit draws a beam from the previous hit's planet to its own"""
+    """lines that follow the sound: between consecutive hits, a comet travels a curved path from the previous hit's
+    planet to this one, leaving as the previous tone sounds and arriving exactly as this one does. Its tail runs
+    dark to bright toward the head, and the whole comet fades in as it leaves and out as it arrives. On the device
+    it's three graded mutable outlines plus the landing ring: four paths."""
     hits = []
     for pr in presses:
         hits += pr["hits"]
-    hits = [h for h in hits if h[0] <= t]
     o = []
     for (t0, i0), (t1, i1) in zip(hits, hits[1:]):
-        age = t - t1
-        if age < 0 or age > BEAM_LIVE + BEAM_TAIL or t1 - t0 > 0.6:   # no beam across the gap between phrases
+        if t1 - t0 > 0.6 or not (t0 <= t <= t1 + LAND):
             continue
         (x0, y0), (x1, y1) = pos[i0], pos[i1]
-        if age < BEAM_LIVE:
-            o.append(path([(x0, y0), (x1, y1)], "#F0F0F0", 1.3))
-            o.append(path(M3_ring(x1, y1, 4 + 10 * age), "#F0F0F0", 0.9, close=True))
-        else:
-            o.append(path([(x0, y0), (x1, y1)], "#5A5A5A", 0.9))
+        dx, dy = x1 - x0, y1 - y0
+        L = math.hypot(dx, dy) or 1.0
+        bend = 0.32 * L                                             # arc up and over, like a thrown line
+        cx, cy = (x0 + x1) / 2 + dy / L * bend * 0.3, (y0 + y1) / 2 - abs(dx) / L * bend - 6
+
+        def at(u):
+            return ((1 - u) ** 2 * x0 + 2 * (1 - u) * u * cx + u * u * x1, (1 - u) ** 2 * y0 + 2 * (1 - u) * u * cy + u * u * y1)
+
+        head = min(1.0, (t - t0) / max(1e-3, t1 - t0))
+        landed = max(0.0, t - t1) / LAND                            # 0..1 after arrival: the tail draws into the target
+        tail = max(0.0, head - TAIL) + landed * TAIL
+        fade = min(1.0, head / 0.3) * (1.0 - landed)
+        if head - tail > 0.01 and fade > 0.02:
+            for g in range(3):                                      # three graded pieces, dim tail → bright head
+                u0 = tail + (head - tail) * g / 3
+                u1 = tail + (head - tail) * (g + 1) / 3
+                level = fade * (0.35 + 0.65 * (g + 1) / 3)
+                v = round(0x30 + (0xF0 - 0x30) * level)
+                o.append(path([at(u0 + (u1 - u0) * k / 6) for k in range(7)], f"#{v:02X}{v:02X}{v:02X}", 1.0 + 0.8 * g))
+        if 0 <= t - t1 < LAND:                                      # the landing: a ring opening round the target
+            age = (t - t1) / LAND
+            v = round(0x40 + (0xF0 - 0x40) * (1 - age))
+            o.append(path(M3_ring(x1, y1, 4 + 9 * age), f"#{v:02X}{v:02X}{v:02X}", 0.9, close=True))
     return o
 
 
