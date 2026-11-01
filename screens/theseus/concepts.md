@@ -15,3 +15,17 @@ I'm working in the house language from `library/toro-blocks/` (P10 Voice field):
 Every design: punch = how far a hit lifts or digs; cutoff = how bright a hit lights; fm = hits split and jag; noise = loose blocks thrown off a hit (more for high drums); tune = shifts which drum a note lands on.
 
 Next: pick one; it goes through the protocol (definition from labyrinth's port, frames at 0/50/100, lint, perceptibility, prototype, video, handoff).
+
+## Round 2: drums you can see
+
+Round 1 read as abstract fields; Brian wanted it to look like drums. `concepts/drums.py` builds real drums from clean primitives: an ellipse for each head, a band for the shell with a darker right third, lugs and hoops as small blocks, cymbals as thin discs with lathe rings. No hand-drawn outlines, so the drawing stays crisp. Board: `concepts/board-drums.png`.
+
+| | Design | What a hit does | Decay | LFO / Rate |
+| --- | --- | --- | --- | --- |
+| d1 | Kit (three-quarter view): kick facing us, two rack toms, snare, hi-hat | the struck drum's head dips and lights, rings spread across it; the kick's front head bulges; the hat lifts and tips | how many rings and how long they last | the kit sways one step per hit |
+| d2 | Overhead kit: the same kit from above, every head a disc with its lugs | rings spread across the struck head; cymbals light and throw shimmer rings (fm) | rings | cymbals slide |
+| d3 | One drum: theseus is one voice that becomes every drum | the single shell becomes the hit's drum (deep kick, tom, snare with wires, a cymbal for hats); five markers below light the zone | rings | — |
+| d4 | Drum tower: shells stacked from kick at the base to hats on top | its tier lifts and lights | rings | the tower leans, more toward the top |
+| d5 | Pads: a 4 × 4 drum-machine pad grid | its pad presses down and lights; fm splits the glow | how long the pad stays lit | a cursor steps across the pads, one cycle per Rate |
+
+Every design keeps the round-1 mappings: punch = how far a hit moves, cutoff = how bright, fm = shimmer and split, noise = sizzle specks (more for high drums), tune = which drum a note lands on.
