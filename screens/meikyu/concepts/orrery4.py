@@ -234,16 +234,16 @@ def scene(p, last, t, presses):
     o = [svg for _, svg in sorted(back, key=lambda q: -q[0])]
     o += S.sun_corona()
     o += [svg for _, svg in sorted(front, key=lambda q: -q[0])]
-    o += beams(t, presses, pos)
+    o += beams(t, presses, pos, spread)
     reach = 1.8 + 1.4 * ((last["vel"] if last else 64) / 127)        # velocity → how far the ring's segments reach
     return o + O.ringed(M3.RING[0], M3.RING[1], 12, p, ring=(1.45, reach), tilt=0.3)
 
 
-def beams(t, presses, pos):
+def beams(t, presses, pos, spread_now=1.0):
     """links that follow the sound: from each sounding step to the next. A link connects fast (it draws out to its
     target in CONNECT s) and lets go slowly (the whole arc stays and fades over FADE s in three greys). Only the last
     LINKS links show, so on the device they're four mutable outlines. The path follows the orbits: radius and angle
-    round the sun interpolated the short way, lifted slightly, then projected."""
+    round the sun along the orbit itself (same radius, same plane), then projected."""
     links = []                                                       # links stay within a phrase
     for pr in presses:
         links += [(t0, i0, t1, i1) for (t0, i0), (t1, i1) in zip(pr["hits"], pr["hits"][1:]) if t0 <= t]
@@ -257,7 +257,7 @@ def beams(t, presses, pos):
         r0, r1 = math.hypot(p0[0], p0[2]), math.hypot(p1[0], p1[2])
         a0, a1 = math.atan2(-p0[2], p0[0]), math.atan2(-p1[2], p1[0])
         da = -((a0 - a1) % (2 * math.pi))                            # along the orbit, back toward the next step
-        lift = 6.0
+        ring_r = M3.ORBIT_RADII[M3.ORBIT_OF[i0]] * spread_now            # exactly the drawn orbit: same radius, same plane
         reach = min(1.0, age / CONNECT)                              # fast connect
         fade = 1.0 if age < CONNECT else 1.0 - (age - CONNECT) / FADE   # slow disconnect
         level = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A   # three greys on the way out
@@ -265,7 +265,7 @@ def beams(t, presses, pos):
         for q in range(48):                                         # ≤ 64 points: one mutable outline
             u = reach * q / 47
             r, a = r0 + (r1 - r0) * u, a0 + da * u
-            x, y, _, _ = M3.project(M3.orbit_point(r, a, (p0[1] + (p1[1] - p0[1]) * u) + lift * math.sin(math.pi * u)))
+            x, y, _, _ = M3.project(M3.orbit_point(ring_r, a, 0.0))
             pts.append((x, y))
         o.append(path(pts, f"#{level:02X}{level:02X}{level:02X}", 1.4 if level == 0xF0 else 1.1))
     return o
