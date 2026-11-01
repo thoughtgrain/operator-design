@@ -9,8 +9,8 @@ Built to the synth display's rules, which is what this needs from the player pag
   - a planet is ONE path node (outline, front equator and a meridian traced as a single line, ≤ 64 points), so it
     moves with a bound transform: translate plus a uniform scale (≤ 2), never a rotation
   - wire vs filled is a palette swap on that node: black fill with grey lines, or light fill with dark lines
-  - it hops every HOP seconds along its orbit (Kepler-ish: inner orbits are faster), its scale set by depth, and
-    passes behind the sun (drawn before it while on the far half) and off the left edge
+  - it hops every HOP seconds down the visible front of its orbit, its scale set by depth; leaving at the bottom it
+    comes back in at the top, and the sixteen are phased evenly so the screen's distribution never thins out
   - hops are staggered so only a few planets redraw on any frame
   - the sun is the corona as picked, static art
   - the ringed planet (the phrase) stays put; its eight segments light for the tones that sounded
@@ -104,20 +104,34 @@ def sun():
     return [path(ell(SX, SY, SR, SR, n=60), "#A4A4A4", 1.4, fill="#000000", close=True)] + O.wire_sphere(SX, SY, SR, "#8A8A8A", 0.8)
 
 
+CYCLE = 20.0                                 # seconds for a planet to cross its visible arc, the same for every orbit
+GOLDEN = 0.6180339887
+
+
+def visible_arc(rx, ry):
+    """the part of an orbit that's on screen and clear of the sun, header and text line: angles -amax..amax"""
+    amax = min(math.acos(min(1.0, 80 / rx)), 0.88)
+    return -amax, amax
+
+
 def planet_states(t):
-    """(depth key, behind?, svg) per planet at time t"""
-    lay = S.layout()
-    rmax = max(q[0] for q in lay)
+    """(depth key, behind?, x, y, scale, step) per planet at time t.
+
+    Each planet runs down the visible front of its own orbit and, when it leaves at the bottom, comes back in at
+    the top. Every planet takes CYCLE seconds to cross, and their phases are spread evenly (golden-ratio offsets,
+    so neighbouring orbits aren't in step), so the screen always holds the same proportion of planets in each
+    part of it: one leaving is always matched by one arriving. Positions only change on hops."""
     out = []
-    for rx, ry, a0, base, i in lay:
+    for rx, ry, a0, base, i in S.layout():
         n = (i % 8) * 2 + (0 if i < 8 else 1)
-        period = PERIOD_OUTER * (rx / rmax) ** 1.5
+        lo, hi = visible_arc(rx, ry)
         stagger = (n * 0.37) % 1.0 * HOP                              # hops spread across frames
         hops = math.floor((t + stagger) / HOP)
-        a = a0 + 2 * math.pi * hops * HOP / period
+        u = ((n * GOLDEN) + hops * HOP / CYCLE) % 1.0                 # 0 entering at the top, 1 leaving at the bottom
+        a = lo + (hi - lo) * u
         x, y = SX + rx * math.cos(a), SY + ry * math.sin(a)
         size = base * (0.62 + 0.38 * (math.sin(a) + 1) / 2) / (0.72 + 0.28 * (math.sin(a0) + 1) / 2)
-        out.append((y, math.sin(a) < 0, x, y, size / 10.0, i))
+        out.append((y, False, x, y, size / 10.0, i))
     return out
 
 
