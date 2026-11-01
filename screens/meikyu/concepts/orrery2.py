@@ -50,8 +50,8 @@ ROCK_WIRE = ("#000000", "#6E6E6E")
 ROCK_FILLED = ("#D0D0D0", "#5A5A5A")
 GAP = 4.0                                    # px kept clear between any two bodies
 
-# eight planets: (orbit rx, radius px). Two inside the belt, six outside; sizes deliberately uneven.
-PLANETS = [(64, 5.0), (90, 12.0), (114, 3.5), (136, 18.0), (196, 7.5), (214, 25.0), (232, 4.5), (248, 13.0)]   # (semi-major axis, radius)
+# eight planets: (orbit reach Q, radius px). Four inside the belt, four outside; sizes deliberately uneven.
+PLANETS = [(118, 5.0), (150, 12.0), (184, 3.5), (218, 18.0), (352, 7.5), (384, 25.0), (420, 4.5), (456, 13.0)]   # (reach to the right Q, radius)
 RING = (446, 200, 26)                        # the ringed planet's centre and reach, an obstacle (bottom-right corner)
 
 
@@ -60,17 +60,31 @@ def f(v):
     return "0" if s in ("-0", "") else s
 
 
-ECC, TILT = 0.84, 0.3                        # orbit eccentricity (the sun at the left focus) and how flat we see them
+TILT = 0.38                                  # how flat we see the orbits
 
 
-def ry_of(rx):
-    return rx * TILT * math.sqrt(1 - ECC * ECC) * 1.9
+def perihelion(Q):
+    """closest approach to the sun's centre for an orbit reaching out to Q: just outside the sun's surface, a little
+    further out for the outer orbits so the paths don't all pinch to one point"""
+    return SR + 8 + 0.09 * (Q - 100)
 
 
-def orbit_xy(rx, a):
-    """a point on an orbit of semi-major axis rx with the sun at its left focus: a = 0 is aphelion (far right),
-    a = π perihelion (just left of the sun); sin(a) > 0 is the near half"""
-    return SX + ECC * rx + rx * math.cos(a), SY + ry_of(rx) * math.sin(a)
+def orbit_params(Q):
+    """an orbit with the sun at its left focus, wrapping round the sun at perihelion and reaching Q to the right:
+    (centre x, semi-major, semi-minor as seen)"""
+    q = perihelion(Q)
+    return SX + (Q - q) / 2, (Q + q) / 2, math.sqrt(q * Q) * TILT
+
+
+def ry_of(Q):
+    return orbit_params(Q)[2]
+
+
+def orbit_xy(Q, a):
+    """a point on an orbit: a = 0 is aphelion (far right), a = π perihelion (just round the sun); sin(a) > 0 is
+    the near half, drawn in front of the sun"""
+    cx, A_, B = orbit_params(Q)
+    return cx + A_ * math.cos(a), SY + B * math.sin(a)
 
 
 def orbit_line(rx, a0, a1, n=40):
@@ -133,9 +147,9 @@ def hidden(x, y, r, a):
     return behind or y + r <= 20 or y - r >= 220 or x + r <= 0
 
 
-def ellipse_length(rx):
-    return sum(math.hypot(rx * (math.cos(2 * math.pi * (k + 1) / 240) - math.cos(2 * math.pi * k / 240)),
-                          ry_of(rx) * (math.sin(2 * math.pi * (k + 1) / 240) - math.sin(2 * math.pi * k / 240))) for k in range(240))
+def ellipse_length(Q):
+    pts = [orbit_xy(Q, 2 * math.pi * k / 240) for k in range(241)]
+    return sum(math.dist(pts[k], pts[k + 1]) for k in range(240))
 
 
 def planet_at(k, u):
@@ -181,7 +195,7 @@ def choose_phases(tries=3000):
 PHASES, CLEAR = choose_phases()
 
 
-BELT = (152, 182)                            # the asteroid ring: inner and outer semi-major axis, between planets 4 and 5
+BELT = (250, 322)                            # the asteroid ring: inner and outer reach Q, between planets 4 and 5
 N_ROCKS = 56                                 # seven per B step
 ROCK_PX = 4.0                                # how far a rock moves along its path per hop
 JOSTLE = 7.0                                 # px a rock can be knocked off its path at Crpt 100
@@ -212,9 +226,8 @@ def stagger(n):
 def scene(p, t):
     """orbits, then everything on the far halves (behind the sun), the sun, then everything on the near halves"""
     o = []
-    for rx, _ in PLANETS:                                                    # orbits: far half dim, near half a little brighter
-        o.append(path(orbit_line(rx, math.pi, 2 * math.pi), "#1C1C1C", 0.8))
-        o.append(path(orbit_line(rx, 0, math.pi), "#2E2E2E", 0.9))
+    for Q, _ in PLANETS:                                                     # far halves of the orbits: behind the sun
+        o.append(path(orbit_line(Q, math.pi, 2 * math.pi), "#1C1C1C", 0.8))
     far, near = [], []
     for k, (rx, r) in enumerate(PLANETS):
         hops = math.floor((t + stagger(k)) / HOP)
@@ -233,6 +246,8 @@ def scene(p, t):
         (near if math.sin(a) >= 0 else far).append((y, node(rock_glyph(seed, hops % 3), x, y, size * depth_scale(a) / 10, fill, line, 0.8)))
     o += [svg for _, svg in sorted(far, key=lambda b: b[0])]
     o += S.sun_corona()                                                      # the corona sun as picked
+    for Q, _ in PLANETS:                                                     # near halves: in front, wrapping round the sun's face
+        o.append(path(orbit_line(Q, 0, math.pi), "#565656", 0.9))
     o += [svg for _, svg in sorted(near, key=lambda b: b[0])]
     return o + O.ringed(RING[0], RING[1], 12, p, ring=(1.5, 2.3), tilt=0.3)
 
