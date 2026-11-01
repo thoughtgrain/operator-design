@@ -104,34 +104,58 @@ def sun():
     return [path(ell(SX, SY, SR, SR, n=60), "#A4A4A4", 1.4, fill="#000000", close=True)] + O.wire_sphere(SX, SY, SR, "#8A8A8A", 0.8)
 
 
-CYCLE = 20.0                                 # seconds for a planet to cross its visible arc, the same for every orbit
+STEP_PX = 6.0                                # how far a planet moves per hop along its path, on every orbit
 GOLDEN = 0.6180339887
 
 
-def visible_arc(rx, ry):
-    """the part of an orbit that's on screen and clear of the sun, header and text line: angles -amax..amax"""
-    amax = min(math.acos(min(1.0, 80 / rx)), 0.88)
-    return -amax, amax
+def planet_size(base, a, a0):
+    return base * (0.62 + 0.38 * (math.sin(a) + 1) / 2) / (0.72 + 0.28 * (math.sin(a0) + 1) / 2)
+
+
+def hidden(x, y, r):
+    """fully out of sight: behind the sun (drawn over the planets), under the header, below the screen or off left"""
+    return math.hypot(x - SX, y - SY) + r <= SR or y + r <= 20 or y - r >= 220 or x + r <= 0
+
+
+def visible_arc(rx, ry, base, a0):
+    """the whole path a planet can be seen on: from where it emerges (behind the sun or under the header) round the
+    front to where it's hidden again. Found by walking out from the front of the orbit in both directions."""
+    ends = []
+    for sign in (-1, 1):
+        a = 0.0
+        while abs(a) < math.pi:
+            a += sign * 0.005
+            r = planet_size(base, a, a0)
+            if hidden(SX + rx * math.cos(a), SY + ry * math.sin(a), r):
+                break
+        ends.append(a)
+    return ends[0], ends[1]
 
 
 def planet_states(t):
     """(depth key, behind?, x, y, scale, step) per planet at time t.
 
-    Each planet runs down the visible front of its own orbit and, when it leaves at the bottom, comes back in at
-    the top. Every planet takes CYCLE seconds to cross, and their phases are spread evenly (golden-ratio offsets,
-    so neighbouring orbits aren't in step), so the screen always holds the same proportion of planets in each
-    part of it: one leaving is always matched by one arriving. Positions only change on hops."""
+    Each planet runs its whole visible path: it emerges from behind the sun (or from under the header), crosses the
+    front of its orbit, and goes behind the sun or off the bottom before it wraps, so its re-entry comes just after
+    its exit and never happens in plain sight. Every planet moves STEP_PX per hop, so long outer paths take longer
+    than short inner ones; starting phases are spread evenly (golden-ratio offsets) so the planets begin evenly
+    distributed and each orbit always holds its one planet, out of sight only for the hop or two of its wrap. Positions only change on hops."""
     out = []
     for rx, ry, a0, base, i in S.layout():
         n = (i % 8) * 2 + (0 if i < 8 else 1)
-        lo, hi = visible_arc(rx, ry)
+        lo, hi = visible_arc(rx, ry, base, a0)
+        length = sum(math.hypot(rx * (math.cos(lo + (hi - lo) * (k + 1) / 200) - math.cos(lo + (hi - lo) * k / 200)),
+                                ry * (math.sin(lo + (hi - lo) * (k + 1) / 200) - math.sin(lo + (hi - lo) * k / 200))) for k in range(200))
+        hops_per_cycle = max(8, round(length / STEP_PX))
+        hop = (hi - lo) / hops_per_cycle
+        lo, hi = lo - 1.5 * hop, hi + 1.5 * hop                     # a hop or two out of sight at each end: the wrap is never seen
+        cycle = (hops_per_cycle + 3) * HOP
         stagger = (n * 0.37) % 1.0 * HOP                              # hops spread across frames
         hops = math.floor((t + stagger) / HOP)
-        u = ((n * GOLDEN) + hops * HOP / CYCLE) % 1.0                 # 0 entering at the top, 1 leaving at the bottom
+        u = ((n * GOLDEN) + hops * HOP / cycle) % 1.0                 # 0 entering at the top, 1 leaving at the bottom
         a = lo + (hi - lo) * u
         x, y = SX + rx * math.cos(a), SY + ry * math.sin(a)
-        size = base * (0.62 + 0.38 * (math.sin(a) + 1) / 2) / (0.72 + 0.28 * (math.sin(a0) + 1) / 2)
-        out.append((y, False, x, y, size / 10.0, i))
+        out.append((y, True, x, y, planet_size(base, a, a0) / 10.0, i))      # all drawn before the sun: they pass behind it
     return out
 
 
