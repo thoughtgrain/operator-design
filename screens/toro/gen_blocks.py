@@ -44,7 +44,7 @@ PREFIX = "toro"
 NX, NY, S = 10, 7, 15                                      # columns along x and y; half-width of a cube in px
 OX, OY = 240 - (NX - NY) * S / 2, 92                         # where column (0, 0)'s base centre sits
 H_MIN, H_MAX = 8, 40                                       # column heights in px
-PILLAR = 64                                                # side faces are this tall, so they cover any height
+PILLAR = 12                                                # side faces: a slab this thick, so the field can wrap round a drum
 PATHS = 0
 HEADER_FIRST = 0
 f, poly, G, fold_signal = g.f, g.poly, g.G, g.fold_signal
@@ -138,32 +138,37 @@ def ease(t, tau):
     return 1 - math.exp(-t / tau) if t is not None else 1.0
 
 
-CURL_ROWS, CURL_TURN, ROW_PX = 4, 2.4, 16.8               # back rows that wind up; how far the tip turns at fold 1; px per row
+ROLL_ARC, ROW_PX, RELIEF_SHRINK, ROLL_SPREAD, ROLL_DROP = 1.9 * math.pi, 16.8, 0.92, 0.5, 14    # arc the field wraps at fold 1 (~280°); px per row upward; relief cut
+ROLL_MID = (NX - 1) / 2                                    # the row that stays on top as the field wraps
 
 
-def curl_amount(fold: float) -> float:
-    """0 at fold 0 (flat field) to 1 at fold 1 (the back rows fully curled)"""
+def roll_amount(fold: float) -> float:
+    """0 at fold 0 (flat field) to 1 at fold 1 (wrapped almost all the way round)"""
     s = max(0.0, fold - 0.05) / 0.95
     return 0.5 - 0.5 * math.cos(math.pi * s)
 
 
-def curl_xy(i: int, j: int, c: float) -> tuple[float, float, float]:
-    """base position of column (i, j) as the field's back edge curls up and over toward the viewer.
+def rolled_top(i: int, j: int, h: float, c: float) -> tuple[float, float, float]:
+    """where column (i, j)'s top face sits (h: how far it stands out, px) when the field is wrapped round a cylinder lying along j.
 
-    The back CURL_ROWS rows wind onto a circle that grows tighter with fold: each row's distance behind the hinge
-    becomes an angle around it, so the back edge rises, stands up, and at full fold hooks forward over the field like
-    a wave's lip. The display can only slide a node, so each cube stays upright and slides along that circle; the
-    rows are drawn back to front, so the field in front covers the feet of the risen columns. Returns (x, y, angle)."""
-    hinge = CURL_ROWS - 0.5                                    # between the last curling row and the field
-    u = hinge - i
-    if u <= 0 or c == 0:
-        return (*base_xy(i, j), 0.0)
-    theta = CURL_TURN * c * u / hinge                         # the back row reaches CURL_TURN at full fold
-    r = hinge / CURL_TURN / max(c, 1e-3) if c < 1 else hinge / CURL_TURN
-    r = min(r, 40.0)
-    along, up = -r * math.sin(theta), r * (1 - math.cos(theta))
-    hx, hy = OX + (hinge - j) * S, OY + (hinge + j) * S * 0.5
-    return hx + along * S, hy + along * S * 0.5 - up * ROW_PX * 1.15, theta
+    The field bends into an arc of ROLL_ARC·c with its middle row on top, so at fold 0 it's flat and at fold 1 it's
+    almost a closed drum. Each column's height becomes how far it stands out from the drum, along the surface's
+    outward normal, so the voice's relief turns into blocks pushing out of the cylinder. The arc's ends rest on the
+    floor. The display can only slide a node, so each cube stays upright and slides to its place; the rows are drawn
+    back to front, so the back of the drum is drawn first and the front last. Returns (x, y, angle from the top)."""
+    A = ROLL_ARC * c
+    sp = 1 + ROLL_SPREAD * c                                 # rows part a little as they wrap, so the drum's staves read
+    L = NX * sp
+    if A < 1e-4:
+        bx, by = base_xy(i, j)
+        return bx, by - h, 0.0
+    R = L / A
+    psi = (i - ROLL_MID) * sp * A / L
+    lift = R * (1 - math.cos(min(A / 2, math.pi)))           # rows: raise the top so the arc's ends touch the floor
+    along = R * math.sin(psi) + (h / ROW_PX) * math.sin(psi)
+    up_px = (lift - R * (1 - math.cos(psi))) * ROW_PX + h * math.cos(psi)
+    px, py = OX + (ROLL_MID - j) * S, OY + (ROLL_MID + j) * S * 0.5
+    return px + along * S, py + along * S * 0.5 - up_px + ROLL_DROP * c, psi
 
 
 def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
@@ -175,29 +180,28 @@ def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
     ci, cj = KEY_SPOTS[key % len(KEY_SPOTS)]
     patch = {(ci + di, cj + dj) for di in (-1, 0, 1) for dj in (-1, 0, 1) if abs(di) + abs(dj) <= 1 or (di, dj) == (1, 1)}
     lit_row = round((NY - 1) * v["res"]) if v["res"] > 0.05 else None
-    c = curl_amount(v["fold"])
+    c = roll_amount(v["fold"])
     out = {}
     for (i, j), n in COL_INDEX.items():
-        h = hs[i][j] + (lift * (1.0 if (i, j) == (ci, cj) else 0.6) if (i, j) in patch else 0.0)
+        # as the field wraps, the voice's own relief sinks into the drum's surface, and notes push blocks out of it
+        h = H_MIN + (hs[i][j] - H_MIN) * (1 - RELIEF_SHRINK * c) + (lift * (1.0 if (i, j) == (ci, cj) else 0.6) if (i, j) in patch else 0.0)
         if t is not None:                                        # the ripple: a ring spreading from the patch
             d = math.hypot(i - ci, j - cj)
             ring = math.exp(-((d - RIPPLE_SPEED * t) / RIPPLE_WIDTH) ** 2) * math.exp(-t / RIPPLE_DECAY)
             h += RIPPLE_HEIGHT * ring
         h = round(h)                                             # whole pixels: crisp edges, and a column only redraws when it really moves
-        bx, by, turn = curl_xy(i, j, c)
-        bx, by = round(bx), round(by)
-        if turn > 0:                                            # wound into the curl: thin material, not the voice's relief
-            h = round(h + (H_MIN - h) * c)
+        tx, ty, psi = rolled_top(i, j, h, c)
+        tx, ty = round(tx), round(ty)
         top = P_TOP_HI if h > 0.75 * H_MAX else P_TOP_MID if h > 0.45 * H_MAX else P_TOP_LO
         if j == lit_row:
             top = P_LIT
-        if i == 0 and turn > 1.8:                               # the curl's tip catches the light as it turns over
-            top = P_LIT
+        if math.cos(psi) < -0.2:                                # on the drum's underside: the top faces away, so it's dark
+            top = P_TOP_LO if top != P_FLASH else top
         if flash and (i, j) in patch:
             top = P_FLASH
-        out[n] = Pose(bx, by - h, P_LEFT)
-        out[n + 1] = Pose(bx, by - h, P_RIGHT)
-        out[n + 2] = Pose(bx, by - h, top)
+        out[n] = Pose(tx, ty, P_LEFT)
+        out[n + 1] = Pose(tx, ty, P_RIGHT)
+        out[n + 2] = Pose(tx, ty, top)
     out[SKIRT_FIRST] = Pose(0, 0, P_BLACK)
     out[SKIRT_FIRST + 1] = Pose(0, 0, P_BLACK)
     return out
