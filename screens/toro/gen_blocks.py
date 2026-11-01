@@ -138,29 +138,32 @@ def ease(t, tau):
     return 1 - math.exp(-t / tau) if t is not None else 1.0
 
 
-CURL_PEAK, CURL_HEIGHT = NX - 4, 58                        # the crest's row, and its height in px at fold 1
-# rows past the crest: (lean in rows, height relative to the crest, tile only). The two lip rows lean back toward
-# the crest and lose their pillars, so they read as the lip curling forward and down over a dark trough.
-CURL_LIP = {1: (-0.15, 6, True), 2: (-0.55, -12, True), 3: (0.0, None, False)}
+CURL_ROWS, CURL_TURN, ROW_PX = 4, 2.4, 16.8               # back rows that wind up; how far the tip turns at fold 1; px per row
 
 
-def curl(i: int, h: float, fold: float) -> tuple[float, float, bool, bool]:
-    """fold curls the field into a breaking wave rolling toward the front-right edge.
-
-    Returns (height px, lean in rows, tile only, lip). The display can only slide a node, so a column can't tilt:
-    the curl is built from heights, a small slide back, and hiding the side faces of the two lip rows so they float.
-    At fold 0 every column keeps the voice's own height; the curl blends in with fold."""
+def curl_amount(fold: float) -> float:
+    """0 at fold 0 (flat field) to 1 at fold 1 (the back rows fully curled)"""
     s = max(0.0, fold - 0.05) / 0.95
-    if s == 0:
-        return h, 0.0, False, False
-    d = i - CURL_PEAK
-    if d <= 0:                                              # the back of the wave: a slope rising to the crest
-        r = max(0.0, 1 + d / 4)
-        target = H_MIN + (CURL_HEIGHT - H_MIN) * r * r
-        return h + (target - h) * s * (1.0 if d > -4 else 0.0), 0.0, False, False
-    lean, rel, tile = CURL_LIP[d]
-    target = H_MIN if rel is None else CURL_HEIGHT + rel
-    return h + (target - h) * s, lean * s, tile and s > 0.7, tile
+    return 0.5 - 0.5 * math.cos(math.pi * s)
+
+
+def curl_xy(i: int, j: int, c: float) -> tuple[float, float, float]:
+    """base position of column (i, j) as the field's back edge curls up and over toward the viewer.
+
+    The back CURL_ROWS rows wind onto a circle that grows tighter with fold: each row's distance behind the hinge
+    becomes an angle around it, so the back edge rises, stands up, and at full fold hooks forward over the field like
+    a wave's lip. The display can only slide a node, so each cube stays upright and slides along that circle; the
+    rows are drawn back to front, so the field in front covers the feet of the risen columns. Returns (x, y, angle)."""
+    hinge = CURL_ROWS - 0.5                                    # between the last curling row and the field
+    u = hinge - i
+    if u <= 0 or c == 0:
+        return (*base_xy(i, j), 0.0)
+    theta = CURL_TURN * c * u / hinge                         # the back row reaches CURL_TURN at full fold
+    r = hinge / CURL_TURN / max(c, 1e-3) if c < 1 else hinge / CURL_TURN
+    r = min(r, 40.0)
+    along, up = -r * math.sin(theta), r * (1 - math.cos(theta))
+    hx, hy = OX + (hinge - j) * S, OY + (hinge + j) * S * 0.5
+    return hx + along * S, hy + along * S * 0.5 - up * ROW_PX * 1.15, theta
 
 
 def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
@@ -172,6 +175,7 @@ def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
     ci, cj = KEY_SPOTS[key % len(KEY_SPOTS)]
     patch = {(ci + di, cj + dj) for di in (-1, 0, 1) for dj in (-1, 0, 1) if abs(di) + abs(dj) <= 1 or (di, dj) == (1, 1)}
     lit_row = round((NY - 1) * v["res"]) if v["res"] > 0.05 else None
+    c = curl_amount(v["fold"])
     out = {}
     for (i, j), n in COL_INDEX.items():
         h = hs[i][j] + (lift * (1.0 if (i, j) == (ci, cj) else 0.6) if (i, j) in patch else 0.0)
@@ -180,19 +184,19 @@ def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
             ring = math.exp(-((d - RIPPLE_SPEED * t) / RIPPLE_WIDTH) ** 2) * math.exp(-t / RIPPLE_DECAY)
             h += RIPPLE_HEIGHT * ring
         h = round(h)                                             # whole pixels: crisp edges, and a column only redraws when it really moves
-        h, lean, float_, lip = curl(i, h, v["fold"])
-        h = round(h)
-        bx, by = base_xy(i, j)
-        bx, by = round(bx - lean * S), round(by - lean * S * 0.5)
+        bx, by, turn = curl_xy(i, j, c)
+        bx, by = round(bx), round(by)
+        if turn > 0:                                            # wound into the curl: thin material, not the voice's relief
+            h = round(h + (H_MIN - h) * c)
         top = P_TOP_HI if h > 0.75 * H_MAX else P_TOP_MID if h > 0.45 * H_MAX else P_TOP_LO
         if j == lit_row:
             top = P_LIT
-        if lip and v["fold"] > 0.3:                             # the lip catches the light
+        if i == 0 and turn > 1.8:                               # the curl's tip catches the light as it turns over
             top = P_LIT
         if flash and (i, j) in patch:
             top = P_FLASH
-        out[n] = Pose(bx, by - h, P_LEFT, visible=not float_)
-        out[n + 1] = Pose(bx, by - h, P_RIGHT, visible=not float_)
+        out[n] = Pose(bx, by - h, P_LEFT)
+        out[n + 1] = Pose(bx, by - h, P_RIGHT)
         out[n + 2] = Pose(bx, by - h, top)
     out[SKIRT_FIRST] = Pose(0, 0, P_BLACK)
     out[SKIRT_FIRST + 1] = Pose(0, 0, P_BLACK)
