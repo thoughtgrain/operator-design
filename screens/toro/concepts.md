@@ -109,3 +109,11 @@ An aurochs traced from a cave wall, documented the way archaeologists record it.
 ## Choosing
 
 Concepts 1 and 3 are the most faithful to the sound; 2, 4 and 5 are the most bull. My order, by how well each control reads and how distinct it would look on the OP-XY: **1, 2, 4, 5, 3**.
+
+## Round 10: the owner's own one-bit bull
+
+Brian pointed at two photos of a toro screen he already had running on the device, one at rest and one with the steam up (`opxy/reference/toro-ink-rest.jpg`, `toro-ink-smoke.jpg`). That ends the search for a subject: the bull is his, the language is P9 one-bit ink, and my job is to make toro's eight controls live on it.
+
+`ink_trace.py` traces each photo into pixel-exact one-bit art (lines kept, dither regularised to Bayer) and treats the steam as the difference between the two traces. Controls are region operations on that art: drive brings the steam out of the nostrils puff by puff, spread scales the horns from their roots, cutoff opens the eyes (dead → the reference's glint → wide), res grows the burst beside the muzzle, fold adds heat squiggles, noise adds sparkles and grain, shape morphs the bar glyphs, aphx slips the dither swatches with a torn scanline; a note flashes the eyes wide and flares the steam a step.
+
+Board: `board-trace.png`. Frames: `i2-trace/`. These are raster studies; the vector conversion for the SDK (static dithered artwork layers, mutable outlines for the horns and steam) is the next step once the mapping is agreed.

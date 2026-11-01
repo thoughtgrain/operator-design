@@ -25,6 +25,29 @@ What I'd check before shipping:
 - **Mesh cost.** If the mesh moves, it has to move as a few nodes, never as re-keyed paths.
 - **Strip markers.** The smallest strip squares look ~2–3 px at 1:1. Make the smallest state at least 4 px, and make "active" differ by size as well as brightness.
 
+## toro-ink-rest.jpg and toro-ink-smoke.jpg
+
+![A one-bit cartoon bull in 3/4 view, outlined in white with dithered shading, sound glyphs around it](toro-ink-rest.jpg)
+
+Two photos of the same toro screen on the device, shared by its owner (thoughtgrain): at rest, and with the steam up. Measured back to 1:1, the display's active area is at (83, 71)–(1283, 687) in the rest photo and (66, 50)–(966, 512) in the smoke photo; the vertical scale in both is about 12 % larger than the horizontal, which is the camera, not the panel.
+
+**Pattern:** P9 One-bit ink. The bull is the hero; the steam is a layer one control brings in; the glyphs each belong to a control.
+
+What works:
+
+- **Hard edges only.** Every shape has a 2 px white outline; tone is ordered dither, never a grey value. Nothing anti-aliased, so nothing smears at 1:1.
+- **Five tones are enough.** Black, 25 %, 50 %, 75 % and white carry the whole drawing (hide, horns, face, muzzle, eyes). The dither reads as texture, not as a grey ramp.
+- **The steam is a state, not decoration.** Rest has none. That's the clearest possible "this control did something".
+- **Glyphs with jobs.** The bar glyph, the swatches, the sparkles and the squiggles each sit where a control can own them.
+
+What I'd check before shipping:
+
+- **Dither cost.** A dithered plane is hundreds of 1 px marks, so it has to be static artwork; a tone change is a swap between pre-dithered layers, not a redraw.
+- **Line breaks.** Some outlines (hind legs, horn interiors) break into 1 px gaps on the panel photo. Keep outlines a full 2 px.
+- **The eyes at low cutoff.** A black eye on a black face vanishes; keep the outline so the socket still reads.
+
+`screens/toro/concepts/ink_trace.py` traces both photos into clean one-bit art and builds toro's controls on top of them.
+
 ## Linked references
 
 - **MNMD** by Max Mockett ([site](https://mmockett.github.io/OP-XY/#mnmd), [source](https://github.com/mmockett/OP-XY-MNMD)). The clearest set of open-xy screens I've found. MD KIT draws each drum's sounding part in section like a patent drawing (P1); FM STAT, VO-6 and DPRO-DENS split structure left and output trace right (P2); SID-6581 and SWAVE-PULSE make the trace the subject (P3); DPRO-WAVE stacks wave frames in depth (P4). Two-page header throughout, inactive row in grey.
