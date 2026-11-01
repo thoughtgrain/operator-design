@@ -7,6 +7,8 @@ description: Design or revise the screen an OP-XY machine draws with the open-xy
 
 You're running the protocol in `opxy/protocol.md`. Read `opxy/constraints.md`, `opxy/patterns.md` and `opxy/craft.md` before drawing anything; `opxy/accessibility.md` before review. Outputs go in `screens/<machine-id>/`.
 
+Start from the library. `library/toro-blocks/` is the house reference: an abstract field (P10 Voice field) driven by a small model of the machine's signal path, built from translated pillar nodes. Abstract fields have landed where figurative subjects (drawn animals, traced photos) kept failing; propose a figurative subject only when the person asks for one. `screens/toro/gen_blocks.py` is the worked generator to copy from (heights model, pillar/skirt nodes, fragment, prototype, video).
+
 ## Steps
 
 1. **Gate 0.** Decide screen vs stock page. If there's no single object the sound acts on, recommend the stock page and stop.

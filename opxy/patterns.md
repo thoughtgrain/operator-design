@@ -122,6 +122,27 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - Ornaments multiply. Every glyph must be a control; if it isn't, cut it.
 - Don't copy the reference's figure or composition. The pattern is the language (outline, dither, glyphs), not that drawing.
 
+## P10 · Voice field
+
+**The idea.** A field of identical simple parts (isometric columns, tiles, bars) whose geometry is computed from a small model of the machine's own signal path. Every control becomes an operation on the field that does to its shape what the control does to the sound: a second oscillator becomes a second wave across it, a folder folds its heights, a filter decides how much fine detail survives, a clip flattens its peaks. Notes act on the field where the key lands. Toro's stacked blocks (`library/toro-blocks/`) is the worked example.
+
+**Why it works.** The mapping explains itself, so nothing on screen needs a label. It's also abstract enough that drawing quality never becomes the question, which is where figurative subjects kept failing. Toro went through nine rounds of bulls before landing here.
+
+**Channel fit.** Shape (heights) carries the big controls; shade on a row or band carries one control at most; count and position come from the note.
+
+**Budget.**
+
+- **Build every part from translated pieces.** An isometric column is three nodes (top, left face, right face). Make the faces fixed-length pillars that move with the top, so height changes are pure translation: no mutable outlines, no static art.
+- **Draw back to front.** Each pillar's overhang is then hidden by the columns in front of it. Two black skirt nodes, drawn last, hide the front row's.
+- **Snap to whole pixels.** Edges stay crisp, and a part only redraws when it really moves.
+- **Check the count.** Seventy columns is 210 nodes; keep the grid at 70–75 columns with the 8-node two-page header.
+
+**Pitfalls.**
+
+- **Field-wide motion is expensive.** A note that moves the whole field (a roll, a ripple) changes far more than ~20 nodes a frame. Make it a decision with the owner, and write down the fallbacks.
+- **Hairline seams between faces.** Use same-colour strokes (~0.3 px) and check them on the device.
+- **Shade can't be the only signal.** Don't let a control's whole effect be a shade change; put it on geometry too.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.
