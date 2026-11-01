@@ -44,6 +44,17 @@ Small device-font text is part of the language when the subject has it: an atlas
 
 Motion is small, precise and physical: a membrane ripples, a fork vibrates, a figure brightens for a beat. No bursts, bounces, expanding bullseyes or confetti. A note is answered by the subject itself before anything else.
 
+## Think in 3D
+
+If a screen shows depth (orbits round a sun, a drum, an isometric field, a stack seen from an angle), I build it as a 3D scene and project it. I don't draw 2D curves and nudge them until they look about right. Meikyu's orrery went through four rounds of hand-bent ellipses that never wrapped the sun properly and pinched together near it; the version that worked modelled the sun as a sphere, the orbits as evenly spaced circles round it, and put one camera on the scene. Here's what that means in practice:
+
+- **Model, then project.** Every point comes from a world position through one camera: position, look-at point, and a projection fitted so the key object lands where the composition needs it. The picture follows from the model, so spacing, curvature and size can't drift apart from each other.
+- **Space things in the world, not on the screen.** Concentric orbits stay evenly spaced all the way round because they're evenly spaced in 3D. If curves bunch up on screen, the model is wrong, not the drawing.
+- **Depth decides order.** Painter's order by distance to the camera: whatever's nearer than an object is drawn after it. For spheres, compare centre distances (exact for two spheres). Split lines (orbits, rings) into runs that are nearer or further than the object they pass, so the near run crosses in front of it and the far run goes behind it. Let the occluder's own fill hide what's behind it.
+- **Size from distance.** A body's drawn size is its world size times pixels-per-unit at its depth. Don't hand-tune a "depth scale".
+- **Check the camera against the frame.** Search camera angle, height and distance for the one that keeps the most of the scene on screen with the key object fixed. Accept what geometry forces and say so: a ring round a point on the screen's edge is always half off-screen.
+- **The device can still only translate and scale.** Projection happens in the generator (and in `display()` on the device); nodes still move by translation plus a uniform scale. Fake rotation with pre-drawn variants (a planet's meridians, a rock's tumble), not by tilting a node.
+
 ## Review: side by side
 
 Before phase 7, put the screen's rest frame next to one reference from `opxy/reference/` or `library/`, both at 1:1, and answer:

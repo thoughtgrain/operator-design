@@ -33,6 +33,7 @@ Start from the library. `library/toro-blocks/` is the house reference: an abstra
 - Every control clears the perceptibility floors (tokens.json `perceptibility`).
 - Nothing moves at rest. Eases settle in 0.15–0.2 s. Reduced motion jumps.
 - One drawing language per screen, three line weights that don't thicken with zoom, one brightest element, no icons (`opxy/craft.md`).
+- Anything with depth is modelled in 3D and projected through one camera: spacing in the world, order by distance to the camera, size from depth (`opxy/craft.md`, Think in 3D). Never bend 2D curves to fake it.
 - Don't copy stock artwork or other machines' drawings.
 - Device-only checks (caption widths in the real font, rasterization, redraw on hardware, photos) are **pending device** until someone does them. Never mark them done.
 - open-xy `docs/display.md` and `docs/ux.md` override this repo if they disagree.
