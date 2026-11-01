@@ -16,7 +16,7 @@ and velocity all need a visible effect, and with Drum on, Scal should mean somet
             step's rocks jump up and fall back. Off: the belt settles back down and planets fill again.
   velocity  how far the ring planet's lit segments reach: soft presses short, hard presses long
   a press   the ring segments light for the tones that sounded; the text line names root, half and phrase count;
-            Pluto (small, on its own tilted, eccentric outermost orbit) glows while the phrase plays
+            Pluto (small, on its own tilted outermost orbit) is the sixteenth step's planet
 
 The sound comes from a port of meikyu's press() with one proposed change: in drum mode Scal selects one of four pad
 sets (KITS) instead of being ignored. That needs the same change in labyrinth's player.cpp.
@@ -184,12 +184,9 @@ def scene(p, last, t, presses):
     for k in range(len(M3.PLANETS) + 1):                              # sixteen step planets, then Pluto
         x, y, rr, p3, hops = planet_pos(k, t, spread)
         pos[k] = (x, y)
-        if k == len(M3.PLANETS):
-            lit = phrase_on                                          # Pluto glows while a phrase is playing
-        else:
-            lit = p.step_lit(k) and not c["drum"]                    # drum mode: planets stop filling
+        lit = p.step_lit(k) and not c["drum"]                        # Pluto (k = 15) carries the sixteenth step
         fill, line = R2.FILLED if lit else R2.WIRE
-        svg = R2.node(M3.GLYPHS[k][hops % 4], x, y, rr / 10, fill, line, 0.9)
+        svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
         (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
     struck = {}                                                      # drum mode: step → seconds since its hit
     if c["drum"] and last:
@@ -212,7 +209,8 @@ def scene(p, last, t, presses):
             fill, line = ("#F0F0F0", "#8A8A8A")
         else:
             fill, line = R2.ROCK_FILLED if p.step_lit(step) else R2.ROCK_WIRE
-        svg = R2.node(R2.rock_glyph(seed, (hops % 2) * 1.5), x, y, s, fill, line, 0.8)
+        turn = (hops % 2) * 1.5 if size >= M3.TUMBLE_MIN else 0      # small rocks don't tumble: one node each
+        svg = R2.node(R2.rock_glyph(seed, turn), x, y, s, fill, line, 0.8)
         (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
     o = [svg for _, svg in sorted(back, key=lambda q: -q[0])]
     o += S.sun_corona()

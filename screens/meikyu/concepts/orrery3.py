@@ -44,13 +44,14 @@ path = O.path
 SUN_R = 60.0                                     # world units
 SUN_SCREEN = (6.0, 116.0, 62.0)                  # where the sun must land: centre x, y and radius in px
 HOP, PERIOD = 0.75, 120.0
+DEPTH_CUE = 2.0                                  # extra powers of (sun depth / depth) on body sizes: size ∝ depth⁻³
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
-ORBIT_RADII = [92, 128, 162, 198, 300, 340, 380, 414]       # four inside the belt, four outside
+ORBIT_RADII = [92, 128, 198, 300, 340, 380, 414]            # three inside the belt, four outside
 # sixteen planets, two per orbit on roughly opposite sides: (orbit radius, planet radius); planet k carries step k
 # the inner four orbits carry one small or medium planet each; the outer four carry three each, a small, a medium and
 # a large spaced a third of an orbit apart, so the weight sits outside the belt and the right side stays full
-_SIZES = {92: [4.0], 128: [6.5], 162: [5.0], 198: [8.0],
+_SIZES = {92: [4.0], 128: [6.5], 198: [8.0],
           300: [4.0, 8.0, 12.0], 340: [9.0, 4.5, 13.5], 380: [13.0, 5.0, 8.5], 414: [8.0, 14.5, 4.0]}
 PLANETS = [(rho, r) for rho in ORBIT_RADII for r in _SIZES[rho]]                 # sixteen; planet k carries step k
 SLOTS = [(i, len(_SIZES[rho])) for rho in ORBIT_RADII for i in range(len(_SIZES[rho]))]
@@ -115,7 +116,9 @@ def nearer_than_sun(p):
 def project(p):
     """world point → (screen x, screen y, depth, px per world unit at that depth)"""
     x, y, z = raw(p)
-    return _OX + x * _SCALE, _OY + y * _SCALE, z, _SCALE / z
+    # sizes: the camera sits far back for gentle perspective, which leaves near and far bodies within ~10% of each
+    # other. Positions stay true; only the depth-to-size relation is exaggerated (cubed) so depth reads in the sizes.
+    return _OX + x * _SCALE, _OY + y * _SCALE, z, _SCALE / z * (_sz / z) ** DEPTH_CUE
 
 
 def orbit_point(rho, a, h=0.0):
@@ -269,7 +272,9 @@ def orbit_segments(rho, n=96, point=None):
 
 
 ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII] + [orbit_segments(0, 120, pluto_point)]
-GLYPHS = {k: [R2.planet_glyph(s, r=10.0) for s in range(4)] for k in range(len(PLANETS) + 1)}
+SPINS = 3                                        # spin variants per planet: meridians step 30°, looping seamlessly
+GLYPHS = {k: [R2.planet_glyph(s * 30 / 22.5, r=10.0) for s in range(SPINS)] for k in range(len(PLANETS) + 1)}
+TUMBLE_MIN = 3.0                                 # rocks smaller than this don't tumble: the turn isn't visible
 
 
 def scene(p, t):
@@ -281,7 +286,7 @@ def scene(p, t):
         hops = math.floor((t + stagger(k)) / HOP)
         x, y, rr, z, p3 = planet_at(k, PHASES[k] + hops * HOP / PERIOD)
         fill, line = R2.FILLED if p.step_lit(k) else R2.WIRE
-        svg = R2.node(GLYPHS[k][hops % 4], x, y, rr / 10, fill, line, 0.9)
+        svg = R2.node(GLYPHS[k][hops % SPINS], x, y, rr / 10, fill, line, 0.9)
         (front if nearer_than_sun(p3) else back).append((math.dist(CAM, p3), svg))
     for n, (seed, rho, h, phase, direction, size, step) in enumerate(ROCKS):
         hops = math.floor((t + stagger(n + 8)) / HOP)
