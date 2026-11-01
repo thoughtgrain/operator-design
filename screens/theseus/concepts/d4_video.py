@@ -141,16 +141,22 @@ def rack_tom(x, top, r, ry, h, e, v):
     return o
 
 
-def hat(x, base, r, e, open_, v):
-    """two cymbals on a rod; a hit lifts the top one open and lights it"""
+def tilt(pts, cx, cy, deg):
+    c, s_ = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    return [(cx + (px - cx) * c - (py - cy) * s_, cy + (px - cx) * s_ + (py - cy) * c) for px, py in pts]
+
+
+def hat(x, base, r, e, open_, v, rock=(0.0, 0.0)):
+    """two cymbals on a rod; a hit lifts the top one open, lights it and rocks it (one edge up, the other down)"""
     o = [shape([(x, base - 30), (x, base + 6)], DIM, 1.4, close=False)]
-    for y, lit in ((base + 2, False), (base - 3 - open_, True)):
+    for (y, lit), deg in zip(((base + 2, False), (base - 3 - open_, True)), rock):
         ry = r * 0.22
         on = lit and e >= 0.04
-        o.append(shape(ellipse(x, y, r, ry, 32), HOT if on else G[6], 1.3, fill=lit_fill(e, v) if on else "#000000"))
+        T = lambda pts: tilt(pts, x, y, deg)
+        o.append(shape(T(ellipse(x, y, r, ry, 32)), HOT if on else G[6], 1.3, fill=lit_fill(e, v) if on else "#000000"))
         for k in (0.45, 0.75):
-            o.append(shape(ellipse(x, y, r * k, ry * k, 24), DIM, 0.8, fill="none"))
-        o.append(shape(ellipse(x, y - 0.6, r * 0.13, ry * 0.35, 12), G[6], 1.0, fill="none"))
+            o.append(shape(T(ellipse(x, y, r * k, ry * k, 24)), DIM, 0.8, fill="none"))
+        o.append(shape(T(ellipse(x, y - 0.6, r * 0.13, ry * 0.35, 12)), G[6], 1.0, fill="none"))
     if v["fm"] > 0.05 and e > 0.05:                                 # fm: shimmer arcs off the open hat
         for k in range(round(1 + 3 * v["fm"])):
             a = -0.5 - 0.45 * k
@@ -166,20 +172,28 @@ def tower(v, hits):
     now = hits.now
     lift = [0.0] * len(TIERS)
     e_t = [0.0] * len(TIERS)
+    rock_top = rock_bottom = 0.0
     for i, t, note in hits.played()[-12:]:
         z = zone_of(note, v)
         k = tier_of(z)
         dt = now - t
+        if k == len(TIERS) - 1:                                   # a hat hit rocks the cymbals, alternating sides
+            side = 1 if i % 2 else -1
+            amp = (5 + 7 * v["punch"]) * math.exp(-dt / 0.45)
+            rock_top += side * amp * math.cos(2 * math.pi * 2.4 * dt)
+            rock_bottom += side * 0.35 * amp * math.cos(2 * math.pi * 2.4 * dt + 0.6)
         lfo = 1 + v["lfo"] * 0.6 * lfo_at(i + 1, v)                 # the hit LFO makes some hits jump higher than others
         lift[k] = max(lift[k], rise(dt, (3 + 8 * v["punch"]) * lfo))
         e_t[k] = max(e_t[k], env(dt, v, z))
     y = 194
-    o.append(shape(ellipse(240, 204, 104, 10, 32), G[2], 1.0, fill="none"))
+    # the floor: centred under the kick's bottom hoop, in the same perspective as every head (ry = 0.26 r)
+    kr = TIERS[0][1]
+    o.append(shape(ellipse(240, y + 1, kr + 8, (kr + 8) * 0.26, 40), G[2], 1.0, fill="none"))
     for k, (z, r, hgt, kind) in enumerate(TIERS):
         ry = r * 0.26
         e = e_t[k]
         if kind == "hat":
-            o += hat(240, y - 6, r, e, lift[k] * 1.4, v)
+            o += hat(240, y - 6, r, e, lift[k] * 1.4, v, rock=(rock_bottom, rock_top))
             break
         top = y - hgt - lift[k]
         o += DRAW[kind](240, top, r, ry, hgt, e, v)
