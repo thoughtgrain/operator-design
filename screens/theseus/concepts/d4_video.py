@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """d4 drum tower, animated: a two-bar groove at 120 bpm with the controls swept while it plays.
 
-Revision 2 (after Brian's notes): each tier looks like the drum it plays, and only the drum that's hit moves, and
+Revision 3: line drawing. Every shape is black with a grey outline, so the drums read as their outlines and don't
+run together; only the drum being played fills with light. Revision 2 (after Brian's notes): each tier looks like the drum it plays, and only the drum that's hit moves, and
 only upward. No ride-along, no wobble, no lean; the hit LFO now sets how high each hit jumps.
 
 The board's d4 only showed single moments. In motion each hit is a small physical event:
@@ -22,7 +23,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from blocks import DEFAULTS, G, env, frame, lfo_at, path, zone_of  # noqa: E402
+from blocks import DEFAULTS, G, env, f, frame, lfo_at, path, poly, zone_of  # noqa: E402
 from drums import cymbal, ellipse, head, shell, sizzle  # noqa: E402
 
 FPS = 30
@@ -60,61 +61,100 @@ class Phrase:
         return len(self.played())
 
 
-def block(x0, y0, x1, y1, fill):
-    return path([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], fill)
+# ---- line drawing: black-filled shapes with grey strokes, so each drum reads as its outline and only the drum
+# being played fills with light (revision 3: the solid fills made the drums run together)
+LINE, DIM, HOT = G[5], G[3], G[7]
+
+
+def shape(pts, stroke=LINE, w=1.2, fill="#000000", close=True):
+    d = poly(pts) if close else "M " + " L ".join(f"{f(x)} {f(y)}" for x, y in pts)
+    return f'<path d="{d}" fill="{fill if close else "none"}" stroke="{stroke}" stroke-width="{w}" stroke-linejoin="round" stroke-linecap="round"/>'
+
+
+def lit_fill(e, v):
+    return "#000000" if e < 0.04 else G[max(1, min(5, round(1 + 4 * e * (0.5 + 0.5 * v["cutoff"]))))]
+
+
+def body(x, top, r, ry, h, e, stroke=LINE):
+    """the shell: its silhouette in black with a grey outline, the front of the lower hoop as a line"""
+    front = ellipse(x, top + h, r, ry, 24, math.pi, 0)
+    o = [shape([(x - r, top)] + front + [(x + r, top)], stroke if e < 0.04 else HOT, 1.2)]
+    o.append(shape(ellipse(x, top + h - 2, r, ry, 24, math.pi, 0), DIM, 1.0, close=False))
+    return o
+
+
+def lugs(x, top, r, ry, h, n, stroke=DIM, inset=0.22):
+    o = []
+    for k in range(n):
+        t = math.pi * (0.15 + 0.7 * k / max(1, n - 1))
+        lx, ly = x + r * math.cos(t) * 0.98, top + h * 0.5 + ry * math.sin(t)
+        o.append(shape([(lx, ly - h * inset), (lx, ly + h * inset)], stroke, 1.4, close=False))
+    return o
+
+
+def batter(x, top, r, ry, e, v):
+    """the head: its hoop as a line, the skin lit by a hit, rings spreading across it with decay"""
+    o = [shape(ellipse(x, top, r, ry, 32), HOT if e >= 0.04 else G[6], 1.5, fill=lit_fill(e, v))]
+    if e > 0.03:
+        for k in range(1 + round(3 * v["decay"])):
+            u = ((1 - e) * 0.9 + k * 0.22) % 1
+            o.append(shape(ellipse(x, top + 0.4, r * 0.84 * u + 1.5, ry * 0.84 * u + 0.8, 24), HOT if k == 0 else G[6], 1.0, fill="none"))
+    return o
 
 
 def kick(x, top, r, ry, h, e, v):
-    """the bass drum: the deepest, darkest shell with a pale wrap stripe, claw hooks, and a felt beater patch"""
-    o = shell(x, top, r, ry, h, side=G[2], edge="#141414", lugs=0)
-    o.append(path([(x - r, top + h * 0.42), (x + r, top + h * 0.42)] + ellipse(x, top + h * 0.58, r, ry, 20, 0, math.pi)[::-1][::-1][::-1] if False else
-                  [(x - r, top + h * 0.40)] + ellipse(x, top + h * 0.40, r, ry, 20, math.pi, 0) + [(x + r, top + h * 0.40), (x + r, top + h * 0.56)] + ellipse(x, top + h * 0.56, r, ry, 20, 0, math.pi) + [(x - r, top + h * 0.56)], G[4]))
-    for k in range(8):                                            # claw hooks round the front
-        t = math.pi * (0.1 + 0.8 * k / 7)
-        lx, ly = x + r * math.cos(t) * 0.99, top + 4 + ry * math.sin(t)
-        o.append(block(lx - 1.4, ly - 2, lx + 1.4, ly + 4, G[5]))
-    o += head(x, top, r, ry, e, v, tone=G[5])
-    o.append(path(ellipse(x + r * 0.28, top + ry * 0.15, r * 0.16, ry * 0.16), G[2]))   # felt beater patch
+    o = body(x, top, r, ry, h, e)
+    for yy in (0.38, 0.6):                                          # the wrap stripe: two lines round the shell
+        o.append(shape(ellipse(x, top + h * yy, r, ry, 24, math.pi, 0), DIM, 1.0, close=False))
+    o += lugs(x, top, r, ry, h, 8, inset=0.12)
+    o += batter(x, top, r, ry, e, v)
+    o.append(shape(ellipse(x + r * 0.3, top + ry * 0.12, r * 0.15, ry * 0.15, 16), DIM, 1.0, fill="none"))   # beater patch
     return o
 
 
 def floor_tom(x, top, r, ry, h, e, v):
-    """the floor tom: tall, with three legs out to the sides"""
     o = []
     for sx in (-1, 1):
-        o.append(path([(x + sx * (r - 2), top + h * 0.3), (x + sx * (r + 8), top + h + 6), (x + sx * (r + 6.5), top + h + 6), (x + sx * (r - 3.5), top + h * 0.3)], G[4]))
-    o += shell(x, top, r, ry, h, side=G[3], lugs=4)
-    o += head(x, top, r, ry, e, v)
+        o.append(shape([(x + sx * (r - 3), top + h * 0.35), (x + sx * (r + 8), top + h + 6)], DIM, 1.4, close=False))
+    o += body(x, top, r, ry, h, e)
+    o += lugs(x, top, r, ry, h, 4)
+    o += batter(x, top, r, ry, e, v)
     return o
 
 
 def snare(x, top, r, ry, h, e, v):
-    """the snare: a shallow bright metal shell, many lugs, the strainer, and wires showing under the bottom hoop"""
     o = []
-    for k in range(7):                                             # the wires, a little wider than the shell
-        yy = top + h + ry * 0.35 + 1.2 * k - 2
-        o.append(block(x - r * 0.62, yy, x + r * 0.62, yy + 0.7, G[5]))
-    o += shell(x, top, r, ry, h, side=G[5], edge=G[3], lugs=7, lug=G[7])
-    o.append(block(x - r * 0.05, top + ry * 0.9 + 1, x + r * 0.12, top + ry * 0.9 + h - 1, G[7]))   # strainer
-    o += head(x, top, r, ry, e, v, tone=G[6])
+    for k in range(4):                                              # the wires under the bottom hoop
+        yy = top + h + ry * 0.55 + 1.6 * k
+        o.append(shape([(x - r * 0.6, yy), (x + r * 0.6, yy)], DIM, 0.8, close=False))
+    o += body(x, top, r, ry, h, e, stroke=G[6])
+    o += lugs(x, top, r, ry, h, 8, stroke=G[6], inset=0.3)
+    o += batter(x, top, r, ry, e, v)
     return o
 
 
 def rack_tom(x, top, r, ry, h, e, v):
-    """the rack tom: medium depth, a mount bracket on its side"""
-    o = shell(x, top, r, ry, h, side=G[3], lugs=3)
-    o.append(block(x - r - 6, top + h * 0.25, x - r + 2, top + h * 0.75, G[5]))                    # mount
-    o.append(block(x - r - 9, top + h * 0.40, x - r - 4, top + h * 0.60, G[4]))
-    o += head(x, top, r, ry, e, v)
+    o = body(x, top, r, ry, h, e)
+    o.append(shape([(x - r - 7, top + h * 0.3), (x - r, top + h * 0.3), (x - r, top + h * 0.7), (x - r - 7, top + h * 0.7)], DIM, 1.0))  # mount
+    o += lugs(x, top, r, ry, h, 3)
+    o += batter(x, top, r, ry, e, v)
     return o
 
 
-def hi_hat(x, top, r, e, v):
-    """the hi-hat: two cymbals on a clutch rod; a hit opens the top one"""
-    o = [block(x - 0.9, top - 22, x + 0.9, top + 6, G[4])]          # rod
-    o += cymbal(x, top + 4, r, 0, v)
-    open_ = rise(0, 0)
-    o += cymbal(x, top - 2 - e * 0, r, e, v, wob=0.0)
+def hat(x, base, r, e, open_, v):
+    """two cymbals on a rod; a hit lifts the top one open and lights it"""
+    o = [shape([(x, base - 30), (x, base + 6)], DIM, 1.4, close=False)]
+    for y, lit in ((base + 2, False), (base - 3 - open_, True)):
+        ry = r * 0.22
+        on = lit and e >= 0.04
+        o.append(shape(ellipse(x, y, r, ry, 32), HOT if on else G[6], 1.3, fill=lit_fill(e, v) if on else "#000000"))
+        for k in (0.45, 0.75):
+            o.append(shape(ellipse(x, y, r * k, ry * k, 24), DIM, 0.8, fill="none"))
+        o.append(shape(ellipse(x, y - 0.6, r * 0.13, ry * 0.35, 12), G[6], 1.0, fill="none"))
+    if v["fm"] > 0.05 and e > 0.05:                                 # fm: shimmer arcs off the open hat
+        for k in range(round(1 + 3 * v["fm"])):
+            a = -0.5 - 0.45 * k
+            o.append(shape(ellipse(x, base - 3 - open_, r + 4 + 3 * k, r * 0.22 + 2 + k, 8, a - 0.3, a + 0.3), G[6], 1.0, close=False))
     return o
 
 
@@ -133,16 +173,13 @@ def tower(v, hits):
         lfo = 1 + v["lfo"] * 0.6 * lfo_at(i + 1, v)                 # the hit LFO makes some hits jump higher than others
         lift[k] = max(lift[k], rise(dt, (3 + 8 * v["punch"]) * lfo))
         e_t[k] = max(e_t[k], env(dt, v, z))
-    y = 204
-    o.append(path(ellipse(240, 206, 108, 14), "#1E1E1E"))
+    y = 194
+    o.append(shape(ellipse(240, 204, 104, 10, 32), G[2], 1.0, fill="none"))
     for k, (z, r, hgt, kind) in enumerate(TIERS):
         ry = r * 0.26
         e = e_t[k]
         if kind == "hat":
-            base = y - 6
-            o.append(block(239.1, base - 26, 240.9, base + 4, G[4]))   # the clutch rod
-            o += cymbal(240, base + 2, r, 0, v)                         # bottom hat stays
-            o += cymbal(240, base - 3 - lift[k] * 1.4, r, e, v)         # the top hat lifts open on a hit
+            o += hat(240, y - 6, r, e, lift[k] * 1.4, v)
             break
         top = y - hgt - lift[k]
         o += DRAW[kind](240, top, r, ry, hgt, e, v)
