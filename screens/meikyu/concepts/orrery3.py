@@ -59,12 +59,29 @@ ORBIT_PLANETS = {138: [5.0, 8.0, 4.0], 198: [9.0, 4.5, 7.0], 320: [12.0, 5.0, 9.
 VARIANT = os.environ.get("MEIKYU_VARIANT", "")
 if VARIANT == "no-belt":
     ORBIT_RADII = [130, 186, 252, 318, 380, 440]
-    ORBIT_PLANETS = {130: [5.0, 8.0], 186: [9.0, 4.5], 252: [7.0, 12.0, 5.0], 318: [10.0, 4.5, 14.0],
-                     380: [6.0, 13.0, 8.0], 440: [11.0, 3.5, 7.0]}  # 440's 3.5 is Pluto
-BODIES = [(rho, r) for rho in ORBIT_RADII for r in ORBIT_PLANETS[rho]]
+    # twenty-four slots: the sixteen step planets ("s"), two of them ringed ("r"), and eight extra planets ("x") that
+    # carry no step and join as Dens rises. Sizes run from tiny to big. Slots go evenly round each orbit.
+    ORBIT_PLANETS = {130: [("s", 5.0), ("x", 2.5), ("s", 8.0)],
+                     186: [("s", 7.0), ("x", 3.0), ("s", 4.0)],
+                     252: [("s", 6.0), ("r", 13.0), ("x", 3.5), ("s", 2.5)],
+                     318: [("s", 8.5), ("x", 4.0), ("s", 4.5), ("s", 17.0)],
+                     380: [("s", 3.0), ("x", 6.0), ("r", 9.5), ("s", 7.5), ("x", 2.5)],
+                     440: [("s", 12.0), ("x", 5.0), ("s", 3.5), ("x", 7.0), ("s", 6.0)]}   # 440's 3.5 is Pluto
+ORBIT_PLANETS = {rho: [(e if isinstance(e, tuple) else ("s", e)) for e in v] for rho, v in ORBIT_PLANETS.items()}
+_ENTRIES = [(rho, kind, r) for rho in ORBIT_RADII for kind, r in ORBIT_PLANETS[rho]]
+BODIES = [(rho, r) for rho, _, r in _ENTRIES]
 ORBIT_OF = [ORBIT_RADII.index(rho) for rho, _ in BODIES]
 SLOT = [(i, len(ORBIT_PLANETS[rho])) for rho in ORBIT_RADII for i in range(len(ORBIT_PLANETS[rho]))]
-PLANETS = list(BODIES)                           # planet k carries step k
+RINGED = {k for k, (_, kind, _) in enumerate(_ENTRIES) if kind == "r"}
+STEP_OF, STEP_BODY = [], {}                      # body → step (None for extras), and step → body
+for _k, (_, _kind, _) in enumerate(_ENTRIES):
+    if _kind == "x":
+        STEP_OF.append(None)
+    else:
+        STEP_BODY[len(STEP_BODY)] = _k
+        STEP_OF.append(len(STEP_BODY) - 1)
+RING_SPAN = (1.45, 2.0)                          # a ringed planet's ring, inner and outer, in planet radii
+PLANETS = list(BODIES)
 BELT = (214, 288, 14.0)                          # inner and outer radius, half thickness: wide by default
 N_ROCKS, JOSTLE = 76, 6.0
 if VARIANT == "no-belt":
@@ -164,7 +181,8 @@ def body_radius(k):
 
 
 def planet_at(k, u):
-    r = body_radius(k)
+    """screen x, y, footprint radius (a ringed planet's ring counts), depth, world point"""
+    r = body_radius(k) * (RING_SPAN[1] if k in RINGED else 1.0)
     a = 2 * math.pi * (u % 1.0)
     p = body_point(k, a)
     x, y, z, ppu = project(p)
@@ -207,19 +225,32 @@ def orbit_phases(bases):
 
 
 def choose_phases(tries=4000):
-    """one base angle per orbit, searched for the widest spacing between planets on neighbouring orbits"""
+    """one base angle per orbit, searched for the widest spacing between planets on neighbouring orbits: a random
+    search, then a local refinement nudging one orbit at a time"""
     rnd = random.Random(11)
     best, best_c = None, -1e9
     for _ in range(tries):
-        ph = orbit_phases([rnd.random() for _ in ORBIT_RADII])
-        c = clearance(ph, 90)
+        bases = [rnd.random() for _ in ORBIT_RADII]
+        c = clearance(orbit_phases(bases), 90)
         if c > best_c:
-            best, best_c = ph, c
-    return best, clearance(best, 480)
+            best, best_c = bases, c
+    for step in (0.02, 0.01, 0.005):                                  # refine: nudge each orbit while it helps
+        improved = True
+        while improved:
+            improved = False
+            for o in range(len(ORBIT_RADII)):
+                for d in (-step, step):
+                    trial = list(best)
+                    trial[o] = (trial[o] + d) % 1.0
+                    c = clearance(orbit_phases(trial), 180)
+                    if c > best_c + 0.05:
+                        best, best_c, improved = trial, c, True
+    ph = orbit_phases(best)
+    return ph, clearance(ph, 480)
 
 
 PHASES, CLEAR = choose_phases()
-PLUTO_STEP = next(k for k, (rho, r) in enumerate(PLANETS) if rho == 440 and r == 3.5)
+PLUTO_BODY = next(k for k, (rho, r) in enumerate(PLANETS) if rho == 440 and r == 3.5)
 
 
 def rocks():

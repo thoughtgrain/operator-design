@@ -11,6 +11,9 @@ and velocity all need a visible effect, and with Drum on, Scal should mean somet
             sequence moves on to the next orbit no line crosses: that planet flashes as it fills and the next link
             starts from it. Every planet flashes bright while its tone sounds.
   belt      the asteroid belt, wide by default, rocks lighting with their steps
+  no-belt   (MEIKYU_VARIANT=no-belt) six orbits, 24 slots: the 16 step planets (two of them ringed) and 8 extras. Dens
+            sets how many are out: a step's planet while its weight is under Dens + 25 (filled if it plays), and the
+            extras one by one from Dens ~13 up, so about 4 planets at Dens 0 and all 24 at 100. Sizes run tiny to big.
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
   Crpt      rewrites steps after each phrase, so fills change between phrases; and it jostles the belt every hop
   Scal      normal mode: spreads the orbits and the asteroid belt with them, pentatonic tightest → minor → major →
@@ -65,6 +68,9 @@ BOUNCE_UP = 16.0                                    # world units a struck rock 
 DRUM_LIFT = 10.0                                    # world units the whole belt rises while Drum is on
 CONNECT, FADE, LINKS = 0.1, 1.2, 4                   # a link draws out fast, fades slowly; how many show at once
 FLASH = 0.15                                        # seconds a planet flashes when its tone sounds
+PRESENCE = 25                                       # no-belt: a step's planet is out while its weight < Dens + this
+# no-belt: the eight extra planets join as Dens rises, one by one
+EXTRA_KEY = {k: key for k, key in zip([k for k in range(len(M3.PLANETS)) if M3.STEP_OF[k] is None], [38, 48, 57, 65, 72, 80, 88, 96])}
 
 
 # ---- the score ------------------------------------------------------------------------------------------------------------
@@ -201,18 +207,29 @@ def scene(p, last, t, presses):
                 struck[i] = t - th
     mid = (M3.BELT[0] + M3.BELT[1]) / 2
     pos = {}
-    for k in range(len(M3.PLANETS)):                                  # sixteen planets, one per step
+    for k in range(len(M3.PLANETS)):                                  # every body: step planets and extras
+        step = M3.STEP_OF[k]
+        if M3.VARIANT == "no-belt":                                  # Dens decides how many planets are out
+            key = p.weights[step] if step is not None else EXTRA_KEY[k]
+            in_phrase = last is not None and step in {i for _, i in last["hits"]}   # what just played stays out
+            if key >= c["dens"] + PRESENCE and not in_phrase:
+                continue
         x, y, rr, p3, hops = planet_pos(k, t, spread)
-        if k in struck:                                              # drum mode: a struck planet jumps and falls back
-            p3 = (p3[0], p3[1] + BOUNCE_UP * math.sin(math.pi * struck[k] / PULSE), p3[2])
+        if step in struck:                                           # drum mode: a struck planet jumps and falls back
+            p3 = (p3[0], p3[1] + BOUNCE_UP * math.sin(math.pi * struck[step] / PULSE), p3[2])
             x, y, _, _ = M3.project(p3)
-        pos[k] = p3                                                  # world position: links travel in 3D
-        lit = (p.step_lit(k) and not c["drum"]) or k in struck
+        if step is not None:
+            pos[step] = p3                                           # world position: links travel in 3D
+        lit = step is not None and ((p.step_lit(step) and not c["drum"]) or step in struck)
         fill, line = R2.FILLED if lit else R2.WIRE
-        if k in flashed:                                             # its tone sounding now: a bright fill
+        if step in flashed:                                          # its tone sounding now: a bright fill
             fill, line = ("#F0F0F0", "#7A7A7A")
         svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
-        (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
+        d = math.dist(M3.CAM, p3)
+        (front if M3.nearer_than_sun(p3) else back).append((d, svg))
+        if k in M3.RINGED:                                           # a flat ring in the orbit plane: back half behind
+            for half, svg_r in ring_halves(p3, M3.body_radius(k) * spread, line):   # the planet, front half in front
+                (front if M3.nearer_than_sun(p3) else back).append((d + (0.5 if half == "back" else -0.5), svg_r))
     for n, (seed, rho, h, phase, direction, size, step) in enumerate(M3.ROCKS):
         hops = math.floor((t + M3.stagger(n + 8)) / M3.HOP)
         a = 2 * math.pi * ((phase + direction * hops * M3.HOP / M3.ROCK_PERIOD) % 1.0)
@@ -239,6 +256,30 @@ def scene(p, last, t, presses):
     return o + O.ringed(M3.RING[0], M3.RING[1], 12, p, ring=(1.45, reach), tilt=0.3)
 
 
+def ring_halves(c3, r, line):
+    """a ring round a planet, flat in the orbit plane, built in 3D and projected: its far half (drawn before the
+    planet, so the planet's disc covers it) and its near half (drawn after)"""
+    out = []
+    cam_d = math.dist(M3.CAM, c3)
+    for half in ("back", "front"):
+        for rad in (M3.RING_SPAN[0] * r, M3.RING_SPAN[1] * r):
+            pts = []
+            for q in range(41):
+                th = 2 * math.pi * q / 40
+                w = (c3[0] + rad * math.cos(th), c3[1], c3[2] + rad * math.sin(th))
+                far = math.dist(M3.CAM, w) > cam_d
+                if far == (half == "back"):
+                    pts.append(M3.project(w)[:2])
+                elif len(pts) > 1:
+                    out.append((half, path(pts, line, 0.9)))
+                    pts = []
+                else:
+                    pts = []
+            if len(pts) > 1:
+                out.append((half, path(pts, line, 0.9)))
+    return out
+
+
 def beams(t, presses, pos, spread_now=1.0):
     """links that follow the sound: from each sounding step to the next. A link connects fast (it draws out to its
     target in CONNECT s) and lets go slowly (the whole arc stays and fades over FADE s in three greys). Only the last
@@ -248,8 +289,10 @@ def beams(t, presses, pos, spread_now=1.0):
     for pr in presses:
         links += [(t0, i0, t1, i1) for (t0, i0), (t1, i1) in zip(pr["hits"], pr["hits"][1:]) if t0 <= t]
     o = []
-    links = [lk for lk in links if M3.ORBIT_OF[lk[1]] == M3.ORBIT_OF[lk[3]]]   # a move to the next orbit draws no line
+    links = [lk for lk in links if M3.ORBIT_OF[M3.STEP_BODY[lk[1]]] == M3.ORBIT_OF[M3.STEP_BODY[lk[3]]]]   # next orbit: no line
     for t0, i0, t1, i1 in links[-LINKS:]:
+        if i0 not in pos or i1 not in pos:
+            continue
         age = t - t0
         if age > CONNECT + FADE:
             continue
@@ -257,7 +300,7 @@ def beams(t, presses, pos, spread_now=1.0):
         r0, r1 = math.hypot(p0[0], p0[2]), math.hypot(p1[0], p1[2])
         a0, a1 = math.atan2(-p0[2], p0[0]), math.atan2(-p1[2], p1[0])
         da = (a1 - a0) % (2 * math.pi)                               # forward along the orbit, the way the planets travel
-        ring_r = M3.ORBIT_RADII[M3.ORBIT_OF[i0]] * spread_now            # exactly the drawn orbit: same radius, same plane
+        ring_r = M3.ORBIT_RADII[M3.ORBIT_OF[M3.STEP_BODY[i0]]] * spread_now   # exactly the drawn orbit: same radius, same plane
         reach = min(1.0, age / CONNECT)                              # fast connect
         fade = 1.0 if age < CONNECT else 1.0 - (age - CONNECT) / FADE   # slow disconnect
         level = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A   # three greys on the way out
