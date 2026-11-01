@@ -60,8 +60,9 @@ def env(age, v, zone):
 
 
 def zone_of(note, v):
-    """tune shifts which drum a note picks (±24 semitones over a 0..1 zone range)"""
-    return max(0.0, min(1.0, note + (v["tune"] - 0.5) * 0.8))
+    """tune shifts which drum a note picks: ±24 semitones, and the zones span 4 octaves, so ±0.5 of the range (as
+    engine.cpp computes it)"""
+    return max(0.0, min(1.0, note + (v["tune"] - 0.5) * 1.0))
 
 
 class Hits:

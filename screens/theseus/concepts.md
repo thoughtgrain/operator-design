@@ -43,3 +43,9 @@ Brian liked the tower and asked for two changes, so `concepts/d4_video.py` now d
 - **Only the drum that's hit moves, and only upward.** It rises fast and settles, never dipping below rest. The tiers above don't ride along, and there is no wobble or lean. The hit LFO now sets how high each hit jumps, and a hat hit lifts the top cymbal open.
 
 The tiers step down in size so each head's front crescent shows, where its rings spread.
+
+### d4 with sound
+
+`d4-tower.mp4` now has a soundtrack rendered by theseus's own engine (`labyrinth/opxy/machines/theseus/engine.cpp`), not a stand-in. `audio/render.cpp` runs the engine block by block, one voice per hit with up to eight voices. `audio/soundtrack.py` feeds it the same groove and control automation the video draws (`d4_video.score()`), so every jump on screen is a hit you hear, and every sweep in the header is the sweep you hear.
+
+Each note's pitch is set so the engine picks the same drum the tower shows: its zones span four octaves from 55 Hz. The visual model's Tune range was corrected to match the engine's, ±24 semitones being ±0.5 of the zone range. The mix is normalised to −1 dBFS; the XY's own envelope and velocity aren't modelled.

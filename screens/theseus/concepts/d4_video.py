@@ -160,29 +160,32 @@ def groove(start, bars, notes):
     return seq
 
 
-def main():
-    out = Path(sys.argv[1])
-    out.mkdir(parents=True, exist_ok=True)
+def score():
+    """the groove and the control automation, shared with the soundtrack (../audio/soundtrack.py)"""
     K, S_, T1, T2, HH = 0.02, 0.45, 0.25, 0.65, 0.9
     beat = [K, HH, T1, HH, S_, HH, K, T2, K, HH, T1, HH, S_, HH, T2, S_]
     fill = [K, None, T2, T2, T1, T1, S_, S_, K, HH, S_, HH, T2, T1, S_, K]
     seq = groove(0.6, 2, beat) + groove(4.6, 1, fill) + groove(6.6, 8, beat) + groove(22.6, 1, fill)
     D = dict(DEFAULTS)
-    # control automation: (start, end, name, from, to) — each swept up and back while the groove plays
     sweeps = [(6.6, 8.6, "punch", D["punch"], 1.0), (8.6, 10.6, "decay", D["decay"], 0.9), (10.6, 12.6, "lfo", 0.0, 1.0),
               (12.6, 14.6, "fm", D["fm"], 1.0), (14.6, 16.6, "noise", D["noise"], 1.0), (16.6, 18.6, "cutoff", D["cutoff"], 1.0),
               (18.6, 20.6, "tune", 0.5, 0.2), (20.6, 22.6, "rate", D["rate"], 0.95)]
-    length = 25.0
 
     def values(t):
         v = dict(D, lfo=0.35, decay=0.4)
         for t0, t1, name, a, b in sweeps:
             if t0 <= t <= t1:
-                u = (t - t0) / (t1 - t0)
-                u = math.sin(math.pi * u)                 # up and back
+                u = math.sin(math.pi * (t - t0) / (t1 - t0))     # up and back
                 v[name] = a + (b - a) * u
         return v
 
+    return seq, values, 25.0
+
+
+def main():
+    out = Path(sys.argv[1])
+    out.mkdir(parents=True, exist_ok=True)
+    seq, values, length = score()
     frames = int(length * FPS)
 
     def render(i):
