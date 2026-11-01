@@ -166,6 +166,28 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Moving everything.** A hit that wobbles the whole instrument reads as noise; move only what played.
 - **Floors and shadows out of perspective.** Put them in the same projection as the heads.
 
+## P12 · Orrery
+
+**The idea.** A machine whose state is a set of things in a cycle (a register's steps, voices, patterns) drawn as a solar system: a sun, concentric orbits, planets that orbit. Each planet stands for one item; it fills when its item is active and flashes when it sounds. A sequence shows as links running along an orbit from planet to planet. Meikyu's player page (`library/meikyu-orrery/`) is the worked example.
+
+**Why it works.** Orbits read as cycles without a legend, motion is constant but calm (everything turns at one rate), and a parameter can change the population (how many planets are out) rather than a dial.
+
+**Build it in 3D.** Model the sun as a sphere and the orbits as evenly spaced circles in one plane, put one camera on it, and project. Order by distance to the camera; split orbit lines at the sun's depth so they wrap it. Size from depth. (`opxy/craft.md`, Think in 3D.)
+
+**Budget.**
+
+- **One node per planet look.** A planet is one path (≤ 64 points, all loops wound one way so a fill covers the disc); its kind sets how many variants it needs (wireframe 3 for spin, rocky 2 for tumble, smooth and banded 1). Fill and flash are palette swaps.
+- **Links are mutable outlines.** Four at most: the live one plus three fading. Draw them on the orbit itself, in the direction the planets travel.
+- **Count it.** Write a `device_parts()` that tallies the nodes on every build and keep it under the limit with headroom.
+
+**Pitfalls.**
+
+- **2D ellipses bent by hand** don't wrap the sun and bunch up near it. Model it.
+- **A ring around a point on the screen's edge is half off-screen.** Accept it or move the centre; no camera angle fixes it.
+- **Too many planets for the orbits.** Guarantee spacing only for the ones that carry meaning; let the rest step out of view while they would touch.
+- **Links across the whole screen.** Keep links within one orbit and one phrase; when the sequence changes orbit, flash the planet instead.
+- **Players can't do this yet.** Today's player page is 24 on/off dots; this needs bound nodes. Say so up front.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.
