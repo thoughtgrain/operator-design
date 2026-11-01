@@ -37,6 +37,7 @@ from PIL import Image
 
 import orbits as O
 import orrery2 as R2
+import planet_kinds as PK
 import planets_av as A
 import suns as S
 
@@ -61,21 +62,33 @@ if VARIANT == "no-belt":
     ORBIT_RADII = [130, 186, 252, 318, 380, 440]
     # twenty-four slots: the sixteen step planets ("s"), two of them ringed ("r"), and eight extra planets ("x") that
     # carry no step and join as Dens rises. Sizes run from tiny to big. Slots go evenly round each orbit.
-    ORBIT_PLANETS = {130: [("s", 5.0), ("x", 2.5), ("s", 8.0)],
-                     186: [("s", 7.0), ("x", 3.0), ("s", 4.0)],
-                     252: [("s", 6.0), ("r", 13.0), ("x", 3.5), ("s", 2.5)],
-                     318: [("s", 8.5), ("x", 4.0), ("s", 4.5), ("s", 17.0)],
-                     380: [("s", 3.0), ("x", 6.0), ("r", 9.5), ("s", 7.5), ("x", 2.5)],
-                     440: [("s", 12.0), ("x", 5.0), ("s", 3.5), ("x", 7.0), ("s", 6.0)]}   # 440's 3.5 is Pluto
+    # forty slots: the sixteen step planets ("s", or "r" with a ring) and twenty-four extras ("x", or "xr" with a
+    # ring) that join as Dens rises; four to ten per orbit, steps spread evenly among them. Built below.
+    _rnd = random.Random(41)
+    _SLOTS = {130: (4, 2), 186: (5, 2), 252: (6, 3), 318: (7, 3), 380: (8, 3), 440: (10, 3)}   # slots, steps
+    _RING_AT = {(252, 1), (318, 6), (380, 1), (380, 5), (440, 7)}                             # (orbit, slot) ringed
+    ORBIT_PLANETS = {}
+    for _rho, (_n, _steps) in _SLOTS.items():
+        _step_slots = {round(j * _n / _steps) for j in range(_steps)}
+        _row = []
+        for _i in range(_n):
+            _is_step = _i in _step_slots
+            _size = _rnd.choice([3.0, 4.5, 6.0, 7.5, 9.0, 11.0, 13.5]) if _is_step else _rnd.choice([1.8, 2.3, 3.0, 3.8, 4.8, 6.0])
+            if (_rho, _i) in _RING_AT:
+                _size = max(_size, 6.0)
+            _kind = ("r" if _is_step else "xr") if (_rho, _i) in _RING_AT else ("s" if _is_step else "x")
+            _row.append((_kind, _size))
+        ORBIT_PLANETS[_rho] = _row
+    ORBIT_PLANETS[440][3] = ("s", 3.5)                                 # Pluto: small, smooth, a step, at the edge
 ORBIT_PLANETS = {rho: [(e if isinstance(e, tuple) else ("s", e)) for e in v] for rho, v in ORBIT_PLANETS.items()}
 _ENTRIES = [(rho, kind, r) for rho in ORBIT_RADII for kind, r in ORBIT_PLANETS[rho]]
 BODIES = [(rho, r) for rho, _, r in _ENTRIES]
 ORBIT_OF = [ORBIT_RADII.index(rho) for rho, _ in BODIES]
 SLOT = [(i, len(ORBIT_PLANETS[rho])) for rho in ORBIT_RADII for i in range(len(ORBIT_PLANETS[rho]))]
-RINGED = {k for k, (_, kind, _) in enumerate(_ENTRIES) if kind == "r"}
+RINGED = {k for k, (_, kind, _) in enumerate(_ENTRIES) if kind in ("r", "xr")}
 STEP_OF, STEP_BODY = [], {}                      # body → step (None for extras), and step → body
 for _k, (_, _kind, _) in enumerate(_ENTRIES):
-    if _kind == "x":
+    if _kind in ("x", "xr"):
         STEP_OF.append(None)
     else:
         STEP_BODY[len(STEP_BODY)] = _k
@@ -195,6 +208,8 @@ def clearance(phases, samples=240):
         u = s / samples
         bodies = []
         for k, ph in enumerate(phases):
+            if STEP_OF[k] is None:                                      # extras keep clear at draw time instead
+                continue
             x, y, r, z, p = planet_at(k, u + ph)
             if on_screen(x, y, r) and not occluded(p):
                 bodies.append((x, y, r))
@@ -298,8 +313,18 @@ def orbit_segments(rho, n=96, point=None):
 
 
 ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII]
-SPINS = 3                                        # spin variants per planet: meridians step 30°, looping seamlessly
-GLYPHS = {k: [R2.planet_glyph(s * 30 / 22.5, r=10.0) for s in range(SPINS)] for k in range(len(PLANETS))}
+SPINS = 3                                        # wireframe spin variants: meridians step 30°, looping seamlessly
+# what each planet looks like: the asteroid version keeps the wireframe for all; the no-belt version mixes in smooth,
+# banded and rocky planets (subtle: same line weight and fills, different surfaces) and tilts each ring its own way
+_krnd = random.Random(7)
+KIND = ["wire"] * len(PLANETS)
+RING_TILT = {k: (math.radians(_krnd.uniform(12, 32)), _krnd.uniform(0, math.pi)) for k in sorted(RINGED)}
+if VARIANT == "no-belt":
+    KIND = [_krnd.choices(["wire", "smooth", "banded", "rocky"], [35, 25, 20, 20])[0] for _ in PLANETS]
+    for _k in RINGED:
+        KIND[_k] = _krnd.choice(["smooth", "banded"])                 # ringed worlds read best as plain or banded
+    KIND[PLUTO_BODY] = "smooth"
+GLYPHS = {k: [PK.glyph(KIND[k], v, 300 + k) for v in range(PK.SPINS[KIND[k]])] for k in range(len(PLANETS))}
 TUMBLE_MIN = 3.0                                 # rocks smaller than this don't tumble: the turn isn't visible
 
 

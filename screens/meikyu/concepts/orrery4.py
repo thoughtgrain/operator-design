@@ -71,8 +71,10 @@ CONNECT, FADE, LINKS = 0.1, 1.2, 4                   # a link draws out fast, fa
 FLASH = 0.15                                        # seconds a planet flashes when its tone sounds
 PRESENCE = 6                                        # no-belt: a step's planet is out while its weight < Dens + this
 GROW = 0.25                                         # no-belt: seconds a newly arrived planet takes to grow in
+GAP_EXTRA = 3.0                                     # no-belt: px an extra keeps from every planet already out
 # no-belt: the eight extra planets join as Dens rises, one by one
-EXTRA_KEY = {k: key for k, key in zip([k for k in range(len(M3.PLANETS)) if M3.STEP_OF[k] is None], [8, 20, 32, 45, 58, 70, 82, 93])}
+_EXTRAS = [k for k in range(len(M3.PLANETS)) if M3.STEP_OF[k] is None]
+EXTRA_KEY = {k: 4 + 92 * j / max(1, len(_EXTRAS) - 1) for j, k in enumerate(random.Random(5).sample(_EXTRAS, len(_EXTRAS)))}
 
 
 # ---- the score ------------------------------------------------------------------------------------------------------------
@@ -176,6 +178,33 @@ def header(p):
 
 
 # ---- scene ----------------------------------------------------------------------------------------------------------------
+_SHOWN = {}
+
+
+def shown_history(t, presses, spread):
+    key = round(t * 30)
+    if key not in _SHOWN:
+        _SHOWN[key] = out_at(key / 30, presses, spread)
+    return _SHOWN[key]
+
+
+def out_at(t, presses, spread=1.0):
+    """no-belt: which bodies are out at time t. Step planets by Dens; extras by Dens too, but an extra stays out of
+    view while it would touch a planet already out (step planets first, then extras in the order they join)"""
+    shown, placed = set(), []
+    order = sorted(range(len(M3.PLANETS)), key=lambda k: (M3.STEP_OF[k] is None, EXTRA_KEY.get(k, 0)))
+    for k in order:
+        if not present(k, t, presses):
+            continue
+        x, y, rr, p3, _ = planet_pos(k, t, spread)
+        foot = rr * (M3.RING_SPAN[1] if k in M3.RINGED else 1.0)
+        if M3.STEP_OF[k] is None and any(math.hypot(x - x2, y - y2) - foot - f2 < GAP_EXTRA for x2, y2, f2 in placed):
+            continue
+        shown.add(k)
+        placed.append((x, y, foot))
+    return shown
+
+
 def present(k, t, presses):
     """no-belt: is body k out at time t? A step's planet while its weight is under Dens + PRESENCE (or while the
     phrase that just played it is still going); an extra once Dens passes its key"""
@@ -222,15 +251,16 @@ def scene(p, last, t, presses):
                 struck[i] = t - th
     mid = (M3.BELT[0] + M3.BELT[1]) / 2
     pos = {}
+    shown_now = shown_history(t, presses, spread) if M3.VARIANT == "no-belt" else set()
     for k in range(len(M3.PLANETS)):                                  # every body: step planets and extras
         step = M3.STEP_OF[k]
         if M3.VARIANT == "no-belt":                                  # Dens decides how many planets are out
-            if not present(k, t, presses):
+            if k not in shown_now:
                 continue
         x, y, rr, p3, hops = planet_pos(k, t, spread)
         if M3.VARIANT == "no-belt":                                  # a planet that has just arrived grows in
             age = 0.0
-            while age < GROW and present(k, t - age - 1 / 30, presses):
+            while age < GROW and k in shown_history(t - age - 1 / 30, presses, spread):
                 age += 1 / 30
             if age < GROW:
                 rr *= 0.25 + 0.75 * (age / GROW) ** 0.5
@@ -243,11 +273,11 @@ def scene(p, last, t, presses):
         fill, line = R2.FILLED if lit else R2.WIRE
         if step in flashed:                                          # its tone sounding now: a bright fill
             fill, line = ("#F0F0F0", "#7A7A7A")
-        svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
+        svg = R2.node(M3.GLYPHS[k][hops % len(M3.GLYPHS[k])], x, y, rr / 10, fill, line, 0.9)
         d = math.dist(M3.CAM, p3)
         (front if M3.nearer_than_sun(p3) else back).append((d, svg))
         if k in M3.RINGED:                                           # a flat ring in the orbit plane: back half behind
-            for half, svg_r in ring_halves(p3, M3.body_radius(k) * spread, line):   # the planet, front half in front
+            for half, svg_r in ring_halves(p3, M3.body_radius(k) * spread, line, *M3.RING_TILT[k]):   # front half in front
                 (front if M3.nearer_than_sun(p3) else back).append((d + (0.5 if half == "back" else -0.5), svg_r))
     for n, (seed, rho, h, phase, direction, size, step) in enumerate(M3.ROCKS):
         hops = math.floor((t + M3.stagger(n + 8)) / M3.HOP)
@@ -275,9 +305,12 @@ def scene(p, last, t, presses):
     return o + O.ringed(M3.RING[0], M3.RING[1], 12, p, ring=(1.45, reach), tilt=0.3)
 
 
-def ring_halves(c3, r, line):
-    """a ring round a planet, flat in the orbit plane, built in 3D and projected: its far half (drawn before the
-    planet, so the planet's disc covers it) and its near half (drawn after)"""
+def ring_halves(c3, r, line, tilt=0.0, yaw=0.0):
+    """a ring round a planet, built in 3D and projected: a circle in a plane tilted out of the orbit plane by `tilt`
+    about an axis turned `yaw` round the vertical. Its far half is drawn before the planet (so the planet's disc
+    covers it) and its near half after."""
+    u = (math.cos(yaw), 0.0, math.sin(yaw))                            # in the orbit plane
+    v = (-math.sin(yaw) * math.cos(tilt), math.sin(tilt), math.cos(yaw) * math.cos(tilt))   # tilted out of it
     out = []
     cam_d = math.dist(M3.CAM, c3)
     for half in ("back", "front"):
@@ -285,7 +318,7 @@ def ring_halves(c3, r, line):
             pts = []
             for q in range(41):
                 th = 2 * math.pi * q / 40
-                w = (c3[0] + rad * math.cos(th), c3[1], c3[2] + rad * math.sin(th))
+                w = tuple(c3[i] + rad * (math.cos(th) * u[i] + math.sin(th) * v[i]) for i in range(3))
                 far = math.dist(M3.CAM, w) > cam_d
                 if far == (half == "back"):
                     pts.append(M3.project(w)[:2])
