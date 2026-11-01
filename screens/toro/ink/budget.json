@@ -1,0 +1,19 @@
+{
+  "nodes": 79,
+  "paths": 3,
+  "points": 64,
+  "texts": 16,
+  "palette": 9,
+  "staticRects": 1847,
+  "staticRectsCell2": 430,
+  "controls": [
+    "spread",
+    "fold",
+    "cutoff",
+    "res",
+    "shape",
+    "noise",
+    "drive",
+    "aphx"
+  ]
+}

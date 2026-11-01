@@ -113,7 +113,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - The figure carries the big controls: shape (horns, posture) and the dither level of its main planes, which is a tone channel.
 - The glyphs carry the small ones, one control per glyph, so each control has an obvious place to look. In toro the waveform glyph is shape, the sparkles are noise, the squiggles are fold, and the dither swatches slipping out of place are aphx.
 
-**Budget.** The dither must be baked into static artwork. Fills come only from artwork, and a dithered plane is hundreds of 1 px marks, which no node budget survives. So I make tone changes by swapping between pre-dithered artwork layers (hide one, show the next), not by re-dithering at runtime. Outlines that move (horn sweep, steam) are the mutable paths; keep them to 2 px strokes.
+**Budget.** Dither only lives in things that never move. A node is one path of ≤ 64 points, so a dithered plane (hundreds of 1 px marks) can't be a node, can't be hidden and can't change tone. Split the screen: the still parts as static artwork, run-length `<rect>`s in white (toro's body is ~1,850 at 1 px, ~430 at 2 px cells); the parts that move or change as flat palette greys with a 2 px white outline, matched to the dither density they stand in for. Toro's `screens/toro/gen_ink.py` is the worked example.
 
 **Pitfalls.**
 
