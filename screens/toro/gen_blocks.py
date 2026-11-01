@@ -202,8 +202,9 @@ def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
         out[n] = Pose(tx, ty, P_LEFT)
         out[n + 1] = Pose(tx, ty, P_RIGHT)
         out[n + 2] = Pose(tx, ty, top)
-    out[SKIRT_FIRST] = Pose(0, 0, P_BLACK)
-    out[SKIRT_FIRST + 1] = Pose(0, 0, P_BLACK)
+    # the skirts only existed to mask floor-length pillars; slabs don't overhang, and a skirt would cut into the drum
+    out[SKIRT_FIRST] = Pose(0, 0, P_BLACK, visible=False)
+    out[SKIRT_FIRST + 1] = Pose(0, 0, P_BLACK, visible=False)
     return out
 
 
