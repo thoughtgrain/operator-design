@@ -38,7 +38,7 @@ button[aria-pressed="true"] { background:#cdcdcd; color:#111; border-color:#cdcd
     <span class="note" id="hint">Tap a key, or press 1–8 on the keyboard. Each key is a different APHX drift.</span>
   </div>
   <div class="faders" id="faders"></div>
-  <p class="note">Seventy columns, three nodes each, moved only by translation. A note pops a six-column patch up and flashes it white, placed by the key, then it settles in about 0.4 s. Controls ease over about 0.15 s like the device. The browser draws the Univers header in a stand-in face.</p>
+  <p class="note">Seventy columns, three nodes each, moved only by translation and in whole pixels. Every note rolls the whole field forward a step, pops a six-column patch where the key lands and sends a ripple out from it. Controls ease over about 0.15 s like the device. The browser draws the Univers header in a stand-in face.</p>
 </div>
 <script>
 const M = {"nx": 10, "ny": 7, "s": 15, "ox": 217.5, "oy": 92, "hMin": 8, "hMax": 40, "pillar": 64, "palette": [["#323232", "#323232", 0.3], ["#646464", "#646464", 0.3], ["#7D7D7D", "#7D7D7D", 0.3], ["#969696", "#969696", 0.3], ["#AFAFAF", "#AFAFAF", 0.3], ["#CDCDCD", "#CDCDCD", 0.3], ["#000000", "#000000", 0.3], ["#FFFFFF", "#FFFFFF", 0.3]], "order": [[0, 0], [0, 1], [1, 0], [0, 2], [1, 1], [2, 0], [0, 3], [1, 2], [2, 1], [3, 0], [0, 4], [1, 3], [2, 2], [3, 1], [4, 0], [0, 5], [1, 4], [2, 3], [3, 2], [4, 1], [5, 0], [0, 6], [1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0], [1, 6], [2, 5], [3, 4], [4, 3], [5, 2], [6, 1], [7, 0], [2, 6], [3, 5], [4, 4], [5, 3], [6, 2], [7, 1], [8, 0], [3, 6], [4, 5], [5, 4], [6, 3], [7, 2], [8, 1], [9, 0], [4, 6], [5, 5], [6, 4], [7, 3], [8, 2], [9, 1], [5, 6], [6, 5], [7, 4], [8, 3], [9, 2], [6, 6], [7, 5], [8, 4], [9, 3], [7, 6], [8, 5], [9, 4], [8, 6], [9, 5], [9, 6]], "colIndex": {"0,0": 8, "0,1": 11, "1,0": 14, "0,2": 17, "1,1": 20, "2,0": 23, "0,3": 26, "1,2": 29, "2,1": 32, "3,0": 35, "0,4": 38, "1,3": 41, "2,2": 44, "3,1": 47, "4,0": 50, "0,5": 53, "1,4": 56, "2,3": 59, "3,2": 62, "4,1": 65, "5,0": 68, "0,6": 71, "1,5": 74, "2,4": 77, "3,3": 80, "4,2": 83, "5,1": 86, "6,0": 89, "1,6": 92, "2,5": 95, "3,4": 98, "4,3": 101, "5,2": 104, "6,1": 107, "7,0": 110, "2,6": 113, "3,5": 116, "4,4": 119, "5,3": 122, "6,2": 125, "7,1": 128, "8,0": 131, "3,6": 134, "4,5": 137, "5,4": 140, "6,3": 143, "7,2": 146, "8,1": 149, "9,0": 152, "4,6": 155, "5,5": 158, "6,4": 161, "7,3": 164, "8,2": 167, "9,1": 170, "5,6": 173, "6,5": 176, "7,4": 179, "8,3": 182, "9,2": 185, "6,6": 188, "7,5": 191, "8,4": 194, "9,3": 197, "7,6": 200, "8,5": 203, "9,4": 206, "8,6": 209, "9,5": 212, "9,6": 215}, "skirtFirst": 218, "skirts": [[[110.5, 143.5], [262.5, 219.5], [262.5, 260], [110.5, 260]], [[262.5, 219.5], [369.5, 166.0], [369.5, 260], [262.5, 260]]], "keySpots": [[2, 2], [6, 1], [4, 4], [8, 3], [1, 5], [5, 6], [7, 5], [3, 1]], "defaults": {"spread": 0.06, "fold": 0.18, "cutoff": 0.55, "res": 0.24, "shape": 0.0, "noise": 0.0, "drive": 0.0, "aphx": 0.0}, "controls": ["spread", "fold", "cutoff", "res", "shape", "noise", "drive", "aphx"], "greys": ["#000000", "#323232", "#4B4B4B", "#646464", "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD"]};
@@ -58,12 +58,12 @@ const WHAT = { spread:"a second wave at the oscillator ratio beats against the f
 function foldSignal(s) { let x = s; for (let k = 0; k < 8 && (x > 1 || x < -1); k++) x = x > 1 ? 2 - x : -2 - x; return x; }
 function mulberry(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 const JIT = (() => { const r = mulberry(4), a = []; for (let i = 0; i < M.nx*M.ny; i++) a.push(r()); return a; })();
-function heights(v, key) {
+function heights(v, key, phase) {
   const ratio = 1 + 0.5*v.spread, gain = 1 + 7*v.fold, out = [];
   for (let i = 0; i < M.nx; i++) { out.push([]); for (let j = 0; j < M.ny; j++) {
-    const u = i/(M.nx - 1), w = j/(M.ny - 1), ph = ((0.8*u + 0.4*w) % 1 + 1) % 1;
+    const u = i/(M.nx - 1), w = j/(M.ny - 1), ph = ((0.8*u + 0.4*w + phase) % 1 + 1) % 1;
     const osc1 = (2*ph - 1)*(1 - v.shape) + (1 - 4*Math.abs(ph - 0.5))*v.shape;
-    const osc2 = 0.6*Math.sin(2*Math.PI*ratio*(0.6*w - 0.5*u) + 1);
+    const osc2 = 0.6*Math.sin(2*Math.PI*ratio*(0.6*w - 0.5*u + phase) + 1);
     const detail = v.cutoff*0.7*Math.sin(2*Math.PI*(3.3*u + 2.1*w) + 0.5);
     const raw = 0.45*(osc1 + osc2) + detail;
     let hv = v.fold > 0.02 ? foldSignal(gain*raw) : Math.max(-1, Math.min(1, raw));
@@ -94,14 +94,18 @@ for (let c = 0; c < 4; c++) {
 }
 
 // ---- pose and draw ---------------------------------------------------------------------------------------------------
-function draw(v, t, key) {
-  const hs = heights(v, key);
+function draw(v, t, key, notes) {
+  const phase = 0.11*(notes + (t != null && !reduced ? 1 - Math.exp(-t/0.22) : (t != null ? 1 : 0)));
+  const hs = heights(v, key, phase);
   const lift = t == null || reduced ? 0 : 22*Math.exp(-t/0.18), flash = t != null && t < 0.12;
   const [ci, cj] = M.keySpots[key % M.keySpots.length];
   const inPatch = (i, j) => { const di = i - ci, dj = j - cj; return (Math.abs(di) + Math.abs(dj) <= 1) || (di === 1 && dj === 1); };
   const litRow = v.res > 0.05 ? Math.round((M.ny - 1)*v.res) : -1;
   for (const c of cols) {
-    const p = inPatch(c.i, c.j), h = hs[c.i][c.j] + (p ? lift*((c.i === ci && c.j === cj) ? 1 : 0.6) : 0);
+    const p = inPatch(c.i, c.j);
+    let h = hs[c.i][c.j] + (p ? lift*((c.i === ci && c.j === cj) ? 1 : 0.6) : 0);
+    if (t != null && !reduced) { const d = Math.hypot(c.i - ci, c.j - cj); h += 11*Math.exp(-Math.pow((d - 14*t)/1.3, 2))*Math.exp(-t/0.55); }
+    h = Math.round(h);
     const [bx, by] = baseXY(c.i, c.j), tr = `matrix(1 0 0 1 ${f(bx)} ${f(by - h)})`;
     let top = h > 0.75*M.hMax ? P.HI : h > 0.45*M.hMax ? P.MID : P.LO;
     if (c.j === litRow) top = P.LIT;
@@ -114,7 +118,7 @@ function draw(v, t, key) {
 // ---- controls, keys, clock -------------------------------------------------------------------------------------------
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const target = Object.assign({}, D), shown = Object.assign({}, D);
-let noteAt = null, key = 0, auto = false, autoTimer = 0;
+let noteAt = null, key = 0, auto = false, autoTimer = 0, played = 0;
 const faders = document.getElementById("faders");
 for (const name of M.controls) {
   const box = document.createElement("div"); box.className = "fader";
@@ -127,7 +131,8 @@ function setInputs() { for (const name of M.controls) document.getElementById("f
 function labelValues() { for (const name of M.controls) document.getElementById("b-"+name).textContent = name === "spread" ? (1 + 0.5*target[name]).toFixed(2) : Math.round(target[name]*100); }
 const keys = document.getElementById("keys");
 for (let i = 0; i < 8; i++) { const b = document.createElement("button"); b.textContent = i + 1; b.setAttribute("aria-label", "play note " + (i+1)); b.addEventListener("click", () => play(i)); keys.appendChild(b); }
-function play(i) { key = i; noteAt = performance.now(); }
+let started = false;
+function play(i) { if (started) played += 1; started = true; key = i; noteAt = performance.now(); }
 document.addEventListener("keydown", e => { const k = parseInt(e.key); if (k >= 1 && k <= 8 && !e.repeat && e.target.tagName !== "INPUT") play(k - 1); });
 document.getElementById("auto").addEventListener("click", e => { auto = !auto; e.currentTarget.setAttribute("aria-pressed", String(auto)); clearInterval(autoTimer);
   if (auto) { play(0); let i = 0; autoTimer = setInterval(() => play((++i*5) % 8), 420); } });
@@ -139,7 +144,7 @@ function tick(now) {
   for (const name of M.controls) shown[name] += (target[name] - shown[name])*a;
   const t = noteAt == null ? null : (now - noteAt)/1000;
   if (t != null && t > 1.0) noteAt = null;
-  draw(shown, t, key); labelValues();
+  draw(shown, t, key, played); labelValues();
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);

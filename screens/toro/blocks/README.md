@@ -16,7 +16,7 @@ An isometric field of seventy grey columns whose heights are a small model of to
 | noise | 2 | jitter in every column | noise |
 | drive | 3 | the tallest columns clip flat to a plateau | soft clip flattens peaks |
 | aphx | 2 | every column drifts its own amount, different for every key | APHX is per-key drift |
-| note | — | a six-column patch placed by the key jumps up 22 px, flashes white for 120 ms, settles in ~0.4 s | one visible event per note, located by the key |
+| note | — | the whole field rolls forward a step (the waves travel); a six-column patch where the key lands jumps up 22 px and flashes white; a ripple rings out from it across the field and fades in ~0.6 s | the sound moving, located by the key |
 
 All eight and the note pass `opxy/tools/perceptibility.py`. Every frame and the fragment pass `lint_frame.py` with no errors; `definition.json` passes `lint_definition.py`.
 
@@ -28,13 +28,13 @@ That works because of draw order. Columns are drawn back to front, so the part o
 
 Budget: 220 nodes (8 header steps, 210 column faces, 2 skirts), 0 paths, 16 texts, 8 palette entries, no static art. `stateBytes` 136: the page header's 20, eased control values, the note serial and time, and one eased height byte per column.
 
-Redraw: a note moves 18 nodes (six columns) for about 0.4 s, under the ~20 per frame guideline; idle moves none. A control turn moves every column while it eases (~0.15 s), which is a turn, not a held note, so it sits outside the per-note budget, but it's the frame to watch on hardware.
+Redraw: Brian asked for more movement, and movement costs nodes. With the roll and the ripple a note changes about 72 nodes per frame averaged over the second after it (135 in the first half second, peaking near 190), against ux.md's ~20. Heights snap to whole pixels, so a column only redraws when it really moves. Idle moves none. This is the first thing to check on hardware; the lighter fallbacks, in order, are dropping the roll (`PHASE_STEP = 0`), then narrowing the ripple. A control turn moves every column while it eases (~0.15 s), which is a turn, not a held note, so it sits outside the per-note budget, but it's the frame to watch on hardware.
 
 ## Motion
 
 - **Idle** is still.
 - **Controls** ease exponentially and settle in about 0.15 s. Reduced motion jumps straight to the end state.
-- **A note** lifts its patch on note-on, flashes the tops white for 120 ms, and decays with a 0.18 s time constant. Reduced motion skips the lift and keeps the flash.
+- **A note** rolls the field's waves forward 0.11 of a cycle (easing over ~0.22 s), lifts its patch, flashes the tops white for 120 ms, and sends a ring outward at 14 columns a second that fades over ~0.55 s. Reduced motion jumps the roll and skips the lift and ripple, keeping the flash.
 - **The key** chooses where the patch lands (eight spots across the field), so a phrase walks across it.
 
 ## Handoff to `display.cpp`

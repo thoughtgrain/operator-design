@@ -65,7 +65,7 @@ def base_xy(i, j):
 
 
 # ---- the field: toro's voice as heights ----------------------------------------------------------------------------
-def heights(v: dict, key: int = 0) -> list[list[float]]:
+def heights(v: dict, key: int = 0, phase: float = 0.0) -> list[list[float]]:
     ratio = 1 + 0.5 * v["spread"]
     gain = 1 + 7 * v["fold"]
     rnd = random.Random(4)
@@ -73,11 +73,11 @@ def heights(v: dict, key: int = 0) -> list[list[float]]:
     for i in range(NX):
         for j in range(NY):
             u, w = i / (NX - 1), j / (NY - 1)
-            ph = (0.8 * u + 0.4 * w) % 1
+            ph = (0.8 * u + 0.4 * w + phase) % 1
             saw = 2 * ph - 1
             tri = 1 - 4 * abs(ph - 0.5)
             osc1 = saw * (1 - v["shape"]) + tri * v["shape"]
-            osc2 = 0.6 * math.sin(2 * math.pi * ratio * (0.6 * w - 0.5 * u) + 1)
+            osc2 = 0.6 * math.sin(2 * math.pi * ratio * (0.6 * w - 0.5 * u + phase) + 1)
             detail = v["cutoff"] * 0.7 * math.sin(2 * math.pi * (3.3 * u + 2.1 * w) + 0.5)
             raw = 0.45 * (osc1 + osc2) + detail
             hv = fold_signal(gain * raw) if v["fold"] > 0.02 else max(-1.0, min(1.0, raw))
@@ -130,8 +130,19 @@ class Pose:
         self.x, self.y, self.palette, self.visible = x, y, palette, visible
 
 
-def pose(v: dict, t=None, key: int = 0) -> dict[int, Pose]:
-    hs = heights(v, key)
+RIPPLE_SPEED, RIPPLE_WIDTH, RIPPLE_HEIGHT, RIPPLE_DECAY = 14.0, 1.3, 11.0, 0.55   # columns/s, columns, px, s
+PHASE_STEP, PHASE_EASE = 0.11, 0.22                                           # cycles per note, s
+
+
+def ease(t, tau):
+    return 1 - math.exp(-t / tau) if t is not None else 1.0
+
+
+def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
+    """`notes` counts notes played before this one: every note rolls the whole field forward a step (the wave
+    travelling), and sends a ripple out from where it lands"""
+    phase = PHASE_STEP * (notes + (ease(t, PHASE_EASE) if t is not None else 0))
+    hs = heights(v, key, phase)
     lift, flash = note(t)
     ci, cj = KEY_SPOTS[key % len(KEY_SPOTS)]
     patch = {(ci + di, cj + dj) for di in (-1, 0, 1) for dj in (-1, 0, 1) if abs(di) + abs(dj) <= 1 or (di, dj) == (1, 1)}
@@ -139,6 +150,11 @@ def pose(v: dict, t=None, key: int = 0) -> dict[int, Pose]:
     out = {}
     for (i, j), n in COL_INDEX.items():
         h = hs[i][j] + (lift * (1.0 if (i, j) == (ci, cj) else 0.6) if (i, j) in patch else 0.0)
+        if t is not None:                                        # the ripple: a ring spreading from the patch
+            d = math.hypot(i - ci, j - cj)
+            ring = math.exp(-((d - RIPPLE_SPEED * t) / RIPPLE_WIDTH) ** 2) * math.exp(-t / RIPPLE_DECAY)
+            h += RIPPLE_HEIGHT * ring
+        h = round(h)                                             # whole pixels: crisp edges, and a column only redraws when it really moves
         bx, by = base_xy(i, j)
         top = P_TOP_HI if h > 0.75 * H_MAX else P_TOP_MID if h > 0.45 * H_MAX else P_TOP_LO
         if j == lit_row:
@@ -182,14 +198,14 @@ def header_fragment() -> list[str]:
     return o
 
 
-def body(v, t=None, key=0) -> list[str]:
-    poses = pose(v, t, key)
+def body(v, t=None, key=0, notes=0) -> list[str]:
+    poses = pose(v, t, key, notes)
     return [node_svg(n, poses[n]) for n in sorted(poses)]
 
 
-def frame_svg(v, t=None, key=0) -> str:
+def frame_svg(v, t=None, key=0, notes=0) -> str:
     return "\n".join(['<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',
-                      '<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>'] + body(v, t, key) + g.header(v) + ["</svg>"])
+                      '<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>'] + body(v, t, key, notes) + g.header(v) + ["</svg>"])
 
 
 def fragment_svg() -> str:
@@ -225,7 +241,7 @@ def board(names, out):
 def main():
     (OUT / "frames").mkdir(parents=True, exist_ok=True)
     D = dict(g.DEFAULTS)
-    frames = {"rest": (D, None, 0), "playing": (D, 0.05, 0), "note-0.2s": (D, 0.2, 0), "note-key4": (D, 0.05, 3)}
+    frames = {"rest": (D, None, 0), "playing": (D, 0.12, 0), "note-0.2s": (D, 0.2, 0), "note-key4": (D, 0.12, 3)}
     for i, name in enumerate(g.CONTROLS):
         for val in (0, 50, 100):
             frames[f"c{i + 1}-{val:03d}"] = (dict(D, **{name: val / 100}), None, 0)
