@@ -29,3 +29,17 @@ Round 1 read as abstract fields; Brian wanted it to look like drums. `concepts/d
 | d5 | Pads: a 4 × 4 drum-machine pad grid | its pad presses down and lights; fm splits the glow | how long the pad stays lit | a cursor steps across the pads, one cycle per Rate |
 
 Every design keeps the round-1 mappings: punch = how far a hit moves, cutoff = how bright, fm = shimmer and split, noise = sizzle specks (more for high drums), tune = which drum a note lands on.
+
+### d4, revision 2
+
+Brian liked the tower and asked for two changes, so `concepts/d4_video.py` now does this:
+
+- **Each tier is drawn as the drum it plays**, bottom to top:
+  - the **kick** is the deepest, darkest shell, with a pale wrap stripe, claw hooks and a felt beater patch;
+  - the **floor tom** is tall, with legs out to the sides;
+  - the **snare** is a shallow, bright metal shell with many lugs, a strainer and its wires showing underneath;
+  - the **rack tom** is medium depth, with a mount bracket;
+  - the **hi-hat** is two cymbals on a clutch rod.
+- **Only the drum that's hit moves, and only upward.** It rises fast and settles, never dipping below rest. The tiers above don't ride along, and there is no wobble or lean. The hit LFO now sets how high each hit jumps, and a hat hit lifts the top cymbal open.
+
+The tiers step down in size so each head's front crescent shows, where its rings spread.

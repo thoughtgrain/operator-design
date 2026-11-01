@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """d4 drum tower, animated: a two-bar groove at 120 bpm with the controls swept while it plays.
 
+Revision 2 (after Brian's notes): each tier looks like the drum it plays, and only the drum that's hit moves, and
+only upward. No ride-along, no wobble, no lean; the hit LFO now sets how high each hit jumps.
+
 The board's d4 only showed single moments. In motion each hit is a small physical event:
   - the struck tier springs up and rings, and every tier above it rides along (hit the kick and the whole tower jumps)
   - the tower wobbles sideways after a hit, more with punch, and leans with the hit LFO, easing to each new step
@@ -23,15 +26,21 @@ from blocks import DEFAULTS, G, env, frame, lfo_at, path, zone_of  # noqa: E402
 from drums import cymbal, ellipse, head, shell, sizzle  # noqa: E402
 
 FPS = 30
-TIERS = [(0.02, 80, 24), (0.25, 66, 18), (0.45, 54, 16), (0.65, 44, 12), (0.88, 38, 0)]   # zone, radius, height
+# the tower, bottom to top: each tier is drawn as the drum it plays
+#   zone, radius, shell height, kind
+TIERS = [(0.02, 86, 30, "kick"), (0.25, 62, 22, "floor"), (0.45, 50, 10, "snare"), (0.65, 38, 15, "tom"), (0.88, 36, 0, "hat")]
+GAP = 9                                                          # room above each tier for it to rise into
 
 
 def tier_of(z):
     return min(range(len(TIERS)), key=lambda k: abs(TIERS[k][0] - z))
 
 
-def spring(dt, amp, f_hz=5.5, tau=0.16):
-    return amp * math.exp(-dt / tau) * math.cos(2 * math.pi * f_hz * dt) if dt >= 0 else 0.0
+def rise(dt, amp):
+    """a hit only ever lifts: up fast, settle slowly, never below rest"""
+    if dt < 0:
+        return 0.0
+    return amp * (1 - math.exp(-dt / 0.018)) * math.exp(-dt / 0.14)
 
 
 class Phrase:
@@ -51,50 +60,94 @@ class Phrase:
         return len(self.played())
 
 
+def block(x0, y0, x1, y1, fill):
+    return path([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], fill)
+
+
+def kick(x, top, r, ry, h, e, v):
+    """the bass drum: the deepest, darkest shell with a pale wrap stripe, claw hooks, and a felt beater patch"""
+    o = shell(x, top, r, ry, h, side=G[2], edge="#141414", lugs=0)
+    o.append(path([(x - r, top + h * 0.42), (x + r, top + h * 0.42)] + ellipse(x, top + h * 0.58, r, ry, 20, 0, math.pi)[::-1][::-1][::-1] if False else
+                  [(x - r, top + h * 0.40)] + ellipse(x, top + h * 0.40, r, ry, 20, math.pi, 0) + [(x + r, top + h * 0.40), (x + r, top + h * 0.56)] + ellipse(x, top + h * 0.56, r, ry, 20, 0, math.pi) + [(x - r, top + h * 0.56)], G[4]))
+    for k in range(8):                                            # claw hooks round the front
+        t = math.pi * (0.1 + 0.8 * k / 7)
+        lx, ly = x + r * math.cos(t) * 0.99, top + 4 + ry * math.sin(t)
+        o.append(block(lx - 1.4, ly - 2, lx + 1.4, ly + 4, G[5]))
+    o += head(x, top, r, ry, e, v, tone=G[5])
+    o.append(path(ellipse(x + r * 0.28, top + ry * 0.15, r * 0.16, ry * 0.16), G[2]))   # felt beater patch
+    return o
+
+
+def floor_tom(x, top, r, ry, h, e, v):
+    """the floor tom: tall, with three legs out to the sides"""
+    o = []
+    for sx in (-1, 1):
+        o.append(path([(x + sx * (r - 2), top + h * 0.3), (x + sx * (r + 8), top + h + 6), (x + sx * (r + 6.5), top + h + 6), (x + sx * (r - 3.5), top + h * 0.3)], G[4]))
+    o += shell(x, top, r, ry, h, side=G[3], lugs=4)
+    o += head(x, top, r, ry, e, v)
+    return o
+
+
+def snare(x, top, r, ry, h, e, v):
+    """the snare: a shallow bright metal shell, many lugs, the strainer, and wires showing under the bottom hoop"""
+    o = []
+    for k in range(7):                                             # the wires, a little wider than the shell
+        yy = top + h + ry * 0.35 + 1.2 * k - 2
+        o.append(block(x - r * 0.62, yy, x + r * 0.62, yy + 0.7, G[5]))
+    o += shell(x, top, r, ry, h, side=G[5], edge=G[3], lugs=7, lug=G[7])
+    o.append(block(x - r * 0.05, top + ry * 0.9 + 1, x + r * 0.12, top + ry * 0.9 + h - 1, G[7]))   # strainer
+    o += head(x, top, r, ry, e, v, tone=G[6])
+    return o
+
+
+def rack_tom(x, top, r, ry, h, e, v):
+    """the rack tom: medium depth, a mount bracket on its side"""
+    o = shell(x, top, r, ry, h, side=G[3], lugs=3)
+    o.append(block(x - r - 6, top + h * 0.25, x - r + 2, top + h * 0.75, G[5]))                    # mount
+    o.append(block(x - r - 9, top + h * 0.40, x - r - 4, top + h * 0.60, G[4]))
+    o += head(x, top, r, ry, e, v)
+    return o
+
+
+def hi_hat(x, top, r, e, v):
+    """the hi-hat: two cymbals on a clutch rod; a hit opens the top one"""
+    o = [block(x - 0.9, top - 22, x + 0.9, top + 6, G[4])]          # rod
+    o += cymbal(x, top + 4, r, 0, v)
+    open_ = rise(0, 0)
+    o += cymbal(x, top - 2 - e * 0, r, e, v, wob=0.0)
+    return o
+
+
+DRAW = {"kick": kick, "floor": floor_tom, "snare": snare, "tom": rack_tom}
+
+
 def tower(v, hits):
     o = []
     now = hits.now
-    played = hits.played()
-    # per-tier: spring lift and the envelope that drives rings and brightness
     lift = [0.0] * len(TIERS)
     e_t = [0.0] * len(TIERS)
-    wobble = 0.0
-    tip = 0.0
-    for i, t, note in played[-12:]:
+    for i, t, note in hits.played()[-12:]:
         z = zone_of(note, v)
         k = tier_of(z)
         dt = now - t
-        lift[k] += spring(dt, 8 + 22 * v["punch"])
+        lfo = 1 + v["lfo"] * 0.6 * lfo_at(i + 1, v)                 # the hit LFO makes some hits jump higher than others
+        lift[k] = max(lift[k], rise(dt, (3 + 8 * v["punch"]) * lfo))
         e_t[k] = max(e_t[k], env(dt, v, z))
-        side = 1 if i % 2 else -1
-        wobble += spring(dt, side * (3 + 7 * v["punch"]) * (1 + 0.8 * (k == 0)), f_hz=2.6, tau=0.35)
-        if k == len(TIERS) - 1:
-            tip += spring(dt, 1.6, f_hz=4.0, tau=0.3)
-    # the LFO lean eases from the previous hit's value to this one's
-    n = hits.count()
-    if n:
-        t_last = played[-1][1]
-        a = 1 - math.exp(-(now - t_last) / 0.12)
-        lean = v["lfo"] * ((1 - a) * lfo_at(n - 1, v) + a * lfo_at(n, v))
-    else:
-        lean = 0.0
-    y = 198
-    o.append(path(ellipse(240 + wobble * 0.3, 202, 104, 14), "#1E1E1E"))
-    rise = 0.0
-    for k, (z, r, hgt) in enumerate(TIERS):
-        rise += max(-5.0, lift[k])                       # every tier rides on the ones below
-        x = 240 + lean * k * 12 + wobble * (k + 1) * 0.7
+    y = 204
+    o.append(path(ellipse(240, 206, 108, 14), "#1E1E1E"))
+    for k, (z, r, hgt, kind) in enumerate(TIERS):
         ry = r * 0.26
         e = e_t[k]
-        if hgt == 0:                                     # the top: a hi-hat pair that tips and rocks
-            o += cymbal(x, y - 9 - rise, r, e, v, wob=max(0.0, min(1.0, abs(tip))))
-            o += cymbal(x - tip * 2, y - 2 - rise * 0.5, r, 0, v)
+        if kind == "hat":
+            base = y - 6
+            o.append(block(239.1, base - 26, 240.9, base + 4, G[4]))   # the clutch rod
+            o += cymbal(240, base + 2, r, 0, v)                         # bottom hat stays
+            o += cymbal(240, base - 3 - lift[k] * 1.4, r, e, v)         # the top hat lifts open on a hit
             break
-        top = y - hgt - rise
-        o += shell(x, top, r, ry, hgt, lugs=3 + (k == 0))
-        o += head(x, top, r, ry, e, v)
-        y = y - hgt - 4
-    o += sizzle(v, hits, 240 + lean * 20, 64 - (rise * 0.5), 120, 4)
+        top = y - hgt - lift[k]
+        o += DRAW[kind](240, top, r, ry, hgt, e, v)
+        y = y - hgt - GAP
+    o += sizzle(v, hits, 240, 54, 120, 4)
     return o
 
 
