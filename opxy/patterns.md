@@ -102,6 +102,26 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 **When.** Machines with four parallel things (four operators, four voices, four partials). Skip it when it would break the single subject into a dashboard.
 
+## P9 · One-bit ink
+
+**The idea.** A chunky hero figure drawn like 1-bit print: hard 2 px white outlines on everything, tone made from ordered (Bayer) dither instead of grey values, and a scatter of small sound-glyphs around it (a waveform, sparkles, squiggles, dither swatches). It sits between figure and symbol: a character you recognise at a glance, built from flat blocky planes. I picked this up from a screen the toro owner pointed at in round 9; toro's `concepts/ink1bit.py` is my first study in it.
+
+**Why it works at 1:1.** Dither is pixel-exact, so nothing smears the way thin grey anti-aliased edges do on the real panel. Five tones (black, 25 %, 50 %, 75 %, white) are plenty, and they read as texture rather than as a grey ramp, which gives the screen its printed, hand-made feel.
+
+**Channel fit.**
+
+- The figure carries the big controls: shape (horns, posture) and the dither level of its main planes, which is a tone channel.
+- The glyphs carry the small ones, one control per glyph, so each control has an obvious place to look. In toro the waveform glyph is shape, the sparkles are noise, the squiggles are fold, and the dither swatches slipping out of place are aphx.
+
+**Budget.** The dither must be baked into static artwork. Fills come only from artwork, and a dithered plane is hundreds of 1 px marks, which no node budget survives. So I make tone changes by swapping between pre-dithered artwork layers (hide one, show the next), not by re-dithering at runtime. Outlines that move (horn sweep, steam) are the mutable paths; keep them to 2 px strokes.
+
+**Pitfalls.**
+
+- Dither at 50 % next to a 2 px outline can read as a grey blur. Leave a 1 px black gutter inside every outline.
+- White-on-white: when a control drives a plane toward white, features drawn in white (eyes, highlights) disappear. Cap the plane at 75 %, or invert the feature to black.
+- Ornaments multiply. Every glyph must be a control; if it isn't, cut it.
+- Don't copy the reference's figure or composition. The pattern is the language (outline, dither, glyphs), not that drawing.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.
