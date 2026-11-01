@@ -28,9 +28,15 @@ I started with 64 px pillars running to the floor, which made heights read as so
 
 The roll (`roll_amount`, `rolled_top`): fold bends the field into an arc of up to 1.9π with its middle row on top, its radius shrinking as the arc grows, and the ends resting on the floor. Each block slides to its point on the circle and out along the radius by its height. As it wraps, the rows part by up to half a row so the staves read, the relief shrinks by 92% so the drum doesn't read as a heap, and tops on the underside go dark. Note lifts and ripples are added after the shrink, so notes push blocks out of the drum at full size. Draw order is fixed back to front, which keeps the drum's back behind its front; the lower-front staves are drawn last but only overlap slab sides.
 
-Budget: 220 nodes (8 header steps, 210 block faces, 2 hidden skirts), 0 paths, 16 texts, 8 palette entries, no static art. `stateBytes` 136: the page header's 20, eased control values, the note serial and time, and one eased height byte per column.
+Budget: 220 nodes (8 header steps, 210 block faces, 2 hidden skirts), 0 paths, 16 texts, 10 palette entries, no static art. `stateBytes` 136: the page header's 20, eased control values, the note serial and time, and one eased height byte per column.
 
 Redraw: Brian asked for more movement, and movement costs nodes. With the roll and the ripple a note changes about 72 nodes per frame averaged over the second after it (135 in the first half second, peaking near 190), against ux.md's ~20. Heights snap to whole pixels, so a column only redraws when it really moves. Idle moves none. This is the first thing to check on hardware; the lighter fallbacks, in order, are dropping the roll (`PHASE_STEP = 0`), then narrowing the ripple. A control turn moves every column while it eases (~0.15 s), which is a turn, not a held note, so it sits outside the per-note budget, but it's the frame to watch on hardware.
+
+## Wireframe cubes
+
+Cubes in the lowest 30% of the voice's range (`WIRE_BELOW`) are drawn hollow: their three faces swap to two palette entries with a black fill and a grey edge (`P_WIRE` for the sides, a lighter `P_WIRE_TOP` for the top). The troughs of the wave read as empty space, and because the test runs on the voice's own height, which cubes are hollow moves with every control. I test before note lifts and the drum's flattening, so a note doesn't flicker cubes between solid and hollow, and the drum keeps its pattern as it rolls. A struck (white) or res-lit cube always stays solid. The black fill matters: a wireframe that didn't hide what's behind it would turn the field into a tangle of edges at 1:1.
+
+It costs nothing extra in redraw: a cube only changes palette when its height crosses the threshold, and height changes already redraw it.
 
 ## Motion
 

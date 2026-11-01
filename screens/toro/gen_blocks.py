@@ -51,8 +51,10 @@ f, poly, G, fold_signal = g.f, g.poly, g.G, g.fold_signal
 
 # palette: (fill, stroke, width). Strokes match fills so faces meet without seams.
 PALETTE = [(G[1], G[1], 0.3), (G[3], G[3], 0.3), (G[4], G[4], 0.3), (G[5], G[5], 0.3), (G[6], G[6], 0.3),
-           (G[7], G[7], 0.3), ("#000000", "#000000", 0.3), ("#FFFFFF", "#FFFFFF", 0.3)]
-P_RIGHT, P_LEFT, P_TOP_LO, P_TOP_MID, P_TOP_HI, P_LIT, P_BLACK, P_FLASH = range(8)
+           (G[7], G[7], 0.3), ("#000000", "#000000", 0.3), ("#FFFFFF", "#FFFFFF", 0.3),
+           ("#000000", G[4], 0.9), ("#000000", G[6], 0.9)]
+P_RIGHT, P_LEFT, P_TOP_LO, P_TOP_MID, P_TOP_HI, P_LIT, P_BLACK, P_FLASH, P_WIRE, P_WIRE_TOP = range(10)
+WIRE_BELOW = 0.3                                           # cubes in the lowest 30% of the voice's range are drawn hollow
 KEY_SPOTS = [(2, 2), (6, 1), (4, 4), (8, 3), (1, 5), (5, 6), (7, 5), (3, 1)]   # where each key's patch lands
 
 
@@ -199,9 +201,12 @@ def pose(v: dict, t=None, key: int = 0, notes: int = 0) -> dict[int, Pose]:
             top = P_TOP_LO if top != P_FLASH else top
         if flash and (i, j) in patch:
             top = P_FLASH
-        out[n] = Pose(tx, ty, P_LEFT)
-        out[n + 1] = Pose(tx, ty, P_RIGHT)
-        out[n + 2] = Pose(tx, ty, top)
+        # the quiet part of the wave is hollow: black faces with grey edges. Decided on the voice's own height (before
+        # notes and the drum's flattening), so it follows the sound; a struck or lit cube stays solid
+        wire = hs[i][j] < H_MIN + WIRE_BELOW * (H_MAX - H_MIN) and top not in (P_FLASH, P_LIT)
+        out[n] = Pose(tx, ty, P_WIRE if wire else P_LEFT)
+        out[n + 1] = Pose(tx, ty, P_WIRE if wire else P_RIGHT)
+        out[n + 2] = Pose(tx, ty, P_WIRE_TOP if wire else top)
     # the skirts only existed to mask floor-length pillars; slabs don't overhang, and a skirt would cut into the drum
     out[SKIRT_FIRST] = Pose(0, 0, P_BLACK, visible=False)
     out[SKIRT_FIRST + 1] = Pose(0, 0, P_BLACK, visible=False)
