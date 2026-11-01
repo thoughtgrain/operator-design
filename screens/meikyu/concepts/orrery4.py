@@ -13,7 +13,8 @@ and velocity all need a visible effect, and with Drum on, Scal should mean somet
   belt      the asteroid belt, wide by default, rocks lighting with their steps
   no-belt   (MEIKYU_VARIANT=no-belt) six orbits, 24 slots: the 16 step planets (two of them ringed) and 8 extras. Dens
             sets how many are out: a step's planet while its weight is under Dens + 25 (filled if it plays), and the
-            extras one by one from Dens ~13 up, so about 4 planets at Dens 0 and all 24 at 100. Sizes run tiny to big.
+            extras one by one as Dens passes 8, 20, 32 … 93, so about 3 planets at Dens 0, ~15 at 60 and all 24 at 100;
+            a newly arrived planet grows in over 0.25 s. Sizes run tiny to big.
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
   Crpt      rewrites steps after each phrase, so fills change between phrases; and it jostles the belt every hop
   Scal      normal mode: spreads the orbits and the asteroid belt with them, pentatonic tightest → minor → major →
@@ -51,7 +52,7 @@ import suns as S
 
 HERE = Path(__file__).resolve().parent
 path = O.path
-LENGTH = 44.0
+LENGTH = 48.0
 OUT = "orrery5-nobelt" if M3.VARIANT == "no-belt" else "orrery4"   # MEIKYU_VARIANT=no-belt → the asteroid-free version
 STEP = A.STEP
 SPREAD = {2: 0.86, 0: 0.93, 1: 1.0, 3: 1.07}      # Scal → orbit spread: pentatonic, minor, major, chromatic
@@ -68,28 +69,30 @@ BOUNCE_UP = 16.0                                    # world units a struck rock 
 DRUM_LIFT = 10.0                                    # world units the whole belt rises while Drum is on
 CONNECT, FADE, LINKS = 0.1, 1.2, 4                   # a link draws out fast, fades slowly; how many show at once
 FLASH = 0.15                                        # seconds a planet flashes when its tone sounds
-PRESENCE = 25                                       # no-belt: a step's planet is out while its weight < Dens + this
+PRESENCE = 6                                        # no-belt: a step's planet is out while its weight < Dens + this
+GROW = 0.25                                         # no-belt: seconds a newly arrived planet takes to grow in
 # no-belt: the eight extra planets join as Dens rises, one by one
-EXTRA_KEY = {k: key for k, key in zip([k for k in range(len(M3.PLANETS)) if M3.STEP_OF[k] is None], [38, 48, 57, 65, 72, 80, 88, 96])}
+EXTRA_KEY = {k: key for k, key in zip([k for k in range(len(M3.PLANETS)) if M3.STEP_OF[k] is None], [8, 20, 32, 45, 58, 70, 82, 93])}
 
 
 # ---- the score ------------------------------------------------------------------------------------------------------------
 def controls(t):
+    """the demo: Dens 60 → 5 → hold → 100 → hold → 60 over 5–15 s, then Crpt, Scal, Drum with kits, Drum off"""
     c = {"dens": 60, "crpt": 20, "scal": 0, "drum": False}
-    if 5 <= t < 11:                                 # Dens 60 → 100 → 15 → 60
-        u = (t - 5) / 6
-        c["dens"] = round(60 + 40 * math.sin(math.pi * u / 0.5) if u < 0.25 else 100 - 85 * (u - 0.25) / 0.5 if u < 0.75 else 15 + 45 * (u - 0.75) / 0.25)
-    if 11 <= t < 16:
+    for t0, t1, v0, v1 in ((5, 8, 60, 5), (8, 9.5, 5, 5), (9.5, 13, 5, 100), (13, 14, 100, 100), (14, 15, 100, 60)):
+        if t0 <= t < t1:
+            c["dens"] = round(v0 + (v1 - v0) * (t - t0) / (t1 - t0))
+    if 15 <= t < 20:
         c["crpt"] = 85
-    for t0, s in ((16, 2), (18, 0), (20, 1), (22, 3)):   # Scal: pent → minor → major → chrom
+    for t0, s in ((20, 2), (22, 0), (24, 1), (26, 3)):   # Scal: pent → minor → major → chrom
         if t >= t0:
             c["scal"] = s
-    if 24 <= t < 34:                                # Drum on, kits 1 → 4
+    if 28 <= t < 38:                                # Drum on, kits 1 → 4
         c["drum"] = True
-        c["scal"] = min(3, int((t - 24) / 2.5))
-    if t >= 34:
+        c["scal"] = min(3, int((t - 28) / 2.5))
+    if t >= 38:
         c["scal"] = 0                               # drum off, back to minor
-        if t >= 39:
+        if t >= 43:
             c["scal"] = 1
     return c
 
@@ -173,6 +176,18 @@ def header(p):
 
 
 # ---- scene ----------------------------------------------------------------------------------------------------------------
+def present(k, t, presses):
+    """no-belt: is body k out at time t? A step's planet while its weight is under Dens + PRESENCE (or while the
+    phrase that just played it is still going); an extra once Dens passes its key"""
+    p, last = page_at(t, presses)
+    dens = controls(t)["dens"]
+    step = M3.STEP_OF[k]
+    if step is None:
+        return EXTRA_KEY[k] < dens
+    in_phrase = last is not None and step in {i for _, i in last["hits"]} and t - last["t"] < 8 * STEP
+    return p.weights[step] < dens + PRESENCE or in_phrase
+
+
 def planet_pos(k, t, spread):
     r = M3.body_radius(k)
     hops = math.floor((t + M3.stagger(k)) / M3.HOP)
@@ -210,11 +225,15 @@ def scene(p, last, t, presses):
     for k in range(len(M3.PLANETS)):                                  # every body: step planets and extras
         step = M3.STEP_OF[k]
         if M3.VARIANT == "no-belt":                                  # Dens decides how many planets are out
-            key = p.weights[step] if step is not None else EXTRA_KEY[k]
-            in_phrase = last is not None and step in {i for _, i in last["hits"]}   # what just played stays out
-            if key >= c["dens"] + PRESENCE and not in_phrase:
+            if not present(k, t, presses):
                 continue
         x, y, rr, p3, hops = planet_pos(k, t, spread)
+        if M3.VARIANT == "no-belt":                                  # a planet that has just arrived grows in
+            age = 0.0
+            while age < GROW and present(k, t - age - 1 / 30, presses):
+                age += 1 / 30
+            if age < GROW:
+                rr *= 0.25 + 0.75 * (age / GROW) ** 0.5
         if step in struck:                                           # drum mode: a struck planet jumps and falls back
             p3 = (p3[0], p3[1] + BOUNCE_UP * math.sin(math.pi * struck[step] / PULSE), p3[2])
             x, y, _, _ = M3.project(p3)
