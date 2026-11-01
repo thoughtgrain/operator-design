@@ -12,7 +12,7 @@ Built to the synth display's rules, which is what this needs from the player pag
   - it hops every HOP seconds along its orbit (Kepler-ish: inner orbits are faster), its scale set by depth, and
     passes behind the sun (drawn before it while on the far half) and off the left edge
   - hops are staggered so only a few planets redraw on any frame
-  - the sun can't turn (no rotation), so its corona breathes: the two ray nodes scale a few percent, slowly
+  - the sun is the corona as picked, static art
   - the ringed planet (the phrase) stays put; its eight segments light for the tones that sounded
 
 Device note: today's player page is 24 on/off dots over static art. This needs the player page to expose bound
@@ -38,8 +38,8 @@ import suns as S
 HERE = Path(__file__).resolve().parent
 path, ell = O.path, O.ell
 SX, SY, SR = S.SX, S.SY, S.SR
-HOP = 0.5                                    # seconds between a planet's hops
-PERIOD_OUTER = 600.0                         # seconds for the outermost orbit; others scale by (rx/rx_max)^1.5
+HOP = 0.75                                   # seconds between a planet's hops
+PERIOD_OUTER = 360.0                         # seconds for the outermost orbit; others scale by (rx/rx_max)^1.5
 WIRE = ("#000000", "#7A7A7A")                # palette: (fill, line) for a wireframe planet
 FILLED = ("#BEBEBE", "#4A4A4A")              # palette: (fill, line) for a planet whose step plays
 
@@ -132,7 +132,7 @@ def art(p, t):
 
     for st in sorted([q for q in states if q[1]], key=lambda q: q[0]):          # far half: behind the sun
         o.append(draw(st))
-    o += corona_nodes(t) + sun()
+    o += S.sun_corona()                                                         # the corona sun as picked, unchanged
     for st in sorted([q for q in states if not q[1]], key=lambda q: q[0]):
         o.append(draw(st))
     return o + S.phrase(p)
