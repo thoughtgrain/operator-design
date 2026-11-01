@@ -143,6 +143,26 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Hairline seams between faces.** Use same-colour strokes (~0.3 px) and check them on the device.
 - **Shade can't be the only signal.** Don't let a control's whole effect be a shade change; put it on geometry too.
 
+## P11 · Instrument stack
+
+**The idea.** When the machine plays something people already know by sight (a drum kit), draw that, simply: the instrument's parts as clean geometric primitives (ellipses for heads and cymbals, bands for shells, short strokes for lugs) in a line drawing, arranged so every part the sound can select has its own place. Theseus stacks its kit into a tower, kick at the base to hi-hat on top (`library/theseus-tower/`).
+
+**Why it works.**
+
+- **Recognition is free.** Nobody needs a legend for which drum is which.
+- **Clean primitives keep it crisp.** Ellipses, bands and short strokes avoid the hand-drawn outlines that failed for toro's bulls.
+- **Lines keep overlaps legible.** A line drawing (black shapes with grey outlines) keeps overlapping parts readable where solid fills merge them.
+
+**Channel fit.** Position for the hit (only the struck part moves, only upward), shade for the hit's brightness (only the struck part fills), count for decay (rings), and the secondary parts for the rest (cymbals rock, a floor that doubles as a clock).
+
+**Budget.** One part moves per hit, so the redraw cost is that part's nodes. Build each part from a handful of nodes (shell, head, rim, lug strip), not one per detail.
+
+**Pitfalls.**
+
+- **Solid fills everywhere.** They make neighbouring parts run together; Brian's note on the first version.
+- **Moving everything.** A hit that wobbles the whole instrument reads as noise; move only what played.
+- **Floors and shadows out of perspective.** Put them in the same projection as the heads.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.

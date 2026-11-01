@@ -7,3 +7,4 @@ To add one, ask for an audit ("this is mine, does it meet the guidelines?"). If 
 | Screen | Machine | Pattern | Verdict | Device | Author |
 | --- | --- | --- | --- | --- | --- |
 | [Toro (stacked blocks)](toro-blocks/) | `toro` synth | P10 Voice field | meets, with notes | pending | Brian Hinton |
+| [Theseus (drum tower)](theseus-tower/) | `theseus` drum voice | P11 Instrument stack | meets, with notes | pending | Brian Hinton |

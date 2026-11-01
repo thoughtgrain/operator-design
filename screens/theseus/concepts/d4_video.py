@@ -23,7 +23,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from blocks import DEFAULTS, G, env, f, frame, lfo_at, path, poly, zone_of  # noqa: E402
+from blocks import DEFAULTS, G, env, f, frame, lfo_at, path, period, poly, zone_of  # noqa: E402
 from drums import cymbal, ellipse, head, shell, sizzle  # noqa: E402
 
 FPS = 30
@@ -141,6 +141,56 @@ def rack_tom(x, top, r, ry, h, e, v):
     return o
 
 
+def floor_clock(cx, cy, rx, ry, n, count, v):
+    """the floor the tower stands on doubles as the hit LFO's clock: Rate sets how many dashes it has (one per hit
+    of the cycle, 32 .. 2), and the dash for the current hit is lit"""
+    o = []
+    step = (count - 1) % n if count else -1
+    gap = 0.18 if n <= 8 else 0.32
+    for k in range(n):
+        a0 = math.pi / 2 + 2 * math.pi * (k + gap / 2) / n          # start at the front, go round
+        a1 = math.pi / 2 + 2 * math.pi * (k + 1 - gap / 2) / n
+        on = k == step
+        if on:                                                   # the current step's slice of the floor, in dark grey
+            o.append(shape([(cx, cy)] + ellipse(cx, cy, rx - 2, ry - 1, max(2, round(36 / n)), a0, a1), G[2], 0.6, fill=G[2]))
+        o.append(shape(ellipse(cx, cy, rx, ry, max(2, round(36 / n)), a0, a1), HOT if on else G[4], 3.2 if on else 2.6, close=False))
+    return o
+
+
+def sparks(v, hits, k_tier, x, top, r, ry, seed=0):
+    """noise: a spray of specks off the head that was just hit (more on the high drums), fading with the hit"""
+    o = []
+    sounding = [(i, t, note) for i, t, note in hits.played()[-8:] if tier_of(zone_of(note, v)) == k_tier]
+    if not sounding:
+        return o
+    i, t, note = sounding[-1]
+    z = zone_of(note, v)
+    e = env(hits.now - t, v, z)
+    if e < 0.05:
+        return o
+    import random as _r
+    rnd = _r.Random(seed + i)
+    for _ in range(round(40 * v["noise"] * (0.5 + 0.5 * z))):
+        a = rnd.uniform(math.pi * 1.05, math.pi * 1.95)
+        d = r * (0.7 + 0.9 * rnd.random()) * (1.25 - 0.5 * e)
+        px, py = x + math.cos(a) * d, top + math.sin(a) * d * 0.55 - 4
+        sz = 1.4 + 1.3 * rnd.random()
+        o.append(shape([(px - sz, py - sz), (px + sz, py - sz), (px + sz, py + sz), (px - sz, py + sz)], G[6], 0.4, fill=G[6]))
+    return o
+
+
+def overtones(x, top, r, ry, e, v):
+    """fm: the struck head throws inharmonic ghost hoops outward, more and further with fm"""
+    o = []
+    extra = max(0.0, (v["fm"] - 0.3) / 0.7)                          # nothing at the default, so the approved look holds
+    if e < 0.05 or extra <= 0:
+        return o
+    for k in range(1 + round(3 * extra)):
+        g = 1 + (0.08 + 0.1 * k) * (0.4 + v["fm"]) * (1.3 - e)
+        o.append(shape(ellipse(x, top - 1.5 * (k + 1), r * g, ry * g, 28), G[5] if k else G[6], 1.0, fill="none"))
+    return o
+
+
 def tilt(pts, cx, cy, deg):
     c, s_ = math.cos(math.radians(deg)), math.sin(math.radians(deg))
     return [(cx + (px - cx) * c - (py - cy) * s_, cy + (px - cx) * s_ + (py - cy) * c) for px, py in pts]
@@ -188,17 +238,19 @@ def tower(v, hits):
     y = 194
     # the floor: centred under the kick's bottom hoop, in the same perspective as every head (ry = 0.26 r)
     kr = TIERS[0][1]
-    o.append(shape(ellipse(240, y + 1, kr + 8, (kr + 8) * 0.26, 40), G[2], 1.0, fill="none"))
+    o += floor_clock(240, y + 1, kr + 8, (kr + 8) * 0.26, period(v), hits.count(), v)
     for k, (z, r, hgt, kind) in enumerate(TIERS):
         ry = r * 0.26
         e = e_t[k]
         if kind == "hat":
             o += hat(240, y - 6, r, e, lift[k] * 1.4, v, rock=(rock_bottom, rock_top))
+            o += sparks(v, hits, k, 240, y - 9 - lift[k] * 1.4, r, r * 0.22, 7)
             break
         top = y - hgt - lift[k]
+        o += overtones(240, top, r, ry, e, v)
         o += DRAW[kind](240, top, r, ry, hgt, e, v)
+        o += sparks(v, hits, k, 240, top, r, ry, 7)
         y = y - hgt - GAP
-    o += sizzle(v, hits, 240, 54, 120, 4)
     return o
 
 
