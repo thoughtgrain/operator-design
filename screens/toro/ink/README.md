@@ -43,3 +43,7 @@ All eight and the note pass `opxy/tools/perceptibility.py`; every frame and the 
 
 - Device checks: the static rect count, the jolt's cost, and whether the node outlines (thin same-colour strokes on pixel staircases) render as crisply as the static rects.
 - `display.cpp`: `gen_ink.py::pose()` is the spec. The old TAURUS atlas files in `screens/toro/` are superseded and get archived once this direction is confirmed.
+
+## Video
+
+`toro-ink.mp4` is a 33 s run at 2× (30 fps): rest, four notes, drive swept up with notes on top, then spread, cutoff, fold, res, shape, noise and aphx each swept 0 → 100 → default, and a closing phrase. Rebuild it with `python3 ink_video.py <tmpdir>` and `ffmpeg -framerate 30 -i <tmpdir>/f%04d.png -vf scale=960:440:flags=neighbor -c:v libx264 -crf 16 -pix_fmt yuv420p ink/toro-ink.mp4`.
