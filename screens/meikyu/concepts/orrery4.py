@@ -5,18 +5,19 @@ beams that follow the sound from step to step.
 Brian's direction after reading what each control did: lines should move to where the sound is going, Scal, Drum
 and velocity all need a visible effect, and with Drum on, Scal should mean something else. So:
 
-  beams     between triggers a comet travels from the previous sounding step's planet to the next, along the orbits
-            (radius and angle round the sun, the short way, lifted slightly), so a phrase's path steps outward in order;
-            steps that don't play are skipped,
-            arriving exactly on the trigger; its tail grades dark to bright and it fades in leaving and out landing,
-            with a ring opening at the target. On the device: three graded mutable outlines plus the ring.
+  links     from each sounding step to the next, a link draws out fast along the orbits (about 0.1 s) and then lets
+            go slowly, fading over 1.2 s in three greys; the last four show (four mutable outlines on the device).
+            A-half phrases step outward planet by planet; B-half phrases step round the belt sector by sector;
+            steps that don't play are skipped.
+  layout    eight planets on one wide spiral arm carry the A half (Pluto, at the edge, is step 7); the asteroid belt,
+            wide by default, is the B half: eight sectors round the sun, rocks lighting with their sector's step.
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
   Crpt      rewrites steps after each phrase, so fills change between phrases; and it jostles the belt every hop
   Scal      normal mode: spreads the orbits and the asteroid belt with them, pentatonic tightest → minor → major →
             chromatic widest (eased)
             drum mode: Scal becomes Kit (kit 1–4): it picks the pad set and spreads the asteroid belt instead
   Drum      on: the belt rises out of the orbit plane (it's the kit now), planets stop filling, and each hit makes its
-            step's rocks jump up and fall back. Off: the belt settles back down and planets fill again.
+            planet, or its sector's rocks, jump up and fall back. Off: the belt settles back down and planets fill again.
   velocity  how far the ring planet's lit segments reach: soft presses short, hard presses long
   a press   the ring segments light for the tones that sounded; the text line names root, half and phrase count;
             Pluto (small, on its own tilted outermost orbit) is the sixteenth step's planet
@@ -59,7 +60,8 @@ EASE = 0.35                                         # seconds for spreads to set
 PULSE = 0.26                                        # seconds a struck rock's bounce lasts
 BOUNCE_UP = 16.0                                    # world units a struck rock jumps
 DRUM_LIFT = 10.0                                    # world units the whole belt rises while Drum is on
-TAIL, LAND = 0.7, 0.22                              # comet tail (fraction of the path); seconds it takes to land
+CONNECT, FADE, LINKS = 0.1, 1.2, 4                   # a link draws out fast, fades slowly; how many show at once
+SECTORS = 8                                         # the belt's sectors: the B half of the register
 
 
 # ---- the score ------------------------------------------------------------------------------------------------------------
@@ -181,24 +183,29 @@ def scene(p, last, t, presses):
     for runs in orbit_lines:                                         # orbit lines, split near/far of the sun
         for is_front, pts in runs:
             (front if is_front else back).append((1e9, path(pts, "#3E3E3E" if is_front else "#1E1E1E", 0.9 if is_front else 0.8)))
-    pos = {}
-    phrase_on = last is not None and t - last["t"] < 8 * STEP
-    for k in range(len(M3.PLANETS)):                                  # sixteen step planets (Pluto is step 7)
-        x, y, rr, p3, hops = planet_pos(k, t, spread)
-        pos[k] = p3                                                  # world position: comets travel in 3D
-        lit = p.step_lit(k) and not c["drum"]                        # Pluto (k = 15) carries the sixteenth step
-        fill, line = R2.FILLED if lit else R2.WIRE
-        svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
-        (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
     struck = {}                                                      # drum mode: step → seconds since its hit
     if c["drum"] and last:
         for th, i in last["hits"]:
             if 0 <= t - th < PULSE:
                 struck[i] = t - th
     mid = (M3.BELT[0] + M3.BELT[1]) / 2
-    for n, (seed, rho, h, phase, direction, size, step) in enumerate(M3.ROCKS):
+    pos = {}
+    for k in range(len(M3.PLANETS)):                                  # the A half: eight planets, Pluto last
+        x, y, rr, p3, hops = planet_pos(k, t, spread)
+        if k in struck:                                              # drum mode: a struck planet jumps and falls back
+            p3 = (p3[0], p3[1] + BOUNCE_UP * math.sin(math.pi * struck[k] / PULSE), p3[2])
+            x, y, _, _ = M3.project(p3)
+        pos[k] = p3                                                  # world position: links travel in 3D
+        lit = (p.step_lit(k) and not c["drum"]) or k in struck
+        fill, line = R2.FILLED if lit else R2.WIRE
+        svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
+        (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
+    for j in range(SECTORS):                                         # the B half: eight sectors of the belt
+        pos[8 + j] = M3.orbit_point(mid * belt * spread, 2 * math.pi * (j + 0.5) / SECTORS, lift)
+    for n, (seed, rho, h, phase, direction, size, _) in enumerate(M3.ROCKS):
         hops = math.floor((t + M3.stagger(n + 8)) / M3.HOP)
         a = 2 * math.pi * ((phase + direction * hops * M3.HOP / M3.ROCK_PERIOD) % 1.0)
+        step = 8 + int((a % (2 * math.pi)) / (2 * math.pi / SECTORS)) % SECTORS   # which B step's sector it's in
         jr = random.Random(seed * 7919 + hops)
         k = M3.JOSTLE * p.corrupt
         rr_ = (mid + (rho - mid) * belt) * spread                    # the belt scales out with the orbits (Scal), plus the kit spread in drum mode
@@ -223,47 +230,33 @@ def scene(p, last, t, presses):
 
 
 def beams(t, presses, pos):
-    """lines that follow the sound: between consecutive hits, a comet travels a curved path from the previous hit's
-    planet to this one, leaving as the previous tone sounds and arriving exactly as this one does. Its tail runs
-    dark to bright toward the head, and the whole comet fades in as it leaves and out as it arrives. On the device
-    it's three graded mutable outlines plus the landing ring: four paths."""
-    hits = []
+    """links that follow the sound: from each sounding step to the next. A link connects fast (it draws out to its
+    target in CONNECT s) and lets go slowly (the whole arc stays and fades over FADE s in three greys). Only the last
+    LINKS links show, so on the device they're four mutable outlines. The path follows the orbits: radius and angle
+    round the sun interpolated the short way, lifted slightly, then projected."""
+    links = []                                                       # links stay within a phrase
     for pr in presses:
-        hits += pr["hits"]
+        links += [(t0, i0, t1, i1) for (t0, i0), (t1, i1) in zip(pr["hits"], pr["hits"][1:]) if t0 <= t]
     o = []
-    for (t0, i0), (t1, i1) in zip(hits, hits[1:]):
-        if t1 - t0 > 0.6 or not (t0 <= t <= t1 + LAND):
+    for t0, i0, t1, i1 in links[-LINKS:]:
+        age = t - t0
+        if age > CONNECT + FADE:
             continue
-        # the path follows the orbits: radius and angle round the sun are interpolated in the world (the short way
-        # round), with a gentle lift out of the plane, then projected, so a comet curves round the sun from one
-        # planet to the next instead of cutting across the screen
         p0, p1 = pos[i0], pos[i1]
         r0, r1 = math.hypot(p0[0], p0[2]), math.hypot(p1[0], p1[2])
         a0, a1 = math.atan2(-p0[2], p0[0]), math.atan2(-p1[2], p1[0])
         da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
         lift = 10.0 + 0.08 * abs(r1 - r0)
-
-        def at(u):
+        reach = min(1.0, age / CONNECT)                              # fast connect
+        fade = 1.0 if age < CONNECT else 1.0 - (age - CONNECT) / FADE   # slow disconnect
+        level = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A   # three greys on the way out
+        pts = []
+        for q in range(25):
+            u = reach * q / 24
             r, a = r0 + (r1 - r0) * u, a0 + da * u
-            x, y, _, _ = M3.project(M3.orbit_point(r, a, lift * math.sin(math.pi * u)))
-            return x, y
-        x1, y1 = at(1.0)
-
-        head = min(1.0, (t - t0) / max(1e-3, t1 - t0))
-        landed = max(0.0, t - t1) / LAND                            # 0..1 after arrival: the tail draws into the target
-        tail = max(0.0, head - TAIL) + landed * TAIL
-        fade = min(1.0, head / 0.3) * (1.0 - landed)
-        if head - tail > 0.01 and fade > 0.02:
-            for g in range(3):                                      # three graded pieces, dim tail → bright head
-                u0 = tail + (head - tail) * g / 3
-                u1 = tail + (head - tail) * (g + 1) / 3
-                level = fade * (0.35 + 0.65 * (g + 1) / 3)
-                v = round(0x30 + (0xF0 - 0x30) * level)
-                o.append(path([at(u0 + (u1 - u0) * k / 6) for k in range(7)], f"#{v:02X}{v:02X}{v:02X}", 1.0 + 0.8 * g))
-        if 0 <= t - t1 < LAND:                                      # the landing: a ring opening round the target
-            age = (t - t1) / LAND
-            v = round(0x40 + (0xF0 - 0x40) * (1 - age))
-            o.append(path(M3_ring(x1, y1, 4 + 9 * age), f"#{v:02X}{v:02X}{v:02X}", 0.9, close=True))
+            x, y, _, _ = M3.project(M3.orbit_point(r, a, (p0[1] + (p1[1] - p0[1]) * u) + lift * math.sin(math.pi * u)))
+            pts.append((x, y))
+        o.append(path(pts, f"#{level:02X}{level:02X}{level:02X}", 1.4 if level == 0xF0 else 1.1))
     return o
 
 

@@ -47,21 +47,18 @@ HOP, PERIOD = 0.75, 120.0
 DEPTH_CUE = 0.0                                  # extra powers of (sun depth / depth) on body sizes (0: true perspective)
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
-ORBIT_RADII = [92, 128, 198, 300, 340, 380, 414, 446]       # three inside the belt, four outside, Pluto's at the edge
-# the sixteen steps, laid out so a phrase moves outward in order. Each step is (orbit radius, planet radius, arm):
-#   arm 0, the A half (steps 0-7): one planet per orbit from the innermost out to Pluto
-#   arms 1 and 2, the B half (steps 8-15): one planet per outer orbit each, two more sweeps across the outer system
-# Planets on one arm sit at nearly the same angle, twisted a little per orbit, so the arms are gentle spirals and the
-# sound's path steps outward along them. The outer orbits carry a small, a medium and a large planet across the arms.
-STEPS = [(92, 4.0, 0), (128, 6.5, 0), (198, 8.0, 0), (300, 4.0, 0), (340, 9.0, 0), (380, 13.0, 0), (414, 8.0, 0),
-         (446, 3.5, 0),                                                            # Pluto: small, outermost, in the plane
-         (300, 8.0, 1), (340, 4.5, 1), (380, 5.0, 1), (414, 14.5, 1),
-         (300, 12.0, 2), (340, 13.5, 2), (380, 8.5, 2), (414, 4.0, 2)]
+ORBIT_RADII = [86, 138, 198, 300, 340, 380, 414, 446]       # three inside the belt, four outside, Pluto's at the edge
+# eight planets, one per orbit, carrying the A half of the register (steps 0-7) in outward order; Pluto is step 7.
+# They sit on one spiral arm going once round the sun (45° further round per orbit outward), so they're spread
+# evenly in angle and a phrase steps outward planet by planet. Sizes mix small, medium and large. The B half (steps 8-15) is the asteroid belt,
+# eight sectors round the sun.
+STEPS = [(86, 4.0, 0), (138, 7.0, 0), (198, 9.0, 0), (300, 12.0, 0), (340, 6.0, 0), (380, 13.5, 0), (414, 8.0, 0),
+         (446, 3.5, 0)]
 PLANETS = [(rho, r) for rho, r, _ in STEPS]                                        # planet k carries step k
 ARMS = [arm for _, _, arm in STEPS]
 PLUTO_STEP = 7
-BELT = (225, 275, 9.0)                           # inner and outer radius, half thickness
-N_ROCKS, JOSTLE = 90, 6.0
+BELT = (214, 288, 14.0)                          # inner and outer radius, half thickness: wide by default
+N_ROCKS, JOSTLE = 76, 6.0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
 CAM = (CAM_D * math.cos(math.radians(CAM_EL)) * math.cos(math.radians(CAM_AZ)), CAM_D * math.sin(math.radians(CAM_EL)),
        -CAM_D * math.cos(math.radians(CAM_EL)) * math.sin(math.radians(CAM_AZ)))
@@ -197,19 +194,16 @@ def arm_phases(theta, twist):
     return [(theta[arm] + twist * ORBIT_RADII.index(rho)) % 1.0 for (rho, _), arm in zip(PLANETS, ARMS)]
 
 
-def choose_phases(tries=6000):
-    """three arms roughly a third of a turn apart and a gentle twist, searched so no two planets come within GAP"""
-    rnd = random.Random(11)
-    best, best_c = None, -1e9
-    for _ in range(tries):
-        t0 = rnd.random()
-        theta = [t0, t0 + 1 / 3 + rnd.uniform(-0.06, 0.06), t0 + 2 / 3 + rnd.uniform(-0.06, 0.06)]
-        twist = rnd.uniform(-0.13, 0.13)
-        ph = arm_phases(theta, twist)
-        c = clearance(ph, 120)
-        if c > best_c:
-            best, best_c = ph, c
-    return best, clearance(best, 480)
+TWIST = -0.125                                   # turns per orbit outward: 45°, so the eight planets go once round
+
+
+def choose_phases(steps=200):
+    """one spiral arm going once round the sun: each planet one orbit further out and 45° further round, so the
+    eight are spread evenly in angle (some are always on screen) and every link is one orbit out and 45° round.
+    Only the arm's starting angle is searched, for the widest spacing."""
+    best = max((clearance(arm_phases([b / steps], TWIST), 120), b / steps) for b in range(steps))
+    ph = arm_phases([best[1]], TWIST)
+    return ph, clearance(ph, 480)
 
 
 PHASES, CLEAR = choose_phases()
