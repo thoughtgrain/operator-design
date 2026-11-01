@@ -47,12 +47,16 @@ HOP, PERIOD = 0.75, 120.0
 DEPTH_CUE = 0.0                                  # extra powers of (sun depth / depth) on body sizes (0: true perspective)
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
-ORBIT_RADII = [138, 198, 300, 340, 380, 414, 446]            # two inside the belt, five outside (Pluto's at the edge)
-# eight planets carrying the A half of the register (steps 0-7). Two orbits carry two planets each, opposite-ish; the
-# rest one. Starting angles are searched for the widest spacing, then steps are numbered round the sun in angle
-# order, so a phrase's links sweep round the system in one direction. Sizes mix small, medium and large.
-BODIES = [(138, 7.0), (198, 9.0), (300, 12.0), (300, 5.0), (340, 6.0), (380, 13.5), (380, 4.5), (446, 3.5)]   # last: Pluto
-PLANETS = list(BODIES)                           # reordered by angle once the phases are chosen (below)
+ORBIT_RADII = [138, 198, 320, 380, 440]                      # two inside the belt, three outside (Pluto's on the last)
+# sixteen planets, three or four to an orbit spaced evenly round it; steps are numbered orbit by orbit, from the inside
+# out, going round each orbit in its direction of travel. A phrase's links run along an orbit from planet to planet;
+# when the sequence moves on to the next orbit, no line crosses: that planet fills and the next link starts from it.
+ORBIT_PLANETS = {138: [5.0, 8.0, 4.0], 198: [9.0, 4.5, 7.0], 320: [12.0, 5.0, 9.0], 380: [14.0, 6.0, 10.0],
+                 440: [8.0, 3.5, 11.0, 5.0]}                       # 440's 3.5 is Pluto
+BODIES = [(rho, r) for rho in ORBIT_RADII for r in ORBIT_PLANETS[rho]]
+ORBIT_OF = [ORBIT_RADII.index(rho) for rho, _ in BODIES]
+SLOT = [(i, len(ORBIT_PLANETS[rho])) for rho in ORBIT_RADII for i in range(len(ORBIT_PLANETS[rho]))]
+PLANETS = list(BODIES)                           # planet k carries step k
 BELT = (214, 288, 14.0)                          # inner and outer radius, half thickness: wide by default
 N_ROCKS, JOSTLE = 76, 6.0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
@@ -185,19 +189,18 @@ def right_fill(phases, samples=60):
     return n / samples
 
 
-def choose_phases(tries=8000):
-    """free starting angles for the eight planets, searched for the widest spacing; planets sharing an orbit start
-    roughly opposite so they never crowd each other"""
+def orbit_phases(bases):
+    """every planet's starting point: its orbit's base angle plus its even slot round the orbit. Slots run backwards
+    in angle so that, as the planets orbit, step k+1 is the next planet coming round in the direction of travel."""
+    return [(bases[o] - i / n) % 1.0 for o, (i, n) in zip(ORBIT_OF, SLOT)]
+
+
+def choose_phases(tries=4000):
+    """one base angle per orbit, searched for the widest spacing between planets on neighbouring orbits"""
     rnd = random.Random(11)
     best, best_c = None, -1e9
     for _ in range(tries):
-        ph, seen = [], {}
-        for rho, _ in PLANETS:
-            if rho in seen:
-                ph.append((seen[rho] + 0.5 + rnd.uniform(-0.12, 0.12)) % 1.0)
-            else:
-                seen[rho] = rnd.random()
-                ph.append(seen[rho])
+        ph = orbit_phases([rnd.random() for _ in ORBIT_RADII])
         c = clearance(ph, 90)
         if c > best_c:
             best, best_c = ph, c
@@ -205,12 +208,7 @@ def choose_phases(tries=8000):
 
 
 PHASES, CLEAR = choose_phases()
-# number the steps round the sun in angle order, starting just past the sun's far side, so step k+1 is always the
-# next planet round (they all orbit at the same rate, so the order holds)
-_order = sorted(range(len(PLANETS)), key=lambda k: (PHASES[k] - 0.3) % 1.0)
-PLANETS = [PLANETS[k] for k in _order]
-PHASES = [PHASES[k] for k in _order]
-PLUTO_STEP = next(k for k, (rho, _) in enumerate(PLANETS) if rho == 446)
+PLUTO_STEP = next(k for k, (rho, r) in enumerate(PLANETS) if rho == 440 and r == 3.5)
 
 
 def rocks():

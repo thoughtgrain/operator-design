@@ -5,12 +5,12 @@ beams that follow the sound from step to step.
 Brian's direction after reading what each control did: lines should move to where the sound is going, Scal, Drum
 and velocity all need a visible effect, and with Drum on, Scal should mean something else. So:
 
-  links     from each sounding step to the next, a link draws out fast along the orbits (about 0.1 s) and then lets
-            go slowly, fading over 1.2 s in three greys; the last four show (four mutable outlines on the device).
-            A-half phrases step outward planet by planet; B-half phrases step round the belt sector by sector;
-            steps that don't play are skipped.
-  layout    eight planets on one wide spiral arm carry the A half (Pluto, at the edge, is step 7); the asteroid belt,
-            wide by default, is the B half: eight sectors round the sun, rocks lighting with their sector's step.
+  links     sixteen planets, three or four to each of five orbits, one per step, numbered orbit by orbit from the
+            inside out. A link runs along an orbit from a sounding planet to the next sounding planet on that orbit:
+            it draws out fast (about 0.1 s) and fades slowly (1.2 s, three greys); the last four show. When the
+            sequence moves on to the next orbit no line crosses: that planet flashes as it fills and the next link
+            starts from it. Every planet flashes bright while its tone sounds.
+  belt      the asteroid belt, wide by default, rocks lighting with their steps
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
   Crpt      rewrites steps after each phrase, so fills change between phrases; and it jostles the belt every hop
   Scal      normal mode: spreads the orbits and the asteroid belt with them, pentatonic tightest → minor → major →
@@ -61,7 +61,7 @@ PULSE = 0.26                                        # seconds a struck rock's bo
 BOUNCE_UP = 16.0                                    # world units a struck rock jumps
 DRUM_LIFT = 10.0                                    # world units the whole belt rises while Drum is on
 CONNECT, FADE, LINKS = 0.1, 1.2, 4                   # a link draws out fast, fades slowly; how many show at once
-SECTORS = 8                                         # the belt's sectors: the B half of the register
+FLASH = 0.15                                        # seconds a planet flashes when its tone sounds
 
 
 # ---- the score ------------------------------------------------------------------------------------------------------------
@@ -183,6 +183,11 @@ def scene(p, last, t, presses):
     for runs in orbit_lines:                                         # orbit lines, split near/far of the sun
         for is_front, pts in runs:
             (front if is_front else back).append((1e9, path(pts, "#3E3E3E" if is_front else "#1E1E1E", 0.9 if is_front else 0.8)))
+    flashed = set()                                                  # steps whose tone is sounding right now
+    if last:
+        for th, i in last["hits"]:
+            if 0 <= t - th < FLASH:
+                flashed.add(i)
     struck = {}                                                      # drum mode: step → seconds since its hit
     if c["drum"] and last:
         for th, i in last["hits"]:
@@ -190,7 +195,7 @@ def scene(p, last, t, presses):
                 struck[i] = t - th
     mid = (M3.BELT[0] + M3.BELT[1]) / 2
     pos = {}
-    for k in range(len(M3.PLANETS)):                                  # the A half: eight planets, Pluto last
+    for k in range(len(M3.PLANETS)):                                  # sixteen planets, one per step
         x, y, rr, p3, hops = planet_pos(k, t, spread)
         if k in struck:                                              # drum mode: a struck planet jumps and falls back
             p3 = (p3[0], p3[1] + BOUNCE_UP * math.sin(math.pi * struck[k] / PULSE), p3[2])
@@ -198,14 +203,13 @@ def scene(p, last, t, presses):
         pos[k] = p3                                                  # world position: links travel in 3D
         lit = (p.step_lit(k) and not c["drum"]) or k in struck
         fill, line = R2.FILLED if lit else R2.WIRE
+        if k in flashed:                                             # its tone sounding now: a bright fill
+            fill, line = ("#F0F0F0", "#7A7A7A")
         svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
         (front if M3.nearer_than_sun(p3) else back).append((math.dist(M3.CAM, p3), svg))
-    for j in range(SECTORS):                                         # the B half: eight sectors of the belt
-        pos[8 + j] = M3.orbit_point(mid * belt * spread, 2 * math.pi * (j + 0.5) / SECTORS, lift)
-    for n, (seed, rho, h, phase, direction, size, _) in enumerate(M3.ROCKS):
+    for n, (seed, rho, h, phase, direction, size, step) in enumerate(M3.ROCKS):
         hops = math.floor((t + M3.stagger(n + 8)) / M3.HOP)
         a = 2 * math.pi * ((phase + direction * hops * M3.HOP / M3.ROCK_PERIOD) % 1.0)
-        step = 8 + int((a % (2 * math.pi)) / (2 * math.pi / SECTORS)) % SECTORS   # which B step's sector it's in
         jr = random.Random(seed * 7919 + hops)
         k = M3.JOSTLE * p.corrupt
         rr_ = (mid + (rho - mid) * belt) * spread                    # the belt scales out with the orbits (Scal), plus the kit spread in drum mode
@@ -238,6 +242,7 @@ def beams(t, presses, pos):
     for pr in presses:
         links += [(t0, i0, t1, i1) for (t0, i0), (t1, i1) in zip(pr["hits"], pr["hits"][1:]) if t0 <= t]
     o = []
+    links = [lk for lk in links if M3.ORBIT_OF[lk[1]] == M3.ORBIT_OF[lk[3]]]   # a move to the next orbit draws no line
     for t0, i0, t1, i1 in links[-LINKS:]:
         age = t - t0
         if age > CONNECT + FADE:
@@ -245,14 +250,14 @@ def beams(t, presses, pos):
         p0, p1 = pos[i0], pos[i1]
         r0, r1 = math.hypot(p0[0], p0[2]), math.hypot(p1[0], p1[2])
         a0, a1 = math.atan2(-p0[2], p0[0]), math.atan2(-p1[2], p1[0])
-        da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
-        lift = 10.0 + 0.08 * abs(r1 - r0)
+        da = -((a0 - a1) % (2 * math.pi))                            # along the orbit, back toward the next step
+        lift = 6.0
         reach = min(1.0, age / CONNECT)                              # fast connect
         fade = 1.0 if age < CONNECT else 1.0 - (age - CONNECT) / FADE   # slow disconnect
         level = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A   # three greys on the way out
         pts = []
-        for q in range(25):
-            u = reach * q / 24
+        for q in range(48):                                         # ≤ 64 points: one mutable outline
+            u = reach * q / 47
             r, a = r0 + (r1 - r0) * u, a0 + da * u
             x, y, _, _ = M3.project(M3.orbit_point(r, a, (p0[1] + (p1[1] - p0[1]) * u) + lift * math.sin(math.pi * u)))
             pts.append((x, y))
