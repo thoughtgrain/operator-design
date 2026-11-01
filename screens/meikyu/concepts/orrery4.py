@@ -5,7 +5,9 @@ beams that follow the sound from step to step.
 Brian's direction after reading what each control did: lines should move to where the sound is going, Scal, Drum
 and velocity all need a visible effect, and with Drum on, Scal should mean something else. So:
 
-  beams     between triggers a comet travels a curved path from the previous sounding step's planet to the next,
+  beams     between triggers a comet travels from the previous sounding step's planet to the next, along the orbits
+            (radius and angle round the sun, the short way, lifted slightly), so a phrase's path steps outward in order;
+            steps that don't play are skipped,
             arriving exactly on the trigger; its tail grades dark to bright and it fades in leaving and out landing,
             with a ring opening at the target. On the device: three graded mutable outlines plus the ring.
   Dens      which steps play: their planets fill (normal mode) and their rocks fill
@@ -176,15 +178,14 @@ def scene(p, last, t, presses):
     lift = eased(t, lambda tt: DRUM_LIFT if controls(tt)["drum"] else 0.0)    # the belt rises when it becomes the kit
     back, front = [], []
     orbit_lines = [M3.orbit_segments(rho * spread) for rho in M3.ORBIT_RADII]
-    orbit_lines.append(M3.orbit_segments(0, 120, lambda a: M3.pluto_point(a, spread)))
     for runs in orbit_lines:                                         # orbit lines, split near/far of the sun
         for is_front, pts in runs:
             (front if is_front else back).append((1e9, path(pts, "#3E3E3E" if is_front else "#1E1E1E", 0.9 if is_front else 0.8)))
     pos = {}
     phrase_on = last is not None and t - last["t"] < 8 * STEP
-    for k in range(len(M3.PLANETS) + 1):                              # sixteen step planets, then Pluto
+    for k in range(len(M3.PLANETS)):                                  # sixteen step planets (Pluto is step 7)
         x, y, rr, p3, hops = planet_pos(k, t, spread)
-        pos[k] = (x, y)
+        pos[k] = p3                                                  # world position: comets travel in 3D
         lit = p.step_lit(k) and not c["drum"]                        # Pluto (k = 15) carries the sixteenth step
         fill, line = R2.FILLED if lit else R2.WIRE
         svg = R2.node(M3.GLYPHS[k][hops % M3.SPINS], x, y, rr / 10, fill, line, 0.9)
@@ -233,14 +234,20 @@ def beams(t, presses, pos):
     for (t0, i0), (t1, i1) in zip(hits, hits[1:]):
         if t1 - t0 > 0.6 or not (t0 <= t <= t1 + LAND):
             continue
-        (x0, y0), (x1, y1) = pos[i0], pos[i1]
-        dx, dy = x1 - x0, y1 - y0
-        L = math.hypot(dx, dy) or 1.0
-        bend = 0.32 * L                                             # arc up and over, like a thrown line
-        cx, cy = (x0 + x1) / 2 + dy / L * bend * 0.3, (y0 + y1) / 2 - abs(dx) / L * bend - 6
+        # the path follows the orbits: radius and angle round the sun are interpolated in the world (the short way
+        # round), with a gentle lift out of the plane, then projected, so a comet curves round the sun from one
+        # planet to the next instead of cutting across the screen
+        p0, p1 = pos[i0], pos[i1]
+        r0, r1 = math.hypot(p0[0], p0[2]), math.hypot(p1[0], p1[2])
+        a0, a1 = math.atan2(-p0[2], p0[0]), math.atan2(-p1[2], p1[0])
+        da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
+        lift = 10.0 + 0.08 * abs(r1 - r0)
 
         def at(u):
-            return ((1 - u) ** 2 * x0 + 2 * (1 - u) * u * cx + u * u * x1, (1 - u) ** 2 * y0 + 2 * (1 - u) * u * cy + u * u * y1)
+            r, a = r0 + (r1 - r0) * u, a0 + da * u
+            x, y, _, _ = M3.project(M3.orbit_point(r, a, lift * math.sin(math.pi * u)))
+            return x, y
+        x1, y1 = at(1.0)
 
         head = min(1.0, (t - t0) / max(1e-3, t1 - t0))
         landed = max(0.0, t - t1) / LAND                            # 0..1 after arrival: the tail draws into the target

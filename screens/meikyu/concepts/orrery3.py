@@ -47,24 +47,26 @@ HOP, PERIOD = 0.75, 120.0
 DEPTH_CUE = 0.0                                  # extra powers of (sun depth / depth) on body sizes (0: true perspective)
 GAP = 4.0
 # eight planets: (orbit radius, planet radius) in world units, four inside the belt and four outside
-ORBIT_RADII = [92, 128, 198, 300, 340, 380, 414]            # three inside the belt, four outside
-# sixteen planets, two per orbit on roughly opposite sides: (orbit radius, planet radius); planet k carries step k
-# the inner four orbits carry one small or medium planet each; the outer four carry three each, a small, a medium and
-# a large spaced a third of an orbit apart, so the weight sits outside the belt and the right side stays full
-_SIZES = {92: [4.0], 128: [6.5], 198: [8.0],
-          300: [4.0, 8.0, 12.0], 340: [9.0, 4.5, 13.5], 380: [13.0, 5.0, 8.5], 414: [8.0, 14.5, 4.0]}
-PLANETS = [(rho, r) for rho in ORBIT_RADII for r in _SIZES[rho]]                 # sixteen; planet k carries step k
-SLOTS = [(i, len(_SIZES[rho])) for rho in ORBIT_RADII for i in range(len(_SIZES[rho]))]
-# Pluto: small, on its own outermost orbit, tilted out of the plane and reaching the right edge. The real tilt is
-# 17°, but at that angle its path can't avoid touching other planets on screen; 8° is the steepest that stays clear.
-PLUTO = dict(r=3.5, a=428.0, e=0.05, incl=math.radians(8))
+ORBIT_RADII = [92, 128, 198, 300, 340, 380, 414, 446]       # three inside the belt, four outside, Pluto's at the edge
+# the sixteen steps, laid out so a phrase moves outward in order. Each step is (orbit radius, planet radius, arm):
+#   arm 0, the A half (steps 0-7): one planet per orbit from the innermost out to Pluto
+#   arms 1 and 2, the B half (steps 8-15): one planet per outer orbit each, two more sweeps across the outer system
+# Planets on one arm sit at nearly the same angle, twisted a little per orbit, so the arms are gentle spirals and the
+# sound's path steps outward along them. The outer orbits carry a small, a medium and a large planet across the arms.
+STEPS = [(92, 4.0, 0), (128, 6.5, 0), (198, 8.0, 0), (300, 4.0, 0), (340, 9.0, 0), (380, 13.0, 0), (414, 8.0, 0),
+         (446, 3.5, 0),                                                            # Pluto: small, outermost, in the plane
+         (300, 8.0, 1), (340, 4.5, 1), (380, 5.0, 1), (414, 14.5, 1),
+         (300, 12.0, 2), (340, 13.5, 2), (380, 8.5, 2), (414, 4.0, 2)]
+PLANETS = [(rho, r) for rho, r, _ in STEPS]                                        # planet k carries step k
+ARMS = [arm for _, _, arm in STEPS]
+PLUTO_STEP = 7
 BELT = (225, 275, 9.0)                           # inner and outer radius, half thickness
 N_ROCKS, JOSTLE = 90, 6.0
 CAM_AZ, CAM_EL, CAM_D = 350.0, 12.0, 2400.0      # camera: azimuth round the sun (0 = +x), height angle, distance
 CAM = (CAM_D * math.cos(math.radians(CAM_EL)) * math.cos(math.radians(CAM_AZ)), CAM_D * math.sin(math.radians(CAM_EL)),
        -CAM_D * math.cos(math.radians(CAM_EL)) * math.sin(math.radians(CAM_AZ)))
 LOOK = (0.0, 0.0, 0.0)
-RING = (446, 200, 26)                            # the ringed phrase planet (screen px), kept as before
+RING = (452, 206, 26)                            # the ringed phrase planet (screen px), kept as before
 
 
 # ---- camera ---------------------------------------------------------------------------------------------------------------
@@ -146,23 +148,12 @@ def on_screen(x, y, r):
     return x + r > 0 and x - r < 480 and y + r > 20 and y - r < 220
 
 
-def pluto_point(a, scale=1.0):
-    """Pluto's orbit: an ellipse with the sun at a focus, aphelion out toward the right of the screen (this camera's
-    right is world +z), its near/far axis tilted out of the ecliptic by the inclination"""
-    A_, e = PLUTO["a"] * scale, PLUTO["e"]
-    b = A_ * math.sqrt(1 - e * e)
-    across = A_ * math.cos(a) + A_ * e                                  # along the screen: aphelion (a = 0) right
-    depth = b * math.sin(a)                                             # toward / away from the camera
-    ci, si = math.cos(PLUTO["incl"]), math.sin(PLUTO["incl"])
-    return (depth * ci, depth * si, across)
-
-
 def body_point(k, a, scale=1.0):
-    return pluto_point(a, scale) if k == len(PLANETS) else orbit_point(PLANETS[k][0] * scale, a)
+    return orbit_point(PLANETS[k][0] * scale, a)
 
 
 def body_radius(k):
-    return PLUTO["r"] if k == len(PLANETS) else PLANETS[k][1]
+    return PLANETS[k][1]
 
 
 def planet_at(k, u):
@@ -201,30 +192,27 @@ def right_fill(phases, samples=60):
     return n / samples
 
 
-def choose_phases(tries=4000):
-    """keep every pair of planets at least GAP apart, and among arrangements that do, fill the right side most"""
+def arm_phases(theta, twist):
+    """each planet's starting point: its arm's angle plus a small twist per orbit outward (turns)"""
+    return [(theta[arm] + twist * ORBIT_RADII.index(rho)) % 1.0 for (rho, _), arm in zip(PLANETS, ARMS)]
+
+
+def choose_phases(tries=6000):
+    """three arms roughly a third of a turn apart and a gentle twist, searched so no two planets come within GAP"""
     rnd = random.Random(11)
-    best, best_score = None, -1e9
+    best, best_c = None, -1e9
     for _ in range(tries):
-        base = {rho: rnd.random() for rho in ORBIT_RADII}                # planets sharing an orbit are spread evenly
-        ph = [(base[rho] + i / n + (rnd.uniform(-0.1, 0.1) if n > 1 else 0)) % 1.0
-              for (rho, _), (i, n) in zip(PLANETS, SLOTS)] + [rnd.random()]   # + Pluto
+        t0 = rnd.random()
+        theta = [t0, t0 + 1 / 3 + rnd.uniform(-0.06, 0.06), t0 + 2 / 3 + rnd.uniform(-0.06, 0.06)]
+        twist = rnd.uniform(-0.13, 0.13)
+        ph = arm_phases(theta, twist)
         c = clearance(ph, 120)
-        score = c - 100 if c < GAP + 0.5 else right_fill(ph)
-        if score > best_score:
-            best, best_score = ph, score
-    return best, clearance(best)
-
-
-def place_pluto(phases, steps=240):
-    """with the others fixed, slide Pluto's starting point round its orbit to where it stays clearest of them"""
-    best = max(((clearance(phases[:-1] + [k / steps], 480), k / steps) for k in range(steps)))
-    return phases[:-1] + [best[1]]
+        if c > best_c:
+            best, best_c = ph, c
+    return best, clearance(best, 480)
 
 
 PHASES, CLEAR = choose_phases()
-PHASES = place_pluto(PHASES)
-CLEAR = clearance(PHASES, 480)
 
 
 def rocks():
@@ -271,9 +259,9 @@ def orbit_segments(rho, n=96, point=None):
     return runs
 
 
-ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII] + [orbit_segments(0, 120, pluto_point)]
+ORBITS = [orbit_segments(rho) for rho in ORBIT_RADII]
 SPINS = 3                                        # spin variants per planet: meridians step 30°, looping seamlessly
-GLYPHS = {k: [R2.planet_glyph(s * 30 / 22.5, r=10.0) for s in range(SPINS)] for k in range(len(PLANETS) + 1)}
+GLYPHS = {k: [R2.planet_glyph(s * 30 / 22.5, r=10.0) for s in range(SPINS)] for k in range(len(PLANETS))}
 TUMBLE_MIN = 3.0                                 # rocks smaller than this don't tumble: the turn isn't visible
 
 
