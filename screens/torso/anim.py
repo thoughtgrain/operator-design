@@ -25,6 +25,7 @@ from PIL import Image
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[0] / "meikyu" / "concepts"))
 import clean as C                        # noqa: E402
+import round3 as R3                      # noqa: E402
 import planets_av as A                   # noqa: E402
 
 STEP = A.STEP
@@ -106,13 +107,12 @@ def frame(t):
     elif pg == 2:
         lit = sounding[0][1] if sounding else -1
         past = [n[1] for n in NOTES if n[0] <= t]
-        built = C.m2(st["repeats"], round(st["time"], 1), st["voices"], st["range"], step=lit, on=on,
-                     last=past[-1] if past else None)
+        built = R3.m2a(st["repeats"], st["time"], st["voices"], st["range"], step=lit, on=on)
     elif pg == 3:
-        built = C.m3(st["velocity"], st["sustain"], st["accent"], st["swing"], head=step if step in on else -1, on=on)
+        built = R3.m3b(st["velocity"], st["sustain"], st["accent"], st["swing"], head=step if step in on else -1, on=on)
     else:
         played = {n[2] - 48 for n in sounding if 0 <= n[2] - 48 < 24}
-        built = C.m4(st["root"], st["scale"], 3, st["random"], played=played)
+        built = R3.m4(st["root"], st["scale"], 3, st["random"], played=played)
     return C.frame(*built)
 
 
@@ -123,7 +123,7 @@ def main():
     wav = tmp / "anim.wav"
     A.sound(wav, [(t, t + g, p, v) for t, _, p, v, g in NOTES])
     n = int(LENGTH * A.FPS)
-    keep = {int(tt * A.FPS) for tt in (7.0, 9.9, 16.5, 19.5, 24.0, 27.8)}
+    keep = {int(tt * A.FPS) for tt in (9.9, 16.5, 19.5, 27.8, 29.6, 34.5)}
 
     def render(i):
         svg = tmp / f"f{i:04d}.svg"

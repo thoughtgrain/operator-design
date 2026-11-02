@@ -46,12 +46,12 @@ def draw(items):
 
 
 # ---- M2a echo field -----------------------------------------------------------------------------------------------------
-def m2a(repeats=3, time=1.0, voices=3, rng=1.0, step=4):
+def m2a(repeats=3, time=1.0, voices=3, rng=1.0, step=4, on=None):
     cam = Cam(el=44, d=520, focal=600, target=(0.0, 0.0, 38.0), screen=(240.0, 132.0))
     dx = 21.0
     items, o = [], []
     zmax = 0.0
-    for s in sorted(ON):
+    for s in sorted(on if on is not None else ON):
         x = (s - 7.5) * dx
         h = 8 + 22 * phrase(s, rng)
         lh = (h - 1.8 * (voices - 1)) / voices
@@ -67,7 +67,8 @@ def m2a(repeats=3, time=1.0, voices=3, rng=1.0, step=4):
             z += 8 + gap
             gap *= 0.75
     o.append(cam.line((-8.5 * dx, 0, 5), (8.5 * dx, 0, 5), 0x4B, 1.0))
-    return o + draw(items), header(("repeats", "time", "voicing", "range"), (str(repeats), "1/32", f"{voices} up", "sine"))
+    return o + draw(items), header(("repeats", "time", "voicing", "range"),
+                                   (str(repeats), {1.0: "1/32", 0.8: "1/32", 0.6: "1/64"}.get(round(time, 1), "1/32"), f"{voices} up", "sine"))
 
 
 # ---- M2b close-up -------------------------------------------------------------------------------------------------------
@@ -134,7 +135,7 @@ def m3a(velocity=0.8, sustain=0.5, accent=1.0, swing=0.62, head=5):
 
 
 # ---- M3b lanes ----------------------------------------------------------------------------------------------------------
-def m3b(velocity=0.8, sustain=0.5, accent=1.0, swing=0.62, head=5):
+def m3b(velocity=0.8, sustain=0.5, accent=1.0, swing=0.62, head=5, on=None):
     cam = Cam(el=40, d=520, focal=560, target=(0.0, 0.0, 34.0), screen=(240.0, 132.0))
     dx = 21.0
     x0 = -8 * dx
@@ -146,7 +147,7 @@ def m3b(velocity=0.8, sustain=0.5, accent=1.0, swing=0.62, head=5):
             if age == 0:
                 o.append(cam.line((x0 + s * dx, 0, -3), (x0 + s * dx, 0, 0), 0x64 if s % 4 == 0 else 0x4B, 1.0))
         jit = [0.6 * math.sin(s * 3.1 + age * 1.7) for s in range(16)]  # the bars behind wander a little
-        for s in sorted(ON):
+        for s in sorted(on if on is not None else ON):
             x = x0 + s * dx + (dx * (swing - 0.5) * 2 if s % 2 else 0) + (jit[s] if age else 0)
             h = 3 + 26 * velocity * PROF[s] * (1 + 0.35 * accent * TMPL[s]) * (1 - 0.08 * age)
             L = max(3.0, dx * (0.15 + 0.85 * sustain))
@@ -154,7 +155,8 @@ def m3b(velocity=0.8, sustain=0.5, accent=1.0, swing=0.62, head=5):
             if age == 0 and TMPL[s] and accent > 0.05:
                 g += solid(cam, x - 1, x + L + 1, 1.8, z, z + 12, 0, True, y0=h + 1.2)
             items.append((z, abs(x), g))
-    return o + draw(items), header(("velocity", "sustain", "accent", "timing"), (str(round(127 * velocity)), "1/2", "agogo", f"{round(swing * 100)}%"))
+    sus = "1/8" if sustain < 0.3 else "1/4" if sustain < 0.45 else "1/2"
+    return o + draw(items), header(("velocity", "sustain", "accent", "timing"), (str(round(127 * velocity)), sus, "agogo", f"{round(swing * 100)}%"))
 
 
 # ---- M4 keyboard in depth -----------------------------------------------------------------------------------------------
