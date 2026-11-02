@@ -6,15 +6,14 @@ it turns into a black hole and every planet falls into it. Built the same way as
 through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
-  Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
-                  flashes; a shock ring runs out through the sun's equator and captures each orbit as it passes: every planet's
-                  position at that moment becomes the far end of a new elliptical orbit that dips toward the hole, then
-                  tightens into a band round it. Planets whirl round as they're captured, each trailing its new orbit, so
-                  the paths spiral in from wherever the planets were; nothing scales. Old orbit lines go at once. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
-                  photon ring and light bent up over the top. The
-                  orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
-                  wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
-                  still fill, flash and link with the sequence
+  Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to a black disc with a
+                  bright photon ring and light bent over the top, and flashes. A shock ring runs out through the sun's
+                  equator and captures each orbit as it passes: every planet's position at that moment becomes the far end
+                  of a new elliptical orbit that dips toward the hole, then tightens into a band round it. Planets whirl
+                  round as they're captured, each trailing its new orbit, so the paths spiral in from wherever the planets
+                  were; nothing scales and no orbit turns (each keeps its own inclined plane). Old orbit lines go at once,
+                  only the sequence's planets arrive, their detail fades to plain circles, and they still fill, flash and
+                  link with the sequence
   Dens below 72   all of it runs backwards, over two seconds: the hole relaxes into a sun and the planets come back out
 
 Everything else carries over from the orrery: sixteen step planets (they fill when their step plays, flash when it
