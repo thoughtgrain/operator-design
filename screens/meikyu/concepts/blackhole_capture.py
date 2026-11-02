@@ -304,7 +304,7 @@ def main():
         t = i / A.FPS
         p, last = M4.page_at(t, presses)
         svg = tmp / f"f{i:04d}.svg"
-        svg.write_text(BM.frame(p, last, scene(p, last, t, hits, w_hist, v_hist)))
+        svg.write_text(B.frame(p, scene(p, last, t, hits, w_hist, v_hist)))   # no corner phrase planet: the scene shows the phrase
         subprocess.run(["rsvg-convert", "-w", "480", "-h", "220", str(svg), "-o", str(tmp / f"f{i:04d}.png")], check=True)
         if i not in keep:
             svg.unlink()
