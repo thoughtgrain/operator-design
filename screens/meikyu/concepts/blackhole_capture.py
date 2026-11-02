@@ -8,8 +8,9 @@ A step plays when its weight is under Dens; a black hole captures what comes ins
   Dens          the capture ring in the disc. Bodies inside it are captured, which is to say they play: they rise
                 off the disc to their pitch. Bodies outside lie flat and dim. Turn Dens up and the ring widens
   accent        a fainter inner ring at Dens/4: bodies inside it are accents, bigger and brighter
-  playhead      the disc turns half a revolution per press (8 steps); a body sounds as it swings through the right
-                side, the side coming toward us, where a real disc is brightest (marked by a faint ray)
+  playhead      the bodies keep their slots (the disc only drifts, a turn a minute); the flashes run round in step
+                order, half the disc per press, so the playhead is seen as the order things light up in, not as
+                spinning. A step in the phrase now playing stands brighter
   value/pitch   height above the disc: the scale degree (melody) or the pad (drums) at this press's velocity
   velocity      wider spread of heights on a hard press (the player's range), and the light flares with it
   Crpt          a re-rolled body is thrown to its new distance, with a streak from where it was
@@ -81,6 +82,7 @@ def light(R_, t, flare=0.0):
 
 # ---- the player, with each press's values kept ------------------------------------------------------------------------
 LENGTH = 30.0
+DRIFT = 60.0                                                          # seconds per turn of the disc: slow, just alive
 
 
 def controls(t):
@@ -167,12 +169,10 @@ def scene(p, last, t, hits, w_hist, v_hist):
     rc, ra = reach(dens), reach(dens / 4)                              # capture ring and accent ring
     behind += [ring(ra, False, 0x58, 1.0), ring(rc, False, 0xA0, 1.5)]
     over += [ring(ra, True, 0x70, 1.0), ring(rc, True, 0xF0, 1.7)]
-    behind.append(path([(CX + R + 2, BASE), (480, BASE)], grey(0x50), 0.9))   # the playhead ray
 
-    play_pos = (t - 0.5) / M4.STEP                                     # the playhead, in steps, continuous
     sounding = {h[1]: t - h[0] for h in recent if t - h[0] < M4.FLASH}
     for i in range(16):
-        a = 2 * math.pi * (i - play_pos) / 16                         # step i reaches the playhead (right side) as it plays
+        a = 2 * math.pi * (i / 16 + t / DRIFT)                         # fixed slots; the whole disc drifts slowly
         w, w_since, w_prev = at(w_hist[i], t)
         val, _, _ = at(v_hist[i], t)
         throw = (t - w_since) / 0.45 if 0 <= t - w_since < 0.45 else None
@@ -186,8 +186,10 @@ def scene(p, last, t, hits, w_hist, v_hist):
         if throw is not None:                                          # Crpt: thrown to its new distance
             ox, oy = disc_xy(reach(w_prev), a, h)
             side.append(path([(ox, oy), (x, y)], grey(0xC0 - 0x80 * throw), 1.4))
+        in_phrase = last is not None and (i - last["start"]) % 16 < 8 and t - last["t"] < 8 * M4.STEP
         if inside > 0.05:
-            side.append(path([(x0, y0), (x, y)], grey(0x30 + 0x40 * inside), 0.8))   # the stem: its pitch, above its spot
+            g = (0x50 + 0x50 * in_phrase) * inside
+            side.append(path([(x0, y0), (x, y)], grey(0x20 + g), 0.9))   # the stem: its pitch, above its spot
         if i in sounding:
             age = sounding[i] / M4.FLASH
             side.append(path(ell(x, y, 5.0, 5.0, n=16), "#F0F0F0", 1.0, fill="#F0F0F0", close=True))
