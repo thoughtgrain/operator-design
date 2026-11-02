@@ -13,12 +13,13 @@ A step plays when its weight is under Dens; a black hole captures what comes ins
   rotation      the disc turns a full circle a minute while the player plays, easing to a stop when it stops
   pitch         stem height: the note it will play at this press's velocity (melody) or its pad (drums)
   Scal          changes the pitches, so the stems move to new heights; a one-octave keyboard in the lower left
-                shows the scale as dots on its keys at the current root (the root's dot bigger), and lights the key
-                of each note as it sounds
+                shows the scale's shape as dots on its keys, drawn from C (C's dot bigger), and lights the key of
+                each note's degree as it sounds
   Crpt          a re-rolled body is thrown to its new distance, with a streak from where it was
-  Rthm          stems become the 8 pad lanes; the keyboard gives way to a small kit drawn in the lower right
-                (hi-hat, snare, tom, kick) whose pieces fill as they're struck; the kick also thumps the hole's
-                edge and the snare the ring under it, each at most ~3 times a second
+  Rthm          stems become the 8 pad lanes; the scale keyboard gives way to a longer one in the lower right
+                (44 semitones from C) with the kit's 8 pads dotted, so each kit has its own shape; the struck pad's
+                key lights. The kick also thumps the hole's edge and the snare the ring under it, each at most ~3
+                times a second
   velocity      a hard press brightens the wire
 
 Still at rest (the turn stops with the music; no shimmer), greys snapped to the stock steps, eases 0.2 s. The black hole is blackhole3's
@@ -273,74 +274,69 @@ def height(i, val, last, c):
     return K * (4.0 + 1.9 * (A.Meikyu.scale_note(root, A.MASKS[c["scal"]], deg) - root))
 
 
-# ---- the corners: the scale as a keyboard (melody), the kit as a drawing (drums) ---------------------------------------
-KEY_X, KEY_Y, KEY_W, KEY_H = 10.0, 190.0, 8.0, 24.0                    # one octave, C to B, lower left
+# ---- the corners: the scale (melody) and the kit (drums), each as dots on a keyboard -----------------------------------
+# Both are drawn from C, as shapes: the scale's notes in C, and the kit's 8 pads as semitones above the note pressed,
+# also counted from C. So each scale and each kit has its own recognisable pattern of dots, however the root moves.
+# A sounding note lights its key: its scale degree (melody) or its pad (drums).
 WHITE = [0, 2, 4, 5, 7, 9, 11]
-BLACK = {1: 1, 3: 2, 6: 4, 8: 5, 10: 6}                                 # pitch class → the white key it sits left of
-HOT_S = 0.3                                                            # a lit key or drum stays lit this long: repeats merge
-
-
-def key_box(pc):
-    """(x, y, w, h, is_black) for pitch class pc"""
-    if pc in BLACK:
-        x = KEY_X + BLACK[pc] * KEY_W - 2.6
-        return x, KEY_Y, 5.2, KEY_H * 0.58, True
-    return KEY_X + WHITE.index(pc) * KEY_W, KEY_Y, KEY_W, KEY_H, False
+BLACK_LEFT = {1: 1, 3: 2, 6: 4, 8: 5, 10: 6}                           # pitch class → the white key it sits left of
+HOT_S = 0.3                                                            # a lit key stays lit this long: repeats merge
 
 
 def rect(x, y, w, h):
     return [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
 
 
-def keyboard(c, last, t):
-    """the scale on a one-octave keyboard: a dot on every key in the scale at the current root (the root's dot is
-    bigger), and the key of a sounding note lights up"""
-    root = (last["root"] if last else 50) % 12
-    mask = A.MASKS[c["scal"]]
-    in_scale = {(root + k) % 12 for k in range(12) if (mask >> k) & 1}
-    hot = {}
-    if last:
-        for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
-            if 0 <= t - th < HOT_S:
-                hot[pitch % 12] = True
+def keys(x0, y0, ww, h, semis, dots, hot, tonic=0):
+    """a keyboard from C covering `semis` semitones; dots on the semitones in `dots`, the keys in `hot` lit"""
+    def box(n):
+        octave, pc = divmod(n, 12)
+        if pc in BLACK_LEFT:
+            bw = ww * 0.64
+            return x0 + (octave * 7 + BLACK_LEFT[pc]) * ww - bw / 2, y0, bw, h * 0.58, True
+        return x0 + (octave * 7 + WHITE.index(pc)) * ww, y0, ww, h, False
     out = []
     for black in (False, True):                                        # white keys, then black keys over them
-        for pc in range(12):
-            x, y, w, h, b = key_box(pc)
+        for n in range(semis):
+            x, y, w, hh, b = box(n)
             if b != black:
                 continue
-            fill = "#CDCDCD" if pc in hot else ("#4B4B4B" if b else "#000000")
-            out.append(path(rect(x, y, w, h), grey(0x7D), 1.0, fill=fill, close=True))
-    for pc in sorted(in_scale):
-        x, y, w, h, b = key_box(pc)
-        r = 2.2 if pc == root else 1.6
-        g = 0x000000 if pc in hot else None
-        dot = "#000000" if pc in hot else "#CDCDCD"
-        out.append(path(ell(x + w / 2, y + h - 4.5, r, r, n=12), dot, 0.8, fill=dot, close=True))
+            fill = "#CDCDCD" if n in hot else ("#4B4B4B" if b else "#000000")
+            out.append(path(rect(x, y, w, hh), grey(0x7D), 0.9, fill=fill, close=True))
+    for n in sorted(dots):
+        x, y, w, hh, b = box(n)
+        r = min(w * 0.36, 2.2 if n == tonic else 1.7)
+        dot = "#000000" if n in hot else "#CDCDCD"
+        out.append(path(ell(x + w / 2, y + hh - max(3.2, w * 0.55), r, r, n=12), dot, 0.6, fill=dot, close=True))
     return out
 
 
-KIT_PIECES = {3: "kick", 1: "snare", 2: "tom", 0: "hat"}                # moon/drum index (blackhole_moons.KIT) → piece
+def sounding_now(last, t):
+    """semitones above the root of the notes that sounded in the last HOT_S seconds"""
+    out = set()
+    if last:
+        for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
+            if 0 <= t - th < HOT_S:
+                out.add(pitch - last["root"])
+    return out
 
 
-def kit_art(hits, t):
-    """a small line drawing of a kit, lower right: kick, snare, tom, hi-hat. A struck piece fills (paced, so a roll
-    never flashes it more than ~3 times a second)"""
-    lit = {d: any(0 <= t - th < HOT_S for th in paced(hits, d)) for d in KIT_PIECES}
-    g_on, g_off = "#CDCDCD", "#000000"
-    o = []
-    # hi-hat: stand and two cymbals, left
-    o.append(path([(410, 178), (410, 214)], grey(0x7D), 1.0))
-    o.append(path(ell(410, 178, 9, 2.2, n=20), grey(0xAF), 1.0, fill=g_on if lit[0] else g_off, close=True))
-    o.append(path(ell(410, 181, 9, 2.2, n=20), grey(0x7D), 1.0, close=True))
-    # tom, over the kick
-    o.append(path(rect(434, 181, 14, 7), grey(0xAF), 1.0, fill=g_on if lit[2] else g_off, close=True))
-    # kick: the front head, a circle
-    o.append(path(ell(452, 202, 12, 12, n=32), grey(0xAF), 1.2, fill=g_on if lit[3] else g_off, close=True))
-    o.append(path(ell(452, 202, 4, 4, n=16), grey(0x7D), 1.0, close=True))
-    # snare: a short drum to the left of the kick
-    o.append(path(rect(421, 196, 14, 8), grey(0xAF), 1.0, fill=g_on if lit[1] else g_off, close=True))
-    return o
+def keyboard(c, last, t):
+    """melody, lower left: one octave from C with the scale's notes dotted (C, the tonic, bigger); the key of each
+    note's scale degree lights as it sounds"""
+    mask = A.MASKS[c["scal"]]
+    dots = {k for k in range(12) if (mask >> k) & 1}
+    hot = {n % 12 for n in sounding_now(last, t)}
+    return keys(10.0, 190.0, 8.0, 24.0, 12, dots, hot)
+
+
+def kit_keys(c, last, t):
+    """drums, lower right: the kit's 8 pads as dots on a keyboard counted from C, over the 44 semitones the widest kit
+    reaches, so every kit has its own shape (stacked fourths and fifths, a minor-seventh chord, wide fifths,
+    semitone clusters); the pad that's struck lights"""
+    pads = M4.KITS[c["scal"]]
+    hot = sounding_now(last, t)
+    return keys(470.0 - 26 * 4.8, 192.0, 4.8, 22.0, 44, set(pads), hot)   # black keys ≥ 3 px
 
 
 _PACED = {}
@@ -417,7 +413,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
             side.append(path(ell(x, y, s * K, s * K, n=14), grey(g), 0.9, fill=grey(g), close=True))
         else:
             side.append(path(ell(x, y, 1.9 * K, 1.9 * K, n=10), grey(0x68), 0.9, fill="#000000", close=True))
-    corner = kit_art(hits, t) if c["drum"] else keyboard(c, last, t)
+    corner = kit_keys(c, last, t) if c["drum"] else keyboard(c, last, t)
     return back + behind + hole + front + over + corner
 
 

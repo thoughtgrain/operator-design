@@ -21,9 +21,9 @@ A black hole in wireframe: the lensed disc of the reference image (an arch over 
 | control | score | channel | what the player sees |
 | --- | --- | --- | --- |
 | Dens | 5 | position, height | the capture ring widens; bodies it reaches rise on stems to their pitch, the rest lie flat and hollow; an inner ring at Dens/4 marks accents |
-| Scal | 3 | position, height | a one-octave keyboard in the lower left shows the scale as dots on its keys at the current root (root dot bigger), and lights each note's key as it sounds; the stems move to the new pitches |
+| Scal | 3 | position, height | a one-octave keyboard in the lower left shows the scale's shape as dots, drawn from C (C's dot bigger); each note's degree lights its key as it sounds; the stems move to the new pitches |
 | Crpt | 3 | position | re-rolled bodies are thrown along their spoke to their new distance, with a streak |
-| Rthm (now Drum) | 5 | shape, height | the keyboard gives way to a small kit in the lower right (hi-hat, snare, tom, kick) whose pieces fill when struck; stems become pad lanes; the kick also thumps the hole's edge, the snare the ring under it |
+| Rthm (now Drum) | 5 | position, shape, height | the scale keyboard gives way to a longer one in the lower right (44 semitones from C) with the kit's 8 pads dotted, so each kit has its own shape; the struck pad's key lights; stems become pad lanes; the kick thumps the hole's edge, the snare the ring under it |
 | a press | — | weight, flash | the phrase's 8 spokes and stems thicken and brighten; each body flashes as its step sounds; the wire brightens by velocity |
 
 ## What makes it work
@@ -31,12 +31,11 @@ A black hole in wireframe: the lensed disc of the reference image (an arch over 
 - **The metaphor does the work.** Find the player's own rule (weight under Dens) and a physical thing with the same shape (inside the capture radius). Then the picture explains the player without a legend.
 - **Keep the middle clear.** Nothing near is drawn across the hole except the bodies; the wire is thin and dim, so the bodies, the capture ring and the hole's edge lead.
 - **Turn slowly, and only while it plays.** The disc turns a full circle a minute while notes play and eases to a stop with the music. Steps keep their slots on it; the playhead is the order things light in. A disc spinning at the step rate was far too fast.
-- **Controls without a twin go to the corners.** Scal and Kit don't map onto a black hole, so they get plain instruments of their own: a keyboard with the scale's dots (melody), a small kit (drums).
+- **Controls without a twin go to the corners.** Scal and Kit don't map onto a black hole, so they get a plain keyboard of their own, drawn from C so each scale and each kit is a recognisable shape of dots ([capture-keys.png](capture-keys.png): the four scales, then the four kits).
 
 ## Notes
 
 - Showing the scale as arch cells and the kit as pads in the under-ring was tried and rejected on looks.
-- The kit drawing is the same for every kit; Kit is heard and named in the header.
 - The turning disc is over the per-frame redraw budget on a device (see the audit).
 - Drum's half-step floor: a protocol question for two-state switches (see the audit).
 - The wire is open strokes; a device build redraws it as thin closed ribbons.
