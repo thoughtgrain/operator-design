@@ -1,6 +1,6 @@
 # operators
 
-My working context for designing for the Teenage Engineering OP-XY. Protocols, patterns, constraints and tooling live here so that I (and any agent I hand work to) design the same way every time.
+This project is a structured framework for designing graphics for Teenage Engineering devices. Protocols, patterns, constraints and tooling live here so that anyone can design a consistent experience every time.
 
 Right now it holds one module: **`opxy/`**, the protocol for designing the screen a custom machine draws on the OP-XY through the [open-xy SDK](https://github.com/etcetc000/open-xy). More modules can sit beside it later (sequencing workflows, preset design, sound-design notes) without touching it.
 
