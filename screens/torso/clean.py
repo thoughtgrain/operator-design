@@ -108,11 +108,11 @@ def euclid(k, n):
 def header(titles, values):
     o = []
     for i, g in enumerate([0x00, 0x32, 0x4B, 0x64, 0x7D, 0x96, 0xAF, 0xCD]):
-        o.append(f'<rect x="{60 * i}" y="18" width="60" height="20" fill="{G(g) if g else "#000000"}" stroke="none"/>')
-    for col, (t, v) in enumerate(zip(titles, values)):
+        o.append(f'<rect x="{60 * i}" y="0" width="60" height="20" fill="{G(g) if g else "#000000"}" stroke="none"/>')
+    for col, (t, v) in enumerate(zip(titles, values)):                 # the stock header, flush with the top
         light = "#CBCBCB" if col < 2 else "#000000"
-        o.append(text(5 + 120 * col, 28, t, 10, light))
-        o.append(text(65 + 120 * col, 36, v, 20 if len(v) <= 4 else 13, light))
+        o.append(text(5 + 120 * col, 10, t, 10, light))
+        o.append(text(65 + 120 * col, 17.4, v, 20 if len(v) <= 4 else 13, light))
     return o
 
 

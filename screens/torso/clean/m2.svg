@@ -39,10 +39,10 @@
 <path d="M96.92,104.48 L108.12,104.48 L111,99.66 L100.05,99.66 Z" fill="#AFAFAF" stroke="#323232" stroke-width="0.5"/>
 <path d="M353.38,147.2 L351,141.68 L351.34,138.54 L353.74,144.01 Z" fill="#646464" stroke="#323232" stroke-width="0.5"/>
 <path d="M353.38,147.2 L364.12,147.2 L364.51,144.01 L353.74,144.01 Z" fill="#7D7D7D" stroke="#323232" stroke-width="0.5"/>
-<path d="M353.74,144.01 L364.51,144.01 L361.89,138.54 L351.34,138.54 Z" fill="#AFAFAF" stroke="#323232" stroke-width="0.5"/>
+<path d="M353.74,144.01 L364.51,144.01 L361.89,138.54 L351.34,138.54 Z" fill="#CDCDCD" stroke="#323232" stroke-width="0.5"/>
 <path d="M353.98,141.89 L351.57,136.45 L351.92,133.27 L354.34,138.66 Z" fill="#646464" stroke="#323232" stroke-width="0.5"/>
 <path d="M353.98,141.89 L364.78,141.89 L365.17,138.66 L354.34,138.66 Z" fill="#7D7D7D" stroke="#323232" stroke-width="0.5"/>
-<path d="M354.34,138.66 L365.17,138.66 L362.52,133.27 L351.92,133.27 Z" fill="#AFAFAF" stroke="#323232" stroke-width="0.5"/>
+<path d="M354.34,138.66 L365.17,138.66 L362.52,133.27 L351.92,133.27 Z" fill="#CDCDCD" stroke="#323232" stroke-width="0.5"/>
 <path d="M354.58,136.52 L352.15,131.16 L352.5,127.96 L354.95,133.26 Z" fill="#646464" stroke="#323232" stroke-width="0.5"/>
 <path d="M354.58,136.52 L365.44,136.52 L365.84,133.26 L354.95,133.26 Z" fill="#7D7D7D" stroke="#323232" stroke-width="0.5"/>
 <path d="M354.95,133.26 L365.84,133.26 L363.16,127.96 L352.5,127.96 Z" fill="#CDCDCD" stroke="#323232" stroke-width="0.5"/>
@@ -91,20 +91,20 @@
 <path d="M213.19,147.2 L213.76,141.68 L213.24,121.61 L212.65,126.8 Z" fill="#000000" stroke="#646464" stroke-width="1"/>
 <path d="M208.42,147.2 L213.19,147.2 L212.65,126.8 L207.78,126.8 Z" fill="#000000" stroke="#646464" stroke-width="1"/>
 <path d="M207.78,126.8 L212.65,126.8 L213.24,121.61 L208.47,121.61 Z" fill="#000000" stroke="#646464" stroke-width="1"/>
-<rect x="0" y="18" width="60" height="20" fill="#000000" stroke="none"/>
-<rect x="60" y="18" width="60" height="20" fill="#323232" stroke="none"/>
-<rect x="120" y="18" width="60" height="20" fill="#4B4B4B" stroke="none"/>
-<rect x="180" y="18" width="60" height="20" fill="#646464" stroke="none"/>
-<rect x="240" y="18" width="60" height="20" fill="#7D7D7D" stroke="none"/>
-<rect x="300" y="18" width="60" height="20" fill="#969696" stroke="none"/>
-<rect x="360" y="18" width="60" height="20" fill="#AFAFAF" stroke="none"/>
-<rect x="420" y="18" width="60" height="20" fill="#CDCDCD" stroke="none"/>
-<text transform="matrix(1 0 0 1 5 28)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">repeats</text>
-<text transform="matrix(1 0 0 1 65 36)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">3</text>
-<text transform="matrix(1 0 0 1 125 28)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">time</text>
-<text transform="matrix(1 0 0 1 185 36)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">1/32</text>
-<text transform="matrix(1 0 0 1 245 28)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">voicing</text>
-<text transform="matrix(1 0 0 1 305 36)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">3 up</text>
-<text transform="matrix(1 0 0 1 365 28)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">range</text>
-<text transform="matrix(1 0 0 1 425 36)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">sine</text>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">repeats</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">3</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">time</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">1/32</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">voicing</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">3 up</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">range</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">sine</text>
 </svg>

@@ -117,20 +117,20 @@
 <path d="M242.58,163.94 L260.65,163.94 L260.71,161.6 L242.59,161.6 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1"/>
 <path d="M242.59,161.6 L260.71,161.6 L260.37,150.18 L242.55,150.18 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1"/>
 <path d="M186.88,179.01 L194.48,181.77 L215.29,181.77 L223.16,179.01 L215.48,176.28 L194.82,176.28 Z" fill="#000000" stroke="#CDCDCD" stroke-width="1.2"/>
-<rect x="0" y="18" width="60" height="20" fill="#000000" stroke="none"/>
-<rect x="60" y="18" width="60" height="20" fill="#323232" stroke="none"/>
-<rect x="120" y="18" width="60" height="20" fill="#4B4B4B" stroke="none"/>
-<rect x="180" y="18" width="60" height="20" fill="#646464" stroke="none"/>
-<rect x="240" y="18" width="60" height="20" fill="#7D7D7D" stroke="none"/>
-<rect x="300" y="18" width="60" height="20" fill="#969696" stroke="none"/>
-<rect x="360" y="18" width="60" height="20" fill="#AFAFAF" stroke="none"/>
-<rect x="420" y="18" width="60" height="20" fill="#CDCDCD" stroke="none"/>
-<text transform="matrix(1 0 0 1 5 28)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">steps</text>
-<text transform="matrix(1 0 0 1 65 36)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">16</text>
-<text transform="matrix(1 0 0 1 125 28)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">pulses</text>
-<text transform="matrix(1 0 0 1 185 36)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">5</text>
-<text transform="matrix(1 0 0 1 245 28)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">cycles</text>
-<text transform="matrix(1 0 0 1 305 36)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">4</text>
-<text transform="matrix(1 0 0 1 365 28)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">division</text>
-<text transform="matrix(1 0 0 1 425 36)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">1/16</text>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">steps</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">16</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">pulses</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">5</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">cycles</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">4</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">division</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">1/16</text>
 </svg>

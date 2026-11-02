@@ -40,20 +40,20 @@
 <path d="M343,115.08 L342.77,116.23 L342.12,117.2 L341.15,117.86 L340,118.08 L338.85,117.86 L337.88,117.2 L337.23,116.23 L337,115.08 L337.23,113.94 L337.88,112.96 L338.85,112.31 L340,112.08 L341.15,112.31 L342.12,112.96 L342.77,113.94 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="0.6"/>
 <path d="M363,118.47 L362.77,119.62 L362.12,120.59 L361.15,121.24 L360,121.47 L358.85,121.24 L357.88,120.59 L357.23,119.62 L357,118.47 L357.23,117.32 L357.88,116.35 L358.85,115.7 L360,115.47 L361.15,115.7 L362.12,116.35 L362.77,117.32 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="0.6"/>
 <path d="M373,140.04 L372.77,141.19 L372.12,142.17 L371.15,142.82 L370,143.04 L368.85,142.82 L367.88,142.17 L367.23,141.19 L367,140.04 L367.23,138.9 L367.88,137.92 L368.85,137.27 L370,137.04 L371.15,137.27 L372.12,137.92 L372.77,138.9 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="0.6"/>
-<rect x="0" y="18" width="60" height="20" fill="#000000" stroke="none"/>
-<rect x="60" y="18" width="60" height="20" fill="#323232" stroke="none"/>
-<rect x="120" y="18" width="60" height="20" fill="#4B4B4B" stroke="none"/>
-<rect x="180" y="18" width="60" height="20" fill="#646464" stroke="none"/>
-<rect x="240" y="18" width="60" height="20" fill="#7D7D7D" stroke="none"/>
-<rect x="300" y="18" width="60" height="20" fill="#969696" stroke="none"/>
-<rect x="360" y="18" width="60" height="20" fill="#AFAFAF" stroke="none"/>
-<rect x="420" y="18" width="60" height="20" fill="#CDCDCD" stroke="none"/>
-<text transform="matrix(1 0 0 1 5 28)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">pitch</text>
-<text transform="matrix(1 0 0 1 65 36)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">F#</text>
-<text transform="matrix(1 0 0 1 125 28)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">scale</text>
-<text transform="matrix(1 0 0 1 185 36)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="13px">major</text>
-<text transform="matrix(1 0 0 1 245 28)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">channel</text>
-<text transform="matrix(1 0 0 1 305 36)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">ch 3</text>
-<text transform="matrix(1 0 0 1 365 28)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">random</text>
-<text transform="matrix(1 0 0 1 425 36)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">25%</text>
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">pitch</text>
+<text transform="matrix(1 0 0 1 65 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="20px">F#</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">scale</text>
+<text transform="matrix(1 0 0 1 185 17.4)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="13px">major</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">channel</text>
+<text transform="matrix(1 0 0 1 305 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">ch 3</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" font-family="UniversNextPro-Light" font-size="10px">random</text>
+<text transform="matrix(1 0 0 1 425 17.4)" fill="#000000" font-family="UniversNextPro-Light" font-size="20px">25%</text>
 </svg>
