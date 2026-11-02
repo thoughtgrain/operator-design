@@ -46,32 +46,32 @@
 <path d="M 122 204 L 238 204 L 238 205 L 122 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
 <path d="M 242 204 L 358 204 L 358 205 L 242 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
 <path d="M 362 204 L 478 204 L 478 205 L 362 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
-<path id="cond_node_16" transform="matrix(1 0 0 1 460 176.714)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
-<path id="cond_node_17" transform="matrix(1 0 0 1 460 162.786)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
-<path id="cond_node_18" transform="matrix(1 0 0 1 460 139.571)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.2"/>
-<path id="cond_node_19" transform="matrix(1 0 0 1 460 121)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
-<path id="cond_node_20" transform="matrix(1 0 0 1 460 107.071)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
-<path id="cond_node_21" transform="matrix(1 0 0 1 460 83.857)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.2"/>
-<path id="cond_node_22" transform="matrix(1 0 0 1 460 65.286)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
-<path id="cond_node_210" transform="matrix(1 0 0 1 109 162.786)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_211" transform="matrix(1 0 0 1 161 176.714)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_212" transform="matrix(1 0 0 1 187 176.714)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_213" transform="matrix(1 0 0 1 213 139.571)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_214" transform="matrix(1 0 0 1 239 121)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_215" transform="matrix(1 0 0 1 265 162.786)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_216" transform="matrix(1 0 0 1 291 162.786)" d="M -8 -1.1 L 8 -1.1 L 8 1.1 L -8 1.1 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
-<path id="cond_node_217" transform="matrix(1 0 0 1 317 176.714)" d="M -8 -1.1 L 8 -1.1 L 8 1.1 L -8 1.1 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
-<path id="cond_node_218" transform="matrix(1 0 0 1 343 176.714)" d="M -8 -1.1 L 8 -1.1 L 8 1.1 L -8 1.1 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
-<path id="cond_node_219" transform="matrix(1 0 0 1 369 139.571)" d="M -8 -1.1 L 8 -1.1 L 8 1.1 L -8 1.1 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
-<path id="cond_node_220" transform="matrix(1 0 0 1 395 65.286)" d="M -8 -1.1 L 8 -1.1 L 8 1.1 L -8 1.1 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
-<path id="cond_node_221" transform="matrix(1 0 0 1 421 162.786)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_222" transform="matrix(1 0 0 1 447 162.786)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_236" transform="matrix(1 0 0 1 242 203)" d="M 0 0 L 116 0 L 116 2 L 0 2 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
+<path id="cond_node_210" transform="matrix(1 0 0 1 222.25 124)" d="M -0.333 0 L 0.333 0 L 0.333 20 L -0.333 20 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_211" transform="matrix(1 0 0 1 300.25 169)" d="M -0.25 0 L 0.25 0 L 0.25 15 L -0.25 15 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_218" transform="matrix(1 0 0 1 196.25 144)" d="M -0.133 0 L 0.133 0 L 0.133 40 L -0.133 40 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_219" transform="matrix(1 0 0 1 248.25 124)" d="M -0.15 0 L 0.15 0 L 0.15 45 L -0.15 45 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_220" transform="matrix(1 0 0 1 352.25 144)" d="M -0.133 0 L 0.133 0 L 0.133 40 L -0.133 40 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_221" transform="matrix(1 0 0 1 378.25 64)" d="M -0.267 0 L 0.267 0 L 0.267 80 L -0.267 80 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_222" transform="matrix(1 0 0 1 404.25 64)" d="M -0.35 0 L 0.35 0 L 0.35 105 L -0.35 105 Z" fill="none" stroke="#646464" stroke-width="1.5"/>
+<path id="cond_node_226" transform="matrix(1 0 0 1 105 169)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_227" transform="matrix(1 0 0 1 157 184)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_228" transform="matrix(1 0 0 1 183 184)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_229" transform="matrix(1 0 0 1 209 144)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_230" transform="matrix(1 0 0 1 235 124)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_231" transform="matrix(1 0 0 1 261 169)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_232" transform="matrix(1 0 0 1 287 169)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#969696" stroke-width="1.6"/>
+<path id="cond_node_233" transform="matrix(1 0 0 1 313 184)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#969696" stroke-width="1.6"/>
+<path id="cond_node_234" transform="matrix(1 0 0 1 339 184)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#969696" stroke-width="1.6"/>
+<path id="cond_node_235" transform="matrix(1 0 0 1 365 144)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#969696" stroke-width="1.6"/>
+<path id="cond_node_236" transform="matrix(1 0 0 1 391 64)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#969696" stroke-width="1.6"/>
+<path id="cond_node_237" transform="matrix(1 0 0 1 417 169)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_238" transform="matrix(1 0 0 1 443 169)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_252" transform="matrix(1 0 0 1 242 203)" d="M 0 0 L 116 0 L 116 2 L 0 2 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
 <text id="cond_text_16" transform="matrix(1 0 0 1 4 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">song</text>
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
 <text id="cond_text_32" transform="matrix(1 0 0 1 447 52)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">5 arp</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 4 143.571)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C5</text>
-<text id="cond_text_21" transform="matrix(1 0 0 1 4 87.857)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C6</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 4 65)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">E6</text>
+<text id="cond_text_21" transform="matrix(1 0 0 1 4 185)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">E4</text>
 </svg>

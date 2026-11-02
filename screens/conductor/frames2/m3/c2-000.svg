@@ -46,12 +46,13 @@
 <path d="M 122 204 L 238 204 L 238 205 L 122 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
 <path d="M 242 204 L 358 204 L 358 205 L 242 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
 <path d="M 362 204 L 478 204 L 478 205 L 362 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
-<path id="cond_node_16" transform="matrix(1 0 0 1 460 164.333)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
-<path id="cond_node_210" transform="matrix(1 0 0 1 265 164.333)" d="M -10.8 -1.485 L 10.8 -1.485 L 10.8 1.485 L -10.8 1.485 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
-<path id="cond_node_236" transform="matrix(1 0 0 1 242 203)" d="M 0 0 L 116 0 L 116 2 L 0 2 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
+<path id="cond_node_226" transform="matrix(1 0 0 1 261 184)" d="M -11.5 0 L 11.5 0 L 20.5 -6 L -2.5 -6 Z" fill="none" stroke="#AFAFAF" stroke-width="1.6"/>
+<path id="cond_node_252" transform="matrix(1 0 0 1 242 203)" d="M 0 0 L 116 0 L 116 2 L 0 2 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
 <text id="cond_text_16" transform="matrix(1 0 0 1 4 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">song</text>
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
 <text id="cond_text_32" transform="matrix(1 0 0 1 447 52)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">5 arp</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 4 185)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G4</text>
+<text id="cond_text_21" transform="matrix(1 0 0 1 4 185)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G4</text>
 </svg>

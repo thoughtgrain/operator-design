@@ -68,6 +68,8 @@ def paint(name: str) -> tuple:
 
 # ---- shapes, authored once per pool -----------------------------------------------------------------------------------
 RULE_LEN = 430
+TREAD_DX, TREAD_DY = 9.0, -6.0    # M3: a tread's depth, receding up and to the right
+RISER_LEN = 60.0                  # M3: a riser at scale 1; stroke-only, so scale sets its length
 ARC_RX = 102.0                    # an arch is a half-ellipse rx x rx/2; uniform scale gives every span
 ARCH_RX, ARCH_RY = 12.0, 40.0     # M2: a note's arch at scale 1
 HOP_R = 4.0
@@ -117,7 +119,9 @@ SHAPES = {
     "archB": half_ellipse(ARCH_RX, ARCH_RY, 22, broken=True),
     "arch": half_ellipse(ARCH_RX, ARCH_RY, 22),
     "archI": half_ellipse(ARCH_RX - 3.5, ARCH_RY - 7, 18),
-    "dash": rect(-8, -1.1, 8, 1.1),
+    "tread": [(-11.5, 0), (11.5, 0), (11.5 + TREAD_DX, TREAD_DY), (-11.5 + TREAD_DX, TREAD_DY)],
+    "riserS": rect(-0.2, 0, 0.2, 12.0),
+    "riser": rect(-0.2, 0, 0.2, RISER_LEN),
     "playhead": rect(-0.75, 0, 0.75, 120),
     "bracket": rect(0, -6.5, 2, 6.5),
     "strike": rect(0, -0.75, 46, 0.75),
@@ -128,7 +132,7 @@ POOLS = [
     ("header", 8), ("bus", 8), ("rule", 12), ("mask", 1), ("hopgap", 20), ("hop", 20), ("pad", 8),
     ("octseg", 11), ("cap", 2), ("cell", 8), ("pctick", 12), ("arc", 4), ("tri", 7), ("stepS", 16),
     ("stepT", 6), ("stepM", 2), ("tick", 8), ("lanetick", 8), ("lanemark", 1), ("archB", 16), ("arch", 16),
-    ("archI", 16), ("dash", 16), ("playhead", 1), ("bracket", 1), ("strike", 8), ("pagemark", 4),
+    ("archI", 16), ("riserS", 8), ("riser", 8), ("tread", 16), ("playhead", 1), ("bracket", 1), ("strike", 8), ("pagemark", 4),
 ]
 BASE, COUNT = {}, {}
 _i = 0
@@ -342,36 +346,38 @@ def draw_m3(arp: G.Arp | None = None, drum=False, playing=False, step=0, degree=
                  ["60", "60", "55", "30", "50", "25", "20", "xy"])
         hits = {0: [0, 8, 10], 1: [4, 12], 4: list(range(0, 16, 2)), 5: [14], 3: [7], 2: [12]}
         for r, name in enumerate(G.DRUM_VOICES):
-            y = 60 + 17 * r
-            fr.node("rule", 460, y, "ground")
-            fr.text(T + r, 4, y + 4, 10, LABEL, name)
+            y = 64 + 17 * r
+            fr.text(T + r, 4, y + 1, 10, LABEL, name)
             for s in hits.get(r, []):
                 live = playing and s == step
-                fr.node("dash", M3_X0 + M3_PITCH * s + M3_PITCH / 2, y, "bright" if live else "second",
-                        1.25 if r < 2 else 1.0)
+                fr.node("tread", M3_X0 + M3_PITCH * s + M3_PITCH / 2 - 4, y,
+                        "a-bright" if live else ("a-bright2" if r < 2 else "a-second"))
     else:
+        # isometric stairs: each note a tread with depth at its pitch; each leap a riser on the treads' front edge
         arp = arp or G.Arp()
         G.header(fr, ["mode", "rate", "range", "steps", "skip", "accent", "tones", "jump"], arp.values())
         notes = [n for n in arp.notes(degree=degree) if not n[4]]
         pitches = [n[1] for n in notes]
-        lo, hi = (min(pitches) - 2, max(pitches) + 2) if pitches else (58, 74)
+        lo, hi = (min(pitches), max(pitches)) if pitches else (60, 72)
         span = max(hi - lo, 12)
         def yp(p):
-            return 186 - (p - lo) / span * 130
-        tones = {(G.SCALES[0][(degree + k) % 7]) % 12 for k in (0, 2, 4)}
-        root = G.SCALES[0][degree] % 12
-        lab = 0
-        for p in range(lo, hi + 1):
-            if p % 12 in tones:
-                is_root = p % 12 == root
-                fr.node("rule", 460, yp(p), "label" if is_root else "ground")
-                if is_root and lab < 3:
-                    fr.text(T + lab, 4, yp(p) + 4, 10, LABEL, G.note_label(p))
-                    lab += 1
+            return 184 - (p - lo) / span * 120
+        fr.text(T, 4, yp(hi) + 1, 10, LABEL, G.note_label(hi))
+        fr.text(T + 1, 4, yp(lo) + 1, 10, LABEL, G.note_label(lo))
+        prev = None
         for s, p, acc, *_ in notes:
+            x = M3_X0 + M3_PITCH * s + M3_PITCH / 2 - 4
+            y = yp(p)
+            if prev is not None and prev[0] == s - 1 and abs(prev[1] - y) > 1:
+                top, leap = min(prev[1], y), abs(prev[1] - y)
+                short = leap < 24 and fr.used["riserS"] < COUNT["riserS"] or fr.used["riser"] >= COUNT["riser"]
+                if short:                    # two riser lengths keep every scale inside (0.4, 2]
+                    fr.node("riserS", x - 11.5 - 1.25, top, "o-quiet", max(0.4, min(2.0, leap / 12.0)))
+                else:
+                    fr.node("riser", x - 11.5 - 1.25, top, "o-quiet", max(0.4, min(2.0, leap / RISER_LEN)))
             live = playing and s == step
-            fr.node("dash", M3_X0 + M3_PITCH * s + M3_PITCH / 2, yp(p),
-                    "bright" if live else ("bright2" if acc else "second"), 1.35 if acc else 1.0)
+            fr.node("tread", x, y, "a-bright" if live else ("a-bright2" if acc else "a-second"))
+            prev = (s, y)
     if playing:
         fr.node("playhead", M3_X0 + M3_PITCH * step + M3_PITCH / 2, 60, "quiet")
     return fr
