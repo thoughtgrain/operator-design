@@ -8,8 +8,8 @@ through one camera), but centred, so every orbit is on screen.
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
                   flashes; a shock ring runs out through the orbit plane and starts each orbit on one smooth move as it passes:
-                  out, then sucked in like a drain, spiralling faster and tipping to its angle in the second half; every
-                  move starts and ends at rest, so nothing snaps. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
+                  pulled straight in, in the orbit plane, to a tight band just outside the horizon, spiralling faster;
+                  every move starts and ends at rest, so nothing snaps. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
                   wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
@@ -286,7 +286,7 @@ def ring_halves(c3, r, line, tilt, yaw):
     return out
 
 
-FINAL = [HORIZON * (1.3 + 0.24 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
+FINAL = [HORIZON * (1.2 + 0.16 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
 
 
 # each orbit's final angle round the hole: how far it tilts out of the orbit plane (toward facing the camera) and how
@@ -298,7 +298,7 @@ FINAL_LEAN = [math.radians(d) for d in (-52, 38, 16, -28, 62, -72)]
 def tilted_point(rho, a, fall, o=0):
     """a point on orbit o, whose plane turns as it falls: it tilts up out of the orbit plane by up to FINAL_TILT[o]
     and leans round the line of sight by up to FINAL_LEAN[o], so the orbits angle into the hole"""
-    beta, gamma = tip(fall) * FINAL_TILT[o], tip(fall) * FINAL_LEAN[o]
+    beta, gamma = 0.0, 0.0                                             # orbits stay in their plane all the way in
     x, y, z = rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta)
     f = (0.0, -math.sin(CAM_EL), math.cos(CAM_EL))                     # the line of sight: lean about it (Rodrigues)
     c, s_ = math.cos(gamma), math.sin(gamma)
@@ -313,8 +313,7 @@ SPIN_UP = 4.0                                                          # how muc
 
 def orbit_radius(o, u):
     """thrown out first, then pulled from there down to its final band round the horizon"""
-    base = ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, u)
-    return base + ORBITS[o] * PUSH[o] * burst(o, u)
+    return ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, u)          # straight in, in the orbit plane: no swing
 
 
 _ANGLE = {}
@@ -425,12 +424,13 @@ def scene(p, last, t, presses):
     out += lensing(hole)
     out += sun(radius, hole, flash)
     out += [s for _, s in sorted(front, key=lambda q: -q[0])]
-    out += links(t, presses, pos, hole)
+    out += links(t, presses, pos, hole, radius)
     return out + O.ringed(446, 40, 12, p, ring=(1.45, 1.8 + 1.4 * ((last["vel"] if last else 64) / 127)), tilt=0.3)
 
 
-def links(t, presses, pos, hole):
+def links(t, presses, pos, hole, radius=0.0):
     out = []
+    hole_px = radius * project((0.0, 0.0, 0.0))[3] + 1
     lk = []
     for pr in presses:
         lk += [(t0, i0, t1, i1) for (t0, i0), (t1, i1) in zip(pr["hits"], pr["hits"][1:]) if t0 <= t]
@@ -444,8 +444,19 @@ def links(t, presses, pos, hole):
         reach = min(1.0, age / M4.CONNECT)
         fade = 1.0 if age < M4.CONNECT else 1.0 - (age - M4.CONNECT) / M4.FADE
         g = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A
-        pts = [project(tilted_point(rho, a0 + da * reach * q / 47, fall, o))[:2] for q in range(48)]
-        out.append(path(pts, f"#{g:02X}{g:02X}{g:02X}", 1.4 if g == 0xF0 else 1.1))
+        colour, w = f"#{g:02X}{g:02X}{g:02X}", 1.4 if g == 0xF0 else 1.1
+        run = []
+        for q in range(48):                                            # the hole hides the stretch that passes behind it
+            w3 = tilted_point(rho, a0 + da * reach * q / 47, fall, o)
+            x, y = project(w3)[:2]
+            if not nearer_than_centre(w3) and math.hypot(x - CENTRE[0], y - CENTRE[1]) < hole_px:
+                if len(run) > 1:
+                    out.append(path(run, colour, w))
+                run = []
+            else:
+                run.append((x, y))
+        if len(run) > 1:
+            out.append(path(run, colour, w))
     return out
 
 
