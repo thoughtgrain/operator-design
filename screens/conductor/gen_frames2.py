@@ -68,6 +68,7 @@ def paint(name: str) -> tuple:
 
 # ---- shapes, authored once per pool -----------------------------------------------------------------------------------
 RULE_LEN = 430
+NOTCH_HALF, NOTCH_DEPTH = 9.0, 26.0   # M2: a note's V at scale 1
 TREAD_DX, TREAD_DY = 9.0, -6.0    # M3: a tread's depth, receding up and to the right
 RISER_LEN = 60.0                  # M3: a riser at scale 1; stroke-only, so scale sets its length
 ARC_RX = 102.0                    # an arch is a half-ellipse rx x rx/2; uniform scale gives every span
@@ -116,9 +117,10 @@ SHAPES = {
     "tick": rect(-0.7, -5, 0.7, 5),
     "lanetick": rect(-0.6, -3, 0.6, 3),
     "lanemark": rect(-1, -7, 1, 7),
-    "archB": half_ellipse(ARCH_RX, ARCH_RY, 22, broken=True),
-    "arch": half_ellipse(ARCH_RX, ARCH_RY, 22),
-    "archI": half_ellipse(ARCH_RX - 3.5, ARCH_RY - 7, 18),
+    "notchgap": rect(-NOTCH_HALF + 0.6, -1.0, NOTCH_HALF - 0.6, 1.0),
+    "notch": [(-NOTCH_HALF, 0), (0, NOTCH_DEPTH), (NOTCH_HALF, 0), (NOTCH_HALF - 1.7, 0), (0, NOTCH_DEPTH - 2.6),
+              (-NOTCH_HALF + 1.7, 0)],
+    "octmark": rect(-3, -0.6, 3, 0.6),
     "tread": [(-11.5, 0), (11.5, 0), (11.5 + TREAD_DX, TREAD_DY), (-11.5 + TREAD_DX, TREAD_DY)],
     "riserS": rect(-0.2, 0, 0.2, 12.0),
     "riser": rect(-0.2, 0, 0.2, RISER_LEN),
@@ -131,8 +133,7 @@ SHAPES = {
 POOLS = [
     ("header", 8), ("bus", 8), ("rule", 12), ("mask", 1), ("hopgap", 20), ("hop", 20), ("pad", 8),
     ("octseg", 11), ("cap", 2), ("cell", 8), ("pctick", 12), ("arc", 4), ("tri", 7), ("stepS", 16),
-    ("stepT", 6), ("stepM", 2), ("tick", 8), ("lanetick", 8), ("lanemark", 1), ("archB", 16), ("arch", 16),
-    ("archI", 16), ("riserS", 8), ("riser", 8), ("tread", 16), ("playhead", 1), ("bracket", 1), ("strike", 8), ("pagemark", 4),
+    ("stepT", 6), ("stepM", 2), ("tick", 8), ("lanetick", 8), ("lanemark", 1), ("notchgap", 16), ("notch", 16), ("octmark", 5), ("riserS", 8), ("riser", 8), ("tread", 16), ("playhead", 1), ("bracket", 1), ("strike", 8), ("pagemark", 4),
 ]
 BASE, COUNT = {}, {}
 _i = 0
@@ -304,8 +305,12 @@ def draw_m2(lanes, sel=4, playing=False, step=0) -> Frame:
     if L.mute:
         fr.node("strike", 8, 55, "second", min(2.0, (tw(f"{sel + 1} {L.role}", 20) + 4) / 46))
 
-    base = 184 - (L.oct + 2) * 9                     # oct lifts the lane's line 9 px an octave
-    fr.node("rule", 456, base, "quiet")
+    # the bar as a ruler's edge with a V cut where each note falls: as big as it's loud (velocity scales the notch),
+    # a tick on the edge where it lets go (gate), an accent marked under its point; oct raises or lowers the edge
+    edge = 128 - L.oct * 14
+    fr.node("rule", 462, edge, "second")
+    for o in range(-2, 3):
+        fr.node("octmark", 24, 128 - o * 14, "bright2" if o == L.oct else "quiet")
     hits = G.lane_hits(L, sel)
     rnd = random.Random(100 + sel)
     cand = sorted(hits)
@@ -314,19 +319,20 @@ def draw_m2(lanes, sel=4, playing=False, step=0) -> Frame:
     for s, acc in sorted(hits.items()):
         x = M2_X0 + M2_PITCH * s + M2_PITCH / 2
         live = playing and s == step
-        sc = 0.45 + 0.95 * L.vel / 100 * (1.08 if acc else 1.0)   # as big as it's loud
-        pname = "a-bright" if live else ("a-quiet" if s in vary else ("a-bright2" if acc else "a-second"))
-        fr.node("archB" if s in vary else "arch", x, base - 0.5, pname, min(sc, 1.9))
+        sc = (0.45 + 1.05 * L.vel / 100) * (0.75 if s in vary else 1.0)
+        sc = min(sc, 1.9)
+        fr.node("notchgap", x, edge, "mask", sc)
+        fr.node("notch", x, edge, "bright" if live else ("quiet" if s in vary else ("bright2" if acc else "second")), sc)
         if acc:
-            fr.node("archI", x, base - 0.5, pname, min(sc, 1.9))
-        if L.role != "drum":                         # gate: a tick on the line where the note lets go
-            gx = x - ARCH_RX * sc + max(3.0, M2_PITCH * 1.8 * L.gate / 100)
-            fr.node("stepS", gx, base + 5, "label")
+            fr.node("tick", x, edge + NOTCH_DEPTH * sc + 9, "bright2")
+        if L.role != "drum":
+            gx = x + max(4.0, M2_PITCH * 1.8 * L.gate / 100) - NOTCH_HALF * sc
+            fr.node("stepS", gx, edge - 2, "label")
     if L.role == "bass":                             # lock steers a bass: its anchor steps marked under the line
         locks = {0: set(G.SONG_KICKS), 1: set(G.SONG_KICKS) | {0, 4, 8, 12}, 2: set()}[L.lock]
         for i, s in enumerate(sorted(locks)):
             pool = "stepT" if i < 6 else "stepM"
-            fr.node(pool, M2_X0 + M2_PITCH * s + M2_PITCH / 2, base + 16, "second")
+            fr.node(pool, M2_X0 + M2_PITCH * s + M2_PITCH / 2, 196, "second")
     if playing:
         fr.node("playhead", M2_X0 + M2_PITCH * step + M2_PITCH / 2, 76, "quiet")
     return fr

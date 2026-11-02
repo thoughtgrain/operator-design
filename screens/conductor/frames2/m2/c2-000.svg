@@ -46,7 +46,7 @@
 <path d="M 122 204 L 238 204 L 238 205 L 122 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
 <path d="M 242 204 L 358 204 L 358 205 L 242 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
 <path d="M 362 204 L 478 204 L 478 205 L 362 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
-<path id="cond_node_16" transform="matrix(1 0 0 1 456 166)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path id="cond_node_16" transform="matrix(1 0 0 1 462 128)" d="M -430 -0.6 L 0 -0.6 L 0 0.6 L -430 0.6 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
 <path id="cond_node_153" transform="matrix(1 0 0 1 300 54)" d="M -0.6 -3 L 0.6 -3 L 0.6 3 L -0.6 3 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.2"/>
 <path id="cond_node_154" transform="matrix(1 0 0 1 322 54)" d="M -0.6 -3 L 0.6 -3 L 0.6 3 L -0.6 3 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.2"/>
 <path id="cond_node_155" transform="matrix(1 0 0 1 344 54)" d="M -0.6 -3 L 0.6 -3 L 0.6 3 L -0.6 3 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.2"/>
@@ -56,7 +56,12 @@
 <path id="cond_node_159" transform="matrix(1 0 0 1 432 54)" d="M -0.6 -3 L 0.6 -3 L 0.6 3 L -0.6 3 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
 <path id="cond_node_160" transform="matrix(1 0 0 1 454 54)" d="M -0.6 -3 L 0.6 -3 L 0.6 3 L -0.6 3 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
 <path id="cond_node_161" transform="matrix(1 0 0 1 388 54)" d="M -1 -7 L 1 -7 L 1 7 L -1 7 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="0.2"/>
-<path id="cond_node_252" transform="matrix(1 0 0 1 122 203)" d="M 0 0 L 116 0 L 116 2 L 0 2 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
+<path id="cond_node_194" transform="matrix(1 0 0 1 24 156)" d="M -3 -0.6 L 3 -0.6 L 3 0.6 L -3 0.6 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path id="cond_node_195" transform="matrix(1 0 0 1 24 142)" d="M -3 -0.6 L 3 -0.6 L 3 0.6 L -3 0.6 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path id="cond_node_196" transform="matrix(1 0 0 1 24 128)" d="M -3 -0.6 L 3 -0.6 L 3 0.6 L -3 0.6 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
+<path id="cond_node_197" transform="matrix(1 0 0 1 24 114)" d="M -3 -0.6 L 3 -0.6 L 3 0.6 L -3 0.6 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path id="cond_node_198" transform="matrix(1 0 0 1 24 100)" d="M -3 -0.6 L 3 -0.6 L 3 0.6 L -3 0.6 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path id="cond_node_241" transform="matrix(1 0 0 1 122 203)" d="M 0 0 L 116 0 L 116 2 L 0 2 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
 <text id="cond_text_16" transform="matrix(1 0 0 1 4 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">song</text>
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
