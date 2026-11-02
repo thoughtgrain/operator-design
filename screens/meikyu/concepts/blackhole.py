@@ -7,9 +7,9 @@ through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens 75 → 100   the sun becomes a black hole: its wireframe and corona fade, leaving a black disc with a bright
-                  photon ring and light bent up over the top; asteroids fall in from every direction. The
-                  orbits fall in, inner first, and turn to face the camera, ending as true circles just outside the
-                  horizon, concentric with its outline; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
+                  photon ring and light bent up over the top. The
+                  orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
+                  wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
                   still fill, flash and link with the sequence
   Dens back down  all of it runs backwards: the hole relaxes into a sun and the planets come back out
 
@@ -189,38 +189,6 @@ def lensing(hole):
     return o
 
 
-N_INFALL, INFALL_LIFE = 18, 4.0                                        # infalling asteroids, and seconds each takes to fall
-
-
-def infalling(t, hole):
-    """asteroids falling into the hole from all round: each on its own tilted path, spiralling in faster, shrinking
-    and tumbling until it crosses the horizon. More of them as the hole deepens. (world point, svg) pairs"""
-    if hole < 0.1:
-        return []
-    out = []
-    for i in range(N_INFALL):
-        rnd = random.Random(900 + i)
-        if rnd.random() > hole:                                       # fewer while the hole is still forming
-            continue
-        offset = rnd.uniform(0, INFALL_LIFE)
-        cycle = math.floor((t + offset) / INFALL_LIFE)
-        u = ((t + offset) % INFALL_LIFE) / INFALL_LIFE                # 0 at the edge … 1 at the horizon
-        crnd = random.Random(900 + i * 97 + cycle)                    # each fall comes from somewhere new
-        a0, tilt, yaw = crnd.uniform(0, 2 * math.pi), crnd.uniform(-1.2, 1.2), crnd.uniform(0, math.pi)
-        rho = HORIZON + (250.0 - HORIZON) * (1 - u) ** 1.6
-        a = a0 + 2 * math.pi * 1.6 * u * u                            # spinning up as it falls
-        x0, z0 = rho * math.cos(a), rho * math.sin(a)                 # in its own plane, then tilted and turned
-        y1, z1 = z0 * math.sin(tilt), z0 * math.cos(tilt)
-        p3 = (x0 * math.cos(yaw) - z1 * math.sin(yaw), y1, x0 * math.sin(yaw) + z1 * math.cos(yaw))
-        x, y, _, ppu = project(p3)
-        size = crnd.uniform(4.0, 8.0) * (1 - 0.65 * u) * ppu
-        if math.hypot(x - CENTRE[0], y - CENTRE[1]) < HORIZON * project((0.0, 0.0, 0.0))[3] + size and not nearer_than_centre(p3):
-            continue
-        g = round(0x5A + (0xC8 - 0x5A) * u)                            # brightening as it heats on the way in
-        out.append((p3, R2.node(R2.rock_glyph(800 + i, cycle % 3), x, y, size / 10, "#000000", f"#{g:02X}{g:02X}{g:02X}", 0.8)))
-    return out
-
-
 def ring_halves(c3, r, line, tilt, yaw):
     u = (math.cos(yaw), 0.0, math.sin(yaw))
     v = (-math.sin(yaw) * math.cos(tilt), math.sin(tilt), math.cos(yaw) * math.cos(tilt))
@@ -246,11 +214,24 @@ def ring_halves(c3, r, line, tilt, yaw):
 FINAL = [HORIZON * (1.3 + 0.2 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
 
 
-def tilted_point(rho, a, fall):
-    """a point on an orbit whose plane turns, as it falls, from the orbit plane to face the camera: at fall 1 the
-    orbit is a true circle on screen, concentric with the horizon's outline"""
-    beta = fall * (math.pi / 2 - CAM_EL)                               # rotate the depth axis up toward the view plane
-    return (rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta))
+# each orbit's final angle round the hole: how far it tilts out of the orbit plane (toward facing the camera) and how
+# far it leans round the line of sight, so the fallen orbits wrap the hole from different directions
+FINAL_TILT = [math.radians(d) for d in (8, -6, 22, 2, 30, -10)]
+FINAL_LEAN = [math.radians(d) for d in (-52, 38, 16, -28, 62, -72)]
+
+
+def tilted_point(rho, a, fall, o=0):
+    """a point on orbit o, whose plane turns as it falls: it tilts up out of the orbit plane by up to FINAL_TILT[o]
+    and leans round the line of sight by up to FINAL_LEAN[o], so the orbits angle into the hole"""
+    beta, gamma = fall * FINAL_TILT[o], fall * FINAL_LEAN[o]
+    x, y, z = rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta)
+    f = (0.0, -math.sin(CAM_EL), math.cos(CAM_EL))                     # the line of sight: lean about it (Rodrigues)
+    c, s_ = math.cos(gamma), math.sin(gamma)
+    d = x * f[0] + y * f[1] + z * f[2]
+    cx, cy, cz = f[1] * z - f[2] * y, f[2] * x - f[0] * z, f[0] * y - f[1] * x
+    return (x * c + cx * s_ + f[0] * d * (1 - c), y * c + cy * s_ + f[1] * d * (1 - c), z * c + cz * s_ + f[2] * d * (1 - c))
+
+
 DETAIL_STEPS = 3                                                       # grey steps the surface detail fades through
 SPIN_UP = 4.0                                                          # how much faster a fully fallen orbit turns
 
@@ -291,7 +272,7 @@ def body_state(k, t, dens_now, hole):
     fade = min(DETAIL_STEPS, int(fall * (DETAIL_STEPS + 1)))           # 0 full detail … DETAIL_STEPS plain circle
     if rho_now - size <= radius:                                       # inside the sun while it's big
         return None
-    p3 = tilted_point(rho_now, a, fall)
+    p3 = tilted_point(rho_now, a, fall, o)
     x, y, _, ppu = project(p3)
     return p3, x, y, size * ppu, hops, fade, a
 
@@ -317,7 +298,7 @@ def scene(p, last, t, presses):
             continue
         for front_half in (False, True):                               # far half behind the sun, near half in front
             g = round(0x3A if front_half else 0x1E)
-            pts = [project(tilted_point(rho_now, (math.pi if front_half else 0) + math.pi * q / 60, fall))[:2] for q in range(61)]
+            pts = [project(tilted_point(rho_now, (math.pi if front_half else 0) + math.pi * q / 60, fall, o))[:2] for q in range(61)]
             (front if front_half else back).append((1e9, path(pts, f"#{g:02X}{g:02X}{g:02X}", 0.9 if front_half else 0.8)))
     flashed = {i for th, i in (last["hits"] if last else []) if 0 <= t - th < M4.FLASH}
     pos, placed = {}, []
@@ -350,8 +331,6 @@ def scene(p, last, t, presses):
         if k in RINGED and fade == 0:
             halves = ring_halves(p3, BODIES[k][1] * (rr / BODIES[k][1] / project(p3)[3]), line, *RINGED[k])
             side += [(d + 0.5, s) for s in halves["back"]] + [(d - 0.5, s) for s in halves["front"]]
-    for p3r, svg in infalling(t, hole):                                # asteroids, ordered with everything else
-        (front if nearer_than_centre(p3r) else back).append((math.dist(CAM, p3r), svg))
     out = [s for _, s in sorted(back, key=lambda q: -q[0])]
     out += lensing(hole)
     out += sun(radius, hole)
@@ -375,7 +354,7 @@ def links(t, presses, pos, hole):
         reach = min(1.0, age / M4.CONNECT)
         fade = 1.0 if age < M4.CONNECT else 1.0 - (age - M4.CONNECT) / M4.FADE
         g = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A
-        pts = [project(tilted_point(rho, a0 + da * reach * q / 47, fall))[:2] for q in range(48)]
+        pts = [project(tilted_point(rho, a0 + da * reach * q / 47, fall, o))[:2] for q in range(48)]
         out.append(path(pts, f"#{g:02X}{g:02X}{g:02X}", 1.4 if g == 0xF0 else 1.1))
     return out
 
