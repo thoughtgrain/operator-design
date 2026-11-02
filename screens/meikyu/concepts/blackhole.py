@@ -6,10 +6,10 @@ it turns into a black hole and every planet falls into it. Built the same way as
 through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
-  Dens hits 75    a timed event (2.6 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
-                  flashes; a shock ring runs out through the orbit plane and flings each orbit outward as it passes;
-                  each hangs a beat, then the hole sucks it in like a drain, flat and spiralling faster, tipping to its
-                  angle only in the last stretch. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
+  Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
+                  flashes; a shock ring runs out through the orbit plane and starts each orbit on one smooth move as it passes:
+                  out, then sucked in like a drain, spiralling faster and tipping to its angle in the second half; every
+                  move starts and ends at rest, so nothing snaps. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
                   wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
@@ -138,7 +138,7 @@ def smooth(x):
     return x * x * (3 - 2 * x)
 
 
-COLLAPSE = 2.6          # seconds for the whole event once Dens reaches GROW_END: swell, implode, shock, infall
+COLLAPSE = 3.0          # seconds for the whole event once Dens reaches GROW_END: swell, implode, shock, infall
 RELEASE = 2.0           # seconds to relax back into a sun once Dens drops below RELEASE_AT (slower: less motion)
 RELEASE_AT = GROW_END - 3                                              # hysteresis, so a knob resting on 75 doesn't flicker
 _HOLE = {}
@@ -149,9 +149,7 @@ SWELL_END = 0.07        # the sun swells and brightens a little: the breath befo
 IMPLODE_END = 0.17      # it implodes to the horizon, accelerating, and flashes
 SHOCK_DUR = 0.26        # a shock ring runs out through the orbit plane from the horizon to SHOCK_MAX
 SHOCK_MAX = 330.0
-FLING_W = 36.0          # as the shock passes an orbit it flings it outward over this much of the shock's travel
-PUSH = [0.34, 0.31, 0.28, 0.25, 0.22, 0.2]                             # how far each orbit is flung (fraction of its radius)
-HANG = 0.06             # how long an orbit hangs out there before the hole grabs it
+PUSH = [0.3, 0.27, 0.24, 0.21, 0.18, 0.15]                             # how far each orbit is flung (fraction of its radius)
 
 
 def swell(u):
@@ -199,23 +197,31 @@ def stage(dens, hole, sw=0.0):
     return radius + (HORIZON - radius) * hole, hole
 
 
+# Every orbit makes one continuous move from the moment the shock reaches it to the end of the event: out, then in,
+# starting and finishing at rest, with no corner anywhere in between. Speed never jumps, so nothing reads as a snap.
+def _progress(o, u):
+    start = shock_reaches(o)
+    return max(0.0, min(1.0, (u - start) / (1.0 - start)))
+
+
 def burst(o, u):
-    """0 → 1 (ease-out) as the shock passes orbit o: it's flung outward, inner orbits first"""
-    x = max(0.0, min(1.0, (u - shock_reaches(o)) / (SHOCK_DUR * FLING_W / (SHOCK_MAX - HORIZON))))
-    return 1 - (1 - x) ** 3
+    """the outward swing: rises from rest, peaks at OUT_PEAK of the move, and is gone again by the end"""
+    x = _progress(o, u)
+    return math.sin(math.pi * min(1.0, x / (2 * OUT_PEAK))) ** 2 if x < 2 * OUT_PEAK else 0.0
+
+
+OUT_PEAK = 0.28         # share of each orbit's move at which it's furthest out
 
 
 def infall(o, u):
-    """how far orbit o has fallen in (0 = in place, 1 = at its band round the horizon): it hangs a beat after the
-    shock passes, then the hole sucks it in, slow to let go and then fast (ease-in), inner orbits first"""
-    start = shock_reaches(o) + HANG
-    x = max(0.0, min(1.0, (u - start) / (1.0 - start)))
-    return x * x * (2 - x)
+    """how far orbit o has fallen in (0 = in place, 1 = at its band round the horizon): smoothstep, so it eases out
+    of place and eases into its band; inner orbits start first because the shock reaches them first"""
+    return smooth(_progress(o, u))
 
 
 def tip(fall):
-    """the funnel: orbits stay flat while they spiral in and only tip to their angles in the last stretch"""
-    return smooth((fall - 0.6) / 0.4)
+    """orbits tip toward their angles across the second half of the fall, eased at both ends"""
+    return smooth((fall - 0.3) / 0.7)
 
 
 def eased_dens(t):
@@ -307,8 +313,8 @@ SPIN_UP = 4.0                                                          # how muc
 
 def orbit_radius(o, u):
     """thrown out first, then pulled from there down to its final band round the horizon"""
-    flung = ORBITS[o] * (1 + PUSH[o] * burst(o, u))
-    return flung + (FINAL[o] - flung) * infall(o, u)
+    base = ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, u)
+    return base + ORBITS[o] * PUSH[o] * burst(o, u)
 
 
 _ANGLE = {}
@@ -487,7 +493,7 @@ def main():
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-framerate", str(A.FPS), "-i", str(tmp / "f%04d.png"), "-i", str(wav),
                     "-vf", "scale=960:440:flags=neighbor", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-b:a", "192k", "-shortest", str(HERE / "blackhole.mp4")], check=True)
-    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (9, 11.7, 12.0, 12.6, 13.4, 16)]
+    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (9, 12.0, 12.8, 13.4, 14.0, 16)]
     sheet = Image.new("RGB", (960, 660))
     for k, im in enumerate(ims):
         sheet.paste(im, (480 * (k % 2), 220 * (k // 2)))
