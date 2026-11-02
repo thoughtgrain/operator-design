@@ -1,6 +1,6 @@
-# Torso · page map
+# Loom · page map
 
-I took Brian's spec ("Torso screen visuals: spec for the four pages", Nov 2 2026) and drew every page at its resting pose, at the positions and sizes it gives, so we can see whether the parts fit before anyone makes artwork. `pages.py` draws them; `maps/pages.png` has all four at 2× with numbered callouts, and `maps/m1..m4.png` are the 1:1 frames.
+I took Brian's spec (the four-page screen spec, Nov 2 2026) and drew every page at its resting pose, at the positions and sizes it gives, so we can see whether the parts fit before anyone makes artwork. `pages.py` draws them; `maps/pages.png` has all four at 2× with numbered callouts, and `maps/m1..m4.png` are the 1:1 frames.
 
 Grey only, with shapes and words wherever the spec used a colour (table at the end). Frame lint: 0 errors on all four pages.
 
@@ -137,4 +137,4 @@ The map frames now use the words and shapes: M1 shows `1/16 free`, and M4 draws 
 
 ## Next
 
-Once the six points above are settled, I'll redraw the four pages as real fragments (`torso_` ids in the agreed order, palette donors, outlines at exactly 64 points) with the key view overlay on and off, and run them through the operators protocol.
+Once the six points above are settled, I'll redraw the four pages as real fragments (`loom_` ids in the agreed order, palette donors, outlines at exactly 64 points) with the key view overlay on and off, and run them through the operators protocol.

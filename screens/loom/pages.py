@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Torso's four pages, mapped from Brian's spec ("Torso screen visuals: spec for the four pages", Nov 2 2026).
+"""Loom's four pages, mapped from Brian's spec (the four-page screen spec, Nov 2 2026).
 
 Each page is drawn at its resting pose, 480 × 220, at the positions and sizes the spec gives, with plausible state
 so every element shows. This is a layout map, not finished artwork: it checks that the parts fit, counts outlines,

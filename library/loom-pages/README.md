@@ -1,16 +1,16 @@
-# Torso and Ariadne (loom pages, drafts)
+# Loom and Ariadne (loom pages, drafts)
 
 ![the four pages](pages.png)
 
 | | |
 | --- | --- |
-| Machines | `torso` · a four-page sequencer engine, after the T-1's controls · `ariadne` · a function track (its keys are functions acting on a target track) · both for [labyrinth](https://github.com/thoughtgrain/labyrinth), SDK side in progress |
+| Machines | `loom` · a four-page sequencer engine, after the T-1's controls · `ariadne` · a function track (its keys are functions acting on a target track) · both for [labyrinth](https://github.com/thoughtgrain/labyrinth), SDK side in progress |
 | Author | Brian Hinton (thoughtgrain) · MIT |
 | Pattern | P14 Loom (from `opxy/patterns.md`) |
 | Audit | **not audited**: drafts, kept as a pattern reference. No perceptibility or budget run yet |
 | Device | **device pending**; node and outline counts per page still to fit (see Open) |
-| Source | `screens/torso/clean.py` (M1), `screens/torso/round3.py` (M2 echo field, M3 lanes, M4 keyboard), `screens/torso/anim.py` (the demo); `screens/ariadne/concepts/loom.py`. Spec and page map: `screens/torso/map.md` |
-| Video | [torso-pages.mp4](torso-pages.mp4): one pattern playing through M1 → M4 with knobs turned on each page, the notes as sound. [ariadne-loom.mp4](ariadne-loom.mp4): the loom on its own, with generated and locked steps, p-locks, ratchet, thin and a target switch |
+| Source | `screens/loom/clean.py` (M1), `screens/loom/round3.py` (M2 echo field, M3 lanes, M4 keyboard), `screens/loom/anim.py` (the demo); `screens/ariadne/concepts/loom.py`. Spec and page map: `screens/loom/map.md` |
+| Video | [loom-pages.mp4](loom-pages.mp4): one pattern playing through M1 → M4 with knobs turned on each page, the notes as sound. [ariadne-loom.mp4](ariadne-loom.mp4): the loom on its own, with generated and locked steps, p-locks, ratchet, thin and a target switch |
 
 ## The screens
 

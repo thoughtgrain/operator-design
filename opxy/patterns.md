@@ -210,7 +210,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 ## P14 · Loom
 
-**The idea.** A sequence drawn as cloth. Steps are warp threads, each pass or cycle weaves a new row at the front and the cloth moves back, and notes are slabs raised on their threads. What stays the same pass after pass (a locked step) forms a solid column down the cloth; what changes (a generated step) shows up as rows that differ. `library/torso-pages/` (Torso's four pages and Ariadne's loom) is the worked example.
+**The idea.** A sequence drawn as cloth. Steps are warp threads, each pass or cycle weaves a new row at the front and the cloth moves back, and notes are slabs raised on their threads. What stays the same pass after pass (a locked step) forms a solid column down the cloth; what changes (a generated step) shows up as rows that differ. `library/loom-pages/` (Loom's four pages and Ariadne's loom) is the worked example.
 
 **Why it works.** History is visible without a list: the player sees at a glance which steps hold and which wander, and how the pattern has moved over the last few passes. Depth means "earlier" everywhere, so the same reading carries to other pages: repeats as rows behind a pulse (an echo field), recent bars as lanes.
 

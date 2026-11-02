@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Torso, round 2 in motion: one pattern playing while the view moves through M1 → M2 → M3 → M4, with knobs turned
+"""Loom, round 2 in motion: one pattern playing while the view moves through M1 → M2 → M3 → M4, with knobs turned
 on each page so every parameter's effect shows, and the pattern's notes as sound.
 
   0–12 s   M1 sequencer   pulses 5 → 9, cycles 4 → 6 (four rows show), a cycle held at 6 s, recalled at 9.5 s

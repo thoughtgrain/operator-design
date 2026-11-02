@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Torso, round 2: the four pages kept clean (Brian, Nov 2).
+"""Loom, round 2: the four pages kept clean (Brian, Nov 2).
 
 The graphic represents the parameters; it isn't the interface. So no strips of cells, mode-key grids or badges at
 rest: each page is the stock two-page header plus one drawing in the loom's language (slabs on threads, modelled in

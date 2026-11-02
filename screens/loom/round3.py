@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Torso, round 3: a fresh pass at M2 and M3 (two candidates each, same slab language), and M4's keyboard in depth.
+"""Loom, round 3: a fresh pass at M2 and M3 (two candidates each, same slab language), and M4's keyboard in depth.
 
   M2a echo field   every pulse throws its repeats as rows behind it, so the bar becomes a field: across = the bar
                    (heights follow the phrase), back = the repeats (each row lower, spaced by time and pace),

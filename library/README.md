@@ -9,5 +9,5 @@ To add one, ask for an audit ("this is mine, does it meet the guidelines?"). If 
 | [Toro (stacked blocks)](toro-blocks/) | `toro` synth | P10 Voice field | meets, with notes | pending | Brian Hinton |
 | [Theseus (drum tower)](theseus-tower/) | `theseus` drum voice | P11 Instrument stack | meets, with notes | pending | Brian Hinton |
 | [Meikyu (orrery)](meikyu-orrery/) | `meikyu` note player | P12 Orrery | not audited (pattern reference) | needs player node binding | Brian Hinton |
-| [Torso and Ariadne (loom pages)](torso-pages/) | `torso` sequencer pages, `ariadne` function track | P14 Loom | not audited (drafts, pattern reference) | device pending | Brian Hinton |
+| [Loom and Ariadne (loom pages)](loom-pages/) | `loom` sequencer pages, `ariadne` function track | P14 Loom | not audited (drafts, pattern reference) | device pending | Brian Hinton |
 | [Meikyu (capture)](meikyu-capture/) | `meikyu` note player | P13 Capture | not yet (two-state floor, redraw while turning); pattern reference | needs player node binding | Brian Hinton |
