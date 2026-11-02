@@ -117,7 +117,7 @@ def header(titles, values):
 
 
 # ---- M1 sequencer: the loom ---------------------------------------------------------------------------------------------
-def m1(steps=16, pulses=5, cycles=4, division=1.0, head=6):
+def m1(steps=16, pulses=5, cycles=4, division=1.0, head=6, pass_idx=0):
     cam = Cam(el=42, target=(0.0, 0.0, 34.0), screen=(240.0, 140.0))
     dx = 18.0 * division
     xs = [(s - (steps - 1) / 2) * dx for s in range(steps)]
@@ -131,7 +131,7 @@ def m1(steps=16, pulses=5, cycles=4, division=1.0, head=6):
     for age in range(cycles - 1, -1, -1):
         z = age * 18
         o.append(cam.line((xs[0] - 9, 0, z + 5), (xs[-1] + 9, 0, z + 5), 0x4B if age == 0 else 0x32, 1.0))   # weft
-        shift = age % 2                                                # each cycle rotates the pattern a little
+        shift = (age + pass_idx) % 2                                   # each cycle rotates the pattern a little
         for s in range(steps):
             x = xs[s]
             ss = (s + shift) % steps
@@ -158,9 +158,9 @@ def m1(steps=16, pulses=5, cycles=4, division=1.0, head=6):
 
 
 # ---- M2 repeats and phrase ----------------------------------------------------------------------------------------------
-def m2(repeats=3, time=1.0, voices=3, rng=1.0, head=4):
+def m2(repeats=3, time=1.0, voices=3, rng=1.0, head=4, step=None, on=None):
     cam = Cam(el=26, d=420, focal=500, target=(10.0, 14.0, 8.0), screen=(240.0, 128.0))
-    pulses = [0, 3, 6, 10, 13]
+    pulses = sorted(on) if on is not None else [0, 3, 6, 10, 13]       # the same pulses the sequencer page shows
     o, items = [], []
     span = 16 * 21.0
     o.append(cam.line((-span / 2 - 8, 0, 5), (span / 2 + 8, 0, 5), 0x4B, 1.0))
@@ -177,7 +177,7 @@ def m2(repeats=3, time=1.0, voices=3, rng=1.0, head=4):
                 lh = h / (voices if r == 0 else 1)
                 y0 = v * (lh + 2.0)
                 if r == 0:
-                    g += solid(cam, x, x + w, lh, 0, 10, 0, lit=(s == pulses[head % len(pulses)] and v == voices - 1), y0=y0)
+                    g += solid(cam, x, x + w, lh, 0, 10, 0, lit=(s == (step if step is not None else pulses[head % len(pulses)])), y0=y0)
                 else:
                     g += hollow(cam, x, x + w, lh, 0, 10, min(r, 3), y0=y0)
             items.append((abs(x), g))
@@ -189,9 +189,12 @@ def m2(repeats=3, time=1.0, voices=3, rng=1.0, head=4):
 
 
 # ---- M3 groove -----------------------------------------------------------------------------------------------------------
-def m3(velocity=0.8, sustain=0.5, accent=1.0, swing=0.58, head=5):
+def m3(velocity=0.8, sustain=0.5, accent=1.0, swing=0.58, head=5, on=None):
     cam = Cam(el=30, d=560, focal=680, target=(0.0, 14.0, 14.0), screen=(240.0, 134.0))
     vel = [1.0, 0, 0.6, 0.8, 0, 0.9, 0.5, 0, 1.0, 0.7, 0, 0.85, 0.6, 0, 0.95, 0.75]
+    if on is not None:                                                 # the same pulses the sequencer page shows
+        prof = [1.0, 0.5, 0.6, 0.8, 0.5, 0.9, 0.5, 0.6, 1.0, 0.7, 0.5, 0.85, 0.6, 0.5, 0.95, 0.75]
+        vel = [prof[s] if s in on else 0 for s in range(16)]
     tmpl = [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0]               # the groove template's lifts
     prob = {6, 12}
     dx = 20.0
@@ -220,7 +223,7 @@ BLACK_LEFT = {1: 1, 3: 2, 6: 4, 8: 5, 10: 6}
 SCALES = {"major": {0, 2, 4, 5, 7, 9, 11}, "minor": {0, 2, 3, 5, 7, 8, 10}, "penta": {0, 2, 4, 7, 9}, "chrom": set(range(12))}
 
 
-def m4(root=6, scale="major", channel=3, random_amt=0.25):
+def m4(root=6, scale="major", channel=3, random_amt=0.25, played=()):
     o = []
     kx, ky, ww, wh, bw, bh = 100.0, 74.0, 20.0, 80.0, 12.0, 50.0
     jit = lambda n: random_amt * 14 * math.sin(n * 2.3 + 1.1)
@@ -235,6 +238,8 @@ def m4(root=6, scale="major", channel=3, random_amt=0.25):
             else:
                 x, w, h = kx + (octv * 7 + WHITE.index(pc)) * ww, ww, wh
                 fill = "#000000"
+            if n in played:
+                fill = "#AFAFAF"
             o.append(path([(x, ky), (x + w, ky), (x + w, ky + h), (x, ky + h)], G(0x7D), 1.0, fill))
     for n in range(24):
         rel = (n - root) % 12
