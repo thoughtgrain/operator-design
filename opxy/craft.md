@@ -39,6 +39,12 @@ How much detail a drawing can carry depends on how often the subject itself is r
 
 Fast notes are a motion question (flashes, pacing, the redraw budget), not a reason to strip the drawing. I made that mistake once with meikyu's drum mode and reverted it.
 
+## Picture, not panel
+
+A screen's drawing represents what the parameters do; it isn't the interface. At rest a page is the header plus one drawing that every knob changes. Strips of cells, mode grids, badges and legends belong to the moment they're used (an encoder held, a mode being picked), not to the resting page. The exception is a page where the interaction is the picture: choosing notes on a keyboard, shaping a filter curve.
+
+Use the stock header, flush with the top of the screen (y 0–20). Reserve the two-page band only when a page has more than four controls or needs the Shift row.
+
 ## Composition
 
 - At least 40 % of the body stays black.

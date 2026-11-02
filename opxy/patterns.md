@@ -208,6 +208,25 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Two-state switches and the half-step rule.** An off/on enum moves all at once; see the audit's note.
 - **Players can't do this yet.** It needs bound nodes on the player page, like P12.
 
+## P14 · Loom
+
+**The idea.** A sequence drawn as cloth. Steps are warp threads, each pass or cycle weaves a new row at the front and the cloth moves back, and notes are slabs raised on their threads. What stays the same pass after pass (a locked step) forms a solid column down the cloth; what changes (a generated step) shows up as rows that differ. `library/torso-pages/` (Torso's four pages and Ariadne's loom) is the worked example.
+
+**Why it works.** History is visible without a list: the player sees at a glance which steps hold and which wander, and how the pattern has moved over the last few passes. Depth means "earlier" everywhere, so the same reading carries to other pages: repeats as rows behind a pulse (an echo field), recent bars as lanes.
+
+**Build it.**
+
+- **Model it in 3D, one camera.** Slabs are boxes drawn back to front; age is distance plus one grey step per row. (`craft.md`, Think in 3D.)
+- **Cap the rows.** Four rows read; six turn into a mass. Show four and say the real count in the header.
+- **Roles by shape.** Solid = locked, wire = generated, rim = manual, split = retrigger, cap = accent, hollow = uncertain, pins with beads = p-locks, brackets plus `held` = a row kept to go back to.
+- **Keep it a picture of the parameters.** Each knob changes the drawing (thread count, slab count, row count, spacing); there are no cells or grids to read at rest.
+
+**Pitfalls.**
+
+- **Slabs are expensive.** Three faces each; a full loom passes the node budget quickly. Flat tops for older rows, or fewer rows.
+- **Wide shapes crowd.** Sixteen steps of slabs plus repeats or six rows get dense; keep one layer of detail per page.
+- **Players can't do this yet** on the stock player page (24 dots); it needs bound nodes, as P12 and P13 do.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.
