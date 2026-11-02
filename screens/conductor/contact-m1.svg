@@ -100,10 +100,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="249" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">rest</text><svg x="512" y="16" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -208,10 +208,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.678)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.78 139.803)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">G</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next Am</text>
 </svg><text x="512" y="249" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">playing</text><svg x="16" y="270" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -315,10 +315,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="503" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c1-000</text><svg x="512" y="270" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -422,10 +422,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 230.2 162.047)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F# 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 128.678 60.246)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">B 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 336.322 60.246)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C# 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 423.708 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">D#m 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 258.795 146.047)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F# 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 141.678 53.677)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">B 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 320.522 53.677)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C# 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 423.708 82.344)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">D#m 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">F#</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next C#</text>
 </svg><text x="512" y="503" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c1-050</text><svg x="1008" y="270" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -529,10 +529,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 128.678 60.246)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">B 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 433.098 131.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">E 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 230.2 162.047)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F# 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 16.802 131.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G#m 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 141.678 53.059)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">B 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 439.334 123.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">E 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 258.037 146.047)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F# 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 75.119 123.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G#m 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">B</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next F#</text>
 </svg><text x="1008" y="503" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c1-100</text><svg x="16" y="524" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -636,10 +636,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="757" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c2-000</text><svg x="512" y="524" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -743,10 +743,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 228.05 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Cm 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Fm 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 92.023 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Gdim 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 25.702 131.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G# 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 228.05 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Cm 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Fm 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Gdim 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 75.119 123.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G# 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">Cm</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next Gdim</text>
 </svg><text x="512" y="757" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c2-050</text><svg x="1008" y="524" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -850,10 +850,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 228.05 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Cm 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Fm 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 25.702 131.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G# 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 228.05 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Cm 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Fm 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 75.119 123.73)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G# 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">Cm</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="1008" y="757" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c2-100</text><svg x="16" y="778" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -957,10 +957,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="1011" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c3-000</text><svg x="512" y="778" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1064,7 +1064,7 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 215.7 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1·2·3·4</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 215.7 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1·2·3·4</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next C</text>
 </svg><text x="512" y="1011" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c3-050</text><svg x="1008" y="778" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1168,10 +1168,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_21" transform="matrix(1 0 0 1 414.257 78.024)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Dm 3</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 2</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 4</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_21" transform="matrix(1 0 0 1 390.966 65.166)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Dm 3</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 2</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 4</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next F</text>
 </svg><text x="1008" y="1011" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c3-100</text><svg x="16" y="1032" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1275,10 +1275,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="1265" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c4-000</text><svg x="512" y="1032" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1382,10 +1382,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="512" y="1265" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c4-050</text><svg x="1008" y="1032" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1489,10 +1489,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="1008" y="1265" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c4-100</text><svg x="16" y="1286" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1596,10 +1596,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="1519" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c5-000</text><svg x="512" y="1286" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1703,10 +1703,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="512" y="1519" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c5-050</text><svg x="1008" y="1286" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1818,10 +1818,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 229.7 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C7 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F7 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 103.523 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G7 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 26.292 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am7 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 229.7 47.336)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C7 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 377.944 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F7 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 158.391 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G7 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 67.076 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am7 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C7</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G7</text>
 </svg><text x="1008" y="1519" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c5-100</text><svg x="16" y="1540" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -1929,10 +1929,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="1773" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c6-000</text><svg x="512" y="1540" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2034,10 +2034,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="512" y="1773" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c6-050</text><svg x="1008" y="1540" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2138,10 +2138,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="1008" y="1773" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c6-100</text><svg x="16" y="1794" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2245,10 +2245,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="2027" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c7-000</text><svg x="512" y="1794" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2352,10 +2352,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="512" y="2027" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c7-050</text><svg x="1008" y="1794" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2459,10 +2459,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="1008" y="2027" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c7-100</text><svg x="16" y="2048" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2566,10 +2566,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="16" y="2281" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c8-000</text><svg x="512" y="2048" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2673,10 +2673,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="512" y="2281" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c8-050</text><svg x="1008" y="2048" width="480" height="220" viewBox="0 0 480 220" overflow="hidden"><rect width="480" height="220" fill="#000000" /><g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" /></g>
@@ -2780,10 +2780,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg><text x="1008" y="2281" fill="#969696" font-family="UniversNextPro-Light, Helvetica Neue, sans-serif" font-size="11">c8-100</text></svg>

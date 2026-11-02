@@ -589,22 +589,20 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
         label = chord_name(key, scale, d, song.seventh and d in loop)
         if positions:
             label += " " + "·".join(positions)
-        a = pc_angle(pc)
-        nx, ny = math.sin(a), -math.cos(a)
-        lx = x + nx * 15
-        ly = y + ny * 16 + 4
+        # clear the planet as drawn (and its ring): above it on the far half of the orbit, below on the near half
+        r = PLANET_R * px_per_unit(z) * (1.95 if d == current else 1.85)
+        extent = r * (1.75 * math.sin(math.radians(CAM_EL) + RING_TILT) if song.seventh else 1.0)
+        extent = max(r, extent) + 2.0
         size = 10
         w = text_width(label, size)
-        if nx > 0.35:
-            tx = lx - 2
-        elif nx < -0.35:
-            tx = lx - w + 2
+        side = r * (1.75 if song.seventh else 1.0) + 4
+        if y > ORBIT_CY:                   # near half: beside it, clear of the phrase track below
+            tx, ly = (x + side, y + 4) if x + side + w <= 476 else (x - side - w, y + 4)
         else:
-            tx = lx - w / 2
-        if tx < 4 or tx + w > 476:         # no room beside it at the screen's edge: label it underneath
-            tx, ly = max(4.0, min(476.0 - w, x - w / 2)), y + 23
-        if tx < 92 and ly < 84:            # keep clear of the plate's title in the corner
-            tx = 92
+            tx, ly = x - w / 2, y - extent - 3
+        tx = max(4.0, min(476.0 - w, tx))
+        if tx < 92 and ly < 84:            # keep clear of the plate's title: put it beside the planet instead
+            tx, ly = x + r * (1.75 if song.seventh else 1.0) + 4, y + 4
         fill = TEXT_HI if d == current else (SECOND if d in loop else LABEL)
         fr.text(T_FREE + d, tx, ly, size, fill, label)
 

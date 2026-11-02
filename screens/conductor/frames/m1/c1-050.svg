@@ -100,10 +100,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 230.2 162.047)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F# 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 128.678 60.246)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">B 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 336.322 60.246)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C# 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 423.708 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">D#m 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 258.795 146.047)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F# 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 141.678 53.677)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">B 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 320.522 53.677)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C# 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 423.708 82.344)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">D#m 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">F#</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next C#</text>
 </svg>

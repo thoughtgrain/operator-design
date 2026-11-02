@@ -108,10 +108,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 229.7 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C7 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F7 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 103.523 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G7 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 26.292 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am7 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 229.7 47.336)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C7 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 377.944 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F7 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 158.391 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G7 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 67.076 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am7 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C7</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G7</text>
 </svg>

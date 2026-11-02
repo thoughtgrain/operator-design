@@ -97,10 +97,10 @@
 <text id="cond_text_17" transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
 <text id="cond_text_18" transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
 <text id="cond_text_19" transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
-<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 53.953)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
-<text id="cond_text_23" transform="matrix(1 0 0 1 355.277 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
-<text id="cond_text_24" transform="matrix(1 0 0 1 109.123 153.66)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
-<text id="cond_text_25" transform="matrix(1 0 0 1 29.092 122.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
+<text id="cond_text_20" transform="matrix(1 0 0 1 232.5 49.069)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C 1</text>
+<text id="cond_text_23" transform="matrix(1 0 0 1 367.587 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">F 4</text>
+<text id="cond_text_24" transform="matrix(1 0 0 1 148.033 139.803)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">G 2</text>
+<text id="cond_text_25" transform="matrix(1 0 0 1 57.697 103.849)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">Am 3</text>
 <text id="cond_text_27" transform="matrix(1 0 0 1 10 62)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">C</text>
 <text id="cond_text_28" transform="matrix(1 0 0 1 10 76)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">next G</text>
 </svg>
