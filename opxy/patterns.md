@@ -227,6 +227,26 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Wide shapes crowd.** Sixteen steps of slabs plus repeats or six rows get dense; keep one layer of detail per page.
 - **Players can't do this yet** on the stock player page (24 dots); it needs bound nodes, as P12 and P13 do.
 
+## P15 · Cell field
+
+**The idea.** When a sound is noise-like and has no mechanism to draw, draw its texture: one uniform field of square cells over the whole body, lit and greyed by the sound. The stock dissolve engine is the reference (`opxy/reference/README.md`, *dissolve, in detail*).
+
+**Why it works.** One cell size, one grid and a few values read as a single object even though the field fills the screen. Hard edges keep it crisp at 1:1; clumps of lit cells read as grain.
+
+**Build it.**
+
+- **Cells are fixed square nodes** on one grid, touching, with value by palette swap. 20–24 px cells (160–240 cells) fit the node budget; 10 px cells don't.
+- **Map the controls to the field's statistics,** not to positions: how many cells are lit (density), how they clump (run length), how many sit in the grey layer, how fast they churn. Each must clear its perceptibility floor across 0 → 100.
+- **Churn ≤ ~20 cells a frame,** nothing at rest. A note can flare a patch (a run of cells near where the key sits) and settle.
+- **Keep the header plain.** No other text on the page.
+
+**Pitfalls.**
+
+- **Gate 0 still applies.** A cell field is only for sounds that are texture; a synth with a mechanism gets a drawing of the mechanism.
+- **Scattered single cells look broken.** Light runs of 2–4.
+- **Grey-only differences.** If two controls both change "how much grey", one of them needs another channel (run length, churn).
+- **Don't copy dissolve's field.** Its grid, values and clumping are TE's; take the approach, choose your own cell size and statistics.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.

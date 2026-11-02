@@ -64,13 +64,46 @@ What they share:
 Per screen:
 
 - **axis** (cubes; labels shape, ratio, shape, vibrato): an isometric star of cubes in four greys, three white ones with dot markers, a single bright line with a handle leaving the figure. The cubes' shades are the ratio between arms; the handle line is a control drawn as a slider in space.
-- **dissolve** (pixel field; swarm, am, fm, detune): a full-screen grid of square cells in white and four greys. The one engine that fills the screen, because the sound is noise-like; it still reads as one object (a field), and the greys are a second layer inside it.
+- **dissolve** (pixel field; swarm, am, fm, detune): a full-screen field of square cells. The one engine that fills the screen; written up in full under *dissolve, in detail* below and as pattern P15.
 - **drumline** (tambourine; pitch, decay, noise, tone): one double-outline drawing, centred, nothing else. Drumline changes instrument often (ten drum models), so each drawing is minimal and taken in at once. See `craft.md`, *Detail follows how often the subject changes*.
 - **epiano** (stacked key planes; shape, ratio, detune, stereo): a white key plane in isometric over three grey grid planes that step down in value. The layers are the voices or partials; depth is value, not perspective tricks.
 - **hardsync** (hair dryer; freq, sub, noise, lowcut): a solid white dryer, grille dots in two greys, a row of stepped grey blocks for the air, an envelope curve with end handles. The most "product drawing" of the set: solid masses, no outlines.
 - **prism** (prism and lenses; shape, ratio, detune, stereo): a white outline prism, a grey convex lens, a dark concave lens, a white eye-like detector; one bright beam bends through them. The signal path is literally drawn left to right.
 - **simple** (slinky on stairs; shape, pw, noise, stereo): four isometric stair treads in rising greys with white-outline slinky rings walking down them. Motion is the subject: the slinky's step is the oscillator's cycle.
 - **wavetable** (waveform; buzz, position, warp, drift): a single white trace with a flat section and a burst; the trace is the sound. One 2 px line on black, nothing else.
+
+### dissolve, in detail
+
+The one stock screen that breaks "one object, lots of black", and why it gets away with it. Measured from Brian's capture (1260 × 576, about 2.6×), read back at 1:1.
+
+**The sound.** TE's guide calls dissolve "a tonal noise synth engine, perfect for ambient pads and bright, noisy leads". Its controls: **swarm** modulates the oscillators with noise; **am** modulates the amplitude, adding grit; **fm** modulates the frequency, adding tonality; **detune** spreads each oscillator's pitch for a richer sound. No other pages are listed.
+
+**The drawing.**
+
+| property | measured |
+| --- | --- |
+| Grid | square cells about 10 px at 1:1 (26–27 px in the capture), touching with no gaps: about 48 columns × 20 rows below the header, roughly 960 cells |
+| Values | black about 70 % of the body, white about 25 %, two dim greys (about `#303030` and `#606060`) about 5 %, a light grey rarely |
+| Shape | nothing but cells; no outlines, no text, no figure. Lit cells clump into short runs and L-shapes, so the field reads as a texture, not as dots |
+| Header | stock, flush with the top; values in real numbers (`49`, `52`, `90`, `00`) |
+
+**Why it works.**
+
+- **The field is the object.** A noise engine has no mechanism to draw. The screen draws the sound's texture instead, and because it's one uniform field (one cell size, one grid, a few values) it still reads as a single thing, not as clutter.
+- **Hard edges only.** Square cells on a fixed grid, touching: nothing is anti-aliased, so nothing smears on the panel, and at arm's length the eye sees grain, not pixels.
+- **White carries it; greys add depth.** White cells are the figure; the two dim greys sit between them like a second, quieter layer, the way a noise floor sits under a signal.
+- **The header stays plain.** With the whole body busy, the header's real-unit numbers are the only text, and they read cleanly.
+
+**What I can't tell from a still.** How each control moves the field isn't visible in one frame, so it isn't documented here as fact. A likely reading, to confirm on a device: swarm sets how many cells are lit and how fast they churn; am and fm set the grey layer and how lit cells clump; detune spreads clumps sideways. Mark any design built on this reading as **pending device**.
+
+**If I build one on open-xy.** The stock screen isn't bound by the SDK's limits; mine is. About 960 cells won't fit 256 nodes, and churning them breaks the ~20 changed nodes a frame. So:
+
+- **Coarser cells.** 20 px cells give 24 × 10 = 240 below the header; 24 px gives 20 × 8 = 160, which leaves room for the header and palette.
+- **Value by palette, not geometry.** Each cell is one fixed square node; lit, grey or dark is a palette swap.
+- **Churn within budget.** Flip at most about 20 cells a frame; a "swarm" that crawls cell by cell reads as motion and stays inside the redraw budget. At rest, nothing flips.
+- **Runs, not dots.** Light neighbours together (runs of 2–4) so the field clumps like the stock one; single scattered cells read as dead pixels.
+
+See P15 in `patterns.md` for the recipe.
 
 What I take for my own screens:
 
