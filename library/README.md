@@ -9,4 +9,4 @@ To add one, ask for an audit ("this is mine, does it meet the guidelines?"). If 
 | [Toro (stacked blocks)](toro-blocks/) | `toro` synth | P10 Voice field | meets, with notes | pending | Brian Hinton |
 | [Theseus (drum tower)](theseus-tower/) | `theseus` drum voice | P11 Instrument stack | meets, with notes | pending | Brian Hinton |
 | [Meikyu (orrery)](meikyu-orrery/) | `meikyu` note player | P12 Orrery | not audited (pattern reference) | needs player node binding | Brian Hinton |
-| [Meikyu (capture)](meikyu-capture/) | `meikyu` note player | P13 Capture | not yet on one floor (two-state switch); pattern reference | needs player node binding | Brian Hinton |
+| [Meikyu (capture)](meikyu-capture/) | `meikyu` note player | P13 Capture | not yet (Scal, Drum under floor); pattern reference | needs player node binding | Brian Hinton |

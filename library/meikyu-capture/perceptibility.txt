@@ -1,7 +1,7 @@
 control        score  need %  0→100 %  0→50 %  50→100 %  span
-Dens               5    2.50     4.05    2.19      3.99   356  ok
-Scal               3    1.20     1.34    1.16      1.63   166  ok
-Crpt               3    1.20     2.31    2.02      2.65   305  ok
-Drum               5    2.50     2.87    2.87      0.00   166  UNDER
-note response      —    2.00     2.62       —         —   347  ok
+Dens               5    2.50     3.80    1.96      3.94   356  ok
+Scal               3    1.20     0.67    0.69      0.86   166  UNDER
+Crpt               3    1.20     2.01    1.64      2.26   305  ok
+Drum               5    2.50     1.06    1.06      0.00   166  UNDER
+note response      —    2.00     2.38       —         —   347  ok
 some changes are under the floor: give those controls more travel or a stronger channel

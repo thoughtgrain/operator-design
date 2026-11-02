@@ -11,12 +11,10 @@ A step plays when its weight is under Dens; a black hole captures what comes ins
   playhead      the 8 spokes of the phrase playing light up; each body flashes as its step sounds, so the
                 playhead is the order things light in. Nothing spins
   pitch         stem height: the note it will play at this press's velocity (melody) or its pad (drums)
-  Scal          the arch over the hole is a 12-note wheel, low left to high right; the scale's notes are cells,
-                so the scale is the arch's shape. Each note lights its cell; the phrase's notes stay half-lit
+  Scal          changes the pitches, so the stems move to new heights
   Crpt          a re-rolled body is thrown to its new distance, with a streak from where it was
-  Rthm          the arch dims and the ring under the hole becomes the 8 pads, spaced by the intervals of the
-                current kit (Kit = Scal); struck pads light; the kick thumps the hole's edge, the snare the ring,
-                each at most ~3 times a second
+  Rthm          stems become the 8 pad lanes; the kick thumps the hole's edge, the snare the ring under it, each
+                at most ~3 times a second
   velocity      a hard press brightens the wire
 
 Still at rest (no drift, no shimmer), greys snapped to the stock steps, eases 0.2 s. The black hole is blackhole3's
@@ -146,17 +144,16 @@ def lattice(rails, ribs, lift=0):
     return out
 
 
-def light(R_, t, flare=0.0, phrase=frozenset(), drum=False):
+def light(R_, t, flare=0.0, phrase=frozenset()):
     back, front = [], []
     b = 1 + 0.35 * flare                                               # a press brightens the wire by its velocity
     arch = [arch_pts(R_ * s, 0.5 + 0.35 * k) for k, (s, _, _) in enumerate(ARCH_RAILS)]
     for k, (s, g, w) in enumerate(ARCH_RAILS):
-        back.append(path(arch[k], grey(g * b * (0.55 if drum else 1.0)), w))   # drums: the arch dims, the ring under it
-                                                                       # carries the kit instead
+        back.append(path(arch[k], grey(g * b), w))
     back += lattice(arch, 5)
     under = [under_pts(R_ * s) for s, _, _ in UNDER_RAILS]
     for k, (s, g, w) in enumerate(UNDER_RAILS):
-        back.append(path(under[k], grey(min(0xF0, g * b * (1.3 if drum else 1.0))), w * (1.4 if drum else 1.0)))
+        back.append(path(under[k], grey(g * b), w))
     back += lattice(under, 6)
     for k, (s, g) in enumerate(DISC_RINGS):                            # disc rings: far halves behind, near broken
         back.append(path(ring_pts(R_ * s, False), grey(g * b), 0.8))
@@ -247,73 +244,6 @@ def height(i, val, last, c):
     return K * (4.0 + 1.9 * (A.Meikyu.scale_note(root, A.MASKS[c["scal"]], deg) - root))
 
 
-# ---- the light carries the harmony: the arch is the scale, the ring underneath is the kit ------------------------------
-# Melody: the inner band of the arch is a 12-note wheel bent over the hole, low notes left, high right. The notes in the
-# scale are filled cells, so the scale is the shape of the arch (pentatonic 5 wide gaps, chromatic all 12, minor and
-# major the same count in different places). A note that sounds lights its cell; the phrase's notes stay half-lit.
-# Drums: the arch empties and the ring under the hole becomes the 8 pads, each placed by the interval it plays in the
-# current kit, so every kit has its own spacing. A struck pad lights its cell the same way.
-CELL_DIM, CELL_PHRASE, CELL_HOT = 0x64, 0x96, 0xCD                     # dim cells still carry the scale: ≥ 3:1
-CELL_HOT_S = 0.3                                                       # long enough that repeats merge: < 3 flashes/s
-CELL_GAP = 0.012                                                       # radians trimmed off each side of a cell
-
-
-def arch_cell(k):
-    """semitone k (0..11) as a cell in the arch's inner band, over the round top of the bell"""
-    r0, r1 = R * ARCH_RAILS[0][0], R * ARCH_RAILS[1][0]
-    lo, hi = math.radians(149), math.radians(31)                        # where the circle hands over to the flare
-    a0 = lo + (hi - lo) * k / 12 - CELL_GAP
-    a1 = lo + (hi - lo) * (k + 1) / 12 + CELL_GAP
-    arc = lambda r, x0, x1: [(CX + r * math.cos(x0 + (x1 - x0) * q / 4), BASE - 0.97 * r * math.sin(x0 + (x1 - x0) * q / 4))
-                             for q in range(5)]
-    return arc(r0, a0, a1) + arc(r1, a1, a0)
-
-
-def under_cell(pos):
-    """a pad at fraction pos (0 low … 1 high) round the ring under the hole, left to right"""
-    r0, r1 = R * UNDER_RAILS[0][0], R * UNDER_RAILS[1][0]
-    span0, span1 = math.pi - 0.32, 0.32
-    mid = span0 + (span1 - span0) * pos
-    a0, a1 = mid + 0.11, mid - 0.11
-    arc = lambda r, x0, x1: [(CX + r * math.cos(x0 + (x1 - x0) * q / 4), BASE + 0.97 * r * math.sin(x0 + (x1 - x0) * q / 4))
-                             for q in range(5)]
-    return arc(r0, a0, a1) + arc(r1, a1, a0)
-
-
-def harmony(c, last, t, recent):
-    """the arch cells (melody) or the pad cells (drums), dim, phrase-lit and hot"""
-    out = []
-    root = last["root"] if last else 50
-    if not c["drum"]:
-        mask = A.MASKS[c["scal"]]
-        played = {}
-        if last and t - last["t"] < 8 * M4.STEP + 0.3:
-            for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
-                if th <= t:
-                    played[(pitch - root) % 12] = t - th
-        for k in range(12):
-            if not (mask >> k) & 1:
-                continue
-            g = CELL_DIM
-            if k in played:
-                age = played[k]
-                g = CELL_HOT if age < CELL_HOT_S else CELL_PHRASE
-            out.append(path(arch_cell(k), grey(g), 0.6, fill=grey(g), close=True))
-    else:
-        pads = M4.KITS[c["scal"]]
-        played = {}
-        if last and t - last["t"] < 8 * M4.STEP + 0.3:
-            for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
-                if th <= t and pitch - root in pads:
-                    played[pads.index(pitch - root)] = t - th
-        for j, iv in enumerate(pads):
-            g = CELL_DIM
-            if j in played:
-                g = CELL_HOT if played[j] < CELL_HOT_S else CELL_PHRASE
-            out.append(path(under_cell(iv / 43), grey(g), 0.6, fill=grey(g), close=True))
-    return out
-
-
 _PACED = {}
 
 
@@ -340,8 +270,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
         vel_flare = (last["vel"] / 127) * (1 - (t - last["t"]) / 0.5)
     live = last is not None and t - last["t"] < 8 * M4.STEP
     phrase = frozenset((last["start"] + k) % 16 for k in range(8)) if live else frozenset()
-    back, hole, front = light(R, t, vel_flare, phrase, c["drum"])
-    back += harmony(c, last, t, recent)
+    back, hole, front = light(R, t, vel_flare, phrase)
     behind, over = [], []
 
     if c["drum"]:
