@@ -9,7 +9,8 @@ through one camera), but centred, so every orbit is on screen.
   Dens 75 → 100   the sun becomes a black hole: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring, a flat accretion disc round it, and the disc's far side lensed up over the top. The
                   orbits fall in, inner first, to a tight band just outside the horizon and keep circling there,
-                  faster; the planets flatten into streaks as they fall and still fill, flash and link with the sequence
+                  faster; the planets stay round, their surface detail fading out to plain circles as they fall, and
+                  still fill, flash and link with the sequence
   Dens back down  all of it runs backwards: the hole relaxes into a sun and the planets come back out
 
 Everything else carries over from the orrery: sixteen step planets (they fill when their step plays, flash when it
@@ -221,7 +222,7 @@ def ring_halves(c3, r, line, tilt, yaw):
 
 
 FINAL = [HORIZON * (1.45 + 0.28 * o) for o in range(len(ORBITS))]    # where each orbit ends up: a tight band round the hole
-FLAT = [1.0, 0.62, 0.4, 0.26]                                          # pre-drawn flattening stages (height / width)
+DETAIL_STEPS = 3                                                       # grey steps the surface detail fades through
 SPIN_UP = 4.0                                                          # how much faster a fully fallen orbit turns
 
 
@@ -258,18 +259,22 @@ def body_state(k, t, dens_now, hole):
     rho_now = orbit_radius(o, hole)
     radius, _ = stage(dens_now)
     size = r * (1 - 0.12 * fall)
-    flat = min(len(FLAT) - 1, int(fall * len(FLAT)))
+    fade = min(DETAIL_STEPS, int(fall * (DETAIL_STEPS + 1)))           # 0 full detail … DETAIL_STEPS plain circle
     if rho_now - size <= radius:                                       # inside the sun while it's big
         return None
     p3 = orbit_point(rho_now, a)
     x, y, _, ppu = project(p3)
-    return p3, x, y, size * ppu, hops, flat
+    return p3, x, y, size * ppu, hops, fade
 
 
-def flattened(pts, aspect):
-    """a planet's path squashed into a streak: wider along the orbit, flatter across it"""
-    sx = 1.0 / aspect ** 0.55
-    return [(x * sx, y * aspect) for x, y in pts]
+CIRCLE = [(10.0 * math.sin(2 * math.pi * q / 32), -10.0 * math.cos(2 * math.pi * q / 32)) for q in range(33)]
+
+
+def mix(c0, c1, u):
+    """two #RRGGBB greys mixed; the device steps through a few palette entries instead"""
+    a, b = int(c0[1:3], 16), int(c1[1:3], 16) if c1.startswith("#") else 0
+    v = round(a + (b - a) * u)
+    return f"#{v:02X}{v:02X}{v:02X}"
 
 
 def scene(p, last, t, presses):
@@ -294,7 +299,7 @@ def scene(p, last, t, presses):
         st = body_state(k, t, dens_now, hole)
         if st is None:
             continue
-        p3, x, y, rr, hops, flat = st
+        p3, x, y, rr, hops, fade = st
         step = STEP_OF[k]
         foot = rr * (2.0 if k in RINGED else 1.0)
         if step is None and any(math.hypot(x - x2, y - y2) - foot - f2 < 3 for x2, y2, f2 in placed):
@@ -306,12 +311,16 @@ def scene(p, last, t, presses):
         fill, line = R2.FILLED if lit else R2.WIRE
         if step in flashed:
             fill, line = ("#F0F0F0", "#7A7A7A")
-        shape = GLYPHS[k][hops % len(GLYPHS[k])] if flat == 0 else flattened(GLYPHS[k][0], FLAT[flat])
-        svg = R2.node(shape, x, y, rr / 10, fill, line, 0.9)
         d = math.dist(CAM, p3)
         side = front if nearer_than_centre(p3) else back
-        side.append((d, svg))
-        if k in RINGED and flat == 0:
+        if fade == 0:
+            side.append((d, R2.node(GLYPHS[k][hops % len(GLYPHS[k])], x, y, rr / 10, fill, line, 0.9)))
+        else:                                                          # falling in: a plain circle, the surface fading
+            side.append((d, R2.node(CIRCLE, x, y, rr / 10, fill, line, 0.9)))
+            if fade < DETAIL_STEPS:
+                faded = mix(line, fill, fade / DETAIL_STEPS)            # detail lines step toward the fill colour
+                side.append((d - 0.1, R2.node(GLYPHS[k][hops % len(GLYPHS[k])], x, y, rr / 10, "none", faded, 0.9)))
+        if k in RINGED and fade == 0:
             halves = ring_halves(p3, BODIES[k][1] * (rr / BODIES[k][1] / project(p3)[3]), line, *RINGED[k])
             side += [(d + 0.5, s) for s in halves["back"]] + [(d - 0.5, s) for s in halves["front"]]
     out = [s for _, s in sorted(back, key=lambda q: -q[0])]
