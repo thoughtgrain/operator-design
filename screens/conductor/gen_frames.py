@@ -120,7 +120,8 @@ POOLS = [
     ("cap", 2, "cap"),             # M4: the register window's low and high caps
     ("strike", 8, "strike"),       # M2, M4: through a muted lane's label
     ("playhead", 1, "playhead"),   # M2, M3: the step column; M4: the register scale's spine
-    ("bracket", 1, "bracket"),     # M2, M4: beside the selected lane
+    ("bracket", 1, "bracket"),     # M4: beside the selected lane
+    ("lanemark", 1, "lanemark"),   # M2: under the shown lane in the lane index
     ("pagemark", 4, "pagemark"),   # the page strip: a rule over the shown page
 ]
 BASE = {}
@@ -666,7 +667,8 @@ def table_edges(fr: Frame, top: float, bottom: float):
     """The table's graduated edges: beats long, steps short, ticks pointing into the table."""
     for half in range(2):
         x = TABLE_X0 + half * 8 * TABLE_PITCH
-        fr.node("comb", half, comb_pts(8 * TABLE_PITCH, 8, TABLE_PITCH, False), x, top, GROUND, GROUND, 0.2)
+        if top is not None:
+            fr.node("comb", half, comb_pts(8 * TABLE_PITCH, 8, TABLE_PITCH, False), x, top, GROUND, GROUND, 0.2)
         fr.node("comb", 2 + half, comb_pts(8 * TABLE_PITCH, 8, TABLE_PITCH, True), x, bottom, GROUND, GROUND, 0.2)
 
 
@@ -723,7 +725,19 @@ def default_lanes():
     return [Lane(r) for r in DEFAULT_ROLES]
 
 
+def lane_index(fr: Frame, lanes, sel, playing=False, lit=frozenset(), y=52):
+    """The eight lanes as a row of moons in the top right; the shown one sits over a bright bar."""
+    x0, gap = 290, 24
+    for i, ln in enumerate(lanes):
+        on = playing and i in lit and ln.role != "off"
+        mr = moon_radius(ln.dens, ln.role) * (1.4 if on else 1.0)
+        fill, stroke, sw = moon_style(ln.role, on, ln.mute)
+        fr.node("moon", i, circle_pts(mr, 16), x0 + gap * i, y, fill, stroke, sw)
+    fr.node("lanemark", 0, rect_pts(-8, 0, 8, 2), x0 + gap * sel, y + 10, BRIGHT, BRIGHT, 0.3)
+
+
 def draw_m2(lanes, sel=0, playing=False, step=0, lit=frozenset()) -> Frame:
+    """One lane at a time: the lane encoder moves through them."""
     fr = Frame()
     L = lanes[sel]
     titles = ["lane", "role", "dens", "oct", "vel", "vary", "lock", "gate"]
@@ -731,76 +745,46 @@ def draw_m2(lanes, sel=0, playing=False, step=0, lit=frozenset()) -> Frame:
               ["kick", "acnt", "free"][L.lock], str(L.gate)]
     header(fr, titles, values)
     page_strip(fr, 1)
+    lane_index(fr, lanes, sel, playing, lit)
+    # the plate's title: which lane, and what it is
+    fr.text(T_FREE + 7, 10, 62, 20, TEXT_HI, f"{sel + 1} {L.role}")
+    if L.mute:
+        fr.node("strike", 0, rect_pts(0, -1, text_width(f"{sel + 1} {L.role}", 20) + 4, 1), 8, 55, SECOND, SECOND, 0.2)
+
     x0, pitch = TABLE_X0, TABLE_PITCH
-    table_edges(fr, 42, 194)
-    y = 48
-    dot_k = 0
-    tail_k = tick_k = 0
-    for i, ln in enumerate(lanes):
-        open_row = i == sel
-        hgt = 52 if open_row else 10
-        base_y = y + hgt - 3
-        fr.node("rule", i, RULE_PTS, 460, base_y, QUIET if open_row else GROUND,
-                QUIET if open_row else GROUND, 0.2)
-        # the lane: moon and name
-        on = playing and i in lit and ln.role != "off"
-        mr = moon_radius(ln.dens, ln.role) * (1.65 if on else 1.0)
-        fill, stroke, sw = moon_style(ln.role, on, ln.mute)
-        fr.node("moon", i, circle_pts(mr, 16), 11, (y + 6.5) if open_row else base_y - 4, fill, stroke, sw)
-        fr.text(T_FREE + i, 25, (y + 10) if open_row else base_y, 10, TEXT_HI if open_row else SECOND,
-                f"{i + 1} {ln.role}")
-        if ln.mute:
-            fr.node("strike", i, rect_pts(0, -0.75, text_width(f"{i + 1} {ln.role}", 10) + 4, 0.75), 23,
-                    ((y + 10) if open_row else base_y) - 3.5,
-                    SECOND, SECOND, 0.2)
-        if open_row:
-            fr.node("bracket", 0, rect_pts(0, 0, 2, hgt - 2), 2, y, BRIGHT, BRIGHT, 0.3)
-        hits = lane_hits(ln, i)
-        rnd = random.Random(100 + i)
-        vary_steps = set()
-        if open_row:
-            cand = sorted(hits)
-            rnd.shuffle(cand)
-            vary_steps = set(cand[: round(len(cand) * ln.vary / 100)])
-        for s, acc in sorted(hits.items()):
-            cx = x0 + pitch * s + pitch / 2
-            live = playing and s == step
-            if open_row:
-                cy = base_y - 8 - (ln.oct + 2) * 7 - REGISTER[ln.role] * 4
-                r = DOT_R * (0.8 + 1.1 * ln.vel / 100) * (1.05 if acc else 1.0)
-                hollow = s in vary_steps
-                if ln.role not in ("drum",):
-                    # gate: a tail behind the body, as long as the note holds
-                    sc = 0.1 + 0.9 * (ln.gate / 100) ** 0.6
-                    wedge = [(0, -9 * sc), (23 * sc, -0.6), (23 * sc, 0.6), (0, 9 * sc)]
-                    fr.node("tail", tail_k, wedge, cx, cy, GROUND, GROUND, 0.3)
-                    tail_k += 1
-                fill = BRIGHT if live else (BLACK if hollow else (BRIGHT2 if (acc or (playing and s < step)) else SECOND))
-                stroke = BRIGHT if live else (SECOND if hollow else (BRIGHT2 if acc else SECOND))
-            else:
-                cy = base_y - 4
-                r = DOT_R * (0.75 if acc else 0.55) * (1.8 if live else 1)
-                fill = stroke = BRIGHT if live else (SECOND if (acc or (playing and s < step)) else QUIET)
-                if ln.mute:
-                    fill, stroke = BLACK, QUIET
-            fr.node("dot", dot_k, circle_pts(r, 14), cx, cy, fill, stroke, 1.2)
-            dot_k += 1
-        if open_row and ln.role == "off":
-            # an off lane's open row: every step a hollow ring, nothing plays here
-            for s_ in range(16):
-                fr.node("dot", dot_k, circle_pts(DOT_R * 1.15, 14), x0 + pitch * s_ + pitch / 2, base_y - 22,
-                        BLACK, QUIET, 1.0)
-                dot_k += 1
-        if open_row and ln.role == "bass":      # lock only steers a bass (generator.h)
-            locks = {0: set(SONG_KICKS), 1: set(SONG_KICKS) | {0, 4, 8, 12}, 2: set()}[ln.lock]
-            for s in sorted(locks):
-                cx = x0 + pitch * s + pitch / 2
-                fr.node("tick", tick_k, rect_pts(-1, 0, 1, 5), cx, base_y + 1, SECOND, SECOND, 0.3)
-                tick_k += 1
-        y += hgt + 3 if open_row else hgt + 3
+    base = 186
+    table_edges(fr, None, base)
+    hits = lane_hits(L, sel)
+    rnd = random.Random(100 + sel)
+    cand = sorted(hits)
+    rnd.shuffle(cand)
+    vary_steps = set(cand[: round(len(cand) * L.vary / 100)])
+    k = tail_k = 0
+    if L.role == "off":
+        for s_ in range(16):                 # nothing plays here: every step an empty ring on the line
+            fr.node("dot", k, circle_pts(DOT_R * 0.8, 14), x0 + pitch * s_ + pitch / 2, base - 10, BLACK, QUIET, 1.0)
+            k += 1
+    for s, acc in sorted(hits.items()):
+        cx = x0 + pitch * s + pitch / 2
+        live = playing and s == step
+        # height is register: oct moves the whole lane 18 px an octave
+        cy = base - 16 - (L.oct + 2) * 18 - REGISTER[L.role] * 6
+        may_vary = s in vary_steps
+        r = DOT_R * (0.8 + 1.1 * L.vel / 100) * (1.05 if acc else 1.0) * (0.7 if may_vary else 1.0)
+        if L.role != "drum":                 # gate: a tail behind the body, as long as the note holds
+            sc = 0.1 + 0.9 * (L.gate / 100) ** 0.6
+            wedge = [(0, -7 * sc), (23 * sc, -0.6), (23 * sc, 0.6), (0, 7 * sc)]
+            fr.node("tail", tail_k, wedge, cx, cy, SECOND, SECOND, 0.3)
+            tail_k += 1
+        edge = BRIGHT if live else (QUIET if may_vary else (BRIGHT2 if acc else SECOND))
+        fr.node("dot", k, circle_pts(r, 16), cx, cy, BRIGHT if live else BLACK, edge, 1.2)
+        k += 1
+    if L.role == "bass":                     # lock only steers a bass (generator.h)
+        locks = {0: set(SONG_KICKS), 1: set(SONG_KICKS) | {0, 4, 8, 12}, 2: set()}[L.lock]
+        for i, s in enumerate(sorted(locks)):
+            fr.node("tick", i, rect_pts(-1, 0, 1, 5), x0 + pitch * s + pitch / 2, base + 3, SECOND, SECOND, 0.3)
     if playing:
-        px_ = x0 + pitch * step + pitch / 2
-        fr.node("playhead", 0, rect_pts(-1.5, 0, 1.5, 144), px_, 46, QUIET, QUIET, 0.2)
+        fr.node("playhead", 0, rect_pts(-1.5, 0, 1.5, 112), x0 + pitch * step + pitch / 2, 78, QUIET, QUIET, 0.2)
     return fr
 
 
@@ -863,7 +847,7 @@ def draw_m3(arp: Arp | None = None, drum: bool = False, playing=False, step=0, l
     fr = Frame()
     page_strip(fr, 2)
     x0, pitch = TABLE_X0, TABLE_PITCH
-    table_edges(fr, 42, 196)
+    table_edges(fr, None, 196)
     k = 0
     if drum:
         titles = ["kick", "snare", "hats", "perc", "fills", "ghost", "human", "map"]
@@ -873,7 +857,6 @@ def draw_m3(arp: Arp | None = None, drum: bool = False, playing=False, step=0, l
         for r, name in enumerate(DRUM_VOICES):
             y = top + rp * r
             fr.text(T_FREE + r, 4, y + 4, 10, LABEL, name)
-            fr.node("rule", r, RULE_PTS, 460, y, FILL, FILL, 0.2)
             for s in hits.get(r, []):
                 live = playing and s == step
                 rr = DOT_R * (1.1 if r < 2 else 0.8) * (1.35 if live else 1)
@@ -895,14 +878,6 @@ def draw_m3(arp: Arp | None = None, drum: bool = False, playing=False, step=0, l
         top, rp = 52, 12
         def row_y(p):
             return top + rp * (rows - 1 - (p - lo) // band)
-        # root rows: a rule at each row holding the key's root, labelled with its octave
-        rule_k = 0
-        for r in range(rows):
-            p = lo + r * band
-            if any((q % 12) == 0 for q in range(p, p + band)) and rule_k < 2:
-                yy = top + rp * (rows - 1 - r)
-                fr.node("rule", rule_k, RULE_PTS, 460, yy, GROUND, GROUND, 0.2)
-                rule_k += 1
         hi_label = NOTE[(lo + band * rows - 1) % 12] + str((lo + band * rows - 1) // 12 - 1)
         lo_label = NOTE[lo % 12] + str(lo // 12 - 1)
         fr.text(T_FREE, 4, top + 4, 10, LABEL, hi_label)
@@ -912,26 +887,19 @@ def draw_m3(arp: Arp | None = None, drum: bool = False, playing=False, step=0, l
             cx = x0 + pitch * s + pitch / 2
             live = playing and s == step
             if skipped:
-                fr.node("dot", k, circle_pts(DOT_R * 0.6, 14), cx, y, BLACK, QUIET, 1.0)
-                k += 1
-                continue
+                continue                       # a skipped step is just a gap
             for h in range(1, held + 1):
                 fr.node("dot", k, circle_pts(DOT_R * 0.4, 10), cx + h * pitch * 0.5, y, LABEL, LABEL, 0.6)
                 k += 1
-            r = DOT_R * (1.5 if acc else 0.9) * (1.8 if live else 1)
-            ahead = playing and s > step
+            r = DOT_R * (1.2 if acc else 0.75) * (1.6 if live else 1)
             c = BRIGHT if live else (BRIGHT2 if acc else SECOND)
-            # notes still to come this bar are hollow while it plays
-            fr.node("dot", k, circle_pts(r, 16), cx, y, BLACK if ahead else c, c, 1.2)
+            fr.node("dot", k, circle_pts(r, 16), cx, y, BRIGHT if live else BLACK, c, 1.2)
             k += 1
     if playing:
         fr.node("playhead", 0, rect_pts(-1.5, 0, 1.5, 148), x0 + pitch * step + pitch / 2, 46, QUIET, QUIET, 0.2)
-    # the plate's corner: which lane this is, its moon lit while it plays
+    # which lane this is, quietly, in the corner
     role = "drum" if drum else "arp"
-    fill, stroke, sw = moon_style(role, playing)
-    fr.node("moon", lane_no - 1, circle_pts(moon_radius(50, role) * (1.7 if playing else 1), 16), 448, 48,
-            fill, stroke, sw)
-    fr.text(T_FREE + 10, 440 - text_width(f"{lane_no} {role}", 10), 52, 10, TEXT_HI, f"{lane_no} {role}")
+    fr.text(T_FREE + 10, 470 - text_width(f"{lane_no} {role}", 10), 52, 10, LABEL, f"{lane_no} {role}")
     return fr
 
 
