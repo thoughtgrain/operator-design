@@ -8,7 +8,8 @@ through one camera), but centred, so every orbit is on screen.
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
                   flashes; a shock ring runs out through the orbit plane and starts each orbit on one smooth move as it passes:
-                  pulled straight in, in the orbit plane, to a tight band just outside the horizon, spiralling faster;
+                  pulled straight in to a tight band just outside the horizon, spiralling faster; the inner three
+                  stay flat in the orbit plane, the outer three tip into the horizon at their own angles;
                   every move starts and ends at rest, so nothing snaps. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
@@ -291,14 +292,15 @@ FINAL = [HORIZON * (1.2 + 0.16 * o) for o in range(len(ORBITS))]       # where e
 
 # each orbit's final angle round the hole: how far it tilts out of the orbit plane (toward facing the camera) and how
 # far it leans round the line of sight, so the fallen orbits wrap the hole from different directions
-FINAL_TILT = [math.radians(d) for d in (8, -6, 22, 2, 30, -10)]
-FINAL_LEAN = [math.radians(d) for d in (-52, 38, 16, -28, 62, -72)]
+# the inner three stay flat in the orbit plane; the outer three tip into the horizon, each its own way
+FINAL_TILT = [math.radians(d) for d in (0, 0, 0, 6, 26, -10)]
+FINAL_LEAN = [math.radians(d) for d in (0, 0, 0, -34, 52, -70)]
 
 
 def tilted_point(rho, a, fall, o=0):
     """a point on orbit o, whose plane turns as it falls: it tilts up out of the orbit plane by up to FINAL_TILT[o]
     and leans round the line of sight by up to FINAL_LEAN[o], so the orbits angle into the hole"""
-    beta, gamma = 0.0, 0.0                                             # orbits stay in their plane all the way in
+    beta, gamma = tip(fall) * FINAL_TILT[o], tip(fall) * FINAL_LEAN[o]  # inner orbits have 0: they stay flat
     x, y, z = rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta)
     f = (0.0, -math.sin(CAM_EL), math.cos(CAM_EL))                     # the line of sight: lean about it (Rodrigues)
     c, s_ = math.cos(gamma), math.sin(gamma)
