@@ -7,11 +7,10 @@ through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
-                  flashes; a shock ring runs out through the sun's equator and starts each orbit on one smooth move as it passes:
-                  pushed out a little, then pulled in to a tight band just outside the horizon, spiralling faster;
-                  each orbit stays in its own plane throughout (they're inclined every which way from the start), so
-                  the shock throws planets out at different angles and they land round the hole from all sides;
-                  every move starts and ends at rest, so nothing snaps. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
+                  flashes; a shock ring runs out through the sun's equator and captures each orbit as it passes: every planet's
+                  position at that moment becomes the far end of a new elliptical orbit that dips toward the hole, then
+                  tightens into a band round it. Planets whirl round as they're captured, each trailing its new orbit, so
+                  the paths spiral in from wherever the planets were; nothing scales. Old orbit lines go at once. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
                   wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
@@ -150,7 +149,6 @@ SWELL_END = 0.07        # the sun swells and brightens a little: the breath befo
 IMPLODE_END = 0.17      # it implodes to the horizon, accelerating, and flashes
 SHOCK_DUR = 0.26        # a shock ring runs out through the equator from the horizon to SHOCK_MAX
 SHOCK_MAX = 330.0
-PUSH = [0.22, 0.2, 0.17, 0.14, 0.11, 0.08]                             # how far each orbit is flung (fraction of its radius)
 
 
 def swell(u):
@@ -203,15 +201,6 @@ def stage(dens, hole, sw=0.0):
 def _progress(o, u):
     start = shock_reaches(o)
     return max(0.0, min(1.0, (u - start) / (1.0 - start)))
-
-
-def burst(o, u):
-    """the outward swing: rises from rest, peaks at OUT_PEAK of the move, and is gone again by the end"""
-    x = _progress(o, u)
-    return math.sin(math.pi * min(1.0, x / (2 * OUT_PEAK))) ** 2 if x < 2 * OUT_PEAK else 0.0
-
-
-OUT_PEAK = 0.28         # share of each orbit's move at which it's furthest out
 
 
 def infall(o, u):
@@ -308,13 +297,50 @@ PHASES, CLEAR = choose()                                              # needs th
 
 
 DETAIL_STEPS = 3                                                       # grey steps the surface detail fades through
+WHIRL = 40.0                                                           # peak extra speed during capture: ~half a turn,
+                                                                       # enough for each planet to trace its new orbit
 SPIN_UP = 4.0                                                          # how much faster a fully fallen orbit turns
 
 
-def orbit_radius(o, u):
-    """thrown out first, then pulled from there down to its final band round the horizon"""
-    base = ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, u)          # out a little, then in, all in its own plane
-    return base + ORBITS[o] * PUSH[o] * burst(o, u)
+# ---- the new orbits ------------------------------------------------------------------------------------------------------
+# Nothing scales. When the shock reaches an orbit, each planet on it is captured where it stands: that point becomes the
+# far end (apoapsis) of a new, elliptical orbit whose near end (periapsis) drops toward the horizon on the opposite side.
+# Then the far end is drawn in too, and the ellipse circularises into the tight band round the hole. Each planet's new
+# orbit starts from its own landing point, so the paths are rotated copies round the hole, not one shrinking circle.
+def _landing_frame(o, n):
+    """the frame at which the shock last reached orbit o (u crossed shock_reaches(o) going up), or None"""
+    key = ("land", o, n)
+    if key not in _HOLE:
+        hole_raw(n / 30)
+        s0, found = shock_reaches(o), None
+        for i in range(n, 0, -1):
+            if _HOLE[i] >= s0 > _HOLE[i - 1]:
+                found = i
+                break
+        _HOLE[key] = found
+    return _HOLE[key]
+
+
+def landing_angle(k, t):
+    """where planet k was captured (radians round its orbit), or None if its orbit hasn't been reached"""
+    i = _landing_frame(ORBIT_OF[k], round(t * 30))
+    return None if i is None else 2 * math.pi * (PHASES[k] + turned(ORBIT_OF[k], i / 30))
+
+
+def ends(o, u):
+    """(far end, near end) of orbit o's new ellipse: the near end drops first, then the far end follows it in"""
+    x = _progress(o, u)
+    near = ORBITS[o] + (FINAL[o] - ORBITS[o]) * smooth(x / 0.55)
+    far = ORBITS[o] + (FINAL[o] - ORBITS[o]) * smooth((x - 0.25) / 0.75)
+    return far, near
+
+
+def path_radius(o, u, a, a0):
+    """distance from the hole at angle a on an ellipse (focus at the hole) whose far end sits at angle a0"""
+    if a0 is None:
+        return ORBITS[o]
+    far, near = ends(o, u)
+    return 2 * far * near / ((far + near) - (far - near) * math.cos(a - a0))
 
 
 _ANGLE = {}
@@ -328,7 +354,9 @@ def turned(o, t):
         total, dt = 0.0, 1 / 30
         for i in range(n):
             tt = i * dt
-            total += dt / PERIOD * (1 + SPIN_UP * infall(o, hole_raw(tt)))
+            uu = hole_raw(tt)
+            whirl = WHIRL * math.sin(math.pi * _progress(o, uu))     # whipped round while it's being captured
+            total += dt / PERIOD * (1 + SPIN_UP * infall(o, uu) + whirl)
         _ANGLE[key] = total
     return _ANGLE[key]
 
@@ -341,9 +369,10 @@ def body_state(k, t, dens_now, u):
     o = ORBIT_OF[k]
     fall = infall(o, u)
     hops = math.floor((t + (k * 0.37) % 1.0 * HOP) / HOP)
-    hop_t = hops * HOP
+    hop_t = hops * HOP if fall == 0 else t                             # captured planets glide: whirling, a hop would jump
     a = 2 * math.pi * (PHASES[k] + turned(o, max(0.0, hop_t)))
-    rho_now = orbit_radius(o, u)
+    a0 = landing_angle(k, t) if fall > 0 else None
+    rho_now = path_radius(o, u, a, a0)
     radius, _ = stage(dens_now, hole_at(t), swell(u))
     size = r * (1 - 0.45 * fall)                                       # smaller as they crowd round the horizon
     fade = min(DETAIL_STEPS, int(fall * (DETAIL_STEPS + 1)))           # 0 full detail … DETAIL_STEPS plain circle
@@ -351,7 +380,7 @@ def body_state(k, t, dens_now, u):
         return None
     p3 = tilted_point(rho_now, a, fall, o)
     x, y, _, ppu = project(p3)
-    return p3, x, y, size * ppu, hops, fade, a
+    return p3, x, y, size * ppu, hops, fade, a, a0
 
 
 CIRCLE = [(10.0 * math.sin(2 * math.pi * q / 32), -10.0 * math.cos(2 * math.pi * q / 32)) for q in range(33)]
@@ -369,15 +398,14 @@ def scene(p, last, t, presses):
     u = hole_raw(t)
     radius, hole = stage(dens_now, hole_at(t), swell(u))
     back, front = [], []
-    for o, rho in enumerate(ORBITS):                                   # orbit lines, falling in with their planets
-        fall = infall(o, u)
-        rho_now = orbit_radius(o, u)
-        keep = 1.0 - smooth(fall / 0.75)                               # orbit lines fade as they're sucked in: no tangle
-        if rho_now <= radius + 1 or keep < 0.1:
+    for o, rho in enumerate(ORBITS):                                   # the old orbit lines: gone quickly once the
+        fall = infall(o, u)                                            # orbit is captured, since its planets leave them
+        keep = 1.0 - smooth(fall / 0.3)
+        if keep < 0.1 or rho <= radius + 1:
             continue
         for front_half in (False, True):                               # far half behind the sun, near half in front
             g = round(0x10 + ((0x3A if front_half else 0x1E) - 0x10) * keep)
-            pts = [project(tilted_point(rho_now, (math.pi if front_half else 0) + math.pi * q / 60, fall, o))[:2] for q in range(61)]
+            pts = [project(tilted_point(rho, (math.pi if front_half else 0) + math.pi * q / 60, fall, o))[:2] for q in range(61)]
             (front if front_half else back).append((1e9, path(pts, f"#{g:02X}{g:02X}{g:02X}", 0.9 if front_half else 0.8)))
     flashed = {i for th, i in (last["hits"] if last else []) if 0 <= t - th < M4.FLASH}
     pos, placed = {}, []
@@ -386,7 +414,7 @@ def scene(p, last, t, presses):
         st = body_state(k, t, dens_now, u)
         if st is None:
             continue
-        p3, x, y, rr, hops, fade, ang = st
+        p3, x, y, rr, hops, fade, ang, a0 = st
         step = STEP_OF[k]
         if step is None and infall(ORBIT_OF[k], u) > 0.8:               # only the sequence's planets make it to the horizon
             continue
@@ -395,7 +423,16 @@ def scene(p, last, t, presses):
             continue
         placed.append((x, y, foot))
         if step is not None:
-            pos[step] = (p3, ORBIT_OF[k], ang, orbit_radius(ORBIT_OF[k], u), infall(ORBIT_OF[k], u))
+            pos[step] = (p3, ORBIT_OF[k], ang, a0, infall(ORBIT_OF[k], u))
+        if step is not None and a0 is not None:                        # its new orbit, traced behind it from where it
+            fall_k = infall(ORBIT_OF[k], u)                            # was captured: a trail that spirals in with it
+            keep = 1.0 - smooth((fall_k - 0.55) / 0.45)
+            span = min(max(0.0, ang - a0), TRAIL)
+            if keep > 0.1 and span > 0.05:
+                g = round(0x18 + (0x58 - 0x18) * keep)
+                w3s = [tilted_point(path_radius(ORBIT_OF[k], u, ang - span * q / 24, a0), ang - span * q / 24, fall_k, ORBIT_OF[k])
+                       for q in range(25)]
+                split_by_depth(w3s, f"#{g:02X}{g:02X}{g:02X}", 0.9, front, back)
         lit = step is not None and p.step_lit(step) and not p.drum
         fill, line = R2.FILLED if lit else R2.WIRE
         if step in flashed:
@@ -429,8 +466,29 @@ def scene(p, last, t, presses):
     return out + O.ringed(446, 40, 12, p, ring=(1.45, 1.8 + 1.4 * ((last["vel"] if last else 64) / 127)), tilt=0.3)
 
 
+TRAIL = 1.4 * math.pi                                                  # how much of its new orbit a planet trails
+
+
+def split_by_depth(w3s, colour, width, front, back):
+    """a 3D polyline cut where it crosses the plane through the hole facing the camera: the near runs go in front of
+    the hole, the far runs behind it"""
+    runs, cur, side = [], [], None
+    for w in w3s:
+        near = nearer_than_centre(w)
+        if side is not None and near != side and len(cur) > 1:
+            runs.append((side, cur))
+            cur = [cur[-1]]
+        cur.append(project(w)[:2])
+        side = near
+    if len(cur) > 1:
+        runs.append((side, cur))
+    for near, pts in runs:
+        (front if near else back).append((1e9 if not near else -1e9, path(pts, colour, width)))
+
+
 def links(t, presses, pos, hole, radius=0.0):
     out = []
+    u = hole_raw(t)
     hole_px = radius * project((0.0, 0.0, 0.0))[3] + 1
     lk = []
     for pr in presses:
@@ -440,7 +498,7 @@ def links(t, presses, pos, hole, radius=0.0):
         age = t - t0
         if age > M4.CONNECT + M4.FADE:
             continue
-        (p0, o, a0, rho, fall), (p1, _, a1, _, _) = pos[i0], pos[i1]
+        (p0, o, a0, c0, fall), (p1, _, a1, c1, _) = pos[i0], pos[i1]
         da = (a1 - a0) % (2 * math.pi)
         reach = min(1.0, age / M4.CONNECT)
         fade = 1.0 if age < M4.CONNECT else 1.0 - (age - M4.CONNECT) / M4.FADE
@@ -448,7 +506,9 @@ def links(t, presses, pos, hole, radius=0.0):
         colour, w = f"#{g:02X}{g:02X}{g:02X}", 1.4 if g == 0xF0 else 1.1
         run = []
         for q in range(48):                                            # the hole hides the stretch that passes behind it
-            w3 = tilted_point(rho, a0 + da * reach * q / 47, fall, o)
+            th = a0 + da * reach * q / 47
+            rho = path_radius(o, u, th, c0) + (path_radius(o, u, th, c1) - path_radius(o, u, th, c0)) * q / 47
+            w3 = tilted_point(rho, th, fall, o)
             x, y = project(w3)[:2]
             if not nearer_than_centre(w3) and math.hypot(x - CENTRE[0], y - CENTRE[1]) < hole_px:
                 if len(run) > 1:
