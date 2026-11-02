@@ -6,7 +6,7 @@ it turns into a black hole and every planet falls into it. Built the same way as
 through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
-  Dens hits 75    the sun collapses into a black hole in under a second (timed, not tied to the knob's travel): its wireframe and corona fade, leaving a black disc with a bright
+  Dens hits 75    the sun collapses into a black hole over about a second and a half (timed, not tied to the knob's travel): its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
                   wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
@@ -135,7 +135,7 @@ def smooth(x):
     return x * x * (3 - 2 * x)
 
 
-COLLAPSE = 0.8          # seconds for the sun to fall into a black hole once Dens reaches GROW_END
+COLLAPSE = 1.6          # seconds for the sun to fall into a black hole once Dens reaches GROW_END
 RELEASE = 2.0           # seconds to relax back into a sun once Dens drops below RELEASE_AT (slower: less motion)
 RELEASE_AT = GROW_END - 3                                              # hysteresis, so a knob resting on 75 doesn't flicker
 _HOLE = {}
@@ -426,7 +426,7 @@ def main():
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-framerate", str(A.FPS), "-i", str(tmp / "f%04d.png"), "-i", str(wav),
                     "-vf", "scale=960:440:flags=neighbor", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-b:a", "192k", "-shortest", str(HERE / "blackhole.mp4")], check=True)
-    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (9, 11.7, 11.9, 12.1, 16, 21.5)]
+    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (9, 11.8, 12.2, 12.6, 16, 21.5)]
     sheet = Image.new("RGB", (960, 660))
     for k, im in enumerate(ims):
         sheet.paste(im, (480 * (k % 2), 220 * (k // 2)))
