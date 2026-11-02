@@ -8,8 +8,8 @@ through one camera), but centred, so every orbit is on screen.
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens 75 → 100   the sun becomes a black hole: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring, a flat accretion disc round it, and the disc's far side lensed up over the top. The
-                  orbits fall in, inner first, to a tight band just outside the horizon and keep circling there,
-                  faster; the planets stay round, their surface detail fading out to plain circles as they fall, and
+                  orbits fall in, inner first, and turn to face the camera, ending as true circles just outside the
+                  horizon, concentric with its outline; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
                   still fill, flash and link with the sequence
   Dens back down  all of it runs backwards: the hole relaxes into a sun and the planets come back out
 
@@ -221,7 +221,14 @@ def ring_halves(c3, r, line, tilt, yaw):
     return out
 
 
-FINAL = [HORIZON * (1.45 + 0.28 * o) for o in range(len(ORBITS))]    # where each orbit ends up: a tight band round the hole
+FINAL = [HORIZON * (1.3 + 0.2 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
+
+
+def tilted_point(rho, a, fall):
+    """a point on an orbit whose plane turns, as it falls, from the orbit plane to face the camera: at fall 1 the
+    orbit is a true circle on screen, concentric with the horizon's outline"""
+    beta = fall * (math.pi / 2 - CAM_EL)                               # rotate the depth axis up toward the view plane
+    return (rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta))
 DETAIL_STEPS = 3                                                       # grey steps the surface detail fades through
 SPIN_UP = 4.0                                                          # how much faster a fully fallen orbit turns
 
@@ -258,13 +265,13 @@ def body_state(k, t, dens_now, hole):
     a = 2 * math.pi * (PHASES[k] + turned(o, max(0.0, hop_t)))
     rho_now = orbit_radius(o, hole)
     radius, _ = stage(dens_now)
-    size = r * (1 - 0.12 * fall)
+    size = r * (1 - 0.45 * fall)                                       # smaller as they crowd round the horizon
     fade = min(DETAIL_STEPS, int(fall * (DETAIL_STEPS + 1)))           # 0 full detail … DETAIL_STEPS plain circle
     if rho_now - size <= radius:                                       # inside the sun while it's big
         return None
-    p3 = orbit_point(rho_now, a)
+    p3 = tilted_point(rho_now, a, fall)
     x, y, _, ppu = project(p3)
-    return p3, x, y, size * ppu, hops, fade
+    return p3, x, y, size * ppu, hops, fade, a
 
 
 CIRCLE = [(10.0 * math.sin(2 * math.pi * q / 32), -10.0 * math.cos(2 * math.pi * q / 32)) for q in range(33)]
@@ -286,12 +293,10 @@ def scene(p, last, t, presses):
         rho_now = orbit_radius(o, hole)
         if rho_now <= radius + 1:
             continue
-        g_far, g_near = round(0x1E * (1 - fall) + 0x10 * fall), round(0x3A * (1 - fall) + 0x18 * fall)
-        for front_half in (False, True):
-            pts = [project(orbit_point(rho_now, (math.pi if front_half else 0) + math.pi * q / 60))[:2] for q in range(61)]
-            (front if front_half else back).append((1e9, path(pts, f"#{(g_near if front_half else g_far):02X}" * 3 if False else
-                                                         f"#{(g_near if front_half else g_far):02X}{(g_near if front_half else g_far):02X}{(g_near if front_half else g_far):02X}",
-                                                         0.9 if front_half else 0.8)))
+        for front_half in (False, True):                               # far half behind the sun, near half in front
+            g = round(0x3A if front_half else 0x1E)
+            pts = [project(tilted_point(rho_now, (math.pi if front_half else 0) + math.pi * q / 60, fall))[:2] for q in range(61)]
+            (front if front_half else back).append((1e9, path(pts, f"#{g:02X}{g:02X}{g:02X}", 0.9 if front_half else 0.8)))
     flashed = {i for th, i in (last["hits"] if last else []) if 0 <= t - th < M4.FLASH}
     pos, placed = {}, []
     order = sorted(range(len(BODIES)), key=lambda k: STEP_OF[k] is None)
@@ -299,14 +304,14 @@ def scene(p, last, t, presses):
         st = body_state(k, t, dens_now, hole)
         if st is None:
             continue
-        p3, x, y, rr, hops, fade = st
+        p3, x, y, rr, hops, fade, ang = st
         step = STEP_OF[k]
         foot = rr * (2.0 if k in RINGED else 1.0)
         if step is None and any(math.hypot(x - x2, y - y2) - foot - f2 < 3 for x2, y2, f2 in placed):
             continue
         placed.append((x, y, foot))
         if step is not None:
-            pos[step] = (p3, ORBIT_OF[k])
+            pos[step] = (p3, ORBIT_OF[k], ang, orbit_radius(ORBIT_OF[k], hole), infall(ORBIT_OF[k], hole))
         lit = step is not None and p.step_lit(step) and not p.drum
         fill, line = R2.FILLED if lit else R2.WIRE
         if step in flashed:
@@ -342,14 +347,12 @@ def links(t, presses, pos, hole):
         age = t - t0
         if age > M4.CONNECT + M4.FADE:
             continue
-        (p0, o), (p1, _) = pos[i0], pos[i1]
-        rho = math.hypot(p0[0], p0[2])
-        a0, a1 = math.atan2(p0[2], p0[0]), math.atan2(p1[2], p1[0])
+        (p0, o, a0, rho, fall), (p1, _, a1, _, _) = pos[i0], pos[i1]
         da = (a1 - a0) % (2 * math.pi)
         reach = min(1.0, age / M4.CONNECT)
         fade = 1.0 if age < M4.CONNECT else 1.0 - (age - M4.CONNECT) / M4.FADE
         g = 0xF0 if fade > 0.66 else 0x8A if fade > 0.33 else 0x4A
-        pts = [project(orbit_point(rho, a0 + da * reach * q / 47))[:2] for q in range(48)]
+        pts = [project(tilted_point(rho, a0 + da * reach * q / 47, fall))[:2] for q in range(48)]
         out.append(path(pts, f"#{g:02X}{g:02X}{g:02X}", 1.4 if g == 0xF0 else 1.1))
     return out
 
