@@ -1,11 +1,11 @@
 control        score  need %  0→100 %  0→50 %  50→100 %  span
-mode               4    1.60     3.12    4.68      4.41   385  ok
-rate               4    1.60     3.45    1.06      4.03   449  ok
-range              4    1.60     4.56    4.50      1.17   449  ok
-steps              3    1.20     4.66    4.15      2.10   449  ok
-skip               3    1.20     3.92    4.61      0.92   449  ok
-accent             2    0.80     1.90    1.17      0.73   338  ok
-tones              3    1.20     3.11    3.11      0.00   449  UNDER
-jump               2    0.80     4.71    4.42      2.05   449  ok
-note response      —    2.00     2.58       —         —   346  ok
+mode               4    1.60     2.04    3.61      3.48   385  ok
+rate               4    1.60     2.82    0.71      3.17   449  ok
+range              4    1.60     3.52    3.46      0.69   449  ok
+steps              3    1.20     3.57    3.27      1.40   449  ok
+skip               3    1.20     3.20    3.52      0.72   449  ok
+accent             2    0.80     1.65    1.01      0.64   338  ok
+tones              3    1.20     2.55    2.55      0.00   449  UNDER
+jump               2    0.80     3.49    3.36      1.20   449  ok
+note response      —    2.00     1.03       —         —   346  UNDER
 some changes are under the floor: give those controls more travel or a stronger channel

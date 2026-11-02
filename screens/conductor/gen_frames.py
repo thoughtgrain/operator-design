@@ -41,24 +41,47 @@ TEXT_HI, TITLE_OFF, VALUE_OFF = "#CBCBCB", "#5A5A5A", "#707070"
 # colour: sixteen of them, which is the limit. Text colours are authored per text slot and never repaint.
 PAINTS = [
     (BLACK, BLACK, 0.2),        # 0  the mask
-    (FILL, FILL, 0.3),          # 1  ground fills: bands, cells, halos
-    (GROUND, GROUND, 0.3),      # 2  hairlines: orbit, rules, edges, stations, tails
-    (QUIET, QUIET, 0.3),        # 3  quiet marks, the sounding chord's span
+    (FILL, FILL, 0.3),          # 1  the page strip's hairline
+    (GROUND, GROUND, 0.3),      # 2  hairlines: orbit, rules, edges, stations
+    (QUIET, QUIET, 0.3),        # 3  quiet lines: the phrase track, the playhead
     (LABEL, LABEL, 0.3),        # 4  rings, beads, the c mark
-    (SECOND, SECOND, 0.3),      # 5  hits, kicks, separators, strikes
-    (BRIGHT2, BRIGHT2, 0.3),    # 6  accents, the transfer arc, lit cells, playheads
+    (SECOND, SECOND, 0.3),      # 5  separators, strikes, lit track
+    (BRIGHT2, BRIGHT2, 0.3),    # 6  the transfer arc, page mark; a lane or step that just played
     (BRIGHT, BRIGHT, 0.3),      # 7  what a note just hit, the selection, the caps
     (BLACK, GROUND, 1.0),       # 8  hollow, ground: outside the register window
-    (BLACK, QUIET, 1.0),        # 9  hollow, quiet: off lanes, other degrees, skipped steps
-    (BLACK, SECOND, 1.2),       # 10 hollow, second: may-vary bodies, notes still to come, beat steps
-    (FILL, QUIET, 1.2),         # 11 dark body, quiet edge: evolve candidates, plain steps, the window
-    (FILL, LABEL, 1.2),         # 12 dark body, label edge: a lane at rest
-    (FILL, SECOND, 1.5),        # 13 dark body, second edge: the loop's chords
-    (FILL, BRIGHT, 2.0),        # 14 dark body, bright edge: the sounding chord
-    (SECOND, BRIGHT2, 1.2),     # 15 a lane that just played
+    (BLACK, QUIET, 1.0),        # 9  hollow, quiet: off lanes, other degrees, skipped steps, plain steps
+    (BLACK, LABEL, 1.2),        # 10 hollow, label: a lane at rest, quiet hits, the register window
+    (BLACK, SECOND, 1.2),       # 11 hollow, second: hits, beat steps, notes, may-vary bodies, gate tails
+    (BLACK, BRIGHT2, 1.2),      # 12 hollow, bright: accents, kicks, lanes that play here
+    (BLACK, SECOND, 1.5),       # 13 hollow, line weight: the loop's chords
+    (BLACK, BRIGHT, 2.0),       # 14 hollow, subject weight: the sounding chord
+    (BLACK, BRIGHT, 1.2),       # 15 hollow, bright: the selected lane's route end
 ]
-PAINT_INDEX = {(f_, s_): i for i, (f_, s_, _) in enumerate(PAINTS)}
-REMAP = {(BLACK, BRIGHT2): (BLACK, SECOND), (BRIGHT2, SECOND): (BRIGHT2, BRIGHT2), (FILL, GROUND): (FILL, FILL)}
+# Bodies are outlines: grey never fills a body. A body fills only for the moment a note hits it (6, 7).
+PAINT_INDEX = {}
+for _i, (_f, _s, _w) in enumerate(PAINTS):
+    PAINT_INDEX.setdefault((_f, _s, _w), _i)
+BODY_POOLS = {"dot", "moon", "octave", "tail", "halo"}
+
+
+def body_paint(fill, stroke, sw):
+    """The outline a body is drawn with: its brightest grey becomes the edge, nothing grey fills it."""
+    if fill == BRIGHT:
+        return (BRIGHT, BRIGHT, 0.3)                  # just hit: the one solid moment
+    edge = max((fill, stroke), key=lambda c: int(c[1:3], 16)) if fill != BLACK else stroke
+    if edge == BLACK:
+        edge = GROUND
+    if sw >= 2.0:
+        return (BLACK, BRIGHT, 2.0)
+    if sw >= 1.5:
+        return (BLACK, SECOND, 1.5)
+    w = {GROUND: 1.0, QUIET: 1.0}.get(edge, 1.2)
+    return (BLACK, edge, w)
+
+
+def line_paint(fill, stroke, sw):
+    c = max((fill, stroke), key=lambda c: int(c[1:3], 16))
+    return (c, c, 0.2 if c == BLACK else 0.3)
 
 # Advance widths of ' '..'~' at 10 px in tenths of a pixel: display.cpp's table, measured in the device font.
 GLYPHS = [28, 32, 36, 56, 56, 92, 69, 21, 29, 29, 44, 68, 28, 33, 28, 29, 56, 56, 56, 56, 56, 56, 56, 56,
@@ -80,11 +103,9 @@ def f(v: float) -> str:
 # (name, count, shape kind). Order is draw order (back to front) and index order on the device.
 POOLS = [
     ("header", 8, "bar"),          # page_header.hpp's stepped bar (preview only here)
-    ("halo", 3, "halo"),           # M1: evolve's candidate halos (at most three degrees), behind everything
     ("segment", 12, "segment"),    # M1: the orbit between neighbouring pitch classes; gaps mark the classes
     ("ringback", 4, "ringback"),   # M1: a seventh's ring, the half behind the planet (loop planets only)
     ("cell", 8, "cell"),           # M1: the phrase track's half-bar cells
-    ("band", 1, "band"),           # M4: the selected lane's route, a ground band under its line
     ("rule", 8, "rule"),           # M2 row baselines, M3 root and voice rows, M4 route lines (400 px, origin right)
     ("mask", 1, "mask"),           # M4: the black lane column the route lines slide out from behind
     ("octave", 11, "octave"),      # M4: the register scale's octave cells
@@ -165,9 +186,11 @@ class Frame:
         if pool in POOL_BASE_R:
             half = max(max(abs(a), abs(b)) for a, b in pts)
             assert half <= 2 * POOL_BASE_R[pool] + 0.01, (pool, k, half)
-        fill, stroke = REMAP.get((fill, stroke), (fill, stroke))
-        assert (fill, stroke) in PAINT_INDEX, (pool, fill, stroke)
-        sw = PAINTS[PAINT_INDEX[(fill, stroke)]][2]
+        paint = body_paint(fill, stroke, sw) if pool in BODY_POOLS else line_paint(fill, stroke, sw)
+        if pool == "dot" and paint == (BLACK, BRIGHT, 1.2):
+            paint = (BLACK, BRIGHT, 1.2)
+        assert paint in PAINT_INDEX, (pool, fill, stroke, sw, paint)
+        fill, stroke, sw = paint
         d = "M " + " L ".join(f"{f(px)} {f(py)}" for px, py in pts) + " Z"
         self.items.append((idx, f'<path id="{PREFIX}_node_{idx}" transform="matrix(1 0 0 1 {f(x)} {f(y)})" d="{d}" '
                                 f'fill="{fill}" stroke="{stroke}" stroke-width="{f(sw)}"/>'))
@@ -187,7 +210,7 @@ class Frame:
         out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
                '<g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>',
                self.header_svg]
-        for i, (fc, sc, w) in enumerate(PAINTS):
+        for i, (fc, sc, w) in enumerate(PAINTS):  # noqa
             out.append(f'<path id="{PREFIX}_palette_{i}" d="M {700 + 8 * i} 300 L {704 + 8 * i} 300 L {704 + 8 * i} 304 Z" '
                        f'fill="{fc}" stroke="{sc}" stroke-width="{f(w)}"/>')
         out += self.art
@@ -454,7 +477,7 @@ def moon_radius(song_dens: int, role: str) -> float:
 
 def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0, lit=frozenset(),
             frozen: bool = False, roles=DEFAULT_ROLES, rot: float = 0.0, moon_pc: float | None = None,
-            glow: dict | None = None) -> Frame:
+            glow: dict | None = None, show_moons: bool = False) -> Frame:
     """rot: an easing offset in pitch classes for the planets (a key turn in progress); moon_pc: where the moons
     are on their way between planets; glow: each lane's light, 0..1 (fades after it plays)."""
     fr = Frame()
@@ -480,8 +503,7 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
     for i, d in enumerate(song.candidates()):
         _, pc, x, y, z = planets[d]
         r = PLANET_R * px_per_unit(z) * (1 + 1.4 * ev / 100)
-        if ev > 0:
-            fr.node("halo", i, circle_pts(r, 24), x, y, FILL, FILL, 0.5)
+        pass                               # evolve now scales the candidate planets themselves (below)
 
     # the transfer arc: from the sounding chord's planet to the next, the short way round
     a_pc, b_pc = planets[current][1], planets[nxt][1]
@@ -528,7 +550,7 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
         fill, stroke, sw = moon_style(role, on)
         fr.node("moon", lane, circle_pts(r, 16), mx, my, fill, stroke, sw)
 
-    for mz, lane, role, mx, my in sorted(moons, reverse=True):
+    for mz, lane, role, mx, my in sorted(moons, reverse=True) if show_moons else []:
         if mz > czp:
             draw_moon(lane, role, mx, my, mz)
 
@@ -543,7 +565,8 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
             r *= 1.85
             fill, stroke, sw = FILL, SECOND, 1.5
         elif ev > 0 and d in song.candidates():
-            fill, stroke, sw = FILL, QUIET, 1.2       # one dark body with its halo: no bullseye
+            r *= 1 + 0.9 * ev / 100                  # what evolve could bring in swells with how likely it is
+            fill, stroke, sw = BLACK, LABEL, 1.2
         else:
             fill, stroke, sw = BLACK, QUIET, 1.2
         ringed = song.seventh and in_loop
@@ -554,13 +577,15 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
             fr.node("ringfront", ring_i, ring_pts(r * 1.75, True), x, y, LABEL, LABEL, 0.2)
             ring_i += 1
 
-    for mz, lane, role, mx, my in sorted(moons, reverse=True):
+    for mz, lane, role, mx, my in sorted(moons, reverse=True) if show_moons else []:
         if mz <= czp:
             draw_moon(lane, role, mx, my, mz)
 
     # planet labels: chord name, and the loop positions it plays ("Am 3"), outside the orbit
     for d, pc, x, y, z in planets:
         positions = [str(i + 1) for i, dd in enumerate(loop) if dd == d]
+        if not positions:
+            continue                       # only the loop's chords are named; the rest stay quiet
         label = chord_name(key, scale, d, song.seventh and d in loop)
         if positions:
             label += " " + "·".join(positions)
@@ -586,8 +611,8 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
     # the plate's title: the sounding chord, and what comes next
     fr.text(T_FREE + 7, 10, 62, 20, TEXT_HI, chord_name(key, scale, current, song.seventh))
     fr.text(T_FREE + 8, 10, 76, 10, LABEL, "next " + chord_name(key, scale, nxt, song.seventh))
-    status = "frozen" if frozen else ("evolving" if song.evolve else "fixed")
-    fr.text(T_FREE + 9, 470 - text_width(status, 10), 52, 10, LABEL, status)
+    if frozen:
+        fr.text(T_FREE + 9, 470 - text_width("frozen", 10), 52, 10, LABEL, "frozen")
 
     # the phrase track: four bars as eight half-bar cells; the sounding chord's span is lit, chords are separated
     x0, cw_px, ty = 24, 54, 160
@@ -598,7 +623,7 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
     now_chord = chord_of_cell[now_cell]
     for h in range(8):
         lit_cell = chord_of_cell[h] == now_chord
-        fr.node("cell", h, rect_pts(0, 0, cw_px - 2, 6), x0 + h * cw_px, ty, QUIET if lit_cell else FILL,
+        fr.node("cell", h, rect_pts(0, 2, cw_px - 2, 4), x0 + h * cw_px, ty, SECOND if lit_cell else GROUND,
                 QUIET if lit_cell else FILL, 0.3)
     sep = 0
     for h in range(1, 8):
@@ -615,6 +640,7 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
         fr.node("rulercomb", half, comb_pts(8 * pitch, 8, pitch, True, first=1), ax + half * 8 * pitch, ry_axis + 0.5,
                 GROUND, GROUND, 0.2)
     kick = song.kicks()
+    energy = 0.55 + 0.9 * song.dens / 100      # dens is every lane's energy: the bar's other bodies swell with it
     for s in range(16):
         lag = song.swing / 100 * (10 / 24) if s % 2 else 0.0
         bx = ax + pitch * s + pitch / 2 + lag * pitch
@@ -622,14 +648,14 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
         if kick[s]:
             r, fill, stroke, sw = DOT_R * 1.5, SECOND, SECOND, 1.2
         elif s in (4, 12):
-            r, fill, stroke, sw = DOT_R * 0.95, LABEL, LABEL, 1.2
+            r, fill, stroke, sw = DOT_R * 0.95 * energy, LABEL, LABEL, 1.2
         elif s % 4 == 0:
-            r, fill, stroke, sw = DOT_R * 0.8, FILL, SECOND, 1.2
+            r, fill, stroke, sw = DOT_R * 0.8 * energy, FILL, SECOND, 1.2
         else:
-            r, fill, stroke, sw = DOT_R * 1.0, FILL, QUIET, 1.2
+            r, fill, stroke, sw = DOT_R * 1.0 * energy, FILL, QUIET, 1.2
         if playing and s == step:
             r *= 1.35
-            fill, stroke = BRIGHT2, BRIGHT2
+            fill, stroke = BRIGHT, BRIGHT
         fr.node("dot", 7 + s, circle_pts(r, 16), bx, by, fill, stroke, sw)
     return fr
 
@@ -948,7 +974,7 @@ def draw_m4(lanes, sel=0) -> Frame:
         if ln.mute or off:
             end_x = 110          # retracted behind the mask
         if i == sel:
-            fr.node("band", 0, rect_pts(-400, -7.5, 0, 7.5), end_x, y, FILL, FILL, 0.2)
+            pass                          # the selected route is told by its bright line, end and bracket
         fr.node("rule", i, RULE_PTS, end_x, y,
                 QUIET if (ln.mute or off) else (BRIGHT2 if i == sel else SECOND),
                 QUIET if (ln.mute or off) else (BRIGHT2 if i == sel else SECOND), 0.2)
