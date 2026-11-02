@@ -774,7 +774,7 @@ VIEWS = {
 }
 
 
-def sheet(page, items):
+def sheet(page, items, start=1):
     """A 1:1 contact sheet: five frames in a column, each captioned."""
     gap, cap = 10, 16
     h = len(items) * (220 + cap + gap)
@@ -782,7 +782,7 @@ def sheet(page, items):
              f'<rect x="0" y="0" width="480" height="{h}" fill="#181818"/>']
     for i, (label, svg_path) in enumerate(items):
         y = i * (220 + cap + gap)
-        parts.append(f'<text x="2" y="{y + 12}" fill="#969696" font-family="sans-serif" font-size="11">{i + 1} · {label}</text>')
+        parts.append(f'<text x="2" y="{y + 12}" fill="#969696" font-family="sans-serif" font-size="11">{i + start} · {label}</text>')
         parts.append(f'<image x="0" y="{y + cap}" width="480" height="220" href="{svg_path.name}"/>')
     parts.append("</svg>")
     out = OUT / f"{page}.svg"
