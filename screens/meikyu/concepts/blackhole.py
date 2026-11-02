@@ -257,7 +257,7 @@ def body_state(k, t, dens_now, hole):
     a = 2 * math.pi * (PHASES[k] + turned(o, max(0.0, hop_t)))
     rho_now = orbit_radius(o, hole)
     radius, _ = stage(dens_now)
-    size = r * (1 - 0.45 * fall)
+    size = r * (1 - 0.12 * fall)
     flat = min(len(FLAT) - 1, int(fall * len(FLAT)))
     if rho_now - size <= radius:                                       # inside the sun while it's big
         return None
@@ -268,7 +268,7 @@ def body_state(k, t, dens_now, hole):
 
 def flattened(pts, aspect):
     """a planet's path squashed into a streak: wider along the orbit, flatter across it"""
-    sx = 1.0 / math.sqrt(aspect) ** 0.6
+    sx = 1.0 / aspect ** 0.55
     return [(x * sx, y * aspect) for x, y in pts]
 
 
