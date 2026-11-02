@@ -6,12 +6,12 @@ it turns into a black hole and every planet falls into it. Built the same way as
 through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
-  Dens 75 → 100   the sun becomes a black hole: its wireframe and corona fade, leaving a black disc with a bright
+  Dens hits 75    the sun collapses into a black hole in under a second (timed, not tied to the knob's travel): its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
                   wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
                   still fill, flash and link with the sequence
-  Dens back down  all of it runs backwards: the hole relaxes into a sun and the planets come back out
+  Dens below 72   all of it runs backwards, over two seconds: the hole relaxes into a sun and the planets come back out
 
 Everything else carries over from the orrery: sixteen step planets (they fill when their step plays, flash when it
 sounds) and sixteen extras, four subtle kinds, a few tilted rings, links along an orbit in the direction of travel
@@ -135,10 +135,33 @@ def smooth(x):
     return x * x * (3 - 2 * x)
 
 
-def stage(dens):
+COLLAPSE = 0.8          # seconds for the sun to fall into a black hole once Dens reaches GROW_END
+RELEASE = 2.0           # seconds to relax back into a sun once Dens drops below RELEASE_AT (slower: less motion)
+RELEASE_AT = GROW_END - 3                                              # hysteresis, so a knob resting on 75 doesn't flicker
+_HOLE = {}
+
+
+def hole_at(t):
+    """black-hole amount 0..1 at time t. Not a function of Dens: crossing GROW_END triggers a timed collapse, so the
+    hole snaps in fast however slowly the knob turns. On the device this is one float carried between display() calls."""
+    n = round(t * 30)
+    if n in _HOLE:
+        return smooth(_HOLE[n])
+    u, armed, dt = 0.0, False, 1 / 30
+    for i in range(n + 1):
+        if i in _HOLE:
+            u, armed = _HOLE[i], _HOLE[("armed", i)]
+            continue
+        d = eased_dens(i * dt)
+        armed = d >= GROW_END or (armed and d > RELEASE_AT)
+        u = min(1.0, u + dt / COLLAPSE) if armed else max(0.0, u - dt / RELEASE)
+        _HOLE[i], _HOLE[("armed", i)] = u, armed
+    return smooth(_HOLE[n])
+
+
+def stage(dens, hole):
     """(sun radius, black-hole amount 0..1)"""
     grow = smooth(dens / GROW_END)
-    hole = smooth((dens - GROW_END) / (100 - GROW_END))
     radius = SUN_MIN + (SUN_MAX - SUN_MIN) * grow ** 1.2
     return radius + (HORIZON - radius) * hole, hole
 
@@ -251,7 +274,7 @@ def turned(o, t):
         total, dt = 0.0, 1 / 30
         for i in range(n):
             tt = i * dt
-            total += dt / PERIOD * (1 + SPIN_UP * infall(o, stage(eased_dens(tt))[1]))
+            total += dt / PERIOD * (1 + SPIN_UP * infall(o, hole_at(tt)))
         _ANGLE[key] = total
     return _ANGLE[key]
 
@@ -267,7 +290,7 @@ def body_state(k, t, dens_now, hole):
     hop_t = hops * HOP
     a = 2 * math.pi * (PHASES[k] + turned(o, max(0.0, hop_t)))
     rho_now = orbit_radius(o, hole)
-    radius, _ = stage(dens_now)
+    radius, _ = stage(dens_now, hole)
     size = r * (1 - 0.45 * fall)                                       # smaller as they crowd round the horizon
     fade = min(DETAIL_STEPS, int(fall * (DETAIL_STEPS + 1)))           # 0 full detail … DETAIL_STEPS plain circle
     if rho_now - size <= radius:                                       # inside the sun while it's big
@@ -289,7 +312,7 @@ def mix(c0, c1, u):
 
 def scene(p, last, t, presses):
     dens_now = eased_dens(t)
-    radius, hole = stage(dens_now)
+    radius, hole = stage(dens_now, hole_at(t))
     back, front = [], []
     for o, rho in enumerate(ORBITS):                                   # orbit lines, falling in with their planets
         fall = infall(o, hole)
@@ -360,15 +383,15 @@ def links(t, presses, pos, hole):
 
 
 # ---- the demo ---------------------------------------------------------------------------------------------------------------
-LENGTH = 36.0
+LENGTH = 30.0
 
 
 def controls(t):
     c = {"dens": 30, "crpt": 20, "scal": 0, "drum": False}
-    for t0, t1, v0, v1 in ((4, 12, 30, 75), (12, 14, 75, 75), (14, 22, 75, 100), (22, 25, 100, 100), (25, 31, 100, 40)):
+    for t0, t1, v0, v1 in ((4, 12, 30, 80), (12, 19, 80, 80), (19, 25, 80, 40)):
         if t0 <= t < t1:
             c["dens"] = round(v0 + (v1 - v0) * (t - t0) / (t1 - t0))
-    if t >= 31:
+    if t >= 25:
         c["dens"] = 40
     return c
 
@@ -403,7 +426,7 @@ def main():
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-framerate", str(A.FPS), "-i", str(tmp / "f%04d.png"), "-i", str(wav),
                     "-vf", "scale=960:440:flags=neighbor", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-b:a", "192k", "-shortest", str(HERE / "blackhole.mp4")], check=True)
-    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (2, 9, 13, 17, 20, 23.5)]
+    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (9, 11.7, 11.9, 12.1, 16, 21.5)]
     sheet = Image.new("RGB", (960, 660))
     for k, im in enumerate(ims):
         sheet.paste(im, (480 * (k % 2), 220 * (k // 2)))
