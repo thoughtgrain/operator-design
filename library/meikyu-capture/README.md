@@ -23,7 +23,7 @@ A black hole in wireframe: the lensed disc of the reference image (an arch over 
 | Dens | 5 | position, height | the capture ring widens; bodies it reaches rise on stems to their pitch, the rest lie flat and hollow; an inner ring at Dens/4 marks accents |
 | Scal | 3 | position, height | a one-octave keyboard in the lower left shows the scale's shape as dots, drawn from C (C's dot bigger); each note's degree lights its key as it sounds; the stems move to the new pitches |
 | Crpt | 3 | position | re-rolled bodies are thrown along their spoke to their new distance, with a streak |
-| Rthm (now Drum) | 5 | position, shape, height | the scale keyboard gives way to the kit's pattern in the lower right: a spacing ruler with each pad a tick at its interval, repeats stacked (so `roll` is one tall column), the struck pad's tick lit; stems become pad lanes; the kick thumps the hole's edge, the snare the ring under it |
+| Rthm (now Drum) | 5 | position, shape, height | the screen turns to minimal line art, as the official drum machines are drawn (one bold double-outline object, because a drum screen changes many times a second): a double ring for the hole (the kick fills it), one arch ribbon for the lensed light (the snare fills it), one ellipse for the capture ring, bodies as outlined circles that fill when struck. The scale keyboard gives way to the kit's pattern in the lower right: a spacing ruler with each pad a tick at its interval, repeats stacked (so `roll` is one tall column), the struck pad's tick lit; stems become pad lanes; the kick thumps the hole's edge, the snare the ring under it |
 | Kit (Scal in drum mode) | — | shape | four pad patterns named for what they are: `stack` (meikyu's spread), `roll` (every pad on one key: a roll on one drum), `fill` (pairs over four neighbouring keys: a fill), `clust` (semitone pairs) |
 | a press | — | weight, flash | the phrase's 8 spokes and stems thicken and brighten; each body flashes as its step sounds; the wire brightens by velocity |
 
@@ -32,6 +32,7 @@ A black hole in wireframe: the lensed disc of the reference image (an arch over 
 - **The metaphor does the work.** Find the player's own rule (weight under Dens) and a physical thing with the same shape (inside the capture radius). Then the picture explains the player without a legend.
 - **Keep the middle clear.** Nothing near is drawn across the hole except the bodies; the wire is thin and dim, so the bodies, the capture ring and the hole's edge lead.
 - **Turn slowly, and only while it plays.** The disc turns a full circle a minute while notes play and eases to a stop with the music. Steps keep their slots on it; the playhead is the order things light in. A disc spinning at the step rate was far too fast.
+- **Drums get minimal line art.** Rapid change needs few, bold, closed shapes; the wireframe stays for melody.
 - **Controls without a twin go to the corners.** Scal and Kit don't map onto a black hole, so they get a plain keyboard of their own, drawn from C so each scale is a recognisable shape of dots; the kit gets a spacing ruler, so each kit is a recognisable spacing ([capture-keys.png](capture-keys.png): the four scales, then the four kits).
 
 ## Notes

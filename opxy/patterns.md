@@ -199,6 +199,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Fixed slots on a slow turn.** Give each item a fixed place (a spoke) on a disc that turns slowly (a circle a minute) only while the machine plays, easing to a stop with the music. The playhead is the order things light in. A disc spinning at the step rate is far too fast. The turn costs redraw on a device, so plan to step it.
 - **Keep the subject's middle clear.** Break near lines where they'd cross the hole; only the bodies go over it.
 - **Wireframe for the ground.** Thin rails, ribs and rings at low greys so the meaningful parts lead.
+- **Minimal line art for drums.** When a mode changes the screen many times a second (drums), drop the wireframe for a few bold, closed, double-outline shapes, the way the official drum machines are drawn; let hits fill those shapes.
 
 **Pitfalls.**
 

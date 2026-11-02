@@ -349,10 +349,10 @@ def kit_pattern(c, last, t):
     a key another pad already has stacks above it. The struck pad's tick lights"""
     pads = KITS[c["scal"]]
     hot = sounding_now(last, t)
-    out = [path([(RULER_X0 - 3, RULER_Y + 1.5), (RULER_X0 + RULER_DX * 43 + 3, RULER_Y + 1.5)], grey(0x7D), 1.5)]
+    out = [path(rect(RULER_X0 - 3, RULER_Y + 0.8, RULER_DX * 43 + 6, 1.5), grey(0x7D), 0.4, fill=grey(0x7D), close=True)]
     for o in (0, 12, 24, 36):                                          # octave marks under the line
         x = RULER_X0 + RULER_DX * o
-        out.append(path([(x, RULER_Y + 1.5), (x, RULER_Y + 5.5)], grey(0x64), 1.5))
+        out.append(path(rect(x - 0.75, RULER_Y + 2.3, 1.5, 3.2), grey(0x64), 0.4, fill=grey(0x64), close=True))
     seen = {}
     for iv in pads:
         level = seen.get(iv, 0)
@@ -416,8 +416,65 @@ def paced(hits, drum):
     return _PACED[key]
 
 
+# ---- drum mode: minimal line art ----------------------------------------------------------------------------------------
+# The official drum machines (the tambourine) draw one bold double-outline object and nothing else, because a drum
+# screen changes many times a second. So with Rthm on the wireframe goes: the hole is a double ring, the lensed light
+# one arch ribbon, the capture ring one ellipse, the bodies outlined circles on thin stems. Every shape is closed (no
+# open strokes for the device to streak). The kick fills the hole's ring, the snare fills the arch; a struck body fills.
+INK, INK_DIM = "#CDCDCD", "#7D7D7D"
+LINE = 1.4                                                             # the drawing's one line weight
+
+
+def circle(cx, cy, r, ry=None, n=40):
+    return ell(cx, cy, r, r if ry is None else ry, n=n)
+
+
+def arch_ribbon(r0, r1):
+    """the lensed light as one closed band over the top of the hole"""
+    top = lambda r, a0, a1: [(CX + r * math.cos(a0 + (a1 - a0) * q / 28), BASE - 0.97 * r * math.sin(a0 + (a1 - a0) * q / 28))
+                             for q in range(29)]
+    return top(r1, math.pi, 0.0) + top(r0, 0.0, math.pi)
+
+
+def stem_rect(x, y0, y1, w=1.6):
+    return rect(x - w / 2, min(y0, y1), w, abs(y1 - y0))
+
+
+def scene_drum(p, last, t, hits, w_hist, v_hist, c, dens):
+    kick = any(0 <= t - th < 0.22 for th in paced(hits, 3))
+    snare = any(0 <= t - th < 0.18 for th in paced(hits, 1))
+    back, over = [], []
+    rc = reach(dens)
+    back.append(path(circle(CX, BASE, rc, ASPECT * rc, 48), INK_DIM, LINE, close=True))           # the capture ring
+    back.append(path(arch_ribbon(R * 1.28, R * 1.42), INK, LINE, fill=INK if snare else "#000000", close=True))
+    hole = [path(circle(CX, BASE, R + 3.2, (R + 3.2) * 0.97, 48), INK, LINE, fill=INK if kick else "#000000", close=True),
+            path(circle(CX, BASE, R, R * 0.97, 48), INK, LINE, fill="#000000", close=True)]
+    sounding = {h[1] for h in hits if 0 <= t - h[0] < M4.FLASH}
+    for i in range(16):
+        a = slot(i, t)
+        w, w_since, w_prev = at(w_hist[i], t)
+        val, _, _ = at(v_hist[i], t)
+        throw = (t - w_since) / 0.45 if 0 <= t - w_since < 0.45 else None
+        r = reach(w) if throw is None else reach(w_prev) + (reach(w) - reach(w_prev)) * B.smooth(throw)
+        inside = B.smooth((dens - w) / 3 + 0.5)
+        h = height(i, val, last, c) * inside
+        x0, y0 = disc_xy(r, a)
+        x, y = disc_xy(r, a, h)
+        side = over if math.sin(a) > -0.05 else back
+        if inside > 0.05 and h > 1:
+            side.append(path(stem_rect(x0, y0, y), INK_DIM, 0.4, fill=INK_DIM, close=True))
+        if inside > 0.5:
+            rr = 3.4 * K
+            side.append(path(circle(x, y, rr, n=20), INK, LINE, fill=INK if i in sounding else "#000000", close=True))
+        else:
+            side.append(path(circle(x, y, 1.8 * K, n=14), INK_DIM, 1.0, fill="#000000", close=True))
+    return back + hole + over + kit_pattern(c, last, t)
+
+
 def scene(p, last, t, hits, w_hist, v_hist):
     c = controls(t)
+    if c["drum"]:
+        return scene_drum(p, last, t, hits, w_hist, v_hist, c, M4.eased(t, lambda tt: controls(tt)["dens"]))
     dens = M4.eased(t, lambda tt: controls(tt)["dens"])
     recent = [h for h in hits if 0 <= t - h[0] < 0.6]
     vel_flare = 0.0
