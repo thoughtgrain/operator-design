@@ -38,7 +38,7 @@
 <circle cx="240" cy="160" r="7.5" fill="none" stroke="#969696" stroke-width="1"/>
 <circle cx="240" cy="60" r="2" fill="#969696" stroke="#969696" stroke-width="1"/>
 <path d="M236,68 L240,73 L244,68 L240,70 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="1"/>
-<text transform="matrix(1 0 0 1 230 150)" fill="#969696" font-family="UniversNextPro-Light" font-size="10px">1/16</text>
+<text transform="matrix(1 0 0 1 222 150)" fill="#969696" font-family="UniversNextPro-Light" font-size="10px">1/16 free</text>
 <path d="M200,130 L203.6,130 L203.6,133.6 L200,133.6 Z" fill="#969696" stroke="#969696" stroke-width="0.8"/>
 <path d="M205.2,130 L208.8,130 L208.8,133.6 L205.2,133.6 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="0.8"/>
 <path d="M210.4,130 L214,130 L214,133.6 L210.4,133.6 Z" fill="#969696" stroke="#969696" stroke-width="0.8"/>

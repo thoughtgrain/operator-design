@@ -2,7 +2,7 @@
 
 I took Brian's spec ("Torso screen visuals: spec for the four pages", Nov 2 2026) and drew every page at its resting pose, at the positions and sizes it gives, so we can see whether the parts fit before anyone makes artwork. `pages.py` draws them; `maps/pages.png` has all four at 2× with numbered callouts, and `maps/m1..m4.png` are the 1:1 frames.
 
-I drew the grayscale variant (greys plus filled / ring / half / square). The repo's rule is grey only, and red belongs to the stock UI, so the hue palette is a decision for later (see the last section). Frame lint: 0 errors on all four pages.
+Grey only, with shapes and words wherever the spec used a colour (table at the end). Frame lint: 0 errors on all four pages.
 
 ## What each page holds
 
@@ -72,7 +72,7 @@ Counts are what the map actually draws, before the header and the 16 palette don
 | M1 | 2 | 58 | 11 | **27** |
 | M2 | 3 | 35 | 12 | **28** |
 | M3 | 3 (needs 4–8, see below) | 48 | 12 | **28** |
-| M4 | 3 | 73 | **20** | **36** |
+| M4 | 3 | 73 | **22** | **38** |
 
 Nodes are nowhere near 512. Text slots and outlines are where it breaks.
 
@@ -90,11 +90,50 @@ In order of how much they change the design.
 3. **M4's keyboard doesn't fill its region.** Two octaves of 10 px white keys is 140 px, but the strip is given x 16–296 (280 px). Either the keys are 20 × 44, or the strip is 140 px wide and the scale and root text sit beside it. The 10 × 44 size matches the SDK's output keyboard, so I'd keep it and pull the routing panel left.
 4. **M1's ring touches the strip.** The ring runs to y 160, and a 5 px step at the bottom reaches y 165. The strip starts at y 164. The cycle row at y 132 also crowds the left- and right-hand steps. Move the ring up to y 98, or the radius down to 52, which gives a 6 px gap.
 5. **Mode keys:** the spec lists 7 keys (bank, pattern, temp, mute, clear, copy, select, ctrl reads as 8 once mute and clear are split) in a 2 × 4 grid. I drew 8; confirm the set.
-6. **Palette roles in grey.** With 4 greys plus white, the pulse kinds survive by shape and size (Euclidean filled 5 px, manual filled with a ring, retrigger square), but accent vs plain bar, and selected target vs selected channel, rely on one grey step. They need a second cue (a cap, a ring), which I've added on M3's accents.
+6. **Roles in grey.** Some roles only differed by hue. Each now has a shape or a word (table at the end): accents get a cap, channels are circles and tracks squares, free-running says `free`.
 
-## The hue palette
+## Grey only: shapes and words instead of colour
 
-The spec's palette is the T-1 pad colours, with red for retrigger, free-running and the cycles family. That's the part I'd hold: this repo keeps machine artwork grey and leaves red to the stock UI, and on a grey device the hues collapse anyway. I'd ship grey-first (the variant drawn here) and only add hue if it never carries meaning alone and never uses the stock red. It's your call: the spec is yours and the SDK is yours.
+Brian's call (Nov 2): no colour other than grey. Every role the spec gave a hue is carried by a shape or a word, and brightness is only ever the second cue.
+
+**Palette (16 entries, all grey).**
+
+| entry | grey | used for |
+| --- | --- | --- |
+| 0 | `#000000` | ground, hollow fills |
+| 1 | `#323232` | ground lines, guides |
+| 2 | `#4B4B4B` | inactive, silent steps |
+| 3 | `#646464` | dim marks, outlines of unselected cells |
+| 4 | `#7D7D7D` | secondary marks |
+| 5 | `#969696` | placed but not active (pulses, bars) |
+| 6 | `#AFAFAF` | secondary bright |
+| 7 | `#CDCDCD` | active, the step playing, selected |
+| 8–15 | spares | the same greys with other stroke widths (hairline, ribbon, cap), since the palette pairs fill, stroke and width |
+
+**Roles.**
+
+| spec role (was a colour) | shape | word |
+| --- | --- | --- |
+| Euclidean pulse (amber) | filled circle, 5 px | — |
+| Manual pulse (orange) | filled circle with a ring | — |
+| Retrigger (red) | square | — |
+| Rotation source (amber) | 2 px dot inside the ring | — |
+| Start point (green) | chevron | — |
+| Free-running division (red) | — | `free` after the division |
+| Cycles (red-orange) | squares: filled = exists, brightest = current, short bar = muted, hollow = in the loop | — |
+| Edits / cc (teal) | half-filled cell | badge reads `edits` / `cc` |
+| Keys / fx (magenta) | — | badge reads `keys` |
+| Bank / scale (green) | — | mode key `B`; scale name text |
+| Pattern / target (blue) | target tracks are **squares** | `trk` |
+| MIDI channels (green) | channels are **circles** | `ch` |
+| Root (green) | the root key filled brightest, with a dot under it | root name, e.g. `F#` |
+| Harmony pitches (blue) | keys filled mid grey with a ring | `+3` count |
+| Random (rose) | the jittered ribbon | `rnd 25%` |
+| Phrase / range (lilac) | the phrase ribbon | phrase name in the header |
+| Accent (cream) | brightest bar plus a 2 px cap | — |
+| Probability | hollow bar, filled up to the chance | — |
+
+The map frames now use the words and shapes: M1 shows `1/16 free`, and M4 draws tracks as squares labelled `trk` and channels as circles labelled `ch`. That adds two words on M4, which is 22 texts against 16, one more reason for point 1 above (labels as nodes).
 
 ## Next
 

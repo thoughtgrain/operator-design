@@ -5,8 +5,8 @@ Each page is drawn at its resting pose, 480 × 220, at the positions and sizes t
 so every element shows. This is a layout map, not finished artwork: it checks that the parts fit, counts outlines,
 nodes and text slots per page against the spec's own limits, and shows where the spec contradicts itself.
 
-Drawn in the spec's grayscale variant (greys plus pattern: filled, ring, half, square), because this repo's rule is
-grey only and red belongs to the stock UI; the colour roles are kept in the legend so the hue version can follow.
+Grey only (Brian, Nov 2): no hue anywhere. Every role the spec gave a colour is carried by a shape or a word instead;
+map.md has the table.
 
     python3 pages.py            → maps/m1..m4.svg/.png (1:1), maps/m1..m4-map.png (2×, numbered), maps/pages.png
 """
@@ -181,7 +181,7 @@ def m1():
     pg.mark(4, cx + 6, cy - r + 14, "rotation source dot")
     pg.path([(cx - 4, cy - r + 20), (cx, cy - r + 25), (cx + 4, cy - r + 20), (cx, cy - r + 22)], K4, 1.0, K4)
     pg.mark(5, cx - 22, cy - r + 24, "start chevron")
-    pg.text(cx - 10, 150, "1/16", 10, K3)
+    pg.text(cx - 18, 150, "1/16 free", 10, K3)                       # the word, not a colour, says free-running
     pg.mark(6, cx + 14, 147, "division text (240, 150)")
     for i in range(16):                                                # cycles: 16 tiny squares, y 132
         x = cx - 40 + i * 5.2
@@ -329,11 +329,13 @@ def m4():
         pg.rect(x, y, 16, 16, K4 if sel else K2, K3 if sel else "#000000", 1.0 if not own else 1.6)
         pg.text(x + 5, y + 12, str(i + 1), 10, "#000000" if sel else K3)
     pg.mark(33, 404, 62, "8 target squares (1 hollow = own)")
-    for i in range(16):                                                # MIDI channels
+    pg.text(306, 64, "trk", 10, K2)
+    for i in range(16):                                                # MIDI channels: circles, so they never read as tracks
         r, c = divmod(i, 8)
-        x, y = 320 + c * 16, 100 + r * 16
-        pg.rect(x, y, 12, 12, K3 if i == 2 else K1, K3 if i == 2 else "#000000", 0.8)
-    pg.mark(34, 456, 106, "16 channel squares")
+        x, y = 326 + c * 16, 106 + r * 16
+        pg.circle(x, y, 5.5, K4 if i == 2 else K2, K3 if i == 2 else "#000000", 1.0)
+    pg.text(306, 110, "ch", 10, K2)
+    pg.mark(34, 456, 106, "16 channel circles (word 'ch'; tracks are squares, word 'trk')")
     rnd = [(316 + k * 144 / 47, 140 + 4 * math.sin(k * 2.7) * math.cos(k * 1.3)) for k in range(48)]
     pg.path(ribbon(rnd[:25], 0.5), K3, 0.6, kind="outline")
     pg.path(ribbon(rnd[24:], 0.5), K3, 0.6, kind="outline")
