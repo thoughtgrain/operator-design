@@ -1,0 +1,11 @@
+control        score  need %  0→100 %  0→50 %  50→100 %  span
+lane               3    1.20     4.62    3.40      3.80   444  ok
+role               5    2.50     3.68    2.91      3.15   382  ok
+dens               4    1.60     3.94    1.46      3.67   399  ok
+oct                4    1.60     8.40    7.98      7.98   430  ok
+vel                3    1.20     5.23    3.70      6.05   411  ok
+vary               2    0.80     3.59    1.80      1.80   399  ok
+lock               3    1.20     2.23    1.30      3.16   358  ok
+gate               3    1.20     0.15    0.16      0.16   414  UNDER
+note response      —    2.00     0.86       —         —   120  UNDER
+some changes are under the floor: give those controls more travel or a stronger channel
