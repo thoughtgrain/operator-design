@@ -7,7 +7,7 @@ through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens 75 → 100   the sun becomes a black hole: its wireframe and corona fade, leaving a black disc with a bright
-                  photon ring, a flat accretion disc round it, and the disc's far side lensed up over the top. The
+                  photon ring and light bent up over the top; asteroids fall in from every direction. The
                   orbits fall in, inner first, and turn to face the camera, ending as true circles just outside the
                   horizon, concentric with its outline; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
                   still fill, flash and link with the sequence
@@ -176,27 +176,49 @@ def sun(radius, hole):
     return o
 
 
-def accretion(hole, front):
-    """the accretion disc in the orbit plane (far or near half) and, behind the hole, its lensed image over the top"""
+def lensing(hole):
+    """light from behind the hole, bent up over the top of it (no flat disc: those tilted lines are gone)"""
     if hole < 0.05:
         return []
     o = []
-    for k, (r_in, r_out, g) in enumerate(((1.35, 1.6, 0xD0), (1.7, 2.05, 0x9A), (2.2, 2.7, 0x6A))):
+    cx, cy = CENTRE
+    rr = HORIZON * project((0.0, 0.0, 0.0))[3]
+    for s, g in ((1.35, 0xC0), (1.7, 0x80)):
         g = round(0x20 + (g - 0x20) * hole)
-        col = f"#{g:02X}{g:02X}{g:02X}"
-        for rr in (r_in * HORIZON, r_out * HORIZON):
-            pts = []
-            for q in range(61):
-                a = (0 if front else math.pi) + math.pi * q / 60
-                pts.append(project(orbit_point(rr, -a))[:2])
-            o.append(path(pts, col, 0.9))
-    if not front:                                                      # light from the far side, bent up over the hole
-        cx, cy = CENTRE
-        rr = HORIZON * project((0.0, 0.0, 0.0))[3]
-        for s, g in ((1.35, 0xC0), (1.7, 0x80)):
-            g = round(0x20 + (g - 0x20) * hole)
-            o.append(path(ell(cx, cy, rr * s, rr * s * 0.95, math.pi * 1.04, math.pi * 1.96, 40), f"#{g:02X}{g:02X}{g:02X}", 1.0))
+        o.append(path(ell(cx, cy, rr * s, rr * s * 0.95, math.pi * 1.04, math.pi * 1.96, 40), f"#{g:02X}{g:02X}{g:02X}", 1.0))
     return o
+
+
+N_INFALL, INFALL_LIFE = 18, 4.0                                        # infalling asteroids, and seconds each takes to fall
+
+
+def infalling(t, hole):
+    """asteroids falling into the hole from all round: each on its own tilted path, spiralling in faster, shrinking
+    and tumbling until it crosses the horizon. More of them as the hole deepens. (world point, svg) pairs"""
+    if hole < 0.1:
+        return []
+    out = []
+    for i in range(N_INFALL):
+        rnd = random.Random(900 + i)
+        if rnd.random() > hole:                                       # fewer while the hole is still forming
+            continue
+        offset = rnd.uniform(0, INFALL_LIFE)
+        cycle = math.floor((t + offset) / INFALL_LIFE)
+        u = ((t + offset) % INFALL_LIFE) / INFALL_LIFE                # 0 at the edge … 1 at the horizon
+        crnd = random.Random(900 + i * 97 + cycle)                    # each fall comes from somewhere new
+        a0, tilt, yaw = crnd.uniform(0, 2 * math.pi), crnd.uniform(-1.2, 1.2), crnd.uniform(0, math.pi)
+        rho = HORIZON + (250.0 - HORIZON) * (1 - u) ** 1.6
+        a = a0 + 2 * math.pi * 1.6 * u * u                            # spinning up as it falls
+        x0, z0 = rho * math.cos(a), rho * math.sin(a)                 # in its own plane, then tilted and turned
+        y1, z1 = z0 * math.sin(tilt), z0 * math.cos(tilt)
+        p3 = (x0 * math.cos(yaw) - z1 * math.sin(yaw), y1, x0 * math.sin(yaw) + z1 * math.cos(yaw))
+        x, y, _, ppu = project(p3)
+        size = crnd.uniform(4.0, 8.0) * (1 - 0.65 * u) * ppu
+        if math.hypot(x - CENTRE[0], y - CENTRE[1]) < HORIZON * project((0.0, 0.0, 0.0))[3] + size and not nearer_than_centre(p3):
+            continue
+        g = round(0x5A + (0xC8 - 0x5A) * u)                            # brightening as it heats on the way in
+        out.append((p3, R2.node(R2.rock_glyph(800 + i, cycle % 3), x, y, size / 10, "#000000", f"#{g:02X}{g:02X}{g:02X}", 0.8)))
+    return out
 
 
 def ring_halves(c3, r, line, tilt, yaw):
@@ -328,10 +350,11 @@ def scene(p, last, t, presses):
         if k in RINGED and fade == 0:
             halves = ring_halves(p3, BODIES[k][1] * (rr / BODIES[k][1] / project(p3)[3]), line, *RINGED[k])
             side += [(d + 0.5, s) for s in halves["back"]] + [(d - 0.5, s) for s in halves["front"]]
+    for p3r, svg in infalling(t, hole):                                # asteroids, ordered with everything else
+        (front if nearer_than_centre(p3r) else back).append((math.dist(CAM, p3r), svg))
     out = [s for _, s in sorted(back, key=lambda q: -q[0])]
-    out += accretion(hole, front=False)
+    out += lensing(hole)
     out += sun(radius, hole)
-    out += accretion(hole, front=True)
     out += [s for _, s in sorted(front, key=lambda q: -q[0])]
     out += links(t, presses, pos, hole)
     return out + O.ringed(446, 40, 12, p, ring=(1.45, 1.8 + 1.4 * ((last["vel"] if last else 64) / 127)), tilt=0.3)
