@@ -453,7 +453,10 @@ def moon_radius(song_dens: int, role: str) -> float:
 
 
 def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0, lit=frozenset(),
-            frozen: bool = False, roles=DEFAULT_ROLES) -> Frame:
+            frozen: bool = False, roles=DEFAULT_ROLES, rot: float = 0.0, moon_pc: float | None = None,
+            glow: dict | None = None) -> Frame:
+    """rot: an easing offset in pitch classes for the planets (a key turn in progress); moon_pc: where the moons
+    are on their way between planets; glow: each lane's light, 0..1 (fades after it plays)."""
     fr = Frame()
     t, v = song.titles_values()
     header(fr, t, v)
@@ -469,7 +472,7 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
     planets = []
     for d in range(7):
         pc = (key + scale[d]) % 12
-        x, y, z = project(orbit_point(pc))
+        x, y, z = project(orbit_point(pc + rot))
         planets.append((d, pc, x, y, z))
 
     # evolve: halos round the degrees evolve could swap in, scaling up from nothing
@@ -498,6 +501,8 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
 
     # moons: the eight lanes in a row round the sounding planet, by register; cmplx scatters them
     d_cur, pc_cur, cxp, cyp, czp = planets[current]
+    host_pc = moon_pc if moon_pc is not None else pc_cur + rot
+    cxp, cyp, czp = project(orbit_point(host_pc))
     rnd = random.Random(12)
     moons = []
     centre_side = 1 if cxp < 110 else (-1 if cxp > 370 else 0)
@@ -509,7 +514,7 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
         ecc = rnd.uniform(-0.45, 0.45)
         phi += song.cmplx / 100 * spread * 1.6
         rho *= 1 + song.cmplx / 100 * ecc
-        a = pc_angle(pc_cur)
+        a = pc_angle(host_pc)
         world = (math.sin(a) + rho * math.cos(phi), 0.0, math.cos(a) + rho * math.sin(phi))
         mx, my, mz = project(world)
         moons.append((mz, lane, role, mx, my))
@@ -517,9 +522,9 @@ def draw_m1(song: Song, position: int = 0, playing: bool = False, step: int = 0,
     # depth order: far moons, then the planets, then near moons
     def draw_moon(lane, role, mx, my, mz):
         r = moon_radius(lane_energy(song, role), role) * (Z0 / mz)
-        on = playing and lane in lit and role != "off"
-        if on:
-            r *= 1.4
+        g = (glow or {}).get(lane, 1.0 if (playing and lane in lit) else 0.0) if role != "off" else 0.0
+        on = g > 0.35
+        r *= 1 + 0.4 * g
         fill, stroke, sw = moon_style(role, on)
         fr.node("moon", lane, circle_pts(r, 16), mx, my, fill, stroke, sw)
 
