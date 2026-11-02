@@ -2,10 +2,10 @@
 """Torso, round 2 in motion: one pattern playing while the view moves through M1 → M2 → M3 → M4, with knobs turned
 on each page so every parameter's effect shows, and the pattern's notes as sound.
 
-  0– 8 s   M1 sequencer   pulses 5 → 9, then cycles 4 → 6
-  8–16 s   M2 repeats     repeats 1 → 4, then time shortens
- 16–24 s   M3 groove      velocity 50 → 100 %, then swing 50 → 66 %
- 24–32 s   M4 tonal       scale major → minor, then random 0 → 60 %
+  0–12 s   M1 sequencer   pulses 5 → 9, cycles 4 → 6 (four rows show), a cycle held at 6 s, recalled at 9.5 s
+ 12–20 s   M2 repeats     repeats 1 → 4, then time shortens
+ 20–28 s   M3 groove      velocity 50 → 100 %, sustain shortens, swing 50 → 66 %
+ 28–36 s   M4 tonal       scale major → minor, then random 0 → 60 %
 
 Page changes snap (the spec: a page opens at its state, no animation). Every change you hear is on the page you see.
 
@@ -28,7 +28,7 @@ import clean as C                        # noqa: E402
 import planets_av as A                   # noqa: E402
 
 STEP = A.STEP
-LENGTH = 32.0
+LENGTH = 36.0
 DEG = [0, 2, 4, 1, 3, 5, 2, 6, 4, 0, 5, 3, 1, 6, 2, 4]               # each step's scale degree
 VEL = [1.0, 0.5, 0.6, 0.8, 0.5, 0.9, 0.5, 0.6, 1.0, 0.7, 0.5, 0.85, 0.6, 0.5, 0.95, 0.75]
 TMPL = [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0]
@@ -39,17 +39,33 @@ def lerp(t, t0, t1, a, b):
     return a + (b - a) * u
 
 
+FREEZE_T, RECALL_T = 6.0, 9.5                                          # hold a cycle; go back to it
+
+
+def pass_of(t):
+    return int(t // (16 * STEP))
+
+
+HELD = pass_of(FREEZE_T) % 3                                           # the cycle frozen at FREEZE_T (its rotation)
+
+
+def shift_at(t):
+    """the rotation the front row plays: each pass moves on, until the held cycle is recalled"""
+    return HELD if t >= RECALL_T else pass_of(t) % 3
+
+
 def state(t):
-    s = {"page": min(4, int(t // 8) + 1), "steps": 16, "division": 1.0,
-         "pulses": round(lerp(t, 2, 5, 5, 9)), "cycles": round(lerp(t, 6, 7, 4, 6)),
-         "repeats": round(lerp(t, 9, 12, 1, 4)), "time": lerp(t, 13, 15, 1.0, 0.6), "voices": 3, "range": 1.0,
-         "velocity": lerp(t, 17, 19, 0.5, 1.0), "sustain": 0.5, "accent": 1.0, "swing": lerp(t, 20, 22, 0.5, 0.66),
-         "root": 6, "scale": "major" if t < 26 else "minor", "random": lerp(t, 28, 31, 0.0, 0.6)}
-    return s
+    page = 1 if t < 12 else 2 if t < 20 else 3 if t < 28 else 4
+    return {"page": page, "steps": 16, "division": 1.0,
+            "pulses": round(lerp(t, 1, 4, 5, 9)), "cycles": round(lerp(t, 4.5, 5.5, 4, 6)),
+            "repeats": round(lerp(t, 13, 16, 1, 4)), "time": lerp(t, 17, 19, 1.0, 0.6), "voices": 3, "range": 1.0,
+            "velocity": lerp(t, 21, 23, 0.5, 1.0), "sustain": lerp(t, 23.5, 25, 0.5, 0.15), "accent": 1.0,
+            "swing": lerp(t, 25.5, 27.5, 0.5, 0.66),
+            "root": 6, "scale": "major" if t < 30 else "minor", "random": lerp(t, 32, 35, 0.0, 0.6)}
 
 
 def notes():
-    """(time, step, pitch, velocity): every pulse, its repeats, swing and random applied"""
+    """(time, step, pitch, velocity): every pulse (rotated by the cycle), its repeats, swing and random applied"""
     out = []
     rnd = random.Random(3)
     n = int(LENGTH / STEP)
@@ -57,19 +73,19 @@ def notes():
         t = i * STEP
         st = state(t)
         s = i % 16
-        if s not in C.euclid(st["pulses"], 16):
+        if s not in C.m1_pattern(st["pulses"], 16, shift_at(t)):
             continue
         tt = t + (STEP * (st["swing"] - 0.5) * 2 if s % 2 else 0)
         scale = sorted(C.SCALES[st["scale"]])
         deg = DEG[s] % len(scale)
         pitch = 48 + st["root"] + scale[deg] + (rnd.choice([-2, -1, 1, 2]) if rnd.random() < st["random"] else 0)
         v = min(127, round(127 * st["velocity"] * VEL[s] * (1 + 0.3 * st["accent"] * TMPL[s])))
-        out.append((tt, s, pitch, v))
+        out.append((tt, s, pitch, v, 0.03 + 0.2 * st["sustain"]))
         gap = STEP * 0.5 * st["time"]
         for r in range(1, st["repeats"]):                               # repeats, decaying, accelerating
             tt += gap
             gap *= 0.8
-            out.append((tt, s, pitch, round(v * (1 - 0.2 * r))))
+            out.append((tt, s, pitch, round(v * (1 - 0.2 * r)), 0.05))
     return out
 
 
@@ -79,15 +95,21 @@ NOTES = notes()
 def frame(t):
     st = state(t)
     step = int(t // STEP) % 16
+    on = C.m1_pattern(st["pulses"], 16, shift_at(t))
     sounding = [n for n in NOTES if 0 <= t - n[0] < 0.1]
     pg = st["page"]
     if pg == 1:
-        built = C.m1(st["steps"], st["pulses"], st["cycles"], st["division"], head=step, pass_idx=int(t // (16 * STEP)))
+        held = HELD if t >= FREEZE_T else None
+        recall = 0.0 if t < RECALL_T else min(1.0, (t - RECALL_T) / 0.25)
+        built = C.m1(st["steps"], st["pulses"], st["cycles"], st["division"], head=step, pass_idx=pass_of(t),
+                     held=held, recall=recall)
     elif pg == 2:
         lit = sounding[0][1] if sounding else -1
-        built = C.m2(st["repeats"], round(st["time"], 1), st["voices"], st["range"], step=lit, on=C.euclid(st["pulses"], 16))
+        past = [n[1] for n in NOTES if n[0] <= t]
+        built = C.m2(st["repeats"], round(st["time"], 1), st["voices"], st["range"], step=lit, on=on,
+                     last=past[-1] if past else None)
     elif pg == 3:
-        built = C.m3(st["velocity"], st["sustain"], st["accent"], st["swing"], head=step if step in C.euclid(st["pulses"], 16) else -1, on=C.euclid(st["pulses"], 16))
+        built = C.m3(st["velocity"], st["sustain"], st["accent"], st["swing"], head=step if step in on else -1, on=on)
     else:
         played = {n[2] - 48 for n in sounding if 0 <= n[2] - 48 < 24}
         built = C.m4(st["root"], st["scale"], 3, st["random"], played=played)
@@ -99,9 +121,9 @@ def main():
     tmp.mkdir(parents=True, exist_ok=True)
     A.LENGTH = LENGTH
     wav = tmp / "anim.wav"
-    A.sound(wav, [(t, t + 0.1, p, v) for t, _, p, v in NOTES])
+    A.sound(wav, [(t, t + g, p, v) for t, _, p, v, g in NOTES])
     n = int(LENGTH * A.FPS)
-    keep = {int(tt * A.FPS) for tt in (3.0, 7.5, 13.0, 21.5, 26.5, 30.5)}
+    keep = {int(tt * A.FPS) for tt in (7.0, 9.9, 16.5, 19.5, 24.0, 27.8)}
 
     def render(i):
         svg = tmp / f"f{i:04d}.svg"

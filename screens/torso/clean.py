@@ -117,104 +117,127 @@ def header(titles, values):
 
 
 # ---- M1 sequencer: the loom ---------------------------------------------------------------------------------------------
-def m1(steps=16, pulses=5, cycles=4, division=1.0, head=6, pass_idx=0):
-    cam = Cam(el=42, target=(0.0, 0.0, 34.0), screen=(240.0, 140.0))
+ROWS_SHOWN = 4                                                         # at most four rows of cycles on screen
+
+
+def m1_pattern(pulses, steps, shift):
+    """which steps sound in a cycle: the Euclidean pulses, rotated by the cycle's shift"""
+    on = euclid(pulses, steps)
+    return {s for s in range(steps) if (s + shift) % steps in on}
+
+
+def m1(steps=16, pulses=5, cycles=4, division=1.0, head=6, pass_idx=0, held=None, recall=0.0):
+    """held: the shift of a cycle the player froze, kept on the back row with brackets so they can go back to it;
+    recall 0..1 slides it forward to the front, where it becomes what plays"""
+    cam = Cam(el=42, target=(0.0, 0.0, 30.0), screen=(240.0, 128.0))
     dx = 18.0 * division
     xs = [(s - (steps - 1) / 2) * dx for s in range(steps)]
+    DZ = 20.0
+    live_rows = min(cycles, ROWS_SHOWN - (1 if held is not None else 0))
     o, items = [], []
-    zback = (cycles + 0.4) * 18
+    zback = (ROWS_SHOWN - 0.4) * DZ
     for x in xs:
         o.append(cam.line((x, 0, -6), (x, 0, zback), 0x32, 1.0))      # warp
-    on = euclid(pulses, steps)
-    manual = {(min(on) + steps // 2) % steps} if steps > 3 else set()
-    retrig = {max(on)} if len(on) > 2 else set()
-    for age in range(cycles - 1, -1, -1):
-        z = age * 18
+    w = min(11.0, dx * 0.62)
+
+    def row(z, shift, age, lit_head, bright=False):
         o.append(cam.line((xs[0] - 9, 0, z + 5), (xs[-1] + 9, 0, z + 5), 0x4B if age == 0 else 0x32, 1.0))   # weft
-        shift = (age + pass_idx) % 2                                   # each cycle rotates the pattern a little
+        on = m1_pattern(pulses, steps, shift)
         for s in range(steps):
-            x = xs[s]
-            ss = (s + shift) % steps
-            if ss not in on and ss not in manual:
+            if s not in on:
                 continue
-            h = 7 + 3 * ((ss * 5) % 4)
-            w = min(11.0, dx * 0.62)
-            lit = age == 0 and s == head
-            g = []
-            if ss in retrig:                                           # retrigger: a split slab
-                g += solid(cam, x - w / 2, x - 0.8, h, z, z + 10, min(age, 4), lit)
-                g += solid(cam, x + 0.8, x + w / 2, h, z, z + 10, min(age, 4), lit)
+            x = xs[s]
+            h = 7 + 3 * ((s * 5) % 4)
+            lit = lit_head and s == head
+            a = 0 if bright else min(age, 4)
+            if s == max(on) and len(on) > 2:                           # retrigger: a split slab
+                g = solid(cam, x - w / 2, x - 0.8, h, z, z + 10, a, lit) + solid(cam, x + 0.8, x + w / 2, h, z, z + 10, a, lit)
             else:
-                g += solid(cam, x - w / 2, x + w / 2, h, z, z + 10, min(age, 4), lit)
-            if ss in manual:                                           # manual pulse: a raised rim on top
-                g += hollow(cam, x - w / 2 - 1.5, x + w / 2 + 1.5, 2.5, z - 1.5, z + 11.5, min(age, 4), y0=h)
+                g = solid(cam, x - w / 2, x + w / 2, h, z, z + 10, a, lit)
             items.append((z, abs(x), g))
+
+    for age in range(live_rows - 1, -1, -1):
+        row(age * DZ, (age + pass_idx) % 3, age, age == 0 and recall < 1)
+    if held is not None:                                               # the held cycle: brackets either side
+        z = (ROWS_SHOWN - 1) * DZ * (1 - recall)
+        row(z, held, 0 if recall else 2, recall >= 1, bright=True)
+        for side in (-1, 1):
+            x = xs[0] - 14 if side < 0 else xs[-1] + 14
+            br = [(x, 0, z - 1), (x, 0, z + 11), (x - 4 * side, 0, z + 11), (x - 4 * side, 0, z + 9.6), (x - 1.4 * side, 0, z + 9.6),
+                  (x - 1.4 * side, 0, z + 0.4), (x - 4 * side, 0, z + 0.4), (x - 4 * side, 0, z - 1)]
+            o.append(path([cam(p) for p in br], "#CDCDCD", 0.6, "#CDCDCD"))
     for _, _, g in sorted(items, key=lambda q: (-q[0], -q[1])):
         o += g
-    hx = xs[head]                                                      # the shuttle under the step playing
+    hx = xs[head]
     o.append(path([cam(p) for p in [(hx - 14, 0, -11), (hx - 8, 0, -14), (hx + 8, 0, -14), (hx + 14, 0, -11), (hx + 8, 0, -8), (hx - 8, 0, -8)]],
                   "#CDCDCD", 1.2, "#000000"))
+    if held is not None:
+        lx, ly = cam((xs[-1] + 22, 0, (ROWS_SHOWN - 1) * DZ * (1 - recall) + 5))
+        o.append(text(lx, ly + 3, "held", 10, "#AFAFAF"))
     return o, header(("steps", "pulses", "cycles", "division"), (str(steps), str(pulses), str(cycles), {1.0: "1/16", 1.4: "1/8", 0.75: "1/32"}.get(division, "1/16")))
 
 
 # ---- M2 repeats and phrase ----------------------------------------------------------------------------------------------
-def m2(repeats=3, time=1.0, voices=3, rng=1.0, head=4, step=None, on=None):
-    cam = Cam(el=26, d=420, focal=500, target=(10.0, 14.0, 8.0), screen=(240.0, 128.0))
-    pulses = sorted(on) if on is not None else [0, 3, 6, 10, 13]       # the same pulses the sequencer page shows
+def m2(repeats=3, time=1.0, voices=3, rng=1.0, head=4, step=None, on=None, last=None):
+    """the bar's pulses in a row, heights following the phrase; only the pulse sounding (or the last one) throws its
+    repeats, as an echo train running back into the distance: spacing by time and pace, each slice lower and hollow"""
+    cam = Cam(el=36, d=430, focal=480, target=(0.0, 10.0, 40.0), screen=(240.0, 120.0))
+    pulses = sorted(on) if on is not None else [0, 3, 6, 10, 13]
+    dx = 22.0
     o, items = [], []
-    span = 16 * 21.0
-    o.append(cam.line((-span / 2 - 8, 0, 5), (span / 2 + 8, 0, 5), 0x4B, 1.0))
-    for i, s in enumerate(pulses):
-        x0 = -span / 2 + s * 21.0
-        phase = s / 16
-        hbase = 14 + 14 * rng * math.sin(2 * math.pi * phase)          # the phrase: heights follow its shape
-        gap, x = 3.5 * time, x0
-        for r in range(repeats + 1):                                   # the pulse and its repeats, decaying
-            w = 9.0 if r == 0 else 4.0
-            h = max(3.0, hbase * (1.0 - 0.18 * r) + 8)
-            g = []
-            for v in range(voices if r == 0 else 1):                   # voicing: the chord's notes as stacked layers
-                lh = h / (voices if r == 0 else 1)
-                y0 = v * (lh + 2.0)
-                if r == 0:
-                    g += solid(cam, x, x + w, lh, 0, 10, 0, lit=(s == (step if step is not None else pulses[head % len(pulses)])), y0=y0)
-                else:
-                    g += hollow(cam, x, x + w, lh, 0, 10, min(r, 3), y0=y0)
-            items.append((abs(x), g))
-            x += w + gap
-            gap *= 0.8                                                 # pace: accelerating
-    for _, g in sorted(items, key=lambda q: -q[0]):
+    o.append(cam.line((-8.5 * dx, 0, 5), (8.5 * dx, 0, 5), 0x4B, 1.0))
+    src = step if step is not None and step >= 0 else last
+    for s in pulses:
+        x = (s - 7.5) * dx
+        h = 16 + 22 * rng * (0.5 + 0.5 * math.sin(2 * math.pi * s / 16))      # the phrase
+        lh = (h - 2.0 * (voices - 1)) / voices
+        g = []
+        for v in range(voices):                                        # voicing: the chord's notes as layers
+            g += solid(cam, x - 6, x + 6, lh, 0, 12, 0, lit=(s == step), y0=v * (lh + 2.0))
+        items.append((0, abs(x), g))
+        if s == src:                                                   # the echo train, back into the distance
+            z, gap = 20.0, 22.0 * time
+            for r in range(1, repeats + 1):
+                rh = max(3.0, h * (1 - 0.18 * r))
+                items.append((z, abs(x), hollow(cam, x - 6, x + 6, rh, z, z + 8, min(r - 1, 3))))
+                z += 8 + gap
+                gap *= 0.75                                            # accelerating pace
+    for _, _, g in sorted(items, key=lambda q: (-q[0], -q[1])):
         o += g
     return o, header(("repeats", "time", "voicing", "range"), (str(repeats), {1.0: "1/32", 1.8: "1/16", 0.6: "1/64"}.get(time, "1/32"), f"{voices} up", "sine"))
 
 
-# ---- M3 groove -----------------------------------------------------------------------------------------------------------
+# ---- M3 groove: a bar seen from the front, time running left to right ------------------------------------------------------
 def m3(velocity=0.8, sustain=0.5, accent=1.0, swing=0.58, head=5, on=None):
-    cam = Cam(el=30, d=560, focal=680, target=(0.0, 14.0, 14.0), screen=(240.0, 134.0))
-    vel = [1.0, 0, 0.6, 0.8, 0, 0.9, 0.5, 0, 1.0, 0.7, 0, 0.85, 0.6, 0, 0.95, 0.75]
-    if on is not None:                                                 # the same pulses the sequencer page shows
-        prof = [1.0, 0.5, 0.6, 0.8, 0.5, 0.9, 0.5, 0.6, 1.0, 0.7, 0.5, 0.85, 0.6, 0.5, 0.95, 0.75]
-        vel = [prof[s] if s in on else 0 for s in range(16)]
-    tmpl = [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0]               # the groove template's lifts
+    """the bar as a lane: grid ticks mark the straight 16ths; each pulse is a slab whose height is its velocity and
+    whose length along the lane is its sustain (the gate), slid off its tick by swing; accents get a cap; an
+    uncertain pulse (probability) is hollow"""
+    cam = Cam(el=30, d=520, focal=560, target=(0.0, 14.0, 6.0), screen=(240.0, 128.0))
+    prof = [1.0, 0.5, 0.6, 0.8, 0.5, 0.9, 0.5, 0.6, 1.0, 0.7, 0.5, 0.85, 0.6, 0.5, 0.95, 0.75]
+    on = on if on is not None else {0, 2, 3, 5, 6, 8, 9, 11, 12, 14, 15}
+    tmpl = [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0]
     prob = {6, 12}
-    dx = 20.0
+    dx = 21.0
+    x0 = -8 * dx
     o, items = [], []
-    o.append(cam.line((-8.5 * dx, 0, 2), (8.5 * dx, 0, 2), 0x4B, 1.0))
-    for s, v in enumerate(vel):
-        x = (s - 7.5) * dx + (dx * (swing - 0.5) * 2 if s % 2 else 0)
-        if v == 0:
-            continue
+    o.append(cam.line((x0, 0, 0), (x0 + 16 * dx, 0, 0), 0x4B, 1.0))    # the lane's front edge
+    o.append(cam.line((x0, 0, 12), (x0 + 16 * dx, 0, 12), 0x32, 1.0))  # and its back edge
+    for s in range(17):                                                # grid: the straight 16ths
+        x = x0 + s * dx
+        o.append(cam.line((x, 0, -3), (x, 0, 0), 0x64 if s % 4 == 0 else 0x4B, 1.0))
+    for s in sorted(on):
+        x = x0 + s * dx + (dx * (swing - 0.5) * 2 if s % 2 else 0)      # swing slides the off-beats
         lift = 1 + 0.35 * accent * tmpl[s]
-        h = 4 + 34 * velocity * v * lift
-        d = 4 + 26 * sustain
+        h = 3 + 34 * velocity * prof[s] * lift
+        length = max(3.0, dx * (0.15 + 0.85 * sustain))                # the gate, along the lane
         lit = s == head
-        g = hollow(cam, x - 4.5, x + 4.5, h, 0, d) if s in prob else solid(cam, x - 4.5, x + 4.5, h, 0, d, 0, lit)
-        if tmpl[s] and accent > 0.05 and s not in prob:                # accent: a cap on top
-            g += solid(cam, x - 5.5, x + 5.5, 1.8, -1, d + 1, 0, True, y0=h + 1.2)
-        items.append((abs(x), g))
+        g = hollow(cam, x, x + length, h, 1, 11) if s in prob else solid(cam, x, x + length, h, 1, 11, 0, lit)
+        if tmpl[s] and accent > 0.05 and s not in prob:
+            g += solid(cam, x - 1, x + length + 1, 1.8, 0, 12, 0, True, y0=h + 1.2)
+        items.append((abs(x + length / 2), g))
     for _, g in sorted(items, key=lambda q: -q[0]):
         o += g
-    return o, header(("velocity", "sustain", "accent", "timing"), (str(round(127 * velocity)), {0.5: "1/2", 0.15: "1/8", 1.0: "1x"}.get(sustain, "1/2"), "agogo", f"{round(swing * 100)}%"))
+    return o, header(("velocity", "sustain", "accent", "timing"), (str(round(127 * velocity)), {0.5: "1/2", 0.15: "1/8", 1.0: "1x"}.get(round(sustain, 2), "1/2"), "agogo", f"{round(swing * 100)}%"))
 
 
 # ---- M4 tonal: keys ------------------------------------------------------------------------------------------------------
