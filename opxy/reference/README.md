@@ -48,6 +48,36 @@ What I'd check before shipping:
 
 `screens/toro/concepts/ink_trace.py` traces both photos into clean one-bit art and builds toro's controls on top of them.
 
+## Stock OP-XY engine screens (teenage engineering)
+
+The house style, from teenage engineering's own engines. Linked, not copied: the [OP-XY guide, synth engines](https://teenage.engineering/guides/op-xy/synth-engines) lists the engines and their parameters; the screens are on the device and in TE's material. Labels below are what the screens shown to me read (some differ from the guide's current names). Annotated from captures at about 2.6× (1260 wide), measured back to 1:1.
+
+What they share:
+
+- **One object per engine, chosen for what it does.** A prism and lenses bending a beam (prism), a hair dryer (hardsync: a motor and a blast of air), a slinky on stairs (simple), a tambourine (drumline), stacked piano-key planes (epiano), a waveform (wavetable), a lattice of cubes (axis), a pixel field (dissolve). The object is a pun or a mechanism, never a dashboard.
+- **Few values, used hard.** White or `#CDCDCD` outlines or masses, flat mid-grey fills, black ground. No gradients, no texture except where the object has it (the dryer's grille dots, the slinky's rings).
+- **Line weight ~2 px for anything that matters** at 1:1; nothing hairline carries meaning.
+- **Lots of black.** Every body leaves most of the screen empty around the object, well over the 40 % rule.
+- **Three-quarter isometric for solids** (axis cubes, epiano planes, simple's stairs): one consistent projection, hidden-line, faces shaded by flat greys rather than lit.
+- **Controls show as parts of the object:** the beam's angle through the lenses, the stairs' shades, the waveform's shape. Where a control has no part, a plain secondary mark carries it (hardsync's envelope line and its two dots, stepped blocks for the tone).
+
+Per screen:
+
+- **axis** (cubes; labels shape, ratio, shape, vibrato): an isometric star of cubes in four greys, three white ones with dot markers, a single bright line with a handle leaving the figure. The cubes' shades are the ratio between arms; the handle line is a control drawn as a slider in space.
+- **dissolve** (pixel field; swarm, am, fm, detune): a full-screen grid of square cells in white and four greys. The one engine that fills the screen, because the sound is noise-like; it still reads as one object (a field), and the greys are a second layer inside it.
+- **drumline** (tambourine; pitch, decay, noise, tone): one double-outline drawing, centred, nothing else. Drumline changes instrument often (ten drum models), so each drawing is minimal and taken in at once. See `craft.md`, *Detail follows how often the subject changes*.
+- **epiano** (stacked key planes; shape, ratio, detune, stereo): a white key plane in isometric over three grey grid planes that step down in value. The layers are the voices or partials; depth is value, not perspective tricks.
+- **hardsync** (hair dryer; freq, sub, noise, lowcut): a solid white dryer, grille dots in two greys, a row of stepped grey blocks for the air, an envelope curve with end handles. The most "product drawing" of the set: solid masses, no outlines.
+- **prism** (prism and lenses; shape, ratio, detune, stereo): a white outline prism, a grey convex lens, a dark concave lens, a white eye-like detector; one bright beam bends through them. The signal path is literally drawn left to right.
+- **simple** (slinky on stairs; shape, pw, noise, stereo): four isometric stair treads in rising greys with white-outline slinky rings walking down them. Motion is the subject: the slinky's step is the oscillator's cycle.
+- **wavetable** (waveform; buzz, position, warp, drift): a single white trace with a flat section and a burst; the trace is the sound. One 2 px line on black, nothing else.
+
+What I take for my own screens:
+
+- Pick the object from the machine's mechanism (P13's "find the machine's own rule" is the same move).
+- Keep the drawing language to one projection and one line weight, and spend contrast only on what the player reads.
+- Don't copy any of these objects or their arrangement; they're TE's, and every machine here needs its own.
+
 ## Linked references
 
 - **MNMD** by Max Mockett ([site](https://mmockett.github.io/OP-XY/#mnmd), [source](https://github.com/mmockett/OP-XY-MNMD)). The clearest set of open-xy screens I've found. MD KIT draws each drum's sounding part in section like a patent drawing (P1); FM STAT, VO-6 and DPRO-DENS split structure left and output trace right (P2); SID-6581 and SWAVE-PULSE make the trace the subject (P3); DPRO-WAVE stacks wave frames in depth (P4). Two-page header throughout, inactive row in grey.
