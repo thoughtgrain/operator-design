@@ -7,9 +7,10 @@ through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens hits 75    a timed event (3 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
-                  flashes; a shock ring runs out through the orbit plane and starts each orbit on one smooth move as it passes:
-                  pulled straight in to a tight band just outside the horizon, spiralling faster; the inner three
-                  stay flat in the orbit plane, the outer three tip into the horizon at their own angles;
+                  flashes; a shock ring runs out through the sun's equator and starts each orbit on one smooth move as it passes:
+                  pushed out a little, then pulled in to a tight band just outside the horizon, spiralling faster;
+                  each orbit stays in its own plane throughout (they're inclined every which way from the start), so
+                  the shock throws planets out at different angles and they land round the hole from all sides;
                   every move starts and ends at rest, so nothing snaps. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
@@ -105,7 +106,7 @@ def clearance(ph, samples=120):
             if STEP_OF[k] is None:
                 continue
             rho, r = BODIES[k]
-            x, y, _, ppu = project(orbit_point(rho, 2 * math.pi * (u + p0)))
+            x, y, _, ppu = project(tilted_point(rho, 2 * math.pi * (u + p0), 0.0, ORBIT_OF[k]))
             pts.append((x, y, r * ppu * (2.0 if k in RINGED else 1.0)))
         for i in range(len(pts)):
             for j in range(i + 1, len(pts)):
@@ -125,7 +126,6 @@ def choose():
     return ph, clearance(ph, 360)
 
 
-PHASES, CLEAR = choose()
 
 
 # ---- Dens → sun, black hole, infall ---------------------------------------------------------------------------------------
@@ -148,9 +148,9 @@ _HOLE = {}
 # the event, as shares of COLLAPSE (u runs 0 → 1):
 SWELL_END = 0.07        # the sun swells and brightens a little: the breath before it goes
 IMPLODE_END = 0.17      # it implodes to the horizon, accelerating, and flashes
-SHOCK_DUR = 0.26        # a shock ring runs out through the orbit plane from the horizon to SHOCK_MAX
+SHOCK_DUR = 0.26        # a shock ring runs out through the equator from the horizon to SHOCK_MAX
 SHOCK_MAX = 330.0
-PUSH = [0.3, 0.27, 0.24, 0.21, 0.18, 0.15]                             # how far each orbit is flung (fraction of its radius)
+PUSH = [0.22, 0.2, 0.17, 0.14, 0.11, 0.08]                             # how far each orbit is flung (fraction of its radius)
 
 
 def swell(u):
@@ -220,11 +220,6 @@ def infall(o, u):
     return smooth(_progress(o, u))
 
 
-def tip(fall):
-    """orbits tip toward their angles across the second half of the fall, eased at both ends"""
-    return smooth((fall - 0.3) / 0.7)
-
-
 def eased_dens(t):
     return M4.eased(t, lambda tt: controls(tt)["dens"])
 
@@ -290,17 +285,17 @@ def ring_halves(c3, r, line, tilt, yaw):
 FINAL = [HORIZON * (1.2 + 0.16 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
 
 
-# each orbit's final angle round the hole: how far it tilts out of the orbit plane (toward facing the camera) and how
-# far it leans round the line of sight, so the fallen orbits wrap the hole from different directions
-# the inner three stay flat in the orbit plane; the outer three tip into the horizon, each its own way
-FINAL_TILT = [math.radians(d) for d in (0, 0, 0, 6, 26, -10)]
-FINAL_LEAN = [math.radians(d) for d in (0, 0, 0, -34, 52, -70)]
+# every orbit has its own plane from the start, like a real system seen from outside: tilted toward or away from the
+# camera and leaned round the line of sight. Inner orbits are steeper; outer ones flatter so they stay on screen. The
+# planes never change: when the hole forms the orbits only change size, so nothing swings round.
+PLANE_TILT = [math.radians(d) for d in (16, -12, 9, -7, 5, -3)]
+PLANE_LEAN = [math.radians(d) for d in (-38, 30, -20, 14, -9, 6)]
 
 
-def tilted_point(rho, a, fall, o=0):
-    """a point on orbit o, whose plane turns as it falls: it tilts up out of the orbit plane by up to FINAL_TILT[o]
-    and leans round the line of sight by up to FINAL_LEAN[o], so the orbits angle into the hole"""
-    beta, gamma = tip(fall) * FINAL_TILT[o], tip(fall) * FINAL_LEAN[o]  # inner orbits have 0: they stay flat
+def tilted_point(rho, a, fall=0.0, o=0):
+    """a point on orbit o, in that orbit's own fixed plane: tilted toward the camera by PLANE_TILT[o] and leaned round
+    the line of sight by PLANE_LEAN[o]. `fall` is kept for callers and doesn't turn anything."""
+    beta, gamma = PLANE_TILT[o], PLANE_LEAN[o]                          # its own plane, fixed: `fall` doesn't turn it
     x, y, z = rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta)
     f = (0.0, -math.sin(CAM_EL), math.cos(CAM_EL))                     # the line of sight: lean about it (Rodrigues)
     c, s_ = math.cos(gamma), math.sin(gamma)
@@ -309,13 +304,17 @@ def tilted_point(rho, a, fall, o=0):
     return (x * c + cx * s_ + f[0] * d * (1 - c), y * c + cy * s_ + f[1] * d * (1 - c), z * c + cz * s_ + f[2] * d * (1 - c))
 
 
+PHASES, CLEAR = choose()                                              # needs the orbit planes, so it runs here
+
+
 DETAIL_STEPS = 3                                                       # grey steps the surface detail fades through
 SPIN_UP = 4.0                                                          # how much faster a fully fallen orbit turns
 
 
 def orbit_radius(o, u):
     """thrown out first, then pulled from there down to its final band round the horizon"""
-    return ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, u)          # straight in, in the orbit plane: no swing
+    base = ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, u)          # out a little, then in, all in its own plane
+    return base + ORBITS[o] * PUSH[o] * burst(o, u)
 
 
 _ANGLE = {}
@@ -414,11 +413,11 @@ def scene(p, last, t, presses):
             halves = ring_halves(p3, BODIES[k][1] * (rr / BODIES[k][1] / project(p3)[3]), line, *RINGED[k])
             side += [(d + 0.5, s) for s in halves["back"]] + [(d - 0.5, s) for s in halves["front"]]
     sr = shock(u)
-    if sr is not None:                                                 # the shock ring, flat in the orbit plane
+    if sr is not None:                                                 # the shock ring, flat in the sun's equator
         x = (sr - HORIZON) / (SHOCK_MAX - HORIZON)
         g = round(0xF0 + (0x30 - 0xF0) * x)
         for front_half in (False, True):
-            pts = [project(tilted_point(sr, (math.pi if front_half else 0) + math.pi * q / 60, 0.0))[:2] for q in range(61)]
+            pts = [project(orbit_point(sr, (math.pi if front_half else 0) + math.pi * q / 60))[:2] for q in range(61)]
             (front if front_half else back).append((1e9 if not front_half else -1e9,
                                                     path(pts, f"#{g:02X}{g:02X}{g:02X}", 1.8 - 0.9 * x)))
     flash = max(0.0, 1.0 - (u - IMPLODE_END) / 0.1) if u >= IMPLODE_END else 0.0
