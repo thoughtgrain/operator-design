@@ -30,6 +30,15 @@ A part that's scaled for motion is authored so its stroke stays inside this tabl
 - No nested bands of contrasting grey. They read as a target.
 - Solid and wireframe can share a figure when they mean something different (toro: quiet parts hollow, loud parts solid; meikyu's planets: a step that plays fills in). Keep wireframes hidden-line, with a black fill so they still hide what's behind them, and keep the edge a mid grey so a solid part stays the brightest thing.
 
+## Detail follows how often the subject changes
+
+How much detail a drawing can carry depends on how often the subject itself is replaced, not on how fast notes come.
+
+- **The subject swaps often:** keep it minimal. The stock drum machine draws a different instrument for each sound (a tambourine, then something else), so each one is a few bold, closed, double-outline shapes the eye takes in at once.
+- **One subject that stays:** detail is fine. Meikyu's black hole is on screen the whole time and only what's on it changes, so a wireframe can stay, in drum mode as well.
+
+Fast notes are a motion question (flashes, pacing, the redraw budget), not a reason to strip the drawing. I made that mistake once with meikyu's drum mode and reverted it.
+
 ## Composition
 
 - At least 40 % of the body stays black.
