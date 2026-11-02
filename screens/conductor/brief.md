@@ -1,193 +1,157 @@
 # Conductor · screen brief
 
-Revision of [mmockett/OP-XY-Conductor](https://github.com/mmockett/OP-XY-Conductor)'s four pages, run through `opxy/protocol.md`. The machine and its code are Matt Mockett's; this folder only holds the design. Frames come from `gen_frames.py`, so nothing here is hand-patched.
+This folder revises the four pages of [mmockett/OP-XY-Conductor](https://github.com/mmockett/OP-XY-Conductor) against `opxy/protocol.md`. The machine and its code are Matt Mockett's; this folder only holds the design.
+
+**Current design: revision 2.** These are the four designs Brian picked from the concept rounds.
+
+| page | design | generator | frames | sheets |
+| --- | --- | --- | --- | --- |
+| M1 song | arc diagram | `gen_frames2.py` | `frames2/m1/` | `rev2/contact-m1.png` |
+| M2 lanes | notches | `gen_frames2.py` | `frames2/m2/` | `rev2/contact-m2.png` |
+| M3 lane | isometric stairs | `gen_frames2.py` | `frames2/m3/`, `frames2/m3-drum/` | `rev2/contact-m3.png` |
+| M4 route | circuit traces | `gen_frames2.py` | `frames2/m4/` | `rev2/contact-m4.png` |
+
+The film is `rev2/conductor-pages.mp4`, made by `anim_all.py`. Revision 1 (the harmonic orrery) is kept in `rev1/` for the record, along with `gen_frames.py` and `anim_m1.py`. Revision 2 still imports `gen_frames.py` for the musical stand-in and the header.
+
+## How we got here
+
+Brian's notes on each round drove the next one:
+
+1. **Orrery (rev 1).** Too busy, and the lane dots on the song page meant nothing. Outcome: no moons on M1, only the loop's chords labelled.
+2. **No grey fills.** Fills only where they show depth or shaping; every body became an outline.
+3. **One lane at a time on M2,** and a calmer M3.
+4. **"Not everything needs to be a circle or a square."** This started five shape languages per page (`concepts.py` → `concepts/m1.png` … `m4.png`).
+   - Picked: **M1 5, arc diagram** and **M4 4, circuit traces**.
+5. **Round 2** for M2 and M3 (`concepts2.py` → `concepts/m2b.png`, `m3b.png`).
+   - M2 6 (arches) was built first. Brian then corrected it to **M2 8, notches**.
+6. **Round 3, the arp as stairs** (`concepts3.py` → `concepts/m3c.png`).
+   - Picked: **M3 13, isometric stairs**.
 
 ## 0 · Screen or stock page?
 
-**Subject in one sentence:** one song that eight lanes follow, drawn as a harmonic orrery: the scale's seven chords are planets on a graduated orbit, and the eight lanes are moons that ride with whichever chord is sounding.
-
-It clearly earns a screen. Conductor has no sound of its own, so the stock page would show eight numbers and nothing about what the song is doing.
+**Subject:** one song that eight lanes follow. That's one chord loop and one groove in the key and scale. M1 draws the loop as arches between the chords that make it; the other pages draw one lane's part of it.
 
 ## 1 · Intake
 
 | | |
 | --- | --- |
 | Machine id | `conductor` |
-| Kind | `synth` (silent engine on aux track 12; plays tracks 1–8 through track control) |
-| Sounds like | Whatever is loaded on tracks 1–8. Conductor decides *what* they play: one chord loop and one groove that every lane leans on, changing a little each four-bar phrase. |
-| Controls | 8 saved on M1 (two pages, `"press": "page"`), plus 8 per-lane controls each on M2, M3 (by role) and M4 (6 used) |
+| Kind | `synth`: a silent engine on aux track 12 that plays tracks 1–8 through track control |
+| What it does | Decides *what* tracks 1–8 play: one chord loop and one groove every lane leans on, changing a little each four-bar phrase |
+| Controls | M1: 8 saved controls (two pages). M2, M3 (by role) and M4: 8, 8 and 6 per lane |
 | Control source | existing XY definition |
 
 ### 1B · Definition review
 
-`python3 opxy/tools/lint_definition.py ../op-xy-conductor/definition.json` → 2 errors, 2 warnings.
+`lint_definition.py ../op-xy-conductor/definition.json` → 2 errors, 2 warnings. None is a definition fault:
 
-| finding | resolution |
-| --- | --- |
-| E `hidePages` is an unknown field | The checker mirrors the SDK on `staging`; `hidePages` comes from the dev SDK branch Conductor needs (open-xy #345). Not a definition fault. I'm leaving it and flagging that the checker needs to learn the field once it lands. |
-| E `texts` 32 > 16 | Same reason: sixteen display words plus the header's sixteen come from `sdk/control-notes`. Again, the checker needs to catch up. |
-| W `hrate` labels over 5 characters | The definition's labels (`0.5 bar`…) are only stored. `display.cpp` shows `kHarmonyNames` (`1/2`, `1`, `2`, `4`), which fit. Justified. |
-| W `voiceCapacity` 1 | The engine is silent and plays other tracks' machines. Justified. |
+- **`hidePages` and 32 texts.** These come from the dev SDK branch Conductor needs (open-xy #345), and the checker doesn't know them yet.
+- **`hrate` labels.** The display shows `1/2 · 1 · 2 · 4`, which fit the column.
+- **`voiceCapacity` 1.** The engine is silent, so one voice is correct.
 
-| check | verdict | reason |
-| --- | --- | --- |
-| Names say what rises clockwise | pass | dens, cmplx, swing, evolve rise; key/scale/prog/hrate are enums |
-| Header values in real units, ≤ ~5 chars | pass | longest is `drone`, `chord`, `hmin` (measured with the device glyph table in `display.cpp`) |
-| Defaults plainest useful; presets sound good | **pending device** | can't judge by ear from here |
-| Engine page holds only the sound's own parameters | pass | all eight are song-level |
-| Page 1 holds what's played most | pass | key, scale, prog, dens |
-| Port parity | n/a | not a port |
-| Saved sounds compatible | pass | no parameter changes proposed; this revision is display-only |
-| `id` final | pass | `conductor` |
+No parameter changes are proposed, so saved projects are unaffected.
 
-### Captions
-
-Unchanged from the machine. One text change: the page strip names become **song / lanes / lane / route**, because `conductor` is 9 characters, over the 8-character label rule (`kPageNames` in `specs.h`).
+One string change: page names become **song / lanes / lane / route** (`kPageNames`), because `conductor` is over the 8-character label rule.
 
 ## 2 · Listen and rank
 
-I scored these from the generator code, not by ear, so **please confirm or correct them**. Perceptibility is checked against these numbers, and I never lowered one to make a control pass.
+I scored these from `generator.h`, not by ear. **They are pending your confirmation by ear.**
 
-**M1 (song)**
-
-| control | what it does to the sound | score |
-| --- | --- | --- |
-| key | transposes everything | 3 |
-| scale | changes three or four chord qualities and every melody | 3 |
-| prog | a different chord loop | 5 |
-| dens | kick count 2–6 per bar, plus every lane's energy | 4 |
-| cmplx | kick displacement, sevenths at ≥ 65, every lane's complexity | 3 |
-| hrate | chords last ½–4 bars | 4 |
-| swing | offbeats up to 10/24 of a step late | 3 |
-| evolve | up to 35 % change a phrase; heard over time | 2 |
-
-**M2 (lanes)**
-
-| control | score |
+| page | control: score |
 | --- | --- |
-| lane | 3 (a selector; given 3 so it's held to a floor) |
-| role | 5 |
-| dens | 4 |
-| oct | 4 |
-| vel | 3 |
-| vary | 2 |
-| lock | 3 (bass only, see `generator.h`) |
-| gate | 3 |
+| M1 | key 3 · scale 3 · prog 5 · dens 4 · cmplx 3 · hrate 4 · swing 3 · evolve 2 |
+| M2 | lane 3 · role 5 · dens 4 · oct 4 · vel 3 · vary 2 · lock 3 (bass only) · gate 3 |
+| M3 (arp) | mode 4 · rate 4 · range 4 · steps 3 · skip 3 · accent 2 · tones 3 · jump 2 |
+| M4 | lane 3 · to 5 · xpose 3 · mute 5 · low 3 · high 3 |
 
-**M3 (arp role)**
+## 3 · Subject and language
 
-| control | score |
+**One language across the four pages:** a line drawing on a ground line, in outlines only, in grey only.
+
+| page | what each part means |
 | --- | --- |
-| mode | 4 |
-| rate | 4 |
-| range | 4 |
-| steps | 3 |
-| skip | 3 |
-| accent | 2 |
-| tones | 3 |
-| jump | 2 |
-
-**M4 (route)**
-
-| control | score |
-| --- | --- |
-| lane | 3 |
-| to | 5 |
-| xpose | 3 |
-| mute | 5 |
-| low | 3 |
-| high | 3 |
-
-## 3 · Subject
-
-| candidate | pattern | verdict |
-| --- | --- | --- |
-| A · current screens | none (dashboard) | Rejected. Five zones on M1 and four white elements tie for brightest. Swing, evolve, cmplx and hrate have no channel. Several states rely on shade alone, and parts sit under 3:1. |
-| B · barrel organ | P13 Capture | Strong metaphor (a pinned barrel replays exactly until re-pinned), but turning it moves ~128 pins a step, far over the redraw budget. |
-| C · harmonic orrery | P12 Orrery | **Chosen by Brian.** Cheapest redraw, and it reuses `library/meikyu-orrery/`. |
-| D · engraved score | P11 | Most literal; its staves turn into hatching at 1:1. |
-
-**Drawing language:** an ephemeris plate from a star atlas.
-- Bodies are outlines over dark fills.
-- Orbits and graduations are hairlines.
-- Tracks carry bodies at intervals.
-- Small labels sit in a mid grey.
-
-**Reference:** `library/meikyu-orrery/`.
-
-The one idea that ties all four pages together: **every lane is a moon, on every page**. A moon's size is how much the lane plays; it's hollow when the lane is off or muted, and it lights when the lane plays.
+| M1 · arc diagram | The twelve pitch classes along a line, and the scale's degrees as triangles under it (the loop's larger). The loop is an arch from each chord to the next, numbered in order; the arch sounding now is the brightest thing on the page. Below the line are the phrase line (where chords change) and the bar's groove (kicks tallest). |
+| M2 · notches | The selected lane's bar as a ruler's edge, with a V cut for each note. Velocity sizes the V, a tick shows where it lets go (gate), and accents get a mark under the point. Notes that may vary are smaller and quiet. Oct raises or lowers the edge. |
+| M3 · isometric stairs | The arp as a staircase seen in 3D: each note a tread with depth at its pitch, each leap a riser. Accents are brighter treads. Drum lanes use the same treads on eight voice rows. |
+| M4 · circuit traces | Eight track buses at the right. Each lane runs along its row and lands on its track's bus with a pad, hopping over the buses it passes. The selected lane's register window sits along the bottom. |
 
 ## 4 · Map and budget
 
 ### M1 · song
 
-| control | channel | part | travel | what the player sees |
-| --- | --- | --- | --- | --- |
-| key | rotation | the seven planets round the 12-tick orbit | 0 → 330° | the whole chord set turns; the `c` tick stays put as the reference |
-| scale | position | planets slide between pitch-class ticks | 1 tick each (≈ 20–100 px) | the scale's shape on the orbit; chord names re-case (`Dm` → `D`) |
-| prog | count + fill | loop planets solid and 1.85×, the rest hollow; transfer arc | 4 planets, arc up to 6 segments | which chords the loop uses, with each one's position in its label (`Am 3`) |
-| dens | scale | moons 0.45× → 1.8×; kick bodies on the ruler | 2 → 6 kicks | the lanes swell as they play more |
-| cmplx | position | moons scatter from a neat row onto eccentric orbits; ringed planets at ≥ 65 | up to 2 × orbit radius | a busy, irregular system; sevenths get Saturn rings |
-| hrate | count + shade | the phrase track's half-bar cells and the separators between chords | 7 → 0 separators; lit span 54 → 432 px | how long each chord holds |
-| swing | position | offbeat bodies on the bar ruler move late (right) and plot low | 11 px right, 20 px down | lag drawn as depth below the on-time axis |
-| evolve | scale | dark halos round the degrees evolve could swap in | 1× → 2.4× planet radius | which chords might arrive next phrase, and how likely; halos collapse on freeze |
-| note | scale + shade | lit moons 1.4× in the bright greys; playhead on track and ruler | — | the ensemble firing round the sounding chord |
+| control | channel | what moves |
+| --- | --- | --- |
+| key | position | Triangles, labels and arches slide along the line, 36.4 px a semitone |
+| scale | position | Degrees move between pitch-class ticks |
+| prog | shape | The arches re-route between different chords |
+| dens | count | Kicks in the groove, 2 → 6 per bar |
+| cmplx | position + text | Kicks pulled off the beat; chord labels gain a 7 at ≥ 65 |
+| hrate | count | Separators on the phrase line, 7 → 0 |
+| swing | position | Offbeat ticks in the groove move late, up to 11 px |
+| evolve | scale | The degrees evolve could swap in grow, 1 → 1.8× |
 
 ### M2 · lanes
 
-All eight rows are always visible. The selected lane's row opens to 52 px.
-
-| control | channel | travel |
+| control | channel | what moves |
 | --- | --- | --- |
-| lane | position | which row opens |
-| role | count + position | the hits, their register band and the tails all change; an off lane's open row is sixteen hollow rings |
-| dens | count | hits added and removed |
-| oct | position | the open row's bodies rise 7 px an octave (28 px over −2…+2) |
-| vel | scale | bodies 0.8× → 1.9× |
-| vary | fill | bodies that may change go hollow (wireframe), 0 → all |
-| lock | position | the bass's hits move to the kick, the accents or its own grid; lock ticks under the row |
-| gate | scale | comet tails 0.1× → 1× behind each body |
+| lane | whole page | Which lane is shown |
+| role | count + shape | The notches change; drum lanes have no gate ticks |
+| dens | count | Number of notches |
+| oct | position | The edge moves 14 px per octave |
+| vel | scale | Notch size, 0.45 → 1.5× |
+| vary | scale + shade | Notes that may vary shrink to 0.75× and go quiet |
+| lock | position | On a bass lane, the notes follow the lock and ticks mark the locked steps |
+| gate | position | A tick on the edge where the note lets go |
 
 ### M3 · lane (arp)
 
-Pitch runs up the page and time across it.
-- Notes are bodies, and accents are 1.5×.
-- A held note trails beads.
-- A skipped step is a hollow ring.
-- Root rows get a hairline rule plus range labels.
-- There is no per-cell grid any more.
-
-Every arp control moves bodies: mode reorders them, rate and steps change the count, range adds rows, skip leaves hollow rings, accent scales bodies, tones swaps the pitch set, and jump lifts bodies an octave. Drum lanes get eight labelled voice rows instead.
+| control | channel | what moves |
+| --- | --- | --- |
+| mode | shape | The order of the steps |
+| rate | count | Number of treads |
+| range | position | The span of the stairs |
+| steps | shape | How long before the pattern repeats |
+| skip | count | Gaps in the stairs |
+| accent | shade | Brighter treads |
+| tones | position | Chord tones or scale tones |
+| jump | position | Treads lifted an octave |
 
 ### M4 · route
 
-| control | channel | travel |
+| control | channel | what moves |
 | --- | --- | --- |
-| lane | position | bracket, ground band and the register panel's footprint |
-| to | position | the route line slides out from behind the lane column to its track; 30.8 px a track |
-| xpose | position | the lit octave cells shift ±2 octaves |
-| mute | position + fill | the line and band retract behind the mask, the end body goes, a strike crosses the name, the moon goes hollow, and the register cells go dark |
-| low / high | position + shade | the window caps move; cells outside the window go black |
+| lane | position | Bracket, bright trace, and the register strip |
+| to | position | The trace slides to a new bus, 22.4 px a track |
+| xpose | shade | Lit octaves on the register strip |
+| mute | position | The trace slides back behind the names, and a strike crosses the name |
+| low / high | position | Window caps on the register strip |
 
 ### Budget
 
 ```json
 "display": {"stateBytes": 0, "stateAlignment": 4,
-            "paths": 0, "points": 0, "nodes": 251, "texts": 32, "palette": 16}
+            "paths": 0, "points": 0, "nodes": 245, "texts": 32, "palette": 16}
 ```
 
-Three device facts shaped this budget:
+The four page designs need 245 of the 256 nodes. Three device facts shaped them:
 
-- **No mutable outlines.** Lines span up to 400 px and a mutable outline only reaches ±64 px, so every moving part is a translated or uniformly scaled node.
-- **No per-page static art.** Static artwork shows on every page, so each page's furniture (orbit, graduated edges, stations, the mask) is a node the other pages hide. The only static art is the hairline under the page strip.
-- **The palette is paints, not colours.** Each entry lends fill, stroke and width together, so the sixteen entries are sixteen paints. `gen_frames.py` refuses any other combination.
+- **No mutable outlines.** Everything is a fixed shape moved by translation and a uniform scale.
+- **No static art** beyond the page strip's hairline, because static art would show on every page.
+- **The palette is sixteen paints.** Each paint sets fill, stroke and width.
 
-251 of 256 nodes are spoken for; `handoff.md` has the pools. `stateBytes` is set during implementation (eased values, glow).
+Redraw, at the worst moments:
 
-| case | changed nodes / frame |
+| case | changed nodes per frame |
 | --- | --- |
 | at rest | 0 |
-| playing, defaults (16ths) | avg ≈ 8: one ruler body, the track playhead, up to 6 moon glows fading |
-| playing, chord change (heaviest, M1) | peak ≈ 26 over 0.2 s (8 moons move, 2 planets restyle, ≤ 6 arc segments, ≤ 7 labels), then ≈ 8 |
-| playing, M2 at dens 100 | avg ≈ 12: the playhead, ≤ 8 hits brightening, moon glows |
-| turning key (worst turn) | 7 planets + 8 ring halves + 8 moons + labels each frame of the 0.2 s ease. Turns aren't notes, but this is **pending device** |
+| playing, M1 | ≈ 3: the playing step tick, the playhead, and one phrase segment at each chord change |
+| playing, M2 / M3 | ≈ 3: the playhead and the sounding notch or tread |
+| chord change, M1 | ≈ 12, once: 4 arches restyle, plus triangles and labels |
+| turning key | 7 triangles + 4 arches + labels each frame of the 0.2 s ease. **Pending device** |
+
+## Open
+
+These are listed in priority order in `review.md`:
+- **The perceptibility floors.** Outline-only drawings fall under them.
+- **"Picture, not panel"** (`craft.md`, added today). It would move the strips off the resting pages.
+- **The M3 mode fix.**

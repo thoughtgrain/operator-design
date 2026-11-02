@@ -1041,4 +1041,4 @@ def build(out: Path):
 
 
 if __name__ == "__main__":
-    build(Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "frames")
+    build(Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "rev1" / "frames")
