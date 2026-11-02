@@ -55,6 +55,11 @@ ollmcp -j ~/.config/ollmcp/mcp-servers/operator-design.json -m qwen3:8b
 python3 mcp/setup.py print
 ```
 
+**Optional settings.** Two flags work with any of the commands above:
+
+- `--colour` lets that client design in colour. Grey is the default because it's the OP-XY's own look; colour is an override you set per client, here, and an agent can't switch it on. Red stays off-limits either way.
+- `--sdk ../open-xy` points the server at a local checkout of [open-xy](https://github.com/etcetc000/open-xy), so it can run open-xy's own `sdk.py test` on a finished machine.
+
 **Check it worked.** This lists what's in place for each client; a missing client is fine if you don't use it.
 
 ```sh

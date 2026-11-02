@@ -46,7 +46,7 @@ The custom agents in `.codex/agents/` (`opxy_designer`, `opxy_drafter`, `opxy_au
 python3 mcp/setup.py lmstudio --model qwen3-8b
 ```
 
-Writes `~/.lmstudio/mcp.json` with the compact tool profile, and points `run: true` agent runs at LM Studio's own server (`http://localhost:1234/v1`) with that model. Use a model that does tool calls; the compact profile keeps the tool list to 15 with short descriptions so it fits a small context.
+Writes `~/.lmstudio/mcp.json` with the compact tool profile, and points `run: true` agent runs at LM Studio's own server (`http://localhost:1234/v1`) with that model. Use a model that does tool calls; the compact profile keeps the tool list to 16 with short descriptions so it fits a small context.
 
 ### Ollama
 
@@ -82,24 +82,34 @@ Set these in the client's `env` block for the server (the setup flags write them
 
 | Variable | What it does |
 | --- | --- |
-| `OPXY_PROFILE` | `full` (default, 29 tools) or `compact` (15, short descriptions) |
+| `OPXY_PROFILE` | `full` (default, 31 tools) or `compact` (16, short descriptions) |
 | `OPXY_WORKSPACE` | Where `screens/` lives, if not this repo (a machine's own checkout, say). Paths outside the repo and workspace are refused |
 | `OPXY_AGENT_ENDPOINT` | OpenAI-compatible base URL for `run: true`: LM Studio, Ollama, llama.cpp, vLLM, or a hosted API |
 | `OPXY_AGENT_MODEL` | Model name on that endpoint |
 | `OPXY_AGENT_API_KEY` | Bearer token, if the endpoint needs one |
 | `OPXY_AGENT_TIMEOUT` | Seconds per agent call (default 300) |
 | `OPXY_APPROVERS` | Comma-separated names allowed to approve training proposals over MCP. Unset by default, so approval happens in a terminal |
+| `OPXY_COLOUR` | `allow` lets this harness design in colour. Unset by default: grey only, which is the OP-XY's own look. Red is refused either way, and a colour machine also ships a designed grayscale version (`--colour` on setup) |
+| `OPXY_SDK` | Path to a local open-xy checkout, so `sdk_test` can run open-xy's own `sdk.py test --machine` (`--sdk` on setup) |
 
 ## Tools
 
 | Group | Tools | Compact |
 | --- | --- | --- |
-| Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `opxy_tokens`, `opxy_library` | guide, search, patterns |
-| Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run`, `preview_brief` | status, lint_frames, perceptibility, render, preview |
+| Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `colour_policy`, `opxy_tokens`, `opxy_library` | guide, search, patterns, colour_policy |
+| Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run`, `preview_brief`, `sdk_test` | status, lint_frames, perceptibility, render, preview |
 | Design passes | `design_pass_start`, `design_pass_submit`, `design_pass_select`, `design_pass_get` | start, submit, select |
 | Training | `training_propose`, `training_revise`, `training_list`, `training_get`, `training_advance`, `training_record`, `training_gate`, `training_approve`, `training_reject`, `training_roles` | propose, get, advance, record |
 
 Prompts (slash commands in clients that show them): `design-screen`, `audit-screen`, `propose-improvement`, `run-training-queue`. Resources: `opxy://doc/<name>`, `opxy://catalog`, `opxy://tokens`, `opxy://library/<entry>`, `opxy://proposal/<id>`.
+
+## Grey by default, colour by config
+
+The server keeps machines grey unless the harness's MCP config says otherwise, because staying true to the OP-XY's own look is the point. open-xy allows colour now (with a grayscale version for players who want one), so colour is an override, not a ban:
+
+- It's set in the config file for each client, never from a conversation: `python3 mcp/setup.py <client> --colour` writes `OPXY_COLOUR=allow`. The repo's `.mcp.json` leaves it off.
+- Without it, `lint_frames` refuses colour and the designer briefs say grey only. `colour_policy` tells an agent which mode it's in.
+- With it, red is still refused, the brief needs a colour role table, and the machine ships a designed `panel.grayscale.svg.fragment`, checked with `lint_frames(grayscale_of=…)`: all grey, same bound IDs, origins and outline topology as the colour original.
 
 ## Video previews
 

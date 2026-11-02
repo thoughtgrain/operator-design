@@ -11,7 +11,8 @@
     python3 mcp/setup.py check                       is everything in place?
 
 Common flags: --dry-run (show, don't write), --python PATH, --profile full|compact, --endpoint URL, --model NAME,
---approver "Name" (lets that person approve training proposals over MCP; off by default).
+--approver "Name" (lets that person approve training proposals over MCP; off by default), --colour (allow colour in
+this harness; grey is the default), --sdk PATH (a local open-xy checkout for sdk_test).
 
 Every config write merges into what's there, keeps other servers, and saves the old file as <name>.bak first.
 """
@@ -50,6 +51,10 @@ def env_for(args, local: str | None = None) -> dict:
         env["OPXY_AGENT_MODEL"] = args.model
     if args.approver:
         env["OPXY_APPROVERS"] = args.approver
+    if getattr(args, "colour", False):
+        env["OPXY_COLOUR"] = "allow"
+    if getattr(args, "sdk", None):
+        env["OPXY_SDK"] = str(Path(args.sdk).expanduser().resolve())
     return env
 
 
@@ -204,6 +209,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--endpoint", help="OpenAI-compatible base URL the server uses for run=true agents")
     ap.add_argument("--model", help="model name on that endpoint")
     ap.add_argument("--approver", help="name allowed to approve training proposals over MCP")
+    ap.add_argument("--colour", "--color", action="store_true",
+                    help="allow colour in this harness (grey is the default; red stays reserved)")
+    ap.add_argument("--sdk", help="path to a local open-xy checkout, for the sdk_test tool")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
     c = args.client

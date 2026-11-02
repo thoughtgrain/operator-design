@@ -193,8 +193,9 @@ def angle_turn_back(a: tuple, b: tuple, c: tuple) -> float | None:
 
 class FrameLinter:
     def __init__(self, tokens: dict, *, fragment: bool, two_page: bool, own_header: bool, paths: int = 0,
-                 points: int | None = None):
+                 points: int | None = None, colour: bool = False):
         self.t = tokens
+        self.colour = colour          # colour override: hues allowed (never red); grey is the default
         self.fragment = fragment
         self.paths = paths            # nodes 0..paths-1 are mutable outlines (definition resources.display.paths)
         self.points = points          # declared points per mutable outline
@@ -371,8 +372,9 @@ class FrameLinter:
         if not (r == g == b):
             if r > g + 40 and r > b + 40:
                 self.add("error", where, "no-red", f"{attr} {hexv} is reddish; red is reserved for stock recording and p-locks")
-            else:
-                self.add("error", where, "grey-only", f"{attr} {hexv} isn't grey; OP-XY screen graphics are greyscale")
+            elif not self.colour:
+                self.add("error", where, "grey-only", f"{attr} {hexv} isn't grey; grey is the default here. Colour is an "
+                         "override set in the harness's MCP config (OPXY_COLOUR=allow), then lint with --colour")
         elif hexv not in self.known_greys:
             self.add("warn", where, "palette", f"{attr} {hexv} is grey but not in tokens.json; prefer the stock greys")
 
@@ -519,6 +521,50 @@ class FrameLinter:
             self.add("error", where, "bound-text", "bound text is positioned by transform only, no x/y")
 
 
+def bound_shapes(path: Path) -> dict[str, dict]:
+    """Every bound element (<prefix>_node/text/palette_<i>) with what a grayscale variant must keep the same."""
+    try:
+        root = ET.parse(path).getroot()
+    except (FileNotFoundError, ET.ParseError) as exc:
+        raise LintError(f"can't read {path}: {exc}") from exc
+    out: dict[str, dict] = {}
+    parents = {c: p for p in root.iter() for c in p}
+    for el in root.iter():
+        ident = el.get("id")
+        if not ident or not BOUND_ID.match(ident):
+            continue
+        chain, node = [], parents.get(el)
+        while node is not None:
+            if node.get("transform"):
+                chain.append(node.get("transform").strip())
+            node = parents.get(node)
+        info = {"tag": local(el.tag), "transform": (el.get("transform") or "").strip(), "ancestors": chain,
+                "filled": (el.get("fill") or "").strip().lower() not in ("", "none")}
+        if info["tag"] == "path":
+            subs, cmds = parse_path(el.get("d") or "")
+            info["commands"] = "".join(c.upper() for c in cmds)
+            info["points"] = [len(s["points"]) if isinstance(s, dict) and "points" in s else 0 for s in subs]
+        out[ident] = info
+    return out
+
+
+def compare_variant(original: Path, variant: Path) -> list[Finding]:
+    """A grayscale variant keeps every bound ID, element type, origin, ancestor transform, fill-vs-none and outline topology."""
+    a, b = bound_shapes(original), bound_shapes(variant)
+    found: list[Finding] = []
+    where = str(variant)
+    for ident in sorted(set(a) - set(b)):
+        found.append(Finding(where, "error", ident, "variant-match", f"{ident} is in {original.name} but missing here"))
+    for ident in sorted(set(b) - set(a)):
+        found.append(Finding(where, "error", ident, "variant-match", f"{ident} isn't in {original.name}; bound IDs must match"))
+    for ident in sorted(set(a) & set(b)):
+        for key, what in (("tag", "element type"), ("transform", "origin (transform)"), ("ancestors", "ancestor transforms"),
+                          ("filled", "fill versus none"), ("commands", "outline topology"), ("points", "point count")):
+            if a[ident].get(key) != b[ident].get(key):
+                found.append(Finding(where, "error", ident, "variant-match", f"{what} differs from {original.name}"))
+    return found
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Lint OP-XY machine screen frames against device drawing rules.")
     ap.add_argument("files", nargs="+", type=Path, help="SVG frames to check")
@@ -528,9 +574,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--own-header", action="store_true", help="the machine draws its own header; allow artwork in the header zone")
     ap.add_argument("--paths", type=int, default=None, help="mutable outlines declared (nodes 0..paths-1); default from --definition, else 0")
     ap.add_argument("--definition", type=Path, help="definition.json: read paths and points from resources.display")
+    ap.add_argument("--colour", "--color", action="store_true",
+                    help="colour override: allow hues (red stays reserved). Only for machines whose harness config allows colour")
+    ap.add_argument("--grayscale-of", type=Path, metavar="ORIGINAL",
+                    help="the files are a grayscale variant of ORIGINAL: check they're all grey and keep its bound IDs, origins and topology")
     ap.add_argument("--strict", action="store_true", help="treat warnings as failures")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     args = ap.parse_args(argv)
+    if args.grayscale_of and args.colour:
+        print("lint_frame: a grayscale variant is checked as grey; drop --colour", file=sys.stderr)
+        return 2
 
     try:
         tokens = load_tokens(args.tokens)
@@ -544,7 +597,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise LintError(f"can't read resources.display from {args.definition}: {exc}") from exc
             paths = args.paths if args.paths is not None else int(disp.get("paths", 0))
             points = int(disp.get("points", 0)) or None
-        linter = FrameLinter(tokens, fragment=args.fragment, two_page=args.two_page, own_header=args.own_header,
+        linter = FrameLinter(tokens, fragment=args.fragment, two_page=args.two_page, own_header=args.own_header, colour=args.colour,
                              paths=paths, points=points)
     except (LintError, KeyError) as exc:
         print(f"lint_frame: {exc}", file=sys.stderr)
@@ -556,6 +609,8 @@ def main(argv: list[str] | None = None) -> int:
     for path in args.files:
         try:
             findings, stats = linter.lint(path)
+            if args.grayscale_of:
+                findings = findings + compare_variant(args.grayscale_of, path)
         except LintError as exc:
             print(f"lint_frame: {exc}", file=sys.stderr)
             failed_io = True

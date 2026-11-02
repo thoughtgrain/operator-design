@@ -14,21 +14,21 @@
         "synth",
         "sample"
       ],
-      "description": "A percussion voice or kit; the player already knows its parts by sight."
+      "description": "A percussion voice or kit; the player already knows its parts by sight. Kits get model, choices and Shift from SDK 1.8."
     },
     "sampler": {
       "name": "Sampler",
       "sdkKinds": [
         "sample"
       ],
-      "description": "Plays, slices or granulates recorded audio."
+      "description": "Plays, slices or granulates recorded audio. Own screen over the sampler page from SDK 1.8, with a sample overview; gives up stock trims."
     },
     "effect": {
       "name": "Effect",
       "sdkKinds": [
         "effect"
       ],
-      "description": "Processes another track's audio: delay, reverb, distortion, filter, dynamics."
+      "description": "Processes another track's audio: delay, reverb, distortion, filter, dynamics. Own send page from SDK 1.7 (no browser preview yet)."
     },
     "player": {
       "name": "Player",

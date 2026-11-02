@@ -76,7 +76,7 @@ After 1B, the header captions come straight from the reviewed definition, which 
 
 For each control, judge its audible effect across 0 → 100 (by ear in the preview, or by level/band energy) and score it 1–5. This score sizes the control's visual travel in phase 4.
 
-Why: ux.md asks that a control be seen as much as heard. A quiet control with a huge visual swing lies to the player; a loud one with a tiny mark leaves them guessing.
+Why: PR #260's ux.md asks that a control be seen as much as heard (open, not merged; I keep it as a house rule). A quiet control with a huge visual swing lies to the player; a loud one with a tiny mark leaves them guessing.
 
 **Gate:** every control has a score and a one-line reason ("cutoff sweep, dramatic: 5"; "drift, subtle until 70: 2").
 
@@ -171,7 +171,7 @@ The agent makes it, not the MCP server. `preview_brief` asks the questions, then
 Start with the craft review in `craft.md`: the rest frame beside a reference at 1:1, five questions, any "no" back to phase 5. Gates prove a screen works; this is where it's judged for whether it looks authored.
 
 
-Copy `checklists` from `accessibility.md` and the "before you submit" items from ux.md into `review.md` and answer each one with evidence (a frame name, a number). Anything only provable on hardware is marked **pending device**, never ticked.
+Copy `checklists` from `accessibility.md` and the "before you submit" items from PR #260's ux.md (open, not merged; kept as a house checklist) into `review.md` and answer each one with evidence (a frame name, a number). Anything only provable on hardware is marked **pending device**, never ticked.
 
 **Gate:** every item answered; nothing ticked that wasn't checked.
 
