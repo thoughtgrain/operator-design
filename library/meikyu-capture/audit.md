@@ -6,7 +6,7 @@
 | Author | Brian Hinton (confirmed his to share: yes, his own port, MIT like labyrinth) |
 | Licence | MIT |
 | Material | design frames rendered from `screens/meikyu/concepts/blackhole_capture.py` (`frames` mode: rest, playing, c1–c4 at 0/50/100), two videos with sound (melody, drums), labyrinth's `opxy/machines/meikyu/definition.json` |
-| **Verdict** | **not yet**: Scal and Drum are under their perceptibility floors since the scale and kit displays were taken out (Brian didn't like them). Everything else passes or is pending device. Kept in the library as a pattern reference, as `meikyu-orrery` was |
+| **Verdict** | **not yet**, on one floor a two-state switch can't meet (Drum's 50→100 half, below) and the redraw cost of the turning disc (author's call, below). Everything else passes or is pending device. Kept in the library as a pattern reference, as `meikyu-orrery` was |
 
 ## Results
 
@@ -14,9 +14,9 @@
 | --- | --- | --- |
 | Definition (`lint_definition.py`) | **not checked as a player**: the tool knows synth / sample / effect only and stops on `kind: player`. Run as `--kind effect` for the generic checks: 0 errors, 3 warnings (percent display on Dens and Crpt; `pentatonic` and `chromatic` too long for the 20 px column) | |
 | Artwork (`lint_frame.py`) | 0 errors, 172 warnings over 14 frames | `lint` output below |
-| Perceptibility | pass on Dens, Crpt, note response; **under** on Scal and Drum | table below |
+| Perceptibility | pass on Dens, Scal, Crpt, note response; Drum passes its full range, its 50→100 half is 0 | table below |
 | Contact sheet, by eye | one subject, every control reads, no dashboard | `contact.png` |
-| Accessibility checklist | 13 of 13 answered: 7 pass, 2 with notes, 2 fail (Scal, Drum), 2 pending device | below |
+| Accessibility checklist | 13 of 13 answered: 9 pass, 3 with notes, 1 pending device | below |
 | Motion | still at rest; eases 0.2 s; no element flashes over 3/s; reduced motion jumps to end states that differ by position, height or shape | below |
 | ux.md before you submit | answered below; device items pending | below |
 
@@ -26,15 +26,15 @@ Scores are the author's to confirm. I scored them from the sound: Dens 5 (it dec
 
 | control | score | need % | 0→100 % | 0→50 % | 50→100 % | span | |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Dens | 5 | 2.50 | 3.80 | 1.96 | 3.94 | 356 | ok |
-| Scal | 3 | 1.20 | 0.67 | 0.69 | 0.86 | 166 | **under** |
-| Crpt | 3 | 1.20 | 2.01 | 1.64 | 2.26 | 305 | ok |
-| Drum | 5 | 2.50 | 1.06 | 1.06 | 0.00 | 166 | **under** |
-| note response | — | 2.00 | 2.38 | — | — | 347 | ok |
+| Dens | 5 | 2.50 | 4.33 | 2.49 | 4.04 | 408 | ok |
+| Scal | 3 | 1.20 | 1.26 | 1.21 | 1.36 | 328 | ok |
+| Crpt | 3 | 1.20 | 2.26 | 2.09 | 2.86 | 372 | ok |
+| Drum | 5 | 2.50 | 3.32 | 3.32 | 0.00 | 456 | **under** (half-step rule) |
+| note response | — | 2.00 | 4.33 | — | — | 402 | ok |
 
-Scal and Drum only move the stems (to new pitches, or to pad lanes), and the kick and snare thumps. A version that drew the scale as cells in the arch and the kit as pads in the ring under the hole passed both (Scal 1.34 %, Drum 2.87 %), but Brian didn't like how it looked, so it's out and these two need another channel.
+Scal passes on the keyboard in the lower left (its dots move to the new scale) plus the stems moving to new pitches. Drum passes its full range on the keyboard giving way to the kit drawing in the lower right, plus the stems becoming pad lanes.
 
-Drum is also an enum with two labels, off and on: its 50 % frame is already "on", so its 50→100 half can't move whatever is drawn. Whether the half-step rule applies to a two-state switch is a protocol decision.
+Drum is an enum with two labels, off and on: its 50 % frame is already "on", so its 50→100 half can't move whatever is drawn. Whether the half-step rule applies to a two-state switch is a protocol decision. Kit (Scal in drum mode) only changes the sound: the kit drawing looks the same for every kit.
 
 ### Lint warnings, by kind
 
@@ -53,9 +53,9 @@ Drum is also an enum with two labels, off and on: its 50 % frame is already "on"
 - [x] Meaningful non-text ≥ 3:1. The capture ring and hole edge are `#CDCDCD` (13.2:1). The accent ring, hollow bodies and out-of-phrase stems are `#646464` or brighter (≥ 3.55:1). Only decoration (rails, ribs, disc rings, idle spokes) sits lower.
 - [x] No part under ~3 px: the smallest body is 4.6 px across. Note: near the left and right of the disc, spokes seen edge-on come closer than 3 px. They're decoration, and each body's own position carries its lane.
 - [x] No state by shade alone. Captured vs not is height, size and fill. Accent is size and shade. The playing phrase is stem weight and shade, and spoke weight and shade.
-- [ ] Each control visibly different at 0 / 50 / 100: Dens and Crpt yes; Scal and Drum too small (perceptibility above). **fails**
-- [ ] Visual travel matches the audible score: Drum (5) moves less than Crpt (3). **fails**
-- [x] Nothing moves at rest, nothing flashes over 3/s. The disc no longer drifts and the wire no longer shimmers. Kick and snare thumps are paced to one per 0.34 s; a body flashes once per 2 s at most.
+- [x] Each control visibly different at 0 / 50 / 100: yes; Drum's second half is the two-state note above.
+- [x] Visual travel matches the audible score: Dens and Drum move the most (5), Crpt and Scal less (3).
+- [x] Nothing moves at rest, nothing flashes over 3/s. The disc turns (a circle a minute) only while the player plays and eases to a stop with the music; the wire no longer shimmers. Keyboard keys and kit pieces stay lit 0.3 s, so repeats merge. Kick and snare thumps are paced to one per 0.34 s; a body flashes once per 2 s at most.
 - [x] Reduced-motion end states differ by more than shade: ring radius, stem height, body distance, cell layout.
 - [x] Labels ≤ 8 characters. Note: Scal's enum labels `pentatonic` and `chromatic` are too long for the column; the mock-up shows `pent` / `chrom`, which needs the change in labyrinth's `definition.json`, as does the `Rthm` label (currently `Drum`). Captions **pending device font**.
 - [x] No red: grey only, every grey a stock step (9 entries including black and the header text).
@@ -63,18 +63,18 @@ Drum is also an enum with two labels, off and on: its 50 % frame is already "on"
 
 ## Motion
 
-Still at rest. Dens and the capture ring ease 0.2 s. A re-rolled body slides 0.45 s to its new distance with a streak, which is an event, not a control ease. A press brightens the wire by its velocity for 0.5 s. No element alternates faster than 3/s (see above).
+Still at rest. While the player plays, the disc turns a full circle a minute, easing up and down over 0.5 s; it's what makes it read as a black hole, so Brian keeps it. Dens and the capture ring ease 0.2 s. A re-rolled body slides 0.45 s to its new distance with a streak, which is an event, not a control ease. A press brightens the wire by its velocity for 0.5 s. No element alternates faster than 3/s (see above).
 
 ## ux.md before you submit
 
-- Redraw: about 85–95 parts on screen including the header. While playing, the changes per frame are the sounding body and its ring, the press's 16 stems and 8 spokes on the press frame (a peak once a second), and the capture ring while Dens moves. Zero at rest. **pending device** measurement.
+- Redraw: about 100–110 parts on screen including the header and a corner. Zero at rest. **Over budget while playing:** the turning disc moves every spoke, body and stem each frame (about 50 changed parts a frame against the ~20 average ux.md allows). Brian keeps the rotation as crucial; on a device it could step (redraw every few frames) or turn only the spokes. **pending device** measurement.
 - Parts fit 256; palette 9 of 16.
 - Mutable outlines: the capture and accent rings change size with Dens (uniform scale about the hole would do for the far halves; the near halves are cut at the hole, so 4 mutable outlines). Stems change length per press: on a device they need length variants per body or bound scaling. Like the orrery, **this needs the player page ABI to grow bound nodes** (today a player page is 24 on/off dots and a text line).
 - Presets: none in the definition yet (ux.md wants some).
 
 ## What to change (most important first)
 
-1. Give Scal and Drum a visible channel Brian likes. Scal needs about twice the change it has; Drum about 2.5×.
+1. Fit the turning disc into the redraw budget on a device (step it, or turn fewer parts).
 2. Decide the half-step rule for two-state switches (proposal: `perceptibility.py` applies only the full-range floor to a two-label enum). That's a protocol change, so it's Brian's call.
 3. Labyrinth: the player page ABI for bound nodes; Scal's short labels; `Drum` → `Rthm`; Kit as Scal in drum mode (`player.cpp`).
 4. Device build: closed ribbons for the wire; measure redraw; photos.
@@ -83,3 +83,5 @@ Still at rest. Dens and the capture ring ease 0.2 s. A re-rolled body slides 0.4
 ## Notes the author justified
 
 - Thin ground wire (`legibility`): deliberate, so the bodies lead. Meaning never rides on it.
+- Rotation while playing: crucial to the picture; costs redraw (above).
+- Kit identity isn't drawn: every kit uses the same drawing; the kit is heard and named in the header.

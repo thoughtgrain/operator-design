@@ -9,15 +9,19 @@ A step plays when its weight is under Dens; a black hole captures what comes ins
                 to their pitch. Bodies outside lie flat and hollow. Turn Dens up and the ring widens
   accent        a fainter inner ring at Dens/4: bodies inside it are accents, bigger and brighter
   playhead      the 8 spokes of the phrase playing light up; each body flashes as its step sounds, so the
-                playhead is the order things light in. Nothing spins
+                playhead is the order things light in
+  rotation      the disc turns a full circle a minute while the player plays, easing to a stop when it stops
   pitch         stem height: the note it will play at this press's velocity (melody) or its pad (drums)
-  Scal          changes the pitches, so the stems move to new heights
+  Scal          changes the pitches, so the stems move to new heights; a one-octave keyboard in the lower left
+                shows the scale as dots on its keys at the current root (the root's dot bigger), and lights the key
+                of each note as it sounds
   Crpt          a re-rolled body is thrown to its new distance, with a streak from where it was
-  Rthm          stems become the 8 pad lanes; the kick thumps the hole's edge, the snare the ring under it, each
-                at most ~3 times a second
+  Rthm          stems become the 8 pad lanes; the keyboard gives way to a small kit drawn in the lower right
+                (hi-hat, snare, tom, kick) whose pieces fill as they're struck; the kick also thumps the hole's
+                edge and the snare the ring under it, each at most ~3 times a second
   velocity      a hard press brightens the wire
 
-Still at rest (no drift, no shimmer), greys snapped to the stock steps, eases 0.2 s. The black hole is blackhole3's
+Still at rest (the turn stops with the music; no shimmer), greys snapped to the stock steps, eases 0.2 s. The black hole is blackhole3's
 lensed disc redrawn as wireframe: rails and ribs, four disc rings, a spoke per step; nothing near is drawn across the
 hole except the bodies. Sound: the plucked voice for melody; blackhole_moons' synthesized kit for drums.
 
@@ -159,7 +163,7 @@ def light(R_, t, flare=0.0, phrase=frozenset()):
         back.append(path(ring_pts(R_ * s, False), grey(g * b), 0.8))
         front += near_path(ring_pts(R_ * s, True), g * b, 0.8)
     for i in range(16):                                                # a spoke per step: the lane its body rides
-        a = slot(i)
+        a = slot(i, t)
         pts = [disc_xy(reach(0) + (reach(100) - reach(0)) * q / 8, a) for q in range(9)]
         on = i in phrase                                               # the phrase playing: its 8 spokes light up
         if math.sin(a) > -0.05:
@@ -175,10 +179,33 @@ LENGTH = 30.0
 OVERRIDE = None                                                        # audit frames: hold every control constant
 
 
-def slot(i):
-    """step i's fixed angle round the disc. No drift: the screen is still at rest (ux.md), and a drifting disc would
-    redraw every spoke, dot and stem each frame, well over the ~20 changed nodes a frame the device allows"""
-    return 2 * math.pi * i / 16 + 0.2
+DRIFT = 60.0                                                          # seconds per turn while the player is playing
+SPIN_EASE = 0.5                                                        # seconds to get up to speed or to come to rest
+PRESSES = []
+_SPIN = {}
+
+
+def spin(t):
+    """the disc's turn so far. It turns only while a phrase is playing and eases to a stop when the music does, so
+    the screen is still at rest (ux.md) but alive while it plays. Integrated, so speeding up never jumps"""
+    n = round(t * 30)
+    if n not in _SPIN:
+        a, v, dt = 0.0, 0.0, 1 / 30
+        for i in range(n + 1):
+            if i in _SPIN:
+                a, v = _SPIN[i]
+                continue
+            tt = i * dt
+            live = any(pr["t"] <= tt < pr["t"] + 8 * M4.STEP for pr in PRESSES)
+            v += ((1.0 if live else 0.0) - v) * (1 - math.exp(-dt / SPIN_EASE))
+            a += v * dt * 2 * math.pi / DRIFT
+            _SPIN[i] = (a, v)
+    return _SPIN[n][0]
+
+
+def slot(i, t=0.0):
+    """step i's angle round the disc: a fixed slot, carried round by the disc's turn"""
+    return 2 * math.pi * i / 16 + 0.2 + spin(t)
 
 
 def controls(t):
@@ -220,6 +247,8 @@ def run():
         t += 8 * M4.STEP
         n += 1
     BM.PLANS[:] = plans
+    PRESSES[:] = presses
+    _SPIN.clear()
     return presses, tones, w_hist, v_hist
 
 
@@ -242,6 +271,76 @@ def height(i, val, last, c):
         return K * (4.0 + 5.5 * ((deg >> 1) & 7))                              # pad lanes
     root = last["root"] if last else 50
     return K * (4.0 + 1.9 * (A.Meikyu.scale_note(root, A.MASKS[c["scal"]], deg) - root))
+
+
+# ---- the corners: the scale as a keyboard (melody), the kit as a drawing (drums) ---------------------------------------
+KEY_X, KEY_Y, KEY_W, KEY_H = 10.0, 190.0, 8.0, 24.0                    # one octave, C to B, lower left
+WHITE = [0, 2, 4, 5, 7, 9, 11]
+BLACK = {1: 1, 3: 2, 6: 4, 8: 5, 10: 6}                                 # pitch class → the white key it sits left of
+HOT_S = 0.3                                                            # a lit key or drum stays lit this long: repeats merge
+
+
+def key_box(pc):
+    """(x, y, w, h, is_black) for pitch class pc"""
+    if pc in BLACK:
+        x = KEY_X + BLACK[pc] * KEY_W - 2.6
+        return x, KEY_Y, 5.2, KEY_H * 0.58, True
+    return KEY_X + WHITE.index(pc) * KEY_W, KEY_Y, KEY_W, KEY_H, False
+
+
+def rect(x, y, w, h):
+    return [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+
+
+def keyboard(c, last, t):
+    """the scale on a one-octave keyboard: a dot on every key in the scale at the current root (the root's dot is
+    bigger), and the key of a sounding note lights up"""
+    root = (last["root"] if last else 50) % 12
+    mask = A.MASKS[c["scal"]]
+    in_scale = {(root + k) % 12 for k in range(12) if (mask >> k) & 1}
+    hot = {}
+    if last:
+        for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
+            if 0 <= t - th < HOT_S:
+                hot[pitch % 12] = True
+    out = []
+    for black in (False, True):                                        # white keys, then black keys over them
+        for pc in range(12):
+            x, y, w, h, b = key_box(pc)
+            if b != black:
+                continue
+            fill = "#CDCDCD" if pc in hot else ("#4B4B4B" if b else "#000000")
+            out.append(path(rect(x, y, w, h), grey(0x7D), 1.0, fill=fill, close=True))
+    for pc in sorted(in_scale):
+        x, y, w, h, b = key_box(pc)
+        r = 2.2 if pc == root else 1.6
+        g = 0x000000 if pc in hot else None
+        dot = "#000000" if pc in hot else "#CDCDCD"
+        out.append(path(ell(x + w / 2, y + h - 4.5, r, r, n=12), dot, 0.8, fill=dot, close=True))
+    return out
+
+
+KIT_PIECES = {3: "kick", 1: "snare", 2: "tom", 0: "hat"}                # moon/drum index (blackhole_moons.KIT) → piece
+
+
+def kit_art(hits, t):
+    """a small line drawing of a kit, lower right: kick, snare, tom, hi-hat. A struck piece fills (paced, so a roll
+    never flashes it more than ~3 times a second)"""
+    lit = {d: any(0 <= t - th < HOT_S for th in paced(hits, d)) for d in KIT_PIECES}
+    g_on, g_off = "#CDCDCD", "#000000"
+    o = []
+    # hi-hat: stand and two cymbals, left
+    o.append(path([(410, 178), (410, 214)], grey(0x7D), 1.0))
+    o.append(path(ell(410, 178, 9, 2.2, n=20), grey(0xAF), 1.0, fill=g_on if lit[0] else g_off, close=True))
+    o.append(path(ell(410, 181, 9, 2.2, n=20), grey(0x7D), 1.0, close=True))
+    # tom, over the kick
+    o.append(path(rect(434, 181, 14, 7), grey(0xAF), 1.0, fill=g_on if lit[2] else g_off, close=True))
+    # kick: the front head, a circle
+    o.append(path(ell(452, 202, 12, 12, n=32), grey(0xAF), 1.2, fill=g_on if lit[3] else g_off, close=True))
+    o.append(path(ell(452, 202, 4, 4, n=16), grey(0x7D), 1.0, close=True))
+    # snare: a short drum to the left of the kick
+    o.append(path(rect(421, 196, 14, 8), grey(0xAF), 1.0, fill=g_on if lit[1] else g_off, close=True))
+    return o
 
 
 _PACED = {}
@@ -289,7 +388,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
 
     sounding = {h[1]: t - h[0] for h in recent if t - h[0] < M4.FLASH}
     for i in range(16):
-        a = slot(i)
+        a = slot(i, t)
         w, w_since, w_prev = at(w_hist[i], t)
         val, _, _ = at(v_hist[i], t)
         throw = (t - w_since) / 0.45 if 0 <= t - w_since < 0.45 else None
@@ -318,7 +417,8 @@ def scene(p, last, t, hits, w_hist, v_hist):
             side.append(path(ell(x, y, s * K, s * K, n=14), grey(g), 0.9, fill=grey(g), close=True))
         else:
             side.append(path(ell(x, y, 1.9 * K, 1.9 * K, n=10), grey(0x68), 0.9, fill="#000000", close=True))
-    return back + behind + hole + front + over
+    corner = kit_art(hits, t) if c["drum"] else keyboard(c, last, t)
+    return back + behind + hole + front + over + corner
 
 
 # ---- audit frames: rest, playing, each control at 0 / 50 / 100 ---------------------------------------------------------

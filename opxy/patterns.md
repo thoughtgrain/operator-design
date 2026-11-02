@@ -196,7 +196,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 **Build it.**
 
-- **Fixed slots, no spin.** Give each item a fixed place (a spoke) and let the playhead be the order things light in. A disc spinning at the step rate is far too fast; one drifting slowly redraws everything every frame and moves at rest.
+- **Fixed slots on a slow turn.** Give each item a fixed place (a spoke) on a disc that turns slowly (a circle a minute) only while the machine plays, easing to a stop with the music. The playhead is the order things light in. A disc spinning at the step rate is far too fast. The turn costs redraw on a device, so plan to step it.
 - **Keep the subject's middle clear.** Break near lines where they'd cross the hole; only the bodies go over it.
 - **Wireframe for the ground.** Thin rails, ribs and rings at low greys so the meaningful parts lead.
 
@@ -204,7 +204,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 - **Edge-on discs hide distance.** Tip the camera until distance from the centre reads, even if it costs some of the reference look.
 - **A thump per hit flashes.** Pace event effects (one per ~0.34 s) so a fast roll can't exceed 3 flashes a second.
-- **Not every control has a twin in the metaphor.** Dens and Crpt map onto the black hole; Scal and Kit don't, and only move stems, which is under their floors. Drawing them as cells in the arch and pads in the under-ring passed but looked bolted on. Still open.
+- **Not every control has a twin in the metaphor.** Dens and Crpt map onto the black hole; Scal and Kit don't. Forcing them into the scenery (cells in the arch, pads in the under-ring) looked bolted on. Give them a plain instrument in a corner instead: a one-octave keyboard with the scale's dots, swapped for a small kit drawing in drum mode.
 - **Two-state switches and the half-step rule.** An off/on enum moves all at once; see the audit's note.
 - **Players can't do this yet.** It needs bound nodes on the player page, like P12.
 
