@@ -61,22 +61,74 @@ def ring(r, near, g, w):
     return path([disc_xy(r, a0 + math.pi * q / 48) for q in range(49)], grey(g), w)
 
 
-# ---- the light, from blackhole3 with the disc opened up ----------------------------------------------------------------
+# ---- the light, as wireframe ------------------------------------------------------------------------------------------
+# blackhole3's shape, drawn as wire instead of stacked bands: a few thin rails with ribs across them, so the arch and the
+# ring under the hole read as a lattice and the middle of the page stays mostly black. Nothing near is drawn across the
+# hole except the bodies: the near disc, its spokes and the rings break where they'd cross it, so the hole and the dots
+# in front of it stay clear.
+ARCH_RAILS = [(1.08, 0xF0, 1.2), (1.32, 0x98, 0.9), (1.58, 0x58, 0.8)]   # radius ÷ R, grey, width
+UNDER_RAILS = [(1.07, 0xC0, 1.0), (1.30, 0x60, 0.8)]
+DISC_RINGS = [(1.45, 0x50), (2.5, 0x40), (3.6, 0x34), (4.9, 0x2A)]       # radius ÷ R, grey
+RIB_G = 0x44
+
+
+def clear(pts):
+    """runs of a polyline outside the hole (a little margin), so near lines break across it"""
+    runs, cur = [], []
+    for x, y in pts:
+        if ((x - CX) / (R * 1.06)) ** 2 + ((y - BASE) / (R * 1.03)) ** 2 < 1:
+            if len(cur) > 1:
+                runs.append(cur)
+            cur = []
+        else:
+            cur.append((x, y))
+    if len(cur) > 1:
+        runs.append(cur)
+    return runs
+
+
+def near_path(pts, g, w):
+    return [path(run, grey(g), w) for run in clear(pts)]
+
+
+def ring_pts(r, near):
+    a0 = 0.0 if near else math.pi
+    return [disc_xy(r, a0 + math.pi * q / 48) for q in range(49)]
+
+
+def lattice(rails, ribs, lift=4):
+    """rails (lists of points, inner to outer, same length) and the ribs joining them at every `ribs`-th point"""
+    out = []
+    n = len(rails[0])
+    for j in range(ribs // 2, n, ribs):
+        out.append(path([(x, y + lift) for x, y in (r[j] for r in rails)], grey(RIB_G), 0.7))
+    return out
+
+
 def light(R_, t, flare=0.0):
     back, front = [], []
-    k = 1 + 0.6 * flare
-    for i, (sx, _, g) in enumerate(reversed(B3.DISC)):
-        back.append(ring(R_ * sx, False, shimmer(g * 0.45, i + 20, t, 0.22) * (1 + 0.25 * flare), max(1.0, B3.DISC_W * R_ * k)))
-    n = len(B3.ARCH)
-    for i, (s, g) in enumerate(reversed(B3.ARCH)):
-        pts = [(x, y + 4) for x, y in B3.arch(R_ * s, 0.42 + 0.5 * (n - 1 - i) / (n - 1))]
-        back.append(path(pts, grey(shimmer(g, i, t) * (1 + 0.2 * flare)), max(0.9, B3.ARCH_W * R_ * k)))
-    for i, (s, g) in enumerate(reversed(B3.UNDER)):
-        pts = [(x, y + 4) for x, y in B3.under(R_ * s, R_)]
-        back.append(path(pts, grey(shimmer(g, i + 9, t)), max(0.9, B3.UNDER_W * R_)))
-    hole = [path(ell(CX, BASE, R_, R_ * 0.97, n=60), "#E8E8E8", 0.9 + 0.02 * R_, fill="#000000", close=True)]
-    for i, (sx, _, g) in enumerate(reversed(B3.DISC)):
-        front.append(ring(R_ * sx, True, shimmer(g * 0.55, i + 12, t, 0.22) * (1 + 0.25 * flare), max(1.0, B3.DISC_W * R_ * k)))
+    b = 1 + 0.35 * flare                                               # a press brightens the wire by its velocity
+    arch = [B3.arch(R_ * s, 0.5 + 0.35 * k) for k, (s, _, _) in enumerate(ARCH_RAILS)]
+    arch = [[p for p in rail] for rail in arch]
+    for k, (s, g, w) in enumerate(ARCH_RAILS):
+        back.append(path([(x, y + 4) for x, y in arch[k]], grey(shimmer(g, k, t) * b), w))
+    back += lattice(arch, 5)
+    under = [B3.under(R_ * s, R_) for s, _, _ in UNDER_RAILS]
+    for k, (s, g, w) in enumerate(UNDER_RAILS):
+        back.append(path([(x, y + 4) for x, y in under[k]], grey(shimmer(g, k + 5, t) * b), w))
+    back += lattice(under, 6)
+    spin = 2 * math.pi * t / DRIFT
+    for k, (s, g) in enumerate(DISC_RINGS):                            # disc rings: far halves behind, near broken
+        back.append(path(ring_pts(R_ * s, False), grey(g * b), 0.8))
+        front += near_path(ring_pts(R_ * s, True), g * b, 0.8)
+    for i in range(16):                                                # a spoke per step: the lane its body rides
+        a = 2 * math.pi * (i / 16) + spin
+        pts = [disc_xy(reach(0) + (reach(100) - reach(0)) * q / 8, a) for q in range(9)]
+        if math.sin(a) > -0.05:
+            front += near_path(pts, 0x2C, 0.7)
+        else:
+            back.append(path(pts, grey(0x24), 0.7))
+    hole = [path(ell(CX, BASE, R_, R_ * 0.97, n=60), "#F0F0F0", 1.4, fill="#000000", close=True)]
     return back, hole, front
 
 
@@ -168,7 +220,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
 
     rc, ra = reach(dens), reach(dens / 4)                              # capture ring and accent ring
     behind += [ring(ra, False, 0x58, 1.0), ring(rc, False, 0xA0, 1.5)]
-    over += [ring(ra, True, 0x70, 1.0), ring(rc, True, 0xF0, 1.7)]
+    over += near_path(ring_pts(ra, True), 0x70, 1.0) + near_path(ring_pts(rc, True), 0xF0, 1.7)
 
     sounding = {h[1]: t - h[0] for h in recent if t - h[0] < M4.FLASH}
     for i in range(16):
