@@ -243,8 +243,28 @@ def lensing(hole):
     cx, cy = CENTRE
     rr = HORIZON * project((0.0, 0.0, 0.0))[3]
     for s, g in ((1.35, 0xC0), (1.7, 0x80)):
-        g = round(0x20 + (g - 0x20) * hole)
-        o.append(path(ell(cx, cy, rr * s, rr * s * 0.95, math.pi * 1.04, math.pi * 1.96, 40), f"#{g:02X}{g:02X}{g:02X}", 1.0))
+        for d, k, w in ((2.2, 0.35, 2.4), (0.0, 1.0, 1.0)):            # each arc with a soft, dimmer stroke under it
+            gg = round(0x20 + (round(0x10 + (g - 0x10) * k) - 0x20) * hole)
+            o.append(path(ell(cx, cy, rr * s, rr * s * 0.95, math.pi * 1.04, math.pi * 1.96, 40), "#" + f"{max(gg, 0x10):02X}" * 3, w))
+    return o
+
+
+# the glow round the event horizon: no blur on the device, so it's stacked rings stepping down in grey, tight and bright
+# at the photon ring and fading out over ~11 px. Drawn over whatever's behind the hole, under everything in front.
+GLOW = [(1.2, 0xD8, 2.2), (2.9, 0xA0, 2.4), (4.9, 0x6C, 2.6), (7.3, 0x44, 3.0), (10.2, 0x26, 3.6)]
+
+
+def glow(hole, t):
+    if hole < 0.05:
+        return []
+    cx, cy = CENTRE
+    rr = HORIZON * project((0.0, 0.0, 0.0))[3]
+    breathe = 1.0 + 0.08 * math.sin(2 * math.pi * t / 4.0)              # a slow swell so it reads as light, not a ring
+    o = []
+    for d, g, w in reversed(GLOW):                                     # outermost first so the bright rings sit on top
+        gg = round(0x10 + (g - 0x10) * hole)
+        rad = rr + d * breathe
+        o.append(path(ell(cx, cy, rad, rad, n=60), f"#{gg:02X}{gg:02X}{gg:02X}", w, close=True))
     return o
 
 
@@ -458,6 +478,7 @@ def scene(p, last, t, presses):
                                                     path(pts, f"#{g:02X}{g:02X}{g:02X}", 1.8 - 0.9 * x)))
     flash = max(0.0, 1.0 - (u - IMPLODE_END) / 0.1) if u >= IMPLODE_END else 0.0
     out = [s for _, s in sorted(back, key=lambda q: -q[0])]
+    out += glow(hole, t)
     out += lensing(hole)
     out += sun(radius, hole, flash)
     out += [s for _, s in sorted(front, key=lambda q: -q[0])]
