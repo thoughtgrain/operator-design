@@ -40,7 +40,8 @@ import planets_av as A
 
 HERE = Path(__file__).resolve().parent
 path, ell, grey, shimmer = O.path, O.ell, B3.grey, B3.shimmer
-R = 30.0
+R = 36.0
+K = R / 30                                                            # px sizes (dots, heights) scale with the hole
 ASPECT = 0.16                                                         # disc ellipse height ÷ width (blackhole3 is ~0.03)
 CX, BASE = B3.CX, B3.CY + B3.DISC_DROP * R + 4
 MODE = "melody"
@@ -48,7 +49,7 @@ MODE = "melody"
 
 def reach(w):
     """distance from the hole for a weight 0..100 (also the capture ring for Dens)"""
-    return R * (1.3 + 3.6 * w / 100)
+    return R * (1.45 + 3.45 * w / 100)                                 # from the first disc ring to the outermost
 
 
 def disc_xy(r, a, h=0.0):
@@ -66,8 +67,8 @@ def ring(r, near, g, w):
 # ring under the hole read as a lattice and the middle of the page stays mostly black. Nothing near is drawn across the
 # hole except the bodies: the near disc, its spokes and the rings break where they'd cross it, so the hole and the dots
 # in front of it stay clear.
-ARCH_RAILS = [(1.08, 0xF0, 1.2), (1.32, 0x98, 0.9), (1.58, 0x58, 0.8)]   # radius ÷ R, grey, width
-UNDER_RAILS = [(1.07, 0xC0, 1.0), (1.30, 0x60, 0.8)]
+ARCH_RAILS = [(1.2, 0xE8, 1.1), (1.42, 0x98, 0.9), (1.66, 0x58, 0.8)]   # radius ÷ R, grey, width
+UNDER_RAILS = [(1.18, 0xC0, 1.0), (1.38, 0x60, 0.8)]
 DISC_RINGS = [(1.45, 0x50), (2.5, 0x40), (3.6, 0x34), (4.9, 0x2A)]       # radius ÷ R, grey
 RIB_G = 0x44
 
@@ -96,26 +97,52 @@ def ring_pts(r, near):
     return [disc_xy(r, a0 + math.pi * q / 48) for q in range(49)]
 
 
-def lattice(rails, ribs, lift=4):
+def arch_pts(r, flare):
+    """blackhole3's bell, but standing on the same disc line as everything else (its own drop made each rail's feet
+    land at a different height) and ending flat at its feet with no tail, so it meets the disc cleanly"""
+    d0 = 0.86 * r
+    h0 = 0.97 * math.sqrt(r * r - d0 * d0)
+    m0 = -0.97 * d0 / math.sqrt(r * r - d0 * d0)
+    w = r * (1 + flare) - d0
+    right = []
+    for q in range(12):
+        tau = (q + 1) / 12
+        h00, h10 = 2 * tau ** 3 - 3 * tau ** 2 + 1, tau ** 3 - 2 * tau ** 2 + tau
+        right.append((d0 + w * tau, h00 * h0 + h10 * w * m0))
+    top = [(-d0 + 2 * d0 * q / 30, 0.97 * math.sqrt(max(0.0, r * r - (-d0 + 2 * d0 * q / 30) ** 2))) for q in range(31)]
+    right = [(x, h) for x, h in right if h > 0.1 * r]                  # stop as it comes down to the disc: no flat
+    left = [(-x, h) for x, h in reversed(right)]                       # feet running along the disc line
+    return [(CX + x, BASE - h) for x, h in left + top + right]
+
+
+def under_pts(r):
+    """the ring under the hole, starting well below the disc line so its ends don't crowd the hole's sides"""
+    d = 0.32
+    return [(CX + r * math.cos(d + (math.pi - 2 * d) * q / 40), BASE + 0.97 * r * math.sin(d + (math.pi - 2 * d) * q / 40))
+            for q in range(41)]
+
+
+def lattice(rails, ribs, lift=0):
     """rails (lists of points, inner to outer, same length) and the ribs joining them at every `ribs`-th point"""
     out = []
     n = len(rails[0])
+    n = min(len(r) for r in rails)
+    off = [(len(r) - n) // 2 for r in rails]                           # rails can differ in length once feet are cut
     for j in range(ribs // 2, n, ribs):
-        out.append(path([(x, y + lift) for x, y in (r[j] for r in rails)], grey(RIB_G), 0.7))
+        out.append(path([(x, y + lift) for x, y in (r[j + o] for r, o in zip(rails, off))], grey(RIB_G), 0.7))
     return out
 
 
 def light(R_, t, flare=0.0):
     back, front = [], []
     b = 1 + 0.35 * flare                                               # a press brightens the wire by its velocity
-    arch = [B3.arch(R_ * s, 0.5 + 0.35 * k) for k, (s, _, _) in enumerate(ARCH_RAILS)]
-    arch = [[p for p in rail] for rail in arch]
+    arch = [arch_pts(R_ * s, 0.5 + 0.35 * k) for k, (s, _, _) in enumerate(ARCH_RAILS)]
     for k, (s, g, w) in enumerate(ARCH_RAILS):
-        back.append(path([(x, y + 4) for x, y in arch[k]], grey(shimmer(g, k, t) * b), w))
+        back.append(path(arch[k], grey(shimmer(g, k, t) * b), w))
     back += lattice(arch, 5)
-    under = [B3.under(R_ * s, R_) for s, _, _ in UNDER_RAILS]
+    under = [under_pts(R_ * s) for s, _, _ in UNDER_RAILS]
     for k, (s, g, w) in enumerate(UNDER_RAILS):
-        back.append(path([(x, y + 4) for x, y in under[k]], grey(shimmer(g, k + 5, t) * b), w))
+        back.append(path(under[k], grey(shimmer(g, k + 5, t) * b), w))
     back += lattice(under, 6)
     spin = 2 * math.pi * t / DRIFT
     for k, (s, g) in enumerate(DISC_RINGS):                            # disc rings: far halves behind, near broken
@@ -193,9 +220,9 @@ def height(i, val, last, c):
     rng_ = 3 + (vel * 13) // 128
     deg = (val * rng_) // 15
     if c["drum"]:
-        return 4.0 + 5.5 * ((deg >> 1) & 7)                              # pad lanes
+        return K * (4.0 + 5.5 * ((deg >> 1) & 7))                              # pad lanes
     root = last["root"] if last else 50
-    return 4.0 + 1.9 * (A.Meikyu.scale_note(root, A.MASKS[c["scal"]], deg) - root)
+    return K * (4.0 + 1.9 * (A.Meikyu.scale_note(root, A.MASKS[c["scal"]], deg) - root))
 
 
 def scene(p, last, t, hits, w_hist, v_hist):
@@ -216,7 +243,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
             hole = [path(ell(CX, BASE, R + 1.5 * k, (R + 1.5 * k) * 0.97, n=60), "#F0F0F0", 1.6 + 3.0 * k, fill="#000000", close=True)]
         if snare:
             k = 1 - min(snare) / 0.18
-            back.append(path([(x, y + 4) for x, y in B3.under(R * 1.12, R)], grey(0xA0 + 0x50 * k), 2.0 + 3.0 * k))
+            back.append(path(under_pts(R * 1.18), grey(0xA0 + 0x50 * k), 1.4 + 2.5 * k))
 
     rc, ra = reach(dens), reach(dens / 4)                              # capture ring and accent ring
     behind += [ring(ra, False, 0x58, 1.0), ring(rc, False, 0xA0, 1.5)]
@@ -244,14 +271,14 @@ def scene(p, last, t, hits, w_hist, v_hist):
             side.append(path([(x0, y0), (x, y)], grey(0x20 + g), 0.9))   # the stem: its pitch, above its spot
         if i in sounding:
             age = sounding[i] / M4.FLASH
-            side.append(path(ell(x, y, 5.0, 5.0, n=16), "#F0F0F0", 1.0, fill="#F0F0F0", close=True))
-            side.append(path(ell(x, y, 6 + 9 * age, 6 + 9 * age, n=20), grey(0xE0 - 0x90 * age), 1.0, close=True))
+            side.append(path(ell(x, y, 5.0 * K, 5.0 * K, n=16), "#F0F0F0", 1.0, fill="#F0F0F0", close=True))
+            side.append(path(ell(x, y, K * (6 + 9 * age), K * (6 + 9 * age), n=20), grey(0xE0 - 0x90 * age), 1.0, close=True))
         elif inside > 0.5:
             s = 3.6 if accent else 2.7
             g = 0xE8 if accent else 0xB0
-            side.append(path(ell(x, y, s, s, n=14), grey(g), 0.9, fill=grey(g), close=True))
+            side.append(path(ell(x, y, s * K, s * K, n=14), grey(g), 0.9, fill=grey(g), close=True))
         else:
-            side.append(path(ell(x, y, 1.9, 1.9, n=10), grey(0x68), 0.9, fill="#000000", close=True))
+            side.append(path(ell(x, y, 1.9 * K, 1.9 * K, n=10), grey(0x68), 0.9, fill="#000000", close=True))
     return back + behind + hole + front + over
 
 
