@@ -4,7 +4,8 @@ One folder per machine, named by its machine id. Each follows the layout in `opx
 
 ```
 screens/<machine-id>/
-├── brief.md      phases 0–4
+├── brief.md      phases 0–4 (category in intake)
+├── passes/       every design pass: <nn>-<kind>/v1…v5 + pass.json, five unique variants
 ├── frames/       rest.svg, playing.svg, c<N>-000.svg, c<N>-050.svg, c<N>-100.svg
 ├── contact.svg   + contact.png
 ├── motion.md     phase 6

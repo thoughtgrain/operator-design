@@ -12,13 +12,13 @@ Start from the library. `library/toro-blocks/` is the house reference: an abstra
 ## Steps
 
 1. **Gate 0.** Decide screen vs stock page. If there's no single object the sound acts on, recommend the stock page and stop.
-2. **Brief.** Copy `opxy/templates/brief.md` and fill intake. Note where the controls come from.
+2. **Brief.** Copy `opxy/templates/brief.md` and fill intake, including the category (`opxy/categories.md`). Note where the controls come from.
 3. **Definition from the port (1A)**, when there's no XY `definition.json` yet: read the source engine's code (not its manual), inventory every control including shared knobs and hidden modes, give each a fate (keep / split / merge / drop with a reason), keep the source's ranges and curves, pick real-unit display formats, lay out pages (page 1 = played most, one alternate per position, no filler), clean defaults, carry presets. Write the port map into the brief and the draft to `screens/<id>/definition.json`, leaving `resources.display` as a placeholder.
 4. **Definition review (1B):** run `python3 opxy/tools/lint_definition.py <definition.json>`. Fix errors; resolve or justify each warning in the brief; give every row of the review table a verdict. By-ear and device checks stay **pending device**.
 5. **Captions and ranking.** Captions from the reviewed definition (labels ≤ 8 chars lower case, values estimated at chars × 0.64 × 20 against 53 px). Rank each control's audible effect 1–5. If you can't hear the machine, score from the DSP and ask the person to confirm.
-6. **Subject.** Propose 2–3 candidates tied to patterns, each with a named drawing language and a reference from `opxy/reference/` or `library/`. When revising an existing screen, score it against the protocol as candidate A. **Ask the person to choose** unless they already have.
+6. **Subject pass.** Five candidates, one per direction (`design_pass_start` with kind `subject` if the operator-design MCP server is connected; by hand otherwise: five different pattern × drawing-language pairs that fit the machine's category in `opxy/categories.md`). Each has a named drawing language and a reference from `opxy/reference/` or `library/`. When revising an existing screen, score it against the protocol alongside the five. Record them with `design_pass_submit`, which checks they're unique. **Ask the person to choose** unless they already have.
 7. **Map + budget.** One channel per control, travel scaled to score with a visible floor, no on/off-only controls. Fill `resources.display` and re-run `lint_definition.py`. Rest = 0 changed nodes; heaviest playing ≈ 20 average.
-8. **Frames.** Start from `opxy/templates/frame.svg`. Draw `rest`, `playing`, and `c<N>-000/050/100` per control. Generate frames from one script when there are many, so they stay consistent; never hand-patch a single frame out of sync with the brief.
+8. **Frames.** Open with a frames pass: five `rest.svg` variants of the chosen subject, each from its own direction, submitted and checked for uniqueness, and the person picks one. Then start from `opxy/templates/frame.svg`. Draw `rest`, `playing`, and `c<N>-000/050/100` per control. Generate frames from one script when there are many, so they stay consistent; never hand-patch a single frame out of sync with the brief.
 9. **Lint.** `python3 opxy/tools/lint_frame.py screens/<id>/frames/*.svg --definition <definition.json>` (the definition tells it which nodes are mutable outlines and how many points they need; `--two-page` for 5–8 controls, `--own-header` if covering the header). Fix every error; fix or justify every warning in `review.md`.
 10. **Perceptibility.** `python3 opxy/tools/perceptibility.py screens/<id>/frames --scores <scores> --names <labels>`. Every control and the note response must pass. Under the floor → back to step 7 with more travel or a stronger channel; never lower a score to pass.
 11. **Contact sheet.** `python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png`, then look at the PNG at 1:1. If any control's three frames look alike, go back to step 7.
@@ -26,6 +26,8 @@ Start from the library. `library/toro-blocks/` is the house reference: an abstra
 13. **Motion, review, handoff.** Write `motion.md`, `review.md` (checklist from `accessibility.md`), `handoff.md` per protocol phase 8.
 
 ## Hard rules
+
+- Every design pass is exactly five unique variants (`opxy/protocol.md`, Iterations). Never fewer, never five tweaks of one idea.
 
 - 480 × 220, grey only, never red. Univers Next Pro Light, ≥ 8 px.
 - Bound mutable outlines: `M L… Z`, `fill="none"`, distinct points ≥ 1/8 px apart, closing edge ≥ 1/4 px, no turn within 2.5° of straight back, ≤ 64 points, one subpath.

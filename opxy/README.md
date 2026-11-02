@@ -6,19 +6,21 @@ The device rules come from open-xy. What this module adds is the process: choosi
 
 ## Reading order
 
-1. **[constraints.md](constraints.md)** — the numbers: 480 × 220, greys, type, frame limits, device drawing faults. Every line links to its source.
-2. **[protocol.md](protocol.md)** — the phases (0 screen-or-stock, 1 intake with 1A definition from a port and 1B definition review, 2 rank, 3 subject, 4 map + budget, 5 frames, 6 motion, 7 review, 8 handoff), each with an output and a gate.
-3. **[patterns.md](patterns.md)** — the visual-channel table and the composition patterns (section drawing, diagram + trace, trace as subject, stack in depth, field and figure, figures, column affinity, headers).
-4. **[craft.md](craft.md)** — one drawing language, line weights, value, composition, text and motion, and the side-by-side review that keeps screens from looking childish.
-5. **[accessibility.md](accessibility.md)** — contrast for every grey, sizes, single-cue rules, motion, caption widths, and the review checklist.
-6. **[audit.md](audit.md)** — how a finished screen (yours or one handed over) is judged, and how passing ones enter `library/`.
-7. **[reference/](reference/)** — annotated screens and links to MNMD, Found Motive and the core machines.
+1. **[categories.md](categories.md)** — engine, drum, sampler, effect, player, sequencer, function, and which patterns fit each.
+2. **[constraints.md](constraints.md)** — the numbers: 480 × 220, greys, type, frame limits, device drawing faults. Every line links to its source.
+3. **[protocol.md](protocol.md)** — the phases (0 screen-or-stock, 1 intake with 1A definition from a port and 1B definition review, 2 rank, 3 subject, 4 map + budget, 5 frames, 6 motion, 7 review, 8 handoff), each with an output and a gate.
+4. **[patterns.md](patterns.md)** — the visual-channel table and the composition patterns (section drawing, diagram + trace, trace as subject, stack in depth, field and figure, figures, column affinity, headers).
+5. **[craft.md](craft.md)** — one drawing language, line weights, value, composition, text and motion, and the side-by-side review that keeps screens from looking childish.
+6. **[accessibility.md](accessibility.md)** — contrast for every grey, sizes, single-cue rules, motion, caption widths, and the review checklist.
+7. **[audit.md](audit.md)** — how a finished screen (yours or one handed over) is judged, and how passing ones enter `library/`.
+8. **[reference/](reference/)** — annotated screens and links to MNMD, Found Motive and the core machines.
 
 ## Files
 
 | Path | What it is |
 | --- | --- |
 | `tokens.json` | The numbers as data. Tools read it; update it with `constraints.md`. |
+| `catalog.json` | Categories, the pattern index by category, the library by category, and the five-iteration settings. The MCP server reads it; update it with `categories.md`. |
 | `templates/brief.md` | Phases 0–4 as a fill-in document |
 | `templates/audit.md` | The audit report |
 | `templates/library-card.md` | The library entry for a screen that passed |
