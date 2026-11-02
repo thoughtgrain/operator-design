@@ -176,7 +176,8 @@ def m4(root=6, scale="major", channel=3, random_amt=0.25, played=(13,)):
         press = 2.5 if n in played else 0.0
         if pc in BLACK_LEFT:
             x = x0 + (o_ * 7 + BLACK_LEFT[pc]) * ww - bw / 2
-            g = cam.box(x, x + bw, 0, bh - press, wd - bd, wd, G(0xCD if n in played else 0x4B), G(0x32), G(0x32), G(0x64), 0.6)
+            g = cam.box(x, x + bw, 0, bh - press, wd - bd, wd, "#000000", "#000000", "#000000",
+                        "#CDCDCD", 1.6 if n in played else 1.0)          # black keys: black, in white wire
             items.append((-1, abs(x + bw / 2), g))
             tops[n] = (x + bw / 2, bh - press, wd - bd + 9)
         else:
