@@ -4,7 +4,7 @@ This project is a structured framework for designing graphics for Teenage Engine
 
 Right now it holds one module: **`opxy/`**, the protocol for designing the screen a custom machine draws on the OP-XY through the [open-xy SDK](https://github.com/etcetc000/open-xy). More modules can sit beside it later (sequencing workflows, preset design, sound-design notes) without touching it.
 
-It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM Studio and Ollama can run the protocol with the real tools: every generative design pass is five unique variants, and **training mode** (`training/`) is how the guidelines learn, through draft → audit → review → gate → my approval, with a separate agent at each stage.
+It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM Studio and Ollama can run the protocol with the real tools: every generative design pass is five unique variants, and **training mode** (`training/`) is how the guidelines learn, through draft → audit → review → gate → a person's approval, with a separate agent at each stage.
 
 ## Set up the MCP server
 
@@ -35,7 +35,7 @@ python3 mcp/setup.py claude-desktop
 python3 mcp/setup.py codex
 ```
 
-**LM Studio.** Adds it to `~/.lmstudio/mcp.json` with the compact tool profile (15 tools, short descriptions) so it fits a small model's context, and points agent runs at LM Studio's local server. Use a model that supports tool calls.
+**LM Studio.** Adds it to `~/.lmstudio/mcp.json` with the compact tool profile (16 tools, short descriptions) so it fits a small model's context, and points agent runs at LM Studio's local server. Use a model that supports tool calls.
 
 ```sh
 python3 mcp/setup.py lmstudio --model qwen3-8b
@@ -70,7 +70,7 @@ Then try it: ask the agent to design a screen (the `design-screen` prompt in cli
 
 ## How to use it
 
-Once the server's connected, I talk to the agent in plain language. It reads the protocol, picks the right tools, and stops to ask me whenever a decision is mine. These are the four things I use it for.
+Once the server's connected, talk to the agent in plain language. It reads the protocol, picks the right tools, and stops to ask whenever a decision is yours. These are the main things it's for.
 
 ### Design a screen
 
@@ -81,11 +81,11 @@ Ask for it by machine, and say what the sound does if the agent can't read the c
 What happens, in order:
 
 1. **Setup.** The agent makes `screens/<id>/` with a brief and asks which category the machine is (engine, drum, sampler, effect, player, sequencer, function) if it can't tell. The category decides which patterns it starts from.
-2. **Definition and scores.** It builds or reviews `definition.json`, then scores how much each control changes the sound (1–5). It asks me to confirm the scores, because they size how far each control moves on screen.
-3. **Subject pass.** I get **five** candidate subjects, each from a different pattern and drawing style. I pick one and say why; the agent never picks.
-4. **Frames pass.** Five rest-frame variants of that subject, shown side by side at 1:1. I pick again, and it draws the full frame set from my pick.
-5. **Checks.** Every frame is linted against the device rules, every control is checked for visible change against its score, and I get a contact sheet to look at. Anything that fails goes back a step instead of being waved through.
-6. **Motion and an optional video.** After the motion spec, it asks whether I want a video preview, silent or with sound. If I say yes, the agent renders it itself. Any sound is **simulated**: the engine's code run on a computer, not a recording from an OP-XY, and the video says so.
+2. **Definition and scores.** It builds or reviews `definition.json`, then scores how much each control changes the sound (1–5). It asks you to confirm the scores, because they size how far each control moves on screen.
+3. **Subject pass.** You get **five** candidate subjects, each from a different pattern and drawing style. You pick one and say why; the agent never picks.
+4. **Frames pass.** Five rest-frame variants of that subject, shown side by side at 1:1. You pick again, and it draws the full frame set from your pick.
+5. **Checks.** Every frame is linted against the device rules, every control is checked for visible change against its score, and you get a contact sheet to look at. Anything that fails goes back a step instead of being waved through.
+6. **Motion and an optional video.** After the motion spec, it asks whether you want a video preview, silent or with sound. If you say yes, the agent renders it itself. Any sound is **simulated**: the engine's code run on a computer, not a recording from an OP-XY, and the video says so.
 7. **Review and handoff.** A review checklist with evidence, then `handoff.md` for whoever writes `display.cpp`. Anything only a real device can prove stays marked pending.
 
 If a review sends something back, the fix is another pass of five, never a quick patch to one frame.
@@ -94,24 +94,24 @@ If a review sends something back, the fix is another pass of five, never a quick
 
 > This is my screen for `theseus`, frames are in this folder. Does it meet the guidelines?
 
-The agent asks whether it's my work and under what licence, runs every automated check that applies, writes a draft report where anything not checked says **not checked**, then does the by-eye checks. The verdict is meets, meets with notes, or not yet with the fixes in order. A passing screen I own can go into `library/`.
+The agent asks whether it's your work and under what licence, runs every automated check that applies, writes a draft report where anything not checked says **not checked**, then does the by-eye checks. The verdict is meets, meets with notes, or not yet with the fixes in order. A passing screen that's yours to share can go into `library/`.
 
 ### Teach the guidelines something (training mode)
 
-When a screen teaches me something worth keeping (a new pattern, a pitfall, a category nothing fits), I say so:
+When a screen teaches something worth keeping (a new pattern, a pitfall, a category nothing fits), say so:
 
 > The cable drawing on the patch-bay screen worked. Propose it as a new pattern.
 
-The agent drafts a proposal, then hands it to a separate auditor and a separate reviewer, then runs an automated gate. Nothing changes in the docs until I approve it from a terminal:
+The agent drafts a proposal, then hands it to a separate auditor and a separate reviewer, then runs an automated gate. Nothing changes in the docs until a person approves it from a terminal:
 
 ```sh
 python3 mcp/train.py list --state awaiting_approval
 python3 mcp/train.py show <id>                         # history, verdicts and the full diff
-python3 mcp/train.py approve <id> --by "Brian Hinton"
-python3 mcp/train.py reject  <id> --by "Brian Hinton" --reason "…"
+python3 mcp/train.py approve <id> --by "<your name>"
+python3 mcp/train.py reject  <id> --by "<your name>" --reason "…"
 ```
 
-After approving, I commit the changed docs together with the proposal folder. The whole process is in [`training/README.md`](training/README.md).
+After approving, commit the changed docs together with the proposal folder. The whole process is in [`training/README.md`](training/README.md).
 
 ### Look something up
 
@@ -121,7 +121,7 @@ These are answered straight from the docs and the library, with nothing written.
 
 ### With a local model
 
-Small local models do best with the compact profile that the LM Studio and Ollama setups turn on. They can also run the auditor and reviewer for training mode themselves: ask the agent to advance a proposal "with run on", and the server sends each stage to the model you set up. Approval still stays with me.
+Small local models do best with the compact profile that the LM Studio and Ollama setups turn on. They can also run the auditor and reviewer for training mode themselves: ask the agent to advance a proposal "with run on", and the server sends each stage to the model you set up. Approval still stays with a person.
 
 ## Layout
 
@@ -136,6 +136,7 @@ operators/
 ├── .claude/agents/, .codex/agents/ ← designer, drafter, auditor, reviewer (generated from training/agents/)
 ├── .claude/skills/opxy-screen/    ← skill that runs the screen protocol end to end
 ├── .claude/skills/opxy-audit/     ← skill that audits a finished screen and adds passing ones to the library
+├── .claude/skills/opxy-train/     ← skill that runs training mode
 ├── opxy/
 │   ├── README.md                  ← module index and reading order
 │   ├── categories.md              ← engine, drum, sampler, effect, player, sequencer, function
@@ -156,7 +157,7 @@ operators/
 
 ## How it relates to open-xy
 
-open-xy owns the truth about the device: the display ABI, the UX conventions machines are reviewed against, and `sdk.py test`. I don't fork those rules here. `opxy/constraints.md` restates the numbers I design against and links every one back to its source, so when the SDK moves I update one file.
+open-xy owns the truth about the device: the display ABI, the UX conventions machines are reviewed against, and `sdk.py test`. This repo doesn't fork those rules. `opxy/constraints.md` restates the numbers designs are checked against and links every one back to its source, so when the SDK moves, one file changes.
 
 What open-xy doesn't cover is the design process itself: going from "here's a sound and its parameters" to a screen where every control reads, inside the node budget, before anyone writes `display.cpp`. That's what this repo is for.
 

@@ -50,7 +50,7 @@ Writes `~/.lmstudio/mcp.json` with the compact tool profile, and points `run: tr
 
 ### Ollama
 
-Ollama doesn't speak MCP itself, so I use [mcp-client-for-ollama](https://pypi.org/project/mcp-client-for-ollama/) as the bridge:
+Ollama doesn't speak MCP itself, so [mcp-client-for-ollama](https://pypi.org/project/mcp-client-for-ollama/) acts as the bridge:
 
 ```sh
 python3 mcp/setup.py ollama --model qwen3:8b
@@ -119,7 +119,7 @@ Engine audio in a preview is a **simulation**: the machine's engine code compile
 
 ## How a design pass runs
 
-Every generative pass (the subject candidates, the rest-frame variants, any revision after a review) is exactly five variants. I picked five because two or three candidates kept collapsing into "the first idea plus two strawmen", and five is still few enough to judge side by side at 1:1.
+Every generative pass (the subject candidates, the rest-frame variants, any revision after a review) is exactly five variants. Five, because two or three candidates kept collapsing into "the first idea plus two strawmen", and five is still few enough to judge side by side at 1:1.
 
 1. `design_pass_start(machine_id, kind)` assigns five directions before anything is drawn. For subjects that's five pattern × drawing-language pairs drawn from the patterns that fit the machine's category (`opxy/categories.md`), with one slot held for a stretch outside the column. For frames it's a Latin square over composition, camera and emphasis, so every pair of variants differs on all three.
 2. It returns five designer briefs. In Claude Code and Codex they run as five parallel `opxy-designer` subagents, each writing only into its own `v<N>/` folder. With `run: true` the server runs them on the configured endpoint.
