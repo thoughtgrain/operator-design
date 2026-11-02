@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>
+<g id="preview_header">
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">mode</text>
+<text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">updn</text>
+<text transform="matrix(1 0 0 1 5 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">skip</text>
+<text transform="matrix(1 0 0 1 65 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">15</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">rate</text>
+<text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1/16</text>
+<text transform="matrix(1 0 0 1 125 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">accent</text>
+<text transform="matrix(1 0 0 1 185 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">50</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">range</text>
+<text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">2</text>
+<text transform="matrix(1 0 0 1 245 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">tones</text>
+<text transform="matrix(1 0 0 1 305 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">chord</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">steps</text>
+<text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">8</text>
+<text transform="matrix(1 0 0 1 365 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">jump</text>
+<text transform="matrix(1 0 0 1 425 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">10</text>
+</g>
+<path d="M 6 188.5 L 24 188.5 L 24 187.5 L 6 187.5 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 184.379 L 24 184.379 L 24 183.379 L 6 183.379 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 28 187.879)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C4</text>
+<path d="M 6 180.258 L 16 180.258 L 16 179.258 L 6 179.258 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 176.136 L 24 176.136 L 24 175.136 L 6 175.136 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 172.015 L 16 172.015 L 16 171.015 L 6 171.015 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 167.894 L 24 167.894 L 24 166.894 L 6 166.894 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 6 163.773 L 24 163.773 L 24 162.773 L 6 162.773 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 159.652 L 16 159.652 L 16 158.652 L 6 158.652 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 155.53 L 24 155.53 L 24 154.53 L 6 154.53 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 6 151.409 L 16 151.409 L 16 150.409 L 6 150.409 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 147.288 L 24 147.288 L 24 146.288 L 6 146.288 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 143.167 L 16 143.167 L 16 142.167 L 6 142.167 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 139.045 L 24 139.045 L 24 138.045 L 6 138.045 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 134.924 L 24 134.924 L 24 133.924 L 6 133.924 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 28 138.424)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C5</text>
+<path d="M 6 130.803 L 16 130.803 L 16 129.803 L 6 129.803 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 126.682 L 24 126.682 L 24 125.682 L 6 125.682 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 122.561 L 16 122.561 L 16 121.561 L 6 121.561 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 118.439 L 24 118.439 L 24 117.439 L 6 117.439 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 6 114.318 L 24 114.318 L 24 113.318 L 6 113.318 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 110.197 L 16 110.197 L 16 109.197 L 6 109.197 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 106.076 L 24 106.076 L 24 105.076 L 6 105.076 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 6 101.955 L 16 101.955 L 16 100.955 L 6 100.955 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 97.833 L 24 97.833 L 24 96.833 L 6 96.833 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 93.712 L 16 93.712 L 16 92.712 L 6 92.712 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 89.591 L 24 89.591 L 24 88.591 L 6 88.591 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 85.47 L 24 85.47 L 24 84.47 L 6 84.47 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 28 88.97)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">C6</text>
+<path d="M 6 81.348 L 16 81.348 L 16 80.348 L 6 80.348 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 77.227 L 24 77.227 L 24 76.227 L 6 76.227 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 73.106 L 16 73.106 L 16 72.106 L 6 72.106 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 68.985 L 24 68.985 L 24 67.985 L 6 67.985 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 64.864 L 24 64.864 L 24 63.864 L 6 63.864 Z" fill="#646464" stroke="#646464" stroke-width="0.2"/>
+<path d="M 6 60.742 L 16 60.742 L 16 59.742 L 6 59.742 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 6 56.621 L 24 56.621 L 24 55.621 L 6 55.621 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 6 52.5 L 16 52.5 L 16 51.5 L 6 51.5 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<path d="M 119 149.03 L 123.8 155.03 L 119 161.03 L 114.2 155.03 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 171 111.939 L 175.8 117.939 L 171 123.939 L 166.2 117.939 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 197 99.576 L 201.8 105.576 L 197 111.576 L 192.2 105.576 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 223 111.939 L 227.8 117.939 L 223 123.939 L 218.2 117.939 Z" fill="#000000" stroke="#CDCDCD" stroke-width="1.3"/>
+<path d="M 249 128.424 L 253.8 134.424 L 249 140.424 L 244.2 134.424 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 275 177.879 L 279.8 183.879 L 275 189.879 L 270.2 183.879 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 301 162.894 L 304.6 167.394 L 301 171.894 L 297.4 167.394 Z" fill="#000000" stroke="#969696" stroke-width="1.3"/>
+<path d="M 327 150.53 L 330.6 155.03 L 327 159.53 L 323.4 155.03 Z" fill="#000000" stroke="#969696" stroke-width="1.3"/>
+<path d="M 353 129.924 L 356.6 134.424 L 353 138.924 L 349.4 134.424 Z" fill="#000000" stroke="#969696" stroke-width="1.3"/>
+<path d="M 379 113.439 L 382.6 117.939 L 379 122.439 L 375.4 117.939 Z" fill="#000000" stroke="#969696" stroke-width="1.3"/>
+<path d="M 405 51.621 L 408.6 56.121 L 405 60.621 L 401.4 56.121 Z" fill="#000000" stroke="#969696" stroke-width="1.3"/>
+<path d="M 431 111.939 L 435.8 117.939 L 431 123.939 L 426.2 117.939 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 457 128.424 L 461.8 134.424 L 457 140.424 L 452.2 134.424 Z" fill="#000000" stroke="#AFAFAF" stroke-width="1.3"/>
+<path d="M 2 204 L 118 204 L 118 205 L 2 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 4 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">song</text>
+<path d="M 122 204 L 238 204 L 238 205 L 122 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
+<path d="M 242 204 L 358 204 L 358 205 L 242 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<path d="M 242 203 L 358 203 L 358 205 L 242 205 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 244 216)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
+<path d="M 362 204 L 478 204 L 478 205 L 362 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 364 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
+</svg>

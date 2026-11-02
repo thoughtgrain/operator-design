@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>
+<g id="preview_header">
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
+<text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">3</text>
+<text transform="matrix(1 0 0 1 5 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">low</text>
+<text transform="matrix(1 0 0 1 65 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">C-1</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">to</text>
+<text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">t3</text>
+<text transform="matrix(1 0 0 1 125 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">high</text>
+<text transform="matrix(1 0 0 1 185 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">G9</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">xpose</text>
+<text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+<text transform="matrix(1 0 0 1 245 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px"></text>
+<text transform="matrix(1 0 0 1 305 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px"></text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">mute</text>
+<text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">off</text>
+<text transform="matrix(1 0 0 1 365 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px"></text>
+<text transform="matrix(1 0 0 1 425 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px"></text>
+</g>
+<text transform="matrix(1 0 0 1 8 62)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">1 drum</text>
+<text transform="matrix(1 0 0 1 8 79)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">2 bass</text>
+<text transform="matrix(1 0 0 1 8 96)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">3 chord</text>
+<text transform="matrix(1 0 0 1 8 113)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">4 lead</text>
+<text transform="matrix(1 0 0 1 8 130)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">5 arp</text>
+<text transform="matrix(1 0 0 1 8 147)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">6 pad</text>
+<text transform="matrix(1 0 0 1 8 164)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">7 off</text>
+<text transform="matrix(1 0 0 1 8 181)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">8 off</text>
+<path d="M 299.5 52 L 299.5 182 L 300.5 182 L 300.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 297 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">1</text>
+<path d="M 321.5 52 L 321.5 182 L 322.5 182 L 322.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 319 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">2</text>
+<path d="M 343.5 52 L 343.5 182 L 344.5 182 L 344.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 341 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">3</text>
+<path d="M 365.5 52 L 365.5 182 L 366.5 182 L 366.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 363 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">4</text>
+<path d="M 387.5 52 L 387.5 182 L 388.5 182 L 388.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 385 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">5</text>
+<path d="M 409.5 52 L 409.5 182 L 410.5 182 L 410.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 407 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">6</text>
+<path d="M 431.5 52 L 431.5 182 L 432.5 182 L 432.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 429 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">7</text>
+<path d="M 453.5 52 L 453.5 182 L 454.5 182 L 454.5 52 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 451 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">8</text>
+<path d="M 72 58.5 L 300 58.5 L 300 57.5 L 72 57.5 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 300 54.5 L 302.8 58 L 300 61.5 L 297.2 58 Z" fill="#000000" stroke="#969696" stroke-width="1.2"/>
+<path d="M 72 75.5 L 296.384 75.5 L 296.984 73.259 L 298.259 71.984 L 300 71.518 L 301.741 71.984 L 303.016 73.259 L 303.616 75.5 L 322 75.5 L 322 74.5 L 304.384 74.5 L 303.912 72.741 L 302.259 71.088 L 300 70.482 L 297.741 71.088 L 296.088 72.741 L 295.616 74.5 L 72 74.5 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 322 71.5 L 324.8 75 L 322 78.5 L 319.2 75 Z" fill="#000000" stroke="#969696" stroke-width="1.2"/>
+<path d="M 72 92.8 L 296.614 92.8 L 297.253 90.414 L 298.414 89.253 L 300 88.828 L 301.586 89.253 L 302.747 90.414 L 303.386 92.8 L 318.614 92.8 L 319.253 90.414 L 320.414 89.253 L 322 88.828 L 323.586 89.253 L 324.747 90.414 L 325.386 92.8 L 340.614 92.8 L 341.253 90.414 L 342.414 89.253 L 344 88.828 L 345.586 89.253 L 346.747 90.414 L 347.386 92.8 L 362.614 92.8 L 363.253 90.414 L 364.414 89.253 L 366 88.828 L 367.586 89.253 L 368.747 90.414 L 369.386 92.8 L 388 92.8 L 388 91.2 L 370.614 91.2 L 370.181 89.586 L 368.414 87.819 L 366 87.172 L 363.586 87.819 L 361.819 89.586 L 361.386 91.2 L 348.614 91.2 L 348.181 89.586 L 346.414 87.819 L 344 87.172 L 341.586 87.819 L 339.819 89.586 L 339.386 91.2 L 326.614 91.2 L 326.181 89.586 L 324.414 87.819 L 322 87.172 L 319.586 87.819 L 317.819 89.586 L 317.386 91.2 L 304.614 91.2 L 304.181 89.586 L 302.414 87.819 L 300 87.172 L 297.586 87.819 L 295.819 89.586 L 295.386 91.2 L 72 91.2 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="0.2"/>
+<path d="M 388 88.5 L 390.8 92 L 388 95.5 L 385.2 92 Z" fill="#000000" stroke="#CDCDCD" stroke-width="1.2"/>
+<path d="M 72 109.5 L 296.384 109.5 L 296.984 107.259 L 298.259 105.984 L 300 105.518 L 301.741 105.984 L 303.016 107.259 L 303.616 109.5 L 318.384 109.5 L 318.984 107.259 L 320.259 105.984 L 322 105.518 L 323.741 105.984 L 325.016 107.259 L 325.616 109.5 L 340.384 109.5 L 340.984 107.259 L 342.259 105.984 L 344 105.518 L 345.741 105.984 L 347.016 107.259 L 347.616 109.5 L 366 109.5 L 366 108.5 L 348.384 108.5 L 347.912 106.741 L 346.259 105.088 L 344 104.482 L 341.741 105.088 L 340.088 106.741 L 339.616 108.5 L 326.384 108.5 L 325.912 106.741 L 324.259 105.088 L 322 104.482 L 319.741 105.088 L 318.088 106.741 L 317.616 108.5 L 304.384 108.5 L 303.912 106.741 L 302.259 105.088 L 300 104.482 L 297.741 105.088 L 296.088 106.741 L 295.616 108.5 L 72 108.5 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 366 105.5 L 368.8 109 L 366 112.5 L 363.2 109 Z" fill="#000000" stroke="#969696" stroke-width="1.2"/>
+<path d="M 72 126.5 L 296.384 126.5 L 296.984 124.259 L 298.259 122.984 L 300 122.518 L 301.741 122.984 L 303.016 124.259 L 303.616 126.5 L 318.384 126.5 L 318.984 124.259 L 320.259 122.984 L 322 122.518 L 323.741 122.984 L 325.016 124.259 L 325.616 126.5 L 344 126.5 L 344 125.5 L 326.384 125.5 L 325.912 123.741 L 324.259 122.088 L 322 121.482 L 319.741 122.088 L 318.088 123.741 L 317.616 125.5 L 304.384 125.5 L 303.912 123.741 L 302.259 122.088 L 300 121.482 L 297.741 122.088 L 296.088 123.741 L 295.616 125.5 L 72 125.5 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 344 122.5 L 346.8 126 L 344 129.5 L 341.2 126 Z" fill="#000000" stroke="#969696" stroke-width="1.2"/>
+<path d="M 72 143.5 L 296.384 143.5 L 296.984 141.259 L 298.259 139.984 L 300 139.518 L 301.741 139.984 L 303.016 141.259 L 303.616 143.5 L 318.384 143.5 L 318.984 141.259 L 320.259 139.984 L 322 139.518 L 323.741 139.984 L 325.016 141.259 L 325.616 143.5 L 340.384 143.5 L 340.984 141.259 L 342.259 139.984 L 344 139.518 L 345.741 139.984 L 347.016 141.259 L 347.616 143.5 L 362.384 143.5 L 362.984 141.259 L 364.259 139.984 L 366 139.518 L 367.741 139.984 L 369.016 141.259 L 369.616 143.5 L 384.384 143.5 L 385.019 141.129 L 384.053 140.871 L 383.616 142.5 L 370.384 142.5 L 369.912 140.741 L 368.259 139.088 L 366 138.482 L 363.741 139.088 L 362.088 140.741 L 361.616 142.5 L 348.384 142.5 L 347.912 140.741 L 346.259 139.088 L 344 138.482 L 341.741 139.088 L 340.088 140.741 L 339.616 142.5 L 326.384 142.5 L 325.912 140.741 L 324.259 139.088 L 322 138.482 L 319.741 139.088 L 318.088 140.741 L 317.616 142.5 L 304.384 142.5 L 303.912 140.741 L 302.259 139.088 L 300 138.482 L 297.741 139.088 L 296.088 140.741 L 295.616 142.5 L 72 142.5 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 384.89 141.354 L 386.259 139.984 L 388 139.518 L 389.741 139.984 L 391.016 141.259 L 391.616 143.5 L 410 143.5 L 410 142.5 L 392.384 142.5 L 391.912 140.741 L 390.259 139.088 L 388 138.482 L 385.741 139.088 L 384.182 140.646 Z" fill="#969696" stroke="#969696" stroke-width="0.2"/>
+<path d="M 410 139.5 L 412.8 143 L 410 146.5 L 407.2 143 Z" fill="#000000" stroke="#969696" stroke-width="1.2"/>
+<path d="M 2 204 L 118 204 L 118 205 L 2 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 4 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">song</text>
+<path d="M 122 204 L 238 204 L 238 205 L 122 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 124 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lanes</text>
+<path d="M 242 204 L 358 204 L 358 205 L 242 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 244 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lane</text>
+<path d="M 362 204 L 478 204 L 478 205 L 362 205 Z" fill="#323232" stroke="#323232" stroke-width="0.2"/>
+<path d="M 362 203 L 478 203 L 478 205 L 362 205 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.2"/>
+<text transform="matrix(1 0 0 1 364 216)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">route</text>
+</svg>
