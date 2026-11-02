@@ -120,7 +120,12 @@ def lint_definition(path: str, machine_json: str | None = None, kind: str | None
 
 
 def lint_frames(paths: list[str] | str, definition: str | None = None, two_page: bool = False, own_header: bool = False,
-                fragment: bool = False, strict: bool = False, tokens_path: str | None = None, summary: bool = True) -> dict:
+                fragment: bool = False, strict: bool = False, tokens_path: str | None = None, summary: bool = True,
+                colour: bool = False, grayscale_of: str | None = None) -> dict:
+    from .paths import colour_allowed
+    if colour and not colour_allowed():
+        raise ToolError("colour is off for this harness. Grey is the default; colour is an override a person sets in the "
+                        "MCP server's config (OPXY_COLOUR=allow, or python3 mcp/setup.py <client> --colour)")
     files = _frame_paths(paths)
     argv: list = [*files]
     if definition:
@@ -130,6 +135,10 @@ def lint_frames(paths: list[str] | str, definition: str | None = None, two_page:
             argv.append(flag)
     if tokens_path:
         argv += ["--tokens", tokens_path]
+    if colour:
+        argv.append("--colour")
+    if grayscale_of:
+        argv += ["--grayscale-of", resolve(grayscale_of)]
     code, data = runner.run_json("lint_frame", argv)
     for entry in data["files"]:
         entry["file"] = rel(Path(entry["file"]))
@@ -256,7 +265,7 @@ def audit_run(material_dir: str, scores: list[int] | None = None, names: list[st
             "report": rel(report_path) if report_path else None,
             "byEye": ["contact sheet at 1:1: one subject, every control reads, no dashboard",
                       "craft review beside a reference (opxy/craft.md)", "accessibility checklist",
-                      "motion", "ux.md before you submit", "rights: author confirms it's theirs to share"]}
+                      "motion", "before you submit (PR #260 checklist)", "rights: author confirms it's theirs to share"]}
 
 
 def _audit_report(name, results, author, licence, automated, blockers) -> str:
@@ -283,7 +292,7 @@ def _audit_report(name, results, author, licence, automated, blockers) -> str:
     p = results.get("perceptibility")
     lines.append("| Perceptibility | " + ("not checked" if p is None else "pass" if p["pass"] else "under on: " + ", ".join(p["under"])) + " | table below |")
     lines += ["| Contact sheet, by eye | not checked | `contact.png` |", "| Accessibility checklist | not checked | |",
-              "| Motion | not checked | |", "| ux.md before you submit | not checked | |", ""]
+              "| Motion | not checked | |", "| Before you submit (PR #260 checklist) | not checked | |", ""]
     if p:
         lines += ["### Perceptibility", "", "| control | score | need % | 0→100 % | 0→50 % | 50→100 % | span | |",
                   "| --- | --- | --- | --- | --- | --- | --- | --- |"]

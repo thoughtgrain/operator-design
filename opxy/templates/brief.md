@@ -14,9 +14,18 @@
 | Machine id | `…` |
 | Kind | synth / effect / sample (the SDK contract) |
 | Category | engine / drum / sampler / effect / player / sequencer / function (`opxy/categories.md`) |
+| Colour | grey (default) / colour, allowed by this harness's MCP config: why this machine needs it, and the role table below |
 | Sounds like | two sentences |
 | Controls | N (≤ 4 stock header, 5–8 two pages) |
 | Control source | existing XY definition / port of … / new |
+
+### Colour roles (only when the harness allows colour)
+
+Skip for grey machines. Two to four hues, each with one job; the grey column is what `panel.grayscale.svg.fragment` uses, and the last column is the cue that still separates them without colour.
+
+| role | colour | its grey | cue besides colour |
+| --- | --- | --- | --- |
+| | | | |
 
 ### 1A · Port map (skip if an XY definition already exists)
 

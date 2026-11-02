@@ -12,6 +12,8 @@ Environment:
     OPXY_AGENT_MODEL      model name on that endpoint
     OPXY_AGENT_API_KEY    bearer token, if the endpoint needs one
     OPXY_APPROVERS        comma-separated names allowed to approve training proposals over MCP (off by default)
+    OPXY_COLOUR           allow: this harness may design in colour (grey is the default; red is always refused)
+    OPXY_SDK              path to a local open-xy checkout, for sdk_test
 """
 from __future__ import annotations
 

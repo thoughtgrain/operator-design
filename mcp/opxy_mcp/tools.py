@@ -11,8 +11,9 @@ import os
 from dataclasses import dataclass, field
 from typing import Callable
 
-from . import knowledge, passes, preview, screens, training
+from . import knowledge, passes, preview, screens, sdk, training
 from .agents import roles
+from .paths import colour_policy
 
 S = "string"
 STR = {"type": S}
@@ -74,6 +75,9 @@ TOOLS: list[Tool] = [
          "full text by id (P1–P15…).",
          _p(pattern_id=STR, category=CATEGORY), lambda a: knowledge.patterns(a.get("pattern_id"), a.get("category")),
          compact=True, short="List patterns (filter by category) or read one by id."),
+    Tool("colour_policy", "Whether this harness allows colour (grey is the default; colour is an override set in the MCP "
+         "config, never from a tool call) and the rules that apply.",
+         {}, lambda a: colour_policy(), compact=True, short="Grey or colour for this harness, and the rules."),
     Tool("opxy_tokens", "The device numbers from opxy/tokens.json, whole or at a JSON pointer (e.g. /perceptibility/channelFloors).",
          _p(pointer=STR), lambda a: knowledge.token_value(a.get("pointer"))),
     Tool("opxy_library", "Audited reference screens: list them (optionally by category) or read one entry's card, audit and files.",
@@ -92,10 +96,14 @@ TOOLS: list[Tool] = [
          _p(path=STR, machine_json=STR, kind={"type": S, "enum": ["synth", "sample", "effect"]}, strict=BOOL),
          lambda a: screens.lint_definition(a["path"], a.get("machine_json"), a.get("kind"), a.get("strict", False)), ["path"]),
     Tool("lint_frames", "Check frames against the device drawing rules (wraps opxy/tools/lint_frame.py). Findings are grouped "
-         "by rule; every error is kept. A clean lint is a pre-flight, not device acceptance.",
-         _p(paths=PATHS, definition=STR, two_page=BOOL, own_header=BOOL, fragment=BOOL, strict=BOOL),
+         "by rule; every error is kept. A clean lint is a pre-flight, not device acceptance. Grey only by default; colour=true "
+         "works only when this harness's config sets OPXY_COLOUR=allow, and red is always refused. grayscale_of checks a "
+         "grayscale variant against its colour original.",
+         _p(paths=PATHS, definition=STR, two_page=BOOL, own_header=BOOL, fragment=BOOL, strict=BOOL, colour=BOOL,
+            grayscale_of={"type": S, "description": "the colour original these grayscale files must match"}),
          lambda a: screens.lint_frames(a["paths"], a.get("definition"), a.get("two_page", False), a.get("own_header", False),
-                                       a.get("fragment", False), a.get("strict", False)),
+                                       a.get("fragment", False), a.get("strict", False),
+                                       colour=a.get("colour", False), grayscale_of=a.get("grayscale_of")),
          ["paths"], compact=True, short="Lint SVG frames against the device rules."),
     Tool("check_perceptibility", "Measure how much of the screen each control changes at 0/50/100 against floors scaled by its "
          "audible score 1–5, plus the note response (wraps opxy/tools/perceptibility.py). Never lower a score to pass.",
@@ -128,6 +136,12 @@ TOOLS: list[Tool] = [
             shows={"type": "array", "items": {"type": S, "enum": list(preview.SHOWS)}}, score=STR),
          lambda a: preview.preview_brief(a["machine_id"], a.get("audio", "ask"), a.get("shows"), a.get("score")),
          ["machine_id"], compact=True, short="Ask about, then spec, a video preview the agent renders (audio is simulated)."),
+    Tool("sdk_test", "Run open-xy's own checker (sdk.py test --machine) on a machine folder, using the local open-xy "
+         "checkout in OPXY_SDK. The real validator once a machine exists: records, sources, both SVGs, preview build, host "
+         "tests. A pass is still not device acceptance.",
+         _p(machine=STR, no_cpu=BOOL, cxx=STR, host_cxx=STR, timeout=INT),
+         lambda a: sdk.sdk_test(a["machine"], a.get("no_cpu", True), a.get("cxx"), a.get("host_cxx"), a.get("timeout", 170)),
+         ["machine"], read_only=False),
     # design passes ──────────────────────────────────────────────────────────
     Tool("design_pass_start", "Open a design pass for a screen. Every pass (subject, frames, revision) is exactly five unique "
          "variants: this assigns each its own direction (pattern × drawing language for subjects, composition × camera × "

@@ -21,7 +21,8 @@ from pathlib import Path
 REAL = Path(__file__).resolve().parents[2]
 TMP = Path(tempfile.mkdtemp(prefix="opxy-mcp-test-"))
 COPY = TMP / "repo"
-for item in ("mcp", "opxy", "library", "training", "AGENTS.md", ".claude", ".codex", "screens/toro/frames"):
+for item in ("mcp", "opxy", "library", "training", "AGENTS.md", ".claude", ".codex", "screens/toro/frames",
+             "screens/toro/definition.json", "screens/toro/machine.json"):
     src = REAL / item
     if src.is_dir():
         shutil.copytree(src, COPY / item, ignore=shutil.ignore_patterns("*.mp4", "*.wav", "__pycache__", "tests"))
@@ -350,6 +351,80 @@ class TestPreview(unittest.TestCase):
         self.assertTrue(any("simulated" in line for line in r["labelling"]))
         self.assertIn("You (the agent) render it", r["whoRenders"])
         self.assertFalse((d / "preview").exists())  # the server never makes the video
+
+
+class TestColour(unittest.TestCase):
+    def setUp(self):
+        self.src = (ROOT / "screens/toro/frames/rest.svg").read_text(encoding="utf-8")
+        self.dir = Path(tempfile.mkdtemp(dir=ROOT / "screens"))
+        (self.dir / "orig.svg").write_text(self.src)
+        (self.dir / "blue.svg").write_text(self.src.replace("#646464", "#3A7BD5"))
+        (self.dir / "red.svg").write_text(self.src.replace("#646464", "#D02020"))
+        (self.dir / "variant.svg").write_text(self.src.replace('id="toro_node_0"', 'id="elsewhere"', 1))
+
+    def tearDown(self):
+        shutil.rmtree(self.dir, ignore_errors=True)
+        os.environ.pop("OPXY_COLOUR", None)
+
+    def lint(self, **args):
+        return call("lint_frames", {"paths": str(self.dir / args.pop("file")), **args})
+
+    def test_grey_by_default(self):
+        _, r = self.lint(file="blue.svg")
+        self.assertTrue(r["errors"] and r["byRule"][0]["rule"] == "grey-only")
+        err, text = self.lint(file="blue.svg", colour=True)
+        self.assertTrue(err and "OPXY_COLOUR" in text)
+        self.assertEqual(call("colour_policy", {})[1]["mode"], "grey only")
+
+    def test_harness_config_allows_colour_but_never_red(self):
+        os.environ["OPXY_COLOUR"] = "allow"
+        _, r = self.lint(file="blue.svg", colour=True)
+        self.assertEqual(r["errors"], 0)
+        _, r = self.lint(file="red.svg", colour=True)
+        self.assertEqual(r["byRule"][0]["rule"], "no-red")
+
+    def test_grayscale_variant_must_match(self):
+        _, r = self.lint(file="orig.svg", grayscale_of=str(self.dir / "orig.svg"))
+        self.assertEqual(r["errors"], 0)
+        _, r = self.lint(file="variant.svg", grayscale_of=str(self.dir / "orig.svg"))
+        self.assertIn("variant-match", [x["rule"] for x in r["byRule"]])
+        _, r = self.lint(file="blue.svg", grayscale_of=str(self.dir / "orig.svg"))
+        self.assertIn("grey-only", [x["rule"] for x in r["byRule"]])
+
+
+class TestOpenXYSync(unittest.TestCase):
+    def lint_def(self, defn: dict, sdk: str, kind: str = "synth") -> set[str]:
+        d = Path(tempfile.mkdtemp(dir=TMP))
+        (d / "definition.json").write_text(json.dumps(defn))
+        (d / "machine.json").write_text(json.dumps({"schema": 1, "sdk": sdk, "kind": kind}))
+        res = subprocess.run([sys.executable, str(ROOT / "opxy/tools/lint_definition.py"), str(d / "definition.json"), "--json"],
+                             capture_output=True, text=True)
+        return {f["message"] for f in json.loads(res.stdout)["findings"] if f["level"] == "error"}
+
+    def test_node_and_text_limits(self):
+        defn = json.loads((ROOT / "screens/toro/definition.json").read_text(encoding="utf-8"))
+        defn["resources"]["display"].update(nodes=400, texts=24)
+        errs = self.lint_def(defn, "1.7")
+        self.assertIn("more than 256 nodes need sdk 1.8+", errs)
+        self.assertNotIn("more than 16 text slots need sdk 1.7+", errs)
+        self.assertFalse(self.lint_def(defn, "1.8") & {"more than 256 nodes need sdk 1.8+"})
+
+    def test_sdk_test_without_a_checkout(self):
+        os.environ.pop("OPXY_SDK", None)
+        err, text = call("sdk_test", {"machine": "screens/toro"})
+        self.assertTrue(err and "OPXY_SDK" in text)
+
+    def test_sdk_test_runs_the_checkout(self):
+        fake = Path(tempfile.mkdtemp(dir=TMP))
+        (fake / "sdk.py").write_text("import sys; print('ARGS', sys.argv[1:]); sys.exit(0)\n")
+        os.environ["OPXY_SDK"] = str(fake)
+        try:
+            _, r = call("sdk_test", {"machine": "screens/toro"})
+        finally:
+            os.environ.pop("OPXY_SDK", None)
+        self.assertTrue(r["pass"])
+        self.assertIn("'test', '--machine'", r["output"])
+        self.assertIn("--no-cpu", r["output"])
 
 
 def tearDownModule():

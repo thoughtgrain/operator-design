@@ -86,6 +86,23 @@ def write_json(path: Path, data) -> None:
     tmp.replace(path)
 
 
+def colour_allowed() -> bool:
+    """Colour is an override set in the harness's MCP config (OPXY_COLOUR=allow), never from a tool call."""
+    return os.environ.get("OPXY_COLOUR", "").strip().lower() in ("allow", "allowed", "on", "1", "true")
+
+
+def colour_policy() -> dict:
+    if colour_allowed():
+        return {"mode": "colour allowed", "set": "OPXY_COLOUR=allow in this harness's MCP config",
+                "rules": ["grey is still the default; use colour only where the brief says why",
+                          "red stays reserved for stock recording and parameter locks",
+                          "two to four accent hues, each with a role, kept the same across pages and animation",
+                          "ship a designed panel.grayscale.svg.fragment (sdk 1.5) and lint it with grayscale_of",
+                          "every hue difference also has a shape, label, position or outline difference"]}
+    return {"mode": "grey only", "set": "default; colour needs OPXY_COLOUR=allow in the harness's MCP config "
+                                       "(python3 mcp/setup.py <client> --colour). An agent can't turn it on."}
+
+
 def catalog() -> dict:
     return load_json(OPXY / "catalog.json")
 

@@ -20,7 +20,7 @@
 | Contact sheet, by eye | | `contact.png` |
 | Accessibility checklist | … of … answered | below |
 | Motion | | |
-| ux.md before you submit | | below |
+| Before you submit (PR #260 checklist) | | below |
 
 ### Perceptibility
 

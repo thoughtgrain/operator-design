@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 
-from .paths import ToolError, machine_dir, rel, tokens
+from .paths import ToolError, colour_allowed, machine_dir, rel, tokens
 
 AUDIO_NOTE = ("Simulated audio: the engine's own code run on a computer with a stand-in envelope, not recorded from an "
               "OP-XY. The device's envelope, effects, mixer and output stage aren't in it, so it can differ from what "
@@ -98,7 +98,8 @@ def preview_brief(machine_id: str, audio: str = "ask", shows: list[str] | None =
                   "fps": 30, "codec": "H.264, yuv420p, -preset veryfast (ffmpeg -crf 18)",
                   "background": "#000000", "header": "the stock header as drawn in the frames' preview_* groups"},
         "audioSteps": audio_steps,
-        "rules": ["grey only, never red", "nothing moves at rest",
+        "rules": [("colour as the screen uses it (this harness allows colour); never red" if colour_allowed()
+                   else "grey only, never red"), "nothing moves at rest",
                   f"no element alternates bright/dark more than {m['maxFlashesPerSecond']}× a second",
                   "reduced motion isn't shown unless asked; if it is, it jumps to end states"],
         "labelling": ([f"Write '{AUDIO_LABEL}' into the file metadata (ffmpeg -metadata comment=…).",

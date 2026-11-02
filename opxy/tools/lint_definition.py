@@ -27,7 +27,10 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 
 DISPLAY_FORMATS = ("ratio", "percent", "bipolar", "duration", "semitones", "enum", "division")
-DISPLAY_LIMITS = {"paths": (0, 4), "points": (0, 64), "nodes": (1, 256), "texts": (0, 16), "palette": (1, 16)}
+DISPLAY_LIMITS = {"paths": (0, 4), "points": (0, 64), "nodes": (1, 512), "texts": (0, 32), "palette": (1, 16)}
+# open-xy staging display.md: > 256 nodes need sdk 1.8; > 4 texts 1.3, > 16 texts 1.7.
+# Effects draw their own page from sdk 1.7, sample engines (forking the sampler) from 1.8.
+OWN_SCREEN_SDK = {"synth": None, "effect": (1, 7), "sample": (1, 8)}
 CONTROLS = {"synth": (4, 8), "sample": (1, 8), "effect": (1, 8)}
 RESOURCES = {
     "synth": ("voiceBytes", "voiceAlignment", "voiceCapacity", "sharedBytes", "outputPeakQ31", "display"),
@@ -130,9 +133,35 @@ def check_mapping(r: Review, where: str, p: dict) -> None:
         r.require(m == {"kind": "linear", "minimum": 0, "maximum": 1}, where, "mapping", "a division control maps linearly 0..1")
 
 
+def check_display(r: "Review", defn: dict, disp, sdk: tuple[int, ...] | None, kind: str) -> None:
+    if not isinstance(disp, dict):
+        return
+    for f, (a, b) in DISPLAY_LIMITS.items():
+        v = disp.get(f)
+        r.require(isinstance(v, int) and a <= v <= b, "resources.display", "display", f"{f} must be {a}..{b} (got {v!r})")
+    if isinstance(disp.get("paths"), int) and isinstance(disp.get("points"), int):
+        r.require((disp["points"] >= 2) == (disp["paths"] > 0), "resources.display", "display",
+                  "paths have 2..64 points; a display without paths declares 0 points")
+    sb, sa = disp.get("stateBytes"), disp.get("stateAlignment")
+    r.require(isinstance(sb, int) and isinstance(sa, int) and sb >= 4 and sa in (4, 8, 16) and sb % sa == 0,
+              "resources.display", "display", "stateBytes whole words with alignment 4/8/16")
+    texts, nodes = disp.get("texts"), disp.get("nodes")
+    if sdk is not None:
+        if isinstance(texts, int) and texts > 4:
+            r.require(sdk >= (1, 3), "resources.display", "sdk", "more than 4 text slots need sdk 1.3+")
+        if isinstance(texts, int) and texts > 16:
+            r.require(sdk >= (1, 7), "resources.display", "sdk", "more than 16 text slots need sdk 1.7+")
+        if isinstance(nodes, int) and nodes > 256:
+            r.require(sdk >= (1, 8), "resources.display", "sdk", "more than 256 nodes need sdk 1.8+")
+    if "press" in defn and isinstance(texts, int) and texts < 16:
+        r.add("note", "resources.display", "header",
+              "two pages without 16 text slots: fine with the stock header, but page_header.hpp takes all sixteen")
+
+
 def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
     r = Review()
-    top = {"schema", "id", "name", "parameters", "presets", "resources"} | ({"press"} if "press" in defn else set())
+    top = ({"schema", "id", "name", "parameters", "presets", "resources"} | ({"press"} if "press" in defn else set())
+           | ({"shift"} if kind == "effect" and "shift" in defn else set()))
     r.require(set(defn) == top, "definition", "fields",
               f"fields must be exactly {sorted(top)} (unknown {sorted(set(defn) - top)}, missing {sorted(top - set(defn))})")
     r.require(defn.get("schema") == 1, "definition", "schema", "schema must be 1")
@@ -189,9 +218,12 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
 
     # pages
     if "press" in defn:
-        r.require(defn["press"] == "page" and kind == "synth" and 5 <= len(params) <= 8 and len(set(positions)) == len(positions),
-                  "press", "pages", '"press": "page" needs 5..8 synth parameters and at most one alternate per position')
-        if sdk:
+        r.require(defn["press"] == "page" and kind in ("synth", "effect") and 5 <= len(params) <= 8
+                  and len(set(positions)) == len(positions),
+                  "press", "pages", '"press": "page" needs 5..8 synth or effect parameters and at most one alternate per position')
+        if sdk and kind == "effect":
+            r.require(sdk >= (1, 7), "press", "sdk", "effect pages (press: page) need sdk 1.7+")
+        elif sdk:
             if len(params) == 8:
                 r.require(sdk >= (1, 3), "press", "sdk", "eight-parameter pages need sdk 1.3+")
             elif sdk < (1, 4):
@@ -199,6 +231,25 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
     elif kind == "synth" and len(params) > 4:
         r.add("warn", "press", "pages",
               'five or more synth parameters without "press": "page"; ux.md asks for two pages and the shared header')
+
+    # effect shift row (sdk 1.7)
+    if kind == "effect" and "shift" in defn:
+        shift = defn["shift"]
+        if r.require(isinstance(shift, list) and 1 <= len(shift) <= 4, "shift", "shift", "shift row: 1..4 enum controls"):
+            combos = 1
+            for i, s in enumerate(shift):
+                where = f"shift[{i}]"
+                if not r.require(isinstance(s, dict), where, "shift", "shift control must be an object"):
+                    continue
+                m = s.get("mapping") if isinstance(s.get("mapping"), dict) else {}
+                r.require(s.get("display") == "enum" and m.get("kind") == "enum", where, "shift", "shift controls are enums")
+                r.require(isinstance(s.get("label"), str) and bool(LABEL.match(s.get("label", ""))), where, "label",
+                          "label: at most eight letters, digits or spaces")
+                labels = m.get("labels") if isinstance(m.get("labels"), list) else []
+                combos *= max(1, len(labels))
+            r.require(combos <= 1_048_576, "shift", "shift", f"shift choices together make {combos} combinations; at most 1,048,576")
+        if sdk is not None:
+            r.require(sdk >= (1, 7), "shift", "sdk", "a shift row needs sdk 1.7+")
 
     # presets
     presets = defn.get("presets")
@@ -228,24 +279,20 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
                 r.require(1 <= cap <= 256, "resources", "voice", "voiceCapacity 1..256")
                 if cap < 8:
                     r.add("warn", "resources", "voice", f"voiceCapacity {cap}; stock plays up to 8 notes per track")
-            disp = res.get("display")
-            if isinstance(disp, dict):
-                for f, (a, b) in DISPLAY_LIMITS.items():
-                    v = disp.get(f)
-                    r.require(isinstance(v, int) and a <= v <= b, "resources.display", "display", f"{f} must be {a}..{b} (got {v!r})")
-                if isinstance(disp.get("paths"), int) and isinstance(disp.get("points"), int):
-                    r.require((disp["points"] >= 2) == (disp["paths"] > 0), "resources.display", "display",
-                              "paths have 2..64 points; a display without paths declares 0 points")
-                sb, sa = disp.get("stateBytes"), disp.get("stateAlignment")
-                r.require(isinstance(sb, int) and isinstance(sa, int) and sb >= 4 and sa in (4, 8, 16) and sb % sa == 0,
-                          "resources.display", "display", "stateBytes whole words with alignment 4/8/16")
-                texts = disp.get("texts")
-                if isinstance(texts, int) and texts > 4 and sdk is not None:
-                    r.require(sdk >= (1, 3), "resources.display", "sdk", "more than 4 text slots need sdk 1.3+")
-                if "press" in defn and isinstance(texts, int) and texts < 16:
-                    r.add("note", "resources.display", "header",
-                          "two pages without 16 text slots: fine with the stock header, but page_header.hpp takes all sixteen")
+            check_display(r, defn, res.get("display"), sdk, kind)
         else:
+            if "display" in res:
+                need_sdk = OWN_SCREEN_SDK[kind]
+                if sdk is not None:
+                    r.require(sdk >= need_sdk, "resources.display", "sdk",
+                              f"a {kind} drawing its own screen needs sdk {'.'.join(map(str, need_sdk))}+")
+                if kind == "sample":
+                    r.add("note", "resources.display", "own-screen",
+                          'a sample engine draws its own screen only when it forks the sampler ("base": "sampler"), and it '
+                          "gives up stock's trim controls on that page (api.md, Own screen)")
+                if kind == "effect":
+                    r.add("note", "resources.display", "own-screen", "effects have no browser preview yet; check the page on a device")
+                check_display(r, defn, res["display"], sdk, kind)
             r.add("note", "resources", "resources", f"{kind} resources not reviewed beyond structure; check api.md")
     return r
 

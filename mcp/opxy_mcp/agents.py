@@ -144,8 +144,11 @@ def designer_brief(record: dict, direction: dict, pdir: Path) -> dict:
                 + (f": {subj.get('subject')} ({subj.get('pattern')}, {subj.get('drawing_language')})" if subj else "")
                 + ". Lint it with zero errors and look at it at 1:1.")
         reply = "Reply with the frame as one ```svg block."
+    from .paths import colour_policy
+    pol = colour_policy()
     brief = "\n".join([
         f"Machine: {record['machine']} · category: {record['category']} · pass: {record['kind']} #{record['number']}",
+        f"Colour: {pol['mode']} ({pol['set']})",
         f"Your variant: {direction['variant']} of 5",
         f"Your direction: {direction['brief']}",
         f"Focus: {record['focus']}" if record.get("focus") else "",

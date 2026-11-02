@@ -10,11 +10,17 @@ The machine-readable version is `catalog.json`. The MCP server reads it (`opxy_p
 | --- | --- | --- | --- |
 | **engine** | `synth` | A voice that makes the sound: oscillators, folders, filters, physical models | The mechanism or the signal path, reshaped by each control |
 | **drum** | `synth` or `sample` | A percussion voice or kit | The instrument itself, because the player already knows its parts by sight |
-| **sampler** | `sample` | Plays, slices or granulates recorded audio | The material (stack of slices, grain field) and where playback sits in it |
+| **sampler** | `sample` | Plays, slices or granulates recorded audio | The material (stack of slices, grain field) and where playback sits in it, drawn from the sample overview |
 | **effect** | `effect` | Processes another track's audio | What happens to the signal on its way through: taps, a space, a transfer curve |
 | **player** | none yet | Generates notes for another engine | The rule that picks notes, drawn as something with the same shape |
 | **sequencer** | none yet | Step, pattern or multi-page sequencing | A sequence over time, with history visible without a list |
 | **function** | none yet | Keys are functions acting on a target track | The target being acted on, not a panel of function cells |
+
+What each one gets to draw with differs (`constraints.md`, Which machines draw a screen):
+
+- **engine** and **drum** voices built as synths draw their engine page on any SDK. A **drum kit** also gets the selected key's model, its choices and the Shift state from SDK 1.8, so the screen can show which drum the encoders are editing.
+- An **effect** draws its own send page from SDK 1.7, with an optional shift row of modes. There's no browser preview for effect pages yet, so I design from stills and check on a device.
+- A **sampler** (a sample engine forking the stock sampler) draws over the sampler's page from SDK 1.8. It gets a 96-bin overview of the sample, the outer markers and whether a sample is loaded, so the sample itself is the obvious subject. It also gives up stock's trim controls on that page, so if trimming matters, two of its own controls have to be start and end, and the screen should show them on the overview.
 
 `player`, `sequencer` and `function` have no SDK kind of their own today, and their pages need bound nodes the stock player page doesn't give them. I still design them, but the handoff says so up front, the same way P12–P14 do.
 

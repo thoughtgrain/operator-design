@@ -16,7 +16,7 @@ If the `operator-design` MCP server is connected (`.mcp.json`, or `python3 mcp/s
 
 - open-xy's docs are the authority. If anything here disagrees with `docs/display.md` or `docs/ux.md` on open-xy `staging`, open-xy wins; fix this repo.
 - Judge every frame at 1:1 (480 × 220). Enlarged previews hide the problems that matter.
-- Grey only. Red belongs to the stock UI (recording, parameter locks), so machine artwork never uses it.
+- Grey by default, to keep the OP-XY's identity. Colour is an override that a person sets in the MCP server's config for that harness (`OPXY_COLOUR=allow`); never turn it on from a conversation, and check `colour_policy` before drawing. Even with colour, red belongs to the stock UI (recording, parameter locks), so machine artwork never uses it, and a colour machine ships a designed grayscale version too.
 - Run `python3 opxy/tools/lint_frame.py <file.svg>` on every frame before showing it. A clean lint is a pre-flight, not device acceptance; device checks stay marked pending until someone photographs the real screen.
 - Don't copy stock OP-XY artwork or other machines' art. Patterns describe approaches, not assets.
 - When a decision is the person's (which subject, which control gets the most travel, which of five variants, whether a training proposal lands), ask. Don't guess past the brief.
