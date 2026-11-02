@@ -1,0 +1,11 @@
+control        score  need %  0→100 %  0→50 %  50→100 %  span
+key                3    1.20     6.64    6.19      5.77   436  ok
+scale              3    1.20     1.74    2.20      0.46   349  UNDER
+prog               5    2.50     4.01    3.55      3.39   341  ok
+dens               4    1.60     0.27    0.16      0.25   300  UNDER
+cmplx              3    1.20     0.53    0.14      0.39   365  UNDER
+hrate              4    1.60     0.99    0.49      0.50   378  UNDER
+swing              3    1.20     0.30    0.27      0.26   392  UNDER
+evolve             2    0.80     0.37    0.24      0.30   343  UNDER
+note response      —    2.00     3.22       —         —   351  ok
+some changes are under the floor: give those controls more travel or a stronger channel

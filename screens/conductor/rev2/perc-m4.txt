@@ -1,0 +1,8 @@
+control        score  need %  0→100 %  0→50 %  50→100 %  span
+lane               3    1.20     0.91    1.97      1.25   302  UNDER
+to                 5    2.50     0.66    0.39      0.32   166  UNDER
+xpose              3    1.20     0.30    0.30      0.30   205  UNDER
+mute               5    2.50     0.99    0.00      0.99   341  UNDER
+low                3    1.20     0.19    0.14      0.12   365  UNDER
+high               3    1.20     0.20    0.21      0.07   366  UNDER
+some changes are under the floor: give those controls more travel or a stronger channel
