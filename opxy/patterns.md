@@ -188,6 +188,26 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **Links across the whole screen.** Keep links within one orbit and one phrase; when the sequence changes orbit, flash the planet instead.
 - **Players can't do this yet.** Today's player page is 24 on/off dots; this needs bound nodes. Say so up front.
 
+## P13 · Capture
+
+**The idea.** Find the machine's own rule and draw a physical thing with the same shape, so the picture explains the machine without a legend. Meikyu plays a step when its weight is under Dens; a black hole captures what comes inside a radius. So each step is a body at a distance set by its weight, Dens is the capture ring, and what's inside the ring plays (rises on a stem to its pitch). `library/meikyu-capture/` is the worked example.
+
+**Why it works.** Every visual change is something the player is doing: the ring widening is Dens letting more steps through, a body thrown outward is Crpt rewriting a step. Compare P12, where the orbits are a pleasant stand-in for a cycle but the sun does nothing.
+
+**Build it.**
+
+- **Fixed slots, no spin.** Give each item a fixed place (a spoke) and let the playhead be the order things light in. A disc spinning at the step rate is far too fast; one drifting slowly redraws everything every frame and moves at rest.
+- **Let the scenery carry a second layer.** The lensed arch and the ring under the hole were decoration; they became the scale (a 12-note wheel whose cells are the scale's notes) and the kit (8 pads spaced by the kit's intervals). No new lines.
+- **Keep the subject's middle clear.** Break near lines where they'd cross the hole; only the bodies go over it.
+- **Wireframe for the ground.** Thin rails, ribs and rings at low greys so the meaningful parts lead.
+
+**Pitfalls.**
+
+- **Edge-on discs hide distance.** Tip the camera until distance from the centre reads, even if it costs some of the reference look.
+- **A thump per hit flashes.** Pace event effects (one per ~0.34 s) so a fast roll can't exceed 3 flashes a second.
+- **Two-state switches and the half-step rule.** An off/on enum moves all at once; see the audit's note.
+- **Players can't do this yet.** It needs bound nodes on the player page, like P12.
+
 ## P8 · Headers
 
 - **Stock header (≤ 4 controls).** Do nothing; artwork starts below y 20.

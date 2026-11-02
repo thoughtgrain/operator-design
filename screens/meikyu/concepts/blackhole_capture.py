@@ -3,23 +3,28 @@
 
 A step plays when its weight is under Dens; a black hole captures what comes inside a radius. So:
 
-  16 steps      16 bodies riding the disc, each in a fixed slot round it
-  weight        distance from the hole: light steps sit close in, heavy ones far out
-  Dens          the capture ring in the disc. Bodies inside it are captured, which is to say they play: they rise
-                off the disc to their pitch. Bodies outside lie flat and dim. Turn Dens up and the ring widens
+  16 steps      16 bodies on the disc, each on its own spoke (its lane), in a fixed slot round the hole
+  weight        distance from the hole along its spoke: light steps sit close in, heavy ones far out
+  Dens          the capture ring. Bodies inside it are captured, which is to say they play: they rise on a stem
+                to their pitch. Bodies outside lie flat and hollow. Turn Dens up and the ring widens
   accent        a fainter inner ring at Dens/4: bodies inside it are accents, bigger and brighter
-  playhead      the bodies keep their slots (the disc only drifts, a turn a minute); the flashes run round in step
-                order, half the disc per press, so the playhead is seen as the order things light up in, not as
-                spinning. A step in the phrase now playing stands brighter
-  value/pitch   height above the disc: the scale degree (melody) or the pad (drums) at this press's velocity
-  velocity      wider spread of heights on a hard press (the player's range), and the light flares with it
+  playhead      the 8 spokes of the phrase playing light up; each body flashes as its step sounds, so the
+                playhead is the order things light in. Nothing spins
+  pitch         stem height: the note it will play at this press's velocity (melody) or its pad (drums)
+  Scal          the arch over the hole is a 12-note wheel, low left to high right; the scale's notes are cells,
+                so the scale is the arch's shape. Each note lights its cell; the phrase's notes stay half-lit
   Crpt          a re-rolled body is thrown to its new distance, with a streak from where it was
-  Rthm          heights become pad lanes; the kick thumps the hole's edge, the snare flashes the ring under it
+  Rthm          the arch dims and the ring under the hole becomes the 8 pads, spaced by the intervals of the
+                current kit (Kit = Scal); struck pads light; the kick thumps the hole's edge, the snare the ring,
+                each at most ~3 times a second
+  velocity      a hard press brightens the wire
 
-The camera is tipped up a little from blackhole3 (the disc reads as an open ellipse rather than a line) so distance
-from the hole can be seen. Sound: the plucked voice for melody; blackhole_moons' synthesized kit for drums.
+Still at rest (no drift, no shimmer), greys snapped to the stock steps, eases 0.2 s. The black hole is blackhole3's
+lensed disc redrawn as wireframe: rails and ribs, four disc rings, a spoke per step; nothing near is drawn across the
+hole except the bodies. Sound: the plucked voice for melody; blackhole_moons' synthesized kit for drums.
 
     python3 blackhole_capture.py <tmpdir> melody|drum   → capture-melody.mp4 / capture-drum.mp4 (+ stills)
+    python3 blackhole_capture.py <dir> frames           → rest, playing, c1..c4 at 0/50/100 for the audit tools
 """
 from __future__ import annotations
 
@@ -39,7 +44,15 @@ import orrery4 as M4
 import planets_av as A
 
 HERE = Path(__file__).resolve().parent
-path, ell, grey, shimmer = O.path, O.ell, B3.grey, B3.shimmer
+path, ell = O.path, O.ell
+STOCK = [0x32, 0x4B, 0x64, 0x7D, 0x96, 0xAF, 0xCD]                       # the stock header steps (tokens.json barSteps)
+
+
+def grey(v):
+    """every grey snaps to a stock step, so the whole screen fits the 16-entry palette and matches the header"""
+    v = round(v)
+    g = min(STOCK, key=lambda s_: abs(s_ - v))
+    return f"#{g:02X}{g:02X}{g:02X}"
 R = 36.0
 K = R / 30                                                            # px sizes (dots, heights) scale with the hole
 ASPECT = 0.16                                                         # disc ellipse height ÷ width (blackhole3 is ~0.03)
@@ -133,38 +146,47 @@ def lattice(rails, ribs, lift=0):
     return out
 
 
-def light(R_, t, flare=0.0):
+def light(R_, t, flare=0.0, phrase=frozenset(), drum=False):
     back, front = [], []
     b = 1 + 0.35 * flare                                               # a press brightens the wire by its velocity
     arch = [arch_pts(R_ * s, 0.5 + 0.35 * k) for k, (s, _, _) in enumerate(ARCH_RAILS)]
     for k, (s, g, w) in enumerate(ARCH_RAILS):
-        back.append(path(arch[k], grey(shimmer(g, k, t) * b), w))
+        back.append(path(arch[k], grey(g * b * (0.55 if drum else 1.0)), w))   # drums: the arch dims, the ring under it
+                                                                       # carries the kit instead
     back += lattice(arch, 5)
     under = [under_pts(R_ * s) for s, _, _ in UNDER_RAILS]
     for k, (s, g, w) in enumerate(UNDER_RAILS):
-        back.append(path(under[k], grey(shimmer(g, k + 5, t) * b), w))
+        back.append(path(under[k], grey(min(0xF0, g * b * (1.3 if drum else 1.0))), w * (1.4 if drum else 1.0)))
     back += lattice(under, 6)
-    spin = 2 * math.pi * t / DRIFT
     for k, (s, g) in enumerate(DISC_RINGS):                            # disc rings: far halves behind, near broken
         back.append(path(ring_pts(R_ * s, False), grey(g * b), 0.8))
         front += near_path(ring_pts(R_ * s, True), g * b, 0.8)
     for i in range(16):                                                # a spoke per step: the lane its body rides
-        a = 2 * math.pi * (i / 16) + spin
+        a = slot(i)
         pts = [disc_xy(reach(0) + (reach(100) - reach(0)) * q / 8, a) for q in range(9)]
+        on = i in phrase                                               # the phrase playing: its 8 spokes light up
         if math.sin(a) > -0.05:
-            front += near_path(pts, 0x2C, 0.7)
+            front += near_path(pts, 0x70 if on else 0x2C, 1.3 if on else 0.7)
         else:
-            back.append(path(pts, grey(0x24), 0.7))
-    hole = [path(ell(CX, BASE, R_, R_ * 0.97, n=60), "#F0F0F0", 1.4, fill="#000000", close=True)]
+            back.append(path(pts, grey(0x64 if on else 0x24), 1.3 if on else 0.7))
+    hole = [path(ell(CX, BASE, R_, R_ * 0.97, n=60), "#CDCDCD", 1.4, fill="#000000", close=True)]
     return back, hole, front
 
 
 # ---- the player, with each press's values kept ------------------------------------------------------------------------
 LENGTH = 30.0
-DRIFT = 60.0                                                          # seconds per turn of the disc: slow, just alive
+OVERRIDE = None                                                        # audit frames: hold every control constant
+
+
+def slot(i):
+    """step i's fixed angle round the disc. No drift: the screen is still at rest (ux.md), and a drifting disc would
+    redraw every spoke, dot and stem each frame, well over the ~20 changed nodes a frame the device allows"""
+    return 2 * math.pi * i / 16 + 0.2
 
 
 def controls(t):
+    if OVERRIDE is not None:
+        return dict(OVERRIDE)
     c = {"dens": 50, "crpt": 10, "scal": 0, "drum": MODE == "drum"}
     for t0, t1, v0, v1 in ((4, 7, 50, 100), (7, 11, 100, 15), (11, 13, 15, 50)):
         if t0 <= t < t1:
@@ -194,7 +216,7 @@ def run():
                 when = t + (min(k, 7) + 0.5) * M4.STEP                  # just after its slot: it re-rolls once it has played
                 w_hist[i].append((when, m.wt[i]))
                 v_hist[i].append((when, m.val[i]))
-        presses.append(dict(t=t, wt=list(m.wt), mask=m.last_mask, root=note, start=start, count=m.phrases, vel=vel,
+        presses.append(dict(t=t, n=n, wt=list(m.wt), mask=m.last_mask, root=note, start=start, count=m.phrases, vel=vel,
                             hits=[(t + k * M4.STEP, i) for k, i, _, _ in plan]))
         plans.append(plan)
         tones += [(t + k * M4.STEP, t + k * M4.STEP + A.GATE, pitch, v) for k, _, pitch, v in plan]
@@ -225,6 +247,90 @@ def height(i, val, last, c):
     return K * (4.0 + 1.9 * (A.Meikyu.scale_note(root, A.MASKS[c["scal"]], deg) - root))
 
 
+# ---- the light carries the harmony: the arch is the scale, the ring underneath is the kit ------------------------------
+# Melody: the inner band of the arch is a 12-note wheel bent over the hole, low notes left, high right. The notes in the
+# scale are filled cells, so the scale is the shape of the arch (pentatonic 5 wide gaps, chromatic all 12, minor and
+# major the same count in different places). A note that sounds lights its cell; the phrase's notes stay half-lit.
+# Drums: the arch empties and the ring under the hole becomes the 8 pads, each placed by the interval it plays in the
+# current kit, so every kit has its own spacing. A struck pad lights its cell the same way.
+CELL_DIM, CELL_PHRASE, CELL_HOT = 0x64, 0x96, 0xCD                     # dim cells still carry the scale: ≥ 3:1
+CELL_HOT_S = 0.3                                                       # long enough that repeats merge: < 3 flashes/s
+CELL_GAP = 0.012                                                       # radians trimmed off each side of a cell
+
+
+def arch_cell(k):
+    """semitone k (0..11) as a cell in the arch's inner band, over the round top of the bell"""
+    r0, r1 = R * ARCH_RAILS[0][0], R * ARCH_RAILS[1][0]
+    lo, hi = math.radians(149), math.radians(31)                        # where the circle hands over to the flare
+    a0 = lo + (hi - lo) * k / 12 - CELL_GAP
+    a1 = lo + (hi - lo) * (k + 1) / 12 + CELL_GAP
+    arc = lambda r, x0, x1: [(CX + r * math.cos(x0 + (x1 - x0) * q / 4), BASE - 0.97 * r * math.sin(x0 + (x1 - x0) * q / 4))
+                             for q in range(5)]
+    return arc(r0, a0, a1) + arc(r1, a1, a0)
+
+
+def under_cell(pos):
+    """a pad at fraction pos (0 low … 1 high) round the ring under the hole, left to right"""
+    r0, r1 = R * UNDER_RAILS[0][0], R * UNDER_RAILS[1][0]
+    span0, span1 = math.pi - 0.32, 0.32
+    mid = span0 + (span1 - span0) * pos
+    a0, a1 = mid + 0.11, mid - 0.11
+    arc = lambda r, x0, x1: [(CX + r * math.cos(x0 + (x1 - x0) * q / 4), BASE + 0.97 * r * math.sin(x0 + (x1 - x0) * q / 4))
+                             for q in range(5)]
+    return arc(r0, a0, a1) + arc(r1, a1, a0)
+
+
+def harmony(c, last, t, recent):
+    """the arch cells (melody) or the pad cells (drums), dim, phrase-lit and hot"""
+    out = []
+    root = last["root"] if last else 50
+    if not c["drum"]:
+        mask = A.MASKS[c["scal"]]
+        played = {}
+        if last and t - last["t"] < 8 * M4.STEP + 0.3:
+            for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
+                if th <= t:
+                    played[(pitch - root) % 12] = t - th
+        for k in range(12):
+            if not (mask >> k) & 1:
+                continue
+            g = CELL_DIM
+            if k in played:
+                age = played[k]
+                g = CELL_HOT if age < CELL_HOT_S else CELL_PHRASE
+            out.append(path(arch_cell(k), grey(g), 0.6, fill=grey(g), close=True))
+    else:
+        pads = M4.KITS[c["scal"]]
+        played = {}
+        if last and t - last["t"] < 8 * M4.STEP + 0.3:
+            for (th, _), (_, _, pitch, _) in zip(last["hits"], BM.PLANS[last["n"]]):
+                if th <= t and pitch - root in pads:
+                    played[pads.index(pitch - root)] = t - th
+        for j, iv in enumerate(pads):
+            g = CELL_DIM
+            if j in played:
+                g = CELL_HOT if played[j] < CELL_HOT_S else CELL_PHRASE
+            out.append(path(under_cell(iv / 43), grey(g), 0.6, fill=grey(g), close=True))
+    return out
+
+
+_PACED = {}
+
+
+def paced(hits, drum):
+    """the hits of one drum that get a thump: one at most every 0.34 s, so a fast roll restarts nothing and the hole
+    never flashes more than 3 times a second (WCAG 2.3.1); the sound still plays every hit"""
+    key = (id(hits), drum)
+    if key not in _PACED:
+        out, last_t = [], -9.0
+        for h in hits:
+            if BM.KIT[h[4]] == drum and h[0] - last_t >= 0.34:
+                out.append(h[0])
+                last_t = h[0]
+        _PACED[key] = out
+    return _PACED[key]
+
+
 def scene(p, last, t, hits, w_hist, v_hist):
     c = controls(t)
     dens = M4.eased(t, lambda tt: controls(tt)["dens"])
@@ -232,15 +338,18 @@ def scene(p, last, t, hits, w_hist, v_hist):
     vel_flare = 0.0
     if last and t - last["t"] < 0.5:                                   # a press flares the light by its velocity
         vel_flare = (last["vel"] / 127) * (1 - (t - last["t"]) / 0.5)
-    back, hole, front = light(R, t, vel_flare)
+    live = last is not None and t - last["t"] < 8 * M4.STEP
+    phrase = frozenset((last["start"] + k) % 16 for k in range(8)) if live else frozenset()
+    back, hole, front = light(R, t, vel_flare, phrase, c["drum"])
+    back += harmony(c, last, t, recent)
     behind, over = [], []
 
     if c["drum"]:
-        kick = [t - h[0] for h in recent if BM.KIT[h[4]] == 3 and t - h[0] < 0.22]
-        snare = [t - h[0] for h in recent if BM.KIT[h[4]] == 1 and t - h[0] < 0.18]
+        kick = [t - th for th in paced(hits, 3) if 0 <= t - th < 0.22]
+        snare = [t - th for th in paced(hits, 1) if 0 <= t - th < 0.18]
         if kick:
             k = 1 - min(kick) / 0.22
-            hole = [path(ell(CX, BASE, R + 1.5 * k, (R + 1.5 * k) * 0.97, n=60), "#F0F0F0", 1.6 + 3.0 * k, fill="#000000", close=True)]
+            hole = [path(ell(CX, BASE, R + 1.5 * k, (R + 1.5 * k) * 0.97, n=60), "#CDCDCD", 1.6 + 3.0 * k, fill="#000000", close=True)]
         if snare:
             k = 1 - min(snare) / 0.18
             back.append(path(under_pts(R * 1.18), grey(0xA0 + 0x50 * k), 1.4 + 2.5 * k))
@@ -251,7 +360,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
 
     sounding = {h[1]: t - h[0] for h in recent if t - h[0] < M4.FLASH}
     for i in range(16):
-        a = 2 * math.pi * (i / 16 + t / DRIFT)                         # fixed slots; the whole disc drifts slowly
+        a = slot(i)
         w, w_since, w_prev = at(w_hist[i], t)
         val, _, _ = at(v_hist[i], t)
         throw = (t - w_since) / 0.45 if 0 <= t - w_since < 0.45 else None
@@ -268,10 +377,11 @@ def scene(p, last, t, hits, w_hist, v_hist):
         in_phrase = last is not None and (i - last["start"]) % 16 < 8 and t - last["t"] < 8 * M4.STEP
         if inside > 0.05:
             g = (0x50 + 0x50 * in_phrase) * inside
-            side.append(path([(x0, y0), (x, y)], grey(0x20 + g), 0.9))   # the stem: its pitch, above its spot
+            side.append(path([(x0, y0), (x, y)], grey(0x20 + g), 2.2 if in_phrase else 1.5))   # the stem: its pitch;
+                                                                       # the phrase playing gets thicker, brighter stems
         if i in sounding:
             age = sounding[i] / M4.FLASH
-            side.append(path(ell(x, y, 5.0 * K, 5.0 * K, n=16), "#F0F0F0", 1.0, fill="#F0F0F0", close=True))
+            side.append(path(ell(x, y, 5.0 * K, 5.0 * K, n=16), "#CDCDCD", 1.0, fill="#CDCDCD", close=True))
             side.append(path(ell(x, y, K * (6 + 9 * age), K * (6 + 9 * age), n=20), grey(0xE0 - 0x90 * age), 1.0, close=True))
         elif inside > 0.5:
             s = 3.6 if accent else 2.7
@@ -282,6 +392,34 @@ def scene(p, last, t, hits, w_hist, v_hist):
     return back + behind + hole + front + over
 
 
+# ---- audit frames: rest, playing, each control at 0 / 50 / 100 ---------------------------------------------------------
+DEFAULTS = {"dens": 60, "crpt": 20, "scal": 0, "drum": False}
+SNAP = 6.5 + 5 * M4.STEP + 0.04                                        # mid-phrase: a step sounding, Crpt throws in flight
+CONTROLS = [("dens", lambda v: round(v * 100)), ("scal", lambda v: min(3, int(v * 4))), ("crpt", lambda v: round(v * 100)),
+            ("drum", lambda v: v >= 0.5)]
+
+
+def snapshot(out, name, ctrl, t):
+    global OVERRIDE, MODE
+    OVERRIDE, MODE = ctrl, "drum" if ctrl["drum"] else "melody"
+    BM.MODE = MODE
+    _PACED.clear()
+    presses, _, w_hist, v_hist = run()
+    hits = BM.hits_of(presses)
+    p, last = M4.page_at(t, presses)
+    (out / f"{name}.svg").write_text(B.frame(p, scene(p, last, t, hits, w_hist, v_hist)))
+    subprocess.run(["rsvg-convert", "-w", "480", "-h", "220", str(out / f"{name}.svg"), "-o", str(out / f"{name}.png")], check=True)
+
+
+def audit_frames(out):
+    snapshot(out, "rest", DEFAULTS, 0.2)                               # before the first press: nothing sounding
+    snapshot(out, "playing", DEFAULTS, SNAP)
+    for n, (key, conv) in enumerate(CONTROLS, 1):
+        for v in (0, 50, 100):
+            snapshot(out, f"c{n}-{v:03d}", {**DEFAULTS, key: conv(v / 100)}, SNAP)
+    print("wrote audit frames to", out)
+
+
 # ---- main --------------------------------------------------------------------------------------------------------------
 def main():
     global MODE
@@ -290,6 +428,9 @@ def main():
     BM.MODE, BM.controls, BM.LENGTH = MODE, controls, LENGTH
     M4.controls = controls
     M4.LENGTH = A.LENGTH = LENGTH
+    M4.EASE = 0.2                                                      # ux: control eases 0.15–0.2 s
+    if MODE == "frames":
+        return audit_frames(tmp)
     presses, tones, w_hist, v_hist = run()
     hits = BM.hits_of(presses)
     wav = tmp / f"capture-{MODE}.wav"
