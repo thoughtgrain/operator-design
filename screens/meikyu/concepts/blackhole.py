@@ -8,7 +8,8 @@ through one camera), but centred, so every orbit is on screen.
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
   Dens 75 → 100   the sun becomes a black hole: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring, a flat accretion disc round it, and the disc's far side lensed up over the top. The
-                  planets spiral in, inner orbits first, speeding up and shrinking until they cross the horizon
+                  orbits fall in, inner first, to a tight band just outside the horizon and keep circling there,
+                  faster; the planets flatten into streaks as they fall and still fill, flash and link with the sequence
   Dens back down  all of it runs backwards: the hole relaxes into a sun and the planets come back out
 
 Everything else carries over from the orrery: sixteen step planets (they fill when their step plays, flash when it
@@ -219,21 +220,56 @@ def ring_halves(c3, r, line, tilt, yaw):
     return out
 
 
+FINAL = [HORIZON * (1.45 + 0.28 * o) for o in range(len(ORBITS))]    # where each orbit ends up: a tight band round the hole
+FLAT = [1.0, 0.62, 0.4, 0.26]                                          # pre-drawn flattening stages (height / width)
+SPIN_UP = 4.0                                                          # how much faster a fully fallen orbit turns
+
+
+def orbit_radius(o, hole):
+    return ORBITS[o] + (FINAL[o] - ORBITS[o]) * infall(o, hole)
+
+
+_ANGLE = {}
+
+
+def turned(o, t):
+    """how far orbit o has turned by time t (turns), integrated so speeding up never makes a planet jump"""
+    key = (o, round(t * 30))
+    if key not in _ANGLE:
+        n = round(t * 30)
+        total, dt = 0.0, 1 / 30
+        for i in range(n):
+            tt = i * dt
+            total += dt / PERIOD * (1 + SPIN_UP * infall(o, stage(eased_dens(tt))[1]))
+        _ANGLE[key] = total
+    return _ANGLE[key]
+
+
 def body_state(k, t, dens_now, hole):
-    """where body k is: (world point, screen x, y, radius px, hops) or None if it's inside the sun or the hole"""
+    """where body k is: (world point, screen x, y, radius px, hops, flattening stage) or None if it's inside the sun.
+    Past the black-hole point the orbits fall in to a band just outside the horizon and keep circling there, faster;
+    the planets flatten into streaks along their orbits as they fall (stepped: the device can only scale uniformly)."""
     rho, r = BODIES[k]
     o = ORBIT_OF[k]
     fall = infall(o, hole)
     hops = math.floor((t + (k * 0.37) % 1.0 * HOP) / HOP)
-    a = 2 * math.pi * (PHASES[k] + hops * HOP / PERIOD) + 6.0 * fall * fall    # spinning up as it falls
-    rho_now = HORIZON + (rho - HORIZON) * (1 - fall) if hole > 0 else rho
+    hop_t = hops * HOP
+    a = 2 * math.pi * (PHASES[k] + turned(o, max(0.0, hop_t)))
+    rho_now = orbit_radius(o, hole)
     radius, _ = stage(dens_now)
-    size = r * (1 - 0.7 * fall)
-    if rho_now - size <= radius * (1.0 if hole < 0.5 else 1.02):        # swallowed by the sun, or through the horizon
+    size = r * (1 - 0.45 * fall)
+    flat = min(len(FLAT) - 1, int(fall * len(FLAT)))
+    if rho_now - size <= radius:                                       # inside the sun while it's big
         return None
     p3 = orbit_point(rho_now, a)
     x, y, _, ppu = project(p3)
-    return p3, x, y, size * ppu, hops
+    return p3, x, y, size * ppu, hops, flat
+
+
+def flattened(pts, aspect):
+    """a planet's path squashed into a streak: wider along the orbit, flatter across it"""
+    sx = 1.0 / math.sqrt(aspect) ** 0.6
+    return [(x * sx, y * aspect) for x, y in pts]
 
 
 def scene(p, last, t, presses):
@@ -242,7 +278,7 @@ def scene(p, last, t, presses):
     back, front = [], []
     for o, rho in enumerate(ORBITS):                                   # orbit lines, falling in with their planets
         fall = infall(o, hole)
-        rho_now = HORIZON + (rho - HORIZON) * (1 - fall)
+        rho_now = orbit_radius(o, hole)
         if rho_now <= radius + 1:
             continue
         g_far, g_near = round(0x1E * (1 - fall) + 0x10 * fall), round(0x3A * (1 - fall) + 0x18 * fall)
@@ -258,7 +294,7 @@ def scene(p, last, t, presses):
         st = body_state(k, t, dens_now, hole)
         if st is None:
             continue
-        p3, x, y, rr, hops = st
+        p3, x, y, rr, hops, flat = st
         step = STEP_OF[k]
         foot = rr * (2.0 if k in RINGED else 1.0)
         if step is None and any(math.hypot(x - x2, y - y2) - foot - f2 < 3 for x2, y2, f2 in placed):
@@ -270,11 +306,12 @@ def scene(p, last, t, presses):
         fill, line = R2.FILLED if lit else R2.WIRE
         if step in flashed:
             fill, line = ("#F0F0F0", "#7A7A7A")
-        svg = R2.node(GLYPHS[k][hops % len(GLYPHS[k])], x, y, rr / 10, fill, line, 0.9)
+        shape = GLYPHS[k][hops % len(GLYPHS[k])] if flat == 0 else flattened(GLYPHS[k][0], FLAT[flat])
+        svg = R2.node(shape, x, y, rr / 10, fill, line, 0.9)
         d = math.dist(CAM, p3)
         side = front if nearer_than_centre(p3) else back
         side.append((d, svg))
-        if k in RINGED:
+        if k in RINGED and flat == 0:
             halves = ring_halves(p3, BODIES[k][1] * (rr / BODIES[k][1] / project(p3)[3]), line, *RINGED[k])
             side += [(d + 0.5, s) for s in halves["back"]] + [(d - 0.5, s) for s in halves["front"]]
     out = [s for _, s in sorted(back, key=lambda q: -q[0])]
