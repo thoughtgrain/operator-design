@@ -2,6 +2,8 @@
 
 A pattern is a way to compose a machine's screen: what the subject is, where it sits, which visual channels the controls drive, and what it costs in nodes. They're descriptions, not assets. I never trace another machine's drawing; I borrow the idea and draw my own subject.
 
+Which patterns fit which kind of machine (engine, drum, sampler, effect, player, sequencer, function) is in `categories.md`, and as data in `catalog.json`. Start from the patterns in the machine's column.
+
 Every pattern lives under the same rules in `constraints.md`. The point of this file is to skip the blank-canvas phase and start from something that's already known to work on 480 × 220 grey.
 
 ## The visual-channel table

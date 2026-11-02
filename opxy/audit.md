@@ -30,7 +30,7 @@ Run in this order; each one's findings go in the audit report (`templates/audit.
 5. **Contact sheet** at 1:1, looked at by eye: one subject, every control reads, no dashboard.
 6. **Craft** (`craft.md`): rest frame beside a reference at 1:1. One drawing language, the line-weight table, one brightest element, no icons.
 7. **Accessibility checklist** from `accessibility.md`.
-8. **Motion:** from the author's description, a video or the preview. Still at rest, short eases, reduced motion jumps, no flashing.
+8. **Motion:** from the author's description, a video or the preview. Still at rest, short eases, reduced motion jumps, no flashing. If the video has sound, record whether it's simulated (engine code run on a computer) or recorded from a device; anything not stated is treated as simulated, and the sound is never evidence of how the instrument sounds.
 9. **ux.md "before you submit"** items, each answered or marked **pending device**.
 
 ## Verdicts

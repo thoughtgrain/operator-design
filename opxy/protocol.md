@@ -8,6 +8,7 @@ Everything lands in `screens/<machine-id>/`:
 screens/<machine-id>/
 ├── brief.md          ← phases 0–4 (incl. port map and definition review), from templates/brief.md
 ├── definition.json   ← phase 1A draft, when the machine has no XY definition yet
+├── passes/           ← every design pass: <nn>-<kind>/v1…v5 + pass.json (five unique variants)
 ├── frames/           ← phase 5: rest.svg, playing.svg, c<N>-000.svg, c<N>-050.svg, c<N>-100.svg
 ├── contact.svg       ← phase 5: tools/contact_sheet.py output (+ contact.png if rsvg-convert exists)
 ├── motion.md         ← phase 6
@@ -81,13 +82,13 @@ Why: ux.md asks that a control be seen as much as heard. A quiet control with a 
 
 ## Phase 3 · Subject
 
-Write two or three candidate subjects, each in one sentence, each tied to a pattern from `patterns.md` (section drawing, diagram + trace, figure...). For each, sketch in words what every control does to it. Pick one and say why.
+Write five candidate subjects, each in one sentence, each tied to a pattern from `patterns.md` that fits the machine's category (`categories.md`). This is a design pass, so it follows the iteration rule below: five variants, five different directions. For each, sketch in words what every control does to it. Pick one and say why.
 
 This is where I stop and ask if the person hasn't already chosen. The subject is the biggest creative decision and the hardest to change later.
 
 Name the drawing language too (`craft.md`: an atlas, a patent section, a schematic) and one or two references it should sit beside.
 
-**Gate:** one subject, one pattern, one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
+**Gate:** five unique candidates recorded; one chosen subject, one pattern, one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
 
 ## Phase 4 · Map and budget
 
@@ -108,7 +109,7 @@ Then the budget: declare `paths`, `points`, `nodes`, `texts`, `palette` (this fi
 
 ## Phase 5 · Frames
 
-Draw the frames as SVG at exactly 480 × 220, starting from `templates/frame.svg`. Required set:
+Start with a frames pass: five `rest.svg` variants of the chosen subject, each from its own direction (composition, camera, line language, where the brightest element sits). Pick one, then draw its full set. Draw the frames as SVG at exactly 480 × 220, starting from `templates/frame.svg`. Required set:
 
 - `rest.svg`: all controls at default, no notes
 - `playing.svg`: defaults, notes held, mid-animation
@@ -136,11 +137,34 @@ python3 opxy/tools/perceptibility.py screens/<id>/frames --scores <phase 2 score
 
 **Gate:** zero lint errors; warnings either fixed or explained in `review.md`; `perceptibility.py` passes for every control and the note response. If a control is under its floor, go back to phase 4 and give it more travel or a stronger channel; don't lower the score to make it pass.
 
+## Iterations: five per pass
+
+Every pass that generates design (the subjects in phase 3, the rest-frame variants that open phase 5, and any revision pass after a review or audit sends work back) produces **exactly five variants**, and they have to be really different, not five nudges of one idea. Why five: two or three candidates kept collapsing into the first idea plus two strawmen; five forces at least a couple of directions I wouldn't have tried, and it's still few enough to judge side by side at 1:1.
+
+How uniqueness is judged (numbers in `catalog.json` → `iterations`):
+
+- **Directions first.** Each variant is assigned its own direction before anything is drawn: a pattern × drawing-language pair (subject pass), or a composition / camera / line-language brief (frames and revision passes). `design_pass_start` hands these out; by hand, write them down before starting.
+- **Subjects** must differ pairwise in at least two of: pattern, drawing language, subject wording (word overlap under 0.6).
+- **Frames** must differ pairwise by at least 4% of body pixels at 1:1 (same pixel step as `perceptibility.py`), and each one must lint with zero errors.
+- **The pick is the person's.** Reviewers can rank the five; choosing stays with the owner, as with every subject decision.
+
+A pass with fewer than five variants, or with two that fail the uniqueness check, doesn't close. Revise the weakest duplicate into a new direction; never drop to four.
+
+Layout: `screens/<id>/passes/<nn>-<kind>/v1…v5/` plus `pass.json` (directions, uniqueness results, the pick and why).
+
 ## Phase 6 · Motion
 
 Write `motion.md`: for each trigger (turn per control, note on, held, hold ended, page press) what moves, from what to what, over how long, and the reduced-motion end state. Use the vocabulary at the end of `patterns.md`.
 
 **Gate:** nothing moves at rest; every ease settles in 0.15–0.2 s; held-note motion lasts as long as notes are held; reduced motion and track change jump to the end state.
+
+### Video preview (optional, ask)
+
+Once `motion.md` passes, I ask whether a video preview is wanted, and if so, silent or with sound, and what it shows (rest, each control turning, notes held, a page press). It's optional: a design is finished without one. Stills prove the frames; a video is the only way to judge the motion before a device is in hand.
+
+The agent makes it, not the MCP server. `preview_brief` asks the questions, then hands back the storyboard, timing (from `motion.md`), size (480 × 220 at 1:1), output path (`screens/<id>/preview/`) and labelling, and the agent renders it with its own tools. Frames come from the same generator as the stills, and frames and sound come from one score, so every change on screen is a change you hear.
+
+**Engine audio is a simulation, and it's always labelled as one.** The sound comes from the machine's engine code compiled and run on a computer (`screens/<id>/audio/render.cpp`), with a stand-in envelope where the OP-XY would apply its own. It isn't a recording of the instrument: the device's envelope, effects, mixer and output stage aren't in it, so it can differ from what an OP-XY plays. The video's metadata, its notes file, and any caption, card or audit that links it say "Audio: simulated (engine code run on a computer, not a device recording)". Only a recording made from a real OP-XY drops the label, and then it says so.
 
 ## Phase 7 · Review
 
@@ -169,4 +193,4 @@ Write `handoff.md` for whoever implements it in the machine's repo:
 
 ## Revisions
 
-When a design changes after handoff, I update the brief's mapping table first, re-run phases 4–8 for what changed, and note the change at the top of `handoff.md` with a date. Frames get regenerated, not hand-patched, so the contact sheet always matches the brief.
+When a design changes after handoff, I update the brief's mapping table first, run a revision pass (five variants of the change), re-run phases 4–8 for what changed, and note the change at the top of `handoff.md` with a date. Frames get regenerated, not hand-patched, so the contact sheet always matches the brief.

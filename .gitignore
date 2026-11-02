@@ -4,3 +4,5 @@ __pycache__/
 local/
 screens/theseus/audio/render
 screens/toro/audio/render
+.codex/config.toml
+*.bak

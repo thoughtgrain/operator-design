@@ -12,7 +12,8 @@
 | | |
 | --- | --- |
 | Machine id | `…` |
-| Kind | synth / effect / sample |
+| Kind | synth / effect / sample (the SDK contract) |
+| Category | engine / drum / sampler / effect / player / sequencer / function (`opxy/categories.md`) |
 | Sounds like | two sentences |
 | Controls | N (≤ 4 stock header, 5–8 two pages) |
 | Control source | existing XY definition / port of … / new |
@@ -62,10 +63,15 @@ Page 1 (played most): … · Page 2: … · Repeated controls: …
 
 ## 3 · Subject
 
-| candidate | pattern | what each control moves | verdict |
-| --- | --- | --- | --- |
-| A | | | |
-| B | | | |
+Five candidates, one per direction from `design_pass_start` (or by hand: five different pattern × drawing-language pairs that fit the category). Pass record: `passes/01-subject/pass.json`.
+
+| candidate | pattern | drawing language | subject in one sentence | what each control moves | verdict |
+| --- | --- | --- | --- | --- | --- |
+| v1 | | | | | |
+| v2 | | | | | |
+| v3 | | | | | |
+| v4 | | | | | |
+| v5 | | | | | |
 
 Chosen: … because …
 

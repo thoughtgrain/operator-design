@@ -1,0 +1,296 @@
+{
+  "$comment": "Index the MCP server and agents read: machine categories, which patterns fit each, the library by category, and how design passes iterate. Prose lives in categories.md and patterns.md; keep the three in step.",
+  "categories": {
+    "engine": {
+      "name": "Engine",
+      "sdkKinds": [
+        "synth"
+      ],
+      "description": "A voice that makes the sound: oscillators, filters, folders, physical models."
+    },
+    "drum": {
+      "name": "Drum",
+      "sdkKinds": [
+        "synth",
+        "sample"
+      ],
+      "description": "A percussion voice or kit; the player already knows its parts by sight."
+    },
+    "sampler": {
+      "name": "Sampler",
+      "sdkKinds": [
+        "sample"
+      ],
+      "description": "Plays, slices or granulates recorded audio."
+    },
+    "effect": {
+      "name": "Effect",
+      "sdkKinds": [
+        "effect"
+      ],
+      "description": "Processes another track's audio: delay, reverb, distortion, filter, dynamics."
+    },
+    "player": {
+      "name": "Player",
+      "sdkKinds": [],
+      "description": "Generates notes for another engine (arps, generative players). Its page needs bound nodes the SDK doesn't give players yet."
+    },
+    "sequencer": {
+      "name": "Sequencer",
+      "sdkKinds": [],
+      "description": "Step, pattern or multi-page sequencing; the state is a sequence over time."
+    },
+    "function": {
+      "name": "Function",
+      "sdkKinds": [],
+      "description": "A track whose keys are functions acting on another track (mutes, rolls, transforms)."
+    }
+  },
+  "patterns": {
+    "P1": {
+      "name": "Section drawing",
+      "role": "subject",
+      "categories": [
+        "drum",
+        "engine",
+        "effect"
+      ]
+    },
+    "P2": {
+      "name": "Diagram + trace",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "effect"
+      ]
+    },
+    "P3": {
+      "name": "Trace as subject",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "effect"
+      ]
+    },
+    "P4": {
+      "name": "Stack in depth",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "sampler",
+        "effect"
+      ]
+    },
+    "P5": {
+      "name": "Field and figure",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "sampler",
+        "player"
+      ]
+    },
+    "P6": {
+      "name": "Figures",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "drum"
+      ],
+      "caution": "Hand-drawn figures kept failing for toro; prefer geometric subjects."
+    },
+    "P7": {
+      "name": "Column affinity",
+      "role": "discipline",
+      "categories": [
+        "*"
+      ]
+    },
+    "P8": {
+      "name": "Headers",
+      "role": "discipline",
+      "categories": [
+        "*"
+      ]
+    },
+    "P9": {
+      "name": "One-bit ink",
+      "role": "subject",
+      "categories": [
+        "engine"
+      ],
+      "caution": "Figurative; toro moved off it to P10."
+    },
+    "P10": {
+      "name": "Voice field",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "effect"
+      ],
+      "example": "toro-blocks"
+    },
+    "P11": {
+      "name": "Instrument stack",
+      "role": "subject",
+      "categories": [
+        "drum"
+      ],
+      "example": "theseus-tower"
+    },
+    "P12": {
+      "name": "Orrery",
+      "role": "subject",
+      "categories": [
+        "player",
+        "sequencer"
+      ],
+      "example": "meikyu-orrery"
+    },
+    "P13": {
+      "name": "Capture",
+      "role": "subject",
+      "categories": [
+        "player",
+        "function"
+      ],
+      "example": "meikyu-capture"
+    },
+    "P14": {
+      "name": "Loom",
+      "role": "subject",
+      "categories": [
+        "sequencer",
+        "function",
+        "player"
+      ],
+      "example": "loom-pages"
+    },
+    "P15": {
+      "name": "Cell field",
+      "role": "subject",
+      "categories": [
+        "engine",
+        "sampler",
+        "effect"
+      ]
+    }
+  },
+  "library": {
+    "toro-blocks": {
+      "machine": "toro",
+      "category": "engine",
+      "pattern": "P10",
+      "verdict": "meets, with notes"
+    },
+    "theseus-tower": {
+      "machine": "theseus",
+      "category": "drum",
+      "pattern": "P11",
+      "verdict": "meets, with notes",
+      "regression": {
+        "frames": "frames",
+        "twoPage": true,
+        "scores": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          1,
+          3
+        ],
+        "names": [
+          "decay",
+          "punch",
+          "cutoff",
+          "fm",
+          "noise",
+          "lfo",
+          "rate",
+          "tune"
+        ]
+      }
+    },
+    "meikyu-orrery": {
+      "machine": "meikyu",
+      "category": "player",
+      "pattern": "P12",
+      "verdict": "not audited"
+    },
+    "meikyu-capture": {
+      "machine": "meikyu",
+      "category": "player",
+      "pattern": "P13",
+      "verdict": "not yet",
+      "regression": {
+        "frames": "frames",
+        "twoPage": false,
+        "headerBottom": 20,
+        "scores": [
+          5,
+          3,
+          3,
+          5
+        ],
+        "names": [
+          "Dens",
+          "Scal",
+          "Crpt",
+          "Drum"
+        ]
+      }
+    },
+    "loom-pages": {
+      "machine": "loom",
+      "category": "sequencer",
+      "pattern": "P14",
+      "verdict": "not audited"
+    }
+  },
+  "iterations": {
+    "$comment": "Every generative design pass produces exactly perPass variants, each from its own direction. Frame variants must differ pairwise by at least minPairwiseBodyDiffPct of body pixels (same pixel step as perceptibility); subject variants must differ in at least two of pattern, drawing language and subject wording (word overlap under maxSubjectOverlap).",
+    "perPass": 5,
+    "passKinds": [
+      "subject",
+      "frames",
+      "revision"
+    ],
+    "minPairwiseBodyDiffPct": 4.0,
+    "maxSubjectOverlap": 0.6,
+    "drawingLanguages": [
+      "patent section",
+      "hidden-line isometric",
+      "star atlas",
+      "engineering schematic",
+      "oscilloscope trace",
+      "typeset diagram",
+      "orthographic elevation",
+      "survey plan"
+    ],
+    "frameAxes": {
+      "composition": [
+        "centred hero",
+        "low horizon",
+        "column-affine (P7)",
+        "off-axis diagonal",
+        "full-bleed field"
+      ],
+      "camera": [
+        "front elevation",
+        "three-quarter isometric",
+        "top-down plan",
+        "low angle",
+        "section cut"
+      ],
+      "emphasis": [
+        "brightest element at the sound source",
+        "brightest element where the note lands",
+        "brightest element on the most-played control's part",
+        "negative space carries the subject",
+        "density gradient carries the subject"
+      ]
+    }
+  }
+}

@@ -9,6 +9,7 @@
 | Pattern | P… (from `opxy/patterns.md`) |
 | Audit | **meets** / **meets, with notes** · YYYY-MM-DD · tokens `source.ref` … · [audit.md](audit.md) |
 | Device | photos taken / **device pending** |
+| Video | … · audio **simulated** (engine code run on a computer, not a device recording) / recorded from an OP-XY / silent |
 
 ## The screen
 

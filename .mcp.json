@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "operator-design": {
+      "command": "python3",
+      "args": [
+        "${CLAUDE_PROJECT_DIR:-.}/mcp/server.py"
+      ]
+    }
+  }
+}

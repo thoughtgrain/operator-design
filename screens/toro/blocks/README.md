@@ -56,7 +56,7 @@ It costs nothing extra in redraw: a cube only changes palette when its height cr
 
 ## Sound
 
-`toro-blocks.mp4` has a soundtrack from toro's own engine (`labyrinth/opxy/machines/toro/engine.cpp`). `blocks_av.py` holds one score: a D minor pentatonic riff, a note every 300 ms, with each control swept up and back while it plays. It draws the frames from that score with `gen_blocks` and renders the audio from the same score through `audio/render.cpp`, so every change on screen is a change you hear.
+`toro-blocks.mp4` has a soundtrack from toro's own engine (`labyrinth/opxy/machines/toro/engine.cpp`). It's a simulation: the engine code run on a computer with a stand-in envelope, not a recording from an OP-XY. `blocks_av.py` holds one score: a D minor pentatonic riff, a note every 300 ms, with each control swept up and back while it plays. It draws the frames from that score with `gen_blocks` and renders the audio from the same score through `audio/render.cpp`, so every change on screen is a change you hear.
 
 The order is drive, spread, cutoff up then down, fold, res, shape, noise, then aphx. Each of the eight keys plays its own pitch and lands its patch on its own spot on the field.
 

@@ -5,7 +5,7 @@
 | Audited | 2026-10-31, against tokens `source.ref`: pull/260 (docs/design-guidelines), read 2026-10-31 |
 | Author | Brian Hinton (thoughtgrain); confirmed his to share: yes, asked for it on the reference list |
 | Licence | MIT (labyrinth's OP-XY ports) |
-| Material | `frames/` (26: rest, playing, each control at 0/50/100), `theseus-tower.mp4` with engine audio |
+| Material | `frames/` (26: rest, playing, each control at 0/50/100), `theseus-tower.mp4` with simulated engine audio (engine code run on a computer, not a device recording) |
 | **Verdict** | **meets, with notes** |
 
 ## Results
@@ -16,7 +16,7 @@
 | Perceptibility | pass on all eight controls and the note | table below |
 | Contact sheet, by eye | one subject; grey only; the played drum is the brightest thing on every playing frame | `contact.png` |
 | Motion | idle still; only struck drums move, only upward, settling in ~0.3 s; hats rock ~0.5 s | video |
-| Sound | the video's soundtrack is theseus's engine.cpp playing the same score | `screens/theseus/audio/` |
+| Sound | the video's soundtrack is theseus's engine.cpp playing the same score, simulated on a computer; how the device sounds is pending | `screens/theseus/audio/` |
 
 ### Perceptibility
 

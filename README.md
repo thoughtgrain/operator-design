@@ -4,6 +4,18 @@ My working context for designing for the Teenage Engineering OP-XY. Protocols, p
 
 Right now it holds one module: **`opxy/`**, the protocol for designing the screen a custom machine draws on the OP-XY through the [open-xy SDK](https://github.com/etcetc000/open-xy). More modules can sit beside it later (sequencing workflows, preset design, sound-design notes) without touching it.
 
+It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM Studio and Ollama can run the protocol with the real tools: every generative design pass is five unique variants, and **training mode** (`training/`) is how the guidelines learn, through draft → audit → review → gate → my approval, with a separate agent at each stage.
+
+## Quick start
+
+```sh
+# Claude Code: open this repo; .mcp.json registers the server.
+python3 mcp/setup.py claude-desktop        # or: codex, lmstudio --model …, ollama --model …, print
+python3 mcp/setup.py check
+```
+
+Details per client are in [`mcp/README.md`](mcp/README.md).
+
 ## Layout
 
 ```
@@ -11,10 +23,16 @@ operators/
 ├── README.md                      ← you are here
 ├── AGENTS.md                      ← agent entry point: what to load for which task
 ├── CLAUDE.md                      ← imports AGENTS.md for Claude Code
+├── .mcp.json                      ← registers the MCP server for Claude Code
+├── mcp/                           ← the MCP server, client setup and the training CLI
+├── training/                      ← training mode: process, agent roles, proposals, changelog
+├── .claude/agents/, .codex/agents/ ← designer, drafter, auditor, reviewer (generated from training/agents/)
 ├── .claude/skills/opxy-screen/    ← skill that runs the screen protocol end to end
 ├── .claude/skills/opxy-audit/     ← skill that audits a finished screen and adds passing ones to the library
 ├── opxy/
 │   ├── README.md                  ← module index and reading order
+│   ├── categories.md              ← engine, drum, sampler, effect, player, sequencer, function
+│   ├── catalog.json               ← categories, patterns by category, library, five-iteration settings
 │   ├── protocol.md                ← the phases, gates and outputs
 │   ├── patterns.md                ← composition patterns and the visual-channel table
 │   ├── constraints.md             ← hard limits distilled from open-xy, with sources
@@ -41,5 +59,6 @@ What open-xy doesn't cover is the design process itself: going from "here's a so
 2. Give it a `README.md` with its reading order, and keep hard limits in one `constraints.md` with sources.
 3. Add a routing line to `AGENTS.md` so agents know when to load it.
 4. If an agent should run it end to end, add a skill under `.claude/skills/`.
+5. If the MCP server should expose it, add its docs to `mcp/opxy_mcp/knowledge.py` → `DOCS` and its tools to `tools.py`.
 
 Not affiliated with Teenage Engineering or the open-xy project. OP-XY is a Teenage Engineering trademark. Nothing in here copies stock artwork.
