@@ -13,7 +13,7 @@
 | Check | Result | Evidence |
 | --- | --- | --- |
 | Definition (`lint_definition.py`) | **not checked as a player**: the tool knows synth / sample / effect only and stops on `kind: player`. Run as `--kind effect` for the generic checks: 0 errors, 3 warnings (percent display on Dens and Crpt; `pentatonic` and `chromatic` too long for the 20 px column) | |
-| Artwork (`lint_frame.py`) | 0 errors, 158 warnings over 14 frames (the drum frames have only the header's) | `lint` output below |
+| Artwork (`lint_frame.py`) | 0 errors, 172 warnings over 14 frames | `lint` output below |
 | Perceptibility | pass on Dens, Scal, Crpt, note response; Drum passes its full range, its 50→100 half is 0 | table below |
 | Contact sheet, by eye | one subject, every control reads, no dashboard | `contact.png` |
 | Accessibility checklist | 13 of 13 answered: 9 pass, 3 with notes, 1 pending device | below |
@@ -29,10 +29,10 @@ Scores are the author's to confirm. I scored them from the sound: Dens 5 (it dec
 | Dens | 5 | 2.50 | 4.28 | 2.43 | 4.04 | 400 | ok |
 | Scal | 3 | 1.20 | 1.25 | 1.16 | 1.40 | 322 | ok |
 | Crpt | 3 | 1.20 | 2.26 | 2.20 | 2.96 | 378 | ok |
-| Drum | 5 | 2.50 | 9.03 | 9.03 | 0.00 | 465 | **under** (half-step rule) |
+| Drum | 5 | 2.50 | 2.71 | 2.71 | 0.00 | 465 | **under** (half-step rule) |
 | note response | — | 2.00 | 4.13 | — | — | 394 | ok |
 
-Scal passes on the keyboard in the lower left (its dots take the new scale's shape) plus the stems moving to new pitches. Drum passes its full range easily: with Rthm on, the whole screen changes to minimal line art (below), plus the kit ruler and the pad lanes.
+Scal passes on the keyboard in the lower left (its dots take the new scale's shape) plus the stems moving to new pitches. Drum passes its full range on the scale keyboard giving way to the kit's spacing ruler in the lower right, plus the stems becoming pad lanes.
 
 Drum is an enum with two labels, off and on: its 50 % frame is already "on", so its 50→100 half can't move whatever is drawn. Whether the half-step rule applies to a two-state switch is a protocol decision. Kit (Scal in drum mode) changes the ruler to that kit's spacing; each kit has its own shape, and the header names it (stack, roll, fill, clust).
 
