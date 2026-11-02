@@ -16,9 +16,9 @@ A step plays when its weight is under Dens; a black hole captures what comes ins
                 shows the scale's shape as dots on its keys, drawn from C (C's dot bigger), and lights the key of
                 each note's degree as it sounds
   Crpt          a re-rolled body is thrown to its new distance, with a streak from where it was
-  Rthm          stems become the 8 pad lanes; the scale keyboard gives way to a longer one in the lower right
-                (44 semitones from C) with the kit's 8 pads dotted, so each kit has its own shape; the struck pad's
-                key lights. The kick also thumps the hole's edge and the snare the ring under it, each at most ~3
+  Rthm          stems become the 8 pad lanes; the scale keyboard gives way to the kit's pattern in the lower right:
+                a spacing ruler, each pad a tick at its interval (repeats stack), so each kit has its own shape; the struck
+                pad lights. Kits are named for their pattern (stack, roll, fill, clust), not numbered. The kick also thumps the hole's edge and the snare the ring under it, each at most ~3
                 times a second
   velocity      a hard press brightens the wire
 
@@ -219,7 +219,7 @@ def controls(t):
     if 14 <= t < 21:
         c["crpt"] = 85
     if t >= 22:
-        c["scal"] = 2 if MODE == "melody" else 1                         # pentatonic, or kit 2
+        c["scal"] = 2 if MODE == "melody" else (1 if t < 26 else 2)     # pentatonic; or the roll kit, then fill
     return c
 
 
@@ -330,13 +330,73 @@ def keyboard(c, last, t):
     return keys(10.0, 190.0, 8.0, 24.0, 12, dots, hot)
 
 
-def kit_keys(c, last, t):
-    """drums, lower right: the kit's 8 pads as dots on a keyboard counted from C, over the 44 semitones the widest kit
-    reaches, so every kit has its own shape (stacked fourths and fifths, a minor-seventh chord, wide fifths,
-    semitone clusters); the pad that's struck lights"""
-    pads = M4.KITS[c["scal"]]
+# The four pad sets, named for their pattern rather than numbered. Proposed for labyrinth's player.cpp: stack is
+# meikyu's own spread; roll puts every pad on one key, so a phrase is a roll on one drum, its accents the dynamics;
+# fill pairs pads over four neighbouring keys, so a phrase rolls down across them (a tom fill); clust is semitone
+# pairs. (The earlier minor-7 "chord" and wide-fifths sets are out: they were melodic, not drums.)
+KITS = [[0, 5, 7, 12, 17, 24, 31, 36],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 2, 2, 4, 4, 7, 7],
+        [0, 1, 6, 7, 12, 13, 18, 19]]
+KIT_NAMES = ["stack", "roll", "fill", "clust"]
+RULER_X0, RULER_DX, RULER_Y, TICK_H, TICK_W, STACK_DY = 352.0, 2.75, 212.0, 6.0, 3.0, 7.2   # lower right; repeats stack with a gap
+
+
+def kit_pattern(c, last, t):
+    """drums, lower right: the kit as a spacing ruler. Each pad is a tick placed by its interval above the note held
+    (0 to 43 semitones along the line), so the gaps are the pattern: uneven and spread (stack), all on one spot
+    (roll, its eight ticks stacked into a column), close pairs across a short run (fill), pairs (clust). A tick on
+    a key another pad already has stacks above it. The struck pad's tick lights"""
+    pads = KITS[c["scal"]]
     hot = sounding_now(last, t)
-    return keys(470.0 - 26 * 4.8, 192.0, 4.8, 22.0, 44, set(pads), hot)   # black keys ≥ 3 px
+    out = [path([(RULER_X0 - 3, RULER_Y + 1.5), (RULER_X0 + RULER_DX * 43 + 3, RULER_Y + 1.5)], grey(0x7D), 1.5)]
+    for o in (0, 12, 24, 36):                                          # octave marks under the line
+        x = RULER_X0 + RULER_DX * o
+        out.append(path([(x, RULER_Y + 1.5), (x, RULER_Y + 5.5)], grey(0x64), 1.5))
+    seen = {}
+    for iv in pads:
+        level = seen.get(iv, 0)
+        seen[iv] = level + 1
+        x = RULER_X0 + RULER_DX * iv - TICK_W / 2
+        y = RULER_Y - TICK_H - level * STACK_DY
+        lit = iv in hot
+        out.append(path(rect(x, y, TICK_W, TICK_H), grey(0xCD if lit else 0x96), 0.6,
+                        fill=grey(0xCD if lit else 0x96), close=True))
+    return out
+
+
+DRUM_PAD = {"kick": 0, "snare": 2, "tom": 4, "hat": 6}                 # a pad index blackhole_moons maps to that drum
+
+
+def drum_of(iv):
+    """the stand-in kit: which synthesized drum a key above the held note plays. On the device it's whatever sample
+    sits on that key in the loaded kit; this only has to keep the same key the same drum, so a roll sounds like one"""
+    pc = iv % 12
+    if pc in (0, 1):
+        return "snare"
+    if pc in (5, 7):
+        return "kick"
+    if pc in (2, 3, 4, 6):
+        return "tom"
+    return "hat"
+
+
+def capture_hits(presses):
+    """every sounded step: (time, step, pitch, velocity, pad code for the stand-in kit)"""
+    out = []
+    for pr, plan in zip(presses, BM.PLANS):
+        for k, i, pitch, v in plan:
+            code = DRUM_PAD[drum_of(pitch - pr["root"])] if MODE == "drum" else None
+            out.append((pr["t"] + k * M4.STEP, i, pitch, v, code))
+    return out
+
+
+def header(p):
+    """the stock header with Rthm; in drum mode Scal reads Kit and shows the pattern's name"""
+    o = [line.replace(">Drum<", ">Rthm<") for line in M4.P.header(p)]
+    if p.drum:
+        o = [line.replace(f">{M4.P.SCALES[p.scale]}<", f">{KIT_NAMES[p.scale]}<").replace(">Scal<", ">Kit<") for line in o]
+    return o
 
 
 _PACED = {}
@@ -413,7 +473,7 @@ def scene(p, last, t, hits, w_hist, v_hist):
             side.append(path(ell(x, y, s * K, s * K, n=14), grey(g), 0.9, fill=grey(g), close=True))
         else:
             side.append(path(ell(x, y, 1.9 * K, 1.9 * K, n=10), grey(0x68), 0.9, fill="#000000", close=True))
-    corner = kit_keys(c, last, t) if c["drum"] else keyboard(c, last, t)
+    corner = kit_pattern(c, last, t) if c["drum"] else keyboard(c, last, t)
     return back + behind + hole + front + over + corner
 
 
@@ -430,7 +490,7 @@ def snapshot(out, name, ctrl, t):
     BM.MODE = MODE
     _PACED.clear()
     presses, _, w_hist, v_hist = run()
-    hits = BM.hits_of(presses)
+    hits = capture_hits(presses)
     p, last = M4.page_at(t, presses)
     (out / f"{name}.svg").write_text(B.frame(p, scene(p, last, t, hits, w_hist, v_hist)))
     subprocess.run(["rsvg-convert", "-w", "480", "-h", "220", str(out / f"{name}.svg"), "-o", str(out / f"{name}.png")], check=True)
@@ -452,12 +512,14 @@ def main():
     tmp.mkdir(parents=True, exist_ok=True)
     BM.MODE, BM.controls, BM.LENGTH = MODE, controls, LENGTH
     M4.controls = controls
+    M4.header = header
+    M4.KITS = KITS                                                     # the proposed pad sets
     M4.LENGTH = A.LENGTH = LENGTH
     M4.EASE = 0.2                                                      # ux: control eases 0.15–0.2 s
     if MODE == "frames":
         return audit_frames(tmp)
     presses, tones, w_hist, v_hist = run()
-    hits = BM.hits_of(presses)
+    hits = capture_hits(presses)
     wav = tmp / f"capture-{MODE}.wav"
     if MODE == "drum":
         BM.drums(wav, hits)

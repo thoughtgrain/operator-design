@@ -204,7 +204,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 - **Edge-on discs hide distance.** Tip the camera until distance from the centre reads, even if it costs some of the reference look.
 - **A thump per hit flashes.** Pace event effects (one per ~0.34 s) so a fast roll can't exceed 3 flashes a second.
-- **Not every control has a twin in the metaphor.** Dens and Crpt map onto the black hole; Scal and Kit don't. Forcing them into the scenery (cells in the arch, pads in the under-ring) looked bolted on. Give them a plain keyboard in a corner instead, drawn from C so each one is a shape: the scale's notes on one octave (lower left), swapped in drum mode for the kit's 8 pads on a longer keyboard (lower right). A drawn drum kit was tried and rejected: the kits are note patterns, not instruments.
+- **Not every control has a twin in the metaphor.** Dens and Crpt map onto the black hole; Scal and Kit don't. Forcing them into the scenery (cells in the arch, pads in the under-ring) looked bolted on. Give them a plain keyboard in a corner instead, drawn from C so each one is a shape: the scale's notes on one octave (lower left), swapped in drum mode for the kit as a spacing ruler (lower right): each pad a tick at its interval, repeats stacked. Name settings for what they are (`stack`, `roll`, `fill`, `clust`), not by number. A drawn drum kit was tried and rejected: the kits are note patterns, not instruments.
 - **Two-state switches and the half-step rule.** An off/on enum moves all at once; see the audit's note.
 - **Players can't do this yet.** It needs bound nodes on the player page, like P12.
 

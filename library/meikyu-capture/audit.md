@@ -29,12 +29,12 @@ Scores are the author's to confirm. I scored them from the sound: Dens 5 (it dec
 | Dens | 5 | 2.50 | 4.28 | 2.43 | 4.04 | 400 | ok |
 | Scal | 3 | 1.20 | 1.25 | 1.16 | 1.40 | 322 | ok |
 | Crpt | 3 | 1.20 | 2.26 | 2.20 | 2.96 | 378 | ok |
-| Drum | 5 | 2.50 | 4.84 | 4.84 | 0.00 | 462 | **under** (half-step rule) |
+| Drum | 5 | 2.50 | 2.71 | 2.71 | 0.00 | 465 | **under** (half-step rule) |
 | note response | — | 2.00 | 4.13 | — | — | 394 | ok |
 
-Scal passes on the keyboard in the lower left (its dots take the new scale's shape) plus the stems moving to new pitches. Drum passes its full range on the scale keyboard giving way to the kit keyboard in the lower right, plus the stems becoming pad lanes.
+Scal passes on the keyboard in the lower left (its dots take the new scale's shape) plus the stems moving to new pitches. Drum passes its full range on the scale keyboard giving way to the kit's spacing ruler in the lower right, plus the stems becoming pad lanes.
 
-Drum is an enum with two labels, off and on: its 50 % frame is already "on", so its 50→100 half can't move whatever is drawn. Whether the half-step rule applies to a two-state switch is a protocol decision. Kit (Scal in drum mode) moves the kit keyboard's dots to that kit's pads; each kit has its own shape.
+Drum is an enum with two labels, off and on: its 50 % frame is already "on", so its 50→100 half can't move whatever is drawn. Whether the half-step rule applies to a two-state switch is a protocol decision. Kit (Scal in drum mode) changes the ruler to that kit's spacing; each kit has its own shape, and the header names it (stack, roll, fill, clust).
 
 ### Lint warnings, by kind
 
@@ -51,7 +51,7 @@ Drum is an enum with two labels, off and on: its 50 % frame is already "on", so 
 - [x] Text ≥ 8 px: the only text is the stock header.
 - [x] Text greys: stock header only.
 - [x] Meaningful non-text ≥ 3:1. The capture ring and hole edge are `#CDCDCD` (13.2:1). The accent ring, hollow bodies and out-of-phrase stems are `#646464` or brighter (≥ 3.55:1). Only decoration (rails, ribs, disc rings, idle spokes) sits lower.
-- [x] No part under ~3 px: the smallest body is 4.6 px across; the kit keyboard's black keys are 3.1 px wide. Note: near the left and right of the disc, spokes seen edge-on come closer than 3 px. They're decoration, and each body's own position carries its lane.
+- [x] No part under ~3 px: the smallest body is 4.6 px across; the ruler's ticks are 3 × 6 px. Note: near the left and right of the disc, spokes seen edge-on come closer than 3 px. They're decoration, and each body's own position carries its lane.
 - [x] No state by shade alone. Captured vs not is height, size and fill. Accent is size and shade. The playing phrase is stem weight and shade, and spoke weight and shade.
 - [x] Each control visibly different at 0 / 50 / 100: yes; Drum's second half is the two-state note above.
 - [x] Visual travel matches the audible score: Dens and Drum move the most (5), Crpt and Scal less (3).
