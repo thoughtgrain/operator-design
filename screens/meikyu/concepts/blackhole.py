@@ -6,8 +6,10 @@ it turns into a black hole and every planet falls into it. Built the same way as
 through one camera), but centred, so every orbit is on screen.
 
   Dens 0 → 75     the sun grows from small to the edge of the second orbit; planets it reaches slip inside it
-  Dens hits 75    a timed event (about two seconds, not tied to the knob's travel): the sun snaps into a black hole and
-                  the shock flings every orbit outward, then the hole grabs them and sucks them in, accelerating: its wireframe and corona fade, leaving a black disc with a bright
+  Dens hits 75    a timed event (2.6 s, not tied to the knob's travel): the sun swells, implodes to the horizon and
+                  flashes; a shock ring runs out through the orbit plane and flings each orbit outward as it passes;
+                  each hangs a beat, then the hole sucks it in like a drain, flat and spiralling faster, tipping to its
+                  angle only in the last stretch. Orbit lines fade as they fall and only the sequence's planets arrive: its wireframe and corona fade, leaving a black disc with a bright
                   photon ring and light bent up over the top. The
                   orbits fall in, inner first, and angle into the hole, each tilting and leaning its own way so they
                   wrap it from different directions just outside the horizon; the planets keep circling there, faster, stay round, their surface detail fading out to plain circles as they fall, and
@@ -136,21 +138,40 @@ def smooth(x):
     return x * x * (3 - 2 * x)
 
 
-COLLAPSE = 1.9          # seconds for the sun to fall into a black hole once Dens reaches GROW_END
+COLLAPSE = 2.6          # seconds for the whole event once Dens reaches GROW_END: swell, implode, shock, infall
 RELEASE = 2.0           # seconds to relax back into a sun once Dens drops below RELEASE_AT (slower: less motion)
 RELEASE_AT = GROW_END - 3                                              # hysteresis, so a knob resting on 75 doesn't flicker
 _HOLE = {}
 
 
+# the event, as shares of COLLAPSE (u runs 0 → 1):
+SWELL_END = 0.07        # the sun swells and brightens a little: the breath before it goes
+IMPLODE_END = 0.17      # it implodes to the horizon, accelerating, and flashes
+SHOCK_DUR = 0.26        # a shock ring runs out through the orbit plane from the horizon to SHOCK_MAX
+SHOCK_MAX = 330.0
+FLING_W = 36.0          # as the shock passes an orbit it flings it outward over this much of the shock's travel
+PUSH = [0.34, 0.31, 0.28, 0.25, 0.22, 0.2]                             # how far each orbit is flung (fraction of its radius)
+HANG = 0.06             # how long an orbit hangs out there before the hole grabs it
+
+
+def swell(u):
+    return math.sin(math.pi * min(1.0, u / IMPLODE_END)) if u < IMPLODE_END else 0.0
+
+
 def hole_at(t):
-    """the eased black-hole amount, for the sun and the lensing: it collapses in the first stretch of the timer, the
-    sudden event that throws the orbits out"""
-    return smooth(min(1.0, hole_raw(t) / SUN_SHARE))
+    """the black-hole amount for the sun and the lensing: 0 until the swell peaks, then an accelerating implosion"""
+    x = max(0.0, min(1.0, (hole_raw(t) - SWELL_END) / (IMPLODE_END - SWELL_END)))
+    return x * x
 
 
-SUN_SHARE = 0.3         # share of COLLAPSE the sun takes to fall in: the flash that starts the infall
-BURST = 0.16            # share of COLLAPSE the orbits spend thrown outward before the hole grabs them
-PUSH = 0.16             # how far out they're thrown (fraction of each orbit's radius)
+def shock(u):
+    """the shock ring's radius, or None before the implosion lands / after it's gone"""
+    x = (u - IMPLODE_END) / SHOCK_DUR
+    return None if not 0.0 <= x <= 1.0 else HORIZON + (SHOCK_MAX - HORIZON) * x
+
+
+def shock_reaches(o):
+    return IMPLODE_END + SHOCK_DUR * (ORBITS[o] - HORIZON) / (SHOCK_MAX - HORIZON)
 
 
 def hole_raw(t):
@@ -171,24 +192,30 @@ def hole_raw(t):
     return _HOLE[n]
 
 
-def stage(dens, hole):
-    """(sun radius, black-hole amount 0..1)"""
+def stage(dens, hole, sw=0.0):
+    """(sun radius, black-hole amount 0..1); sw swells it a touch just before it implodes"""
     grow = smooth(dens / GROW_END)
-    radius = SUN_MIN + (SUN_MAX - SUN_MIN) * grow ** 1.2
+    radius = (SUN_MIN + (SUN_MAX - SUN_MIN) * grow ** 1.2) * (1 + 0.08 * sw)
     return radius + (HORIZON - radius) * hole, hole
 
 
-def burst(u):
-    """0 → 1 fast (ease-out) as the hole forms: the orbits are flung outward"""
-    x = min(1.0, u / BURST)
+def burst(o, u):
+    """0 → 1 (ease-out) as the shock passes orbit o: it's flung outward, inner orbits first"""
+    x = max(0.0, min(1.0, (u - shock_reaches(o)) / (SHOCK_DUR * FLING_W / (SHOCK_MAX - HORIZON))))
     return 1 - (1 - x) ** 3
 
 
 def infall(o, u):
-    """how far orbit o has fallen in (0 = in place, 1 = through the horizon): inner orbits go first"""
-    start = BURST + 0.05 * o
+    """how far orbit o has fallen in (0 = in place, 1 = at its band round the horizon): it hangs a beat after the
+    shock passes, then the hole sucks it in, slow to let go and then fast (ease-in), inner orbits first"""
+    start = shock_reaches(o) + HANG
     x = max(0.0, min(1.0, (u - start) / (1.0 - start)))
-    return x * x * (2 - x)                                             # ease-in: slow to let go, then sucked in fast
+    return x * x * (2 - x)
+
+
+def tip(fall):
+    """the funnel: orbits stay flat while they spiral in and only tip to their angles in the last stretch"""
+    return smooth((fall - 0.6) / 0.4)
 
 
 def eased_dens(t):
@@ -196,8 +223,8 @@ def eased_dens(t):
 
 
 # ---- drawing ---------------------------------------------------------------------------------------------------------------
-def sun(radius, hole):
-    """the corona sun, fading into a black hole as `hole` goes to 1"""
+def sun(radius, hole, flash=0.0):
+    """the corona sun, imploding into a black hole as `hole` goes to 1; flash > 0 thickens the ring as it lands"""
     o = []
     cx, cy = CENTRE
     rr = radius * project((0.0, 0.0, 0.0))[3]
@@ -211,7 +238,7 @@ def sun(radius, hole):
             o.append(path([(cx + (rr + 3) * math.cos(a), cy + (rr + 3) * math.sin(a)), (cx + L * math.cos(a), cy + L * math.sin(a))],
                           f"#{g:02X}{g:02X}{g:02X}", 1.1 if k % 3 == 0 else 0.8))
     rim = round(0xA4 + (0xF0 - 0xA4) * hole)                            # the sun's rim brightens into the photon ring
-    o.append(path(ell(cx, cy, rr, rr, n=60), f"#{rim:02X}{rim:02X}{rim:02X}", 1.4 + 0.6 * hole, fill="#000000", close=True))
+    o.append(path(ell(cx, cy, rr, rr, n=60), f"#{rim:02X}{rim:02X}{rim:02X}", 1.4 + 0.6 * hole + 1.6 * flash, fill="#000000", close=True))
     if keep > 0.03:
         g = round(0x30 + (0x8A - 0x30) * keep)
         o += O.wire_sphere(cx, cy, rr, f"#{g:02X}{g:02X}{g:02X}", 0.8)
@@ -253,7 +280,7 @@ def ring_halves(c3, r, line, tilt, yaw):
     return out
 
 
-FINAL = [HORIZON * (1.3 + 0.2 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
+FINAL = [HORIZON * (1.3 + 0.24 * o) for o in range(len(ORBITS))]       # where each orbit ends up: rings hugging the horizon
 
 
 # each orbit's final angle round the hole: how far it tilts out of the orbit plane (toward facing the camera) and how
@@ -265,7 +292,7 @@ FINAL_LEAN = [math.radians(d) for d in (-52, 38, 16, -28, 62, -72)]
 def tilted_point(rho, a, fall, o=0):
     """a point on orbit o, whose plane turns as it falls: it tilts up out of the orbit plane by up to FINAL_TILT[o]
     and leans round the line of sight by up to FINAL_LEAN[o], so the orbits angle into the hole"""
-    beta, gamma = fall * FINAL_TILT[o], fall * FINAL_LEAN[o]
+    beta, gamma = tip(fall) * FINAL_TILT[o], tip(fall) * FINAL_LEAN[o]
     x, y, z = rho * math.cos(a), rho * math.sin(a) * math.sin(beta), rho * math.sin(a) * math.cos(beta)
     f = (0.0, -math.sin(CAM_EL), math.cos(CAM_EL))                     # the line of sight: lean about it (Rodrigues)
     c, s_ = math.cos(gamma), math.sin(gamma)
@@ -280,7 +307,7 @@ SPIN_UP = 4.0                                                          # how muc
 
 def orbit_radius(o, u):
     """thrown out first, then pulled from there down to its final band round the horizon"""
-    flung = ORBITS[o] * (1 + PUSH * burst(u))
+    flung = ORBITS[o] * (1 + PUSH[o] * burst(o, u))
     return flung + (FINAL[o] - flung) * infall(o, u)
 
 
@@ -311,7 +338,7 @@ def body_state(k, t, dens_now, u):
     hop_t = hops * HOP
     a = 2 * math.pi * (PHASES[k] + turned(o, max(0.0, hop_t)))
     rho_now = orbit_radius(o, u)
-    radius, _ = stage(dens_now, hole_at(t))
+    radius, _ = stage(dens_now, hole_at(t), swell(u))
     size = r * (1 - 0.45 * fall)                                       # smaller as they crowd round the horizon
     fade = min(DETAIL_STEPS, int(fall * (DETAIL_STEPS + 1)))           # 0 full detail … DETAIL_STEPS plain circle
     if rho_now - size <= radius:                                       # inside the sun while it's big
@@ -334,15 +361,16 @@ def mix(c0, c1, u):
 def scene(p, last, t, presses):
     dens_now = eased_dens(t)
     u = hole_raw(t)
-    radius, hole = stage(dens_now, hole_at(t))
+    radius, hole = stage(dens_now, hole_at(t), swell(u))
     back, front = [], []
     for o, rho in enumerate(ORBITS):                                   # orbit lines, falling in with their planets
         fall = infall(o, u)
         rho_now = orbit_radius(o, u)
-        if rho_now <= radius + 1:
+        keep = 1.0 - smooth(fall / 0.75)                               # orbit lines fade as they're sucked in: no tangle
+        if rho_now <= radius + 1 or keep < 0.1:
             continue
         for front_half in (False, True):                               # far half behind the sun, near half in front
-            g = round(0x3A if front_half else 0x1E)
+            g = round(0x10 + ((0x3A if front_half else 0x1E) - 0x10) * keep)
             pts = [project(tilted_point(rho_now, (math.pi if front_half else 0) + math.pi * q / 60, fall, o))[:2] for q in range(61)]
             (front if front_half else back).append((1e9, path(pts, f"#{g:02X}{g:02X}{g:02X}", 0.9 if front_half else 0.8)))
     flashed = {i for th, i in (last["hits"] if last else []) if 0 <= t - th < M4.FLASH}
@@ -354,6 +382,8 @@ def scene(p, last, t, presses):
             continue
         p3, x, y, rr, hops, fade, ang = st
         step = STEP_OF[k]
+        if step is None and infall(ORBIT_OF[k], u) > 0.8:               # only the sequence's planets make it to the horizon
+            continue
         foot = rr * (2.0 if k in RINGED else 1.0)
         if step is None and any(math.hypot(x - x2, y - y2) - foot - f2 < 3 for x2, y2, f2 in placed):
             continue
@@ -376,9 +406,18 @@ def scene(p, last, t, presses):
         if k in RINGED and fade == 0:
             halves = ring_halves(p3, BODIES[k][1] * (rr / BODIES[k][1] / project(p3)[3]), line, *RINGED[k])
             side += [(d + 0.5, s) for s in halves["back"]] + [(d - 0.5, s) for s in halves["front"]]
+    sr = shock(u)
+    if sr is not None:                                                 # the shock ring, flat in the orbit plane
+        x = (sr - HORIZON) / (SHOCK_MAX - HORIZON)
+        g = round(0xF0 + (0x30 - 0xF0) * x)
+        for front_half in (False, True):
+            pts = [project(tilted_point(sr, (math.pi if front_half else 0) + math.pi * q / 60, 0.0))[:2] for q in range(61)]
+            (front if front_half else back).append((1e9 if not front_half else -1e9,
+                                                    path(pts, f"#{g:02X}{g:02X}{g:02X}", 1.8 - 0.9 * x)))
+    flash = max(0.0, 1.0 - (u - IMPLODE_END) / 0.1) if u >= IMPLODE_END else 0.0
     out = [s for _, s in sorted(back, key=lambda q: -q[0])]
     out += lensing(hole)
-    out += sun(radius, hole)
+    out += sun(radius, hole, flash)
     out += [s for _, s in sorted(front, key=lambda q: -q[0])]
     out += links(t, presses, pos, hole)
     return out + O.ringed(446, 40, 12, p, ring=(1.45, 1.8 + 1.4 * ((last["vel"] if last else 64) / 127)), tilt=0.3)
@@ -448,7 +487,7 @@ def main():
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-framerate", str(A.FPS), "-i", str(tmp / "f%04d.png"), "-i", str(wav),
                     "-vf", "scale=960:440:flags=neighbor", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-b:a", "192k", "-shortest", str(HERE / "blackhole.mp4")], check=True)
-    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (11.4, 11.8, 12.2, 12.6, 13.0, 16)]
+    ims = [Image.open(tmp / f"f{int(tt * A.FPS):04d}.png") for tt in (9, 11.7, 12.0, 12.6, 13.4, 16)]
     sheet = Image.new("RGB", (960, 660))
     for k, im in enumerate(ims):
         sheet.paste(im, (480 * (k % 2), 220 * (k // 2)))
