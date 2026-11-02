@@ -6,15 +6,62 @@ Right now it holds one module: **`opxy/`**, the protocol for designing the scree
 
 It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM Studio and Ollama can run the protocol with the real tools: every generative design pass is five unique variants, and **training mode** (`training/`) is how the guidelines learn, through draft → audit → review → gate → my approval, with a separate agent at each stage.
 
-## Quick start
+## Set up the MCP server
+
+Everything runs on Python 3.10+ with no packages to install. The one outside tool is `rsvg-convert`, which renders frames to PNG so agents can look at them (macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`).
+
+Clone the repo first, then pick your client. Every setup command merges into your existing config (other servers stay put), saves the old file as `.bak`, and takes `--dry-run` if you want to see what it'll write first.
 
 ```sh
-# Claude Code: open this repo; .mcp.json registers the server.
-python3 mcp/setup.py claude-desktop        # or: codex, lmstudio --model …, ollama --model …, print
+git clone https://github.com/thoughtgrain/operator-design.git
+cd operator-design
+```
+
+**Claude Code.** Nothing to install for this repo. Open it in Claude Code and approve the `operator-design` server when it asks; `.mcp.json` registers it and `.claude/agents/` brings the designer, drafter, auditor and reviewer subagents. To use it from every project instead:
+
+```sh
+python3 mcp/setup.py claude-code --scope user
+```
+
+**Claude Desktop.** Writes the server into Desktop's config with the full path to your Python, since Desktop doesn't see your shell's `PATH`. Restart Desktop afterwards.
+
+```sh
+python3 mcp/setup.py claude-desktop
+```
+
+**Codex.** Adds the server to `~/.codex/config.toml` (or `--scope project` for `.codex/config.toml`, which only loads in trusted projects). The custom agents are already in `.codex/agents/`, and Codex reads `AGENTS.md` on its own.
+
+```sh
+python3 mcp/setup.py codex
+```
+
+**LM Studio.** Adds it to `~/.lmstudio/mcp.json` with the compact tool profile (15 tools, short descriptions) so it fits a small model's context, and points agent runs at LM Studio's local server. Use a model that supports tool calls.
+
+```sh
+python3 mcp/setup.py lmstudio --model qwen3-8b
+```
+
+**Ollama.** Ollama has no MCP client of its own, so it goes through [mcp-client-for-ollama](https://pypi.org/project/mcp-client-for-ollama/). Setup writes the server file and prints the command to start it:
+
+```sh
+python3 mcp/setup.py ollama --model qwen3:8b
+pip install mcp-client-for-ollama
+ollmcp -j ~/.config/ollmcp/mcp-servers/operator-design.json -m qwen3:8b
+```
+
+**Any other MCP client.** Print the generic stdio entry and paste it into the client's config:
+
+```sh
+python3 mcp/setup.py print
+```
+
+**Check it worked.** This lists what's in place for each client; a missing client is fine if you don't use it.
+
+```sh
 python3 mcp/setup.py check
 ```
 
-Details per client are in [`mcp/README.md`](mcp/README.md).
+Then try it: ask the agent to design a screen (the `design-screen` prompt in clients that show prompts) and it should start by reading the protocol and the machine's category. Environment settings, the full tool list and how design passes and training mode run are in [`mcp/README.md`](mcp/README.md).
 
 ## Layout
 
