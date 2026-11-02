@@ -9,8 +9,8 @@
 | Pattern | P11 Instrument stack (from `opxy/patterns.md`) |
 | Audit | **meets, with notes** · 2026-10-31 · tokens `source.ref` pull/260 · [audit.md](audit.md) |
 | Device | **device pending** |
-| Source | `screens/theseus/concepts/d4_video.py` (drawing, motion, score), `screens/theseus/audio/` (sound from the real engine) |
-| Video | [theseus-tower.mp4](theseus-tower.mp4), with theseus's own engine as the soundtrack |
+| Source | `screens/theseus/concepts/d4_video.py` (drawing, motion, score), `screens/theseus/audio/` (sound from the real engine code, simulated on a computer) |
+| Video | [theseus-tower.mp4](theseus-tower.mp4), with theseus's own engine as the soundtrack. Audio: **simulated**, engine code run on a computer, not a recording from an OP-XY |
 
 ## The screen
 

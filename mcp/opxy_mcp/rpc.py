@@ -17,7 +17,8 @@ INSTRUCTIONS = (
     "operator-design: the protocol, tools and library for designing OP-XY machine screens (open-xy SDK). "
     "Start with opxy_guide(doc='protocol') and opxy_guide(doc='categories'). Every generative design pass is exactly five "
     "unique variants (design_pass_start → five designer briefs → design_pass_submit → the person picks). Judge frames at 1:1 "
-    "with render_frame. Training mode (training_*) changes the guidelines through draft → audit → review → gate → the "
+    "with render_frame. Video previews are asked about after the motion spec and rendered by you, not the server; engine "
+    "audio in them is a simulation (engine code on a computer), never a device recording. Training mode (training_*) changes the guidelines through draft → audit → review → gate → the "
     "person's approval; never approve on your own initiative. Decisions that are the person's (the subject, the pick, "
     "approval) are asked, not guessed."
 )

@@ -326,6 +326,32 @@ class TestSetup(unittest.TestCase):
             self.assertNotIn("training_approve", f.read_text().split("---")[1])
 
 
+class TestPreview(unittest.TestCase):
+    def setUp(self):
+        shutil.rmtree(ROOT / "screens/prevtest", ignore_errors=True)
+        call("screen_init", {"machine_id": "prevtest", "category": "engine"})
+
+    def test_asks_first(self):
+        _, r = call("preview_brief", {"machine_id": "prevtest"})
+        self.assertEqual(r["state"], "ask_first")
+        self.assertTrue(any("simulated" in q for q in r["askThePerson"]))
+
+    def test_needs_motion_then_labels_audio(self):
+        args = {"machine_id": "prevtest", "audio": "simulated", "shows": ["rest", "controls"]}
+        _, r = call("preview_brief", args)
+        self.assertEqual(r["state"], "not_ready")
+        d = ROOT / "screens/prevtest"
+        (d / "motion.md").write_text("# motion\n")
+        for v in ("000", "050", "100"):
+            shutil.copy(d / "frames/rest.svg", d / f"frames/c1-{v}.svg")
+        _, r = call("preview_brief", args)
+        self.assertEqual(r["state"], "ready")
+        self.assertIn("not recorded from an OP-XY", r["audioNote"])
+        self.assertTrue(any("simulated" in line for line in r["labelling"]))
+        self.assertIn("You (the agent) render it", r["whoRenders"])
+        self.assertFalse((d / "preview").exists())  # the server never makes the video
+
+
 def tearDownModule():
     shutil.rmtree(TMP, ignore_errors=True)
 

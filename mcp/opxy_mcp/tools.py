@@ -11,7 +11,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Callable
 
-from . import knowledge, passes, screens, training
+from . import knowledge, passes, preview, screens, training
 from .agents import roles
 
 S = "string"
@@ -120,6 +120,14 @@ TOOLS: list[Tool] = [
                                      a.get("two_page", False), a.get("fragment"), a.get("author"), a.get("licence"),
                                      a.get("write_report", True), a.get("out_dir")),
          ["material_dir"], read_only=False),
+    Tool("preview_brief", "Video preview of a screen, after the motion spec. The server doesn't render video: with audio "
+         "'ask' (default) it returns the questions to ask the person (want one? silent or simulated engine audio? what to "
+         "show?); with their answers it returns the storyboard, timing, size, output path and labelling for you to render "
+         "it with your own tools. Engine audio is always a simulation (engine code run on a computer), never a device recording.",
+         _p(machine_id=STR, audio={"type": S, "enum": ["ask", "none", "simulated"]},
+            shows={"type": "array", "items": {"type": S, "enum": list(preview.SHOWS)}}, score=STR),
+         lambda a: preview.preview_brief(a["machine_id"], a.get("audio", "ask"), a.get("shows"), a.get("score")),
+         ["machine_id"], compact=True, short="Ask about, then spec, a video preview the agent renders (audio is simulated)."),
     # design passes ──────────────────────────────────────────────────────────
     Tool("design_pass_start", "Open a design pass for a screen. Every pass (subject, frames, revision) is exactly five unique "
          "variants: this assigns each its own direction (pattern × drawing language for subjects, composition × camera × "

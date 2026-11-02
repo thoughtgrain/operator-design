@@ -16,8 +16,10 @@ PROMPTS = {
                  "that hasn't passed. Every generative pass is five unique variants: design_pass_start → run the five designer "
                  "briefs (in parallel subagents if you can) → design_pass_submit → show the person all five at 1:1 → "
                  "design_pass_select with their pick. Ask the person whenever a decision is theirs (the subject, which control "
-                 "gets the most travel). Lint every frame, run check_perceptibility, look at contact_sheet at 1:1. Device checks "
-                 "stay pending."),
+                 "gets the most travel). Lint every frame, run check_perceptibility, look at contact_sheet at 1:1. After the motion spec, "
+                 "call preview_brief and ask the person whether they want a video preview; if they do, you render it with "
+                 "your own tools and label any engine audio as simulated (engine code on a computer, not the device). "
+                 "Device checks stay pending."),
     },
     "audit-screen": {
         "description": "Audit a finished screen against the guidelines and draft the report.",

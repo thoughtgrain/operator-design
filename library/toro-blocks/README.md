@@ -10,7 +10,7 @@
 | Audit | **meets, with notes** · 2026-10-31 · tokens `source.ref` pull/260 · [audit.md](audit.md) |
 | Device | **device pending** |
 | Source | `screens/toro/gen_blocks.py` (frames, fragment, prototype); `screens/toro/blocks/` |
-| Video | [toro-blocks.mp4](toro-blocks.mp4), every control swept with toro's own engine as the soundtrack (`screens/toro/blocks_av.py`); [toro-drum.mp4](toro-drum.mp4), fold rolling the field into a drum (`screens/toro/curl_av.py`) |
+| Video | [toro-blocks.mp4](toro-blocks.mp4), every control swept with toro's own engine as the soundtrack (`screens/toro/blocks_av.py`). Audio: **simulated**, toro's engine code run on a computer with a stand-in envelope, not a recording from an OP-XY; [toro-drum.mp4](toro-drum.mp4), fold rolling the field into a drum (`screens/toro/curl_av.py`) |
 
 ## The screen
 

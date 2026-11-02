@@ -46,7 +46,7 @@ The custom agents in `.codex/agents/` (`opxy_designer`, `opxy_drafter`, `opxy_au
 python3 mcp/setup.py lmstudio --model qwen3-8b
 ```
 
-Writes `~/.lmstudio/mcp.json` with the compact tool profile, and points `run: true` agent runs at LM Studio's own server (`http://localhost:1234/v1`) with that model. Use a model that does tool calls; the compact profile keeps the tool list to 14 with short descriptions so it fits a small context.
+Writes `~/.lmstudio/mcp.json` with the compact tool profile, and points `run: true` agent runs at LM Studio's own server (`http://localhost:1234/v1`) with that model. Use a model that does tool calls; the compact profile keeps the tool list to 15 with short descriptions so it fits a small context.
 
 ### Ollama
 
@@ -82,7 +82,7 @@ Set these in the client's `env` block for the server (the setup flags write them
 
 | Variable | What it does |
 | --- | --- |
-| `OPXY_PROFILE` | `full` (default, 28 tools) or `compact` (14, short descriptions) |
+| `OPXY_PROFILE` | `full` (default, 29 tools) or `compact` (15, short descriptions) |
 | `OPXY_WORKSPACE` | Where `screens/` lives, if not this repo (a machine's own checkout, say). Paths outside the repo and workspace are refused |
 | `OPXY_AGENT_ENDPOINT` | OpenAI-compatible base URL for `run: true`: LM Studio, Ollama, llama.cpp, vLLM, or a hosted API |
 | `OPXY_AGENT_MODEL` | Model name on that endpoint |
@@ -95,11 +95,17 @@ Set these in the client's `env` block for the server (the setup flags write them
 | Group | Tools | Compact |
 | --- | --- | --- |
 | Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `opxy_tokens`, `opxy_library` | guide, search, patterns |
-| Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run` | status, lint_frames, perceptibility, render |
+| Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run`, `preview_brief` | status, lint_frames, perceptibility, render, preview |
 | Design passes | `design_pass_start`, `design_pass_submit`, `design_pass_select`, `design_pass_get` | start, submit, select |
 | Training | `training_propose`, `training_revise`, `training_list`, `training_get`, `training_advance`, `training_record`, `training_gate`, `training_approve`, `training_reject`, `training_roles` | propose, get, advance, record |
 
 Prompts (slash commands in clients that show them): `design-screen`, `audit-screen`, `propose-improvement`, `run-training-queue`. Resources: `opxy://doc/<name>`, `opxy://catalog`, `opxy://tokens`, `opxy://library/<entry>`, `opxy://proposal/<id>`.
+
+## Video previews
+
+The server asks about them and specifies them; it never renders one. After the motion spec, `preview_brief` returns the questions for the person (want a preview? silent or with sound? what should it show?). With their answers it returns the storyboard, timing from `motion.md`, size, output path and labelling, and the agent (Claude, Codex or a local model) builds the video with its own tools.
+
+Engine audio in a preview is a **simulation**: the machine's engine code compiled and run on a computer with a stand-in envelope, not a recording from an OP-XY. The brief has the agent write that into the video's metadata and notes, and into any caption, card or audit that links it.
 
 ## How a design pass runs
 

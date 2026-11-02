@@ -158,6 +158,14 @@ Write `motion.md`: for each trigger (turn per control, note on, held, hold ended
 
 **Gate:** nothing moves at rest; every ease settles in 0.15–0.2 s; held-note motion lasts as long as notes are held; reduced motion and track change jump to the end state.
 
+### Video preview (optional, ask)
+
+Once `motion.md` passes, I ask whether a video preview is wanted, and if so, silent or with sound, and what it shows (rest, each control turning, notes held, a page press). It's optional: a design is finished without one. Stills prove the frames; a video is the only way to judge the motion before a device is in hand.
+
+The agent makes it, not the MCP server. `preview_brief` asks the questions, then hands back the storyboard, timing (from `motion.md`), size (480 × 220 at 1:1), output path (`screens/<id>/preview/`) and labelling, and the agent renders it with its own tools. Frames come from the same generator as the stills, and frames and sound come from one score, so every change on screen is a change you hear.
+
+**Engine audio is a simulation, and it's always labelled as one.** The sound comes from the machine's engine code compiled and run on a computer (`screens/<id>/audio/render.cpp`), with a stand-in envelope where the OP-XY would apply its own. It isn't a recording of the instrument: the device's envelope, effects, mixer and output stage aren't in it, so it can differ from what an OP-XY plays. The video's metadata, its notes file, and any caption, card or audit that links it say "Audio: simulated (engine code run on a computer, not a device recording)". Only a recording made from a real OP-XY drops the label, and then it says so.
+
 ## Phase 7 · Review
 
 Start with the craft review in `craft.md`: the rest frame beside a reference at 1:1, five questions, any "no" back to phase 5. Gates prove a screen works; this is where it's judged for whether it looks authored.
