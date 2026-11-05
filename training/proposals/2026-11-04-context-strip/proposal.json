@@ -1,0 +1,74 @@
+{
+  "id": "2026-11-04-context-strip",
+  "kind": "new_pattern",
+  "title": "Context strip",
+  "summary": "Adds P16 Context strip: a thin map strip under the header showing where the machine is in a larger whole (keyboard zones for a multisample engine, the whole sample with markers, one waveform cycle).",
+  "rationale": "Asked for by the guidelines' owner on 2026-11-04: engines can carry a top strip with grid context, such as where on a keyboard a multisample engine is, or where on a sample or waveform. Grounded in open-xy staging 6b2d113: the display Input has note activity but no pitch, a sampler-based engine plays one sample chromatically from a root key, and the sample overview is 96 bins whose begin/end markers follow every edit including stockShift trims. No screen has used it yet, so it's marked a draft pattern.",
+  "evidence": [
+    "opxy/patterns.md",
+    "https://github.com/etcetc000/open-xy/blob/staging/sdk/include/opxy/draw.hpp",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/display.md#sample-overview",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/api.md#own-screen"
+  ],
+  "categories": [
+    "engine",
+    "sampler"
+  ],
+  "changes": [
+    {
+      "op": "insert_section",
+      "file": "opxy/patterns.md",
+      "before": "## P8 · Headers",
+      "content": "## P16 · Context strip\n\n**The idea.** Draft pattern: no screen has used it yet. A thin strip across the top of the body, right under the header, that shows where the machine is inside something bigger than the screen. For a multisample engine it's a keyboard, with the engine's zones and the one the controls select. For a sample engine it's the whole sample, with the markers and the window the subject is zoomed into. For a wave engine it's one cycle of the waveform, with the phase or window the subject shows. The subject below stays the picture the controls change; the strip is the map that says which part of the whole that picture is. It's the top-edge partner to P5's activity strip at the bottom: the bottom strip says what's happening, the top one says where you are.\n\n**Why it works.** A zoomed-in subject loses its frame of reference. With a sample's waveform filling the body, the player can't tell whether they're looking at the attack or the tail; with one zone of a multisample drawn large, they can't tell which octave it covers. A map strip answers that at a glance and without a label, the way a scroll bar does. Sitting right under the header, it reads as part of the page furniture rather than a second subject, so the screen keeps one subject.\n\n**Build it.**\n\n- **Where.** Directly under the header: below y 20 with the stock header, below y 38 with the two-page header (`tokens.json` → `header`). Leave a 2 px gap, keep it 10–14 px tall and full width, and plan the body below it as that much shorter. With page 2 up, the two-page header's rows sit in y 18–38, so a strip below 38 stays clear on both pages.\n- **Static ruler, moving marker.** The ruler (keys, sample bins, one cycle) is static artwork in ground greys (`#4B4B4B`, `#646464`). Only the marker or window over it is bound, one or two nodes, so the strip costs almost nothing to redraw and nothing at rest.\n- **Keyboard.** All 128 MIDI notes across 480 px is 3.75 px a key, right at the legibility floor, so either draw octaves (a tick per C, about 45 px apart) or draw only the range the engine maps (four octaves is 10 px a key). Zones are low bars on the ruler; the selected zone is a step brighter and taller, so it differs by size as well as shade.\n- **Sample.** The sample overview gives 96 bins across the whole sample, which is exactly 5 px a bin across 480. Draw the bins once per overview `generation`, and move the `begin`/`end` markers (they follow every edit, Shift-trims included) and the window that shows what the subject is zoomed into. While `assigned` or `loaded` is 0, show the empty ruler, never the last sample.\n- **Waveform.** One cycle as a thin closed ribbon, with the window or phase marker over it.\n- **Motion.** The marker eases with its control like any other part (0.15–0.2 s). The ruler only changes when what it maps changes, such as a new sample.\n\n**Pitfalls.**\n\n- **The screen doesn't know which key was played.** The display input has note activity (a start serial, a held count, releases) but no pitch (`draw.hpp`, `Input`). A keyboard strip can show the range and zones the controls select, or the engine's own key map, but it can't light the key under the player's finger. Don't fake it from the note serial; a note can flare the whole selected zone instead.\n- **It's context, not a control's channel.** A 3–4 px marker sliding across the strip clears the 24 px position floor easily, but it changes far too little of the screen to pass a control's perceptibility on its own. The control it follows still needs travel in the subject; the strip is the second cue.\n- **Don't repeat the header.** The header already shows the value in real units. The strip shows where that value sits in the whole, never the number again, and carries no text: anything readable at 10–14 px would crowd the header above it.\n- **Quiet greys.** The strip sits against the header's stepped bar, so a bright strip competes with it. Keep the ruler in ground greys and the marker in a secondary grey (`#969696`, `#AFAFAF`); the brightest element stays in the subject (`craft.md`).\n- **One strip each way.** With P5's bottom strip as well, the subject is boxed in top and bottom. Use both only when each says something different (where you are, what's happening), and drop the bottom one first if the body feels short."
+    },
+    {
+      "op": "set_json",
+      "file": "opxy/catalog.json",
+      "pointer": "/patterns/P16",
+      "value": {
+        "name": "Context strip",
+        "role": "discipline",
+        "categories": [
+          "engine",
+          "sampler"
+        ],
+        "caution": "Draft pattern: no worked example yet."
+      }
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "| P15 Cell field | ● | | ● | ● | | | |\n",
+      "replace": "| P15 Cell field | ● | | ● | ● | | | |\n| P16 Context strip | ● | | ● | | | | |\n"
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/patterns.md",
+      "find": "plus a thin activity strip along the bottom edge (steps, notes, grains).",
+      "replace": "plus a thin activity strip along the bottom edge (steps, notes, grains). Its partner at the top edge, a map of where the machine is, is P16."
+    }
+  ],
+  "changesHash": "3cbd63a3cf598fe7",
+  "state": "audit",
+  "iteration": 1,
+  "draftedBy": "claude-drafter@claude-code",
+  "created": "2026-11-04T20:38:01",
+  "audit": null,
+  "review": null,
+  "gate": null,
+  "approval": null,
+  "history": [
+    {
+      "at": "2026-11-04T20:38:01",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "proposed"
+    },
+    {
+      "at": "2026-11-04T20:38:01",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    }
+  ]
+}
