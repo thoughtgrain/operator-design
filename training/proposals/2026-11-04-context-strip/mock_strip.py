@@ -67,7 +67,7 @@ for k, s in ((ZONES[SEL], 1), (ZONES[SEL + 1], -1)):
     gap_centre = kx(k) + 0.5          # the split gap runs kx-1 .. kx+2
     add(f'  <path d="{path(piece(gap_centre, s))}" fill="#AFAFAF" stroke="none" stroke-width="0"/>')
 
-# the close-up's frame: corner marks at the map's ends, the same 4 px arm, hairline, quieter; one outline each
+# the close-up's frame: corner marks at the map's ends, the same 7 px arm, hairline, quieter; one outline each
 def corner(x, y, sx, sy, w=1):
     pts = [(x, y), (x + sx * ARM, y), (x + sx * ARM, y + sy * w), (x + sx * w, y + sy * w), (x + sx * w, y + sy * ARM), (x, y + sy * ARM)]
     return pts if sx * sy > 0 else list(reversed(pts))
