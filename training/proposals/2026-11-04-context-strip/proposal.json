@@ -2,24 +2,25 @@
   "id": "2026-11-04-context-strip",
   "kind": "new_pattern",
   "title": "Context strip",
-  "summary": "Adds P16 Context strip (draft): a thin grey map under the header showing where a close-up drawing sits in a bigger whole (a multisample synth's keyboard zones, a whole sample with markers, one waveform cycle), plus the narrow craft.md exception it needs.",
+  "summary": "Adds P16 Context strip (draft): when an engine's controls pick part of a bigger fixed whole (multisample zones, wavetable frames, a built-in recording) and the drawing is a close-up, a small detail-callout map of the whole sits under the header; plus the narrow craft.md exception.",
   "rationale": "Asked for by the guidelines' owner on 2026-11-04: engines can carry a top strip with grid context, such as where on a keyboard a multisample engine is, or where on a sample or waveform. Grounded in open-xy staging 6b2d113: the display Input has note activity but no pitch, a sampler-based engine plays one sample chromatically from a root key, and the sample overview is 96 bins whose begin/end markers follow every edit including stockShift trims. No screen has used it yet, so it's marked a draft pattern.",
   "evidence": [
     "opxy/patterns.md",
+    "opxy/craft.md",
+    "training/proposals/2026-11-04-context-strip/mock-rest.svg",
+    "training/proposals/2026-11-04-context-strip/mock-rest.png",
     "https://github.com/etcetc000/open-xy/blob/staging/sdk/include/opxy/draw.hpp",
-    "https://github.com/etcetc000/open-xy/blob/staging/docs/display.md#sample-overview",
     "https://github.com/etcetc000/open-xy/blob/staging/docs/api.md#own-screen"
   ],
   "categories": [
-    "engine",
-    "sampler"
+    "engine"
   ],
   "changes": [
     {
       "op": "insert_section",
       "file": "opxy/patterns.md",
       "before": "## P8 · Headers",
-      "content": "## P16 · Context strip\n\n**The idea.** A draft pattern: no audited screen uses it yet. When the drawing is a close-up of part of something bigger, I add a thin map of the whole right under the header, so the player can see which part they're looking at. For a multisample engine it's a keyboard, with the engine's zones and the one the controls select. For a sample engine it's the whole sample, with the markers. For a wave engine it's one cycle, with the window the drawing shows. The drawing below stays the picture every control changes; the strip only answers \"where in the whole is this?\". It's the top-edge partner to P5's activity strip at the bottom: that one says what's happening, this one says where you are.\n\n**Why it works.** A close-up loses its frame of reference. With one zone of a multisample drawn large, the player can't tell which octave it covers; with a loop drawn large, they can't tell where in the sample it sits. A map answers that at a glance and without a label, the way a scroll bar does. It still has to look like the OP-XY made it: thin, grey, flush with the header's columns, no icons and no text, so it reads as part of the page's furniture rather than a second subject or a panel.\n\n**When it stays.** `craft.md` keeps strips off the resting page, and this is the one narrow exception: the strip stays at rest only when the drawing really is a close-up of part of a whole. If the drawing already shows the whole (a sampler whose subject is the overview itself, as `categories.md` suggests), there's no strip: that would draw the same thing twice. In between, I show the strip while its control turns and let it settle away 0.15–0.2 s after the turn stops, so the resting page is the header plus one drawing. When I can't say in one sentence what the strip tells the player that the drawing doesn't, I leave it out.\n\n**Build it.**\n\n- **Where.** Below y 20 under the stock header, below y 38 under the two-page header on both pages (`tokens.json` → `header`). My starting values are a 2 px gap and 10–14 px of height, a little slimmer than P5's 16 px bottom strip (`body.stripTop`–`stripBottom`), full width so it sits under all four columns without belonging to one.\n- **Greys and weights.** Hairlines (1–1.2 px) for the ruler and ticks, from the weights table in `craft.md`. Marks that carry meaning (octave ticks, zones, sample levels, markers) are `#646464` or brighter, since they must clear 3:1 (`accessibility.md`); `#4B4B4B` and `#323232` are only for a plain backing. The selected zone or window is `#969696`–`#AFAFAF` and a step taller, so it differs by size as well as shade. The brightest thing on the screen stays in the drawing.\n- **Keyboard (a multisample engine built as a synth).** open-xy's sample engines play one sample across the keys or a 24-pad kit, so a multisample engine is a synth carrying its own zones. Its zone map is its own fixed data, so the keyboard and zones are static artwork, and the selection is a window of two edge nodes driven by the controls (a zone, a range, a split). All 128 MIDI notes across 480 px is 3.75 px a key, at the legibility floor, so I draw octaves (a tick per C, about 45 px apart) or only the range the engine maps (four octaves is 10 px a key).\n- **Sample.** The overview's 96 bins change with every sample, so they can't be static artwork, and a 64-point outline can't hold 96 bins. What fits: two mutable outlines at scale 2, each spanning half the width (authored within ±60 px, so 240 px drawn), each a closed envelope of 16 bins top and 16 bottom, with one bin per three overview bins (the largest of the three). Keep each bin at least ±0.5 px so quiet stretches still enclose area, and author strokes at half width since the node is scaled 2×. Re-key both only when the overview's `generation` changes; the `begin`/`end` markers are two nodes that move when edited (with `stockShift` trims, SDK 1.10, they follow those edits too; `api.md`, Own screen). That spends two of the four outlines. If the drawing needs all four, use 32 cells of 15 px instead, one node each in three greys from `#646464` up: 32 nodes on the frame a new sample arrives, none otherwise. While `assigned` or `loaded` is 0, the strip shows only its backing, and the line telling the player how to load a sample goes in the drawing's area, where text can be 10 px.\n- **Waveform.** One cycle as one closed outline at scale 2 spans 256 px; I centre it, or use a second outline if the cycle needs the full width. It re-keys only when its control changes the shape.\n- **Cost.** Turning the control that moves the window: two nodes. A new sample: two outlines (or 32 cells) on one frame. At rest: nothing.\n\n**Pitfalls.**\n\n- **Possible isn't the bar.** open-xy says what the device can draw; the OP-XY's own look decides what belongs on the page. A strip that's buildable but busy, bright or labelled fails here even if it lints clean.\n- **The screen doesn't know which key was played.** The display input has note activity but no pitch (`draw.hpp`, `Input`), so a keyboard strip can show the range the controls select, never the key under the player's finger. If a note should show at all, it lifts the selected zone a step, on top of the drawing's own note response (a strip this thin can't meet the note floor alone), paced like P13: at most one flare every ~0.34 s.\n- **Context, not a control's channel.** A marker sliding across the strip clears the 24 px position floor but changes too little of the screen to pass a control's perceptibility on its own; the control still moves the drawing. If a control's only picture is a keyboard (a scale, a kit's spacing), that's P13's corner keyboard, not this.\n- **Don't repeat the header.** The header shows the value in real units; the strip shows where it sits, never the number again.\n- **One strip each way, at most.** Header, strip, drawing and P5's bottom strip make four bands. I use both strips only when each says something different, and drop the bottom one first.\n- **Leaving draft.** A discipline is never drawn into a design pass by the server, so I try it on purpose, as the focus of a frames pass. It stops being a draft when an audited library screen uses it and its card says what the strip added."
+      "content": "## P16 · Context strip\n\n**The idea.** A draft pattern: no audited screen uses it yet; the mock in its proposal (`training/proposals/2026-11-04-context-strip/mock-rest.png`) shows the intent. Some engines play from something bigger than one picture: a multisample synth's zones across the keyboard, a wavetable's frames, a recording built into the engine. When the controls pick part of that whole and the drawing is a close-up of the part, I put a small map of the whole right under the header, drawn the way a technical drawing marks a detail: a ruler of the whole, an outlined bracket on the part the controls pick, and two faint callout lines down to corner marks around the close-up. The drawing stays the picture every control changes; the map only answers \"which part of the whole is this?\". It's the top-edge partner to P5's activity strip: that one says what's happening, this one says where you are.\n\n**Why it works.** A close-up loses its frame of reference. With one wavetable frame drawn large, the player can't tell how far through the table it is; with one zone drawn large, they can't tell which octave it covers. A detail callout is how drawings have always answered that, so it reads as part of the drawing rather than an interface: no scroll bar, no filled value bar echoing the header, no text.\n\n**When it's there.** Only when both hold: the controls select part of a whole that the drawing doesn't show, and I can say in one sentence what the map tells the player that the drawing doesn't. Then it's part of the resting page, as `craft.md` allows. Otherwise there's no strip, not even while a control turns. A sample engine never gets one: its drawing is the sample's overview, which already is the whole (`categories.md`), and a strip would draw it twice. If a control's only picture is a keyboard (a scale, a kit's spacing), that's P13's corner keyboard, not this.\n\n**Build it.**\n\n- **Drawn in the screen's language.** The ruler, bracket and callout belong to the drawing's own language (`craft.md`, One drawing language): an atlas gets a locator inset, a patent section gets a detail callout.\n- **Where and how big.** Below y 20 under the stock header, below y 38 under the two-page header (`tokens.json` → `header`). My starting values are a 2 px gap and about 10–12 px of height, slimmer than P5's 16 px bottom strip (`body.stripTop`–`stripBottom`). It spans the drawing's width, not the screen's, which keeps it from reading as a second header row under the stepped bar.\n- **The ruler is static artwork.** The whole is the engine's own fixed data (its zone map, its table, its recording), so the ruler is authored once and never redraws. All 128 MIDI notes across 480 px is 3.75 px a key, so a keyboard ruler marks octaves (a tick per C, 45 px apart) or only the range the engine maps (four octaves is 10 px a key). A wavetable ruler is one tick per frame, sized by that frame's brightness, kept ≥ 3 px apart.\n- **The bracket is two nodes.** An outlined window (left and right edges, or one outline when its width is fixed), driven by the controls through `Input` the way every other part is, easing 0.15–0.2 s. Turning it costs two nodes; at rest it costs nothing.\n- **Weights and greys.** The ruler and its ticks are hairlines (1–1.2 px) in `#646464`, guides in the `craft.md` weights table. The bracket is the meaningful mark, so it's a line weight (1.5 px) in `#AFAFAF` and at least 3 px across. Callout lines are hairline decoration in `#4B4B4B`; corner marks are `#646464`. The brightest thing on screen stays in the drawing.\n\n**Pitfalls.**\n\n- **Possible isn't the bar.** open-xy says what the device can draw; the OP-XY's own look decides what belongs on the page. A map that's buildable but busy, bright, filled or labelled fails here even if it lints clean.\n- **The screen doesn't know which key was played.** The display input has note activity but no pitch (`draw.hpp`, `Input`), so a keyboard map shows the range the controls select, never the key under the player's finger. If a note shows on the map at all, the bracket lifts 2 px and brightens one grey step and eases back: decoration on top of the drawing's own note response, not the note response itself, paced like P13 (at most one every ~0.34 s).\n- **Context, not a control's channel.** The bracket sliding along the ruler clears the 24 px position floor but changes too little of the screen to pass a control's perceptibility alone; the control still has to move the drawing.\n- **Don't repeat the header.** The header shows the value in real units; the map shows where it sits.\n- **One strip at rest.** Header, map, drawing and P5's bottom strip make four bands, which is a panel. With a context map, a bottom strip only shows while its own control is in use.\n- **Leaving draft.** The server never draws a discipline into a design pass, so I try it on purpose, as the focus of a frames pass. It stops being a draft when an audited library screen uses it and its card says what the map added."
     },
     {
       "op": "set_json",
@@ -29,40 +30,39 @@
         "name": "Context strip",
         "role": "discipline",
         "categories": [
-          "engine",
-          "sampler"
+          "engine"
         ],
-        "caution": "Draft pattern: no audited screen uses it yet. Only when the drawing is a close-up of part of a whole."
+        "caution": "Draft pattern: no audited screen uses it yet. Only when the controls pick part of a whole the drawing doesn't show."
       }
     },
     {
       "op": "replace_text",
       "file": "opxy/categories.md",
       "find": "| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n",
-      "replace": "| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n| P16 Context strip (draft) | ● | | ● | | | | |\n"
+      "replace": "| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n| P16 Context strip (draft) | ● | | | | | | |\n"
     },
     {
       "op": "replace_text",
       "file": "opxy/categories.md",
       "find": "A pattern outside its column isn't banned,",
-      "replace": "P16 is a discipline like P7 and P8, laid over a subject rather than being one, but it only fits machines whose drawing is a close-up of part of a whole, so it's marked per column. It stays a draft until an audited screen uses it.\n\nA pattern outside its column isn't banned,"
+      "replace": "P16 is a discipline like P7 and P8, laid over a subject rather than being one, but it only fits engines whose controls pick part of a bigger whole, so it's marked per column. It stays a draft until an audited screen uses it.\n\nA pattern outside its column isn't banned,"
     },
     {
       "op": "replace_text",
       "file": "opxy/patterns.md",
       "find": "plus a thin activity strip along the bottom edge (steps, notes, grains).",
-      "replace": "plus a thin activity strip along the bottom edge (steps, notes, grains). Its partner at the top edge, a map of where the drawing sits in a bigger whole, is P16."
+      "replace": "plus a thin activity strip along the bottom edge (steps, notes, grains). Its partner at the top edge, a map of which part of a bigger whole the drawing shows, is P16."
     },
     {
       "op": "replace_text",
       "file": "opxy/craft.md",
       "find": "The exception is a page where the interaction is the picture: choosing notes on a keyboard, shaping a filter curve.",
-      "replace": "The exception is a page where the interaction is the picture: choosing notes on a keyboard, shaping a filter curve. A context strip (P16) is the only other one, and a narrow one: when the drawing is a close-up of part of something bigger, a thin grey map of the whole can stay at rest; otherwise it shows while its control turns and settles away."
+      "replace": "The exception is a page where the interaction is the picture: choosing notes on a keyboard, shaping a filter curve. One more, narrow one: a context strip (P16) stays at rest when the controls select part of a whole the drawing doesn't show, and I can say in one sentence what it tells the player that the drawing doesn't. It's drawn as a detail callout in the drawing's own language, never as a bar or a row of cells. Anywhere else there's no strip."
     }
   ],
-  "changesHash": "70467c0fd609d286",
+  "changesHash": "88c4c2ef07d52e11",
   "state": "audit",
-  "iteration": 2,
+  "iteration": 3,
   "draftedBy": "claude-drafter@claude-code",
   "created": "2026-11-04T20:38:01",
   "audit": null,
@@ -109,22 +109,50 @@
       "stage": "audit",
       "by": "operator-design",
       "event": "submitted"
+    },
+    {
+      "at": "2026-11-04T21:06:12",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 9
+    },
+    {
+      "at": "2026-11-04T21:06:12",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 7,
+      "note": "reviewed in parallel with the audit"
+    },
+    {
+      "at": "2026-11-04T21:20:00",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 3. Narrowed to engines whose controls pick part of a bigger fixed whole (multisample zones, wavetable frames, a built-in recording): the ruler is static artwork and the bracket two nodes, which removes the scaled outlines, the seam, stroke scaling, the 32-node peak, the marker-source question and the stockShift dependency (audit 1, 3, 4, 6, 7, 8). Sample engines get no strip, since their drawing already is the whole (review 5). craft.md exception narrowed to rest-only with the one-sentence test, and the turn-only case dropped (both 2/1). Drawn as a detail callout in the screen's language, spanning the drawing's width, outlined bracket, no filled bar (review 2). At most one strip at rest (review 3). Cell fallback dropped (review 4). Flare defined: 2 px and one step, decoration on top, paced (audit 9, review 6). Bracket at line weight and >= 3 px; hairlines only for the ruler (audit 5). Lint-clean mock rest frame added beside the proposal (review 7)."
+    },
+    {
+      "at": "2026-11-04T21:20:00",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
     }
   ],
   "reviewNotes": {
     "verdict": "changes_requested",
     "findings": [
-      "1. Reconcile with craft.md 'Picture, not panel', which keeps strips off the resting page. Either argue why a context strip is part of the picture (and add that exception to craft.md in the same proposal), or have the strip appear only while its control is held or turned and leave the resting page as header plus subject. Say plainly how it avoids reading as a second subject or a second header row under the stepped bar.",
-      "2. Rewrite the sample build so it can run on the device. A ruler that changes per sample isn't static artwork, and 96 min/max bins (about 192 envelope points) won't fit one 64-point outline out of four. Give a build that fits (for example, downsample to 32 bins on one outline, or say which outlines or nodes it spends) and count its redraw cost. Also face that the 96-bin overview is all the sample data there is: a sampler's subject can't be a more detailed zoom than the strip, so either drop the attack-vs-tail example for samplers or name a subject the strip actually adds to.",
-      "3. Contrast: zones and sample bins are meaningful, so draw them at #646464 or brighter (3:1 floor in accessibility.md). Keep #4B4B4B for pure guide ticks only. Name the line weights (hairline ruler and ticks, per craft.md).",
-      "4. Cross-reference the overlaps. Tie P16's keyboard to P13's corner-keyboard pitfall (a control's channel there, context only here) and to categories.md's sampler row, which already makes the overview the obvious subject, so a designer doesn't draw the overview twice.",
-      "5. Make the draft status impossible to miss and say how it ends: add '(draft)' to the categories.md row the way P6 and P9 say '(caution)', and state what promotes it (for example, the first audited library screen that uses it). Note that a discipline-role pattern is never drawn into a design pass, so it has to be tried on purpose.",
-      "6. Fix the catalog/table mismatch: role 'discipline' with ● marks in two columns, where every other discipline is '*'. Either keep discipline and explain in categories.md that this one is restricted to engine and sampler, or pick a role that fits.",
-      "7. Add pacing to the note flare (one effect per ~0.34 s, at most 3 flashes a second, as in P13). Say where the 'how to load a sample' prompt goes when nothing is assigned, since the strip carries no text.",
-      "8. Drop or source the 'page 2 rows sit in y 18–38' detail; the rule 'below y 38' is enough. Put the section in the same first-person voice as its neighbours."
+      "1. Narrow the craft.md exception and make it match P16. As written, 'otherwise it shows while its control turns and settles away' reads as permission to show a strip during turns on any page. It contradicts P16's rule of no strip when the drawing already shows the whole, and P16's 'In between' case is never defined. Rewrite craft.md so the strip stays at rest only when the controls select part of a whole the drawing doesn't show, and when it passes P16's one-sentence test (name the test in craft.md). Drop the general 'otherwise' clause, or replace it with the one defined case, with an example.",
+      "2. Item 0: present it as a drawing convention, not an interface element. Replace the scroll-bar analogy with one from the drawing languages: an atlas locator inset, a detail callout on a technical drawing, a ruler with a bracket. Say the strip is drawn in the screen's named drawing language (craft.md, One drawing language). Make the selection an outlined bracket or hairline window, not a filled bar that echoes the header's value bars. Say it must not be mistaken for a second header row. Let its width follow the drawing instead of requiring full width.",
+      "3. Don't allow both strips at rest. Header, top strip, drawing and P5's bottom strip make four bands, and that is a panel, especially under the 38 px two-page header. Say at most one strip on the resting page. If both are earned, the second one only appears while its control turns.",
+      "4. Drop the 32-cell fallback for the sample strip, or redraw it. Three greys of cells put sample level on shade alone (accessibility.md, Meaning never rides on one cue), and a full-width row of cells is exactly the 'strips of cells' craft.md keeps off the resting page. If a fallback is needed, show level by cell height in one grey, or fall back to one outline.",
+      "5. Finish removing the zoom premise for samplers. A sampler only has the 96-bin overview, and categories.md makes the overview its subject. So either name a sampler drawing that really is a close-up without being a magnified overview (for example a slice stack or grain field for the region between the markers) and use it as the sampler example in 'Why it works', or limit P16 to engines and remove sampler from catalog.json and the categories row.",
+      "6. Say what 'lifts the selected zone a step' means: one grey step, a step taller, or both. If it's a shade step, say it's the second cue after the drawing's own note response, so that a note on the strip never rests on shade alone.",
+      "7. Before approval, show the owner one lint-clean mock rest frame at 1:1, outside the proposal since frames can't be part of a training change. Item 0 can't be settled from prose; neither I nor any later reviewer has seen a context strip under the stock header."
     ],
     "by": "opxy-reviewer@claude-code",
-    "at": "2026-11-04T20:49:26",
-    "changesHash": "3cbd63a3cf598fe7"
+    "at": "2026-11-04T21:06:12",
+    "changesHash": "70467c0fd609d286",
+    "iteration": 2
   }
 }
