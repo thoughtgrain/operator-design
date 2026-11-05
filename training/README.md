@@ -14,7 +14,7 @@ Each stage is a different actor, on purpose. The person who wrote a pattern is t
 | --- | --- | --- | --- |
 | **Draft** | drafter agent (`agents/drafter.md`) | What should change, and what's the evidence? | `training_propose`, `training_revise` |
 | **Audit** | auditor agent (`agents/auditor.md`) | Is it true? Against open-xy, the constraints and its own evidence | `training_record` stage `audit` |
-| **Review** | reviewer agent (`agents/reviewer.md`), without seeing the audit | Will it make the next screen better, and will the next designer understand it? | `training_record` stage `review` |
+| **Review** | reviewer agent (`agents/reviewer.md`), without seeing the audit | Does it stay true to the OP-XY's look (open-xy says what's possible, not what's wanted)? Will it make the next screen better, and will the next designer understand it? | `training_record` stage `review` |
 | **Gate** | the server, no model | Does it hold together mechanically? | `training_gate` |
 | **Approval** | a person | Do I want this in my guidelines? | `python3 mcp/train.py approve` |
 

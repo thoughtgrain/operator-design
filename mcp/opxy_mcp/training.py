@@ -34,6 +34,7 @@ EDITABLE = [re.compile(p) for p in (
     r"^training/README\.md$")]
 COPY_FOR_GATE = ("opxy", "library", "training/agents", "training/README.md", "AGENTS.md", ".claude/skills")
 PATTERN_HEAD = re.compile(r"^## (P(\d+)) · (.+)$", re.M)
+BRIEF_DIFF_MAX = 60000  # agents must see the whole change; past this the brief says where the rest is
 
 
 def now() -> str:
@@ -524,7 +525,11 @@ def _changelog(rec: dict, touched: list[str]) -> None:
 
 def _context_for(rec: dict, stage: str) -> str:
     with Sandbox(rec["changes"]) as sb:
-        diff = sb.diff(14000)
+        full = sb.diff(10**9)
+    diff = full if len(full) <= BRIEF_DIFF_MAX else full[:BRIEF_DIFF_MAX] + (
+        f"\n…(diff truncated at {BRIEF_DIFF_MAX} of {len(full)} characters. Read the whole diff with "
+        f"training_get(id=\"{rec['id']}\") or `python3 mcp/train.py show {rec['id']}` before giving a verdict; "
+        "a verdict on a partial diff doesn't count.)")
     evidence = []
     for e in rec.get("evidence", []):
         exists = (ROOT / e).exists() if not re.match(r"^[a-z]+://", e) else None

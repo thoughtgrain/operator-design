@@ -1,0 +1,517 @@
+{
+  "id": "2026-11-04-context-strip",
+  "kind": "new_pattern",
+  "title": "Context strip",
+  "summary": "Adds P16 Context strip (draft): when an engine's controls pick part of a bigger fixed whole (a multisample synth's zones, a long wavetable, a built-in recording) and the drawing is a close-up, a small static locator of the whole sits under the header, or replaces the header as a piano with no values (at most four controls); plus the matching craft.md and P8 exceptions.",
+  "rationale": "Asked for by the guidelines' owner on 2026-11-04: engines can carry a top strip with grid context, such as where on a keyboard a multisample engine is, or where in a larger whole. On 2026-11-05 the owner asked that the strip can also replace the grey header entirely and show a piano with no titles or values, as the stock OP-XY multisampler page does, and shared a screenshot of that page as the reference: a plain grey bar over the whole range with only the playable span drawn as keys. The image is kept out of the repo; the pattern takes the approach, not the artwork. Grounded in open-xy staging 6b2d113: Input has note activity but no pitch; covering y 0-20 hides the stock header; five to eight controls use page_header.hpp; ux.md asks for real-unit header values, a convention catalog review checks, so the trade is stated.",
+  "evidence": [
+    "opxy/patterns.md",
+    "opxy/craft.md",
+    "training/proposals/2026-11-04-context-strip/mock-rest.svg",
+    "training/proposals/2026-11-04-context-strip/mock-rest.png",
+    "training/proposals/2026-11-04-context-strip/mock_strip.py",
+    "training/proposals/2026-11-04-context-strip/mock-header.svg",
+    "training/proposals/2026-11-04-context-strip/mock-header.png",
+    "training/proposals/2026-11-04-context-strip/mock_header.py",
+    "https://github.com/etcetc000/open-xy/blob/staging/sdk/include/opxy/draw.hpp",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/display.md#artwork",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/ux.md#controls"
+  ],
+  "categories": [
+    "engine"
+  ],
+  "changes": [
+    {
+      "op": "insert_section",
+      "file": "opxy/patterns.md",
+      "before": "## P8 · Headers",
+      "content": "## P16 · Context strip\n\n**The idea.** A draft pattern: no audited screen uses it yet; the two mocks in its proposal (`training/proposals/2026-11-04-context-strip/mock-rest.png` under the header, `mock-header.png` in it, both a multisample synth) show the intent. Some engines play from something bigger than one picture: a multisample synth's zones across the keyboard, a long wavetable, a recording built into the engine. When the controls pick part of that whole and the drawing is a close-up of the part, I put a small, static map of the whole at the top of the page, either under the header or in place of it (below): a ruler of the whole and an open bracket on the part the controls pick. Under the header, each half of the bracket uses the close-up's corner form, the same 7 px arms joined by a short upright, so the bracket and the frame read as the same mark; that's what ties the two together. In place of the header, the window of keys is the selection and the band is the header's own place, so the tie is the header itself. The bracket is shorter, heavier and brighter, because it's the part that moves; the drawing stays the picture every control changes, and the map only answers \"which part of the whole is this?\". It's the top-edge partner to P5's activity strip: that one says what's happening, this one says where you are.\n\n**Why it works.** A close-up loses its frame of reference. With one zone's sample drawn large, the player can't tell which part of the keyboard it covers; with one frame of a long table drawn large, they can't tell how far through it they are. A locator is how drawings have always answered that, so it reads as part of the drawing rather than an interface. Under the header that means a ruler: no slider, no filled bar echoing the header, no text. In place of the header, the band is the header's own bar, so the map takes over the OP-XY's own furniture instead of adding a second piece.\n\n**When it's there.** Only when both hold: the controls select part of a whole that the drawing doesn't show, and I can say in one sentence what the map tells the player that the drawing doesn't. Then it's part of the resting page, as `craft.md` allows. Otherwise there's no context strip, not even while a control turns.\n\n- **Not P4.** When the whole is a short ordered set the drawing can stack (P4's five or six layers), the stack already shows where you are. P16 is for wholes a stack can't show: a span of the keyboard, a table too long to layer.\n- **Not P13.** If a control's only picture is a keyboard (a scale, a kit's spacing), that's P13's corner keyboard.\n- **Not a sampler.** A sample engine's obvious subject is its sample overview (`categories.md`), so a map of the sample would usually draw the same material twice. A synth that carries its own recording is different: it gets no overview, so its drawing can be a close-up and the map shows where it sits.\n\n**Under the header or in place of it.** The map has two forms, and the machine picks one.\n\n- **Under the header** keeps the stock header, titles and values as they are, and the map is a slim ruler below it. It's the default, and the only form for a machine with five to eight controls, whose header has to show which page the encoders edit.\n- **In place of the header** gives the whole band, y 0–20, to the map, the way the stock multisampler page gives its header to the keyboard: the whole range as a plain grey bar, and only the part the controls pick drawn as real keys, with no titles or values. I take the approach from that page, not its artwork. The artwork covers the top 20 px, which hides the stock header (`display.md`, Artwork), and builds the band from static artwork and nodes; it uses no text slots. It's for a machine with at most four controls, where the map is what the player needs most and the drawing makes every control read on its own, since no number on screen will. The page trades the header's real-unit values (`ux.md`, Controls) for the map, so I say so in the handoff and the machine's README, because catalog review checks machines against that convention.\n\n**Build it.**\n\n- **Drawn in the screen's language.** The ruler, bracket and corner marks belong to the drawing's own language (`craft.md`, One drawing language): an atlas gets a locator inset, a section drawing gets a detail mark.\n- **In place of the header.** The band is the whole range as plain `#4B4B4B` segments, one per octave with 1 px gaps, 19 px tall; eight octaves at 60 px each echo the stock header's eight 60 px steps. The part the controls pick (the playable span, an octave, a transpose window) is drawn as keys at the same scale in `#AFAFAF`, over a black backing the size of its segment: the white keys are one closed outline with the black keys notched in from the top and the key gaps (on whole pixels) from the bottom, which fits an octave in 48 points. The backing and the keys are two nodes with the same origin and transform, so they move as one part (`display.md`: parts that meet share an outline or a pivot) and the segments under them stay static. Moving the window costs two nodes; at rest, nothing. The window is the bracket in this form, so there's no other selection mark, and it has a fixed width; a selection whose width changes (zones of different sizes) uses the under-header form instead. The drawing's frame starts a little below the band.\n- **Where and how big, under the header.** About 6 px under the header (below y 20 with the stock header, below y 38 with the two-page header, `tokens.json` → `header`) and about 10 px tall: my starting values, slimmer than P5's 16 px bottom strip (`body.stripTop`–`stripBottom`). It spans exactly the close-up's frame (the frame's corner marks sit at the map's two ends), not the header's columns, and the gap lets the drawing own it; together those keep it from reading as a second header row.\n- **The ruler is static artwork and a guide.** The whole is the engine's own fixed data (its zone map, its table, its recording), so the ruler is authored once and never redraws. Its marks are uniform and sparse, on whole pixels, hairline (1 px) in `#646464`: a keyboard gets a tick per C, a table a tick every nth frame so ticks stay at least 3 px apart, with n chosen for the table's length. A strip w px wide gives w/keys px a key and 12 × that between C ticks (480 px over all 128 notes is 3.75 and 45; the mock's 384 px over six octaves is 5.33 and 64). Zones are told apart by position: the baseline is 2 px in `#646464`, broken by a 3 px gap at each split, not by shade.\n- **The bracket is two nodes.** A left and a right piece in `#AFAFAF`, 1.5 px, about 6 px tall, each one closed outline (8 points): two corners with 7 px horizontal arms joined by an upright. It sits above the baseline, at least 1 px clear of it, with each upright centred over its split gap, so the splits it points at stay open; the same offset on both sides. It's open in the middle, so its width follows the selection by moving the pieces, never by scaling. Driven by the controls through `Input` like every other part, easing 0.15–0.2 s. Turning it costs two nodes; at rest it costs nothing. The brightest thing on screen stays in the drawing.\n- **The close-up's frame.** Four corner marks: under the header, at the map's ends and the drawing's top and bottom; in place of the header, simply around the drawing. Each is one closed outline with 7 px legs both ways, hairline (1 px) in `#646464`. The same corner form and arm as the bracket; taller, lighter and quieter on purpose.\n\n**Pitfalls.**\n\n- **Possible isn't the bar.** open-xy says what the device can draw; the OP-XY's own look decides what belongs on the page. A map that's buildable but busy, bright or labelled fails here even if it lints clean, and so does one with a solid area its form doesn't allow. Under the header, the only solid area is the zones' baseline; everything else is a hairline mark or the bracket. In place of the header, the only solid areas are the header's own bar and the window of keys.\n- **It doesn't answer notes.** The display input has note activity but no pitch (`draw.hpp`, `Input`), so a keyboard map can't show the key under the player's finger, and it doesn't flare either: a note is answered by the drawing (`craft.md`, Motion). The map is still.\n- **Context, not a control's channel.** The bracket sliding along the ruler clears the 24 px position floor but changes too little of the screen to pass a control's perceptibility alone; the control still has to move the drawing.\n- **No leader lines.** A straight line from the moving bracket to a fixed corner would have to turn and change length as the bracket moves: turning is a tilt, which this repo doesn't do to parts, and a uniform scale would thicken it. The only other way is to reshape it on every turn, which spends a mutable outline. The matching marks do the job for free.\n- **Don't repeat the header.** The header shows the value in real units; the map shows where it sits.\n- **One strip at rest.** Header, map, drawing and P5's bottom strip make four bands, which is a panel. With a context map, a bottom strip only shows while its own control is in use. A map in the header is the strip: never a second one under it.\n- **No values means the drawing carries everything.** With the header replaced, nothing on screen says \"62\". Every control still has to read in the drawing at 0, 50 and 100 (`perceptibility.py`), and a control the drawing can't show is a reason to keep the header.\n- **Leaving draft.** The server never draws a discipline into a design pass, so I try it on purpose, as the focus of a frames pass. It stops being a draft when an audited library screen uses it and its card says what the map added."
+    },
+    {
+      "op": "set_json",
+      "file": "opxy/catalog.json",
+      "pointer": "/patterns/P16",
+      "value": {
+        "name": "Context strip",
+        "role": "discipline",
+        "categories": [
+          "engine"
+        ],
+        "caution": "Draft pattern: no audited screen uses it yet. Only when the controls pick part of a whole the drawing doesn't show."
+      }
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n",
+      "replace": "| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n| P16 Context strip (draft) | ● | | | | | | |\n"
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "A pattern outside its column isn't banned,",
+      "replace": "P16 is a discipline like P7 and P8, laid over a subject rather than being one, but it only fits engines whose controls pick part of a bigger whole, so it's marked per column. It stays a draft until an audited screen uses it.\n\nA pattern outside its column isn't banned,"
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/patterns.md",
+      "find": "plus a thin activity strip along the bottom edge (steps, notes, grains).",
+      "replace": "plus a thin activity strip along the bottom edge (steps, notes, grains). Its partner at the top edge, a map of which part of a bigger whole the drawing shows, is P16."
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/craft.md",
+      "find": "Use the stock header, flush with the top of the screen (y 0–20). Reserve the two-page band only when a page has more than four controls or needs the Shift row.",
+      "replace": "Use the stock header, flush with the top of the screen (y 0–20). Reserve the two-page band only when a page has more than four controls or needs the Shift row. The one time the header goes is a P16 context map in its place, for a machine with at most four controls."
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/patterns.md",
+      "find": "- **Own header.** Only when the header itself needs to show something stock can't. Cover y 0–20 and rebuild it with nodes and text slots; this uses every text slot, so budget for it.",
+      "replace": "- **Own header.** Only when the header itself needs to show something stock can't. Cover y 0–20 and rebuild it with nodes and text slots; this uses every text slot, so budget for it.\n- **Map header.** A P16 context map in place of the header (at most four controls): cover y 0–20 and draw the map there with static artwork and nodes, no titles or values and no text slots. Say in the handoff and the machine's README that the page trades values for the map."
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/craft.md",
+      "find": "The exception is a page where the interaction is the picture: choosing notes on a keyboard, shaping a filter curve.",
+      "replace": "The exception is a page where the interaction is the picture: choosing notes on a keyboard, shaping a filter curve. One more, narrow one: a context strip (P16) stays at rest when the controls select part of a whole the drawing doesn't show, and I can say in one sentence what it tells the player that the drawing doesn't. Under the header it's drawn as a static locator in the drawing's own language, never as a filled bar, a slider or a row of cells; in place of the header it takes the header's own bar. Anywhere else there's no context strip."
+    }
+  ],
+  "changesHash": "24bb31d59d046aa0",
+  "state": "awaiting_approval",
+  "iteration": 10,
+  "draftedBy": "claude-drafter@claude-code",
+  "created": "2026-11-04T20:38:01",
+  "audit": {
+    "verdict": "pass",
+    "findings": [],
+    "by": "opxy-auditor@claude-code",
+    "at": "2026-11-05T10:37:08",
+    "changesHash": "24bb31d59d046aa0"
+  },
+  "review": {
+    "verdict": "pass",
+    "findings": [],
+    "by": "opxy-reviewer@claude-code",
+    "at": "2026-11-05T10:37:08",
+    "changesHash": "24bb31d59d046aa0"
+  },
+  "gate": {
+    "pass": true,
+    "checks": [
+      {
+        "check": "audit passed on these exact changes",
+        "ok": true,
+        "level": "error",
+        "detail": "audit: pass by opxy-auditor@claude-code"
+      },
+      {
+        "check": "review passed on these exact changes",
+        "ok": true,
+        "level": "error",
+        "detail": "review: pass by opxy-reviewer@claude-code"
+      },
+      {
+        "check": "drafter, auditor and reviewer are different agents",
+        "ok": true,
+        "level": "error",
+        "detail": "claude-drafter@claude-code / opxy-auditor@claude-code / opxy-reviewer@claude-code"
+      },
+      {
+        "check": "every op is valid and editable",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "applies cleanly to the current docs",
+        "ok": true,
+        "level": "error",
+        "detail": "opxy/patterns.md, opxy/catalog.json, opxy/categories.md, opxy/craft.md"
+      },
+      {
+        "check": "tokens.json and catalog.json are valid JSON",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "every pattern and library category exists",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "design passes stay at five variants",
+        "ok": true,
+        "level": "error",
+        "detail": "perPass = 5"
+      },
+      {
+        "check": "pattern numbers are unique",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "every pattern in patterns.md has a catalog.json row and vice versa",
+        "ok": true,
+        "level": "error",
+        "detail": "doc only: [], catalog only: []"
+      },
+      {
+        "check": "a new pattern is added",
+        "ok": true,
+        "level": "error",
+        "detail": "no new '## P<n> · Name' heading"
+      },
+      {
+        "check": "P16 has the house structure",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "P16 is in the categories.md table",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "P16 names the categories it fits",
+        "ok": true,
+        "level": "error",
+        "detail": "engine"
+      },
+      {
+        "check": "links resolve in opxy/categories.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/categories.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "links resolve in opxy/craft.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/craft.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "links resolve in opxy/patterns.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/patterns.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      }
+    ],
+    "at": "2026-11-05T10:37:08",
+    "changesHash": "24bb31d59d046aa0"
+  },
+  "approval": null,
+  "history": [
+    {
+      "at": "2026-11-04T20:38:01",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "proposed"
+    },
+    {
+      "at": "2026-11-04T20:38:01",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-04T20:49:26",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 8
+    },
+    {
+      "at": "2026-11-04T20:49:26",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 8,
+      "note": "reviewed in parallel with the audit; recorded with the audit's send-back"
+    },
+    {
+      "at": "2026-11-04T20:50:37",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Addresses audit (8) and review (8): buildable sample strip (two outlines at scale 2, or 32 cells) with its cost; multisample reframed as a synth carrying its own zones; meaningful marks at #646464+ with hairline weights; stockShift qualified with SDK 1.10; header detail reduced to 'below 38'; strip sizes stated as starting values against P5's; craft.md exception added with a 'when it stays' rule (rest only for a close-up of a whole, else while turning); sampler double-drawing ruled out; note flare on top of the drawing's response and paced; empty-sampler message placed in the drawing area; P13 overlap named; row moved beside P7/P8 and marked (draft); how it leaves draft; first-person voice. Also: the owner asked that patterns stay true to the OP-XY's look, not just what open-xy allows, so 'Possible isn't the bar' is a pitfall and the strip is held to stock greys, no icons, no text."
+    },
+    {
+      "at": "2026-11-04T20:50:37",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-04T21:06:12",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 9
+    },
+    {
+      "at": "2026-11-04T21:06:12",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 7,
+      "note": "reviewed in parallel with the audit"
+    },
+    {
+      "at": "2026-11-04T21:20:00",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 3. Narrowed to engines whose controls pick part of a bigger fixed whole (multisample zones, wavetable frames, a built-in recording): the ruler is static artwork and the bracket two nodes, which removes the scaled outlines, the seam, stroke scaling, the 32-node peak, the marker-source question and the stockShift dependency (audit 1, 3, 4, 6, 7, 8). Sample engines get no strip, since their drawing already is the whole (review 5). craft.md exception narrowed to rest-only with the one-sentence test, and the turn-only case dropped (both 2/1). Drawn as a detail callout in the screen's language, spanning the drawing's width, outlined bracket, no filled bar (review 2). At most one strip at rest (review 3). Cell fallback dropped (review 4). Flare defined: 2 px and one step, decoration on top, paced (audit 9, review 6). Bracket at line weight and >= 3 px; hairlines only for the ruler (audit 5). Lint-clean mock rest frame added beside the proposal (review 7)."
+    },
+    {
+      "at": "2026-11-04T21:20:00",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-04T21:24:54",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 8
+    },
+    {
+      "at": "2026-11-04T21:24:54",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 7,
+      "note": "reviewed in parallel with the audit"
+    },
+    {
+      "at": "2026-11-05T05:00:08",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T05:00:08",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T05:03:45",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 5
+    },
+    {
+      "at": "2026-11-05T05:03:45",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 1,
+      "note": "reviewed in parallel with the audit"
+    },
+    {
+      "at": "2026-11-05T07:51:45",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 5. Bracket moved above the baseline with uprights centred over the split gaps, 1 px clear, symmetric (audit 1). Bracket pieces and frame corners now one closed outline each, the same 7 px arm, the frame at the map's ends; text says only weight and grey differ and why (audit 2, 4, review 1). Leader-line pitfall restated: turning is a house no-tilt rule, not a device limit (audit 3). Mock comment fixed (audit 5). Earlier: Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T07:51:45",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T09:36:23",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 2
+    },
+    {
+      "at": "2026-11-05T09:36:23",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass (not recorded: audit sent it back first)",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T09:36:24",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 6. Matching-marks wording says what's true: shared corner form and 7 px arm, the bracket shorter, heavier and brighter (audit 1). Generator comment fixed (audit 2). Earlier: Revision 5. Bracket moved above the baseline with uprights centred over the split gaps, 1 px clear, symmetric (audit 1). Bracket pieces and frame corners now one closed outline each, the same 7 px arm, the frame at the map's ends; text says only weight and grey differ and why (audit 2, 4, review 1). Leader-line pitfall restated: turning is a house no-tilt rule, not a device limit (audit 3). Mock comment fixed (audit 5). Earlier: Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T09:36:24",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T09:37:15",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T09:37:15",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T09:37:15",
+      "stage": "gate",
+      "by": "operator-design gate",
+      "event": "pass",
+      "failed": []
+    },
+    {
+      "at": "2026-11-05T10:19:49",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 7. Owner asked that the map can also replace the grey header entirely and show a piano, as the stock multisampler page does, with no titles or values (owner's choice when asked). Adds the in-header form: at most four controls, static piano in y 0-20, no text slots, zone splits as wider gaps, bracket under the band; the trade of header values is stated for the handoff and catalog review; craft.md's stock-header rule and P8 get the matching exception. Owner then shared the stock multisampler page as reference: the band is a plain grey bar over the whole range with only the playable span drawn as keys. The in-header form and its mock now follow that approach (one-octave window, one 52-point outline, one node, fixed width; variable-width selections use the under-header form), drawn here rather than copied. Second mock (mock-header) added; lints clean with --own-header. Earlier: Revision 6. Matching-marks wording says what's true: shared corner form and 7 px arm, the bracket shorter, heavier and brighter (audit 1). Generator comment fixed (audit 2). Earlier: Revision 5. Bracket moved above the baseline with uprights centred over the split gaps, 1 px clear, symmetric (audit 1). Bracket pieces and frame corners now one closed outline each, the same 7 px arm, the frame at the map's ends; text says only weight and grey differ and why (audit 2, 4, review 1). Leader-line pitfall restated: turning is a house no-tilt rule, not a device limit (audit 3). Mock comment fixed (audit 5). Earlier: Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T10:19:49",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T10:23:06",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 4
+    },
+    {
+      "at": "2026-11-05T10:23:06",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 2,
+      "note": "reviewed in parallel with the audit"
+    },
+    {
+      "at": "2026-11-05T10:24:22",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 8. Window is two nodes (backing and keys, same origin), cost stated; 48 points (audit 1, 2). Under-header-only wording scoped so it doesn't contradict the in-header form (audit 3). Evidence lists both mocks and generators; rationale records the request and the reference (audit 4, review 1). P8 says handoff and README (review 2). Key gaps on whole pixels. Earlier: Revision 7. Owner asked that the map can also replace the grey header entirely and show a piano, as the stock multisampler page does, with no titles or values (owner's choice when asked). Adds the in-header form: at most four controls, static piano in y 0-20, no text slots, zone splits as wider gaps, bracket under the band; the trade of header values is stated for the handoff and catalog review; craft.md's stock-header rule and P8 get the matching exception. Owner then shared the stock multisampler page as reference: the band is a plain grey bar over the whole range with only the playable span drawn as keys. The in-header form and its mock now follow that approach (one-octave window, one 52-point outline, one node, fixed width; variable-width selections use the under-header form), drawn here rather than copied. Second mock (mock-header) added; lints clean with --own-header. Earlier: Revision 6. Matching-marks wording says what's true: shared corner form and 7 px arm, the bracket shorter, heavier and brighter (audit 1). Generator comment fixed (audit 2). Earlier: Revision 5. Bracket moved above the baseline with uprights centred over the split gaps, 1 px clear, symmetric (audit 1). Bracket pieces and frame corners now one closed outline each, the same 7 px arm, the frame at the map's ends; text says only weight and grey differ and why (audit 2, 4, review 1). Leader-line pitfall restated: turning is a house no-tilt rule, not a device limit (audit 3). Mock comment fixed (audit 5). Earlier: Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T10:24:22",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T10:32:41",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 1
+    },
+    {
+      "at": "2026-11-05T10:32:41",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass (not recorded: audit sent it back first)",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T10:32:41",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 9. 'Possible isn't the bar' scoped so 'filled' doesn't rule out the in-header form's bar and keys (audit 1). Earlier: Revision 8. Window is two nodes (backing and keys, same origin), cost stated; 48 points (audit 1, 2). Under-header-only wording scoped so it doesn't contradict the in-header form (audit 3). Evidence lists both mocks and generators; rationale records the request and the reference (audit 4, review 1). P8 says handoff and README (review 2). Key gaps on whole pixels. Earlier: Revision 7. Owner asked that the map can also replace the grey header entirely and show a piano, as the stock multisampler page does, with no titles or values (owner's choice when asked). Adds the in-header form: at most four controls, static piano in y 0-20, no text slots, zone splits as wider gaps, bracket under the band; the trade of header values is stated for the handoff and catalog review; craft.md's stock-header rule and P8 get the matching exception. Owner then shared the stock multisampler page as reference: the band is a plain grey bar over the whole range with only the playable span drawn as keys. The in-header form and its mock now follow that approach (one-octave window, one 52-point outline, one node, fixed width; variable-width selections use the under-header form), drawn here rather than copied. Second mock (mock-header) added; lints clean with --own-header. Earlier: Revision 6. Matching-marks wording says what's true: shared corner form and 7 px arm, the bracket shorter, heavier and brighter (audit 1). Generator comment fixed (audit 2). Earlier: Revision 5. Bracket moved above the baseline with uprights centred over the split gaps, 1 px clear, symmetric (audit 1). Bracket pieces and frame corners now one closed outline each, the same 7 px arm, the frame at the map's ends; text says only weight and grey differ and why (audit 2, 4, review 1). Leader-line pitfall restated: turning is a house no-tilt rule, not a device limit (audit 3). Mock comment fixed (audit 5). Earlier: Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T10:32:41",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T10:33:39",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T10:33:39",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "changes_requested",
+      "findings": 1
+    },
+    {
+      "at": "2026-11-05T10:34:39",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Revision 10. 'Filled' replaced with 'solid area' so the pitfall can't be read as banning the fill attribute the bracket, ticks and corners are drawn with (review 1). Earlier: Revision 9. 'Possible isn't the bar' scoped so 'filled' doesn't rule out the in-header form's bar and keys (audit 1). Earlier: Revision 8. Window is two nodes (backing and keys, same origin), cost stated; 48 points (audit 1, 2). Under-header-only wording scoped so it doesn't contradict the in-header form (audit 3). Evidence lists both mocks and generators; rationale records the request and the reference (audit 4, review 1). P8 says handoff and README (review 2). Key gaps on whole pixels. Earlier: Revision 7. Owner asked that the map can also replace the grey header entirely and show a piano, as the stock multisampler page does, with no titles or values (owner's choice when asked). Adds the in-header form: at most four controls, static piano in y 0-20, no text slots, zone splits as wider gaps, bracket under the band; the trade of header values is stated for the handoff and catalog review; craft.md's stock-header rule and P8 get the matching exception. Owner then shared the stock multisampler page as reference: the band is a plain grey bar over the whole range with only the playable span drawn as keys. The in-header form and its mock now follow that approach (one-octave window, one 52-point outline, one node, fixed width; variable-width selections use the under-header form), drawn here rather than copied. Second mock (mock-header) added; lints clean with --own-header. Earlier: Revision 6. Matching-marks wording says what's true: shared corner form and 7 px arm, the bracket shorter, heavier and brighter (audit 1). Generator comment fixed (audit 2). Earlier: Revision 5. Bracket moved above the baseline with uprights centred over the split gaps, 1 px clear, symmetric (audit 1). Bracket pieces and frame corners now one closed outline each, the same 7 px arm, the frame at the map's ends; text says only weight and grey differ and why (audit 2, 4, review 1). Leader-line pitfall restated: turning is a house no-tilt rule, not a device limit (audit 3). Mock comment fixed (audit 5). Earlier: Revision 4. Mock is now a multisample synth's zone map, which a stack can't show; 'not P4' added (review 1). Map lines up with the drawing's frame, 6 px gap, sparse uniform ruler on whole pixels, open two-piece bracket, no rising ticks (review 2, audit 5, 6). Leader lines dropped, with a pitfall saying why (review 3, audit 1). Note flare dropped: the map is still (review 4, audit 2, 4). craft.md says 'no context strip' (review 5). Recording clause explains why a synth's own recording differs from a sampler (review 6); sampler reason reworded (audit 8). Keyboard numbers given per strip width with both worked cases (audit 3). Every-nth-frame rule for long tables (audit 7). Mock regenerated to match: map y 26-36, ruler #646464, bracket #AFAFAF (review 7)."
+    },
+    {
+      "at": "2026-11-05T10:34:39",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T10:37:08",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T10:37:08",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T10:37:08",
+      "stage": "gate",
+      "by": "operator-design gate",
+      "event": "pass",
+      "failed": []
+    }
+  ]
+}
