@@ -3,8 +3,9 @@
 The map replaces the stock header (the artwork covers y 0-20, which hides it; display.md, Artwork). The band is the
 whole range the engine maps as a plain grey bar, one 60 px segment per octave over eight octaves, an echo of the
 stock header's eight 60 px steps. Only the part the controls pick is drawn as real keys, at the same scale, in a
-brighter grey: one octave as one closed outline (white keys with the black keys and key gaps notched in), so it's
-one node and moves by sliding. No titles, no values, no text slots. The approach follows the stock multisampler page
+brighter grey: one octave as one closed outline (white keys with the black keys and key gaps notched in, 48 points)
+over a black backing. The keys and the backing are two nodes with the same origin, so the window moves by sliding
+both together. No titles, no values, no text slots. The approach follows the stock multisampler page
 (the whole range plain, the playable span as keys); the artwork is drawn here, not copied.
 
 Below the band is the drawing: the selected zone's sample as an envelope silhouette inside corner marks.
@@ -34,11 +35,11 @@ def rect(x, y, w, h):
 def octave_outline(x0):
     """One octave of keys as a single closed outline: the white keys' area, with each black key notched in from the
     top (to y 11) and each key gap notched in from the bottom (1 px wide). E-F and B-C gaps stop 2 px short of the
-    top so the outline stays one piece. 52 points."""
+    top so the outline stays one piece. 48 points."""
     black = {0: True, 1: True, 2: False, 3: True, 4: True, 5: True, 6: False}   # a black key after C D _ F G A _
     top, bottom = [(x0, 0)], []
     for k in range(1, 7):
-        gx = x0 + k * WK
+        gx = x0 + round(k * WK) + 0.5        # key gaps centred on whole pixels, so they render as one black column
         if black[k - 1]:
             top += [(gx - 2.5, 0), (gx - 2.5, 11), (gx + 2.5, 11), (gx + 2.5, 0)]
             bottom += [(gx - 0.5, BAND_H), (gx - 0.5, 11.5), (gx + 0.5, 11.5), (gx + 0.5, BAND_H)]
@@ -61,7 +62,7 @@ add(f'  <path d="{rect(0, 0, 480, 20)}" fill="#000000" stroke="none" stroke-widt
 for o in range(8):
     add(f'  <path d="{rect(o * OCT_W, 0, OCT_W - 1, BAND_H)}" fill="#4B4B4B" stroke="none" stroke-width="0"/>')
 
-# the part the controls pick: one octave drawn as keys, one outline, one node; it covers its segment
+# the part the controls pick: a black backing and one octave of keys, two nodes with the same origin, sliding together
 x0 = SEL_OCT * OCT_W
 add(f'  <path d="{rect(x0, 0, OCT_W - 1, BAND_H)}" fill="#000000" stroke="none" stroke-width="0"/>')
 add(f'  <path d="{path(octave_outline(x0))}" fill="#AFAFAF" stroke="none" stroke-width="0"/>')
