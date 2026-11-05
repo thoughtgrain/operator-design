@@ -78,13 +78,151 @@
     }
   ],
   "changesHash": "24bb31d59d046aa0",
-  "state": "audit",
+  "state": "awaiting_approval",
   "iteration": 10,
   "draftedBy": "claude-drafter@claude-code",
   "created": "2026-11-04T20:38:01",
-  "audit": null,
-  "review": null,
-  "gate": null,
+  "audit": {
+    "verdict": "pass",
+    "findings": [],
+    "by": "opxy-auditor@claude-code",
+    "at": "2026-11-05T10:37:08",
+    "changesHash": "24bb31d59d046aa0"
+  },
+  "review": {
+    "verdict": "pass",
+    "findings": [],
+    "by": "opxy-reviewer@claude-code",
+    "at": "2026-11-05T10:37:08",
+    "changesHash": "24bb31d59d046aa0"
+  },
+  "gate": {
+    "pass": true,
+    "checks": [
+      {
+        "check": "audit passed on these exact changes",
+        "ok": true,
+        "level": "error",
+        "detail": "audit: pass by opxy-auditor@claude-code"
+      },
+      {
+        "check": "review passed on these exact changes",
+        "ok": true,
+        "level": "error",
+        "detail": "review: pass by opxy-reviewer@claude-code"
+      },
+      {
+        "check": "drafter, auditor and reviewer are different agents",
+        "ok": true,
+        "level": "error",
+        "detail": "claude-drafter@claude-code / opxy-auditor@claude-code / opxy-reviewer@claude-code"
+      },
+      {
+        "check": "every op is valid and editable",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "applies cleanly to the current docs",
+        "ok": true,
+        "level": "error",
+        "detail": "opxy/patterns.md, opxy/catalog.json, opxy/categories.md, opxy/craft.md"
+      },
+      {
+        "check": "tokens.json and catalog.json are valid JSON",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "every pattern and library category exists",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "design passes stay at five variants",
+        "ok": true,
+        "level": "error",
+        "detail": "perPass = 5"
+      },
+      {
+        "check": "pattern numbers are unique",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "every pattern in patterns.md has a catalog.json row and vice versa",
+        "ok": true,
+        "level": "error",
+        "detail": "doc only: [], catalog only: []"
+      },
+      {
+        "check": "a new pattern is added",
+        "ok": true,
+        "level": "error",
+        "detail": "no new '## P<n> · Name' heading"
+      },
+      {
+        "check": "P16 has the house structure",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "P16 is in the categories.md table",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "P16 names the categories it fits",
+        "ok": true,
+        "level": "error",
+        "detail": "engine"
+      },
+      {
+        "check": "links resolve in opxy/categories.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/categories.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "links resolve in opxy/craft.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/craft.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "links resolve in opxy/patterns.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/patterns.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      }
+    ],
+    "at": "2026-11-05T10:37:08",
+    "changesHash": "24bb31d59d046aa0"
+  },
   "approval": null,
   "history": [
     {
@@ -353,17 +491,27 @@
       "stage": "audit",
       "by": "operator-design",
       "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T10:37:08",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T10:37:08",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T10:37:08",
+      "stage": "gate",
+      "by": "operator-design gate",
+      "event": "pass",
+      "failed": []
     }
-  ],
-  "reviewNotes": {
-    "verdict": "changes_requested",
-    "findings": [
-      "1. The evidence list doesn't include training/proposals/2026-11-04-context-strip/mock-header.svg or mock-header.png. P16's text cites mock-header.png as one of its two mocks, and it's the only evidence for the new in-header form, so both files belong in the evidence list for the record and the gate to check.",
-      "2. The P8 'Map header' bullet says to state the trade in the handoff only, while P16 says the handoff and the machine's README, because catalog review checks against the ux.md values convention. Make the P8 bullet say 'in the handoff and the README', since P8 is where designers look for header rules."
-    ],
-    "by": "opxy-reviewer@claude-code",
-    "at": "2026-11-05T10:23:06",
-    "changesHash": "33782d3d77b0f34c",
-    "iteration": 7
-  }
+  ]
 }
