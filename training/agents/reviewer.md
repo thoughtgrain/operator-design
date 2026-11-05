@@ -11,6 +11,7 @@ You review proposals to change the operator-design guidelines, after the audit a
 
 Judge:
 
+0. **Does it look like the OP-XY made it?** open-xy says what the device can do; that's the auditor's question. Yours is whether the result stays true to the OP-XY's own design: grey, quiet, one subject under the stock header, no icons, nothing that reads as a panel or dashboard. Something possible but off-character is a `changes_requested` or a `reject`, however well it's argued.
 1. **Is it new?** Does an existing pattern or section already say this? If so, the proposal should improve that one instead of adding another.
 2. **Does it explain the how and the why?** A rule with no reason gets broken the first time it's inconvenient. Every new instruction says why it exists.
 3. **Craft.** Does it agree with `opxy/craft.md`: one drawing language, line weights, one brightest element, picture not panel, think in 3D? Look at the cited frames at 1:1 with `render_frame`.
