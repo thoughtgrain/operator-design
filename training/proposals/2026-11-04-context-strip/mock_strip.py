@@ -2,7 +2,8 @@
 
 The drawing is a close-up of the sample the selected zone plays: its envelope as a silhouette inside corner marks.
 Above it, the map: the keyboard the engine covers, split into its zones, with a tick per C, and an open bracket
-(two corner pieces, the same marks that frame the close-up) around the zone the controls select.
+above the zone the controls select. Each bracket piece is two of the frame's corners joined by an upright,
+one closed outline; only weight and grey differ.
 
 Usage: python3 mock_strip.py OUT.svg
 """
@@ -12,9 +13,10 @@ import sys
 X0, X1 = 48, 432                  # the drawing's frame; the map lines up with it, not the header's columns
 OCTAVES = 6                        # the engine maps C1..C7
 KEY = (X1 - X0) / (12 * OCTAVES)   # 384 / 72 = 5.33 px a key here (width / keys, not 480 / 128)
-GAP, TOP, BASE = 6, 26, 33         # 6 px under the stock header (y 20); the map is y 26-36
+GAP, TOP, BASE = 6, 26, 33         # 6 px under the stock header (y 20); the map is y 26-35
+ARM, W, BH = 7, 1.5, 6             # shared corner arm; bracket weight; bracket height (y 26-32, 1 px clear of the baseline)
 ZONES = [0, 18, 30, 43, 51, 61, 72]   # zone splits, in keys from C1
-SEL = 2                            # the zone the controls select: keys 30..43 (F#3..G4)
+SEL = 2                            # the zone the controls select: keys 30..42 (F#3..F#4)
 FRAME_TOP, FRAME_BOT = 50, 204
 f = lambda v: f"{v:.2f}".rstrip("0").rstrip(".")
 
@@ -54,34 +56,36 @@ for o in range(OCTAVES + 1):
     x = min(kx(12 * o), X1 - 1)
     add(f'  <path d="{rect(x, BASE - 4, 1, 4)}" fill="#646464" stroke="none" stroke-width="0"/>')
 
-# the bracket: two open corner pieces around the selected zone (two nodes on the device; static here)
-xa, xb, arm, w = kx(ZONES[SEL]) - 2, kx(ZONES[SEL + 1]) + 2, 4, 1.5
-for x, s in ((xa, 1), (xb, -1)):
-    stem_x = x if s > 0 else x - w
-    add(f'  <path d="{path([(stem_x, TOP), (stem_x + w, TOP), (stem_x + w, TOP + 10), (stem_x, TOP + 10)])}" fill="#AFAFAF" stroke="none" stroke-width="0"/>')
-    for y in (TOP, TOP + 10 - w):
-        x0 = x if s > 0 else x - arm
-        add(f'  <path d="{rect(x0, y, arm, w)}" fill="#AFAFAF" stroke="none" stroke-width="0"/>')
+# the bracket: two pieces, each one closed 8-point outline, uprights centred over the selected zone's split gaps
+def piece(xc, s):
+    """A '[' (s=1) or ']' (s=-1): two frame corners joined by an upright, centred on x = xc."""
+    x, y = xc - s * W / 2, TOP
+    pts = [(x, y), (x + s * ARM, y), (x + s * ARM, y + W), (x + s * W, y + W),
+           (x + s * W, y + BH - W), (x + s * ARM, y + BH - W), (x + s * ARM, y + BH), (x, y + BH)]
+    return pts if s > 0 else list(reversed(pts))
+for k, s in ((ZONES[SEL], 1), (ZONES[SEL + 1], -1)):
+    gap_centre = kx(k) + 0.5          # the split gap runs kx-1 .. kx+2
+    add(f'  <path d="{path(piece(gap_centre, s))}" fill="#AFAFAF" stroke="none" stroke-width="0"/>')
 
-# the close-up's frame: corner marks in the same language as the bracket, quieter
-for (x, sx) in ((X0 - 6, 1), (X1 + 6, -1)):
-    for (y, sy) in ((FRAME_TOP, 1), (FRAME_BOT, -1)):
-        xs = x if sx > 0 else x - 1
-        ys = y if sy > 0 else y - 6
-        add(f'  <path d="{rect(xs, ys, 1, 6)}" fill="#646464" stroke="none" stroke-width="0"/>')
-        add(f'  <path d="{rect(x if sx > 0 else x - 6, y if sy > 0 else y - 1, 6, 1)}" fill="#646464" stroke="none" stroke-width="0"/>')
+# the close-up's frame: corner marks at the map's ends, the same 4 px arm, hairline, quieter; one outline each
+def corner(x, y, sx, sy, w=1):
+    pts = [(x, y), (x + sx * ARM, y), (x + sx * ARM, y + sy * w), (x + sx * w, y + sy * w), (x + sx * w, y + sy * ARM), (x, y + sy * ARM)]
+    return pts if sx * sy > 0 else list(reversed(pts))
+for x, sx in ((X0, 1), (X1, -1)):
+    for y, sy in ((FRAME_TOP, 1), (FRAME_BOT, -1)):
+        add(f'  <path d="{path(corner(x, y, sx, sy))}" fill="#646464" stroke="none" stroke-width="0"/>')
 
 # the drawing: the selected zone's sample as an envelope silhouette, bright edge, dark body
 N, MID = 31, (FRAME_TOP + FRAME_BOT) / 2
 def amp(t):
     attack = min(1.0, t / 0.05)
     return max(1.5, 66 * attack * math.exp(-2.6 * t) * (0.88 + 0.12 * math.sin(t * 23)))
-top = [(X0 + (X1 - X0) * i / (N - 1), MID - amp(i / (N - 1))) for i in range(N)]
+top = [(X0 + 8 + (X1 - X0 - 16) * i / (N - 1), MID - amp(i / (N - 1))) for i in range(N)]
 bot = [(x, MID + (MID - y) * 0.92) for x, y in reversed(top)]
 pts = top + bot
 pts = pts[N // 2:] + pts[:N // 2]           # start mid-way along a long edge
 add(f'  <path d="{path(pts)}" fill="#323232" stroke="#CDCDCD" stroke-width="2"/>')
 # the centre line, hairline guide
-add(f'  <path d="{rect(X0, round(MID), X1 - X0, 1)}" fill="#4B4B4B" stroke="none" stroke-width="0"/>')
+add(f'  <path d="{rect(X0 + 8, round(MID), X1 - X0 - 16, 1)}" fill="#4B4B4B" stroke="none" stroke-width="0"/>')
 add("</svg>")
 open(sys.argv[1], "w").write("\n".join(out) + "\n")
