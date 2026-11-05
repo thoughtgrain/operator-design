@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <!-- P16 Context strip, in-header form, mock rest frame (illustration only): a multisample synth. -->
+  <g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>
+  <path d="M 0 0 L 480 0 L 480 20 L 0 20 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 0 0 L 59 0 L 59 19 L 0 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 60 0 L 119 0 L 119 19 L 60 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 120 0 L 179 0 L 179 19 L 120 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 180 0 L 239 0 L 239 19 L 180 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 240 0 L 299 0 L 299 19 L 240 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 300 0 L 359 0 L 359 19 L 300 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 360 0 L 419 0 L 419 19 L 360 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 420 0 L 479 0 L 479 19 L 420 19 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 240 0 L 299 0 L 299 19 L 240 19 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 240 0 L 246.07 0 L 246.07 11 L 251.07 11 L 251.07 0 L 254.64 0 L 254.64 11 L 259.64 11 L 259.64 0 L 271.79 0 L 271.79 11 L 276.79 11 L 276.79 0 L 280.36 0 L 280.36 11 L 285.36 11 L 285.36 0 L 288.93 0 L 288.93 11 L 293.93 11 L 293.93 0 L 299 0 L 299 19 L 291.93 19 L 291.93 11.5 L 290.93 11.5 L 290.93 19 L 283.36 19 L 283.36 11.5 L 282.36 11.5 L 282.36 19 L 274.79 19 L 274.79 11.5 L 273.79 11.5 L 273.79 19 L 266.21 19 L 266.21 2 L 265.21 2 L 265.21 19 L 257.64 19 L 257.64 11.5 L 256.64 11.5 L 256.64 19 L 249.07 19 L 249.07 11.5 L 248.07 11.5 L 248.07 19 L 240 19 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path d="M 48 34 L 55 34 L 55 35 L 49 35 L 49 41 L 48 41 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 48 199 L 49 199 L 49 205 L 55 205 L 55 206 L 48 206 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 432 41 L 431 41 L 431 35 L 425 35 L 425 34 L 432 34 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 432 206 L 425 206 L 425 205 L 431 205 L 431 199 L 432 199 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 240 101.64 L 252.27 104.39 L 264.53 106.29 L 276.8 107.23 L 289.07 107.46 L 301.33 107.39 L 313.6 107.47 L 325.87 107.99 L 338.13 109 L 350.4 110.37 L 362.67 111.81 L 374.93 113.03 L 387.2 113.85 L 399.47 114.25 L 411.73 114.33 L 424 114.3 L 424 125.25 L 411.73 125.22 L 399.47 125.29 L 387.2 125.66 L 374.93 126.42 L 362.67 127.54 L 350.4 128.86 L 338.13 130.12 L 325.87 131.05 L 313.6 131.53 L 301.33 131.6 L 289.07 131.54 L 276.8 131.74 L 264.53 132.61 L 252.27 134.36 L 240 136.89 L 227.73 139.83 L 215.47 142.57 L 203.2 144.56 L 190.93 145.53 L 178.67 145.64 L 166.4 145.51 L 154.13 146.06 L 141.87 148.13 L 129.6 152.14 L 117.33 157.86 L 105.07 164.36 L 92.8 170.33 L 80.53 174.58 L 68.27 157.69 L 56 121.38 L 56 118.5 L 68.27 79.03 L 80.53 60.68 L 92.8 65.29 L 105.07 71.78 L 117.33 78.85 L 129.6 85.06 L 141.87 89.43 L 154.13 91.67 L 166.4 92.27 L 178.67 92.13 L 190.93 92.25 L 203.2 93.3 L 215.47 95.47 L 227.73 98.45 Z" fill="#323232" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 56 120 L 424 120 L 424 121 L 56 121 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+</svg>
