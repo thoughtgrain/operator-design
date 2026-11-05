@@ -282,6 +282,15 @@ class TestTraining(unittest.TestCase):
         self.assertIn("token changes bump source.ref", failed)
         self.assertIn("no library entry gets worse under the new tokens", failed)
 
+    def test_brief_carries_the_whole_diff(self):
+        big = PATTERN + "\n\n" + "\n".join(f"- Detail line {i} that makes this proposal long." for i in range(400))
+        ops = [dict(PATTERN_OPS[0], content=big)] + PATTERN_OPS[1:]
+        r = training.propose("new_pattern", "long brief", "s", "why", ops, by="drafter@t")
+        training.advance(r["id"])
+        brief = training.advance(r["id"])["brief"]
+        self.assertIn("Detail line 399", brief)
+        self.assertNotIn("diff truncated", brief)
+
     def test_revision_clears_verdicts(self):
         pid = self._through_review(PATTERN_OPS)
         training.revise(pid, note="tweak", by="drafter@t")
