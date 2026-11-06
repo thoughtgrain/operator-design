@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <title>marble · subject pass 01 · v4 clean · P13 capture · orthographic elevation</title>
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">pegs</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">6</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">drop</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1/8</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">bounce</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">scale</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">major</text>
+  </g>
+  <path d="M 206 28 L 274 28 L 247 42 L 233 42 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 226 45.75 L 236 45.75 L 236 44.25 L 226 44.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 244 45.75 L 254 45.75 L 254 44.25 L 244 44.25 Z" fill="#7D7D7D" stroke="none"/>
+  <circle cx="240" cy="58" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="225" cy="71" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="255" cy="71" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="210" cy="84" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="240" cy="84" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="270" cy="84" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="195" cy="97" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="225" cy="97" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="255" cy="97" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="285" cy="97" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="180" cy="110" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="210" cy="110" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="240" cy="110" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="270" cy="110" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="300" cy="110" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="165" cy="123" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="195" cy="123" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="225" cy="123" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="255" cy="123" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="285" cy="123" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <circle cx="315" cy="123" r="2.2" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path d="M 134.5 138 L 134.5 206 L 135.5 206 L 135.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 164.5 138 L 164.5 206 L 165.5 206 L 165.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 194.5 138 L 194.5 206 L 195.5 206 L 195.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 224.5 138 L 224.5 206 L 225.5 206 L 225.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 254.5 138 L 254.5 206 L 255.5 206 L 255.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 284.5 138 L 284.5 206 L 285.5 206 L 285.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 314.5 138 L 314.5 206 L 315.5 206 L 315.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 344.5 138 L 344.5 206 L 345.5 206 L 345.5 138 Z" fill="#646464" stroke="none"/>
+  <path d="M 135 206.5 L 345 206.5 L 345 205.5 L 135 205.5 Z" fill="#646464" stroke="none"/>
+  <path d="M 138 200.75 L 162 200.75 L 162 199.25 L 138 199.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 168 192.75 L 192 192.75 L 192 191.25 L 168 191.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 198 184.75 L 222 184.75 L 222 183.25 L 198 183.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 228 180.75 L 252 180.75 L 252 179.25 L 228 179.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 258 172.75 L 282 172.75 L 282 171.25 L 258 171.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 288 164.75 L 312 164.75 L 312 163.25 L 288 163.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 318 160.75 L 342 160.75 L 342 159.25 L 318 159.25 Z" fill="#7D7D7D" stroke="none"/>
+  <circle cx="173.5" cy="185.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 170.404 185.037 L 170.561 184.276 L 170.865 183.624 L 171.31 183.06 L 171.874 182.615 L 172.526 182.311 L 173.287 182.154 L 173.085 181.174 L 172.21 181.355 L 171.346 181.757 L 170.598 182.348 L 170.007 183.096 L 169.605 183.96 L 169.424 184.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="186.5" cy="185.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 183.404 185.037 L 183.561 184.276 L 183.865 183.624 L 184.31 183.06 L 184.874 182.615 L 185.526 182.311 L 186.287 182.154 L 186.085 181.174 L 185.21 181.355 L 184.346 181.757 L 183.598 182.348 L 183.007 183.096 L 182.605 183.96 L 182.424 184.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="203.5" cy="177.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 200.404 177.037 L 200.561 176.276 L 200.865 175.624 L 201.31 175.06 L 201.874 174.615 L 202.526 174.311 L 203.287 174.154 L 203.085 173.174 L 202.21 173.355 L 201.346 173.757 L 200.598 174.348 L 200.007 175.096 L 199.605 175.96 L 199.424 176.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="216.5" cy="177.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 213.404 177.037 L 213.561 176.276 L 213.865 175.624 L 214.31 175.06 L 214.874 174.615 L 215.526 174.311 L 216.287 174.154 L 216.085 173.174 L 215.21 173.355 L 214.346 173.757 L 213.598 174.348 L 213.007 175.096 L 212.605 175.96 L 212.424 176.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="203.5" cy="164.75" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 200.404 164.537 L 200.561 163.776 L 200.865 163.124 L 201.31 162.56 L 201.874 162.115 L 202.526 161.811 L 203.287 161.654 L 203.085 160.674 L 202.21 160.855 L 201.346 161.257 L 200.598 161.848 L 200.007 162.596 L 199.605 163.46 L 199.424 164.335 Z" fill="#646464" stroke="none"/>
+  <circle cx="216.5" cy="164.75" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 213.404 164.537 L 213.561 163.776 L 213.865 163.124 L 214.31 162.56 L 214.874 162.115 L 215.526 161.811 L 216.287 161.654 L 216.085 160.674 L 215.21 160.855 L 214.346 161.257 L 213.598 161.848 L 213.007 162.596 L 212.605 163.46 L 212.424 164.335 Z" fill="#646464" stroke="none"/>
+  <circle cx="233.5" cy="173.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 230.404 173.037 L 230.561 172.276 L 230.865 171.624 L 231.31 171.06 L 231.874 170.615 L 232.526 170.311 L 233.287 170.154 L 233.085 169.174 L 232.21 169.355 L 231.346 169.757 L 230.598 170.348 L 230.007 171.096 L 229.605 171.96 L 229.424 172.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="246.5" cy="173.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 243.404 173.037 L 243.561 172.276 L 243.865 171.624 L 244.31 171.06 L 244.874 170.615 L 245.526 170.311 L 246.287 170.154 L 246.085 169.174 L 245.21 169.355 L 244.346 169.757 L 243.598 170.348 L 243.007 171.096 L 242.605 171.96 L 242.424 172.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="233.5" cy="160.75" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 230.404 160.537 L 230.561 159.776 L 230.865 159.124 L 231.31 158.56 L 231.874 158.115 L 232.526 157.811 L 233.287 157.654 L 233.085 156.674 L 232.21 156.855 L 231.346 157.257 L 230.598 157.848 L 230.007 158.596 L 229.605 159.46 L 229.424 160.335 Z" fill="#646464" stroke="none"/>
+  <circle cx="246.5" cy="160.75" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 243.404 160.537 L 243.561 159.776 L 243.865 159.124 L 244.31 158.56 L 244.874 158.115 L 245.526 157.811 L 246.287 157.654 L 246.085 156.674 L 245.21 156.855 L 244.346 157.257 L 243.598 157.848 L 243.007 158.596 L 242.605 159.46 L 242.424 160.335 Z" fill="#646464" stroke="none"/>
+  <circle cx="240" cy="148.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 236.904 148.037 L 237.061 147.276 L 237.365 146.624 L 237.81 146.06 L 238.374 145.615 L 239.026 145.311 L 239.787 145.154 L 239.585 144.174 L 238.71 144.355 L 237.846 144.757 L 237.098 145.348 L 236.507 146.096 L 236.105 146.96 L 235.924 147.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="263.5" cy="165.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 260.404 165.037 L 260.561 164.276 L 260.865 163.624 L 261.31 163.06 L 261.874 162.615 L 262.526 162.311 L 263.287 162.154 L 263.085 161.174 L 262.21 161.355 L 261.346 161.757 L 260.598 162.348 L 260.007 163.096 L 259.605 163.96 L 259.424 164.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="276.5" cy="165.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 273.404 165.037 L 273.561 164.276 L 273.865 163.624 L 274.31 163.06 L 274.874 162.615 L 275.526 162.311 L 276.287 162.154 L 276.085 161.174 L 275.21 161.355 L 274.346 161.757 L 273.598 162.348 L 273.007 163.096 L 272.605 163.96 L 272.424 164.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="263.5" cy="152.75" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 260.404 152.537 L 260.561 151.776 L 260.865 151.124 L 261.31 150.56 L 261.874 150.115 L 262.526 149.811 L 263.287 149.654 L 263.085 148.674 L 262.21 148.855 L 261.346 149.257 L 260.598 149.848 L 260.007 150.596 L 259.605 151.46 L 259.424 152.335 Z" fill="#646464" stroke="none"/>
+  <circle cx="276.5" cy="152.75" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 273.404 152.537 L 273.561 151.776 L 273.865 151.124 L 274.31 150.56 L 274.874 150.115 L 275.526 149.811 L 276.287 149.654 L 276.085 148.674 L 275.21 148.855 L 274.346 149.257 L 273.598 149.848 L 273.007 150.596 L 272.605 151.46 L 272.424 152.335 Z" fill="#646464" stroke="none"/>
+  <circle cx="293.5" cy="157.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 290.404 157.037 L 290.561 156.276 L 290.865 155.624 L 291.31 155.06 L 291.874 154.615 L 292.526 154.311 L 293.287 154.154 L 293.085 153.174 L 292.21 153.355 L 291.346 153.757 L 290.598 154.348 L 290.007 155.096 L 289.605 155.96 L 289.424 156.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="306.5" cy="157.25" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 303.404 157.037 L 303.561 156.276 L 303.865 155.624 L 304.31 155.06 L 304.874 154.615 L 305.526 154.311 L 306.287 154.154 L 306.085 153.174 L 305.21 153.355 L 304.346 153.757 L 303.598 154.348 L 303.007 155.096 L 302.605 155.96 L 302.424 156.835 Z" fill="#646464" stroke="none"/>
+  <circle cx="255" cy="88.8" r="5" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="1"/>
+  <path d="M 252.501 88.64 L 252.63 88.015 L 252.875 87.49 L 253.235 87.035 L 253.69 86.675 L 254.215 86.43 L 254.84 86.301 L 254.638 85.321 L 253.897 85.474 L 253.16 85.819 L 252.523 86.323 L 252.019 86.96 L 251.674 87.697 L 251.521 88.438 Z" fill="#000000" stroke="none"/>
+</svg>
