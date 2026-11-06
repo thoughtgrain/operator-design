@@ -1,0 +1,60 @@
+{
+  "machine": "ebb",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: survey plan."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: patent section."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "star atlas",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: star atlas. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

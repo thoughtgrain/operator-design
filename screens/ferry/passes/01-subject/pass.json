@@ -1,0 +1,60 @@
+{
+  "machine": "ferry",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: oscilloscope trace."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "survey plan",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: survey plan. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

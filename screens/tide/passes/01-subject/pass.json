@@ -1,0 +1,60 @@
+{
+  "machine": "tide",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: oscilloscope trace."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: survey plan."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "patent section",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: patent section. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

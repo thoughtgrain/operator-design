@@ -1,0 +1,60 @@
+{
+  "machine": "pendula",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P6",
+      "patternName": "Figures",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": "Hand-drawn figures kept failing for toro; prefer geometric subjects.",
+      "brief": "Subject built on P6 Figures; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Hand-drawn figures kept failing for toro; prefer geometric subjects."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

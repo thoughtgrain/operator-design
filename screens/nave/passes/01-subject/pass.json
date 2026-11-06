@@ -1,0 +1,60 @@
+{
+  "machine": "nave",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: survey plan."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: patent section."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: star atlas."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "patternName": "One-bit ink",
+      "drawingLanguage": "engineering schematic",
+      "stretch": true,
+      "caution": "Figurative; toro moved off it to P10.",
+      "brief": "Subject built on P9 One-bit ink; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Figurative; toro moved off it to P10."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

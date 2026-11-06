@@ -1,0 +1,60 @@
+{
+  "machine": "spool",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

@@ -1,0 +1,60 @@
+{
+  "machine": "tilt",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

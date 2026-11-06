@@ -1,0 +1,60 @@
+{
+  "machine": "bell",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: patent section."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: star atlas."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P6",
+      "patternName": "Figures",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": true,
+      "caution": "Hand-drawn figures kept failing for toro; prefer geometric subjects.",
+      "brief": "Subject built on P6 Figures; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Hand-drawn figures kept failing for toro; prefer geometric subjects."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

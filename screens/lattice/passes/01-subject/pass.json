@@ -1,0 +1,60 @@
+{
+  "machine": "lattice",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: patent section."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: star atlas."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

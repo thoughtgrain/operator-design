@@ -1,0 +1,60 @@
+{
+  "machine": "kiln",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: star atlas."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: oscilloscope trace."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "typeset diagram",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: typeset diagram. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

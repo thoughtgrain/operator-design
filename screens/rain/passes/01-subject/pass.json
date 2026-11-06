@@ -1,0 +1,60 @@
+{
+  "machine": "rain",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "open",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: survey plan."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: patent section."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: star atlas."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "patternName": "One-bit ink",
+      "drawingLanguage": "engineering schematic",
+      "stretch": true,
+      "caution": "Figurative; toro moved off it to P10.",
+      "brief": "Subject built on P9 One-bit ink; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Figurative; toro moved off it to P10."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}
