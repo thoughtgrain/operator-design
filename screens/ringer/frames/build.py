@@ -333,19 +333,6 @@ class Frame:
             right.append((x - nx * h, y - ny * h))
         self.path(left + right[::-1], colour)
 
-    def hatch(self, poly, colour, gap=4.0, w=HAIR):
-        """45-degree hairlines >= 3 px apart, clipped to poly (craft.md: semi-opaque is hatched)."""
-        shape = Polygon(poly)
-        x0, y0, x1, y1 = shape.bounds
-        c = x0 - (y1 - y0)
-        from shapely.geometry import LineString
-        while c < x1:
-            seg = LineString([(c, y1 + 1), (c + (y1 - y0) + 2, y0 - 1)]).intersection(shape)
-            for g in getattr(seg, "geoms", [seg]):
-                if not g.is_empty and g.length > 2.5:
-                    self.ribbon(list(g.coords), w, colour)
-            c += gap
-
     def svg(self):
         head = ['<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',
                 f"  <title>ringer · straight on · {self.title}</title>",

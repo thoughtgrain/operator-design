@@ -439,19 +439,23 @@ def _scratch_ok(pts):
 
 
 def _skates():
-    """Long scratches where a stylus skated across the earlier turns, all running one way."""
+    """Long scratches where a stylus skated across the earlier turns, all running roughly one way."""
     out = []
-    for i, (cy, ang, L) in enumerate(((84, 27, 128), (112, 31, 118), (138, 24, 124), (98, 34, 96))):
-        for dx in [0.5 * j for j in range(0, 80)]:
-            for sgn in (1, -1):
-                cx = 268 + sgn * dx
+    for i, (ang, L) in enumerate(((36, 100), (31, 96), (40, 92), (33, 84))):
+        best = None
+        for cy in range(92, 132, 2):
+            for cx in range(220, 320, 2):
                 pts = scratch(cx, cy, ang, L, 3 * i + 1)
-                if _scratch_ok(pts):
-                    out.append(("scratch", cx, cy, pts))
-                    break
-            else:
-                continue
-            break
+                if not _scratch_ok(pts):
+                    continue
+                gap = min((min(math.dist(p, q) for p in pts for q in o[3]) for o in out), default=99)
+                if gap < 12:
+                    continue
+                score = -abs(gap - 22) if out else -abs(cy - 110)
+                if best is None or score > best[0]:
+                    best = (score, ("scratch", cx, cy, pts))
+        if best:
+            out.append(best[1])
     return out
 
 

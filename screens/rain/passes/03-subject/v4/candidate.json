@@ -1,0 +1,21 @@
+{
+  "variant": "v4",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "One heavy bead seen close and about to let go, its surface drawn as level contours that sag toward its heavy lower edge, with neighbouring beads and an old wiped trail cut by the frame's edges so the pane is only implied.",
+  "controls": [
+    "rate: how many small beads land around the heavy one (count, a few at 0.25 a beat to a crowd at 8), each a single-weight outline.",
+    "roof: how far up and down the glass the small landings scatter around the heavy bead (position spread, one row at 0 st to the full height at 36 st).",
+    "gust: the arriving streaks slant and the heavy bead's sag leans left or right (shape: its lowest contour shifts ±16 px), so the run it starts will go sideways.",
+    "puddle: the heavy bead's size before it goes (scale, radius about 1.5x from 0 to 100, with more contours); a full puddle is a big, slow-growing bead that sweeps everything below it when it runs."
+  ],
+  "reference": "contour line art (topographic level lines on a modelled dome); library/theseus-tower for one subject that stays and carries detail",
+  "risks": [
+    "Nested contours on a dome can read as a target (craft.md: no nested bands); the strong downward sag and the oblique camera are what keep it a drop, and they must survive every setting.",
+    "After the bead lets go the subject has left the frame: the screen is an empty lane until a new heavy bead gathers, which can read as broken.",
+    "Single weight means hierarchy is carried by grey alone (G7 bead, G5 contours, G4 neighbours); that's three steps but close to the grey-only-difference limit.",
+    "A heavy run moving with 7 contour nodes plus its lane is ~8 changed nodes a frame, fine, but the lane is a re-keyed path while it moves.",
+    "Muted: the bead's contours drop to G3 with only its outline left at G4; nothing lands, nothing lets go."
+  ]
+}

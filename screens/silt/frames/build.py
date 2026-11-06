@@ -518,7 +518,7 @@ def grain_target(k, n, geo, gscale, bx):
     c, t = geo["c"], geo["t"]
     xr = geo["right"][0]
     tilt = t / math.tan(math.radians(THMAX))
-    x = bx + (xr - 0.25 - bx) * 0.55 * tilt * (0.6 + 0.4 * jit(k, 3))
+    x = bx + max(0.0, xr - 0.22 - bx) * 0.8 * max(0.0, tilt) ** 0.6 * (0.6 + 0.4 * jit(k, 3))
     zs = surface_z(x, c, t)
     zf = 0.0 if abs(x) <= RB else (abs(x) - RB) / KW
     r = grain_r_px(k) * gscale / PPU

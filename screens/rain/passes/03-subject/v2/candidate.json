@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "A real wet pane seen at an angle and cut through at its right edge, so the glass shows its thickness as a hatched section and the heavy bead sitting on the cut shows its meniscus in profile, holding as much water as the puddle lets it.",
+  "controls": [
+    "rate: how many drops strike the face of the pane (count of foreshortened beads, sparse at 0.25 a beat to crowded at 8).",
+    "roof: how tall the wet band is on the glass (position/extent along the pane's height): every bead sits at its note's height, so 0 st is one line of beads and 36 st wets most of the pane.",
+    "gust: the incoming drops' streaks slant and the runs on the face drift sideways along the pane (shape, the trails bend toward or away from the cut).",
+    "puddle: the bead on the cut swells (scale of its profile and meniscus, about 1.5x from 0 to 100) because a fuller glass holds more before it lets go; when it does go, its run sweeps the face and replays what it took in."
+  ],
+  "reference": "opxy/reference patent-section language as used in craft.md (hatching for cut material); library/theseus-tower for black-over-outline bodies",
+  "risks": [
+    "The section is a narrow strip at the right edge: at 1:1 it can read as a post or a pipe rather than the glass's thickness, and the pane's other edges aren't drawn, so the angle is carried only by the foreshortened beads.",
+    "The subject (the bead on the cut) sits at the edge, not where the eye lands first; the bead field in the middle competes with it.",
+    "Gust's sideways push runs mostly along the camera's depth axis, so it's foreshortened; it needs checking at ±100 that it clears the 24 px floor.",
+    "Muted: no drops strike, the profile bead drops from G7 to G4 and the hatched section stays as the only clear structure."
+  ]
+}
