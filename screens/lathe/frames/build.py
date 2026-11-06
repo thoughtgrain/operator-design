@@ -4,17 +4,19 @@
 One camera, one model. The lacquer coat is the plane z = 0, the grooves run away from the eye
 along world y, and the near edge of the field is the coat's cut face (y = Y0), where every groove
 shows as a V notch. Light comes in low from the right, so each groove's left wall is the lit one:
-its left lip (the lit lip, Line weight) and its floor (hairline) bound that wall. The right walls,
-the lands and the uncut lacquer are black. The newest groove (the one the cutter is laying down
+its left lip (the lit lip) and its floor (hairline) bound that wall, drawn as a dark body. The right
+walls, the lands and the uncut lacquer stay black. The newest groove (the one the cutter is laying down
 now) is the one bright line; the turns already cut sit to its right, toward the rim; uncut lacquer
 is to its left. Lines dim with depth (the objective's depth of field) and stop at a round field stop
-centred below the frame.
+centred below the frame, so the far ends of the outer turns follow its arc.
 
 Controls, each on its own channel (an effect page gets nothing live, so nothing else moves):
     cut     shape: the newest groove's swing widens and its crests flatten (nodes 0, 1)
-    groove  count: further in, more earlier turns lie beside the newest one, the rim bevel steps out
-    wear    count: specks and short scratches on the lands between earlier turns
-    rumble  position: the newest lip shakes into a double exposure, two ghosts either side (nodes 2, 3)
+    groove  count: further in, more earlier turns lie beside the newest one (4 -> 7) and the rim
+            steps out of the field
+    wear    count: stylus-skate scratches across the earlier turns, then grains and short scratches
+            on the lands
+    rumble  position: the newest lip smears into a double exposure, two ghosts trailing it (nodes 2, 3)
 
     python3 screens/lathe/frames/build.py            # rest + per-control frames (svg + png)
     python3 screens/lathe/frames/build.py --sheets   # also before-after.png, contact.png, sweep.gif
@@ -34,7 +36,7 @@ W, H = 480, 220
 
 G0, G1, G2, G3, G4, G5, G6, BK = ("#CDCDCD", "#AFAFAF", "#969696", "#7D7D7D",
                                   "#646464", "#4B4B4B", "#323232", "#000000")
-PALETTE = [G0, G2, G3, G4, G5]
+PALETTE = [G0, G2, G3, G4, G5, G6]
 FONT = 'font-family="UniversNextPro-Light"'
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.0
 PARK = (640, 320)
@@ -43,12 +45,12 @@ NPTS = 32                       # centre-line points of a mutable ribbon -> 64-p
 # ------------------------------------------------------------------ model
 P = 0.138                       # groove pitch (world)
 HW = 0.033                      # groove half-width at the surface
-DEPTH = 0.042                   # 90 degree stylus: depth = half-width
+DEPTH = 0.042                   # a little deeper than a 90 degree V, so the notch reads at 1:1
 CENTRE_X = 156                  # principal point: the newest groove stands upright here
 Y_NEAR_SCREEN, Y_FAR_SCREEN = 166.0, 44.0
 FIELD = (228.0, 310.0, 270.0)   # field stop: centre x, centre y, radius (screen)
 TOP = 40.0                      # nothing above this (header clearance)
-SPLIT_SCREEN = 122.0            # depth of field: lips dim in three runs, walls dissolve at WALL_SCREEN
+SPLIT_SCREEN = 122.0            # depth of field: lips dim in three runs; walls and floors stop at WALL_SCREEN
 FAR_SCREEN = 70.0
 WALL_SCREEN = 58.0
 OLD_AMP = 0.014                 # earlier turns: swing as cut at 1.00
@@ -111,7 +113,8 @@ def amounts(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0):
     rumble_v = rumble ** 2
     return {
         "ratio": ratio,
-        "turns": DEFAULT_TURNS + int(math.floor(groove * (MAX_TURNS - DEFAULT_TURNS) + 0.5)),
+        # turns come in at groove 25, 58 and 92: spread so each half of the knob adds its share
+        "turns": DEFAULT_TURNS + int(math.floor(groove * (MAX_TURNS - DEFAULT_TURNS) + 0.25)),
         "wear": wear_v,
         "rumble": rumble_v,
         "values": [f"{ratio:.2f}", f"{round(groove * 100)}", f"{round(wear_v * 100)}", f"{round(rumble_v * 100)}"],
@@ -129,7 +132,7 @@ def signal(t, k):
 
 def swing(t, ratio):
     """The cutter: gain into a soft limit. Amplitude grows with the ratio and the crests flatten."""
-    amax = 0.052
+    amax = 0.081
     return amax * math.tanh(0.3 * ratio * signal(t, 0))
 
 
@@ -268,25 +271,16 @@ def run(k, side, ratio, y_from, y_to, n=None, clip=True):
         y = y_from + (y_to - y_from) * i / (n - 1)
         t = (y - Y0) / (Y1 - Y0)
         x = gx(k) + lateral(k, t, ratio)
-        if side == "lip":
-            q = CAM((x - HW, y, 0.0))
-        elif side == "mid":
-            q = CAM((x - HW / 2, y, -DEPTH / 2))
-        else:
-            q = CAM((x, y, -DEPTH))
+        q = CAM((x - HW, y, 0.0)) if side == "lip" else CAM((x, y, -DEPTH))
         if clip and not in_field(q):
             break
         pts.append(q)
     return pts
 
 
-def section_piece(k_from, k_to, x_start=None):
-    """The cut face's lit top edge: from turn k_from's shadow lip (or x_start) to turn k_to's notch."""
-    pts = []
-    if x_start is not None:
-        pts.append(CAM((x_start, Y0, 0.0)))
-    else:
-        pts.append(CAM((gx(k_from) + HW, Y0, 0.0)))
+def section_piece(k_from, k_to):
+    """The cut face's lit top edge: from turn k_from's shadow lip across the land into turn k_to's notch."""
+    pts = [CAM((gx(k_from) + HW, Y0, 0.0))]
     c = gx(k_to)
     pts += [CAM((c - HW, Y0, 0.0)), CAM((c - 0.003, Y0, -DEPTH)), CAM((c + 0.003, Y0, -DEPTH)),
             CAM((c + HW, Y0, 0.0))]
@@ -371,8 +365,8 @@ def runs(pts, cuts):
 
 
 def turn_parts(k):
-    """An earlier turn, cut at 1.00: its notch in the cut face, its lit wall as a dark body that the
-    depth of field dissolves halfway up, then its lip (three runs, dimming) and floor (two runs)."""
+    """An earlier turn, cut at 1.00: its notch in the cut face, its lit wall as a dark body, then its
+    lip (three runs, dimming with depth) and floor (two runs)."""
     lip = run(k, "lip", 1.0, Y0, Y1 + 0.5, n=48)
     floor = run(k, "floor", 1.0, Y0, Y_WALL, n=32)
     l1, l2, l3 = runs(lip, (SPLIT_SCREEN, FAR_SCREEN))
@@ -393,6 +387,15 @@ def wall_body(k, ratio, n=24, clip=True):
             m += 1
         lip, floor = lip[:m], floor[:m]
     return lip + floor[::-1]
+
+
+def big_enough(pts, px=4.0):
+    """Drop slivers the field stop leaves behind: under ~4 px they don't read at 1:1."""
+    if len(pts) < 2:
+        return False
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    return max(xs) - min(xs) >= px or max(ys) - min(ys) >= px
 
 
 def draw_part(F, part, node=None, shown=True):
@@ -550,14 +553,15 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
               CAM((0.003, Y0, -DEPTH)), CAM((HW, Y0, 0.0))], LINE, G3)
     for k in range(1, DEFAULT_TURNS + 1):
         for part in turn_parts(k):
-            draw_part(F, part)
+            if big_enough(part[1]):
+                draw_part(F, part)
 
     node = 4
     # --- groove: turns 4..7 appear as the cutter is further in (5 nodes each)
     for k in range(DEFAULT_TURNS + 1, MAX_TURNS + 1):
         shown = k <= turns
         for part in turn_parts(k):
-            if len(part[1]) >= 2:
+            if big_enough(part[1]):
                 draw_part(F, part, node=node, shown=shown)
                 node += 1
     # --- groove: the rim just outside the last turn, or the open field at the last (2 nodes per position)
@@ -565,7 +569,7 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
         shown = n == turns
         edge, fall = rim_parts(n)
         for pts, c in ((edge, G4 if n < MAX_TURNS else G3), (fall, G4)):
-            if pts and len(pts) >= 2:
+            if pts and big_enough(pts):
                 F.ribbon(pts, LINE, c, node=node, shown=shown)
                 node += 1
 

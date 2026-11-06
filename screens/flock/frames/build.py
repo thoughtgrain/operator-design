@@ -39,7 +39,10 @@ V5_PNG = HERE.parent / "passes" / "02-subject" / "v5" / "rest.png"
 # ------------------------------------------------------------------ greys and weights
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
-LID, FRONT, END = "#464646", "#2C2C2C", "#161616"     # the box's faces, by their light (from the upper left)
+# the box's faces, flat greys by their light (from above and the right): lid lightest, front mid, end darkest.
+# Stock #4B4B4B for the lid would put #969696 parts on it at 2.95:1, a hair under 3:1, so the lid is a
+# step darker; there is no stock grey between #323232 and black for the end.
+LID, FRONT, END = "#464646", "#323232", "#1A1A1A"
 HAIR, LINE, SUBJ = 1.1, 1.5, 2.25
 
 SCALES = {  # enum order from definition.json: pent, maj, min, dor, lyd, chr
@@ -71,7 +74,7 @@ class State:
     scale: float = 0.0          # control position 0..1 (enum)
     # animation (all zero at rest)
     crank_turn: float = 0.0     # extra crank angle while playing, degrees (rest parks at the speed angle)
-    drift: float = 0.0          # flock centre offset along the slot, world units
+    ride: tuple = (0.0,) * 8    # how far each bird has ridden along the slot since rest, world units
     lit: int = 4                # the bird that played last / is playing now
     pluck: float = 0.0          # 0..1: how hard the lit bird's tine is flicking now (decays to 0)
     bob: float = 0.0            # px the lit bird is lifted by its pluck
@@ -147,12 +150,13 @@ CAM = orbit(-9, 29, 60, (0.1, 0.0, 0.0), 32.5, (240, 147))
 # the box (world units): long axis x, lid at y = 0, front face at z = BZ0 facing the camera
 BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.7, 4.7, -0.9, 0.0, -1.35, 1.05
 SLOT_Z0, SLOT_Z1 = 0.42, 0.58                 # the groove the rods ride in, just behind the comb's tips
-SLOT_X0, SLOT_X1 = BX0 + 0.45, BX1 - 0.45
+SLOT_X0, SLOT_X1 = BX0 + 0.4, BX1 - 1.85     # the right end of the lid is the crank's
 TIP_Z = 0.3                                 # the comb's tips line up here, where the picks reach
 BAR_Z = -1.18                                 # the comb's bar, stepped: long tines root further forward
 COMB_X0, COMB_X1 = SLOT_X0 + 0.15, SLOT_X1 - 0.15
-CRANK_C = (BX1 - 0.95, BY0 + 0.55, BZ0)        # the crank's boss, on the front face
-CRANK_R = 1.45
+CRANK_C = (BX1 - 0.95, BY0 + 0.75, BZ0)        # the crank's boss, on the front face
+CRANK_R = 1.3
+KNOB_RB, KNOB_RT, KNOB_R = 10.0, 5.0, 9.5     # px: the arm's round end, its width at the knob, the knob
 
 # ------------------------------------------------------------------ the flock on its rods
 # Eight birds on four tiers, two a tier, the pair on a tier always more than a bird's length
@@ -167,15 +171,18 @@ BIRDS = [(-1.00, "A", 0.06), (-0.72, "B", -0.04), (-0.44, "C", 0.05), (-0.16, "D
 STRAYS = {0: -1, 6: +1, 7: +1}
 LEAN_MAX = math.radians(32)
 SLIDE_MAX = 0.9
-BIRD_LEN = 0.9                                # world units, beak to tail
+BIRD_LEN = 0.93                               # world units, beak to tail
 
 
 def spread(cohere: float) -> float:
     """Half-width of the flock along the slot: most of the comb at 0, three or four tines at 100."""
-    return 1.25 + (3.75 - 1.25) * (1 - cohere)
+    return 1.25 + (3.2 - 1.25) * (1 - cohere)
 
 
-CENTRE = 0.0 - 0.16 * spread(0.5)              # the lit bird (offset 0.16) sits on the middle tine at the defaults
+_PENT_PITCH = (COMB_X1 - COMB_X0) / 10
+# the flock sits over the middle of the comb, nudged so the lit bird (offset 0.16) is on a tine at the defaults
+CENTRE = COMB_X0 + _PENT_PITCH * round(((COMB_X0 + COMB_X1) / 2 + 0.16 * spread(0.5) - COMB_X0) / _PENT_PITCH) \
+    - 0.16 * spread(0.5)
 
 
 def tines(st: State):
@@ -196,18 +203,19 @@ def nearest_tine(x: float, ts) -> int:
 def rods(st: State):
     """Per bird: foot (world), lean (radians, + leans right), rod length."""
     W = spread(st.cohere)
-    centre = CENTRE + st.drift
-    ts = tines(st)
+    centre = CENTRE
     out = []
     for k, (o, tier, jit) in enumerate(BIRDS):
-        x = centre + W * o
+        x = centre + W * o + st.ride[k]
         lean = 0.0
         if k in STRAYS:
-            x += STRAYS[k] * SLIDE_MAX * st.scatter
-            lean = STRAYS[k] * LEAN_MAX * st.scatter
+            side = STRAYS[k]
+            # slide out, but stop short of the slot's end, leaving room for any stray further out
+            further = sum(1 for j, sj in STRAYS.items() if sj == side and BIRDS[j][0] * side > o * side)
+            end = (SLOT_X1 if side > 0 else SLOT_X0) - side * (0.12 + 0.4 * further)
+            x += side * max(0.0, min(SLIDE_MAX * st.scatter, (end - x) * side))
+            lean = side * LEAN_MAX * st.scatter
         x = max(SLOT_X0 + 0.12, min(SLOT_X1 - 0.12, x))
-        if k == st.lit:                          # the bird that played: its pick sits on its tine
-            x = ts[nearest_tine(x, ts)][0]
         out.append(((x, BY1, (SLOT_Z0 + SLOT_Z1) / 2), lean, TIER[tier] + jit))
     return out
 
@@ -284,6 +292,26 @@ class Frame:
         self.poly([(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)],
                   colour)
 
+    def ribbon_path(self, pts, w, colour):
+        """A polyline of width w as one closed filled ribbon, mitred at the joints."""
+        h = w / 2
+        left, right = [], []
+        for k, (x, y) in enumerate(pts):
+            if k == 0:
+                dx, dy = pts[1][0] - x, pts[1][1] - y
+            elif k == len(pts) - 1:
+                dx, dy = x - pts[k - 1][0], y - pts[k - 1][1]
+            else:
+                ax, ay = x - pts[k - 1][0], y - pts[k - 1][1]
+                bx, by = pts[k + 1][0] - x, pts[k + 1][1] - y
+                la, lb = math.hypot(ax, ay) or 1, math.hypot(bx, by) or 1
+                dx, dy = ax / la + bx / lb, ay / la + by / lb
+            ln = math.hypot(dx, dy) or 1
+            nx, ny = -dy / ln, dx / ln
+            left.append((x + nx * h, y + ny * h))
+            right.append((x - nx * h, y - ny * h))
+        self.poly(left + right[::-1], colour)
+
     def svg(self, header: list[str]) -> str:
         head = TEMPLATE.read_text(encoding="utf-8")
         s0 = head.index('  <g id="preview_canvas">')
@@ -332,18 +360,19 @@ def draw(st: State, title: str) -> Frame:
     pad = 0.5 * pitch
     feet = rods(st)
     lit_tine = nearest_tine(feet[st.lit][0][0], ts)
-    # the bar: a dark steel block on the lid, its back edge stepping with the tongues' lengths
+    # the tongues: thin steel lines, all cut full length; the bar drawn over them sets how much of each shows
+    for i, (x, L) in enumerate(ts):
+        flick = 0.06 * st.pluck if i == lit_tine else 0.0     # tip pushed sideways by the pick, ringing down
+        playing = i == lit_tine and st.playing
+        F.ribbon(CAM((x, BY1, BAR_Z + 0.04)), CAM((x + flick, BY1, TIP_Z)),
+                 SUBJ if playing else LINE, G6 if playing else G5)
+    # the bar: a dark steel block on the lid, its back edge stepping with the tongues' lengths (long, low
+    #     tines on the left); one mutable outline on the device, since its steps follow the scale
     bar = [(COMB_X0 - pad, BY1, BAR_Z), (COMB_X1 + pad, BY1, BAR_Z)]
     for i in range(n - 1, -1, -1):
         x, L = ts[i]
         bar += [(x + pad, BY1, TIP_Z - L), (x - pad, BY1, TIP_Z - L)]
     F.poly(C(bar), FRONT, G5, HAIR)
-    # the tongues: thin steel lines from the bar to the tip line
-    for i, (x, L) in enumerate(ts):
-        flick = 0.06 * st.pluck if i == lit_tine else 0.0     # tip pushed sideways by the pick, ringing down
-        playing = i == lit_tine and st.playing
-        F.ribbon(CAM((x, BY1, TIP_Z - L - 0.03)), CAM((x + flick, BY1, TIP_Z)),
-                 SUBJ if playing else LINE, G6 if playing else G5)
 
     # --- the crank on the front face: arm round the boss, a stud for the axle, the knob end-on;
     #     it parks at the speed angle and turns about the stud (a turn in the screen's plane)
@@ -354,24 +383,26 @@ def draw(st: State, title: str) -> Frame:
     ux, uy = math.sin(ang), -math.cos(ang)
     nx, ny = -uy, ux
     tip = (cc[0] + R * ux, cc[1] + R * uy)
-    rb, rt = 8.0, 4.0
+    rb, rt = KNOB_RB, KNOB_RT
     arm = [(cc[0] + rb * (math.cos(a) * nx - math.sin(a) * ux), cc[1] + rb * (math.cos(a) * ny - math.sin(a) * uy))
            for a in [math.radians(t) for t in range(0, 181, 15)]]
     arm += [(tip[0] - nx * rt, tip[1] - ny * rt), (tip[0] + nx * rt, tip[1] + ny * rt)]
     F.poly(arm, G0, G5, LINE)
     F.poly([(cc[0] + 2.8 * math.cos(2 * math.pi * k / 12), cc[1] + 2.8 * math.sin(2 * math.pi * k / 12))
             for k in range(12)], G5)
-    F.poly([(tip[0] + 7.5 * math.cos(2 * math.pi * k / 24), tip[1] + 7.5 * math.sin(2 * math.pi * k / 24))
+    F.poly([(tip[0] + KNOB_R * math.cos(2 * math.pi * k / 24), tip[1] + KNOB_R * math.sin(2 * math.pi * k / 24))
             for k in range(24)], G0, G5, LINE)
 
-    # --- rods (each with its pick, a short leg from the foot forward over the comb's tips), then the birds
+    # --- rods: each rod runs down through its carriage in the slot and its lower end is the pick, which
+    #     reaches forward over the comb's tips; rod and pick are one ribbon and lean together (a lever
+    #     on the slot), so a leaning rod is one node turned about its foot
     for k, (foot, lean, h) in enumerate(feet):
-        lit = k == st.lit
-        hot = lit and st.playing
-        flick = 0.06 * st.pluck if lit else 0.0
-        F.ribbon(CAM(foot), CAM((foot[0] + flick, BY1, TIP_Z - 0.08)), 1.5, G6 if hot else G5)
-        top = rod_top(foot, lean, h)
-        F.ribbon(CAM(foot), CAM(top), 1.5, G5)
+        f0 = CAM(foot)
+        pe = CAM((foot[0], BY1, TIP_Z - 0.08))
+        vx, vy = pe[0] - f0[0], pe[1] - f0[1]
+        ca, sa = math.cos(lean), math.sin(lean)
+        pe = (f0[0] + vx * ca - vy * sa, f0[1] + vx * sa + vy * ca)    # the pick swings the other way
+        F.ribbon_path([pe, f0, CAM(rod_top(foot, lean, h))], 1.5, G5)
     for k, (foot, lean, h) in enumerate(feet):
         lit = k == st.lit
         top = rod_top(foot, lean, h)
@@ -426,6 +457,19 @@ def bird_gaps(st: State) -> float:
         - SUBJ / 2 - LINE / 2
 
 
+def birds_on_box(st: State) -> int:
+    """How many birds (body or wing) overlap the box's faces on screen: those need 3:1 against the lid."""
+    C = lambda pts: [CAM(p) for p in pts]
+    faces = [C([(BX0, BY1, BZ0), (BX1, BY1, BZ0), (BX1, BY1, BZ1), (BX0, BY1, BZ1)]),
+             C([(BX0, BY1, BZ0), (BX1, BY1, BZ0), (BX1, BY0, BZ0), (BX0, BY0, BZ0)])]
+    n = 0
+    for f, l, h in rods(st):
+        top = rod_top(f, l, h)
+        parts = (bird_outline(top, l), wing_outline(top, l, st.speed))
+        n += any(poly_gap(a, face) == 0.0 for a in parts for face in faces)
+    return n
+
+
 def top_of_drawing(st: State) -> float:
     feet = rods(st)
     return min(min(y for _, y in bird_outline(rod_top(f, l, h), l, st.bob if k == st.lit else 0)
@@ -458,37 +502,64 @@ def frames() -> list[Path]:
 
 
 def phrase() -> list[State]:
-    """A short phrase at the defaults: eight notes, the crank turning, the flock riding, then the coast."""
+    """A short phrase at the defaults, then the settle.
+
+    The flock's centre drifts along the slot (its model), but a bird is only redrawn when it crosses
+    into a new cell, which is its note: it eases to where the model has it (0.15 s), its pick plucks
+    the tine under it (the tine rings down sideways), it bobs and takes the bright outline. The crank
+    turns while notes come, a turn a beat at speed 1.00 (120 bpm here), and after the last note it
+    coasts on with the release to its park angle (the speed setting) and stops. The phrase is sparse
+    (four notes a second, not the sixteen eight birds make at 1.00) so each pluck can be seen.
+    """
     fps = 20
-    order = [2, 5, 3, 6, 1, 4, 2, 7]             # which bird crosses into a new cell, note by note
-    step = 0.25                                   # s between notes (speed 1.00 at 120 bpm, sketch)
-    out = []
-    t_end = step * len(order)
-    total = t_end + 1.2
+    order = [2, 5, 3, 6, 1, 4, 2, 7, 5, 4]       # which bird crosses into a new cell, note by note
+    step = 0.25                                   # s between notes
+    lead = 0.5                                    # s of rest before the first note
+    t_end = lead + step * len(order)
+    release = 0.4                                 # s: the coast follows the note's release
+    total = t_end + release + 0.8
+    rate = 360 * speed_ratio(DEFAULT.speed) * 120 / 60          # degrees a second
     crank = 0.0
-    drift = 0.0
-    lit = DEFAULT.lit
+    ride_from = [0.0] * 8
+    ride_to = [0.0] * 8
+    ride_t = [-9.0] * 8
+    lit, last_n = DEFAULT.lit, -1
+    out = []
     for f in range(int(total * fps)):
         t = f / fps
-        playing = t < t_end + 0.35
-        # crank: one turn a beat at speed 1.00 while notes come, then an ease-out coast to its park angle
-        if t < t_end:
-            crank += 360 * speed_ratio(DEFAULT.speed) / 2 / fps * 2
-            drift = 0.55 * math.sin(math.pi * t / t_end)
-        n = min(len(order) - 1, int(t / step)) if t < t_end else len(order) - 1
-        since = t - n * step
-        lit = order[n]
-        pluck = math.exp(-since / 0.12) * math.cos(2 * math.pi * since / 0.09) if since < 0.45 else 0.0
-        bob = 4.0 * math.exp(-since / 0.07) if since < 0.3 else 0.0
-        if t >= t_end:
-            k = 1 - math.exp(-(t - t_end) / 0.18)
+        if lead <= t < t_end:
+            n = int((t - lead) / step)
+            if n != last_n:                       # a note: this bird crossed into a new cell
+                last_n, k = n, order[n]
+                drift = 0.75 * math.sin(math.pi * (t - lead) / (t_end - lead))
+                ride_from[k] = ride_now(ride_from[k], ride_to[k], t - ride_t[k])
+                ride_to[k], ride_t[k] = drift, t
+                lit = k
+            crank += rate / fps
+            since = t - (lead + n * step)
+        elif t >= t_end:
+            since = t - (lead + (len(order) - 1) * step)
+        else:
+            since = 99.0
+        if t >= t_end:                             # coast: ease out to the next park angle, then still
+            k_ = min(1.0, (t - t_end) / release)
             target = math.ceil(crank / 360) * 360
-            crank_draw = crank + (target - crank) * k
+            crank_draw = crank + (target - crank) * (1 - (1 - k_) ** 3)
         else:
             crank_draw = crank
-        out.append(replace(DEFAULT, crank_turn=crank_draw % 360, drift=drift, lit=lit, pluck=pluck,
-                           bob=round(bob), playing=playing and since < 0.3))
+        ride = tuple(ride_now(ride_from[k], ride_to[k], t - ride_t[k]) for k in range(8))
+        pluck = math.exp(-since / 0.1) * math.cos(2 * math.pi * since / 0.1) if since < 0.4 else 0.0
+        bob = 4.0 * math.exp(-since / 0.06) if since < 0.25 else 0.0
+        out.append(replace(DEFAULT, crank_turn=crank_draw % 360, ride=ride, lit=lit, pluck=round(pluck, 2),
+                           bob=round(bob), playing=since < 0.2))
     return out
+
+
+def ride_now(a: float, b: float, dt: float) -> float:
+    """A bird's ride position dt seconds after its note: exponential ease-out, settled by 0.15 s."""
+    if dt >= 0.15:
+        return b
+    return b + (a - b) * math.exp(-dt / 0.035)
 
 
 def gif(states: list[State], path: Path, scratch: Path) -> None:
@@ -544,6 +615,7 @@ def main(argv: list[str]) -> int:
     if "--check" in argv:
         print("contrast (WCAG):")
         for what, a, b in (("bird #969696 on lid", G5, LID), ("lit bird #CDCDCD on lid", G7, LID),
+                           ("#969696 on stock #4B4B4B (not used)", G5, G2),
                            ("rod/pick/tine #969696 on lid", G5, LID), ("crank #969696 on front", G5, FRONT),
                            ("bird #969696 on black", G5, G0), ("box edge #7D7D7D on black", G4, G0),
                            ("lid vs front", LID, FRONT), ("front vs end", FRONT, END), ("lid vs black", LID, G0)):
@@ -553,7 +625,10 @@ def main(argv: list[str]) -> int:
                 [(replace(DEFAULT, cohere=c, speed=v, scatter=t), f"corner cohere {c:.0%} speed {v:.0%} scatter {t:.0%}")
                  for c in (0.0, 1.0) for v in (0.0, 1.0) for t in (0.0, 1.0)]:
             print(f"  {name}: closest birds {bird_gaps(st):.1f} px apart (stroke to stroke), "
-                  f"top of drawing y {top_of_drawing(st):.1f}")
+                  f"top of drawing y {top_of_drawing(st):.1f}, birds over the box {birds_on_box(st)}")
+        cc, Rp = CAM(CRANK_C), CRANK_R * CAM.ppu(CRANK_C)
+        print(f"  crank through a full turn: y {cc[1] - Rp - KNOB_R - 0.75:.1f} to {cc[1] + Rp + KNOB_R + 0.75:.1f} "
+              f"(screen ends at 220)")
         print(f"  black body at rest: {100 * black_fraction(HERE / 'rest.png'):.1f}%")
         for p in made:
             print(f"  {p.stem}: black {100 * black_fraction(p.with_suffix('.png')):.1f}%")
