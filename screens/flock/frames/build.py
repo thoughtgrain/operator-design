@@ -531,7 +531,7 @@ def phrase() -> list[State]:
             n = int((t - lead) / step)
             if n != last_n:                       # a note: this bird crossed into a new cell
                 last_n, k = n, order[n]
-                drift = 0.75 * math.sin(math.pi * (t - lead) / (t_end - lead))
+                drift = 0.3 * math.sin(math.pi * (t - lead) / (t_end - lead))
                 ride_from[k] = ride_now(ride_from[k], ride_to[k], t - ride_t[k])
                 ride_to[k], ride_t[k] = drift, t
                 lit = k
@@ -626,6 +626,8 @@ def main(argv: list[str]) -> int:
                  for c in (0.0, 1.0) for v in (0.0, 1.0) for t in (0.0, 1.0)]:
             print(f"  {name}: closest birds {bird_gaps(st):.1f} px apart (stroke to stroke), "
                   f"top of drawing y {top_of_drawing(st):.1f}, birds over the box {birds_on_box(st)}")
+        ph = phrase()
+        print(f"  motion phrase: {len(ph)} frames, closest birds {min(bird_gaps(st) for st in ph):.1f} px")
         cc, Rp = CAM(CRANK_C), CRANK_R * CAM.ppu(CRANK_C)
         print(f"  crank through a full turn: y {cc[1] - Rp - KNOB_R - 0.75:.1f} to {cc[1] + Rp + KNOB_R + 0.75:.1f} "
               f"(screen ends at 220)")
