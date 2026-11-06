@@ -40,10 +40,12 @@ V5_PNG = HERE.parent / "passes" / "02-subject" / "v5" / "rest.png"
 # ------------------------------------------------------------------ greys and weights
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
-# the box's faces, flat greys by their light (from above and the right): lid lightest, front mid, end darkest.
-# Stock #4B4B4B for the lid would put #969696 parts on it at 2.95:1, a hair under 3:1, so the lid is a
-# step darker; there is no stock grey between #323232 and black for the end.
-LID, FRONT, END = "#464646", "#323232", "#1A1A1A"
+# Fill is selective (owner, 2026-11-06: "less fill, and more selective fill"). The lid and front stay black
+# with crisp outlines, so the birds, rods and comb read over black; the only filled faces are the end in
+# shadow (one stock step, which is what gives the box its weight) and the comb's steel bar (the mechanism
+# the picks play), plus the crank, the part in the hand, whose turn is speed. All stock greys.
+LID, FRONT, END = "#000000", "#000000", "#323232"
+BAR = "#323232"
 HAIR, LINE, SUBJ = 1.1, 1.5, 2.25
 
 SCALES = {  # enum order from definition.json: pent, maj, min, dor, lyd, chr
@@ -373,7 +375,7 @@ def draw(st: State, title: str) -> Frame:
     for i in range(n - 1, -1, -1):
         x, L = ts[i]
         bar += [(x + pad, BY1, TIP_Z - L), (x - pad, BY1, TIP_Z - L)]
-    F.poly(C(bar), FRONT, G5, HAIR)
+    F.poly(C(bar), BAR, G5, HAIR)
 
     # --- the crank on the front face: arm round the boss, a stud for the axle, the knob end-on;
     #     it parks at the speed angle and turns about the stud (a turn in the screen's plane)
@@ -388,11 +390,11 @@ def draw(st: State, title: str) -> Frame:
     arm = [(cc[0] + rb * (math.cos(a) * nx - math.sin(a) * ux), cc[1] + rb * (math.cos(a) * ny - math.sin(a) * uy))
            for a in [math.radians(t) for t in range(0, 181, 15)]]
     arm += [(tip[0] - nx * rt, tip[1] - ny * rt), (tip[0] + nx * rt, tip[1] + ny * rt)]
-    F.poly(arm, G0, G5, LINE)
+    F.poly(arm, G2, G5, LINE)            # the crank, the part in the hand, is the third selective fill
     F.poly([(cc[0] + 2.8 * math.cos(2 * math.pi * k / 12), cc[1] + 2.8 * math.sin(2 * math.pi * k / 12))
             for k in range(12)], G5)
     F.poly([(tip[0] + KNOB_R * math.cos(2 * math.pi * k / 24), tip[1] + KNOB_R * math.sin(2 * math.pi * k / 24))
-            for k in range(24)], G0, G5, LINE)
+            for k in range(24)], G2, G5, LINE)
 
     # --- rods: each rod runs down through its carriage in the slot and its lower end is the pick, which
     #     reaches forward over the comb's tips; rod and pick are one ribbon and lean together (a lever
@@ -627,7 +629,7 @@ def main(argv: list[str]) -> int:
                            ("#969696 on stock #4B4B4B (not used)", G5, G2),
                            ("rod/pick/tine #969696 on lid", G5, LID), ("crank #969696 on front", G5, FRONT),
                            ("bird #969696 on black", G5, G0), ("box edge #7D7D7D on black", G4, G0),
-                           ("lid vs front", LID, FRONT), ("front vs end", FRONT, END), ("lid vs black", LID, G0)):
+                           ("end vs black", END, G0), ("tine #969696 on bar", G5, BAR)):
             print(f"  {what}: {contrast(a, b):.2f}")
         for st, name in [(DEFAULT, "rest")] + [(replace(DEFAULT, **{f: v / 100}), f"{f}-{v}")
                                                 for f, _ in CONTROL_FRAMES for v in (0, 50, 100)] + \

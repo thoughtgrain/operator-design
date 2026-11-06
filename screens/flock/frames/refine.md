@@ -90,3 +90,13 @@ The owner picked v5 from subject pass 02 and asked for "v5 slightly simplified, 
 - **cohere 100 and speed 4.00 together:** the raised wings of the gathered knot come within about 0.5 px of the bird above and to the right. Every single-control extreme keeps at least 3.4 px.
 - **Mute isn't drawn in this pass.** The candidate's idea still fits: the crank pulled off its stud (a gap at the boss) and the comb hatched over. Want it in the next set of frames?
 - **The lever:** a leaning rod's pick swings a few px the other way, which is how a lever on the slot would behave. It's small, but check it reads as intended at 1:1.
+
+## Revision: less fill, and more selective (owner, 2026-11-06)
+
+The owner asked for less fill, used more selectively. The lid and front are black again with their #7D7D7D outlines, so the box reads as a line drawing and the birds, rods and comb sit over black. Fill now marks three things only:
+
+- **The end face**, in shadow, at stock #323232. One dark face is enough to give the box its weight.
+- **The comb's steel bar**, #323232: the mechanism the picks play.
+- **The crank**, arm and knob at #4B4B4B: the part in the hand. With the front black, the crank's turn alone fell under speed's floor (2.36% against 2.5%), and filling the crank brought it back to 3.40%.
+
+The two non-stock greys (#464646, #1A1A1A) are gone, and so are the 26 lint warnings they caused. Rods and tongues are now #969696 on black at 7.1:1 instead of 3.19:1 on the lid. Body black is 90.8% at rest (it was 76.5%). Perceptibility after the change: cohere 5.86%, speed 3.40%, scatter 2.48%, scale 1.56%, note response 5.11%; all pass. `fill-compare.png` shows the earlier and current rest frames side by side.
