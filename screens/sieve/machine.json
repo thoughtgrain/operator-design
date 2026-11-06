@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A harmonic sieve: a comb filter tuned to the input's fundamental keeps only chosen multiples, shaken to let others through."
+}

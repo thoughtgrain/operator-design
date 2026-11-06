@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A swinging-door freeze: the door catches a slice of the send's sound and swings it back and forth, creaking as it slows."
+}

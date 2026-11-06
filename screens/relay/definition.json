@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "relay",
+  "name": "Relay",
+  "parameters": [
+    {
+      "id": "stages",
+      "label": "Stages",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.01, "maximum": 1.0},
+      "display": "duration"
+    },
+    {
+      "id": "leak",
+      "label": "Leak",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "clock",
+      "label": "Clock",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "semitones"
+    },
+    {
+      "id": "feedback",
+      "label": "Feedback",
+      "default": 0.35,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Clean": {"stages": 0.5, "leak": 0.0, "clock": 0.0, "feedback": 0.35},
+    "Tired": {"stages": 0.7, "leak": 0.45, "clock": 0.3, "feedback": 0.6}
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 32,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 64,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

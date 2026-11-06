@@ -13,10 +13,11 @@ outlines are used, and they share one point count (draw.hpp: every mutable outli
          Fill only, no stroke.
   close  the stretch between the markers, magnified, drawn the way the band is: two filled halves at scale 2,
          193 px each drawn (authored within +-48.25), overlapping 2 px (the same seam caveat). The same mapping,
-         stretched: x 48-432 is the stretch from begin to end. Where a point's neighbourhood holds bin centres, it
-         takes their highest high and lowest low, so a long stretch keeps its peaks; where it holds none (a stretch
-         shorter than the points), it takes the straight line between the two nearest bin centres, so a short
-         stretch is a polyline through the real values with no plateaus. Never less than one bin. Fill only.
+         stretched: x 48-432 is the stretch from begin to end. When the stretch has at least as many bins as the
+         half has points, each point takes the highest high and lowest low of the bin centres within half a
+         point-spacing, so a long stretch keeps its peaks. When it has fewer, every point takes the straight line
+         between the two nearest bin centres, so a short stretch is exactly the polyline through the real values,
+         with no plateaus. Never less than one bin. Fill only.
 
 Begin and end are two 5 px #969696 squares on the band's bottom edge. The band re-keys only when the overview's
 generation differs from the one stored (display_reset clears it, so the first frame after a reset redraws too). The
@@ -63,7 +64,7 @@ def rotate(pts):
 def sample_at(bins, b, radius):
     """(low, high) at fractional bin position b: the extremes of bin centres within radius, else the straight line
     between the two nearest bin centres. Bin i's centre is at i + 0.5."""
-    near = [bins[i] for i in range(len(bins)) if abs(i + 0.5 - b) <= radius]
+    near = [bins[i] for i in range(len(bins)) if abs(i + 0.5 - b) <= radius] if radius > 0 else []
     if near:
         return min(l for l, _ in near), max(h for _, h in near)
     c = min(max(b - 0.5, 0), len(bins) - 1)
@@ -90,7 +91,7 @@ def close_half(bins, lo_b, hi_b, x_left, width, x0, x1, cy, half_h):
     """16 points evenly over the half; x 48-432 maps linearly onto the stretch lo_b..hi_b (in bins)."""
     xs = [x_left + j * width / 15 for j in range(16)]
     per_px = (hi_b - lo_b) / (x1 - x0)
-    radius = width / 15 * per_px / 2
+    radius = width / 15 * per_px / 2 if hi_b - lo_b >= 32 else 0   # fewer bins than points: interpolate everywhere
     return outline(xs, [sample_at(bins, lo_b + (x - x0) * per_px, radius) for x in xs], cy, half_h)
 
 

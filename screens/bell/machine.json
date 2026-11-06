@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A compressor as a diving bell: depth is the threshold, the air pocket is the release, the knee is how the bell settles."
+}

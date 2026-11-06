@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "bell",
+  "name": "Bell",
+  "parameters": [
+    {"id": "depth", "label": "Depth", "default": 0.25,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 48}, "display": "ratio"},
+    {"id": "air", "label": "Air", "default": 0.5,
+     "mapping": {"kind": "exponential", "minimum": 0.02, "maximum": 2}, "display": "duration"},
+    {"id": "knee", "label": "Knee", "default": 0.25,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 24}, "display": "ratio"},
+    {"id": "gain", "label": "Gain", "default": 0.25,
+     "mapping": {"kind": "exponential", "minimum": 1, "maximum": 16}, "display": "ratio"}
+  ],
+  "presets": {
+    "Plain": {"depth": 0.25, "air": 0.5, "knee": 0.25, "gain": 0.25},
+    "Pump": {"depth": 0.6, "air": 0.25, "knee": 0.0, "gain": 0.5},
+    "Glue": {"depth": 0.15, "air": 0.75, "knee": 0.6, "gain": 0.12}
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 64,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

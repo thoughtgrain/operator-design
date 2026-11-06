@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "id": "sieve",
+  "name": "Sieve",
+  "parameters": [
+    {
+      "id": "mesh",
+      "label": "Mesh",
+      "default": 0.0,
+      "mapping": {
+        "kind": "enum",
+        "labels": ["all", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "shake",
+      "label": "Shake",
+      "default": 0.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "keep",
+      "label": "Keep",
+      "default": 0.4,
+      "mapping": {
+        "kind": "exponential",
+        "minimum": 0.01,
+        "maximum": 2.0
+      },
+      "display": "duration"
+    },
+    {
+      "id": "mix",
+      "label": "Mix",
+      "default": 1.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Octaves": {
+      "mesh": 0.1429,
+      "shake": 0.0,
+      "keep": 0.4,
+      "mix": 1.0
+    },
+    "Rattle": {
+      "mesh": 0.2857,
+      "shake": 0.55,
+      "keep": 0.7,
+      "mix": 0.8
+    }
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 32,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}
