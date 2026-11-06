@@ -1,0 +1,19 @@
+{
+  "variant": "v3",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "A snow globe of silt: shaking it lifts a hatched cloud off the drift on its floor, and the cloud's lifted top edge is the one bright line.",
+  "controls": [
+    "settle: position; how high the cloud's underside still hangs above the drift, resting on it at 0.1 s and floating about 0.4 of the globe higher at 10 s (thicker liquid).",
+    "layers: count; the cloud is hatched with exactly one 45-degree hairline per partial, so 2 layers is two strokes and 64 is a dense mass (spacing floors at 3.2 px, so it saturates near 40).",
+    "stir: shape; the cloud's top edge (the bright mutable outline) rises and bulges, highest in the middle, from a low skin at 0 to near the top of the glass at 100.",
+    "grain: scale; coarse flakes appear under the cloud and grow from nothing to about 10 px, and the top edge roughens."
+  ],
+  "reference": "library/toro-blocks (solid vs hollow meaning different things; black fills behind outlines)",
+  "risks": [
+    "A snow globe is a known toy and could tip toward novelty; it must stay drawn as an object (glass highlight, banded base), never as an icon.",
+    "Layers as hatch count saturates around 40 lines at the 3.2 px floor, so 48 and 64 look alike.",
+    "Settle shown as hang height is a snapshot of a time, not the rate."
+  ]
+}

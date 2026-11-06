@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "None land. Five new, unique variations.",
   "subject": null,
@@ -94,7 +94,178 @@
       "brief": "Start from what silt is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: detailed line art. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "One mica-like platelet per partial, flat hexagonal flakes exploded up a dashed leader line from the big fundamental on the bed to the small high partials, which a stir has lifted furthest.",
+      "controls": [
+        "settle: rotation; each lifted flake tilts as if gliding down, flat at 0.1 s and up to about 26 degrees for the highest flakes at 10 s (pre-drawn tilt variants per flake, since nodes can't tip out of the screen plane).",
+        "layers: count; one flake per partial, 2 to 64, each smaller than the one below, so the column gets longer and finer.",
+        "stir: position; the gaps between flakes along the leader line, growing with partial number, so the high flakes travel furthest (top flake moves well over 24 px from 0 to 100).",
+        "grain: shape; the regular hexagons break into chipped, uneven grains and step off the leader line, each by its own seeded amount."
+      ],
+      "reference": "library/theseus-tower (hidden-line line art with inner structure, black fills hiding what's behind)",
+      "risks": [
+        "At 1:1 the column can read as a chain of hexagons rather than flakes; the low flakes crowd into a muddy cluster at the base because they barely lift.",
+        "At 64 layers the top flakes get under ~3 px wide; they would need a minimum size or to be capped.",
+        "Settle as tilt needs pre-drawn variants for every flake (a node budget question for phase 4)."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "A pebble has just dropped into a still, shallow stream, and a plume of silt billows up off the bed where it landed and leans away downstream under rings on the water.",
+      "controls": [
+        "settle: rotation; the plume leans downstream, nearly upright at 0.1 s (it drops before the current can carry it) and leaning about 40 degrees at 10 s.",
+        "layers: count; one billow per partial, each its own contour folded over the one above, so the plume goes from two lumps to a fine cauliflower.",
+        "stir: shape; the plume's height, the high billows rising furthest, capped under the water surface.",
+        "grain: shape; the billows scatter off the column into a ragged, uneven plume (seeded per billow)."
+      ],
+      "reference": "library/theseus-tower (line drawing, black bodies with grey outlines, one lit subject)",
+      "risks": [
+        "Single weight: everything is 1.5 px, so hierarchy rests on brightness alone (bright plume outline vs mid-grey scene); a departure from three weights by the direction's own language.",
+        "The plume outline at rest can read as a shell or a cabbage; whether it reads as silt depends on the motion (billowing up on a note, leaning and sinking).",
+        "Stir and grain are both shape on the plume; they change different things (height vs raggedness) but share the outline path."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "A snow globe of silt: shaking it lifts a hatched cloud off the drift on its floor, and the cloud's lifted top edge is the one bright line.",
+      "controls": [
+        "settle: position; how high the cloud's underside still hangs above the drift, resting on it at 0.1 s and floating about 0.4 of the globe higher at 10 s (thicker liquid).",
+        "layers: count; the cloud is hatched with exactly one 45-degree hairline per partial, so 2 layers is two strokes and 64 is a dense mass (spacing floors at 3.2 px, so it saturates near 40).",
+        "stir: shape; the cloud's top edge (the bright mutable outline) rises and bulges, highest in the middle, from a low skin at 0 to near the top of the glass at 100.",
+        "grain: scale; coarse flakes appear under the cloud and grow from nothing to about 10 px, and the top edge roughens."
+      ],
+      "reference": "library/toro-blocks (solid vs hollow meaning different things; black fills behind outlines)",
+      "risks": [
+        "A snow globe is a known toy and could tip toward novelty; it must stay drawn as an object (glass highlight, banded base), never as an icon.",
+        "Layers as hatch count saturates around 40 lines at the 3.2 px floor, so 48 and 64 look alike.",
+        "Settle shown as hang height is a snapshot of a time, not the rate."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "A prospector's pan cut in half mid-swirl: the water tips up one wall, the fine grains ride up in it while the heavy ones stay in the crease, and the tilted waterline is the bright line.",
+      "controls": [
+        "settle: position; how high the fine grains still hang in the water, back down in the crease at 0.1 s and up near the surface on the high side at 10 s.",
+        "layers: count; one grain per partial, from big heavy ones in the crease to small fine ones up the slope.",
+        "stir: rotation; the waterline tilts from nearly level at 0 to about 38 degrees at 100, climbing the right-hand wall and taking the fines with it.",
+        "grain: scale; every grain grows up to 2.4 times, from fine silt to coarse sand."
+      ],
+      "reference": "library/theseus-tower (dark bodies, light on the edge that matters)",
+      "risks": [
+        "At 1:1 the pan reads as a bowl or boat as much as a gold pan; the riffles on the back wall are the only cue.",
+        "Grains are 3 to 6 px with a rim light on one side; the smallest sit at the legibility floor.",
+        "The cut wall bodies are a #323232 fill (solid bodies); the water is hatching, the grains black with rim light."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "A slab of rippled silt lifted out after the water has gone, its cut face showing the cross-laminae each stir-and-settle left, its front ripple profile the one bright line.",
+      "controls": [
+        "settle: shape; the ripples' asymmetry, steep current ripples at 0.1 s (fast drop) easing to round, nearly symmetric ripples at 10 s.",
+        "layers: count; one ripple per two partials (crests and cross-lamina sets), 1 to 32 crests, doubling across the range.",
+        "stir: shape; ripple height, from a nearly flat bed at 0 to tall ripples at 100 (front profile moves well over 16 px).",
+        "grain: shape (planform); the crests go from straight to sinuous, broken linguoid ripples, seeded per crest."
+      ],
+      "reference": "library/toro-blocks (a modelled 3D field projected through one camera, hidden-line)",
+      "risks": [
+        "Three controls change the same ripple field by shape (asymmetry, height, crest planform); they read differently on the slab but share one channel family.",
+        "Layers below 4 (2 crests) shows a near-empty slab; at 64 the 32 crests sit around 8 px apart, close to the hatching limit with crest lines plus laminae.",
+        "Wave and current ripples are geology; the read is 'ripple marks', not necessarily 'partials', without the motion."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:25:22"
+  },
   "selection": null
 }

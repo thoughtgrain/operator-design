@@ -23,7 +23,6 @@ FONT = "UniversNextPro-Light"
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2
-DEBUG = False
 
 # ---------------------------------------------------------------- the model
 DEFAULTS = {"settle": 0.5, "layers": 0.5, "stir": 0.35, "grain": 0.0}
@@ -289,14 +288,14 @@ def v1(c):
     the plate count, grain breaks the hexagons into coarse chipped grains off the line."""
     s = Svg()
     n, stir, grain, sn = n_partials(c["layers"]), c["stir"], c["grain"], c["settle"]
-    rad = [1.0 * k ** -0.32 for k in range(1, n + 1)]
+    rad = [1.45 * k ** -0.34 for k in range(1, n + 1)]
     thick = [0.12 * r + 0.05 for r in rad]
     z, zs = 0.0, []
     for k in range(1, n + 1):
         zs.append(z)
         gap = (0.06 + stir * 0.75 * lift(k + 1, n)) * 16 / max(n, 8)
         z += thick[k - 1] + gap
-    slope = 1.25  # leader line runs up and downstream
+    slope = 1.0  # leader line runs up and downstream
     plates = []
     for k in range(1, n + 1):
         r, t, z0 = rad[k - 1], thick[k - 1], zs[k - 1]
@@ -322,7 +321,7 @@ def v1(c):
         top = [place(x, y, t) for x, y in verts]
         bot = [place(x, y, 0) for x, y in verts]
         plates.append((k, r, top, bot, place(0, 0, t)))
-    cam = Camera(eye=(slope * z * 0.35, -9.0, z * 0.5 + 6.5), target=(slope * z * 0.5, 0, z * 0.5))
+    cam = Camera(eye=(slope * z * 0.35, -10.0, z * 0.5 + 6.5), target=(slope * z * 0.5, 0, z * 0.5))
     key = [p for (_, _, top, bot, _) in plates for p in top + bot]
     cam.fit(key, (56, 34, 424, 200))
     # leader line through the centres, behind every plate (exploded-view convention)
@@ -336,7 +335,6 @@ def v1(c):
         bright = idx == len(plates) - 1
         s.poly(outline, fill=G0, stroke=G7 if bright else G5, sw=SUBJ if bright else LINE)
         rs = r * cam.ppu(ctop)
-        print('rs', k, round(rs,1)) if DEBUG else None
         if rs >= 6:
             s.loop(T, HAIR, G6 if bright else G4)
             # vertical edges on the front: top vertex below the face centre
@@ -386,8 +384,8 @@ def v2(c):
         L = lift(k, n)
         h = 0.3 + stir * 2.1 * L
         h = min(h, WS - 0.22)
-        rho = 0.12 + 0.13 * L ** 0.6
-        side = (1 if k % 2 else -1) * rho * 0.85 * min(1.0, 4 * L)
+        rho = 0.13 + 0.15 * L ** 0.6
+        side = (1 if k % 2 else -1) * rho * 0.5 * min(1.0, 4 * L)
         x = sx + (h - 0.3) * math.tan(lean) + side + grain * 0.4 * jitter(k, 11)
         zc = h + grain * 0.12 * jitter(k, 13)
         circles.append((x, zc, rho))
@@ -407,22 +405,13 @@ def v2(c):
     # near bed profile, the pebble on it
     bed = [cam((x / 10, 0, bed_z(x / 10))) for x in range(-60, 80)]
     s.ribbon(bed, LINE, G5)
-    s.poly(outline, fill=G0, stroke=G7, sw=LINE)
-    # inside: each billow's upper fold, hidden where a higher billow covers it
-    for i, (x, zc, rho) in enumerate(circles):
-        run = []
-        for j in range(25):
-            a = math.radians(200 + 120 * j / 24)
-            px, pz = x + rho * 0.97 * math.cos(a), zc + rho * 0.97 * math.sin(a)
-            covered = i == 0 or any((px - x2) ** 2 + (pz - z2) ** 2 < (r2 * 0.97) ** 2 for (x2, z2, r2) in circles[:i])
-            if covered:
-                if len(run) > 3:
-                    s.ribbon(run, LINE, G5)
-                run = []
-            else:
-                run.append(cam((px, 0, pz)))
-        if len(run) > 3:
-            s.ribbon(run, LINE, G5)
+    # each billow is its own contour, drawn high to low so the lower ones fold over the
+    # higher; the plume's whole outline goes on top as the one bright line
+    s.poly(outline, fill=G0, stroke="none")
+    for (x, zc, rho) in reversed(circles):
+        bulb = [cam((x + rho * math.cos(a / 36 * 2 * math.pi), 0, zc + rho * math.sin(a / 36 * 2 * math.pi))) for a in range(36)]
+        s.poly(bulb, fill=G0, stroke=G4, sw=LINE)
+    s.poly(outline, fill="none", stroke=G7, sw=LINE)
     peb = []
     for i in range(36):
         a = i / 36 * 2 * math.pi
@@ -561,11 +550,6 @@ def v4(c):
     def wall_x(z, side):
         return side * (rb + (rt - rb) * z / dep)
     # section of the interior in y=0, below the waterline
-    prof = []
-    xl = None
-    for i in range(41):  # left wall, bottom, right wall
-        pass
-    zl = zw - math.tan(ang) * rb
     # left intersection: water_z(x) = z on left wall x = -(rb + (rt-rb) z/dep)
     k = (rt - rb) / dep
     zl = (zw - math.tan(ang) * rb) / (1 + math.tan(ang) * k)
@@ -633,7 +617,7 @@ def v5(c):
     m = max(2, n // 2)
     lam = Lx / m
     A = 0.05 + stir * 0.24
-    asym = 0.72
+    asym = 0.92 - 0.42 * sn   # quick settle: steep current ripples; slow settle: rounder
 
     def phase_u(u, v):
         d = grain * 0.32 * lam * (math.sin(2 * math.pi * v / Ly * 1.3 + u * 2.1) + 0.5 * math.sin(5.1 * v + 3 * u))
@@ -660,21 +644,6 @@ def v5(c):
     s.poly(surf, fill=G0, stroke="none")
     for edge in (back_top, left_top):
         s.ribbon(edge, LINE, G5)
-    # mud drapes in the troughs: hatched strips, wider for a quick settle
-    dw = lam * (0.06 + 0.22 * (1 - sn))
-    for j in range(m + 1):
-        ut = j * lam
-        strip_a, strip_b = [], []
-        for v in vs:
-            d = grain * 0.32 * lam * (math.sin(2 * math.pi * v / Ly * 1.3 + ut * 2.1) + 0.5 * math.sin(5.1 * v + 3 * ut))
-            u0, u1 = ut - d - dw / 2, ut - d + dw / 2
-            if u1 <= 0.02 or u0 >= Lx - 0.02:
-                continue
-            u0, u1 = max(u0, 0.02), min(u1, Lx - 0.02)
-            strip_a.append(cam((u0, v, T + 0.004)))
-            strip_b.append(cam((u1, v, T + 0.004)))
-        if len(strip_a) > 3:
-            hatch_lines(s, strip_a + strip_b[::-1], 3.2, G3, HAIR, 1.5)
     # crest lines: one hairline per ripple
     for j in range(m):
         uc = (j + asym) * lam

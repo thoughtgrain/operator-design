@@ -1,0 +1,21 @@
+{
+  "variant": "v4",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "The bronze cut through: the ring hung in a two-tier frame and sectioned on its centre plane, the cut walls showing thin waist and thick sound bow, each clapper standing off its strike point by how far its bell is from striking in this change.",
+  "controls": [
+    "bells: count, sectioned bells in the two tiers from 4 to 12 (2 + 2 up to 6 + 6), smaller as the tiers fill, the sills lengthening.",
+    "method: rotation, each clapper swings about its crown staple: the bell striking now has its ball on the sound bow (bright), the others hang progressively further off it toward plumb.",
+    "pace: rotation (spread), the clappers' stand-off range narrows as the pace rises, from about 34 to 17 degrees (24 at the default), so the whole row of clappers closes toward the bow.",
+    "stroke: rotation, on handstroke changes the leading clapper is held back off the bow by up to 12 degrees before it strikes."
+  ],
+  "reference": "opxy/patterns.md P1 (section drawing) for the cut, not its look; library/theseus-tower for one lit part",
+  "risks": [
+    "Cut bronze is hatched, which craft.md reserves for semi-opaque or inactive regions; in a section the hatch means cut material, so every bell is hatched and the lit one is told by weight and brightness, not by hatch. Needs a sentence or a solid cut fill instead.",
+    "Method, pace and stroke all act through the clappers' angle (order, range, one bell's hold-back); three controls in one channel is the weakest mapping of the five.",
+    "Clapper swing on a 50 to 60 px flight moves the ball about 20-25 px for the full range; small bells at twelve get under the rotation floor.",
+    "Two tiers of mouth-down bells can read as a rack of bell icons if the hatch and wall thickness don't show at 1:1.",
+    "Mute: every clapper hangs plumb, the bright ball gone; distinct by rotation."
+  ]
+}

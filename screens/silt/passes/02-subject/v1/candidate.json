@@ -1,0 +1,19 @@
+{
+  "variant": "v1",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "One mica-like platelet per partial, flat hexagonal flakes exploded up a dashed leader line from the big fundamental on the bed to the small high partials, which a stir has lifted furthest.",
+  "controls": [
+    "settle: rotation; each lifted flake tilts as if gliding down, flat at 0.1 s and up to about 26 degrees for the highest flakes at 10 s (pre-drawn tilt variants per flake, since nodes can't tip out of the screen plane).",
+    "layers: count; one flake per partial, 2 to 64, each smaller than the one below, so the column gets longer and finer.",
+    "stir: position; the gaps between flakes along the leader line, growing with partial number, so the high flakes travel furthest (top flake moves well over 24 px from 0 to 100).",
+    "grain: shape; the regular hexagons break into chipped, uneven grains and step off the leader line, each by its own seeded amount."
+  ],
+  "reference": "library/theseus-tower (hidden-line line art with inner structure, black fills hiding what's behind)",
+  "risks": [
+    "At 1:1 the column can read as a chain of hexagons rather than flakes; the low flakes crowd into a muddy cluster at the base because they barely lift.",
+    "At 64 layers the top flakes get under ~3 px wide; they would need a minimum size or to be capped.",
+    "Settle as tilt needs pre-drawn variants for every flake (a node budget question for phase 4)."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variant": "v5",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "A slab of rippled silt lifted out after the water has gone, its cut face showing the cross-laminae each stir-and-settle left, its front ripple profile the one bright line.",
+  "controls": [
+    "settle: shape; the ripples' asymmetry, steep current ripples at 0.1 s (fast drop) easing to round, nearly symmetric ripples at 10 s.",
+    "layers: count; one ripple per two partials (crests and cross-lamina sets), 1 to 32 crests, doubling across the range.",
+    "stir: shape; ripple height, from a nearly flat bed at 0 to tall ripples at 100 (front profile moves well over 16 px).",
+    "grain: shape (planform); the crests go from straight to sinuous, broken linguoid ripples, seeded per crest."
+  ],
+  "reference": "library/toro-blocks (a modelled 3D field projected through one camera, hidden-line)",
+  "risks": [
+    "Three controls change the same ripple field by shape (asymmetry, height, crest planform); they read differently on the slab but share one channel family.",
+    "Layers below 4 (2 crests) shows a near-empty slab; at 64 the 32 crests sit around 8 px apart, close to the hatching limit with crest lines plus laminae.",
+    "Wave and current ripples are geology; the read is 'ripple marks', not necessarily 'partials', without the motion."
+  ]
+}

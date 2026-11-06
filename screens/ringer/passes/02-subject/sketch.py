@@ -634,13 +634,13 @@ def v4():
 def v5():
     fr = Frame("v5 the tower pulled apart")
     S = 5.0                                   # half the tower's inside width
-    gap = 6.0 + GAP * 3.0                     # stroke: the tower pulls further apart
+    gap = 7.0 + GAP * 3.0                     # stroke: the tower pulls further apart
     yb = 0.0                                  # ringing-chamber floor
     yt = yb + gap                             # bell-chamber floor
     rc = 3.3                                  # ringing circle radius
     sally_h = 1.1 + 1.6 * math.log2(PACE / 0.5) / 4   # pace: sallies ride up the ropes
-    cam = Camera((-14, 15, -20), (0, 2.6, 0))
-    key = [(sx * S, y, sz * S) for sx in (-1, 1) for sz in (-1, 1) for y in (yb - 0.6, yt + 1.6)]
+    cam = Camera((-15, 10.5, -22), (0, 3.4, 0))
+    key = [(sx * S, y, sz * S) for sx in (-1, 1) for sz in (-1, 1) for y in (yb - 0.6, yt + 2.2)]
     cam.fit(key, (40, 26, 440, 212))
     th = 0.45
 
@@ -702,7 +702,7 @@ def v5():
     bell_order = sorted(range(1, N + 1), key=lambda b: -cam.depth((rope_pos[b][0], yt, rope_pos[b][1])))
     for b in bell_order:
         x, z = rope_pos[b]
-        R = 0.62 * bell_scale(b) / bell_scale(N) * (6 / max(N, 6)) ** 0.5 * 1.25
+        R = 0.62 * bell_scale(b) / bell_scale(N) * (6 / max(N, 6)) ** 0.5 * 1.7
         now = PLACE[b] == 1
         base = (x, yt + BELL_H * R + 0.05, z)
         bell_hidden(fr, cam, base, R, G6 if now else G4, SUBJ if now else LINE, G5 if now else G3)

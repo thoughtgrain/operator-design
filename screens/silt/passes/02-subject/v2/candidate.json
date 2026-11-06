@@ -1,0 +1,19 @@
+{
+  "variant": "v2",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "A pebble has just dropped into a still, shallow stream, and a plume of silt billows up off the bed where it landed and leans away downstream under rings on the water.",
+  "controls": [
+    "settle: rotation; the plume leans downstream, nearly upright at 0.1 s (it drops before the current can carry it) and leaning about 40 degrees at 10 s.",
+    "layers: count; one billow per partial, each its own contour folded over the one above, so the plume goes from two lumps to a fine cauliflower.",
+    "stir: shape; the plume's height, the high billows rising furthest, capped under the water surface.",
+    "grain: shape; the billows scatter off the column into a ragged, uneven plume (seeded per billow)."
+  ],
+  "reference": "library/theseus-tower (line drawing, black bodies with grey outlines, one lit subject)",
+  "risks": [
+    "Single weight: everything is 1.5 px, so hierarchy rests on brightness alone (bright plume outline vs mid-grey scene); a departure from three weights by the direction's own language.",
+    "The plume outline at rest can read as a shell or a cabbage; whether it reads as silt depends on the motion (billowing up on a note, leaning and sinking).",
+    "Stir and grain are both shape on the plume; they change different things (height vs raggedness) but share the outline path."
+  ]
+}

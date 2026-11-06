@@ -1,0 +1,21 @@
+{
+  "variant": "v3",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "bold closed outlines",
+  "subject": "The wheels of the ring face on, each with its rope wound from the garter hole round the rim and falling to the sally, every wheel turned to how far through its pull its bell is in this change, the one about to strike drawn bright.",
+  "controls": [
+    "bells: count, wheels across the frame from 4 to 12, smaller as they're added so the row always fills the frame head.",
+    "method: rotation, each wheel turns to its bell's place in the current change (first place wound furthest, garter hole low on the right; last place barely started), the rope's wrap round the rim lengthening and shortening with it.",
+    "pace: position, every sally rides up its rope as the ropes are taken in to ring lower and faster, about 26 px from 0.5 to 8 a beat.",
+    "stroke: position, the sliders under the frame head run out to the right by up to 14 px as the handstroke gap opens, the stays meeting them later."
+  ],
+  "reference": "opxy/reference/ (stock drum machine: bold, closed, double-outline instruments)",
+  "risks": [
+    "The busiest of the five: six wheels, spokes, stays, wraps and sallies; at twelve bells each wheel is about 15 px in radius and the spokes and garter holes go under the 3 px floor.",
+    "Method as each wheel's rotation is the physical truth, but it echoes pass 01's v2 (bells turned to their swing); here the turn is in the screen plane, so it's one node per wheel, not pre-drawn variants.",
+    "Stroke's slider travel (14 px) is under the 24 px position floor and the sliders are small; it needs the stays to rest against them, or a larger runner.",
+    "Bold closed wheels with spokes can read as bicycle or cart wheels if the ropes and sallies are missed.",
+    "Mute: the ring is stood, every wheel turned to the balance with its stay on the slider, all wheels at one angle; honest and distinct by rotation."
+  ]
+}
