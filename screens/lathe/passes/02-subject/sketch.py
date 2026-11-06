@@ -277,7 +277,7 @@ def v1() -> Frame:
     xs = [x_tool + (x_end - x_tool) * i / 29 for i in range(30)]
     top = [(x, ax - r(x)) for x in xs]
     bot = [(x, ax + r(x)) for x in reversed(xs)]
-    prof = [(x_tool, ax - raw + 0.01)] + top + bot + [(x_tool, ax + raw - 0.01)]
+    prof = [(x_tool - 1.2, ax - raw)] + top + bot + [(x_tool - 1.2, ax + raw)]
     F.path(prof, fill=BK, stroke=G0, sw=SUBJ, node=0)
     # tailstock: dead centre in the end of the work, quill, body, handwheel boss
     F.outline([(x_end, ax - 3), (x_end + 18, ax - 9), (x_end + 18, ax + 9), (x_end, ax + 3)], G3)
