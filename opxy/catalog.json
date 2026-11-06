@@ -21,7 +21,7 @@
       "sdkKinds": [
         "sample"
       ],
-      "description": "Plays, slices or granulates recorded audio. Own screen over the sampler page from SDK 1.8, with a sample overview; gives up stock trims."
+      "description": "Plays, slices or granulates recorded audio. Own screen over the sampler page from SDK 1.8, with a sample overview; stock trims return on Shift with stockShift (SDK 1.10)."
     },
     "effect": {
       "name": "Effect",
@@ -32,18 +32,24 @@
     },
     "player": {
       "name": "Player",
-      "sdkKinds": [],
-      "description": "Generates notes for another engine (arps, generative players). Its page needs bound nodes the SDK doesn't give players yet."
+      "sdkKinds": [
+        "synth"
+      ],
+      "description": "Generates notes for another engine (arps, generative players). Runs as a synth with resources.trackControl on aux track 12 (SDK 1.9)."
     },
     "sequencer": {
       "name": "Sequencer",
-      "sdkKinds": [],
-      "description": "Step, pattern or multi-page sequencing; the state is a sequence over time."
+      "sdkKinds": [
+        "synth"
+      ],
+      "description": "Step, pattern or multi-page sequencing; the state is a sequence over time. Runs as a synth with resources.trackControl on aux track 12 (SDK 1.9)."
     },
     "function": {
       "name": "Function",
-      "sdkKinds": [],
-      "description": "A track whose keys are functions acting on another track (mutes, rolls, transforms)."
+      "sdkKinds": [
+        "synth"
+      ],
+      "description": "A track whose keys are functions acting on another track (mutes, rolls, transforms). Runs as a synth with resources.trackControl on aux track 12 (SDK 1.9)."
     }
   },
   "patterns": {

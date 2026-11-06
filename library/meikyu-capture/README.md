@@ -8,7 +8,7 @@
 | Author | Brian Hinton (thoughtgrain) · MIT |
 | Pattern | P13 Capture (from `opxy/patterns.md`) |
 | Audit | **not yet** on Drum's two-state half-step floor and the turning disc's redraw cost; all else passes or is device pending · 2026-11-01 · tokens `pull/260` · [audit.md](audit.md). Kept as a pattern reference |
-| Device | **needs the player page to bind nodes**; device pending |
+| Device | needs to run where it can bind nodes: today, as a track-control synth on aux track 12 (open-xy SDK 1.9); device pending |
 | Source | `screens/meikyu/concepts/blackhole_capture.py` (also `blackhole3.py` for the lensed-disc shape, `blackhole_moons.py` for the kit sound); `python3 blackhole_capture.py <dir> melody\|drum\|frames` |
 | Video | [capture-melody.mp4](capture-melody.mp4), [capture-drum.mp4](capture-drum.mp4): the real player logic (a port of `press()`) with a stand-in voice and a synthesized kit |
 

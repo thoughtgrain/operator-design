@@ -412,8 +412,11 @@ class FrameLinter:
             letters = "".join(commands).upper()
             if not re.fullmatch(r"ML*Z", letters):
                 self.add("error", where, "mutable-topology", "mutable outline must be exactly M, L…, Z (no H/V/curves)")
-            if el.get("fill", "").strip().lower() != "none":
-                self.add("error", where, "mutable-topology", "mutable outline must have fill=\"none\"; mutable outlines draw hollow")
+            fill = el.get("fill", "").strip().lower()
+            if fill not in ("none",) and not re.fullmatch(r"#[0-9a-f]{6}", fill):
+                self.add("error", where, "mutable-topology",
+                         "mutable outline fill is \"none\" (draws hollow) or an explicit #RRGGBB (stays filled; display.md, "
+                         "Artwork). Give it a fill only when its geometry encloses area")
             extent = self.t["frame"]["pathExtent"]
             far = max((max(abs(x), abs(y)) for x, y in pts), default=0)
             if far > extent:

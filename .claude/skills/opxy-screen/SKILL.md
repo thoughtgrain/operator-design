@@ -32,7 +32,7 @@ Start from the library. `library/toro-blocks/` is the house reference: an abstra
 - Every design pass is exactly five unique variants (`opxy/protocol.md`, Iterations). Never fewer, never five tweaks of one idea.
 
 - 480 × 220, grey by default, never red. Colour only when the harness's MCP config allows it (`colour_policy`); then a role table in the brief and a designed `panel.grayscale.svg.fragment` linted with `--grayscale-of`. Univers Next Pro Light, ≥ 8 px.
-- Bound mutable outlines: `M L… Z`, `fill="none"`, distinct points ≥ 1/8 px apart, closing edge ≥ 1/4 px, no turn within 2.5° of straight back, ≤ 64 points, one subpath.
+- Bound mutable outlines: `M L… Z`, `fill="none"` (hollow) or an explicit `#RRGGBB` fill when the shape encloses area, distinct points ≥ 1/8 px apart, closing edge ≥ 1/4 px, no turn within 2.5° of straight back, ≤ 64 points, one subpath.
 - Lines are closed ribbons. Parts that meet share an outline or pivot.
 - Every control clears the perceptibility floors (tokens.json `perceptibility`).
 - Nothing moves at rest. Eases settle in 0.15–0.2 s. Reduced motion jumps.

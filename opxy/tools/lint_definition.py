@@ -31,6 +31,15 @@ DISPLAY_LIMITS = {"paths": (0, 4), "points": (0, 64), "nodes": (1, 512), "texts"
 # open-xy staging display.md: > 256 nodes need sdk 1.8; > 4 texts 1.3, > 16 texts 1.7.
 # Effects draw their own page from sdk 1.7, sample engines (forking the sampler) from 1.8.
 OWN_SCREEN_SDK = {"synth": None, "effect": (1, 7), "sample": (1, 8)}
+# open-xy staging tooling/definitions.py (2185ec8): pages a synth may hide (sdk 1.9), the stock sampler
+# turns a sample engine's own screen may hand back on Shift (stockShift, sdk 1.10), and track control
+# on an aux track (sdk 1.9).
+HIDDEN_PAGES = ("envelope", "filter")
+STOCK_SHIFT = ("", "start", "loopStart", "loopEnd", "end", "direction", "tune", "gain", "window", "loopWindow")
+CONTROL_FIELDS = ("stateBytes", "stateAlignment")
+CONTROL_OPTIONS = ("unique", "savedBytes", "aux", "sharedLfo")
+AUX_TRACKS = (12,)
+SAVED_CAPACITY = 8192
 CONTROLS = {"synth": (4, 8), "sample": (1, 8), "effect": (1, 8)}
 RESOURCES = {
     "synth": ("voiceBytes", "voiceAlignment", "voiceCapacity", "sharedBytes", "outputPeakQ31", "display"),
@@ -161,7 +170,8 @@ def check_display(r: "Review", defn: dict, disp, sdk: tuple[int, ...] | None, ki
 def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
     r = Review()
     top = ({"schema", "id", "name", "parameters", "presets", "resources"} | ({"press"} if "press" in defn else set())
-           | ({"shift"} if kind == "effect" and "shift" in defn else set()))
+           | ({"shift"} if kind == "effect" and "shift" in defn else set())
+           | ({"hidePages"} if "hidePages" in defn else set()))
     r.require(set(defn) == top, "definition", "fields",
               f"fields must be exactly {sorted(top)} (unknown {sorted(set(defn) - top)}, missing {sorted(top - set(defn))})")
     r.require(defn.get("schema") == 1, "definition", "schema", "schema must be 1")
@@ -251,6 +261,15 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
         if sdk is not None:
             r.require(sdk >= (1, 7), "shift", "sdk", "a shift row needs sdk 1.7+")
 
+    # hidden stock pages (sdk 1.9)
+    if "hidePages" in defn:
+        pages = defn["hidePages"]
+        r.require(kind == "synth" and isinstance(pages, list) and bool(pages) and len(set(pages)) == len(pages)
+                  and all(pg in HIDDEN_PAGES for pg in pages), "hidePages", "hidePages",
+                  '"hidePages" lists "envelope" and/or "filter", for a synth')
+        if sdk is not None:
+            r.require(sdk >= (1, 9), "hidePages", "sdk", "hidePages needs sdk 1.9+")
+
     # presets
     presets = defn.get("presets")
     if r.require(isinstance(presets, dict) and len(presets) <= 64, "presets", "presets", "presets must be an object of ≤ 64"):
@@ -280,6 +299,8 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
                 if cap < 8:
                     r.add("warn", "resources", "voice", f"voiceCapacity {cap}; stock plays up to 8 notes per track")
             check_display(r, defn, res.get("display"), sdk, kind)
+            if "trackControl" in res:
+                check_track_control(r, res, sdk)
         else:
             if "display" in res:
                 need_sdk = OWN_SCREEN_SDK[kind]
@@ -288,13 +309,62 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
                               f"a {kind} drawing its own screen needs sdk {'.'.join(map(str, need_sdk))}+")
                 if kind == "sample":
                     r.add("note", "resources.display", "own-screen",
-                          'a sample engine draws its own screen only when it forks the sampler ("base": "sampler"), and it '
-                          "gives up stock's trim controls on that page (api.md, Own screen)")
+                          'a sample engine draws its own screen only when it forks the sampler ("base": "sampler"); it '
+                          "takes over the sampler page's encoders, so stock's start, end, loop and gain are gone from that "
+                          "page unless stockShift hands them back on Shift (sdk 1.10; api.md, Own screen)")
                 if kind == "effect":
                     r.add("note", "resources.display", "own-screen", "effects have no browser preview yet; check the page on a device")
                 check_display(r, defn, res["display"], sdk, kind)
+            if "stockShift" in res:
+                check_stock_shift(r, res, sdk, kind)
             r.add("note", "resources", "resources", f"{kind} resources not reviewed beyond structure; check api.md")
     return r
+
+
+def check_stock_shift(r: "Review", res: dict, sdk, kind: str) -> None:
+    names = res["stockShift"]
+    where = "resources.stockShift"
+    if not r.require(kind == "sample", where, "stockShift", "stockShift is for a sample engine's own screen"):
+        return
+    if not r.require(isinstance(names, list) and 1 <= len(names) <= 4 and all(isinstance(n, str) for n in names),
+                     where, "stockShift", "stockShift lists what Shift and encoders 1..4 edit: at most four names"):
+        return
+    r.require("crossfade" not in names, where, "stockShift",
+              "stockShift can't name crossfade: SampleBlock doesn't carry it, so the engine couldn't hear it")
+    unknown = [n for n in names if n not in STOCK_SHIFT]
+    r.require(not unknown, where, "stockShift",
+              f"unknown {unknown}; it takes {', '.join(n for n in STOCK_SHIFT if n)}, or '' for the machine's own fine turn")
+    named = [n for n in names if n]
+    r.require(bool(named), where, "stockShift", "stockShift names no stock control: leave it out instead")
+    r.require(len(set(named)) == len(named), where, "stockShift", "stockShift names a stock control twice")
+    r.require("display" in res, where, "stockShift", "stockShift needs resources.display (it's for the own screen)")
+    if sdk is not None:
+        r.require(sdk >= (1, 10), where, "sdk", "stockShift needs sdk 1.10+")
+
+
+def check_track_control(r: "Review", res: dict, sdk) -> None:
+    c = res["trackControl"]
+    where = "resources.trackControl"
+    if not r.require(isinstance(c, dict), where, "trackControl", "trackControl must be an object"):
+        return
+    allowed = set(CONTROL_FIELDS) | set(CONTROL_OPTIONS)
+    r.require(set(CONTROL_FIELDS) <= set(c) <= allowed, where, "trackControl",
+              f"trackControl holds {list(CONTROL_FIELDS)} and optionally {list(CONTROL_OPTIONS)}")
+    sb, sa = c.get("stateBytes"), c.get("stateAlignment")
+    r.require(isinstance(sb, int) and isinstance(sa, int) and sb >= 4 and sa in (4, 8, 16) and sb % sa == 0,
+              where, "trackControl", "track control state must occupy aligned whole words")
+    if "savedBytes" in c:
+        r.require(isinstance(c["savedBytes"], int) and 1 <= c["savedBytes"] <= SAVED_CAPACITY, where, "trackControl",
+                  f"savedBytes 1..{SAVED_CAPACITY}")
+    aux = c.get("aux")
+    r.require(isinstance(aux, list) and bool(aux) and set(aux) <= set(AUX_TRACKS) and len(set(aux)) == len(aux),
+              where, "trackControl", f"track control runs on an aux track: aux lists {list(AUX_TRACKS)}")
+    r.require(c.get("unique") is True, where, "trackControl", "a track control machine is unique")
+    if sdk is not None:
+        r.require(sdk >= (1, 9), where, "sdk", "track control needs sdk 1.9+")
+    r.add("note", where, "trackControl",
+          "runs on aux track 12 with its own page on M1 (api.md, Aux tracks); show the muted state on the page, "
+          "passing control::Input.muted to the display through Overlay::display (ux.md, Aux tracks)")
 
 
 def main(argv: list[str] | None = None) -> int:

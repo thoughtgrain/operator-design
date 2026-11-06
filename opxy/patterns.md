@@ -188,7 +188,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **A ring around a point on the screen's edge is half off-screen.** Accept it or move the centre; no camera angle fixes it.
 - **Too many planets for the orbits.** Guarantee spacing only for the ones that carry meaning; let the rest step out of view while they would touch.
 - **Links across the whole screen.** Keep links within one orbit and one phrase; when the sequence changes orbit, flash the planet instead.
-- **Players can't do this yet.** Today's player page is 24 on/off dots; this needs bound nodes. Say so up front.
+- **Where it runs.** The stock player page is 24 on/off dots and binds no nodes, so this can't draw there. From SDK 1.9 a player can run instead as a track-control synth on aux track 12 with its own page, which can (`constraints.md`, Which machines draw a screen). Say which in the handoff.
 
 ## P13 · Capture
 
@@ -208,7 +208,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 - **A thump per hit flashes.** Pace event effects (one per ~0.34 s) so a fast roll can't exceed 3 flashes a second.
 - **Not every control has a twin in the metaphor.** Dens and Crpt map onto the black hole; Scal and Kit don't. Forcing them into the scenery (cells in the arch, pads in the under-ring) looked bolted on. Give them a plain keyboard in a corner instead, drawn from C so each one is a shape: the scale's notes on one octave (lower left), swapped in drum mode for the kit as a spacing ruler (lower right): each pad a tick at its interval, repeats stacked. Name settings for what they are (`stack`, `roll`, `fill`, `clust`), not by number. A drawn drum kit was tried and rejected: the kits are note patterns, not instruments.
 - **Two-state switches and the half-step rule.** An off/on enum moves all at once; see the audit's note.
-- **Players can't do this yet.** It needs bound nodes on the player page, like P12.
+- **Where it runs.** Not on the stock player page, which binds no nodes; as a track-control synth on aux track 12 (SDK 1.9), with its own page, it can.
 
 ## P14 · Loom
 
@@ -227,7 +227,7 @@ Pick stock when: no physical or diagrammatic subject exists, the controls are in
 
 - **Slabs are expensive.** Three faces each; a full loom passes the node budget quickly. Flat tops for older rows, or fewer rows.
 - **Wide shapes crowd.** Sixteen steps of slabs plus repeats or six rows get dense; keep one layer of detail per page.
-- **Players can't do this yet** on the stock player page (24 dots); it needs bound nodes, as P12 and P13 do.
+- **Where it runs.** Not on the stock player page (24 dots, no bound nodes); as a track-control synth on aux track 12 (SDK 1.9), with its own page, it can, as P12 and P13 can.
 
 ## P15 · Cell field
 
