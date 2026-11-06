@@ -1,0 +1,100 @@
+{
+  "machine": "vapor",
+  "category": "engine",
+  "kind": "subject",
+  "number": 2,
+  "state": "open",
+  "created": "2026-11-06T12:27:05",
+  "focus": "More iterations visually: five new, unique variants. The owner liked v5's look but couldn't tell what it was.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what vapor is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: exploded view. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what vapor is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: single-weight contour. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what vapor is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: hatched mass. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what vapor is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: edge-lit silhouette. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what vapor is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: detailed line art. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}
