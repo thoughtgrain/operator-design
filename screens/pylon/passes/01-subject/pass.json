@@ -62,12 +62,12 @@
       "subject": "A field of floating slabs, one row per conductor along the span, whose heights are the standing wave the wind locks into each wire, drawn as a patent figure between two cross-arms cut in hatched section.",
       "controls": [
         "wind: shape (heights) — the locked mode number climbs from one broad hump at 0.5 m/s to fine loops at 20 m/s, so the crests multiply along every row.",
-        "span: count — the field grows from 8 to 24 slabs along the line while the cross-arms move apart, and the same wind sings a higher mode on a longer span.",
+        "span: count — the field grows from 10 to 18 slabs along the line while the cross-arms move apart, and the same wind sings a higher mode on a longer span.",
         "gust: shape (row offset) — neighbouring modes join the lock and each row drifts out of step with the next, so the crests stop lining up across the conductors.",
         "hum: shape (texture) — a fine alternating mains ripple lifts every other slab by up to 8 px, an even comb under the wind's loops; none at 0."
       ],
       "reference": "library/toro-blocks",
-      "risks": "Closest to toro's voice field in build (it's the same pattern), so it has to earn its difference in the drawing: hatched section plates and patent numerals, hidden-line slabs, no solid grey faces. 80 slabs × 3 nodes is ~240 nodes, near the 256 line before sdk 1.8. Wind, gust and hum all act on heights; hum's comb has to stay visibly a texture rather than another wave, or it reads as a second wind. Crest highlight is several cells, so the 'one brightest element' is a set, not a single part."
+      "risks": "Closest to toro's voice field in build (it's the same pattern), so it has to earn its difference in the drawing: hatched section plates and patent numerals, hidden-line slabs, no solid grey faces. At span 100 it's 90 slabs × 3 nodes = 270 nodes, over 256, so it needs sdk 1.8 or a row fewer. Wind, gust and hum all act on heights; hum's comb has to stay visibly a texture rather than another wave, or it reads as a second wind. Crest highlight is several cells, so the 'one brightest element' is a set, not a single part."
     },
     {
       "variant": "v2",
@@ -89,7 +89,7 @@
       "drawing_language": "star atlas",
       "subject": "The span between two pylon heads plotted on a sky chart, its wire a chain of standing-wave loops hung on a catenary across the graticule, with meteors for gusts and an ephemeris band for the hum.",
       "controls": [
-        "wind: shape — the wire's single mutable outline divides into more loops as the locked mode rises (1 at the bottom of the range, 8+ at the top), each crest marked with a star.",
+        "wind: shape — the wire's single mutable outline divides into more loops as the locked mode rises (1 loop at 0.5 m/s, capped near 12 at the top, where loops would drop under ~12 px), each crest marked with a star.",
         "span: position — the two pylon stars slide apart (140 → 360 px) and the catenary sags deeper between them.",
         "gust: count — meteor trails streak in from a fixed radiant upwind, 0 to 12, each a short plotted trail pointing back to it.",
         "hum: position — a hairline ephemeris band opens under the wire, 6 → 30 px below it; folded onto the wire at 0."
@@ -200,7 +200,7 @@
       }
     ],
     "problems": [],
-    "checked": "2026-11-05T23:20:39"
+    "checked": "2026-11-05T23:20:54"
   },
   "selection": null
 }

@@ -1,0 +1,19 @@
+{
+  "variant": "v4",
+  "pattern": "P10",
+  "drawing_language": "star atlas",
+  "subject": "The voice's spectrum charted as a star field on a conic atlas: columns are harmonics, rows are successive trips round the comb, and each star's magnitude comes from the same model as the sound, with the fundamental as the brightest star.",
+  "controls": [
+    "pulse: the field's magnitudes along the harmonic axis follow the pulse's spectrum, so a dark lane of faint stars walks in from the right toward the fundamental as pulses widen (shape of the field, size).",
+    "lens: how far down the chart the stars stay bright, from only the top row at 0 to all four rows near equal at 100 (shape of the field, size by row).",
+    "sweep: the beam's great-circle track swings about the fundamental star across the chart (rotation, -10 to -50 degrees), lighting the stars it passes.",
+    "fog: a nebula boundary drawn as a hairline contour moves in from the high harmonics, and stars inside it drop to hollow wire (position of the boundary, look swap as second cue)."
+  ],
+  "reference": "library/toro-blocks/README.md (a voice field whose geometry is the signal model, hollow parts below a threshold)",
+  "risks": [
+    "A grid of dots risks reading as a dot-matrix meter or a dashboard rather than an atlas; the conic graticule, labels and the constellation line carry the language.",
+    "Pulse and lens both act on star size; it works the P10 way (two operations on one field along different axes) but needs perceptibility to separate them.",
+    "48 stars as nodes is cheap, but a sweep that relights stars as it turns can exceed ~20 changed nodes per frame while turning.",
+    "Rotating light becomes a line on a chart, the most abstract of the five readings of 'beacon'."
+  ]
+}

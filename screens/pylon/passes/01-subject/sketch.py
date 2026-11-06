@@ -176,7 +176,7 @@ def hatch_quad(fr, q, spacing, w, fill):
 # ---- v1 · P10 voice field, patent section ---------------------------------------------------------------------------
 def v1(p):
     fr = Frame()
-    NI, NJ = 16, 5
+    NI, NJ = 10 + round(8 * p["span"]), 5      # span: slabs along the line
     u, v = (13.0, 4.0), (-8.0, 6.0)
     O = (150.0, 92.0)
     T = 6.0

@@ -1,0 +1,19 @@
+{
+  "variant": "v5",
+  "pattern": "P14",
+  "drawing_language": "engineering schematic",
+  "subject": "An engineering schematic of the comb loop (sum, delay, gain, fog low-pass) whose delay line is woven out below it as cloth: warp threads are the delay taps, and each trip round the loop weaves a fainter row behind the last.",
+  "controls": [
+    "pulse: how many adjacent warp threads carry a raised slab in each row, 1 to 9 (count across the warp).",
+    "lens: slab heights fall row by row by the feedback, so at 0 only the front row stands and at 100 four rows stand nearly level (position: slab tops).",
+    "sweep: the rows shear sideways against the warp as the light swings the comb's tuning, 0 to 12 px per row (position: row offset).",
+    "fog: the raised slabs smear onto their neighbours row by row, the back rows widening and flattening (shape of each row's slab run)."
+  ],
+  "reference": "library/loom-pages/README.md (slabs on warp threads, depth as earlier, four rows)",
+  "risks": [
+    "Stretch, and a weak one: P14 is for history over musical time, and the comb's trips last milliseconds, so the cloth shows a physics diagram, not something the player has done. The best case for the exception is that P14 already names an echo field (repeats as rows behind a pulse), and a comb is exactly that.",
+    "Schematic plus cloth is two pictures, and the schematic half is a dashboard of blocks with labels that no control moves.",
+    "Lens and sweep are both position channels (different parts: slab tops vs row offsets); sweep's shear is small at its default.",
+    "Slabs cost three nodes each; 12 threads x 4 rows with flat tiles is ~70 nodes before anything moves."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "pattern": "P2",
+  "drawing_language": "oscilloscope trace",
+  "subject": "A dual-channel scope: the partial spectrum and its decay slope on the left graticule, the summed output waveform on the right.",
+  "controls": [
+    "settle: rotation; the ch2 decay line (level in dB against time, so an exponential settle is a straight line) swings from steep (0.1 s) to nearly flat (10 s), about 56 degrees.",
+    "layers: count; the ch1 spectrum gains lines, one per partial, from 2 to 64 across the log-frequency graticule.",
+    "stir: shape; the output trace (one mutable outline, 64 points) gains high-partial ripple and sharpens its edges as stir lifts the upper partials.",
+    "grain: position; each spectrum line slides off its harmonic tick by a fixed seeded amount, so coarse grain reads as an inharmonic, scattered comb."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": [
+    "Easy to drift into 'oscilloscope', which says nothing new (P3 pitfall applies to the right half).",
+    "Three graticules make it read as a dashboard of meters; the subject is split in three boxes, not one object.",
+    "At 64 layers the log-spaced top lines bunch under 3 px; cap or thin the upper octave.",
+    "Grain's sideways slide is ~3-6 px per line, below the 24 px position floor; needs more travel or shape help.",
+    "Settling itself (the sinking) only shows on notes; at rest the screen is a static spectrum."
+  ]
+}

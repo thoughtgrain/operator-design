@@ -1,0 +1,19 @@
+{
+  "variant": "v2",
+  "pattern": "P4",
+  "drawing_language": "patent section",
+  "subject": "The comb lens as a stack of sawtooth Fresnel plates receding behind a lamp housing in section, one plate per trip the sound survives round the comb, drawn as a numbered patent figure.",
+  "controls": [
+    "pulse: the tooth profile of the front plate, from sharp sawtooth to blunt flat-topped teeth (shape, on the current layer only).",
+    "lens: how many plates stand in the stack, 1 at 0 to 6 at 100, each further one a grey step darker (count).",
+    "sweep: the shutter blade on the lamp housing turns about the lamp's axis, its swing drawn as a hairline arc (rotation, -60 to 180 degrees).",
+    "fog: the plates drift apart along the recession, the stack loosening from tight to spread (position, 1 to 1.8 times the spacing)."
+  ],
+  "reference": "library/theseus-tower/README.md (a stacked object in clean primitives, black bodies behind grey outlines)",
+  "risks": [
+    "The stack of offset sawtooth plates reads as stairs or a book edge at 1:1; the Fresnel idea needs the axis and the lamp to be legible.",
+    "Lamp and plates sit apart, so the brightest element (front plate) is not where the sound starts; the eye splits between two objects.",
+    "Lamp plus lens plus light is close to the stock prism engine's idea (a beam through optics); must never draw a beam or rays to stay clear of it.",
+    "Section hatching at 6 px pitch on the front plate is near the 3 px floor once scaled; keep it static."
+  ]
+}

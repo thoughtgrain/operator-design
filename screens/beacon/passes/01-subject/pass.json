@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,178 @@
       "brief": "Subject built on P14 Loom; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P3",
+      "drawing_language": "survey plan",
+      "subject": "The output itself, traced bright along a chained survey baseline: each input pulse below the chain rings into a run of teeth one comb period apart, surveyed from a station whose bearing ray is the rotating light.",
+      "controls": [
+        "pulse: the grey input pulse train under the chain line widens its pulses, and the bright teeth above widen with them (shape of the input path; the output tooth width follows as a second cue).",
+        "lens: the number and height of teeth each pulse rings into (shape of the bright output trace): one lone spike per pulse at 0, a long even run that fills the gap to the next pulse at 100.",
+        "sweep: the bearing ray from station a swings up from the chain line, with its angle arc (rotation, 8 to 48 degrees), and the tooth spacing breathes along the chainage as a second cue.",
+        "fog: grey survey contours roll in over the plan from the right edge, one more line every ~15 % (count), and the teeth tips flatten as the trace is low-passed."
+      ],
+      "reference": "library/meikyu-capture/README.md (labelled wireframe ground, thin rails, mid-grey text that makes it read as authored)",
+      "risks": [
+        "P3's own pitfall: at a glance it reads as an oscilloscope; the survey furniture (chain, chainage figures, station, offsets) is what makes it a plan and it has to stay.",
+        "Two controls (pulse, lens) both touch the bright trace; the rule holds only because pulse's primary is the grey input path. Perceptibility must prove it.",
+        "Fog by contour count is empty at the default 0, so the rest frame never shows fog; a contour lines' layer fighting the trace at 100 is untested.",
+        "Teeth 18 px apart at lens 100 approach hatching density; keep the comb period on screen ≥ 12 px whatever the note."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P4",
+      "drawing_language": "patent section",
+      "subject": "The comb lens as a stack of sawtooth Fresnel plates receding behind a lamp housing in section, one plate per trip the sound survives round the comb, drawn as a numbered patent figure.",
+      "controls": [
+        "pulse: the tooth profile of the front plate, from sharp sawtooth to blunt flat-topped teeth (shape, on the current layer only).",
+        "lens: how many plates stand in the stack, 1 at 0 to 6 at 100, each further one a grey step darker (count).",
+        "sweep: the shutter blade on the lamp housing turns about the lamp's axis, its swing drawn as a hairline arc (rotation, -60 to 180 degrees).",
+        "fog: the plates drift apart along the recession, the stack loosening from tight to spread (position, 1 to 1.8 times the spacing)."
+      ],
+      "reference": "library/theseus-tower/README.md (a stacked object in clean primitives, black bodies behind grey outlines)",
+      "risks": [
+        "The stack of offset sawtooth plates reads as stairs or a book edge at 1:1; the Fresnel idea needs the axis and the lamp to be legible.",
+        "Lamp and plates sit apart, so the brightest element (front plate) is not where the sound starts; the eye splits between two objects.",
+        "Lamp plus lens plus light is close to the stock prism engine's idea (a beam through optics); must never draw a beam or rays to stay clear of it.",
+        "Section hatching at 6 px pitch on the front plate is near the 3 px floor once scaled; keep it static."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "drawing_language": "hidden-line isometric",
+      "subject": "A hidden-line lens barrel ringed like a comb standing on an isometric sea grid, its lit window and the patch of light it throws on the water turning with the sweep, with the pulse train ticking along the bottom strip.",
+      "controls": [
+        "pulse: the marks in the bottom strip widen, 4 px to 22 px, as each pulse gets wider (shape and size of the strip marks).",
+        "lens: the barrel gains evenly spaced rings, 3 at 0 to 12 at 100, the comb's teeth tightening (count on the figure).",
+        "sweep: the lit window travels round the barrel's near face and the hidden-line patch on the sea swings with it (position round the barrel; the patch's bearing as the second cue).",
+        "fog: a fog bank, a hidden-line wall with black fill, advances across the sea grid toward the barrel and swallows the far grid lines (position)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one bright figure over a low-grey mesh, strip along the bottom)",
+      "risks": [
+        "A ringed cylinder on a grid is close to a generic 3D primitive; it says lighthouse more than comb filter, and the lens/pitch link depends on the rings.",
+        "Lens by ring count at 12 rings over 80 px is a 6.7 px pitch: legal but near hatching; the top end may smear.",
+        "The lit window and the sea patch move together on rotation-faked-by-position; at the barrel's edge the window hugs the silhouette and nearly vanishes.",
+        "Fog wall is not drawn at the default 0; whether it reads as fog or as a building needs a frame at 100."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P10",
+      "drawing_language": "star atlas",
+      "subject": "The voice's spectrum charted as a star field on a conic atlas: columns are harmonics, rows are successive trips round the comb, and each star's magnitude comes from the same model as the sound, with the fundamental as the brightest star.",
+      "controls": [
+        "pulse: the field's magnitudes along the harmonic axis follow the pulse's spectrum, so a dark lane of faint stars walks in from the right toward the fundamental as pulses widen (shape of the field, size).",
+        "lens: how far down the chart the stars stay bright, from only the top row at 0 to all four rows near equal at 100 (shape of the field, size by row).",
+        "sweep: the beam's great-circle track swings about the fundamental star across the chart (rotation, -10 to -50 degrees), lighting the stars it passes.",
+        "fog: a nebula boundary drawn as a hairline contour moves in from the high harmonics, and stars inside it drop to hollow wire (position of the boundary, look swap as second cue)."
+      ],
+      "reference": "library/toro-blocks/README.md (a voice field whose geometry is the signal model, hollow parts below a threshold)",
+      "risks": [
+        "A grid of dots risks reading as a dot-matrix meter or a dashboard rather than an atlas; the conic graticule, labels and the constellation line carry the language.",
+        "Pulse and lens both act on star size; it works the P10 way (two operations on one field along different axes) but needs perceptibility to separate them.",
+        "48 stars as nodes is cheap, but a sweep that relights stars as it turns can exceed ~20 changed nodes per frame while turning.",
+        "Rotating light becomes a line on a chart, the most abstract of the five readings of 'beacon'."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P14",
+      "drawing_language": "engineering schematic",
+      "subject": "An engineering schematic of the comb loop (sum, delay, gain, fog low-pass) whose delay line is woven out below it as cloth: warp threads are the delay taps, and each trip round the loop weaves a fainter row behind the last.",
+      "controls": [
+        "pulse: how many adjacent warp threads carry a raised slab in each row, 1 to 9 (count across the warp).",
+        "lens: slab heights fall row by row by the feedback, so at 0 only the front row stands and at 100 four rows stand nearly level (position: slab tops).",
+        "sweep: the rows shear sideways against the warp as the light swings the comb's tuning, 0 to 12 px per row (position: row offset).",
+        "fog: the raised slabs smear onto their neighbours row by row, the back rows widening and flattening (shape of each row's slab run)."
+      ],
+      "reference": "library/loom-pages/README.md (slabs on warp threads, depth as earlier, four rows)",
+      "risks": [
+        "Stretch, and a weak one: P14 is for history over musical time, and the comb's trips last milliseconds, so the cloth shows a physics diagram, not something the player has done. The best case for the exception is that P14 already names an echo field (repeats as rows behind a pulse), and a comb is exactly that.",
+        "Schematic plus cloth is two pictures, and the schematic half is a dashboard of blocks with labels that no control moves.",
+        "Lens and sweep are both position channels (different parts: slab tops vs row offsets); sweep's shear is small at its default.",
+        "Slabs cost three nodes each; 12 threads x 4 rows with flat tiles is ~70 nodes before anything moves."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:21:18"
+  },
   "selection": null
 }

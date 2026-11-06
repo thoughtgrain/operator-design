@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <!-- spool · subject pass 01 · v3 · P4 stack in depth · survey plan -->
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wear</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wow</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">length</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0.32s</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">bias</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+  </g>
+  <path d="M 64.4 174.45 L 140.4 106.05 L 139.6 105.15 L 63.6 173.55 Z" fill="#323232" stroke="none"/>
+  <path d="M 300.4 174.45 L 376.4 106.05 L 375.6 105.15 L 299.6 173.55 Z" fill="#323232" stroke="none"/>
+  <path d="M 140 101.2 L 269.8 58 L 281.6 82 L 340.6 76 L 352.4 101.2 L 376 101.2 L 376 105.6 L 140 105.6 Z" fill="#000000" stroke="none"/>
+  <path d="M 140 106.2 L 376 106.2 L 376 105 L 140 105 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 140.24 101.91 L 269.42 58.92 L 281.16 82.8 L 340.15 76.8 L 351.92 101.95 L 376 101.95 L 376 100.45 L 352.88 100.45 L 341.05 75.2 L 282.04 81.2 L 270.18 57.08 L 139.76 100.49 Z" fill="#4B4B4B" stroke="none"/>
+  <text transform="matrix(1 0 0 1 384 108.6)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">-4</text>
+  <path d="M 121 118.3 L 250.8 75.1 L 262.6 99.1 L 321.6 93.1 L 333.4 118.3 L 357 118.3 L 357 122.7 L 121 122.7 Z" fill="#000000" stroke="none"/>
+  <path d="M 121 123.3 L 357 123.3 L 357 122.1 L 121 122.1 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 121.24 119.01 L 250.42 76.02 L 262.16 99.9 L 321.15 93.9 L 332.92 119.05 L 357 119.05 L 357 117.55 L 333.88 117.55 L 322.05 92.3 L 263.04 98.3 L 251.18 74.18 L 120.76 117.59 Z" fill="#4B4B4B" stroke="none"/>
+  <text transform="matrix(1 0 0 1 365 125.7)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">-3</text>
+  <path d="M 102 135.4 L 231.8 92.2 L 243.6 116.2 L 302.6 110.2 L 314.4 135.4 L 338 135.4 L 338 139.8 L 102 139.8 Z" fill="#000000" stroke="none"/>
+  <path d="M 102 140.4 L 338 140.4 L 338 139.2 L 102 139.2 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 102.24 136.11 L 231.42 93.12 L 243.16 117 L 302.15 111 L 313.92 136.15 L 338 136.15 L 338 134.65 L 314.88 134.65 L 303.05 109.4 L 244.04 115.4 L 232.18 91.28 L 101.76 134.69 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 346 142.8)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">-2</text>
+  <path d="M 83 152.5 L 212.8 109.3 L 224.6 133.3 L 283.6 127.3 L 295.4 152.5 L 319 152.5 L 319 156.9 L 83 156.9 Z" fill="#000000" stroke="none"/>
+  <path d="M 83 157.5 L 319 157.5 L 319 156.3 L 83 156.3 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 83.24 153.21 L 212.42 110.22 L 224.16 134.1 L 283.15 128.1 L 294.92 153.25 L 319 153.25 L 319 151.75 L 295.88 151.75 L 284.05 126.5 L 225.04 132.5 L 213.18 108.38 L 82.76 151.79 Z" fill="#7D7D7D" stroke="none"/>
+  <text transform="matrix(1 0 0 1 327 159.9)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">-1</text>
+  <path d="M 64 169.6 L 193.8 126.4 L 205.6 150.4 L 264.6 144.4 L 276.4 169.6 L 300 169.6 L 300 174 L 64 174 Z" fill="#000000" stroke="none"/>
+  <path d="M 64 174.6 L 300 174.6 L 300 173.4 L 64 173.4 Z" fill="#646464" stroke="none"/>
+  <path d="M 64.32 170.55 L 193.29 127.62 L 205.01 151.47 L 264 145.47 L 275.76 170.6 L 300 170.6 L 300 168.6 L 277.04 168.6 L 265.2 143.33 L 206.19 149.33 L 194.31 125.18 L 63.68 168.65 Z" fill="#CDCDCD" stroke="none"/>
+  <text transform="matrix(1 0 0 1 308 177)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">0</text>
+  <rect x="63.4" y="174" width="1.2" height="6" fill="#7D7D7D" stroke="none"/>
+  <rect x="92.9" y="174" width="1.2" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="122.4" y="174" width="1.2" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="151.9" y="174" width="1.2" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="181.4" y="174" width="1.2" height="6" fill="#7D7D7D" stroke="none"/>
+  <rect x="210.9" y="174" width="1.2" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="240.4" y="174" width="1.2" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="269.9" y="174" width="1.2" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="299.4" y="174" width="1.2" height="6" fill="#7D7D7D" stroke="none"/>
+  <text transform="matrix(1 0 0 1 64 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">0+00</text>
+  <text transform="matrix(1 0 0 1 300 192)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px" text-anchor="end">1+00</text>
+  <text transform="matrix(1 0 0 1 384 91.6)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px" text-anchor="start">pass</text>
+</svg>

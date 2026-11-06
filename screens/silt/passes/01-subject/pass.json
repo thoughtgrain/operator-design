@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,180 @@
       "brief": "Subject built on P11 Instrument stack; drawing language: patent section. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P2",
+      "drawing_language": "oscilloscope trace",
+      "subject": "A dual-channel scope: the partial spectrum and its decay slope on the left graticule, the summed output waveform on the right.",
+      "controls": [
+        "settle: rotation; the ch2 decay line (level in dB against time, so an exponential settle is a straight line) swings from steep (0.1 s) to nearly flat (10 s), about 56 degrees.",
+        "layers: count; the ch1 spectrum gains lines, one per partial, from 2 to 64 across the log-frequency graticule.",
+        "stir: shape; the output trace (one mutable outline, 64 points) gains high-partial ripple and sharpens its edges as stir lifts the upper partials.",
+        "grain: position; each spectrum line slides off its harmonic tick by a fixed seeded amount, so coarse grain reads as an inharmonic, scattered comb."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "Easy to drift into 'oscilloscope', which says nothing new (P3 pitfall applies to the right half).",
+        "Three graticules make it read as a dashboard of meters; the subject is split in three boxes, not one object.",
+        "At 64 layers the log-spaced top lines bunch under 3 px; cap or thin the upper octave.",
+        "Grain's sideways slide is ~3-6 px per line, below the 24 px position floor; needs more travel or shape help.",
+        "Settling itself (the sinking) only shows on notes; at rest the screen is a static spectrum."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P3",
+      "drawing_language": "typeset diagram",
+      "subject": "The stirred wave printed big as a textbook figure, its component partials drawn small beneath it hanging in a band that sinks toward a stippled silt bed.",
+      "controls": [
+        "settle: position; the band of component curves hangs high under the wave at long settle and drops onto the stipple bed at short settle (about 26 px).",
+        "layers: count; one printed component curve per partial is added under the wave (capped at eight visible, labelled k2 to kN).",
+        "stir: shape; the main wave (the one bright mutable outline) gains high-partial ripple and steeper edges.",
+        "grain: scale; the stipple dots of the bed grow from fine silt (3 px) to coarse sand (6 px)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "The component band reads as water hatching at 1:1; spacing is exactly at the 7 px limit and amplitude only 2 px.",
+        "Layers has to cap at eight curves, so 16..64 differ only in the label; count floor (12 items) fails above 8.",
+        "Grain on the bed is small and low-grey; scale 2x of 3 px dots may still under-read for a score-3 control.",
+        "Settle shown as a position is a snapshot of a time; it explains 'how far they've sunk', not the rate."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P4",
+      "drawing_language": "orthographic elevation",
+      "subject": "Octave bands of partials as flat plates in elevation, stepping back from the fundamental on the ground line, the upper plates lifted off their dashed settled positions.",
+      "controls": [
+        "settle: position along the stack; the bright plate (the settle front, the band still falling) moves from the front plate at 0.1 s to the back plate at 10 s.",
+        "layers: count; one plate per octave band (k1, k2, k3-4, k5-8 ...), from 2 plates at 2 partials to 7 plates at 64.",
+        "stir: position; plates lift vertically off their dashed settled lines, more the further back (higher) they are, up to ~46 px for the top band.",
+        "grain: shape; the bright plate's top edge goes from a fine serration to coarse teeth."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "Settle and stir both use position, on different parts and axes (bright marker along the stack vs vertical lift); a reviewer may call it a shared channel.",
+        "Count by octave grows slowly (2 to 7 plates), under the 12-item floor though it is more than doubling.",
+        "Plates read as shelves or a bar chart at 1:1; the elevation conventions (ground hatch, hidden settled lines, dimension ticks) carry the language and must stay crisp.",
+        "Grain only shapes one plate; a score-3 control on a 230 px edge with 1.5-5 px teeth is borderline."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "drawing_language": "survey plan",
+      "subject": "A survey plan of a settling basin: a bright silt plume spreading from the inlet over the faint contoured bed, with its deposit lens on the flow line and one chainage station per partial along the foot.",
+      "controls": [
+        "settle: scale; the plume grows from 0.7x to 1.3x along the flow line (slow-settling silt stays suspended and travels further).",
+        "layers: count; chainage stations along the bottom strip, one tick per partial, every fourth numbered.",
+        "stir: shape; the plume's edges lobe and billow (high partials lifted) from a smooth fan to a churned outline.",
+        "grain: position; the deposit lens slides upstream toward the inlet as grain coarsens (coarse grains drop out first), about 100 px."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": [
+        "The strip of stations is close to a 'strip of cells' at rest (craft: picture, not panel); it earns its place only because it is the partial count.",
+        "Contours under 1.5 px (hairline field, lint warns) may vanish on the panel; check on device.",
+        "The plume is a metaphor for the spectrum, not a plot of it: stir lobing doesn't literally show which partials lifted.",
+        "A blob outline can slide toward an organic or icon-like shape (an earlier draft read as a fish); keep it a fan."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "patent section",
+      "subject": "A glass settling column cut open like a patent figure, its partial strata stacked from the bed up to a bright interface, a hinged stirring arm and suspended grains above.",
+      "controls": [
+        "settle: position; the bright interface between settled strata and suspension sits low for a fast settle and high for a slow one (about 100 px).",
+        "layers: count; one stratum line per partial from the bed up, to the interface (capped near 24 visible).",
+        "stir: rotation; the stirring arm swings on its pivot from hanging straight (0) to 40 degrees (100).",
+        "grain: scale; the suspended particles grow from 3 px to 6 px."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": [
+        "Stretch: P11 is for instruments people know by sight, and a settling column (Imhoff cone, elutriation tube) isn't one most players know; recognition is not free here, so the pattern's main reason doesn't hold. Honest verdict: it doesn't fit the pattern well; it survives as a section drawing (closer to P1) of the machine's own metaphor.",
+        "Layers counted as strata loses legibility past ~24 lines; strata hide above the interface at slow settle.",
+        "The arm rotating is a literal stir, but stir in the DSP lifts high partials; the arm angle doesn't show which partials rise.",
+        "Hatched walls are many small static paths; fine for budget but check hatch spacing (5 px) on device."
+      ],
+      "stretch": "Doesn't fit P11 honestly: silt has no instrument the player knows by sight. The column is the machine's own metaphor drawn as an instrument; keep it only if the owner wants a literal object."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:20:59"
+  },
   "selection": null
 }

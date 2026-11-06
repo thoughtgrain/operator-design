@@ -1,0 +1,19 @@
+{
+  "variant": "v3",
+  "pattern": "P5",
+  "drawing_language": "hidden-line isometric",
+  "subject": "A hidden-line lens barrel ringed like a comb standing on an isometric sea grid, its lit window and the patch of light it throws on the water turning with the sweep, with the pulse train ticking along the bottom strip.",
+  "controls": [
+    "pulse: the marks in the bottom strip widen, 4 px to 22 px, as each pulse gets wider (shape and size of the strip marks).",
+    "lens: the barrel gains evenly spaced rings, 3 at 0 to 12 at 100, the comb's teeth tightening (count on the figure).",
+    "sweep: the lit window travels round the barrel's near face and the hidden-line patch on the sea swings with it (position round the barrel; the patch's bearing as the second cue).",
+    "fog: a fog bank, a hidden-line wall with black fill, advances across the sea grid toward the barrel and swallows the far grid lines (position)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one bright figure over a low-grey mesh, strip along the bottom)",
+  "risks": [
+    "A ringed cylinder on a grid is close to a generic 3D primitive; it says lighthouse more than comb filter, and the lens/pitch link depends on the rings.",
+    "Lens by ring count at 12 rings over 80 px is a 6.7 px pitch: legal but near hatching; the top end may smear.",
+    "The lit window and the sea patch move together on rotation-faked-by-position; at the barrel's edge the window hugs the silhouette and nearly vanishes.",
+    "Fog wall is not drawn at the default 0; whether it reads as fog or as a building needs a frame at 100."
+  ]
+}
