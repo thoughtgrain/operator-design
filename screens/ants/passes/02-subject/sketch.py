@@ -371,67 +371,50 @@ def ant_side(F, x, y, L, edge, sw=HAIR, legs=None, facing=1, hang=False):
 
 # ======================================================================== v1
 def v1() -> Frame:
-    """Pegs and thread, single-weight contour: every crossing winds a strand between two pegs;
-    strands that aren't walked again slip off and hang."""
+    """The rule as a real object, single-weight contour: the colony walking a glockenspiel,
+    one bar per degree, so every step an ant lands on a bar is a note."""
     F = Frame([G0, G2, G3, G4, BK])
     WT = LINE                                   # the one weight
     n = N_DEG
-    x0, dx = 62.0, 35.6
-    px = [x0 + i * dx for i in range(n)]
-    top, plank = 88.0, 168.0
-    # plank: a long board in elevation, its front edge and top face
-    F.shape([(30, plank), (450, plank), (450, plank + 12), (30, plank + 12)], G4, WT)
-    F.line([(34, plank + 4), (446, plank + 4)], WT, G4)
-    # pegs: shafts and turned heads
-    for x in px:
-        F.shape([(x - 3.2, top + 4), (x + 3.2, top + 4), (x + 3.2, plank), (x - 3.2, plank)], G4, WT)
-        F.shape(ellipse(x, top, 6.5, 5.5, 20), G3, WT)
-
-    def drape(a, b, sag_k=0.5, lift=0.0):
-        xa, xb = px[a], px[b]
-        L = abs(xb - xa)
-        sag = sag_k * L ** 1.05
+    pitch, bw = 39.0, 27.0
+    x0 = 240 - pitch * (n - 1) / 2
+    cy = 120.0
+    bars = []
+    for i in range(n):
+        L = 160 - i * 7.2
+        x = x0 + i * pitch
+        bars.append((x, cy - L / 2 + 4 * i / n, cy + L / 2 - 4 * i / n))
+    # the two felt rails the bars rest on, at the nodal points (under the bars)
+    for fr in (0.224, 0.776):
+        F.line([(bars[0][0] - bw / 2 - 10, bars[0][1] + fr * (bars[0][2] - bars[0][1]))] +
+               [(x, y0 + fr * (y1 - y0)) for x, y0, y1 in bars] +
+               [(bars[-1][0] + bw / 2 + 10, bars[-1][1] + fr * (bars[-1][2] - bars[-1][1]))], WT, G4)
+    # bars: rounded plates, a pin through each nodal point
+    for x, y0, y1 in bars:
+        r = 4.0
         pts = []
-        for k in range(25):
-            t = k / 24
-            xx = xa + (xb - xa) * t
-            yy = top + 3 + lift * (1 - 0.6 * abs(2 * t - 1)) + sag * (4 * t * (1 - t)) ** 0.95
-            pts.append((xx, yy))
-        return pts
+        for cx_, cy_, a0 in ((x + bw / 2 - r, y0 + r, -math.pi / 2), (x + bw / 2 - r, y1 - r, 0),
+                             (x - bw / 2 + r, y1 - r, math.pi / 2), (x - bw / 2 + r, y0 + r, math.pi)):
+            pts += [(cx_ + r * math.cos(a0 + math.pi / 2 * k / 4), cy_ + r * math.sin(a0 + math.pi / 2 * k / 4)) for k in range(5)]
+        F.shape(pts, G3, WT)
+        for fr in (0.224, 0.776):
+            F.shape(ellipse(x, y0 + fr * (y1 - y0), 2.6, 2.6, 12), G4, WT)
+    # where the phrase lands on each bar (an ant walks the bar top between notes)
+    land = {0: 0.5, 2: 0.36, 3: 0.58, 5: 0.42, 4: 0.7, 1: 0.6}
+    ghost_land = {6: 0.4, 7: 0.62, 8: 0.35, 10: 0.5, 5: 0.6, 3: 0.3, 4: 0.45}
 
-    # fallen strands (fade): old threads slipped off one peg and hanging past the board
-    hang = [(7, 1.0, 22.0), (9, -1.0, 34.0)]
-    for peg, side, depth in hang[: 2 if FADE < 0.5 else 1]:
-        x = px[peg]
-        pts = [(x + side * 3, top + 4)]
-        for k in range(1, 22):
-            t = k / 21
-            pts.append((x + side * (3 + 12 * math.sin(t * 1.4)), top + 4 + t * (depth + 34)))
-        F.line(pts, WT, G4)
-    # live strands: each walked edge carries a bundle (scent: strands per edge)
-    edges = {}
-    for a, b in zip(TRAIL, TRAIL[1:]):
-        key = (min(a, b), max(a, b))
-        edges[key] = edges.get(key, 0) + 1
-    order = sorted(edges, key=lambda e: e[1] - e[0], reverse=True)
-    for (a, b) in order:
-        strands = 1 + int(SCENT * 1.6 + 0.2 * edges[(a, b)]) if b - a == 1 else 1
-        for k in range(strands):
-            F.line(drape(a, b, lift=k * 3.6), WT, G0 if k == 0 else G2, bound=(k == 0))
-    # one stray single strand from the wandering part of the walk
-    F.line(drape(5, 6, sag_k=0.9), WT, G3)
-    # ants: contour ants walking the strands
-    # thread wound round the pegs the phrase uses
-    for p in sorted(set(TRAIL)):
-        x = px[p]
-        for k in range(2):
-            F.line([(x - 4.5, top + 10 + 4 * k), (x + 4.5, top + 7 + 4 * k)], WT, G2)
-    # ants walk upside down under the deepest strands
-    spots = [((0, 2), 0.42), ((3, 5), 0.6), ((2, 4), 0.45), ((1, 2), 0.5)]
-    for (a, b), t in spots[:N_ANTS]:
-        pts = drape(a, b, lift=0)
-        (x, y), ang = point_along(pts, t)
-        ant_side(F, x, y + 1.2, 24, G2, WT, legs=G3, facing=1 if b > a else -1, hang=True)
+    def at(i, fr):
+        x, y0, y1 = bars[i]
+        return (x, y0 + fr * (y1 - y0))
+    for g in GHOSTS[: 2 if FADE < 0.5 else 1]:
+        F.dashed(catmull([at(i, ghost_land.get(i, 0.5)) for i in g], 6, False), WT, G4, on=4, off=5)
+    seq = TRAIL[:-1]
+    fr = [land[i] if k != 5 else 0.2 for k, i in enumerate(seq)]
+    loop = catmull([at(i, q) for i, q in zip(seq, fr)], 7, True)
+    F.line(loop, WT + 0.5, G0, bound=True)
+    for t in (0.04, 0.3, 0.55, 0.78)[:N_ANTS]:
+        (x, y), ang = point_along(loop, t)
+        ant_plan(F, x, y, ang, 26, G2, WT, legs=G3, legw=HAIR)
     return F
 
 
@@ -608,7 +591,7 @@ def v4() -> Frame:
             F.line(pts, HAIR, G5)
         if k == chosen:
             F.line([at(k, j, 0.0) for j in range(1, 18)], SUBJ, G0, bound=True)
-        elif k in (1, 3)[: 2 if FADE < 0.5 else 1]:
+        elif k in (1, 2)[: 2 if FADE < 0.5 else 1]:
             # old scent left on an unused branch: deposits not yet evaporated (fade: how far they reach)
             reach = 2 + int(10 * (1 - FADE))
             band = [at(k, j, 0.4) for j in range(1, reach)] + [at(k, j, -0.4) for j in range(reach - 1, 0, -1)]
@@ -742,7 +725,7 @@ def v5() -> Frame:
     """Ants, drawn literally in hidden-line 3D: a file of modelled ants walking the
     reinforced path across the degree stones, one camera over the whole scene."""
     F = Frame([G0, G2, G3, G4, G5, BK])
-    cam = Camera((0.8, 3.4, 8.4), (0.6, 0.0, -1.0), 330.0, 240.0, 118.0)
+    cam = Camera((0.8, 5.2, 8.2), (0.6, 0.0, -0.9), 300.0, 240.0, 118.0)
     sp = 2.5
     stones = ([(-5.0 + i * sp, 0.0, 0.8) for i in range(5)] + [(-3.8 + i * sp, 0.0, -2.6) for i in range(5)]
               + [(8.7, 0.0, -2.6)])
@@ -769,7 +752,7 @@ def v5() -> Frame:
         F.shape(top, G5, HAIR)
     # ants on the route, far to near
     spots = []
-    for (a, b), t in (((2, 1), 0.5), ((5, 4), 0.42), ((4, 2), 0.3), ((3, 5), 0.72)):
+    for (a, b), t in (((2, 1), 0.5), ((5, 4), 0.7), ((4, 2), 0.15), ((3, 5), 0.72)):
         A, B = stones[a], stones[b]
         spots.append(((A[0] + (B[0] - A[0]) * t, 0.0, A[2] + (B[2] - A[2]) * t),
                       math.atan2(B[2] - A[2], B[0] - A[0])))

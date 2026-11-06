@@ -787,9 +787,8 @@ def v5(s: Spool) -> Frame:
         fr.poly([cam(p) for p in fill3], fill=K, stroke=K, sw=0.6)
         if extra:
             th, circles, dd = extra
-            tvec = v3(0, math.sin(th), math.cos(th))
             for x, rr in circles:
-                pts = [cam(P(x + dd * 0.42 * math.cos(a), rr, th) + tvec * dd * 0.42 * math.sin(a))
+                pts = [cam(P(x + dd * 0.42 * math.cos(a), rr + dd * 0.42 * math.sin(a), th))
                        for a in np.linspace(0, 2 * math.pi, 14, endpoint=False)]
                 fr.outline(pts, B, HAIR)
         for pts, w, col in edges:

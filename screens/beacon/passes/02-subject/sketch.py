@@ -403,7 +403,7 @@ def v1() -> Frame:
     # prism rings, edge-lit from the lamp inside: each prism's edge catches light only
     # near the lit panel (bright), fading to a hairline across the next panels, and as
     # a short rim where the drum turns away at either silhouette; the rest stays black.
-    reach = math.radians(68)
+    reach = math.radians(48)
 
     def arc3(r, z, a0, a1, n=24):
         return [(r * math.cos(lerp(a0, a1, k / n)), r * math.sin(lerp(a0, a1, k / n)), z) for k in range(n + 1)]
@@ -719,8 +719,8 @@ def v4() -> Frame:
 
     # swell, far to near: each crest a closed shape that hides what's behind
     rng = random.Random(7)
-    rows = [3.3 * 1.2 ** k for k in range(9, -1, -1)]     # far to near, evenly spaced in log depth
-    reach = lerp(LD, 3.0, 0.3 + 0.7 * D["lens"])  # lens: how far toward you the glitter reaches
+    rows = [3.4 * 1.3 ** k for k in range(6, -1, -1)]     # far to near, evenly spaced in log depth
+    reach = lerp(LD, 3.0, 0.35 + 0.65 * D["lens"])  # lens: how far toward you the glitter reaches
     col_X = lambda Dp: (lx - cx) * Dp / f          # world X under the light at depth Dp
 
     def crest(s, k):
@@ -745,7 +745,7 @@ def v4() -> Frame:
             # glitter: crests under the light catch it, as far as the lens throws it
             xc = col_X(Dp)
             if Dp >= reach and X < xc < X + w:
-                gl = (0.25 + 1.2 * D["pulse"]) / 2   # pulse: how long each glint is
+                gl = (0.4 + 2.0 * D["pulse"]) / 2   # pulse: how long each glint is
                 seg = []
                 for j in range(41):
                     s = j / 40
@@ -754,7 +754,7 @@ def v4() -> Frame:
                         seg.append(P(xx, Dp, hgt * crest(s, k)))
                 if len(seg) >= 2:
                     F.ribbon(seg, sw + 0.5, G6)
-            X += w * (0.55 + 0.2 * rng.random())
+            X += w * (0.8 + 0.35 * rng.random())
     # glints on the far water, between the rock and the first row
     for Dp in (24.0, 20.0):
         if Dp >= reach:

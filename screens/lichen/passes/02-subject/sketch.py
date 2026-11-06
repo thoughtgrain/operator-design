@@ -925,13 +925,13 @@ def v5():
     tip; the dead centre is a hole hatched with the old crust; fruiting cups
     sit where the colony's next step up is a half step; spores lie downwind."""
     s = Svg()
-    cam = Cam((5.4, -3.6, 9.4), (5.4, 2.2, 0), 300, 236, 122)
+    cam = Cam((5.4, -3.6, 9.4), (5.4, 2.2, 0), 370, 236, 122)
     P = cam.p
     g = DEF["grow"]
     cells = LIVE
     cen = (sum(hexc(*c)[0] for c in cells) / len(cells), sum(hexc(*c)[1] for c in cells) / len(cells))
 
-    discs = [(*hexc(*c), 0.5) for c in cells]
+    discs = [(*hexc(*c), 0.56) for c in cells]
     caps = []                                  # lobes: from each margin cell outward, widening to the tip
     jr = random.Random(5)
     for c in sorted(cells):
@@ -944,13 +944,13 @@ def v5():
             nx_, ny_ = norm((bx - x, by - y, 0))[:2]
             rx, ry = norm((x - cen[0], y - cen[1], 0))[:2]
             ang = math.atan2(ny_ * 0.6 + ry * 0.4, nx_ * 0.6 + rx * 0.4) + jr.uniform(-0.25, 0.25)
-            L = 0.42 + 0.6 * g + jr.uniform(0, 0.18)
+            L = 0.5 + 0.6 * g + jr.uniform(0, 0.22)
             tip = (x + math.cos(ang) * L, y + math.sin(ang) * L)
             caps.append(((x, y), tip, 0.13, 0.19))
             for sgn in (-1, 1):                # crenate tip: two short rounded lobules
                 a2 = ang + sgn * 0.5
                 caps.append((tip, (tip[0] + math.cos(a2) * 0.13, tip[1] + math.sin(a2) * 0.13), 0.15, 0.12))
-    holes = [(*hexc(*c), 0.36) for c in DEAD]
+    holes = [(*hexc(*c), 0.3) for c in DEAD]
 
     def capsule(px, py, a, b, ra, rb):
         dx, dy = b[0] - a[0], b[1] - a[1]
@@ -1027,7 +1027,7 @@ def v5():
                     cls.append(3)
                 else:
                     cls.append(2 if lit > 0.3 else (1 if lit > -0.35 else 0))
-            style = {3: (SUBJ, G7), 2: (LINE, G5), 1: (HAIR, G4), 0: (HAIR, G3)}
+            style = {3: (SUBJ, G7), 2: (LINE, G5), 1: (HAIR, G3), 0: None}
             i0 = next((i for i in range(n) if cls[i] != cls[i - 1]), 0)
             runs, cur = [], [i0]
             for k in range(1, n + 1):
@@ -1038,7 +1038,8 @@ def v5():
                     cur = [i]
             for cl, idx in runs:
                 st = style[cl]
-                s.line([scr[i] for i in idx], st[0], st[1])
+                if st:
+                    s.line([scr[i] for i in idx], st[0], st[1])
     # spores: lying on bare stone (seed)
     for c in SPORES:
         x, y = hexc(*c)
