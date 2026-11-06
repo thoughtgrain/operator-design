@@ -1,7 +1,0 @@
-control        score  need %  0→100 %  0→50 %  50→100 %  span
-settle             4    1.60     3.01    2.71      2.39   240  ok
-layers             4    1.60     1.86    0.70      1.19   183  ok
-stir               5    2.50     3.17    3.20      3.08   263  ok
-grain              3    1.20     1.81    1.46      1.70   177  ok
-note response      —    2.00     3.09       —         —   245  ok
-pass

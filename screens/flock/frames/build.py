@@ -230,7 +230,7 @@ WING = [(-0.03, -0.05), (0.16, -0.075), (0.40, -0.065), (0.60, -0.016), (0.60, 0
 
 def wing_angle(speed: float) -> float:
     """Degrees from the beak direction, anticlockwise: folded along the back at 0.25, raised at 4.00."""
-    return 188 - 84 * speed
+    return 198 - 80 * speed
 
 
 def _place(pts, top, lean, bob):

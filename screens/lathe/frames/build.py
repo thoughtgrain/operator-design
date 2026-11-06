@@ -46,7 +46,7 @@ HW = 0.033                      # groove half-width at the surface
 DEPTH = 0.042                   # 90 degree stylus: depth = half-width
 CENTRE_X = 156                  # principal point: the newest groove stands upright here
 Y_NEAR_SCREEN, Y_FAR_SCREEN = 166.0, 44.0
-FIELD = (236.0, 310.0, 275.0)   # field stop: centre x, centre y, radius (screen)
+FIELD = (228.0, 310.0, 270.0)   # field stop: centre x, centre y, radius (screen)
 TOP = 40.0                      # nothing above this (header clearance)
 SPLIT_SCREEN = 122.0            # depth of field: lips dim in three runs, walls dissolve at WALL_SCREEN
 FAR_SCREEN = 70.0
@@ -290,7 +290,24 @@ def section_piece(k_from, k_to, x_start=None):
     c = gx(k_to)
     pts += [CAM((c - HW, Y0, 0.0)), CAM((c - 0.003, Y0, -DEPTH)), CAM((c + 0.003, Y0, -DEPTH)),
             CAM((c + HW, Y0, 0.0))]
-    return pts
+    return clip_right(pts)
+
+
+def clip_right(pts, margin=4.0):
+    """Cut a left-to-right polyline where it reaches the field stop's right edge."""
+    out = [pts[0]]
+    for p in pts[1:]:
+        q = out[-1]
+        lim = field_x(p[1]) - margin
+        if p[0] <= lim:
+            out.append(p)
+            continue
+        limq = field_x(q[1]) - margin
+        if q[0] < limq and p[0] != q[0]:
+            t = (limq - q[0]) / (p[0] - q[0])
+            out.append((q[0] + (p[0] - q[0]) * t, q[1] + (p[1] - q[1]) * t))
+        break
+    return out if len(out) >= 2 and math.dist(out[0], out[-1]) > 1 else []
 
 
 def field_x(y_screen):
