@@ -2,7 +2,8 @@
 """Flock · v5 refined: the crank automaton, simplified, with a filled box.
 
     python3 screens/flock/frames/build.py            # frames, PNGs, before-after, contact, motion.gif
-    python3 screens/flock/frames/build.py --check    # also print clearance, contrast and black-body numbers
+    python3 screens/flock/frames/build.py --check    # also print contrast, clearances, black body, perceptibility
+    (scratch work goes in screens/flock/frames/_scratch/ and is removed at the end unless --keep)
 
 The pick from subject pass 02 (v5): a wooden box with eight carved birds on rods riding a slot
 over a tuned comb. Each rod's pick plucks the tine in front of it; a crank on the front drives it.
@@ -613,6 +614,14 @@ def main(argv: list[str]) -> int:
     shutil.copy(scratch / "contact.png", HERE / "contact.png")
     gif(phrase(), HERE / "motion.gif", scratch)
     if "--check" in argv:
+        # note response: a playing frame (crank turned, a bird hopped and lit, its tine ringing) beside rest
+        playing = replace(DEFAULT, crank_turn=120, ride=(0.0, 0.2, 0.0, 0.25, 0.0, 0.3, 0.35, 0.0), lit=6,
+                          pluck=0.8, bob=4, playing=True)
+        write(playing, "playing", "playing", cs)
+        res = subprocess.run([sys.executable, str(ROOT / "opxy" / "tools" / "perceptibility.py"), str(cs),
+                              "--scores", "4,5,2,3", "--names", "cohere,speed,scatter,scale"],
+                             capture_output=True, text=True)
+        print(res.stdout.rstrip())
         print("contrast (WCAG):")
         for what, a, b in (("bird #969696 on lid", G5, LID), ("lit bird #CDCDCD on lid", G7, LID),
                            ("#969696 on stock #4B4B4B (not used)", G5, G2),
@@ -634,6 +643,8 @@ def main(argv: list[str]) -> int:
         print(f"  black body at rest: {100 * black_fraction(HERE / 'rest.png'):.1f}%")
         for p in made:
             print(f"  {p.stem}: black {100 * black_fraction(p.with_suffix('.png')):.1f}%")
+    if "--keep" not in argv:
+        shutil.rmtree(scratch, ignore_errors=True)
     return 0
 
 

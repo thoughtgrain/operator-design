@@ -1,7 +1,0 @@
-control        score  need %  0→100 %  0→50 %  50→100 %  span
-cohere             4    1.60     5.76    5.72      5.57   241  ok
-speed              5    2.50     2.87    3.08      2.95   275  ok
-scatter            2    0.80     2.45    2.31      2.32   307  ok
-scale              3    1.20     1.30    0.93      1.29   249  ok
-note response      —    2.00     4.72       —         —   263  ok
-pass
