@@ -584,15 +584,6 @@ class Scene:
         th = self.theta
         return (0.0, math.sin(th), -math.cos(th))
 
-    def sweep(self):
-        """The circle the grip's centre travels, a hairline construction line behind the brace."""
-        xm = (self.GRIP0 + self.GRIP1) / 2
-        pts = [self.B(xm, self.T * math.sin(a), -self.T * math.cos(a)) for a in
-               [2 * math.pi * i / 48 for i in range(48)]]
-        if self.style == "line":
-            self.s.ribbon("sweep.a", pts[:25], HAIR, G[2])
-            self.s.ribbon("sweep.b", pts[24:] + [pts[0]], HAIR, G[2])
-
     def bow(self):
         """Path 0: the bow rod, a tube 15 mm across, projected from its centreline."""
         dvec = self.bow_dir()
@@ -607,6 +598,10 @@ class Scene:
         g0, g1 = self.GRIP0, self.GRIP1
         prof = [(g0, 9), (g0 + 1.5, 14), (g0 + 5, 17), (g0 + 10, 18.2), (g0 + 20, 19), ((g0 + g1) / 2, 19.5),
                 (g1 - 20, 19), (g1 - 10, 18.2), (g1 - 5, 17), (g1 - 1.5, 14), (g1, 9)]
+        # the grip's two ferrules, metal collars it turns between
+        for i, (xa, sg) in enumerate(((g0, -1), (g1, 1))):
+            fer = sorted([(xa + sg * 0.5, 10.4), (xa + sg * 1.2, 12.2), (xa + sg * 5.2, 12.2), (xa + sg * 6.0, 10.4)])
+            self.solid(f"grip.ferrule{i}", self.revolve(fer, yc, zc, n=20))
         self.solid("grip", self.revolve(prof, yc, zc, n=24))
         self.detail("grip.ring0", self.ring_arc(g0 + 9, 18.1, yc, zc), G[3])
         self.detail("grip.ring1", self.ring_arc(g1 - 9, 18.1, yc, zc), G[3])
@@ -649,7 +644,6 @@ class Scene:
         self.bore()
         self.bit_static()
         self.twist()
-        self.sweep()
         toward = math.sin(self.theta) < -1e-6           # bow on the camera's side of the axis
         if not toward:
             self.bow(); self.grip()

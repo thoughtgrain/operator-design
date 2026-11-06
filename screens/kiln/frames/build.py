@@ -810,7 +810,11 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
             if len(scr) < 2 or math.dist(scr[0], scr[-1]) < 3:
                 continue
             if depth == 0:
-                F.outline(taper_pts(dedupe(scr, 0.8), (1.4 + 2.8 * u) * s, 1.1 * s), G2)
+                # while it rings, a cracked lip chatters: the mouth opens and closes frame by frame
+                chatter = 0.0
+                if ringing and u > 0.15:
+                    chatter = (1 if frame_index % 2 else -1) * min(1.0, live / 0.012) * 1.1 * u
+                F.outline(taper_pts(dedupe(scr, 0.8), max(1.2, (1.4 + 2.8 * u) * s + chatter), 1.1 * s), G2)
             else:
                 F.line(scr, (1.5 if depth == 1 else 1.2) * s, G2 if depth == 1 else G3)
 
@@ -941,8 +945,9 @@ def timeline_main():
 def timeline_compare(key, a, b):
     pa, pb = dict(DEFAULTS), dict(DEFAULTS)
     pa[key], pb[key] = a, b
-    return [(pa, [Voice(0.4, 0, pa["strike"], t_off=0.9)]),
-            (pb, [Voice(0.4, 0, pb["strike"], t_off=0.9)])], 4.2
+    # the key stays down, so what you see is the bowl's own decay, not the envelope's release
+    return [(pa, [Voice(0.4, 0, pa["strike"])]),
+            (pb, [Voice(0.4, 0, pb["strike"])])], 5.8
 
 
 def render_gif(name, segments, seg_len, scratch: Path, keep=()):

@@ -471,7 +471,7 @@ def bed(n, gscale, settle):
         return _BED[key]
     placed = []
     root = math.sqrt(1 + KW * KW)
-    spread = 0.35 + 0.90 * settle
+    spread = 0.55 + 0.95 * settle
     for k in range(1, n + 1):
         r = grain_r_px(k) * gscale / PPU
         pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.6 * (0.8 + 0.4 * jit(k, 9))
@@ -480,10 +480,10 @@ def bed(n, gscale, settle):
             x = RB + 0.30 - i * 0.006
             z = max(r + 0.01, (x - RB + r * root) / KW)
             for (xj, zj, rj) in placed:
-                d = (r + rj) * 0.80              # piled in depth: neighbours overlap a little in the cut
+                d = (r + rj) * (0.78 + 0.12 * jit(k, 11))   # piled in depth: neighbours overlap a little
                 if abs(x - xj) < d:
                     z = max(z, zj + math.sqrt(d * d - (x - xj) ** 2))
-            cost = z + 0.6 * abs(x - pref) + 2.0 * max(0.0, x - RB)
+            cost = 2.5 * z + 0.6 * abs(x - pref) + 2.0 * max(0.0, x - RB)
             if best is None or cost < best[0]:
                 best = (cost, x, z)
         placed.append((best[1], best[2], r))

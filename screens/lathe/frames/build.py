@@ -365,10 +365,16 @@ def turn_parts(k):
             ("line", f1, HAIR, G4), ("line", f2, HAIR, G5)]
 
 
-def wall_body(k, ratio, n=24):
-    """The lit wall between lip and floor as one closed outline (lip near->far, floor far->near)."""
+def wall_body(k, ratio, n=24, clip=True):
+    """The lit wall between lip and floor as one closed outline (lip near->far, floor far->near),
+    cut off where either edge leaves the field stop."""
     lip = run(k, "lip", ratio, Y0, Y_WALL, n=n, clip=False)
     floor = run(k, "floor", ratio, Y0, Y_WALL, n=n, clip=False)
+    if clip:
+        m = 0
+        while m < n and in_field(lip[m]) and in_field(floor[m]):
+            m += 1
+        lip, floor = lip[:m], floor[:m]
     return lip + floor[::-1]
 
 
@@ -405,7 +411,7 @@ WEAR = _wear_items()
 
 
 def speck(cx, cy, seed):
-    r = 1.9 + 0.3 * (seed % 3)
+    r = 2.2 + 0.35 * (seed % 3)
     pts = []
     for i in range(6):
         a = 2 * math.pi * i / 6 + seed
@@ -474,11 +480,8 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
         node += 1
     F.nodes = node
 
-    # --- the newest groove: floor (node 1), rumble ghosts (nodes 2, 3), lit lip (node 0) on top
-    floor = run(0, "floor", ratio, Y0, Y1, n=NPTS, clip=False)
+    # --- the newest groove: rumble ghosts (nodes 2, 3) under its lit wall (node 1), lit lip (node 0) on top
     lip = run(0, "lip", ratio, Y0, Y1, n=NPTS, clip=False)
-    wall = wall_body(0, ratio, n=NPTS)
-    _emit_wall(F, wall)
     shake = 12.0 * a["rumble"] ** 0.6
     lip_out = ribbon_outline(lip, SUBJ)
     xs = [p[0] for p in lip_out]
@@ -489,6 +492,7 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
         org = (lip_origin[0] + s * shake, lip_origin[1])
         F.ribbon([(x + s * shake, y) for x, y in lip], LINE, G5, node=nd, origin=org, shown=ghost_shown,
                  exact=2 * NPTS)
+    _emit_wall(F, wall_body(0, ratio, n=NPTS, clip=False))
     F.ribbon(lip, SUBJ, G0, node=0, origin=lip_origin, exact=2 * NPTS)
     return F
 

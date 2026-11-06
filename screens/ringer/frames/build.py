@@ -54,11 +54,11 @@ DEFAULTS = {"bells": 0.25, "method": 0.2, "pace": 0.5, "stroke": 0.0}
 
 PITCH = math.radians(9.0)      # camera looks up at the bells by this much
 SP, CP = math.sin(PITCH), math.cos(PITCH)
-AXLE_Y = 92.0                  # screen y of the headstock axle line (all bells)
+AXLE_Y = 100.0                 # screen y of the headstock axle line (all bells)
 BEAM_DROP = 15.0               # beam underside sits this far above the axle
 BEAM_H, BEAM_D = 10.0, 22.0    # beam front-face height and depth (px)
 BEAM_X0, BEAM_X1 = 12.0, 468.0
-ROW_W = 432.0                  # widest row (slowest pace, full stroke) fits this
+ROW_W = 440.0                  # widest row (slowest pace, full stroke) fits this
 SWING_MAX = math.radians(62)   # how far toward you a striking bell swings
 MIN_SEP = 3.0                  # detail lines closer than this at 1:1 are dropped
 
@@ -187,15 +187,15 @@ def bell_scale(b):
 
 def gap_px(s, u):
     """Pace: the space between neighbouring lips, wide at 0.5 a beat, nearly touching at 8."""
-    return 3.5 + s * 1.5 * (1 - u)
+    return 3.5 + s * 0.8 * (1 - u)
 
 
 def size_for(n):
     """Treble lip radius (px) so the widest row (pace 0, stroke 100) fits ROW_W."""
     widths = sum(2 * bell_scale(b) for b in range(1, n + 1))
     mean = widths / n
-    # widths*s + (n-1)*(3.5+1.5s) + bay(mean*s + 3.5 + 1.5s) = ROW_W
-    a = widths + (n - 1) * 1.5 + mean + 1.5
+    # widths*s + (n-1)*(3.5+0.8s) + bay(mean*s + 3.5 + 0.8s) = ROW_W
+    a = widths + (n - 1) * 0.8 + mean + 0.8
     c = (n - 1) * 3.5 + 3.5
     return (ROW_W - c) / a
 
@@ -500,7 +500,7 @@ def draw(c, row, title, swing=None, positions=None, lit=None, values=None):
     lit = row[0] if lit is None else lit
     for b in sorted(range(1, n + 1), reverse=True):           # tenor first: smaller bells pass in front
         R = s * bell_scale(b)
-        hangers(fr, R, xpos[b], G7 if (b == lit and not swing) else G3)
+        hangers(fr, R, xpos[b], G3)
     for b in sorted(range(1, n + 1), reverse=True):
         if swing and b == swing[0]:
             continue
