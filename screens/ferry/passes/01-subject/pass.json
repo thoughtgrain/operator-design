@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P4 Stack in depth; drawing language: survey plan. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P5",
+      "drawing_language": "engineering schematic",
+      "subject": "A ferry drawn in side elevation, with centreline, waterline and hidden hull lines, riding a receding sea mesh above a timing diagram of its timetable, one pulse per port at the port's pitch.",
+      "controls": [
+        "route: reorders the pulses in the timing diagram, so the strip's contour becomes a rising stair (up), a falling stair (down), a peak (shtl), a zigzag (cross) or a scatter (tramp); shape of the strip trace.",
+        "ports: how many pulse heights the timetable cycles through before it repeats, 2 to 8, each new port a taller pulse (the chord's next tone); count on the strip.",
+        "swell: the sea mesh lifts into waves that grow toward the viewer and the hull heels up to 9 degrees, while each pulse slips late in its slot; rotation of the figure, shape of the field.",
+        "dwell: the timetable's slot length, from 32 slots a bar at 1/32 down to 2 at 1/2, so the pulses widen and thin out; count and width on the strip."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "The figure (the ferry) carries only swell; route, ports and dwell all live in a 28 px strip, so three of four controls sit in the smallest part of the screen and the player's eye lands on the one that does least. The ferry is a figure people recognise, which edges toward an illustration rather than a picture of the rule; it must not gain portholes, flags or wake. At dwell 1/32 the strip is 32 pulses 12 px apart, about the hatching floor. Muted state not drawn yet: proposed as the hull outline dropping from #CDCDCD to #646464 and the strip going dashed, never shade alone."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P12",
+      "drawing_language": "oscilloscope trace",
+      "subject": "An X-Y oscilloscope graticule with one tilted orbit per octave around the root, the chord's tones as points placed by pitch class, the route traced from point to point, and the beam spot as the ferry.",
+      "controls": [
+        "route: which arcs of the orbits the trace lights and in which direction, so up runs forward round each orbit, down runs back, shtl doubles back, cross jumps and flashes the far point, tramp lights a scatter; shape of the links.",
+        "ports: how many points sit on the orbits, filling the inner orbit then stepping out an octave at a time to the third orbit, 2 to 8 points; count, plus which orbits light (shade as second cue).",
+        "swell: the orbit traces ripple like a noisy beam, nine lobes per turn whose depth grows with swell; shape of the orbits.",
+        "dwell: the size of the beam spot burnt in at the port it dwells on, 3 px at 1/32 to 9 px at 1/2; scale of the ferry."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "An oscilloscope is the language P3 warns drifts into saying nothing new; here the graticule carries no data and costs 70+ static lines. Placing ports by pitch class makes C, E and G cluster on one side of each orbit, so with a triad the orbits are mostly empty and the eye reads a lopsided cluster. Pitch class on an orbit is the chord's structure, not the ferry's route, so the 'ferry on a route between ports' story is the weakest here. Close to meikyu-orrery in pattern; the scope framing is what keeps it from being a copy. Muted: beam spot drops to a hollow ring and the trace stops lighting."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P13",
+      "drawing_language": "typeset diagram",
+      "subject": "A bay in plan like a textbook figure: piers along the shore spaced by the interval between chord tones, each pier head inside a dashed capture ring the ferry must enter and wait in before it plays, and numbered legs of the route arcing across the water.",
+      "controls": [
+        "route: the numbered legs redraw between piers in the new order, so up is a run of short hops with one long return, cross is a fan of wide arcs, tramp is a tangle; shape of the legs.",
+        "ports: how many piers stand on the shore, 2 to 8, spaced by pitch so a new octave stretches the chord across the bay; count of piers and position of each.",
+        "swell: each leg's line roughens into a wave whose height grows with swell, the ferry visibly pushed off its course; shape of the legs.",
+        "dwell: the radius of every capture ring, 9 px at 1/32 to 31 px at 1/2, the ring being the time the ferry is held before it plays; scale of the rings."
+      ],
+      "reference": "library/meikyu-capture",
+      "risks": "The rings overlap at 8 ports with dwell above about 1/4 (a minor third puts piers 36 px apart, rings reach 62 px wide); cap ring radius by pier spacing or accept the overlap. Leg numbers and pier names are static text but change with route and ports, so on the device they are text slots (up to 9), not artwork. A capture ring scaled by dwell reads as 'how long', which is a stretch of P13's 'what's inside plays'; the honest twin is that the ferry only plays once inside. Muted: legs go dashed and the ferry hull hollow."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P14",
+      "drawing_language": "orthographic elevation",
+      "subject": "The timetable woven as cloth and drawn in flat elevation: one band per voyage stacked from the newest at the foot to three older ones above, a slab on each warp thread raised to the pitch of the port it played, so locked stops form straight columns and swell shows as slabs pushed late.",
+      "controls": [
+        "route: the skyline each band's slabs make, a stair up, a stair down, a peak, a zigzag or a scatter; shape across every row.",
+        "ports: how many distinct slab heights the skyline uses before it repeats, 2 to 8, so the stair gets longer and finer; count of levels.",
+        "swell: slabs slip right off their threads by a different amount in every band, breaking the straight columns that a calm sea weaves; position, and the only control that makes rows differ.",
+        "dwell: how many warp threads fit one bar, 32 at 1/32 down to 2 at 1/2, so threads and slabs spread apart and grow wider; count of threads."
+      ],
+      "reference": "library/loom-pages",
+      "risks": "At swell 0 every band is identical, so the rest frame is four copies of one skyline: honest, but repetitive, and it says 'history' only once swell is up. At dwell 1/32 there are 32 threads 12.6 px apart with slabs 7.6 px wide, dense but above the hatching floor; slab count is 3 x 32 + front row, far over the node budget, so short dwells need flat-top slabs or fewer rows shown. There is no ferry in the drawing, only its timetable; the subject sentence carries the ferry, the picture doesn't. Muted: the front band stops weaving and its datum goes dashed."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P4",
+      "drawing_language": "survey plan",
+      "subject": "Survey sheets of each port's harbour stacked diagonally in the order the route calls at them, the front sheet the port the ferry is berthed at, its berth drawn as long as the dwell.",
+      "controls": [
+        "route: the order the sheets stack in, read from the port names on their edges (C4 E4 G4 C5 for up, reversed for down); position of each sheet in the stack.",
+        "ports: how many sheets are stacked, 2 to 8 (6 visible, the deepest two hidden behind the sixth with a count), so the stack grows up and to the right; count.",
+        "swell: the depth contours on the front sheet wander off their smooth lines and the ferry swings on its berth; shape of the contours.",
+        "dwell: the dashed berth on the pier lengthens from 16 px at 1/32 to 42 px at 1/2; shape of the berth."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "Stretch, and it mostly doesn't fit. P4 is a stack the sound scans through continuously; a player steps, so each note becomes a slide change that swaps the whole front sheet, the opposite of P4's cheap shade-only layers. The case for it: the ports are an ordered set like wavetable frames and the route is a scan order through them, so a stack is a literal picture of route x ports. But route then rides on text labels on the sheet edges, which is reading, not seeing, and swell and dwell sit on one small sheet. The front sheet's coast and contours are generic (every port is the same drawing), so nothing about C4 vs G4 is shown. Muted: the front sheet drops back into the stack's grey."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:33:21"
+  },
   "selection": null
 }

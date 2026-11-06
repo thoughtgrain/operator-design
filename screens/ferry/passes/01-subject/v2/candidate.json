@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P12",
+  "drawing_language": "oscilloscope trace",
+  "subject": "An X-Y oscilloscope graticule with one tilted orbit per octave around the root, the chord's tones as points placed by pitch class, the route traced from point to point, and the beam spot as the ferry.",
+  "controls": [
+    "route: which arcs of the orbits the trace lights and in which direction, so up runs forward round each orbit, down runs back, shtl doubles back, cross jumps and flashes the far point, tramp lights a scatter; shape of the links.",
+    "ports: how many points sit on the orbits, filling the inner orbit then stepping out an octave at a time to the third orbit, 2 to 8 points; count, plus which orbits light (shade as second cue).",
+    "swell: the orbit traces ripple like a noisy beam, nine lobes per turn whose depth grows with swell; shape of the orbits.",
+    "dwell: the size of the beam spot burnt in at the port it dwells on, 3 px at 1/32 to 9 px at 1/2; scale of the ferry."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "An oscilloscope is the language P3 warns drifts into saying nothing new; here the graticule carries no data and costs 70+ static lines. Placing ports by pitch class makes C, E and G cluster on one side of each orbit, so with a triad the orbits are mostly empty and the eye reads a lopsided cluster. Pitch class on an orbit is the chord's structure, not the ferry's route, so the 'ferry on a route between ports' story is the weakest here. Close to meikyu-orrery in pattern; the scope framing is what keeps it from being a copy. Muted: beam spot drops to a hollow ring and the trace stops lighting."
+}

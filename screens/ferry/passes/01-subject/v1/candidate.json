@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P5",
+  "drawing_language": "engineering schematic",
+  "subject": "A ferry drawn in side elevation, with centreline, waterline and hidden hull lines, riding a receding sea mesh above a timing diagram of its timetable, one pulse per port at the port's pitch.",
+  "controls": [
+    "route: reorders the pulses in the timing diagram, so the strip's contour becomes a rising stair (up), a falling stair (down), a peak (shtl), a zigzag (cross) or a scatter (tramp); shape of the strip trace.",
+    "ports: how many pulse heights the timetable cycles through before it repeats, 2 to 8, each new port a taller pulse (the chord's next tone); count on the strip.",
+    "swell: the sea mesh lifts into waves that grow toward the viewer and the hull heels up to 9 degrees, while each pulse slips late in its slot; rotation of the figure, shape of the field.",
+    "dwell: the timetable's slot length, from 32 slots a bar at 1/32 down to 2 at 1/2, so the pulses widen and thin out; count and width on the strip."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "The figure (the ferry) carries only swell; route, ports and dwell all live in a 28 px strip, so three of four controls sit in the smallest part of the screen and the player's eye lands on the one that does least. The ferry is a figure people recognise, which edges toward an illustration rather than a picture of the rule; it must not gain portholes, flags or wake. At dwell 1/32 the strip is 32 pulses 12 px apart, about the hatching floor. Muted state not drawn yet: proposed as the hull outline dropping from #CDCDCD to #646464 and the strip going dashed, never shade alone."
+}
