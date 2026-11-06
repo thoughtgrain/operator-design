@@ -52,7 +52,7 @@ SPLIT_SCREEN = 122.0            # depth of field: lips dim in three runs, walls 
 FAR_SCREEN = 70.0
 WALL_SCREEN = 58.0
 OLD_AMP = 0.014                 # earlier turns: swing as cut at 1.00
-DEFAULT_TURNS, MAX_TURNS = 4, 8
+DEFAULT_TURNS, MAX_TURNS = 4, 7
 COAT = 0.11                     # lacquer coat thickness over the aluminium
 
 
@@ -336,7 +336,7 @@ def rim_parts(n):
     falling away over the edge. At MAX_TURNS there's no rim in the field: the land runs to the stop."""
     if n >= MAX_TURNS:
         xe = world_x_at(field_x(Y_NEAR_SCREEN) - 4, 0.0)
-        return [CAM((gx(n) + HW, Y0, 0.0)), CAM((xe, Y0, 0.0))], None
+        return clip_right([CAM((gx(n) + HW, Y0, 0.0)), CAM((xe, Y0, 0.0))]), None
     xr = rim_x(n)
     edge = [CAM((gx(n) + HW, Y0, 0.0))]
     for i in range(30):
@@ -564,12 +564,10 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     for n in range(DEFAULT_TURNS, MAX_TURNS + 1):
         shown = n == turns
         edge, fall = rim_parts(n)
-        F.ribbon(edge, LINE, G4 if n < MAX_TURNS else G3, node=node, shown=shown)
-        if fall:
-            F.ribbon(fall, LINE, G4, node=node + 1, shown=shown)
-            node += 2
-        else:
-            node += 1
+        for pts, c in ((edge, G4 if n < MAX_TURNS else G3), (fall, G4)):
+            if pts and len(pts) >= 2:
+                F.ribbon(pts, LINE, c, node=node, shown=shown)
+                node += 1
 
     # --- wear: specks and scratches on the lands (one node each)
     n_wear = int(math.floor(a["wear"] * len(WEAR) + 0.5))

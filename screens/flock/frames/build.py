@@ -142,7 +142,7 @@ def orbit(yaw: float, pitch: float, dist: float, target, ppu: float, centre) -> 
     return Camera(eye, target, dist * ppu, centre)
 
 
-CAM = orbit(-9, 29, 60, (0.1, 0.0, 0.0), 33.5, (240, 147))
+CAM = orbit(-9, 29, 60, (0.1, 0.0, 0.0), 32.5, (240, 147))
 
 # the box (world units): long axis x, lid at y = 0, front face at z = BZ0 facing the camera
 BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.7, 4.7, -0.9, 0.0, -1.35, 1.05
@@ -161,8 +161,8 @@ CRANK_R = 1.45
 # The tiers rise left to right in two runs, so each bird's raised wing (it points back, to the left)
 # opens away from its neighbour: neighbours are a tier (0.67) apart and the higher one is ahead.
 TIER = {"A": 0.9, "B": 1.57, "C": 2.24, "D": 2.91}
-BIRDS = [(-1.00, "A", 0.06), (-0.77, "B", -0.04), (-0.47, "C", 0.05), (-0.22, "D", -0.02),
-         (0.20, "A", 0.00), (0.43, "B", 0.07), (0.76, "C", -0.05), (1.00, "D", 0.00)]
+BIRDS = [(-1.00, "A", 0.06), (-0.72, "B", -0.04), (-0.44, "C", 0.05), (-0.16, "D", -0.02),
+         (0.16, "A", 0.00), (0.44, "B", 0.07), (0.72, "C", -0.05), (1.00, "D", 0.00)]
 # scatter: these three break away (slide out along the slot and lean out); sign = which way
 STRAYS = {0: -1, 6: +1, 7: +1}
 LEAN_MAX = math.radians(32)
@@ -171,11 +171,11 @@ BIRD_LEN = 0.9                                # world units, beak to tail
 
 
 def spread(cohere: float) -> float:
-    """Half-width of the flock along the slot: most of the comb at 0, two or three tines at 100."""
-    return 1.0 + (3.75 - 1.0) * (1 - cohere)
+    """Half-width of the flock along the slot: most of the comb at 0, three or four tines at 100."""
+    return 1.25 + (3.75 - 1.25) * (1 - cohere)
 
 
-CENTRE = 0.0 - 0.20 * spread(0.5)              # the lit bird (offset 0.20) sits on the middle tine at the defaults
+CENTRE = 0.0 - 0.16 * spread(0.5)              # the lit bird (offset 0.16) sits on the middle tine at the defaults
 
 
 def tines(st: State):
@@ -224,13 +224,13 @@ BODY = [(0.54, 0.13), (0.54, 0.115), (0.43, 0.09), (0.38, 0.05), (0.30, -0.03), 
         (-0.38, 0.13), (-0.20, 0.15), (-0.02, 0.17), (0.12, 0.175), (0.20, 0.19), (0.28, 0.26),
         (0.38, 0.26), (0.45, 0.19)]
 SHOULDER = (0.08, 0.13)
-WING = [(-0.03, -0.05), (0.16, -0.075), (0.40, -0.065), (0.60, -0.016), (0.60, 0.016), (0.40, 0.09),
-        (0.16, 0.125), (-0.03, 0.08)]           # along +u from the shoulder; +v is the leading edge
+WING = [(-0.03, -0.05), (0.18, -0.075), (0.46, -0.065), (0.69, -0.016), (0.69, 0.016), (0.46, 0.09),
+        (0.18, 0.125), (-0.03, 0.08)]           # along +u from the shoulder; +v is the leading edge
 
 
 def wing_angle(speed: float) -> float:
     """Degrees from the beak direction, anticlockwise: folded along the back at 0.25, raised at 4.00."""
-    return 198 - 80 * speed
+    return 200 - 72 * speed
 
 
 def _place(pts, top, lean, bob):
@@ -550,8 +550,8 @@ def main(argv: list[str]) -> int:
             print(f"  {what}: {contrast(a, b):.2f}")
         for st, name in [(DEFAULT, "rest")] + [(replace(DEFAULT, **{f: v / 100}), f"{f}-{v}")
                                                 for f, _ in CONTROL_FRAMES for v in (0, 50, 100)] + \
-                [(replace(DEFAULT, cohere=1.0, scatter=1.0), "cohere-100+scatter-100"),
-                 (replace(DEFAULT, cohere=0.0, scatter=1.0), "cohere-0+scatter-100")]:
+                [(replace(DEFAULT, cohere=c, speed=v, scatter=t), f"corner cohere {c:.0%} speed {v:.0%} scatter {t:.0%}")
+                 for c in (0.0, 1.0) for v in (0.0, 1.0) for t in (0.0, 1.0)]:
             print(f"  {name}: closest birds {bird_gaps(st):.1f} px apart (stroke to stroke), "
                   f"top of drawing y {top_of_drawing(st):.1f}")
         print(f"  black body at rest: {100 * black_fraction(HERE / 'rest.png'):.1f}%")
