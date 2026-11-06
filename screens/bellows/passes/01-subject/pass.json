@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -202,5 +202,21 @@
     "problems": [],
     "checked": "2026-11-05T23:19:11"
   },
-  "selection": null
+  "selection": {
+    "variant": "v4",
+    "reason": "Pick 1 is nice; add it.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59",
+    "pattern": "P3",
+    "drawing_language": "orthographic elevation",
+    "subject": "The reed's wave drawn in elevation like a facade standing on a datum, its roofline held up by the wind line of the bellows, which sags mid-stroke and recovers.",
+    "controls": [
+      "press: the wind line rises from 30 to 100 px over the datum and the whole wave stands taller under it, the dimension at the right following; scale and position of the wind line.",
+      "reed: the wave's profile goes from rounded arches to tall narrow piers as upper partials come in; shape of the bright trace.",
+      "leak: a rough band of breath grows along the datum under the wave, 0 to 14 px tall; shape of a second path (the noise band).",
+      "choir: a grey second wave behind the first slides out of phase and its piers drift against the bright ones into 0 to 4 beat groups across the width; shape and position of the ghost path."
+    ],
+    "reference": "opxy/reference/README.md (wavetable: a single white trace is the sound)",
+    "risks": "P3's own warning: it can drift into 'oscilloscope', and an elevation only differs by its ground line, datum ticks and level mark. Three of four controls are shape on paths (trace, breath band, ghost), which is the four-path budget nearly used, and a held note can't re-key them each frame: note response must be node scale on the trace. Rectifying the wave above the datum is a drawing choice, not what the sound does; the shape is truthful, the baseline is not."
+  }
 }

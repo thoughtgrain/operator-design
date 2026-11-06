@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -232,5 +232,27 @@
     "problems": [],
     "checked": "2026-11-05T23:28:10"
   },
-  "selection": null
+  "selection": {
+    "variant": "v4",
+    "reason": "Pick 1 is nice; needs refinement: the distance number clips, no letters at the dots.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59",
+    "pattern": "P1",
+    "drawing_language": "star atlas",
+    "subject": "A section cut across the canyon, charted like a sky atlas: the two rock walls are the dark limb, a hairline graticule fills the gap, and each echo is plotted as a lettered star of falling magnitude on a constellation line zig-zagging up from the shout.",
+    "controls": [
+      "distance: position; the walls draw apart, the floor from 100 px to 300 px wide, and the constellation's segments stretch with them.",
+      "walls: count; more stars are plotted up the chain, a to l, alternating walls, each one higher.",
+      "absorb: scale; the stars' magnitudes fall faster bounce by bounce, the later discs shrinking from ~11 px to ~4 px, as the highs die in the rock.",
+      "wind: position; each star slides along its own short proper-motion track, up to about 16 px, so the constellation line kinks."
+    ],
+    "reference": "opxy/reference/README.md (stock engines: one object chosen for what it does) beside library/theseus-tower",
+    "risks": [
+      "The star atlas is a borrowed language for rock; the graticule may read as decoration rather than as the space inside the canyon.",
+      "Twelve stars between the walls get dense at short distance (narrow canyon); lettering has to drop to every other star.",
+      "Distance moves the walls, and wind moves the stars: both are position, on different parts; the walls' move must stay much bigger.",
+      "Section drawing (P1) wants a part that moves physically; here the walls are fixed for a given distance and nothing physical answers audio except the stars. Audio flare must be on the stars.",
+      "Wall rims at width 100 % reach the screen edges; check the extremes for crowding at the sides."
+    ]
+  }
 }

@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "rejected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -202,5 +202,10 @@
     "problems": [],
     "checked": "2026-11-05T23:20:43"
   },
-  "selection": null
+  "selection": null,
+  "rejection": {
+    "reason": "Be true to the name: an old crank-style hand drill. Five new variations.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59"
+  }
 }

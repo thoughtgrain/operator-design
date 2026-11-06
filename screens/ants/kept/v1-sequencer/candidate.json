@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "pattern": "P12",
+  "drawing_language": "typeset diagram",
+  "subject": "The colony seen as a textbook orrery: the nest a dark sphere at the centre, each octave of the scale an orbit round it, each degree a planet fixed at its pitch-class angle, and the reinforced trail a bright run of links from planet to planet with the ants walking on it.",
+  "controls": [
+    "ants: count, the number of ant marks on the trail links, 1 to 8 (4 at default); each new ant eases in at the nest and walks out onto the trail, so 1 → 8 is three doublings of bodies spread round the orbits.",
+    "scent: shape, the bright trail itself: at 0 the links scatter into short one-step arcs between many planets, at 100 they close into one loop that repeats, so the run of bright links contracts by ≥ 16 px on its outer points as it locks onto a phrase.",
+    "fade: count + shade, the older trails behind the live one: at 0 up to six grey trail runs stay on the orbits, stepping darker with age; at 100 only the live trail is left, the rest gone within a pass.",
+    "scale: count + position, planets per orbit and the spokes under them: pent 5, major/minor/modes 7, chrom 12 per orbit, each planet sliding to its pitch-class angle so the rings fill from a pentagon to an even clock."
+  ],
+  "reference": "library/meikyu-orrery",
+  "muted": "Muted (bypass): the trail drops from #CDCDCD to the ground grey and the ants stop where they are; the planets and orbits stay, so the colony reads as asleep, not gone.",
+  "risks": "The trail returns over its own arcs (a phrase reuses edges), so at 1:1 the reinforced links double up beside the orbits on the left and read as a thick ring rather than a path. Cross-octave steps can't stay on one orbit (P12's pitfall: links across orbits); here they are short spiral links, which is the one place the pattern is bent. The nest does nothing a control drives, the same objection P13 makes of P12's sun. Ants on a 2.4 px bright link are only a bead; at 1:1 they read as knots, not bodies, and the brightest-element rule makes trail and ants compete. 24 bound nodes at rest in the sketch; twelve planets per orbit at chrom plus 8 ants plus up to 4 trail outlines stays well under 256."
+}

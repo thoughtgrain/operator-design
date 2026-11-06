@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "rejected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -202,5 +202,10 @@
     "problems": [],
     "checked": "2026-11-05T23:37:53"
   },
-  "selection": null
+  "selection": null,
+  "rejection": {
+    "reason": "Five new, unique iterations.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59"
+  }
 }
