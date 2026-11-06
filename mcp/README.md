@@ -98,7 +98,7 @@ Set these in the client's `env` block for the server (the setup flags write them
 | --- | --- | --- |
 | Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `colour_policy`, `opxy_tokens`, `opxy_library` | guide, search, patterns, colour_policy |
 | Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run`, `preview_brief`, `sdk_test` | status, lint_frames, perceptibility, render, preview |
-| Design passes | `design_pass_start`, `design_pass_submit`, `design_pass_select`, `design_pass_get` | start, submit, select |
+| Design passes | `design_pass_start`, `design_pass_submit`, `design_pass_select`, `design_pass_reject`, `design_pass_get` | start, submit, select or reject |
 | Training | `training_propose`, `training_revise`, `training_list`, `training_get`, `training_advance`, `training_record`, `training_gate`, `training_approve`, `training_reject`, `training_roles` | propose, get, advance, record |
 
 Prompts (slash commands in clients that show them): `design-screen`, `audit-screen`, `propose-improvement`, `run-training-queue`. Resources: `opxy://doc/<name>`, `opxy://catalog`, `opxy://tokens`, `opxy://library/<entry>`, `opxy://proposal/<id>`.
@@ -121,10 +121,10 @@ Engine audio in a preview is a **simulation**: the machine's engine code compile
 
 Every generative pass (the subject candidates, the rest-frame variants, any revision after a review) is exactly five variants. Five, because two or three candidates kept collapsing into "the first idea plus two strawmen", and five is still few enough to judge side by side at 1:1.
 
-1. `design_pass_start(machine_id, kind)` assigns five directions before anything is drawn. For subjects that's five pattern × drawing-language pairs drawn from the patterns that fit the machine's category (`opxy/categories.md`), with one slot held for a stretch outside the column. For frames it's a Latin square over composition, camera and emphasis, so every pair of variants differs on all three.
+1. `design_pass_start(machine_id, kind)` assigns five directions before anything is drawn. For subjects that's five angles on the machine's own idea (the object in its name, the mechanism, the material, a scene, a cutaway and so on) × five ways of drawing. The patterns that fit the category are listed in each brief as inspiration, never assigned. For frames it's a Latin square over composition, camera and emphasis, so every pair of variants differs on all three.
 2. It returns five designer briefs. In Claude Code and Codex they run as five parallel `opxy-designer` subagents, each writing only into its own `v<N>/` folder. With `run: true` the server runs them on the configured endpoint.
-3. `design_pass_submit` checks the five are really different: subjects must differ in at least two of pattern, drawing language and wording (word overlap under 0.6); frames must each lint clean and differ pairwise on at least 4% of the body at 1:1, measured the same way `perceptibility.py` measures change. A pass with near-duplicates goes back as `needs_revision`, never down to four.
-4. The person picks. `design_pass_select` records who picked which variant and why. The server never picks.
+3. `design_pass_submit` checks the five are really different: subjects must differ in at least two of angle, drawing language and wording (word overlap under 0.6); frames must each lint clean and differ pairwise on at least 4% of the body at 1:1, measured the same way `perceptibility.py` measures change. A pass with near-duplicates goes back as `needs_revision`, never down to four.
+4. The person picks. `design_pass_select` records who picked which variant and why; `design_pass_reject` records that they wanted none and why, and closes the pass for a new one. The server never picks.
 
 The numbers live in `opxy/catalog.json` → `iterations`, and the training gate refuses any proposal that changes `perPass` from five.
 
