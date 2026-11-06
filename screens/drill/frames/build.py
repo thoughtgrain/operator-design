@@ -450,7 +450,7 @@ class Scene:
                 head = [cam((x, 0, z)) for x, z in self.cutting_head()]
                 lower = [cam((x, 0, -z)) for x, z in self.cutting_head()[::-1]]
                 head = head + lower[1:]
-            fixed = 4 + len(head)
+            fixed = 5 + len(head)
             per_land = max(4, (budget - fixed) // max(1, len(grp)))
             # edge samples per land: corners + curved edges
             pts = [top_pt(xa, R * k)]
@@ -491,7 +491,9 @@ class Scene:
         else:
             seq = poly[:]
         # sample the edges
-        per_edge = max(2, budget // max(1, len(seq) - 1))
+        E = len(seq) - 1
+        curved = sum(1 for j in range(E) if abs(seq[j + 1][1] - seq[j][1]) > 0.05)
+        per_edge = max(1, (budget - 1 - (E - curved)) // max(1, curved))
         out = []
         wr = 0.42 * self.wear
         for j in range(len(seq) - 1):

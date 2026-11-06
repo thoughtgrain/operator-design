@@ -37,7 +37,9 @@ B, S2, S, M, G, D, F, K = ("#CDCDCD", "#AFAFAF", "#969696", "#7D7D7D",
                            "#646464", "#4B4B4B", "#323232", "#000000")
 FONT = "UniversNextPro-Light"
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2   # craft.md's three weights
-CHORD_W = (SUBJ, SUBJ, 2.5, 2.5)   # thread width by voices held (0, 1, 2+)
+PLY = 1.1                          # stroke of each ply: the thread is a hollow ribbon, two plies
+GAP = (0.5, 0.5, 1.0, 1.0)         # plies apart when fresh, by voices held: ~1.6 px line, ~2.1 px for a chord
+FRAY, SPLIT = 2.6, 3.4             # plies part with wear, and open wide where the oxide thins
 BODY_TOP = 21.0
 PATHS, POINTS = 4, 64
 CTRL = ["wear", "wow", "length", "bias"]
@@ -500,7 +502,7 @@ def trail_point(s: Spool, st: State, q: float):
     else:                                          # over-bias: quieter
         v *= 1 - 0.38 * b
     depth = max(0.0, min(1.0, (sw - 0.25) / 0.4))
-    w = CHORD_W[min(st.voices, 3)] * (1 - 0.3 * sw) * (1 - 0.75 * dropout(u, rep + int(mark * 7), depth))
+    w = GAP[min(st.voices, 3)] + FRAY * sw + SPLIT * dropout(u, rep + int(mark * 7), depth)
     return v3(x, AMP * v, 0.0), w, rep, mark
 
 
@@ -513,10 +515,9 @@ def worn_now(s: Spool, st: State) -> float:
 
 def shade_for(s: Spool, ws, st: State) -> str:
     """The thread dulls as it wears, two stock steps at most: a stretch reads its mean wear back
-    from its width (width = base x (1 - 0.55 wear), dropouts excluded by the median)."""
-    base = CHORD_W[min(st.voices, 3)]
-    med = float(np.median(ws)) / base
-    worn = (1 - med) / 0.3
+    from how far its plies have parted (dropouts excluded by the median)."""
+    base = GAP[min(st.voices, 3)]
+    worn = (float(np.median(ws)) - base) / FRAY
     return B if worn < 0.3 else S2 if worn < 0.62 else S
 
 
@@ -670,16 +671,15 @@ def scene(s: Spool, st: State) -> Frame:
     for i, ch in enumerate(chunks):
         if ch is None or len(ch[0]) < 2:
             fr.node(i, [(640 + 2 * math.cos(a), 320 + 2 * math.sin(a)) for a in np.linspace(0, 6.2, POINTS)],
-                    B, "none", 0, origin=(640, 320), note="trail chunk (hidden)")
+                    "none", B, PLY, origin=(640, 320), note="trail chunk (hidden)")
             continue
-        fr.node(i, polyline_fixed(ch[0], ch[1], POINTS // 2), shade_for(s, ch[1], st), "none", 0,
+        fr.node(i, polyline_fixed(ch[0], ch[1], POINTS // 2), "none", shade_for(s, ch[1], st), PLY,
                 note=f"trail chunk {i}: mutable, {POINTS} points")
     touch, w_now, _, _ = trail_point(s, st, st.phi)
     fp = free_run(s, st, touch)
     fpts = [cam(p) for p in fp]
-    base = CHORD_W[min(st.voices, 3)]
-    fw = [base * (1 - 0.3 * worn_now(s, st))] * len(fpts)
-    fr.node(3, polyline_fixed(fpts, fw, POINTS // 2), shade_for(s, fw, st), "none", 0,
+    fw = [GAP[min(st.voices, 3)] + FRAY * worn_now(s, st)] * len(fpts)
+    fr.node(3, polyline_fixed(fpts, fw, POINTS // 2), "none", shade_for(s, fw, st), PLY,
             note="free run: mutable, 64 points")
 
     # 10 near flange body, 11 its face, 12 hub, 13 bore, 14..16 holes (they turn with the roll)
