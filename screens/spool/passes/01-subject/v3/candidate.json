@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P4",
+  "drawing_language": "survey plan",
+  "subject": "Successive passes of the loop surveyed as profiles stacked back in depth, the pass playing now in front and older, fresher passes receding behind it with chainage along the front.",
+  "controls": [
+    "wear: each profile is a little more eroded than the one behind it, so the stack goes from crisp at the back to rounded at the front (shape; only the front profile is a mutable outline, older ones are re-keyed when a pass ages).",
+    "wow: the passes shear sideways against each other along the tape, up to 10 px each (position of each layer).",
+    "length: the spacing between passes opens from 12 to 26 px, so a longer loop pushes history further back (position along the stack).",
+    "bias: the front profile's level, 1.3x under-biased to 0.7x over-biased (scale of the front layer)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "At defaults (wear 0) all five profiles are identical, so the rest frame shows only a stack, and the history this subject exists for appears only once wear is up and a note has run. Bias scale spans 1.86x but scaling a node also scales its stroke, so the front line thickens past 2.5 px at the under-bias end; bias may need shape instead, which collides with wear on the same part. Wow as shear at 10 px is under the 24 px floor at 1:1 and needs more travel. Re-keying all five profiles each pass is 5 path redraws per loop period; at 0.05 s loops that is too often, so the stack should advance by moving nodes, not rewriting them."
+}

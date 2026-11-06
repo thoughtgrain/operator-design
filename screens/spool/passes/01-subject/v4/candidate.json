@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P5",
+  "drawing_language": "patent section",
+  "subject": "The record head's laminated core, cut in patent section with hatching, coil turns and reference numerals, standing on a perspective plane of tape with a strip of worn-through segments under it.",
+  "controls": [
+    "wear: segments of the loop in the bottom strip fill in as they wear through, 0 to 24 of 24 (count).",
+    "wow: the tape's near edge, the brightest line of the field, weaves in a slow wave up to 4 px (shape of one mutable edge).",
+    "length: the splice, a brighter cut across the tape, recedes from the near edge toward the head as the loop lengthens, ~36 px (position).",
+    "bias: the field lines fringing out of the head gap into the tape grow from 0.55x to 1.45x (scale)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "The figure (the head) is the brightest and largest thing but no control moves the head itself: it is a fixed stage for the gap's field lines, so the screen's subject is the drawing least connected to the sound. Wear, the loudest control (5), lands on the least prominent part, the strip, and at defaults the strip is 24 empty cells; it should probably also cut gaps in the field. Wow at 4 px edge travel is well under the 16 px shape floor. Section hatching and coil turns are static art (fine for cost) but dense: ~60 short ribbons at 6 px pitch, near the 3 px hatching limit in the corners. Patent numerals (10, 12, 14, 16) refer to nothing on screen; they are language, and a reviewer may call them ornament."
+}

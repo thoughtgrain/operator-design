@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P3",
+  "drawing_language": "orthographic elevation",
+  "subject": "The magnetised waveform itself, bright along a strip of tape seen in flat front elevation between two diagonal splices, dimensioned like a part drawing.",
+  "controls": [
+    "wear: the repeated cycle along the strip rounds off and sags at two dropouts, every repeat the same (shape of the trace).",
+    "wow: the strip's top and bottom edges weave up and down, up to 6 px, as the tape flutters through the guides (shape of the two edge lines, a second and third path).",
+    "length: the right-hand splice and the end of the dimension line beneath it slide along the strip, 184 to 454 px from the left edge (position).",
+    "bias: the two saturation rails inside the strip close in toward the trace as bias goes under and open to the tape edges as it goes over; under-bias, the trace clips flat against them (position, 20 px travel per rail)."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": "It is the closest of the five to an oscilloscope, which patterns.md warns about; the tape edges, splices and dimension line are what keep it an elevation, and if they read as chrome it collapses into a scope. Four repeats of the cycle across 420 px need four mutable outlines for the trace alone, leaving none for the wow edges, so a device version must repeat one outline as several placed nodes (all re-keyed together when wear moves) or draw fewer repeats. Bias rail travel is ~20 px, just under the 24 px position floor: it needs the clip to show on the trace as well. The 'elevation' label is decoration if nothing else on the page is labelled; cut it in frames."
+}

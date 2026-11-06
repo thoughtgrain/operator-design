@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P14",
+  "drawing_language": "hidden-line isometric",
+  "subject": "Each pass of the loop woven as a row of isometric slabs on warp threads, slab heights tracing the cycle, so wear shows as rows that stop matching the row behind.",
+  "controls": [
+    "wear: rows erode front to back, the pass playing now lowest and roundest, the oldest still the written shape (position of slab tops, re-keyed as rows age).",
+    "wow: rows slide sideways along the warp against each other, up to 1.4 threads (position of each row).",
+    "length: the number of warp threads, 8 to 24, so a longer loop is a wider cloth (count).",
+    "bias: under-bias lowers a cap height that the tallest slabs flatten against and turn a lighter grey, over-bias leaves them free (position of the cap, count of capped slabs)."
+  ],
+  "reference": "library/loom-pages",
+  "risks": "Stretch, outside the engine column. Why spool may be the exception: its sound is literally a history of passes over the same material, and what P14 draws (which positions stay the same pass after pass and which drift) is exactly what wear does; no other engine pattern shows time-by-pass. Why it may not fit: the rows only differ while wear is up and notes run, so at defaults the loom is four identical rows (the 'locked' reading, honest but flat), and a field of bars on a floor reads like a 3D bar chart, i.e. a meter, which the subject gate rejects. Cost is high: 4 rows x 14 threads x 3 faces = 168 nodes, and every pass re-keys all of them as rows age, far over ~20 a frame at short loop lengths; flat tops for older rows (P14's own advice) halve it. At 24 threads the cloth shrinks to fit and slabs get near the 3 px floor."
+}

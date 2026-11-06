@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P14 Loom; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P2",
+      "drawing_language": "typeset diagram",
+      "subject": "A labelled diagram of the tape path on the left (loop, capstan, tension roller, record and play heads) with the cycle the play head reads drawn large on the right.",
+      "controls": [
+        "wear: the right-hand trace loses its corners and opens two dropout notches, with the cycle as written ghosted in #4B4B4B behind it (shape, one mutable trace).",
+        "wow: the flutter arm resting on the loop's top run swings about its pivot, 0 to 36 degrees (rotation).",
+        "length: the tension roller slides right and the loop stretches with it, 80 to 180 px between roller centres (position).",
+        "bias: the field lines fringing from the record-head gap into the tape grow from 0.55x to 1.45x (scale)."
+      ],
+      "reference": "library/meikyu-capture",
+      "risks": "Hands and screen disagree: P2 wants structure on knobs 1-2 and tone on 3-4, but spool's order puts wear (a trace control) first and length (a structure control) third, so the screen splits left/right while the controls interleave. The left diagram is small at 1:1 (rollers 34 px) and sparse beside the trace; rotating the wow arm lifts its roller off the tape, which is not what wow does physically, so a frames pass should find a truer motion (the arm pressing the run into a dip, say). Wear is the 5-score control but only moves the right half. A ~200 px trace is wider than one mutable outline can be (points within +-64 px of the node), so it needs 2 of the 4 paths."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P3",
+      "drawing_language": "orthographic elevation",
+      "subject": "The magnetised waveform itself, bright along a strip of tape seen in flat front elevation between two diagonal splices, dimensioned like a part drawing.",
+      "controls": [
+        "wear: the repeated cycle along the strip rounds off and sags at two dropouts, every repeat the same (shape of the trace).",
+        "wow: the strip's top and bottom edges weave up and down, up to 6 px, as the tape flutters through the guides (shape of the two edge lines, a second and third path).",
+        "length: the right-hand splice and the end of the dimension line beneath it slide along the strip, 184 to 454 px from the left edge (position).",
+        "bias: the two saturation rails inside the strip close in toward the trace as bias goes under and open to the tape edges as it goes over; under-bias, the trace clips flat against them (position, 20 px travel per rail)."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": "It is the closest of the five to an oscilloscope, which patterns.md warns about; the tape edges, splices and dimension line are what keep it an elevation, and if they read as chrome it collapses into a scope. Four repeats of the cycle across 420 px need four mutable outlines for the trace alone, leaving none for the wow edges, so a device version must repeat one outline as several placed nodes (all re-keyed together when wear moves) or draw fewer repeats. Bias rail travel is ~20 px, just under the 24 px position floor: it needs the clip to show on the trace as well. The 'elevation' label is decoration if nothing else on the page is labelled; cut it in frames."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P4",
+      "drawing_language": "survey plan",
+      "subject": "Successive passes of the loop surveyed as profiles stacked back in depth, the pass playing now in front and older, fresher passes receding behind it with chainage along the front.",
+      "controls": [
+        "wear: each profile is a little more eroded than the one behind it, so the stack goes from crisp at the back to rounded at the front (shape; only the front profile is a mutable outline, older ones are re-keyed when a pass ages).",
+        "wow: the passes shear sideways against each other along the tape, up to 10 px each (position of each layer).",
+        "length: the spacing between passes opens from 12 to 26 px, so a longer loop pushes history further back (position along the stack).",
+        "bias: the front profile's level, 1.3x under-biased to 0.7x over-biased (scale of the front layer)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "At defaults (wear 0) all five profiles are identical, so the rest frame shows only a stack, and the history this subject exists for appears only once wear is up and a note has run. Bias scale spans 1.86x but scaling a node also scales its stroke, so the front line thickens past 2.5 px at the under-bias end; bias may need shape instead, which collides with wear on the same part. Wow as shear at 10 px is under the 24 px floor at 1:1 and needs more travel. Re-keying all five profiles each pass is 5 path redraws per loop period; at 0.05 s loops that is too often, so the stack should advance by moving nodes, not rewriting them."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "drawing_language": "patent section",
+      "subject": "The record head's laminated core, cut in patent section with hatching, coil turns and reference numerals, standing on a perspective plane of tape with a strip of worn-through segments under it.",
+      "controls": [
+        "wear: segments of the loop in the bottom strip fill in as they wear through, 0 to 24 of 24 (count).",
+        "wow: the tape's near edge, the brightest line of the field, weaves in a slow wave up to 4 px (shape of one mutable edge).",
+        "length: the splice, a brighter cut across the tape, recedes from the near edge toward the head as the loop lengthens, ~36 px (position).",
+        "bias: the field lines fringing out of the head gap into the tape grow from 0.55x to 1.45x (scale)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "The figure (the head) is the brightest and largest thing but no control moves the head itself: it is a fixed stage for the gap's field lines, so the screen's subject is the drawing least connected to the sound. Wear, the loudest control (5), lands on the least prominent part, the strip, and at defaults the strip is 24 empty cells; it should probably also cut gaps in the field. Wow at 4 px edge travel is well under the 16 px shape floor. Section hatching and coil turns are static art (fine for cost) but dense: ~60 short ribbons at 6 px pitch, near the 3 px hatching limit in the corners. Patent numerals (10, 12, 14, 16) refer to nothing on screen; they are language, and a reviewer may call them ornament."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P14",
+      "drawing_language": "hidden-line isometric",
+      "subject": "Each pass of the loop woven as a row of isometric slabs on warp threads, slab heights tracing the cycle, so wear shows as rows that stop matching the row behind.",
+      "controls": [
+        "wear: rows erode front to back, the pass playing now lowest and roundest, the oldest still the written shape (position of slab tops, re-keyed as rows age).",
+        "wow: rows slide sideways along the warp against each other, up to 1.4 threads (position of each row).",
+        "length: the number of warp threads, 8 to 24, so a longer loop is a wider cloth (count).",
+        "bias: under-bias lowers a cap height that the tallest slabs flatten against and turn a lighter grey, over-bias leaves them free (position of the cap, count of capped slabs)."
+      ],
+      "reference": "library/loom-pages",
+      "risks": "Stretch, outside the engine column. Why spool may be the exception: its sound is literally a history of passes over the same material, and what P14 draws (which positions stay the same pass after pass and which drift) is exactly what wear does; no other engine pattern shows time-by-pass. Why it may not fit: the rows only differ while wear is up and notes run, so at defaults the loom is four identical rows (the 'locked' reading, honest but flat), and a field of bars on a floor reads like a 3D bar chart, i.e. a meter, which the subject gate rejects. Cost is high: 4 rows x 14 threads x 3 faces = 168 nodes, and every pass re-keys all of them as rows age, far over ~20 a frame at short loop lengths; flat tops for older rows (P14's own advice) halve it. At 24 threads the cloth shrinks to fit and slabs get near the 3 px floor."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:22:47"
+  },
   "selection": null
 }

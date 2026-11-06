@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "eddy",
+  "name": "Eddy",
+  "parameters": [
+    {
+      "id": "spin",
+      "label": "Spin",
+      "default": 0.25,
+      "mapping": {"kind": "exponential", "minimum": 0.4, "maximum": 7},
+      "display": "ratio"
+    },
+    {
+      "id": "flutter",
+      "label": "Flutter",
+      "default": 0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "depth",
+      "label": "Depth",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "mix",
+      "label": "Mix",
+      "default": 1,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Chorale": {"spin": 0.25, "flutter": 0, "depth": 0.5, "mix": 1},
+    "Gale": {"spin": 0.85, "flutter": 0.6, "depth": 0.75, "mix": 0.8}
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 2,
+      "points": 64,
+      "nodes": 48,
+      "texts": 0,
+      "palette": 8
+    }
+  }
+}
