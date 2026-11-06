@@ -305,7 +305,326 @@ class Frame:
         return "\n".join(head + ["  " + s for s in self.items] + ["</svg>", ""])
 
 
-#@@VARIANTS@@
+# ================================================================ v1
+def v1() -> Frame:
+    """The verge at large scale: the gable end of the roof seen from the side, its
+    plain-tile courses as a sawtooth of noses, black against the night and lit only
+    along the edges that face the sky. The eave corner and its gutter are in frame;
+    the roof runs on past the right edge. Rain falls in the open sky and stops at
+    the roof's edge; the course a drop just hit is the lit one."""
+    fr = Frame("v1 · the verge, edge-lit")
+    cs = courses(SPAN)
+    n = len(cs)
+    pitch = math.radians(27)
+    u = (math.cos(pitch), math.sin(pitch), 0.0)          # up the slope
+    v = (-math.sin(pitch), math.cos(pitch), 0.0)         # out of the slope
+    e = 1.0                                              # exposure per course (world)
+    t = 0.36                                             # nose thickness
+    run = n * e
+
+    def P(s, h, z=0.0):
+        return add(add(mul(u, s), mul(v, h)), (0.0, 0.0, z))
+
+    # one camera, a little forward of the gable and level with the eave
+    cam = Camera((2.0, 1.5, 22.0), (4.0, 2.2, 0.0))
+    cam.fit([P(-0.9, -1.6), P(run - 0.3, t)], (10, 44, 482, 214))
+
+    def tread(k):
+        s0, s1 = k * e, (k + 1) * e
+        return [(s0, 0.0), (s0, t), (s0 + 0.08 * e, t + 0.03), (s1, 0.4 * t)]
+
+    prof = []
+    for k in range(n):
+        prof += tread(k)
+    prof.append((run + 2.0, 0.4 * t))
+    # rain in the open sky: streaks above the courses they'll land on
+    for k, frac, ht in ((0, 0.6, 0.55), (2, 0.35, 0.75), (3, 0.7, 0.25), (6, 0.5, 0.6), (7, 0.35, 0.2)):
+        land = cam(P((k + frac) * e, 0.4 * t + 0.62 * t * (1 - frac)))
+        top = max(land[1] - 14 - ht * 70, TOP + 22)
+        fr.ribbon([(land[0], top - 18), (land[0], top)], LINE, G3)
+    # receding nose edges: the courses run back into the dark (short, hairline)
+    for k in range(n):
+        fr.ribbon([cam(P(k * e, t)), cam(P(k * e, t, -2.4))], HAIR, G2)
+    # the body: the roof's end and barge board, black, hiding what's behind
+    barge = 0.75
+    body = [cam(P(-0.3, 0.0))] + [cam(P(s, h)) for s, h in prof] + \
+           [cam(P(run + 2.0, -barge)), cam(P(-0.3, -barge))]
+    fr.poly(body, G0)
+    fr.ribbon([cam(P(-0.3, -barge)), cam(P(run + 2.0, -barge))], HAIR, G3)
+    # rim light on every sky-facing edge
+    struck = 4
+    for k in range(n):
+        tr = [cam(P(s, h)) for s, h in tread(k)[1:]]
+        fr.ribbon(tr, SUBJ if k == struck else LINE, G7 if k == struck else G4)
+        s0 = k * e
+        fr.ribbon([cam(P(s0, 0.0)), cam(P(s0, t))], HAIR, G2)   # nose face, turned from the light
+    # gutter at the eave: a half-round in profile, dark body with a lit rim (empty: puddle 0)
+    gp = P(-0.35, -0.45)
+    g = cam(gp)
+    rr = cam.focal * 0.5 / cam.depth(gp)
+    gut = ellipse_pts(g[0], g[1], rr, rr, 0, math.pi, 18) + \
+        ellipse_pts(g[0], g[1], rr - 3, rr - 3, math.pi, 0, 18)
+    fr.outline(gut, G4, LINE)
+    # the drop that just landed: a broken crown off the struck tread
+    sp = cam(P((struck + 0.5) * e, 0.4 * t + 0.31 * t))
+    for dx in (-1, 1):
+        fr.ribbon([(sp[0] + dx * 3, sp[1] - 3), (sp[0] + dx * 10, sp[1] - 12)], LINE, G5)
+    return fr
+
+
+# ================================================================ v2
+def drop_profile(r, flat, n=40):
+    """Side profile of a falling raindrop: round on top, flattened underneath."""
+    pts = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        x, y = math.cos(a), math.sin(a)
+        y = y * (0.96 if y > 0 else (1 - flat))
+        pts.append((r * x, r * y))
+    return pts
+
+
+def v2() -> Frame:
+    """Rain itself: the drops of the last bar falling through still air, drawn as
+    real drops (round on top, flattened underneath the bigger they are). A drop's
+    size is its note: big drops are the low courses, small the high ones. The one
+    that just played is the bright one."""
+    fr = Frame("v2 · the drops")
+    cs = courses(SPAN)
+    n = len(cs)
+    cam = Camera((0.0, 160.0, 900.0), (0.0, 0.0, 0.0))
+    cam.fit([(-235, -95, 0), (235, 95, 0)], (14, 30, 466, 214))
+    rnd = random.Random(5)
+    placed = []
+    tries = 0
+    while len(placed) < 7 and tries < 4000:
+        tries += 1
+        c = rnd.randrange(n)
+        r = 7.0 + 12.0 * (1 - c / (n - 1))
+        x, y, z = rnd.uniform(-210, 210), rnd.uniform(-70, 72), rnd.uniform(-60, 60)
+        if all(math.hypot(x - q[0], y - q[1]) > r + q[3] + 36 for q in placed):
+            placed.append((x, y, z, r, c))
+    placed.sort(key=lambda q: -cam.depth((q[0], q[1], q[2])))
+    newest = min(range(len(placed)), key=lambda i: abs(placed[i][0] - 40) + abs(placed[i][1] + 10))
+    for i, (x, y, z, r, c) in enumerate(placed):
+        p = (x, y, z)
+        o = cam(p)
+        k = cam.focal / cam.depth(p)
+        rp = r * k
+        flat = 0.06 + 0.4 * (r - 7) / 12
+        prof = [(o[0] + px * k, o[1] - py * k) for px, py in drop_profile(r, flat)]
+        bright = i == newest
+        # the fall: one hairline, the distance it fell in a frame
+        L = 2.2 * rp + 10
+        fr.ribbon([(o[0], o[1] - 0.96 * rp - 4 - L), (o[0], o[1] - 0.96 * rp - 4)], HAIR, G3 if bright else G2)
+        fr.outline(prof, G7 if bright else G4, SUBJ if bright else LINE)
+        # inner structure: the near half of the equator (seen from a little above)
+        if rp >= 9:
+            eq = ellipse_pts(o[0], o[1] + rp * 0.04, rp * 0.92 - 1, rp * 0.3, 0.2, math.pi - 0.2, 18)
+            fr.ribbon(eq, HAIR, G4 if bright else G3)
+        # the refraction crescent, up and left
+        if rp >= 6.5:
+            hl = ellipse_pts(o[0] + rp * 0.02, o[1] + rp * 0.02, rp * 0.62, rp * 0.62,
+                             math.pi * 1.1, math.pi * 1.42, 10)
+            fr.ribbon(hl, HAIR, G5 if bright else G3)
+    return fr
+
+
+# ================================================================ v3
+def v3() -> Frame:
+    """A rainstick: a long hollow stick with pins driven through it in a spiral,
+    pebbles falling inside strike the pins. Each ring of pins is a course; a pin
+    just struck carries a ring of light at its head. Turning the stick (gust)
+    tilts it; level, a shake scatters the pebbles at random."""
+    fr = Frame("v3 · the rainstick")
+    cs = courses(SPAN)
+    n = len(cs)
+    R, L = 20.0, 400.0
+    yaw = math.radians(16)
+    ax = (math.cos(yaw), 0.0, math.sin(yaw))
+    e1 = (0.0, 1.0, 0.0)
+    e2 = norm(cross(ax, e1))
+
+    def S(s, phi, r=R):
+        return add(mul(ax, s), add(mul(e1, r * math.cos(phi)), mul(e2, r * math.sin(phi))))
+
+    cam = Camera((40.0, 170.0, 620.0), (0.0, 0.0, 0.0))
+    angles = [q * math.pi / 18 for q in range(36)]
+    ring_l = [S(-L / 2, a) for a in angles]
+    ring_r = [S(L / 2, a) for a in angles]
+    cam.fit(ring_l + ring_r, (22, 42, 458, 204))
+
+    def facing(s, phi, r=R):
+        nrm = add(mul(e1, math.cos(phi)), mul(e2, math.sin(phi)))
+        return dot(nrm, norm(sub(cam.eye, S(s, phi, r))))
+
+    body = hull([cam(p) for p in ring_l + ring_r])
+    fr.outline(body, G4, LINE)
+    # growth nodes along the stick: the visible half of each ring, hairline
+    for s in (-120.0, 10.0, 130.0):
+        pts = [cam(S(s, a)) for a in [q * math.pi / 40 for q in range(81)] if facing(s, a) > 0.05]
+        fr.ribbon(pts, HAIR, G2)
+    # the grip: cord wound round the left end, hairlines 4 px apart
+    for j in range(8):
+        s = -L / 2 + 12 + j * 5.0
+        pts = [cam(S(s + 2.4 * math.sin(a), a)) for a in [q * math.pi / 30 for q in range(61)]
+               if facing(s, a) > 0.05]
+        fr.ribbon(pts, HAIR, G3)
+    # near end: open; a rim with wall thickness, and the dark inside (no pebbles: puddle 0)
+    rim = [cam(S(L / 2, a)) for a in [q * math.pi / 24 for q in range(48)]]
+    inner = [cam(S(L / 2, a, R - 3.5)) for a in [q * math.pi / 24 for q in range(48)]]
+    fr.outline(inner, G3, LINE)
+    fr.ribbon(rim + rim[:1], LINE, G4)
+    # pins: n rings along the stick, six per ring, turning in a spiral; visible heads only
+    s0, s1 = -L / 2 + 70, L / 2 - 24
+    struck = {(1, 1): 1, (3, 4): 1, (5, 3): 1, (6, 2): 2}
+    for k in range(n):
+        s = s0 + (s1 - s0) * k / (n - 1)
+        for j in range(6):
+            phi = j * math.pi / 3 + k * 0.42
+            if facing(s, phi) < 0.3:
+                continue
+            p = cam(S(s, phi))
+            age = struck.get((k, j))
+            if age == 2:
+                fr.disc(p[0], p[1], 2.8, G7)
+                fr.ribbon(ellipse_pts(p[0], p[1], 6.0, 6.0, 0, 2 * math.pi, 24), LINE, G5)
+            elif age:
+                fr.disc(p[0], p[1], 2.2, G4)
+                fr.ribbon(ellipse_pts(p[0], p[1], 5.6, 5.6, 0, 2 * math.pi, 24), HAIR, G4)
+            else:
+                fr.disc(p[0], p[1], 2.0, G3)
+    return fr
+
+
+# ================================================================ v4
+def v4() -> Frame:
+    """Pantiles seen close: the S-shaped clay the rain lands on, eight courses
+    rising away from us, each course's leading edge one bold line over black, its
+    rolls carried up the slope as hairlines. The tile just struck has the bright
+    edge; puddle fills the pans with water (hatched; dry at 0)."""
+    fr = Frame("v4 · pantiles, close")
+    cs = courses(SPAN)
+    n = len(cs)
+    pitch = math.radians(30)
+    up = (0.0, math.sin(pitch), -math.cos(pitch))
+    nrm = (0.0, math.cos(pitch), math.sin(pitch))
+    W, e, thick = 1.0, 0.55, 0.07
+
+    def prof(x):                       # pantile: a broad shallow pan, then a tall roll
+        ph = (x / W) % 1.0
+        if ph < 0.62:
+            return -0.05 * math.sin(math.pi * ph / 0.62)
+        return 0.16 * math.sin(math.pi * (ph - 0.62) / 0.38)
+
+    def P(x, s, h=0.0):
+        return add(add((x, 0.0, 0.0), mul(up, s)), mul(nrm, h + prof(x)))
+
+    cam = Camera((0.3, 1.25, 2.6), (0.3, 1.25, -2.0))
+    cam.fit([P(-1.6, 0, -thick), P(2.1, 0, -thick), P(-1.6, n * e + 0.3), P(2.1, n * e + 0.3)],
+            (-20, 30, 500, 214))
+    struck = (4, 1)
+    x0, x1 = -3.4, 4.2
+    xs = [x0 + (x1 - x0) * q / 60 for q in range(61)]
+    for k in reversed(range(n)):
+        s = k * e
+        lower = [cam(P(x, s, 0.0)) for x in xs]
+        top = [cam(P(x, s + e * 1.6, 0.0)) for x in reversed(xs)]
+        fr.poly([cam(P(x, s, -thick)) for x in xs] + top, G0)
+        near = k < 4
+        # rolls carried up the slope: one hairline on each crest, inner structure
+        for j in range(-4, 5):
+            xc = (j + 0.81) * W
+            a, b = cam(P(xc, s + 0.02, 0.0)), cam(P(xc, s + e * 0.98, 0.0))
+            if -5 < a[0] < 485:
+                fr.ribbon([a, b], HAIR, G2 if near else G1)
+        fr.ribbon(lower, SUBJ if near else LINE, G4 if near else G3)
+        fr.ribbon([cam(P(x, s, -thick)) for x in xs], LINE if near else HAIR, G3 if near else G2)
+        if k == struck[0]:
+            j = struck[1]
+            seg = [cam(P(x, s, 0.0)) for x in xs if j * W - 0.02 <= x <= (j + 1) * W + 0.02]
+            fr.ribbon(seg, SUBJ + 0.5, G7)
+    # drops coming down toward the roof: small closed teardrops
+    for x, s, hgt in ((-0.75, 6.2, 0.5), (1.45, 2.4, 0.45), (0.15, 3.4, 0.9)):
+        base = P(x, s, hgt)
+        o = cam(base)
+        k = cam.focal / cam.depth(base) * 0.06
+        tear = []
+        for q in range(28):
+            a = 2 * math.pi * q / 28
+            sy = math.sin(a)
+            r = 1.0 if sy > 0 else 1.0 - 0.8 * (-sy) ** 1.5
+            tear.append((o[0] + k * r * math.cos(a), o[1] + k * sy * (1.0 if sy > 0 else 2.0)))
+        fr.outline(tear, G5, LINE)
+    # the splash off the struck tile: a broken crown
+    k, j = struck
+    c = cam(P((j + 0.31) * W, k * e + 0.22, 0.0))
+    for dx in (-1, 1):
+        fr.ribbon([(c[0] + dx * 4, c[1] - 3), (c[0] + dx * 11, c[1] - 12)], LINE, G5)
+    return fr
+
+
+# ================================================================ v5
+def v5() -> Frame:
+    """Under the eave, a shelf of clay flowerpots, cut through to show their
+    hollows: the drip line above lets the rain fall into them, and each pot rings
+    its own note (the big ones low, the small ones high). The pot that just rang is
+    bright; puddle is the water standing in them (hatched; dry at 0)."""
+    fr = Frame("v5 · pots under the eave, cut away")
+    cs = courses(SPAN)
+    n = len(cs)
+    cam = Camera((0.0, 330.0, 900.0), (0.0, 20.0, 0.0))
+    radii = [25.0 - 12.0 * k / (n - 1) for k in range(n)]
+    gap = 10.0
+    total = sum(2 * r for r in radii) + gap * (n - 1)
+    xs, x = [], -total / 2
+    for r in radii:
+        xs.append(x + r)
+        x += 2 * r + gap
+    shelf = 0.0
+    ey = 150.0
+    cam.fit([(-total / 2 - 8, shelf - 10, 20), (total / 2 + 8, shelf - 10, 20), (0, ey, 0)],
+            (14, 34, 466, 212))
+
+    def ring(cx_, y, r, a0, a1, m=24):
+        return [cam((cx_ + r * math.cos(a0 + (a1 - a0) * q / m), y, r * math.sin(a0 + (a1 - a0) * q / m)))
+                for q in range(m + 1)]
+
+    W0, W1 = -400.0, 400.0
+    # the eave above: a dark slab whose drip edge catches the light
+    fr.poly([cam((W0, ey, 0)), cam((W1, ey, 0)), cam((W1, ey + 60, 0)), cam((W0, ey + 60, 0))], G0)
+    fr.ribbon([cam((W0, ey, 0)), cam((W1, ey, 0))], LINE, G4)
+    fr.ribbon([cam((W0, ey + 8, 0)), cam((W1, ey + 8, 0))], HAIR, G2)
+    # the shelf: a plank running out of frame; top face hairline, front edge Line
+    fr.ribbon([cam((W0, shelf, -30)), cam((W1, shelf, -30))], HAIR, G2)
+    fr.ribbon([cam((W0, shelf, 30)), cam((W1, shelf, 30))], LINE, G3)
+    fr.ribbon([cam((W0, shelf - 10, 30)), cam((W1, shelf - 10, 30))], HAIR, G2)
+    struck = 3
+    for i, (cxp, r) in enumerate(zip(xs, radii)):
+        H = r * 1.75
+        rb = r * 0.66
+        t = max(3.0, r * 0.13)
+        col, w = (G7, SUBJ) if i == struck else (G4, LINE)
+        # through the cut: the far half of the rim and of the floor
+        fr.ribbon(ring(cxp, shelf + H, r - t * 0.4, math.pi, 2 * math.pi), HAIR, G3)
+        fr.ribbon(ring(cxp, shelf + t, rb - t, math.pi, 2 * math.pi, 16), HAIR, G2)
+        # the cut walls, both sides: clay section with the rim collar and the floor's drain hole
+        hole = r * 0.14
+        sec = [(hole, 0.0), (rb, 0.0), (r * 0.93, H - t * 2.4), (r + t * 0.55, H - t * 2.4),
+               (r + t * 0.55, H), (r - t, H), (r - t, H - t * 2.4 + 0.1), (rb - t * 0.9, t), (hole, t)]
+        for side in (-1, 1):
+            fr.outline([cam((cxp + side * px, shelf + py, 0)) for px, py in sec], col, w)
+    # drops falling from the drip edge into the pots, straight down in still air
+    for i, frac in ((1, 0.35), (5, 0.6), (6, 0.15)):
+        cxp, r = xs[i], radii[i]
+        yb = r * 1.75 + 16 + 70 * frac
+        fr.ribbon([cam((cxp - r * 0.2, yb + 16, 0)), cam((cxp - r * 0.2, yb, 0))], LINE, G4)
+    # the one that just rang: a short crown off the floor of the bright pot
+    c = cam((xs[struck] - radii[struck] * 0.2, shelf + 4.5, 0))
+    for dx in (-1, 1):
+        fr.ribbon([(c[0] + dx * 2.5, c[1] - 2), (c[0] + dx * 8, c[1] - 9)], LINE, G5)
+    return fr
+
 
 def main():
     for name, fn in (("v1", v1), ("v2", v2), ("v3", v3), ("v4", v4), ("v5", v5)):
