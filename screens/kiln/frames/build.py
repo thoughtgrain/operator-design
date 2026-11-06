@@ -419,7 +419,7 @@ def lip_wall(fire):
     return 0.10 - 0.035 * fire                # the lip thins as the body vitrifies
 
 
-GLAZE_T = (0.13, 0.55)                        # inner-profile t of the glaze line, glaze 0 .. 100
+GLAZE_T = (0.13, 0.5)                        # inner-profile t of the glaze line, glaze 0 .. 100
 
 
 def glaze_ring(g):
@@ -454,7 +454,7 @@ assert glaze_tf(1.0)[0] <= 2.0, glaze_tf(1.0)[0]
 
 
 # ---------------------------------------------------------------- crack and crazing (authored once)
-def crack_geometry():
+def crack_geometry(seed=23):
     """A dunting crack as a tree grown down the front wall from the lip.
 
     Each step is a short segment with its path length from the crack's mouth;
@@ -462,7 +462,7 @@ def crack_geometry():
     runs down, forks, and its forks fork (a count of segments, eased by length).
     Returns [(dist, depth, (th, t), (th, t))] sorted by dist.
     """
-    rnd = random.Random(23)
+    rnd = random.Random(seed)
     th0 = math.radians(THETA_CRACK)
     segs = []
     ds = 0.034
@@ -470,18 +470,21 @@ def crack_geometry():
     def grow(th, t, heading, budget, depth, dist):
         steps = int(budget / ds)
         for i in range(steps):
-            heading += rnd.uniform(-0.32, 0.32)
-            heading = max(-1.25, min(1.25, heading))
+            heading += rnd.uniform(-0.3, 0.3)
+            if depth == 0:
+                heading *= 0.8                    # the main crack keeps running down the wall
+            heading = max(-1.2, min(1.2, heading))
             r = BOWL.outer(t)[0]
             nth = th + math.sin(heading) * ds / r
             nt = t - math.cos(heading) * ds * 0.9
-            if nt < 0.1 or abs(nth - th0) > math.radians(46):
+            if nt < 0.12 or abs(nth - th0) > math.radians(44):
                 return
             segs.append((dist, depth, (th, t), (nth, nt)))
             th, t, dist = nth, nt, dist + ds
-            if depth < 2 and i > 1 and rnd.random() < (0.2 if depth == 0 else 0.13):
+            p_fork = (0.26, 0.2, 0.12)[depth] if depth < 3 else 0
+            if i > 1 and rnd.random() < p_fork:
                 side = rnd.choice((-1, 1))
-                grow(th, t, heading + side * rnd.uniform(0.7, 1.1), budget * rnd.uniform(0.35, 0.55),
+                grow(th, t, heading + side * rnd.uniform(0.8, 1.15), budget * rnd.uniform(0.4, 0.6),
                      depth + 1, dist)
     grow(th0, 0.99, 0.0, 0.92, 0, 0.0)
     segs.sort(key=lambda q: q[0])
@@ -770,7 +773,7 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
             pts = [main[0][2]] + [q[3] for q in main]
             pts = tf.pts([wall_pt(th, tt, 0.004) for th, tt in pts])
             F.outline(taper_pts(pts, (1.3 + 1.9 * u) * s, 1.0 * s), G2)
-        for depth, col in ((1, G3), (2, G4)):
+        for depth, col in ((1, G3), (2, G4), (3, G4)):
             for q in CRACK:
                 if q[1] == depth and q[0] < reach:
                     seg = [wall_pt(*q[2], 0.004), wall_pt(*q[3], 0.004)]

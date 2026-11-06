@@ -504,6 +504,22 @@ def trail_point(s: Spool, st: State, q: float):
     return v3(x, AMP * v, 0.0), w, rep, mark
 
 
+def worn_now(s: Spool, st: State) -> float:
+    """High-partial loss of the pass being laid now."""
+    mark = max([m for m in st.marks if m <= st.phi + 1e-9])
+    P = math.floor(st.phi - mark) * s.passes_per_rev()
+    return 1 - (1 - 0.35 * s.wear) ** P if s.wear > 0 else 0.0
+
+
+def shade_for(s: Spool, ws, st: State) -> str:
+    """The thread dulls as it wears, two stock steps at most: a stretch reads its mean wear back
+    from its width (width = base x (1 - 0.55 wear), dropouts excluded by the median)."""
+    base = CHORD_W[min(st.voices, 3)]
+    med = float(np.median(ws)) / base
+    worn = (1 - med) / 0.55
+    return B if worn < 0.3 else S2 if worn < 0.62 else S
+
+
 def trail_samples(s: Spool, st: State):
     """Dense screen samples of the trail from the laying point to the left edge, corners kept."""
     a = 0.9 * s.wow
@@ -656,13 +672,15 @@ def scene(s: Spool, st: State) -> Frame:
             fr.node(i, [(640 + 2 * math.cos(a), 320 + 2 * math.sin(a)) for a in np.linspace(0, 6.2, POINTS)],
                     B, "none", 0, origin=(640, 320), note="trail chunk (hidden)")
             continue
-        fr.node(i, polyline_fixed(ch[0], ch[1], POINTS // 2), B, "none", 0,
+        fr.node(i, polyline_fixed(ch[0], ch[1], POINTS // 2), shade_for(s, ch[1], st), "none", 0,
                 note=f"trail chunk {i}: mutable, {POINTS} points")
-    touch = trail_point(s, st, st.phi)[0]
+    touch, w_now, _, _ = trail_point(s, st, st.phi)
     fp = free_run(s, st, touch)
     fpts = [cam(p) for p in fp]
-    fw = [CHORD_W[min(st.voices, 3)]] * len(fpts)
-    fr.node(3, polyline_fixed(fpts, fw, POINTS // 2), B, "none", 0, note="free run: mutable, 64 points")
+    base = CHORD_W[min(st.voices, 3)]
+    fw = [base * (1 - 0.55 * worn_now(s, st))] * len(fpts)
+    fr.node(3, polyline_fixed(fpts, fw, POINTS // 2), shade_for(s, fw, st), "none", 0,
+            note="free run: mutable, 64 points")
 
     # 10 near flange body, 11 its face, 12 hub, 13 bore, 14..16 holes (they turn with the roll)
     fr.node(10, cyl_outline(near0, near1, RF), K, M, LINE, note="near flange rim")
