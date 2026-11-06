@@ -472,40 +472,32 @@ def bed(n, gscale, settle):
     placed = []
     root = math.sqrt(1 + KW * KW)
     spread = (1.15 + 0.85 * settle) * gscale ** 0.8   # coarser grains need a longer drift to stay under water
-    for k in range(1, n + 1):
-        r = grain_r_px(k) * gscale / PPU * (0.9 + 0.2 * jit(k, 13))
-        pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.75 * (0.8 + 0.4 * jit(k, 9))
+
+    def place(k, r, pref, squeeze):
         best = None
         for i in range(440):
             x = RB + 0.30 - i * 0.005
             z = max(r + 0.01, (x - RB + r * root) / KW)
             for (xj, zj, rj) in placed:
-                d = r + rj + 0.6 / PPU                  # touching, never overlapping: each grain reads
+                d = (r + rj) * squeeze + 0.6 / PPU
                 if abs(x - xj) < d:
                     z = max(z, zj + math.sqrt(d * d - (x - xj) ** 2))
             cost = (1.4 * z + 0.5 * abs(x - pref) + 2.0 * max(0.0, x - RB) + 20.0 * max(0.0, z + r - 0.9 * ZW)
                     + 0.03 * jit(k * 1000 + i, 17))
             if best is None or cost < best[0]:
                 best = (cost, x, z)
-        placed.append((best[1], best[2], r))
-    _BED[key] = [(x, z) for x, z, _ in placed]
-    return _BED[key]
-    placed = []
-    root = math.sqrt(1 + KW * KW)
+        return best
+
     for k in range(1, n + 1):
-        r = grain_r_px(k) * gscale / PPU * 0.92
-        best = None
-        for i in range(260):
-            x = RB + 0.35 - i * 0.006               # sweep from up the wall leftwards across the floor
-            zmin = max(r + SHEET * 0 + 0.012, (x - RB + r * root) / KW if KW else r)
-            z = zmin
-            for (xj, zj, rj) in placed:
-                d = r + rj + 0.004
-                if abs(x - xj) < d:
-                    z = max(z, zj + math.sqrt(d * d - (x - xj) ** 2))
-            cost = z + 0.40 * (RB - x)
-            if best is None or cost < best[0]:
-                best = (cost, x, z)
+        r = grain_r_px(k) * gscale / PPU * (0.9 + 0.2 * jit(k, 13))
+        pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.75 * (0.8 + 0.4 * jit(k, 9))
+        best = place(k, r, pref, 1.0)                 # touching, never overlapping: each grain reads
+        if best[2] + r > 0.92 * ZW:
+            # no room under the water: the drift is a pile in depth, so in the cut its grains overlap
+            for squeeze in (0.8, 0.6, 0.45):
+                best = place(k, r, pref, squeeze)
+                if best[2] + r <= 0.92 * ZW:
+                    break
         placed.append((best[1], best[2], r))
     _BED[key] = [(x, z) for x, z, _ in placed]
     return _BED[key]
