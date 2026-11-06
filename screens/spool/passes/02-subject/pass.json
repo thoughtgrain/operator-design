@@ -1,0 +1,100 @@
+{
+  "machine": "spool",
+  "category": "engine",
+  "kind": "subject",
+  "number": 2,
+  "state": "open",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Draw a spool: thread or yarn wound on a spool, somehow. Five new variations of that.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: single-weight contour. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: hatched mass. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: edge-lit silhouette. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: detailed line art. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the material the sound acts on, seen close",
+      "drawingLanguage": "hidden-line 3D",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: hidden-line 3D. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

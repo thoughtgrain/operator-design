@@ -1,0 +1,75 @@
+{
+  "machine": "flock",
+  "category": "player",
+  "kind": "subject",
+  "number": 2,
+  "state": "open",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Five new, unique iterations.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "bold closed outlines",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what flock is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: bold closed outlines. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "cutaway section",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what flock is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: cutaway section. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what flock is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: exploded view. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what flock is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: single-weight contour. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what flock is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: hatched mass. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}

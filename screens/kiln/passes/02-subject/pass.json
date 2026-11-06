@@ -1,0 +1,100 @@
+{
+  "machine": "kiln",
+  "category": "engine",
+  "kind": "subject",
+  "number": 2,
+  "state": "open",
+  "created": "2026-11-06T08:11:59",
+  "focus": "None of the five land. Five new, unique directions.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "hidden-line 3D",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what kiln is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: hidden-line 3D. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "the material the sound acts on, seen close",
+      "drawingLanguage": "bold closed outlines",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what kiln is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: bold closed outlines. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "one scene where this happens, with one subject in it",
+      "drawingLanguage": "cutaway section",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what kiln is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: cutaway section. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what kiln is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: exploded view. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what kiln is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: single-weight contour. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [],
+  "uniqueness": null,
+  "selection": null
+}
