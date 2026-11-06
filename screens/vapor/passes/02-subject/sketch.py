@@ -269,145 +269,117 @@ HEADER = ('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" view
 
 # ================================================================== v1 exploded view: the speaking machine
 def v1():
-    """Kempelen-style speaking machine pulled apart along its air axis (world x), seen from front-right
-    above. Left to right: bellows (breath opens it), reed block (the glottal pulse), telescoping throat
-    tube (throat draws it out), lip iris (vowel shapes its aperture) with its closing spring (glide = coils)."""
+    """A speaking machine pulled apart along its air axis (world x), seen from front-right above.
+    Left to right: wedge bellows (breath opens its boards), reed block (the glottal pulse),
+    telescoping throat tube (throat draws it out), flared mouth and the lip iris in front of it
+    (vowel shapes the aperture), with the spring that closes it back to "oo" (glide = coils)."""
     fr = Frame()
-    cam = Cam(eye=(60, 150, 560), target=(10, -8, 0), focal=560, cx=246, cy=118)
+    cam = Cam(eye=(330, 150, 470), target=(0, -4, 0), focal=560, cx=232, cy=122)
     op, fw, rd = vowel_at(VOWEL)
+    P = cam.p
 
-    def P(q):
-        return cam.p(q)
-
-    # dash-dot axis through the parts (exploded-view convention)
-    x0, x1 = -235, 250
-    n = 0
-    x = x0
+    # dash-dot axis (exploded-view convention)
+    x0, x1 = -260, 262
+    x, n = x0, 0
     while x < x1:
-        L = 9 if n % 2 == 0 else 2
+        L = 10 if n % 2 == 0 else 2
         fr.line([P((x, 0, 0)), P((min(x + L, x1), 0, 0))], HAIR, C6)
         x += L + 4
         n += 1
 
-    def box(xa, xb, hy, hz, edge=C4, inner=None, bright=False):
-        """Hidden-line box from xa..xb, half-sizes hy (up), hz (toward camera)."""
-        V = {(i, j, k): (xa if i == 0 else xb, (-hy if j == 0 else hy), (-hz if k == 0 else hz))
-             for i in (0, 1) for j in (0, 1) for k in (0, 1)}
-        faces = [  # visible faces from front-right-above: +z, +y, +x
-            [(0, 0, 1), (1, 0, 1), (1, 1, 1), (0, 1, 1)],
-            [(0, 1, 0), (1, 1, 0), (1, 1, 1), (0, 1, 1)],
-            [(1, 0, 0), (1, 1, 0), (1, 1, 1), (1, 0, 1)],
-        ]
-        for fc in faces:
-            fr.poly([P(V[k]) for k in fc], stroke=edge, sw=LINE, fill=BLACK)
-        return V
+    def cyl(xa, xb, r_, edge=C4, bore=True, seams=()):
+        pa = cam.ps(circle3((xa, 0, 0), (0, 1, 0), (0, 0, 1), r_, 36))
+        pb = cam.ps(circle3((xb, 0, 0), (0, 1, 0), (0, 0, 1), r_, 36))
+        fr.poly(convex_hull(pa + pb), stroke=edge, sw=LINE, fill=BLACK)
+        for s_ in seams:
+            xs_ = xa + (xb - xa) * s_
+            fr.line(cam.ps(circle3((xs_, 0, 0), (0, 1, 0), (0, 0, 1), r_, 20, 0.0, math.pi)), HAIR, C6)
+        fr.poly(pb, stroke=edge, sw=HAIR, fill=BLACK)
+        if bore:
+            fr.poly(cam.ps(circle3((xb, 0, 0), (0, 1, 0), (0, 0, 1), r_ - 4, 30)), stroke=C6, sw=HAIR, fill=BLACK)
 
-    # ---- bellows: back board, pleated leather, front board. breath opens it.
-    depth = 26 + 64 * BREATH          # world length of the pleated part
-    bx1 = -150                         # front board (fixed, nozzle side)
-    bx0 = bx1 - depth
-    hy, hz = 40, 30
-    pleats = 7
-    # back board
-    box(bx0 - 6, bx0, hy + 4, hz + 4, edge=C4)
-    # pleats: alternating in/out frames, drawn back to front, as hidden-line ribbons of leather
-    for i in range(pleats):
-        xa = bx0 + depth * i / pleats
-        xb = bx0 + depth * (i + 1) / pleats
-        inset = 6 if i % 2 == 0 else 0
-        inset_b = 0 if i % 2 == 0 else 6
-        ya, za, yb, zb = hy - inset, hz - inset, hy - inset_b, hz - inset_b
-        top = [P((xa, ya, -za)), P((xb, yb, -zb)), P((xb, yb, zb)), P((xa, ya, za))]
-        front = [P((xa, -ya, za)), P((xb, -yb, zb)), P((xb, yb, zb)), P((xa, ya, za))]
-        fr.poly(top, stroke=C5, sw=HAIR, fill=BLACK)
-        fr.poly(front, stroke=C5, sw=HAIR, fill=BLACK)
-    box(bx1, bx1 + 6, hy + 4, hz + 4, edge=C4)
-    # nozzle
-    noz = [(bx1 + 6, 0, 0), (bx1 + 26, 0, 0)]
-    for r_ in (7,):
-        c0 = circle3((bx1 + 26, 0, 0), (0, 1, 0), (0, 0, 1), r_, 24)
-        fr.poly(cam.ps(c0), stroke=C4, sw=HAIR, fill=BLACK)
+    # ---- wedge bellows: two pear-shaped boards hinged at the nozzle, leather folds between.
+    hx = -168                       # hinge line (x), boards run back to -x
+    half = math.radians(3 + 17 * BREATH)   # half the opening angle: 3..20 degrees
 
-    # ---- reed block (glottis): a small housing with the reed tongue showing through a slot
-    rx0, rx1 = -96, -62
-    V = box(rx0, rx1, 14, 14, edge=C4)
-    # reed slot on the top face and the reed tongue (pulse) lifted a little
-    slot = [P((rx0 + 6, 14, -3)), P((rx1 - 6, 14, -3)), P((rx1 - 6, 14, 3)), P((rx0 + 6, 14, 3))]
-    fr.poly(slot, stroke=C5, sw=HAIR, fill=BLACK)
-    fr.line([P((rx0 + 8, 14, 0)), P((rx1 - 8, 19, 0))], LINE, C3)
+    def board_outline(ang, inset=0.0):
+        pts = []
+        for i in range(29):
+            t = i / 28
+            a = math.pi * (t - 0.5)
+            # pear: narrow at the hinge, wide at the back
+            u = 34 + 46 * math.cos(a) - inset        # length back from the hinge
+            w = (30 - inset) * math.sin(a)
+            pts.append((u, w))
+        pts = [(4, -12 + inset * 0.3)] + pts + [(4, 12 - inset * 0.3)]
+        return [(hx - u * math.cos(ang), w, 4 * math.copysign(1, ang) + u * math.sin(ang)) for u, w in pts]
 
-    # ---- throat tube: three telescoping sections, total length follows throat
-    tx0 = -36
-    tlen = 120 * RATIO / 1.0 * 0.75 + 20     # world length at this ratio
-    radii = [12, 15, 18]
-    seg = tlen / 3
-    for i, r_ in enumerate(radii):
-        xa = tx0 + i * (seg + 10)
-        xb = xa + seg
-        # cylinder: silhouette lines + near end ellipse, far end hidden-line
-        c_a = circle3((xa, 0, 0), (0, 1, 0), (0, 0, 1), r_, 36)
-        c_b = circle3((xb, 0, 0), (0, 1, 0), (0, 0, 1), r_, 36)
-        pa, pb = cam.ps(c_a), cam.ps(c_b)
-        # body as the hull of both ends
-        hull = convex_hull(pa + pb)
-        fr.poly(hull, stroke=C4, sw=LINE, fill=BLACK)
-        fr.poly(pb, stroke=C4, sw=HAIR, fill=BLACK)
-        # inner bore ring on the open end
-        fr.poly(cam.ps(circle3((xb, 0, 0), (0, 1, 0), (0, 0, 1), r_ - 4, 30)), stroke=C6, sw=HAIR)
-        # seam rings along the section
-        for s in (0.33, 0.66):
-            xs_ = xa + seg * s
-            ring = cam.ps(circle3((xs_, 0, 0), (0, 1, 0), (0, 0, 1), r_, 36, -math.pi / 2, math.pi / 2))
-            # only the half facing the camera (z > 0)
-            fr.line(cam.ps(circle3((xs_, 0, 0), (0, 1, 0), (0, 0, 1), r_, 24, 0.0, math.pi)), HAIR, C6)
-    tend = tx0 + 3 * seg + 20
+    fr.poly(cam.ps(board_outline(-half)), stroke=C5, sw=LINE, fill=BLACK)
+    folds = 4
+    for k in range(1, folds * 2):
+        a = -half + 2 * half * k / (folds * 2)
+        inset = 5 if k % 2 else 0
+        fr.poly(cam.ps(board_outline(a, inset)), stroke=C6, sw=HAIR, fill=BLACK)
+    top = board_outline(half)
+    fr.poly(cam.ps(top), stroke=C4, sw=LINE, fill=BLACK)
+    # the board's handle and its grain line
+    fr.line(cam.ps([(hx - u * math.cos(half), 0, 4 + u * math.sin(half) + 0.5) for u in (30, 70)]), HAIR, C6)
+    # nozzle cone from the hinge forward
+    cyl(hx, hx + 26, 6, edge=C4, bore=False)
 
-    # ---- mouth bell: a flaring cone, then the lip iris plate in front
-    mx0 = tend + 14
-    mx1 = mx0 + 46
-    rings = []
-    for i in range(6):
-        t = i / 5
-        xr = mx0 + (mx1 - mx0) * t
-        rr = 16 + 22 * t ** 1.6
-        rings.append((xr, rr))
-    outline_pts = []
+    # ---- reed block (the glottis): a small housing with the reed tongue lifted out of its slot
+    rx0, rx1, s = -112, -80, 13
+    V = {(i, j, k): (rx0 if i == 0 else rx1, -s if j == 0 else s, -s if k == 0 else s)
+         for i in (0, 1) for j in (0, 1) for k in (0, 1)}
+    for fc in ([(0, 0, 1), (1, 0, 1), (1, 1, 1), (0, 1, 1)], [(0, 1, 0), (1, 1, 0), (1, 1, 1), (0, 1, 1)],
+               [(1, 0, 0), (1, 1, 0), (1, 1, 1), (1, 0, 1)]):
+        fr.poly([P(V[k]) for k in fc], stroke=C4, sw=LINE, fill=BLACK)
+    fr.poly([P((rx0 + 6, s, -3)), P((rx1 - 6, s, -3)), P((rx1 - 6, s, 3)), P((rx0 + 6, s, 3))], stroke=C5, sw=HAIR, fill=BLACK)
+    fr.line([P((rx0 + 8, s, 0)), P((rx1 - 7, s + 7, 0))], LINE, C3)
+    fr.poly(cam.ps(circle3((rx1, 0, 0), (0, 1, 0), (0, 0, 1), 5, 20)), stroke=C5, sw=HAIR, fill=BLACK)
+
+    # ---- throat tube: three telescoping sections; throat draws the set out
+    tx = -54
+    seg = 26 + 22 * RATIO
+    for i, r_ in enumerate((11, 14, 17)):
+        xa = tx + i * (seg + 12)
+        cyl(xa, xa + seg, r_, seams=(0.5,))
+    tend = tx + 3 * seg + 24
+
+    # ---- mouth: a flared horn
+    mx0, mx1 = tend + 6, tend + 52
+    rings = [(mx0 + (mx1 - mx0) * i / 6, 15 + 23 * (i / 6) ** 1.8) for i in range(7)]
+    pts = []
     for xr, rr in rings:
-        outline_pts += cam.ps(circle3((xr, 0, 0), (0, 1, 0), (0, 0, 1), rr, 36))
-    fr.poly(convex_hull(outline_pts), stroke=C4, sw=LINE, fill=BLACK)
-    for xr, rr in rings[1:-1]:
-        fr.line(cam.ps(circle3((xr, 0, 0), (0, 1, 0), (0, 0, 1), rr, 24, 0.0, math.pi)), HAIR, C6)
-    fr.poly(cam.ps(circle3((mx1, 0, 0), (0, 1, 0), (0, 0, 1), 38, 40)), stroke=C4, sw=HAIR, fill=BLACK)
+        pts += cam.ps(circle3((xr, 0, 0), (0, 1, 0), (0, 0, 1), rr, 36))
+    fr.poly(convex_hull(pts), stroke=C4, sw=LINE, fill=BLACK)
+    for xr, rr in rings[2:-1:2]:
+        fr.line(cam.ps(circle3((xr, 0, 0), (0, 1, 0), (0, 0, 1), rr, 20, 0.0, math.pi)), HAIR, C6)
+    fr.poly(cam.ps(circle3((mx1, 0, 0), (0, 1, 0), (0, 0, 1), 38, 44)), stroke=C4, sw=HAIR, fill=BLACK)
+    fr.poly(cam.ps(circle3((mx1, 0, 0), (0, 1, 0), (0, 0, 1), 32, 40)), stroke=C6, sw=HAIR, fill=BLACK)
 
-    # lip iris: a flat plate, its aperture shaped by the vowel (round small u, open a, wide slit i)
-    ix = mx1 + 34
-    plate = circle3((ix, 0, 0), (0, 1, 0), (0, 0, 1), 40, 48)
-    fr.poly(cam.ps(plate), stroke=C4, sw=LINE, fill=BLACK)
-    # plate thickness edge
-    fr.line(cam.ps(circle3((ix + 4, 0, 0), (0, 1, 0), (0, 0, 1), 40, 24, -0.2, math.pi * 0.62)), HAIR, C5)
-    # iris leaves: radial hairlines from aperture to rim
-    ay = 6 + 22 * op * (1 - 0.5 * fw)          # aperture half-height (up)
-    az = 6 + 22 * op + 10 * fw - 4 * rd        # aperture half-width (across)
+    # ---- lip iris: a flat ring of leaves, its aperture shaped by the vowel
+    ix = mx1 + 36
+    fr.poly(convex_hull(cam.ps(circle3((ix - 5, 0, 0), (0, 1, 0), (0, 0, 1), 40, 48))
+                        + cam.ps(circle3((ix, 0, 0), (0, 1, 0), (0, 0, 1), 40, 48))), stroke=C4, sw=LINE, fill=BLACK)
+    fr.poly(cam.ps(circle3((ix, 0, 0), (0, 1, 0), (0, 0, 1), 40, 48)), stroke=C4, sw=HAIR, fill=BLACK)
+    ay = 6 + 22 * op * (1 - 0.6 * fw) + 2 * rd   # aperture half-height
+    az = 6 + 20 * op + 12 * fw - 2 * rd          # half-width
+    for k in range(9):
+        a = 2 * math.pi * k / 9 + 0.3
+        fr.line([P((ix, ay * math.sin(a), az * math.cos(a))), P((ix, 37 * math.sin(a + 0.55), 37 * math.cos(a + 0.55)))],
+                HAIR, C6)
     ap = [(ix, ay * math.sin(a), az * math.cos(a)) for a in [2 * math.pi * k / 40 for k in range(40)]]
-    for k in range(10):
-        a = 2 * math.pi * k / 10 + 0.3
-        p_in = (ix, ay * math.sin(a), az * math.cos(a))
-        p_out = (ix, 36 * math.sin(a + 0.5), 36 * math.cos(a + 0.5))
-        fr.line([P(p_in), P(p_out)], HAIR, C6)
     fr.poly(cam.ps(ap), stroke=C1, sw=SUBJ, fill=BLACK)
-    # glide: a coil spring that closes the iris back to "oo"; more coils = softer = slower
+    # glide: the spring that pulls the iris back to "oo"; more coils, softer, slower
     coils = 3 + round(12 * GLIDE)
-    sx0, sx1 = ix - 30, ix - 4
-    sy = -50
-    spts = []
-    N = coils * 12
-    for i in range(N + 1):
-        t = i / N
-        a = 2 * math.pi * coils * t
-        spts.append(P((sx0 + (sx1 - sx0) * t, sy + 5 * math.sin(a), 5 * math.cos(a))))
+    sy = -52
+    sx0, sx1 = ix - 44, ix - 8
     fr.line([P((sx0 - 6, sy, 0)), P((sx0, sy, 0))], LINE, C4)
-    fr.line(spts, HAIR, C3)
-    fr.line([P((sx1, sy, 0)), P((ix, -38, 0))], LINE, C4)
+    N = coils * 12
+    fr.line([P((sx0 + (sx1 - sx0) * i / N, sy + 4 * math.sin(2 * math.pi * coils * i / N),
+                4 * math.cos(2 * math.pi * coils * i / N))) for i in range(N + 1)], HAIR, C3)
+    fr.line([P((sx1, sy, 0)), P((ix, -39, 0))], LINE, C4)
     return fr
 
 
@@ -437,84 +409,80 @@ def v2():
     dashes of air rising through the airway; glide is the hatched sweep back to the "oo" tongue."""
     fr = Frame()
     W = LINE
-    ox, oy, s = 150, 22, 1.0
+    ox, oy = 150, 22
     op, fw, rd = vowel_at(VOWEL)
-    lar = 166 + 30 * THROAT            # larynx (vocal folds) height on screen: 166 .. 196
+    lar = 150 + 30 * THROAT            # vocal folds, local y: 150 .. 180
 
     def T(pts):
-        return [(ox + x * s, oy + y * s) for x, y in pts]
+        return [(ox + x, oy + y) for x, y in pts]
 
-    jaw = 4 + 10 * op                  # jaw drop in px at the chin
-    lipf = 6 * rd - 2 * fw             # lip protrusion
-    # outer profile: back of neck, skull, face; lower face drops with the jaw
+    j = 3 + 9 * op                     # jaw drop at the chin
+    lipf = 5 * rd - 2 * fw             # lip protrusion
     upper = [(40, 196), (42, 170), (34, 142), (16, 116), (8, 84), (14, 48), (40, 18), (80, 6), (122, 8),
              (150, 22), (164, 44), (166, 58), (163, 66), (170, 80), (180, 94), (172, 99), (164, 100),
-             (166, 108), (170 + lipf, 113), (166 + lipf, 117)]
-    lower = [(166 + lipf, 119 + jaw * 0.6), (170 + lipf, 124 + jaw * 0.7), (160, 132 + jaw * 0.8),
-             (164, 146 + jaw), (158, 156 + jaw), (138, 160 + jaw * 0.6), (118, 162), (106, 172), (108, 186), (104, 198)]
+             (165, 106), (169 + lipf, 110), (164 + lipf, 113)]
+    lower = [(164 + lipf, 115 + j * 0.6), (169 + lipf, 120 + j * 0.7), (160, 130 + j * 0.8),
+             (164, 144 + j), (158, 154 + j), (138, 158 + j * 0.6), (118, 160), (110, 168), (110, 182), (106, 198)]
     fr.line(T(smooth(upper, 6)), W, C3)
     fr.line(T(smooth(lower, 6)), W, C3)
-    # the cut face of the skull: an inner contour that follows the cranium, a calm second line
+    # the cut through the cranium: an inner contour following the skull, a calm second line
     skull = [(30, 120), (20, 86), (26, 52), (48, 28), (84, 18), (118, 20), (142, 34), (152, 52), (148, 64)]
-    fr.line(T(smooth(skull, 6)), W, C6)
-    # spine column behind the airway: vertebra bodies as stacked outlines
-    for i in range(5):
-        y0 = 118 + i * 16
-        fr.poly(T([(52, y0), (70, y0 + 1), (70, y0 + 12), (52, y0 + 13)]), stroke=C7, sw=W, fill=BLACK)
-    # nasal cavity
-    nasal = [(160, 96), (140, 84), (112, 76), (94, 82), (92, 94), (124, 94), (156, 100)]
-    fr.poly(T(smooth(nasal, 5, closed=True)), stroke=C5, sw=W, fill=BLACK)
-    # hard palate (roof of the mouth) and soft palate hanging back to the uvula
-    palate = [(160, 104), (146, 100), (124, 99), (104, 102), (94, 110), (90, 118)]
+    fr.line(T(smooth(skull, 6)), W, C7)
+    # nasal cavity above the palate
+    nasal = [(160, 96), (140, 84), (112, 78), (96, 84), (94, 94), (124, 94), (156, 100)]
+    fr.poly(T(smooth(nasal, 5, closed=True)), stroke=C6, sw=W, fill=BLACK)
+    # hard palate arching back, soft palate hanging to the uvula
+    palate = [(158, 104), (146, 98), (128, 96), (110, 99), (100, 104), (94, 112), (93, 118)]
     fr.line(T(smooth(palate, 6)), W, C4)
-    # pharynx back wall down to the oesophagus
-    wall = [(88, 92), (80, 108), (78, 130), (80, 152), (82, 176), (82, 198)]
+    # incisors
+    fr.poly(T([(158, 103), (162, 104), (161, 112), (158, 111)]), stroke=C5, sw=W, fill=BLACK)
+    fr.poly(T([(156, 120 + j * 0.6), (159, 119 + j * 0.6), (160, 127 + j * 0.6), (156, 127 + j * 0.6)]),
+            stroke=C5, sw=W, fill=BLACK)
+    # pharynx back wall down into the oesophagus
+    wall = [(92, 96), (86, 112), (84, 132), (84, 156), (86, 180), (86, 198)]
     fr.line(T(smooth(wall, 6)), W, C5)
 
-    # tongue: dorsum shape from the vowel. high back (u), low and retracted (a), high front (i)
-    def tongue(o, fr_):
-        hy = 104 + 26 * o - 2 * fr_          # height of the dorsum's crest
-        hx = 104 + 40 * fr_                  # crest position (front/back)
-        root = 96 + 10 * fr_ - 6 * o         # tongue root x (retracted for open vowels)
-        tip = (156, 122 + jaw * 0.6)
-        return [tip, (148, 116 + 8 * o), (hx + 14, hy + 2), (hx, hy), (hx - 16, hy + 6 + 4 * o),
-                (root + 2, 136), (root, 150), (root + 4, lar - 12 - 30 * THROAT * 0)]
+    def tongue(o, f_):
+        hx = 110 + 30 * f_ - 2 * o
+        hy = 104 + 14 * o
+        root = 98 + 6 * f_ - 6 * o
+        ty = 121 + j * 0.6
+        return [(154, ty), ((154 + hx) / 2 + 2, (ty + hy) / 2 - 2), (hx, hy),
+                ((hx + root) / 2 - 2, hy + 0.3 * (136 - hy)), (root + 1, hy + 0.72 * (140 - hy)), (root + 1, 148)]
     cur = smooth(tongue(op, fw), 6)
-    # glide: hatched sweep between the onset tongue (u) and where it's heading, as far back as glide reaches
+    # glide: hatched sweep between the tongue and its "oo" onset, as far back as glide reaches
     u = VOWELS[0]
-    g = GLIDE
-    ghost_o = op + (u[0] - op) * g
-    ghost_f = fw + (u[1] - fw) * g
-    gh = smooth(tongue(ghost_o, ghost_f), 6)
-    region = cur + gh[::-1]
-    hatch(fr, [T(region)], spacing=3.5, col=C6)
+    go = op + (u[0] - op) * GLIDE
+    gf = fw + (u[1] - fw) * GLIDE
+    gh = smooth(tongue(go, gf), 6)
+    hatch(fr, [T(cur + gh[::-1])], spacing=3.5, col=C6)
     fr.line(T(gh), HAIR, C5)
-    # floor of the mouth and the jaw
-    floor_ = [(156, 128 + jaw * 0.6), (140, 142 + jaw * 0.6), (118, 152), (104, lar - 18)]
+    # underside of the tongue, floor of the mouth, down to the hyoid
+    floor_ = [(154, 124 + j * 0.6), (146, 134 + j * 0.6), (128, 142 + j * 0.4), (112, 150), (106, lar - 10)]
     fr.line(T(smooth(floor_, 6)), W, C6)
-    # epiglottis
-    fr.line(T(smooth([(cur[-1][0], cur[-1][1] - 6), (96, lar - 22), (92, lar - 30)], 4)), W, C4)
-    # larynx: thyroid outline at the throat front, vocal folds across the airway
-    fr.poly(T([(92, lar - 8), (110, lar - 10), (114, lar + 4), (110, lar + 16), (92, lar + 14)]),
+    # epiglottis, a small flap leaning back over the airway
+    fr.line(T(smooth([(cur[-1][0], cur[-1][1]), (97, lar - 14), (92, lar - 22)], 4)), W, C4)
+    # larynx: thyroid cartilage in front, the folds across the airway
+    fr.poly(T([(98, lar - 6), (112, lar - 8), (116, lar + 2), (112, lar + 14), (98, lar + 12)]),
             stroke=C5, sw=W, fill=BLACK)
-    fr.line(T([(84, lar + 2), (92, lar + 1)]), W, C3)
-    fr.line(T([(94, lar + 1), (106, lar + 2)]), W, C3)
-    # trachea rings below
-    for yy in range(int(lar + 22), 198, 7):
-        fr.line(T([(90, yy), (106, yy)]), W, C7)
-    fr.line(T(smooth(cur, 1)), SUBJ, C1)
+    fr.line(T([(86, lar + 3), (93, lar + 2)]), W, C2)
+    fr.line(T([(95, lar + 2), (98, lar + 3)]), W, C2)
+    # trachea: front wall below the larynx, rings as short marks
+    fr.line(T([(102, lar + 14), (104, 198)]), W, C6)
+    for yy in range(int(lar + 22), 196, 7):
+        fr.line(T([(88, yy), (101, yy)]), HAIR, C7)
+    fr.line(T(cur), SUBJ, C1)
 
-    # breath: dashes of air rising from the trachea, through the folds, over the tongue and out the lips
-    path = smooth([(97, 198), (96, lar + 6), (92, lar - 30), (90, 120), (110, 116 + 10 * op), (150, 114 + 4 * op),
-                   (176 + lipf, 116), (212, 112), (236, 106)], 8)
+    # breath: dashes of air rising through the folds, over the tongue and out between the lips
+    path = smooth([(94, 198), (92, lar + 4), (90, lar - 30), (91, 112), (108, 108 + 8 * op), (140, 110 + 6 * op),
+                   (172 + lipf, 113 + j * 0.3), (204, 112), (232, 108)], 8)
     lens = [0]
     for a, b in zip(path, path[1:]):
         lens.append(lens[-1] + math.dist(a, b))
     count = 4 + round(20 * BREATH)
-    total = lens[-1]
     for k in range(count):
-        t0 = (k + 0.5) / count * total
-        seg_ = [p for p, l in zip(path, lens) if t0 <= l <= t0 + 5]
+        t0 = (k + 0.5) / count * lens[-1]
+        seg_ = [p for p, l in zip(path, lens) if t0 <= l <= t0 + 5 and p[0] < 166]
         if len(seg_) >= 2:
             fr.line(T(seg_), W, C4)
     return fr
@@ -523,27 +491,28 @@ def v2():
 # ================================================================== v3 hatched mass: a breath fogged on a cold pane
 def v3():
     """A window pane, face on. The sung breath has fogged it: a dense hatched core in the vowel's
-    shape, a sparser halo out to where breath carries, and drops running down from the fog
-    to the glazing bar (glide)."""
+    shape, a sparser halo out to where breath carries, the patch higher on the glass for a longer
+    throat (a bigger singer), and drops running down from the fog to the glazing bar (glide)."""
     fr = Frame()
     rnd = random.Random(7)
     op, fw, rd = vowel_at(VOWEL)
     # glazing bars: vertical at x 330, horizontal at y 176. Each drawn as two edges + putty line.
     for x in (326, 334):
-        fr.line([(x, 21), (x, 172)], LINE if x == 326 else HAIR, C6)
-        fr.line([(x, 180), (x, 220)], LINE if x == 326 else HAIR, C6)
-    for y in (172, 180):
-        fr.line([(0, y), (326, y)], LINE if y == 172 else HAIR, C6)
-        fr.line([(334, y), (480, y)], LINE if y == 172 else HAIR, C6)
+        fr.line([(x, 21), (x, 186)], LINE if x == 326 else HAIR, C6)
+        fr.line([(x, 194), (x, 220)], LINE if x == 326 else HAIR, C6)
+    for y in (186, 194):
+        fr.line([(0, y), (326, y)], LINE if y == 186 else HAIR, C6)
+        fr.line([(334, y), (480, y)], LINE if y == 186 else HAIR, C6)
     # putty bevel, inside the pane corner
-    fr.line([(0, 168), (322, 168), (322, 21)], HAIR, C7)
-    fr.line([(338, 21), (338, 168), (480, 168)], HAIR, C7)
-    fr.line([(0, 184), (322, 184), (322, 220)], HAIR, C7)
-    fr.line([(338, 220), (338, 184), (480, 184)], HAIR, C7)
+    fr.line([(0, 182), (322, 182), (322, 21)], HAIR, C7)
+    fr.line([(338, 21), (338, 182), (480, 182)], HAIR, C7)
+    fr.line([(0, 198), (322, 198), (322, 220)], HAIR, C7)
+    fr.line([(338, 220), (338, 198), (480, 198)], HAIR, C7)
 
-    cx, cy = 168, 96
+    cx = 166
+    cy = 108 - 44 * THROAT            # throat: a longer throat, a bigger singer, a mouth higher on the glass
     sc = 0.7 + 0.45 * THROAT * 1.0 + 0.0     # throat scales the whole patch
-    sc = 0.62 + 0.6 * THROAT
+    sc = 0.76
     rx = (26 + 40 * op + 34 * fw - 10 * rd) * sc * 1.25
     ry = (24 + 34 * op - 12 * fw) * sc * 1.25
 
@@ -568,19 +537,17 @@ def v3():
     # the wettest centre: densest, brightest (the one brightest element)
     hatch(fr, [inner], spacing=3, col=C1)
 
-    # drops: glide sets how many have gathered and run (count), each a trail ending in a bead
+    # drops: glide sets how many have gathered and run (count): a trail and a solid bead at its foot
     drops = 2 + round(12 * GLIDE)
-    bottom = max(p[1] for p in core)
-    xs = sorted(rnd.uniform(cx - rx * 0.8, cx + rx * 0.8) for _ in range(drops))
+    xs = [cx - rx * 0.75 + rx * 1.5 * (i + 0.5) / drops + rnd.uniform(-4, 4) for i in range(drops)]
     for x in xs:
-        # where the core's lower edge sits at this x
-        ys = [p[1] for p in core if abs(p[0] - x) < 6 and p[1] > cy]
-        y0 = (max(ys) if ys else bottom) - 2
-        L = rnd.uniform(18, 1) + (168 - 6 - y0) * rnd.uniform(0.3, 1.0)
-        y1 = min(y0 + L, 160)
-        wob = [(x + 0.8 * math.sin(i * 1.3), y0 + (y1 - y0) * i / 8) for i in range(9)]
-        fr.line(wob, HAIR, C4)
-        fr.poly(ellipse(x + 0.6, y1 + 2.4, 1.9, 2.6, 14), stroke=C3, sw=HAIR, fill=BLACK)
+        ys = [p[1] for p in core if abs(p[0] - x) < 8 and p[1] > cy]
+        y0 = (max(ys) if ys else cy + ry) - 6
+        y1 = min(y0 + rnd.uniform(10, 46), 174)
+        wob = [(x + 0.9 * math.sin(i * 1.1 + x), y0 + (y1 - y0) * i / 10) for i in range(11)]
+        fr.line(wob, HAIR, C3)
+        drop = [(x - 2.4, y1 + 1), (x, y1 - 1.5), (x + 2.4, y1 + 1), (x + 2.2, y1 + 3.6), (x, y1 + 5), (x - 2.2, y1 + 3.6)]
+        fr.poly(drop, fill=C3)
     return fr
 
 
@@ -595,31 +562,32 @@ def v4():
     jaw = 6 + 16 * op
     lipf = 8 * rd - 3 * fw
     gap = 2 + 9 * op - 2 * fw + 1.5 * rd
-    lar = 186 + 26 * (THROAT)      # larynx bump on the neck: 186 .. 212
-    upper = [(-4, 40), (30, 44), (58, 52), (82, 62), (92, 74), (86, 80), (72, 82), (70, 90),
-             (76 + lipf, 100), (80 + lipf, 106), (74 + lipf, 110)]
-    mouth_in = (62, 112 + gap * 0.5)
-    lower = [(74 + lipf, 112 + gap), (79 + lipf, 118 + gap), (72 + lipf * 0.6, 126 + gap * 1.1),
-             (64, 132 + jaw * 0.6), (72, 146 + jaw * 0.8), (68, 160 + jaw), (50, 166 + jaw * 0.8),
-             (24, 168 + jaw * 0.5), (16, 172 + jaw * 0.3)]
-    neck = [(16, 176 + jaw * 0.2), (18, lar - 12), (26, lar), (20, lar + 12), (14, 230)]
+    lar = 184 + 26 * THROAT        # larynx bump on the neck: 184 .. 210
+    D = 14
+    upper = [(D + 30, 21), (D + 33, 34), (D + 31, 44), (D + 40, 58), (D + 54, 72), (D + 56, 77), (D + 50, 80),
+             (D + 42, 80), (D + 42, 88), (D + 49 + lipf, 97), (D + 52 + lipf, 103), (D + 47 + lipf, 107)]
+    mouth_in = (D + 38, 109 + gap * 0.5)
+    lower = [(D + 47 + lipf, 110 + gap), (D + 51 + lipf, 116 + gap), (D + 46 + lipf * 0.6, 123 + gap * 1.1),
+             (D + 42, 130 + jaw * 0.6), (D + 51, 144 + jaw * 0.8), (D + 47, 157 + jaw), (D + 30, 163 + jaw * 0.8),
+             (D + 8, 165 + jaw * 0.5), (D, 169 + jaw * 0.3)]
+    neck = [(D - 1, 175 + jaw * 0.2), (D, lar - 12), (D + 7, lar), (D + 2, lar + 12), (D - 4, 230)]
     prof = smooth(upper, 6) + [mouth_in] + smooth(lower, 6) + smooth(neck, 6)
-    body = [(-10, 30)] + prof + [(-10, 230)]
+    body = [(-10, 21)] + prof + [(-10, 230)]
     fr.poly(body, fill=BLACK)
     # rim light: the one bright line
     rim = [p for p in prof if 21 <= p[1] <= 219]
     fr.line(rim, SUBJ, C1)
     # a quieter inner rim along the jaw, as a silhouette lit from behind shows
-    jaw_in = smooth([(60, 136 + jaw * 0.6), (64, 150 + jaw * 0.8), (58, 160 + jaw * 0.9), (40, 164 + jaw * 0.7)], 5)
+    jaw_in = smooth([(D + 40, 136 + jaw * 0.6), (D + 44, 149 + jaw * 0.8), (D + 39, 157 + jaw * 0.9), (D + 22, 160 + jaw * 0.7)], 5)
     fr.line(jaw_in, HAIR, C6)
 
     # plume: centre line rising a little to the right, narrow "oo" neck for the glide length, then opening
-    x_start = 82 + lipf
-    y_start = 111 + gap * 0.5
+    x_start = D + 55 + lipf
+    y_start = 108.5 + gap * 0.5
     neck_len = 12 + 150 * GLIDE
 
     def centre(t):  # t in px along x from the lips
-        return (x_start + t, y_start - 0.10 * t - 10 * math.sin(t / 120) ** 2)
+        return (x_start + t, y_start - 0.07 * t - 6 * math.sin(t / 120) ** 2)
 
     def width(t):
         if t < neck_len:
@@ -638,140 +606,137 @@ def v4():
         # scallops past the neck: billows evenly along the open part
         if t > neck_len:
             ph = (t - neck_len) / max(span - neck_len, 1) * billows
-            sc_ = abs(math.sin(math.pi * ph))
-            bump = 0.18 * w * sc_
+            k_ = int(ph)
+            amp = 0.10 + 0.14 * ((k_ * 7919) % 5) / 4
+            bump = amp * w * abs(math.sin(math.pi * ph))
+            ph2 = ph + 0.45
+            amp2 = 0.08 + 0.12 * ((int(ph2) * 104729) % 4) / 3
+            bump2 = amp2 * w * abs(math.sin(math.pi * ph2))
         else:
-            bump = 0
+            bump = bump2 = 0
         up_pts.append((cxp, cyp - w / 2 - bump))
-        lo_pts.append((cxp, cyp + w / 2 + bump * 0.7))
+        lo_pts.append((cxp, cyp + w / 2 + bump2))
     plume = up_pts + lo_pts[::-1]
     # cold air: hatched faintly inside the plume, the vapour there but not solid
     hatch(fr, [[(x, max(y, 21)) for x, y in plume]], spacing=6, col=C7)
     fr.line([p for p in up_pts if p[1] > 21 and p[0] < 482], LINE, C4)
     fr.line([p for p in lo_pts if p[0] < 482], LINE, C4)
-    # curls inside the open plume, one per billow, in the plume's own line
+    # folds inside the open plume: a short arc under each billow, in the plume's own line
     for k in range(billows):
-        t = neck_len + (k + 0.5) / billows * (span - neck_len)
-        if t > 470 - x_start:
+        t = neck_len + (k + 0.55) / billows * (span - neck_len)
+        if t > 474 - x_start:
             continue
         cxp, cyp = centre(t)
         w = width(t)
-        r0 = 0.22 * w
-        if r0 < 3:
+        rr = 0.3 * w
+        if rr < 4:
             continue
-        sp = [(cxp + r0 * (1 - 0.6 * a / 7) * math.cos(a + k), cyp + 0.6 * r0 * (1 - 0.6 * a / 7) * math.sin(a + k))
-              for a in [i * 0.25 for i in range(26)]]
-        fr.line(sp, HAIR, C5)
+        side = -1 if k % 2 == 0 else 1
+        arc = [(cxp + rr * math.cos(a), cyp + side * (0.18 * w) + side * 0.5 * rr * math.sin(a) * -1)
+               for a in [math.pi * (0.15 + 0.7 * i / 12) for i in range(13)]]
+        fr.line(arc, HAIR, C5)
     return fr
 
 
 # ================================================================== v5 detailed line art: a breath ring of vapour
 def v5():
-    """Vapour, literally: a ring of breath rising off a round "oo" mouthpiece, modelled as a torus
-    and projected, with its poloidal flow drawn as hidden-line hairlines. Vowel shapes the ring's
-    plan (small round u, wide round a, flattened i), throat thickens its core, breath sheds wisps,
-    glide is the small hatched "oo" ring still rising behind it."""
+    """Vapour, literally: a ring of breath rising through cold air, modelled as a torus and projected,
+    its rolling flow drawn as hidden-line hairlines round the core. Vowel shapes the ring's plan
+    (small and round for u, wide for a, flattened for i, like the lips it left), throat thickens its
+    core, breath sheds wisps off it, glide is the small hatched "oo" ring it opened from, still rising
+    behind it."""
     fr = Frame()
     op, fw, rd = vowel_at(VOWEL)
-    cam = Cam(eye=(0, 190, 430), target=(0, 10, 0), focal=430, cx=240, cy=104)
-    R = 30 + 40 * op + 10 * fw            # plan radius across
-    kz = 1.0 - 0.45 * fw                  # plan squash in depth for spread vowels
-    r = 9 + 10 * THROAT                   # core thickness follows throat
-    ring_y = 30
+    cam = Cam(eye=(0, 150, 400), target=(0, -4, 0), focal=430, cx=240, cy=92)
+    R = 36 + 26 * op + 12 * fw            # plan radius across
+    kz = 1.0 - 0.4 * fw                   # plan squash in depth for spread vowels
+    r = 14 + 20 * THROAT                  # core thickness follows throat
+    ring_y = 0
+
+    tilt = math.radians(-9)               # rings lean as they travel
+
+    def tl(q):
+        x_, y_, z_ = q
+        return (x_ * math.cos(tilt) - y_ * math.sin(tilt), x_ * math.sin(tilt) + y_ * math.cos(tilt), z_)
 
     def tor(phi, th, Rr=R, rr=r, yc=ring_y, k=kz):
-        cx_, cz_ = Rr * math.cos(phi), Rr * math.sin(phi) * k
         rad = norm((math.cos(phi), 0, math.sin(phi) * k))
-        return (cx_ + rr * math.cos(th) * rad[0], yc + rr * math.sin(th), cz_ + rr * math.cos(th) * rad[2])
+        return tl((Rr * math.cos(phi) + rr * math.cos(th) * rad[0], yc + rr * math.sin(th),
+                   Rr * math.sin(phi) * k + rr * math.cos(th) * rad[2]))
 
-    # mouthpiece: a short round tube at the bottom, its rim an ellipse
-    ap_y, ap_r = -120, 12
-    rim_top = circle3((0, ap_y, 0), (1, 0, 0), (0, 0, 1), ap_r, 40)
-    rim_bot = circle3((0, ap_y - 40, 0), (1, 0, 0), (0, 0, 1), ap_r + 2, 40)
-    fr.poly(convex_hull(cam.ps(rim_top) + cam.ps(rim_bot)), stroke=C5, sw=LINE, fill=BLACK)
-    fr.poly(cam.ps(rim_top), stroke=C4, sw=LINE, fill=BLACK)
-    fr.poly(cam.ps(circle3((0, ap_y, 0), (1, 0, 0), (0, 0, 1), ap_r - 4, 32)), stroke=C6, sw=HAIR, fill=BLACK)
-
-    # wake: streamlines from the rim up into the ring's underside, twisting a little
-    for k in range(8):
-        a0 = 2 * math.pi * k / 8 + 0.2
+    # wake: a few broken streamlines rising from below the frame toward the ring's underside
+    for k in range(5):
+        a0 = 2 * math.pi * k / 5 + 0.5
         pts = []
-        for i in range(25):
-            t = i / 24
-            y = ap_y + (ring_y - r * 0.6 - ap_y) * t
-            rr = ap_r + (R - r * 0.9 - ap_r) * t ** 2.2
-            a = a0 + 0.9 * t
-            pts.append((rr * math.cos(a), y, rr * math.sin(a) * (1 + (kz - 1) * t ** 2)))
-        # only the near streamlines (z > 0 at the top) draw fully; far ones are hidden behind the ring later
-        fr.line(cam.ps(pts), HAIR, C6 if math.sin(a0 + 0.9) < 0 else C5)
+        for i in range(30):
+            t = i / 29
+            y = -150 + (ring_y - r - 12 + 150) * t
+            rr = 8 + (R - r - 8) * t ** 2.5
+            a = a0 + 1.1 * t
+            pts.append((rr * math.cos(a), y, rr * math.sin(a)))
+        pp = cam.ps(pts)
+        # broken into dashes: vapour thins as it rises
+        for i in range(0, len(pp) - 3, 5):
+            fr.line(pp[i:i + 3], HAIR, C7)
 
-    # glide: the onset "oo" ring, small and round, still rising up the wake (hatched: there, not solid)
-    gy = ap_y + 16 + (ring_y - ap_y - 60) * GLIDE
-    gR, gr = 13, 4
-    outer = cam.ps(circle3((0, gy, 0), (1, 0, 0), (0, 0, 1), gR + gr, 40))
-    inner = cam.ps(circle3((0, gy, 0), (1, 0, 0), (0, 0, 1), gR - gr, 32))
+    # glide: the onset "oo" ring, small and round, still rising (hatched: there, not solid)
+    gy = -128 + 70 * GLIDE
+    gR, gr = 12, 5
+    gt = math.radians(7)
+    outer = cam.ps(circle3((0, gy, 0), (math.cos(gt), math.sin(gt), 0), (0, 0, 1), gR + gr, 40))
+    inner = cam.ps(circle3((0, gy, 0), (math.cos(gt), math.sin(gt), 0), (0, 0, 1), gR - gr, 32))
     fr.poly(outer, fill=BLACK)
     hatch(fr, [outer, inner], spacing=3, col=C5)
     fr.poly(outer, stroke=C4, sw=HAIR)
     fr.poly(inner, stroke=C4, sw=HAIR)
 
-    # the ring: poloidal sections back to front; each disc filled black hides what's behind it,
-    # and only its arc facing the camera is drawn
-    N = 30
-    secs = []
-    for i in range(N):
-        phi = 2 * math.pi * i / N + 0.05
-        c = tor(phi, 0, rr=0)
-        secs.append((cam.depth(c), phi))
-    secs.sort(reverse=True)
+    # the ring: sections back to front; each section disc filled black hides what's behind it,
+    # and only the arc of it facing the camera is drawn
+    N = 32
+    secs = sorted(((cam.depth(tor(2 * math.pi * i / N + 0.05, 0, rr=0)), 2 * math.pi * i / N + 0.05) for i in range(N)),
+                  reverse=True)
     for _, phi in secs:
-        pts3 = [tor(phi, 2 * math.pi * j / 32) for j in range(32)]
-        fr.poly(cam.ps(pts3), fill=BLACK)
+        fr.poly(cam.ps([tor(phi, 2 * math.pi * jj / 36) for jj in range(36)]), fill=BLACK)
         c = tor(phi, 0, rr=0)
-        vis = []
-        runs = []
-        for j in range(33):
-            th = 2 * math.pi * j / 32
-            q = tor(phi, th)
-            nrm = sub(q, c)
-            facing = dot(nrm, sub(cam.eye, q)) > 0
-            if facing:
+        runs, vis = [], []
+        for jj in range(37):
+            q = tor(phi, 2 * math.pi * jj / 36)
+            if dot(sub(q, c), sub(cam.eye, q)) > 0:
                 vis.append(cam.p(q))
             elif vis:
                 runs.append(vis); vis = []
         if vis:
             runs.append(vis)
-        # merge wraparound
         for run in runs:
             if len(run) >= 2:
                 fr.line(run, HAIR, C4)
 
-    # outer silhouette: for each phi, the point of the section furthest from the ring's projected centre
+    # outer silhouette: the one bright line
     ctr = cam.p((0, ring_y, 0))
     sil = []
-    for i in range(96):
-        phi = 2 * math.pi * i / 96
+    for i in range(120):
+        phi = 2 * math.pi * i / 120
         best, bd = None, -1
-        for j in range(48):
-            q = cam.p(tor(phi, 2 * math.pi * j / 48))
+        for jj in range(60):
+            q = cam.p(tor(phi, 2 * math.pi * jj / 60))
             d = math.dist(q, ctr)
             if d > bd:
                 bd, best = d, q
         sil.append(best)
     fr.poly(sil, stroke=C1, sw=SUBJ)
 
-    # breath: wisps shed off the ring's rim, small curls in the same projection
-    rnd = random.Random(4)
+    # breath: wisps peeling off the ring's top and trailing up and back
     wisps = 2 + round(12 * BREATH)
     for k in range(wisps):
-        phi = 2 * math.pi * (k + 0.3) / wisps + 0.4
-        base = tor(phi, 0.6, rr=r + 4)
+        phi = 2 * math.pi * (k + 0.3) / wisps + 0.9
         pts = []
-        for i in range(14):
-            t = i / 13
-            a = phi + 0.5 * t
-            rr_ = (R + r + 6 + 14 * t)
-            pts.append((rr_ * math.cos(a), ring_y + 6 + 22 * t - 8 * t * t, rr_ * math.sin(a) * kz))
+        for i in range(16):
+            t = i / 15
+            a = phi + 0.7 * t
+            rr_ = R + r * 0.6 + 16 * t
+            pts.append(tl((rr_ * math.cos(a), ring_y + r * 0.8 + 26 * t - 10 * t * t, rr_ * math.sin(a) * kz)))
+        if cam.depth(pts[0]) > cam.depth((0, 0, 0)) + R * 0.4:
+            continue  # behind the ring
         fr.line(cam.ps(pts), HAIR, C5)
     return fr
 

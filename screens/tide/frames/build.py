@@ -50,7 +50,7 @@ def depth_s(p): return 0.05 * 100 ** p         # resonator T60, s
 def fmt_dur(s):
     if s < 0.1:
         return f"{round(s * 1000)}ms"
-    if s < 1.0 and abs(s * 100 - round(s * 100)) > 1e-6 and round(s, 1) != round(s, 2):
+    if s < 1.0 and abs(round(s, 2) - round(s, 1)) > 1e-9:
         return f"{s:.2f}s"
     return f"{s:.1f}s"
 
@@ -61,8 +61,10 @@ def header_values(c):
 
 
 # ---------------------------------------------------------------- scene
-CAM = Camera(eye=(0.0, -6.2, 1.5), target=(0.0, 1.2, 0.0), f=560, at=(240, 150))
-LIGHT = norm((-0.55, 0.75, 0.62))      # low sun behind the raft, up and to the left (points toward the light)
+_ALPHA = math.radians(11.5)             # the camera looks down 11.5 degrees: low, at the water's level
+_DIST = 19.0                             # long lens, far back: the pool's depth compresses, so fronts fill the body
+CAM = Camera(eye=(0.0, 0.55 - _DIST * math.cos(_ALPHA), _DIST * math.sin(_ALPHA)), target=(0.0, 0.55, 0.0), f=1950, at=(240, 150))
+LIGHT = norm((-0.5, 1.0, 0.42))        # low sun behind the raft, up and to the left (points toward the light)
 HORIZON_Y = CAM.p((0, 4000, 0))[1]
 R1 = 0.68                                # the fundamental's radius, world units
 RAFT_C = (0.15, 0.55)                    # raft centre on the water (x, y)
@@ -111,26 +113,49 @@ def build_raft():
     rnd = random.Random(7)
     spent = []
     allb = list(voiced)
-    cands = []
-    for _ in range(3000):
-        host = rnd.choice(allb[:8])
-        a = rnd.uniform(0, 2 * math.pi)
-        r = rnd.uniform(0.085, 0.15)
-        x = host["x"] + (host["r"] + r) * 1.02 * math.cos(a)
-        y = host["y"] + (host["r"] + r) * 1.02 * math.sin(a)
-        cands.append((x, y, r))
-    while len(spent) < 16:
+    N = 24
+    while len(spent) < N:
         best, bestscore = None, -1e9
-        for x, y, r in cands:
+        for _ in range(2500):
+            host = rnd.choice(allb)
+            ang = rnd.uniform(0, 2 * math.pi)
+            r = rnd.uniform(0.09, 0.16)
+            gap = rnd.uniform(1.03, 1.5)
+            x = host["x"] + (host["r"] + r) * gap * math.cos(ang)
+            y = host["y"] + (host["r"] + r) * gap * math.sin(ang)
             if any(math.hypot(x - b["x"], y - b["y"]) < (r + b["r"]) * 1.02 for b in allb):
                 continue
-            if not (-2.6 < x < 2.8 and -0.6 < y < 1.9):
+            if not (-2.2 < x < 2.3 and -1.1 < y < 2.2):
                 continue
-            # touch something, prefer the back and the ends, stay near the raft
+            # touch something, stay near the raft
             near = min(math.hypot(x - b["x"], y - b["y"]) - (r + b["r"]) for b in allb)
-            score = -near * 40 + 0.9 * y - 0.25 * abs(x - RAFT_C[0]) + rnd.uniform(0, 0.6)
+            # and stay in sight: its crown must not fall inside a nearer dome
+            cs = CAM.p((x, y, r))
+            dz = CAM.depth((x, y, 0))
+            hidden = False
+            for b in allb:
+                bd = CAM.depth((b["x"], b["y"], 0))
+                if bd < dz + 0.05:
+                    bc = CAM.p((b["x"], b["y"], 0))
+                    br = CAM.f * b["r"] / bd
+                    if math.dist(cs, bc) < br + 2 and cs[1] < bc[1] + 1:
+                        hidden = True
+            # and don't crowd at 1:1: its drawn dome may tuck into a neighbour's only a little
+            mine = (CAM.p((x, y, 0)), CAM.f * r / dz)
+            for b in allb:
+                bd = CAM.depth((b["x"], b["y"], 0))
+                if math.dist(mine[0], CAM.p((b["x"], b["y"], 0))) < 0.7 * (mine[1] + CAM.f * b["r"] / bd):
+                    hidden = True
+                    break
+            if hidden:
+                continue
+            # spread the lingering foam along the raft instead of piling it in one place
+            far = min([math.hypot(x - b["x"], y - b["y"]) for b in spent] + [1.2])
+            score = -near * 8 + 1.4 * far - 0.35 * y + rnd.uniform(0, 0.3)
             if score > bestscore:
                 best, bestscore = (x, y, r), score
+        if best is None:
+            raise SystemExit(f"spent foam: only {len(spent)} fit")
         x, y, r = best
         b = {"k": 0, "r": r, "x": x, "y": y, "kind": "spent", "order": len(spent)}
         spent.append(b)
@@ -227,7 +252,9 @@ def bubble_parts(b):
     for P in arc3[1:-1]:
         nn = norm(sub(P, c))
         lit = max(0.0, dot(nn, LIGHT))
-        fres = 1.0 if P[2] > 0.02 * r else 0.4
+        # the water's meniscus darkens the film's foot: the rim light lifts off the waterline
+        zz = max(0.0, min(1.0, P[2] / (0.5 * r)))
+        fres = zz * zz * (3 - 2 * zz)
         I.append(0.0 if shadowed(P, b) else lit ** 1.6 * fres)
     pts3 = arc3[1:-1]
     thr = 0.28
@@ -320,16 +347,16 @@ for _b in VOICED:
         p["refl_rib"] = ribbon(p["refl"], HAIR)
 
 # ---------------------------------------------------------------- ripple lines (swell fronts)
-K_LINES = 14
+K_LINES = 30
 D_RAFT = RAFT_C[1]                     # crest timing is set at the raft's centre line
-D_FAR = 30.0                            # beyond this the fronts are hidden (they'd merge into the horizon)
+MIN_GAP = 3.6                           # fronts closer than this on screen are hidden (craft: lines >= 3 px apart)
 Y_BOTTOM = H + 4
 
 
 def wavelength(T):
-    """World spacing of the fronts: longer period, longer wave (deep water: lambda ~ T^2; drawn as T^0.75
-    so the slow end still keeps two or three fronts in view)."""
-    return 0.62 * (T / 2.0) ** 0.75
+    """World spacing of the fronts: longer period, longer wave (deep water: lambda ~ T^2; drawn as T^0.5
+    so the fast end stays above the 3 px hatching floor and the slow end keeps several fronts in view)."""
+    return 0.95 * (T / 2.0) ** 0.5
 
 
 def depth_for_y(y):
@@ -347,23 +374,23 @@ def depth_for_y(y):
 D_NEAR = depth_for_y(Y_BOTTOM)
 LINE_BASE = []
 for _j in range(K_LINES):
-    _ph = random.Random(300 + _j).uniform(0, 2 * math.pi)
-    _lam = random.Random(400 + _j).uniform(150, 210)
-    LINE_BASE.append([(x, 1.6 * math.sin(2 * math.pi * x / _lam + _ph) + 0.7 * math.sin(2 * math.pi * x / 61 + 2 * _ph))
+    # neighbouring fronts stay nearly parallel: the phase walks once round the ring of K nodes,
+    # so a node that wraps from the near edge to the far one still matches its new neighbours
+    _ph = 2 * math.pi * _j / K_LINES
+    LINE_BASE.append([(x, 1.1 * math.sin(2 * math.pi * x / 170 + _ph) + 0.5 * math.sin(2 * math.pi * x / 67 - 2 * _ph))
                       for x in [-292 + 584 * i / 30 for i in range(31)]])
 LINE_RIB = [ribbon(b, HAIR) for b in LINE_BASE]
 
 
 def line_scale(y):
-    """Perspective swells a front a little as it nears (in plane, uniform, <= 2): 0.86 at the horizon,
+    """Perspective swells a front a little as it nears (in plane, uniform, <= 2): 0.86 at the top,
     1.22 at the bottom edge. Ribbons stay 0.95-1.34 px: hairline to line."""
-    t = max(0.0, min(1.0, (y - HORIZON_Y) / (H - HORIZON_Y)))
+    t = max(0.0, min(1.0, (y - TOP) / (H - TOP)))
     return 0.86 + 0.36 * t
 
 
 def line_shade(y, crest):
-    t = (y - HORIZON_Y) / (H - HORIZON_Y)
-    base = 1 if t < 0.06 else (2 if t < 0.5 else 3)
+    base = 1 if y < 60 else (2 if y < 150 else 3)
     return min(5, base + crest)
 
 
@@ -375,12 +402,15 @@ def fronts(T, phase):
     out = []
     w0 = math.floor((D_NEAR - D_RAFT) / lam - a + phase) - 1
     w = w0
-    while True:
+    last_y = None
+    while len(out) < K_LINES:
         d = D_RAFT + lam * (w + a - phase)
-        if d > D_FAR:
-            break
         if d >= D_NEAR:
+            y = CAM.p((0, d, 0))[1]
+            if y < TOP + 3 or (last_y is not None and last_y - y < MIN_GAP):
+                break
             out.append((w, d))
+            last_y = y
         w += 1
     return out, lam
 
@@ -427,22 +457,50 @@ def base_edge_shade(k):
 
 
 def spent_count(depth_p):
-    return round(2 + 14 * depth_p)
+    """Foam that has finished ringing and lingers on the water: none at 50 ms (it pops as it rings),
+    all 24 at 5 s. Linear in the knob's position, which is already logarithmic in time."""
+    return round(24 * depth_p)
 
 
-def drift_pose(b, drift, theta):
-    """Drift loosens the raft: every bubble moves out from the raft's centre (spread) and wanders on
-    its own (theta, a slow random walk while notes sound). Wander amplitude is 0.18 r per side, and the
-    spread opens at least that much room between any two touching bubbles, so they never collide."""
-    sx = RAFT_C[0] + (b["x"] - RAFT_C[0]) * (1 + 0.22 * drift)
-    sy = RAFT_C[1] + (b["y"] - RAFT_C[1]) * (1 + 0.22 * drift)
-    a = 0.2 * b["r"] * drift
-    return sx + a * math.cos(theta), sy + 0.5 * a * math.sin(theta)
+DRIFT_A = 0.27          # world units of wander at drift 100 (about 28 px across the screen)
 
 
-def pose_bubble(b, c, theta, bob_px=0.0):
+def raft_layout(c, thetas):
+    """Where every bubble floats for these controls. Drift: each bubble is pushed off its packed place
+    in its own direction (theta: seeded at rest, a slow random walk while notes sound), mostly sideways,
+    then a short relaxation pushes touching bubbles apart so none overlaps. The same few lines run on the
+    device (24 bubbles, 276 pairs, a handful of passes) and only while drift is non-zero and something moves."""
+    n_spent = spent_count(c["depth"])
+    live = [b for b in BUBBLES if b["kind"] == "voiced" or b["order"] < n_spent]
+    pos = {}
+    for b in live:
+        th = thetas[id(b)]
+        pos[id(b)] = [b["x"] + c["drift"] * DRIFT_A * math.cos(th), b["y"] + c["drift"] * 0.35 * DRIFT_A * math.sin(th)]
+    if c["drift"] > 0:
+        rad = {id(b): b["r"] * (salt_scale(b["k"], c["salt"]) if b["kind"] == "voiced" else 1.0) for b in live}
+        for _ in range(40):
+            moved = False
+            for i in range(len(live)):
+                for j in range(i + 1, len(live)):
+                    a, b = pos[id(live[i])], pos[id(live[j])]
+                    dx, dy = b[0] - a[0], b[1] - a[1]
+                    d = math.hypot(dx, dy) or 1e-6
+                    need = (rad[id(live[i])] + rad[id(live[j])]) * 1.02
+                    if d < need:
+                        ra, rb = rad[id(live[i])], rad[id(live[j])]
+                        wa = rb ** 2 / (ra ** 2 + rb ** 2)          # the smaller bubble gives way
+                        push = need - d
+                        a[0] -= dx / d * push * wa; a[1] -= dy / d * push * wa
+                        b[0] += dx / d * push * (1 - wa); b[1] += dy / d * push * (1 - wa)
+                        moved = True
+            if not moved:
+                break
+    return pos
+
+
+def pose_bubble(b, c, xy, bob_px=0.0):
     """Screen translation and uniform scale for a bubble's nodes (about its projected centre)."""
-    x, y = drift_pose(b, c["drift"], theta)
+    x, y = xy
     c0 = b["parts"]["centre"]
     c1 = CAM.p((x, y, 0.0))
     persp = CAM.depth((b["x"], b["y"], 0)) / CAM.depth((x, y, 0))
@@ -472,32 +530,30 @@ def node_state(c, sim=None):
             crest = round(2 * sim["wave"] * near)
         st[("line", j)] = (0, y, round(line_scale(y) * 64) / 64, line_shade(y, crest))
     n_spent = spent_count(c["depth"])
+    thetas = sim["theta"] if sim else {id(b): b["seed"] for b in BUBBLES}
+    layout = raft_layout(c, thetas)
     for kind, b, part in NODES:
         if kind == "line":
             continue
         if kind == "spent" and b["order"] >= n_spent:
             st[(id(b), part)] = None
             continue
-        theta = sim["theta"][id(b)] if sim else b["seed"]
         bob = 0.0
         if sim and sim["wave"] > 0:
             lam_ = lam
-            dd = min(abs(((b["y"] - D_RAFT) - lam_ * (w + rise_frac(T) - phase))) for w in range(-40, 80)) if False else None
             # distance from the bubble to the nearest front, in wavelengths
             u = ((b["y"] - D_RAFT) / lam_ - rise_frac(T) + phase) % 1.0
             u = min(u, 1 - u)
             bob = 2.2 * min(1.0, T / 1.0) * sim["wave"] * math.cos(math.pi * u) ** 8
-        (dx, dy), s = pose_bubble(b, c, theta, round(bob))
+        (dx, dy), s = pose_bubble(b, c, layout[id(b)], round(bob))
         shade = 0
         if part == "edge":
             steps = sim["steps"][b["k"]] if sim else 0
-            shade = min(7 if b["k"] == 1 else 6, base_edge_shade(b["k"]) + steps)
-            if b["k"] != 1 and steps > 0:
-                shade = min(7, base_edge_shade(b["k"]) + steps)
+            shade = min(7, base_edge_shade(b["k"]) + steps)
         elif part in ("wl", "refl"):
             shade = 3
         elif kind == "spent":
-            shade = 3          # stroke shade; its fill stays black
+            shade = 3          # stroke shade; its fill stays black: a hollow, quiet bubble (wireframe, toro-style)
         st[(id(b), part)] = (dx, dy, s, shade)
     return st
 
@@ -515,9 +571,6 @@ def xf(pts, origin, dx, dy, s):
 def render(c, sim=None):
     st = node_state(c, sim)
     out = []
-    # static: the far water's edge, a hairline where the pool meets the open sea
-    hz = round(HORIZON_Y) + 0.5
-    out.append(f'<path d="{path_d(ribbon([(0.6, hz), (240, hz), (479.4, hz)], HAIR))}" fill="{G[2]}" stroke="none"/>')
     for i, (kind, ref, part) in enumerate(NODES):
         nid = f"{PREFIX}_node_{i}"
         if kind == "line":

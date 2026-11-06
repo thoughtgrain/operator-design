@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T12:27:05",
   "focus": "More iterations visually: five new, unique variants. The owner liked v5's look but couldn't tell what it was.",
   "subject": null,
@@ -94,7 +94,158 @@
       "brief": "Start from what vapor is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: detailed line art. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "A speaking machine pulled apart along its air axis: wedge bellows, reed block, telescoping throat tube, flared horn and a lip iris whose bright aperture is the vowel.",
+      "controls": [
+        "vowel: shape, the lip iris's bright aperture goes from a small round hole (u) through a wide open mouth (a) to a wide flat slit (i), its rim moving well over 16 px.",
+        "breath: rotation, the bellows boards swing open about their hinge from 6° to 40° and the leather folds fan out between them.",
+        "throat: position, the three tube sections draw out along the axis, pushing the horn and iris about 40 px further from the reed between 0.75 and 1.50.",
+        "glide: count, the spring that pulls the iris back to a closed oo winds from 3 coils at 5 ms to 15 at 2 s, a softer spring for a slower opening."
+      ],
+      "reference": "library/theseus-tower (hidden-line parts over black fills, one bright edge); opxy/craft.md, Think in 3D",
+      "risks": "Six parts on one axis is busy, and at 1:1 the reed block and spring are only ~25 px. The speaking machine is a historical object (Kempelen's) most players won't name, though bellows into horn reads as a wind machine that makes a voice. The iris is seen at an angle, so the vowel aperture is an ellipse and u/a/i must stay distinct through foreshortening. Glide as spring coils is a metaphor (stiffness for time) and the coil count is small and at the frame's edge."
+    },
+    {
+      "variant": "v2",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "A singer's head cut down the middle mid-note: the tongue's bright dome shaping the vowel under the palate, the larynx low in the throat and breath rising through the airway.",
+      "controls": [
+        "vowel: shape, the tongue's bright dome moves from high at the back (u) through low and flat (a) to high at the front (i), its crest travelling about 30 px while the jaw and lips follow.",
+        "breath: count, short dashes of air along the airway from the trachea through the folds to the lips, 4 at 0 to 24 at 100.",
+        "throat: position, the larynx (thyroid outline and the vocal folds across the airway) slides 30 px down the throat as the tract lengthens.",
+        "glide: shape, a hatched sweep between the tongue and the oo tongue each note opens from, none at 5 ms and the whole sweep back to u at 2 s."
+      ],
+      "reference": "library/theseus-tower (line discipline, one bright subject over quiet structure)",
+      "risks": "A sagittal head section is the phonetics textbook figure, so it can tip into diagram; it has to stay a drawing with no labels. Single weight leaves hierarchy to grey, apart from the tongue's 2 px line. At vowel a the glide hatch is a thin band. Anatomy can read clinical rather than musical."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "A sung breath fogged onto a cold window pane, a hatched mass of condensation in the mouth's shape with drops running down from it to the glazing bar.",
+      "controls": [
+        "vowel: shape, the fog's dense core goes from a small round patch (u) to a tall open oval (a) to a wide flat ellipse (i).",
+        "breath: scale of the halo only, the sparse outer fog spreads from 1.2× to 2.1× the core while the core stays put.",
+        "throat: position, the whole patch sits about 30 px higher on the glass as the throat lengthens (a bigger singer, a mouth higher on the pane).",
+        "glide: count, drops gather and run from the bottom of the fog, 2 at 5 ms to 14 at 2 s, each a trail ending in a solid bead."
+      ],
+      "reference": "opxy/craft.md (Semi-opaque areas are hatched, not tinted); opxy/reference/toro-ink-smoke.jpg (steam as a state)",
+      "risks": "Throat as height on the glass is the weakest mapping of the pass: physical in a story, arbitrary in the sound. A hatched blob needs the window bars to read as fog on glass; without them it's a texture. Many 45° hairlines are costly as nodes and the core's 3 px spacing is at the hatching floor."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "A singer's lips and jaw at the left edge as a black silhouette lit along its rim, and the breath leaving them into cold air across the frame.",
+      "controls": [
+        "vowel: shape, the rim-lit lips and jaw round and push forward for u, drop open for a and spread for i, the chin moving about 16 px, and the stream's mouth widens with them.",
+        "breath: count, billows along the plume's edge from 2 at 0 to 16 at 100, each with a fold line under it.",
+        "throat: position, the larynx bump on the neck's rim slides 26 px down toward the bottom edge.",
+        "glide: shape, the breath leaves the lips as a narrow round oo stream that holds for 12 px at 5 ms up to 160 px at 2 s before the plume opens."
+      ],
+      "reference": "opxy/reference/toro-ink-smoke.jpg (breath and steam as a drawn layer); opxy/reference/field-and-figure.jpg (one bright outline over a quiet field)",
+      "risks": "A human profile can slide toward illustration or icon; it stays a single rim line with no eye or features. The plume is a large hatched area to redraw on a note. Throat lives in a small corner of the frame at the bottom edge, and vowel's lip change is about 16 px, right at the shape floor."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "Vapour itself: a ring of breath rising through cold air, modelled as a torus with its rolling flow drawn in hidden-line hairlines, a smaller oo ring following below.",
+      "controls": [
+        "vowel: shape, the ring's plan follows the lips it left: small and round for u, wide for a, flattened and spread for i, the rim travelling about 30 px.",
+        "breath: count, wisps peel off the ring's top and trail back, 2 at 0 to 14 at 100.",
+        "throat: shape, the ring's core thickens from 14 to 34 units as the throat lengthens, a fatter, slower roll for a lower voice.",
+        "glide: position, the small hatched oo ring the note opened from rises up the wake behind the main ring, about 60 px over the range."
+      ],
+      "reference": "library/theseus-tower (hidden-line 3D detail over black fills, one bright silhouette); opxy/craft.md, Think in 3D",
+      "risks": "A torus can read as a doughnut, a tyre or a lampshade rather than a vapour ring; the wake and the second ring carry the reading. Vowel (plan) and throat (core) both change the ring's size, in different directions, which may blur at a glance. Poloidal hairlines bunch under 3 px near the ring's sides, and the projected sections are many nodes."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T12:40:03"
+  },
   "selection": null
 }

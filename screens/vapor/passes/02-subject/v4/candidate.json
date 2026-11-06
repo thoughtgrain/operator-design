@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "A singer's lips and jaw at the left edge as a black silhouette lit along its rim, and the breath leaving them into cold air across the frame.",
+  "controls": [
+    "vowel: shape, the rim-lit lips and jaw round and push forward for u, drop open for a and spread for i, the chin moving about 16 px, and the stream's mouth widens with them.",
+    "breath: count, billows along the plume's edge from 2 at 0 to 16 at 100, each with a fold line under it.",
+    "throat: position, the larynx bump on the neck's rim slides 26 px down toward the bottom edge.",
+    "glide: shape, the breath leaves the lips as a narrow round oo stream that holds for 12 px at 5 ms up to 160 px at 2 s before the plume opens."
+  ],
+  "reference": "opxy/reference/toro-ink-smoke.jpg (breath and steam as a drawn layer); opxy/reference/field-and-figure.jpg (one bright outline over a quiet field)",
+  "risks": "A human profile can slide toward illustration or icon; it stays a single rim line with no eye or features. The plume is a large hatched area to redraw on a note. Throat lives in a small corner of the frame at the bottom edge, and vowel's lip change is about 16 px, right at the shape floor."
+}

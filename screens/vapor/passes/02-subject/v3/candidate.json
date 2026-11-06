@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "A sung breath fogged onto a cold window pane, a hatched mass of condensation in the mouth's shape with drops running down from it to the glazing bar.",
+  "controls": [
+    "vowel: shape, the fog's dense core goes from a small round patch (u) to a tall open oval (a) to a wide flat ellipse (i).",
+    "breath: scale of the halo only, the sparse outer fog spreads from 1.2× to 2.1× the core while the core stays put.",
+    "throat: position, the whole patch sits about 30 px higher on the glass as the throat lengthens (a bigger singer, a mouth higher on the pane).",
+    "glide: count, drops gather and run from the bottom of the fog, 2 at 5 ms to 14 at 2 s, each a trail ending in a solid bead."
+  ],
+  "reference": "opxy/craft.md (Semi-opaque areas are hatched, not tinted); opxy/reference/toro-ink-smoke.jpg (steam as a state)",
+  "risks": "Throat as height on the glass is the weakest mapping of the pass: physical in a story, arbitrary in the sound. A hatched blob needs the window bars to read as fog on glass; without them it's a texture. Many 45° hairlines are costly as nodes and the core's 3 px spacing is at the hatching floor."
+}

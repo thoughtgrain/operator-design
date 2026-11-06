@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "A speaking machine pulled apart along its air axis: wedge bellows, reed block, telescoping throat tube, flared horn and a lip iris whose bright aperture is the vowel.",
+  "controls": [
+    "vowel: shape, the lip iris's bright aperture goes from a small round hole (u) through a wide open mouth (a) to a wide flat slit (i), its rim moving well over 16 px.",
+    "breath: rotation, the bellows boards swing open about their hinge from 6° to 40° and the leather folds fan out between them.",
+    "throat: position, the three tube sections draw out along the axis, pushing the horn and iris about 40 px further from the reed between 0.75 and 1.50.",
+    "glide: count, the spring that pulls the iris back to a closed oo winds from 3 coils at 5 ms to 15 at 2 s, a softer spring for a slower opening."
+  ],
+  "reference": "library/theseus-tower (hidden-line parts over black fills, one bright edge); opxy/craft.md, Think in 3D",
+  "risks": "Six parts on one axis is busy, and at 1:1 the reed block and spring are only ~25 px. The speaking machine is a historical object (Kempelen's) most players won't name, though bellows into horn reads as a wind machine that makes a voice. The iris is seen at an angle, so the vowel aperture is an ellipse and u/a/i must stay distinct through foreshortening. Glide as spring coils is a metaphor (stiffness for time) and the coil count is small and at the frame's edge."
+}

@@ -36,8 +36,8 @@ RSVG = shutil.which("rsvg-convert")
 B, S2, S, M, G, D, F, K = ("#CDCDCD", "#AFAFAF", "#969696", "#7D7D7D",
                            "#646464", "#4B4B4B", "#323232", "#000000")
 FONT = "UniversNextPro-Light"
-LINE = 1.5                     # the one contour weight
-CHORD_W = (1.5, 1.5, 1.9, 2.2)  # thread width by voices held (0, 1, 2, 3+)
+HAIR, LINE, SUBJ = 1.0, 1.5, 2.2   # craft.md's three weights
+CHORD_W = (SUBJ, SUBJ, 2.5, 2.5)   # thread width by voices held (0, 1, 2+)
 BODY_TOP = 21.0
 PATHS, POINTS = 4, 64
 CTRL = ["wear", "wow", "length", "bias"]
@@ -134,7 +134,7 @@ def dropout(u: float, rep: int, depth: float) -> float:
     for k in range(2):
         c = ((rep * 0.6180339 + k * 0.4142 + 0.13) % 1.0)
         d = min(abs(u - c), 1 - abs(u - c))
-        out = max(out, math.exp(-(d / 0.045) ** 2))
+        out = max(out, math.exp(-(d / 0.075) ** 4))
     return depth * out
 
 
@@ -281,21 +281,79 @@ def ribbon(pts, ws):
     return left + right[::-1]
 
 
-def polyline_fixed(pts, ws, n_center):
-    """An open line as exactly 2*n_center ribbon points (mutable outline topology)."""
+def _clean_edge(edge, centre):
+    """Drop edge points that step backwards along the line (the inside of a sharp corner)."""
+    pts = [edge[0]]
+    cs = [centre[0]]
+    for e, c in zip(edge[1:], centre[1:]):
+        dx, dy = c[0] - cs[-1][0], c[1] - cs[-1][1]
+        ex, ey = e[0] - pts[-1][0], e[1] - pts[-1][1]
+        ln = math.hypot(dx, dy) or 1
+        if (ex * dx + ey * dy) / ln < 0.35 or math.hypot(ex, ey) < 0.35:
+            continue
+        pts.append(e)
+        cs.append(c)
+    if pts[-1] != edge[-1]:
+        if len(pts) > 1 and math.dist(pts[-1], edge[-1]) < 0.6:
+            pts[-1] = edge[-1]
+        else:
+            pts.append(edge[-1])
+    return pts
+
+
+def _turn_back(a, b, c):
+    v1 = (a[0] - b[0], a[1] - b[1])
+    v2 = (c[0] - b[0], c[1] - b[1])
+    l1, l2 = math.hypot(*v1), math.hypot(*v2)
+    if not l1 or not l2:
+        return 0.0
+    cosv = max(-1, min(1, (v1[0] * v2[0] + v1[1] * v2[1]) / (l1 * l2)))
+    return math.degrees(math.acos(cosv))      # 0 = straight back
+
+
+def polyline_fixed(pts, ws, n_center, total=POINTS):
+    """An open line as a closed ribbon of exactly `total` points (mutable outline topology)."""
     pts, ws = list(pts), list(ws)
     keep = [0]
     for i in range(1, len(pts)):
-        if math.dist(pts[keep[-1]], pts[i]) >= 0.3:
+        if math.dist(pts[keep[-1]], pts[i]) >= 0.8:
             keep.append(i)
+    if keep[-1] != len(pts) - 1:
+        if len(keep) > 1:
+            keep[-1] = len(pts) - 1
+        else:
+            keep.append(len(pts) - 1)
     pts, ws = [pts[i] for i in keep], [ws[i] for i in keep]
-    while len(pts) < n_center:            # too few: split the longest segment
-        k = max(range(len(pts) - 1), key=lambda i: math.dist(pts[i], pts[i + 1]))
-        a, b = pts[k], pts[k + 1]
-        pts.insert(k + 1, ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2))
-        ws.insert(k + 1, (ws[k] + ws[k + 1]) / 2)
-    pts, ws = simplify(pts, ws, n_center)
-    return ribbon(pts, ws)
+    pts, ws = simplify(pts, ws, max(n_center + 10, 2))
+    rib = ribbon(pts, ws)
+    n = len(pts)
+    left, right = rib[:n], rib[n:][::-1]
+    left, right = _clean_edge(left, pts), _clean_edge(right, pts)
+    poly = left + right[::-1]
+    prot = {0, len(left) - 1, len(left), len(poly) - 1}
+    # too few: split the longest edges (never an end cap)
+    while len(poly) < total:
+        k = max((i for i in range(len(poly)) if not ({i, (i + 1) % len(poly)} <= prot)),
+                key=lambda i: math.dist(poly[i], poly[(i + 1) % len(poly)]))
+        a, b = poly[k], poly[(k + 1) % len(poly)]
+        poly.insert(k + 1, ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2))
+        prot = {i + 1 if i > k else i for i in prot}
+    # too many: Visvalingam on the closed outline, end caps protected, worst tips first
+    while len(poly) > total:
+        best, bk = math.inf, None
+        m = len(poly)
+        for i in range(m):
+            if i in prot:
+                continue
+            a, b, c = poly[i - 1], poly[i], poly[(i + 1) % m]
+            area = abs((b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])) / 2
+            if _turn_back(a, b, c) < 6 or math.dist(a, b) < 0.3:
+                area = -1
+            if area < best:
+                best, bk = area, i
+        del poly[bk]
+        prot = {i - 1 if i > bk else i for i in prot}
+    return poly
 
 
 # ---------------------------------------------------------------- frame
@@ -360,20 +418,20 @@ def changed(a: Frame | None, b: Frame) -> tuple[int, int]:
 
 # ---------------------------------------------------------------- the scene
 
-RF, RW, LH, TF = 0.42, 0.30, 0.40, 0.06   # flange radius, winding radius, half winding length, flange thickness
-AMP = 0.42                                # amplitude of the laid cycle across the table (world)
+RF, RW, LH, TF = 0.40, 0.29, 0.55, 0.06   # flange radius, winding radius, half winding length, flange thickness
+AMP = 0.50                                # amplitude of the laid cycle across the table (world)
 
 
 def camera() -> Camera:
-    cam = Camera(v3(-2.05, -3.15, 0.78), v3(-0.95, 0.0, 0.33))
+    cam = Camera(v3(-1.55, -3.3, 1.35), v3(-0.9, 0.0, 0.3))
     cam.f = 1.0
     # fit: put the spool's centre and size where the composition wants them
     c = v3(0, 0, RF)
     p0 = cam.raw(c - v3(0, LH + TF, 0))
     p1 = cam.raw(c - v3(0, LH + TF, 0) + v3(0, 0, RF))
-    cam.f = 56.0 / abs(p1[1] - p0[1])                 # near flange radius ~56 px tall
-    cam.cx = 392 - cam.f * p0[0]
-    cam.cy = 150 + cam.f * p0[1]
+    cam.f = 52.0 / abs(p1[1] - p0[1])                 # near flange radius ~52 px tall
+    cam.cx = 400 - cam.f * p0[0]
+    cam.cy = 130 + cam.f * p0[1]
     return cam
 
 
@@ -409,15 +467,13 @@ def visible_reps(s: Spool) -> float:
 
 
 def laying_point(s: Spool) -> np.ndarray:
-    """Where the thread touches down: a taut (under) run lands close, a slack (over) one further back."""
-    b = s.bias
-    gap = 0.62 + 0.30 * b
-    return v3(-gap, 0.0, 0.0)
+    """Where the newest repeat ends, a fixed distance behind the spool (the treadmill's mouth)."""
+    return v3(-0.95, 0.0, 0.0)
 
 
 def wind_off() -> np.ndarray:
-    a = math.radians(38)                         # on the winding, up and back toward the trail
-    return v3(-RW * math.sin(a), 0.05, RF + RW * math.cos(a))
+    a = math.radians(50)                         # on the winding, up and back toward the trail
+    return v3(-RW * math.sin(a), 0.12, RF + RW * math.cos(a))
 
 
 def trail_point(s: Spool, st: State, q: float):
@@ -438,12 +494,13 @@ def trail_point(s: Spool, st: State, q: float):
     a = 0.9 * s.wow
     uw = u + a / (2 * math.pi) * math.sin(2 * math.pi * (u - 0.3))
     v = cycle_at(uw, table)
+    v *= 1 - 0.45 * sw                             # worn: the highs go and the level with them
     if b < 0:                                      # under-bias: louder, saturates hard
         v = max(-1 + 0.48 * -b, min(1 - 0.48 * -b, v * (1 + 0.35 * -b)))
     else:                                          # over-bias: quieter
         v *= 1 - 0.38 * b
-    depth = max(0.0, min(1.0, (sw - 0.3) / 0.5))
-    w = CHORD_W[min(st.voices, 3)] * (1 - 0.84 * dropout(u, rep + int(mark * 7), depth))
+    depth = max(0.0, min(1.0, (sw - 0.25) / 0.4))
+    w = CHORD_W[min(st.voices, 3)] * (1 - 0.55 * sw) * (1 - 0.75 * dropout(u, rep + int(mark * 7), depth))
     return v3(x, AMP * v, 0.0), w, rep, mark
 
 
@@ -477,7 +534,7 @@ def trail_samples(s: Spool, st: State):
         for rep in range(r0, r1 + 1):
             ws_ = list(np.linspace(0, 1, 49)[:-1]) + corners
             for uw in sorted(set(round(x, 6) for x in ws_)):
-                for e in (-0.004, 0.0) if uw in corners and uw > 0 else (0.0,):
+                for e in (0.0,):
                     u = warp_inv(uw + e, a) if a > 0 else uw + e
                     qv = mark + rep + u
                     if b0 <= qv <= b1:
@@ -534,21 +591,21 @@ def split_chunks(pts, ws, n=3):
 
 
 def free_run(s: Spool, st: State, touch):
-    """The thread between the winding and the table: taut and straight under-biased,
-    a slack loop lying on the table over-biased."""
+    """The thread between the winding and the table. Under-biased it's taut: one straight
+    line from the winding to the trail. Over-biased it's slack: it falls almost at once to
+    the table and lies there in a loose bow toward us before the trail begins."""
     W = wind_off()
-    L = touch
-    slack = max(0.0, 0.5 + 0.5 * s.bias)          # 0 taut .. 1 slack
-    slack = min(1.0, max(0.0, slack * (1 + 0.35 * st.slack_mod)))
+    T = touch
+    slack = 0.5 + 0.5 * s.bias                    # 0 taut .. 1 slack
+    slack = min(1.0, max(0.0, slack + 0.22 * st.slack_mod))
+    t_drop = 1 - 0.74 * slack
     pts = []
-    for t in np.linspace(0, 1, 90):
-        p = W * (1 - t) + L * t
-        # taut: straight. slack: drops onto the table early and lies in a loop toward us
-        drop = slack * 0.9 * math.sin(math.pi * min(1, t * 1.6) / 2)
-        z = max(0.0, p[2] - drop * W[2] * (1 - t) * 1.0)
-        bulge = slack * 0.34 * math.sin(math.pi * t) ** 1.3
-        sweep = slack * 0.10 * math.sin(2 * math.pi * t)
-        pts.append(v3(p[0] + sweep, p[1] - bulge, z))
+    for t in np.linspace(0, 1, 120):
+        p = W * (1 - t) + T * t
+        z = W[2] * max(0.0, 1 - t / t_drop) ** (1 + 1.6 * slack)
+        bow = slack * 0.62 * math.sin(math.pi * t) ** 2
+        sway = slack * 0.16 * math.sin(2 * math.pi * t)
+        pts.append(v3(p[0] + sway, p[1] - bow, z))
     return pts
 
 
@@ -588,7 +645,7 @@ def scene(s: Spool, st: State) -> Frame:
             if flags[i]:
                 arc.append(cam(pts[i]))
         arc = arc[3:-3]
-        rib = polyline_fixed(arc, [LINE] * len(arc), 30)
+        rib = polyline_fixed(arc, [HAIR] * len(arc), 30)
         fr.node(6 + k, rib, D, "none", 0, note="turn of thread on the winding")
 
     # trail (nodes 0..2) and free run (node 3): the one bright thing
@@ -601,7 +658,7 @@ def scene(s: Spool, st: State) -> Frame:
             continue
         fr.node(i, polyline_fixed(ch[0], ch[1], POINTS // 2), B, "none", 0,
                 note=f"trail chunk {i}: mutable, {POINTS} points")
-    touch = laying_point(s)
+    touch = trail_point(s, st, st.phi)[0]
     fp = free_run(s, st, touch)
     fpts = [cam(p) for p in fp]
     fw = [CHORD_W[min(st.voices, 3)]] * len(fpts)
@@ -621,12 +678,16 @@ def scene(s: Spool, st: State) -> Frame:
     for k in range(3):
         a = -ang + k * 2 * math.pi / 3 + 0.4
         hc = near0 + 0.265 * (math.cos(a) * v3(1, 0, 0) + math.sin(a) * v3(0, 0, 1))
-        hole, _ = ring(hc, ax, 0.062, 40)
-        pts = [cam(p) for p in hole]
         hc2 = cam(hc)
+        # the outline is authored once, at the face's centre, and only its origin moves
+        ref, _ = ring(near0 + v3(0, 0, 0.0), ax, 0.062, 40)
+        rc = cam(near0)
+        hc2 = (round(hc2[0], 2), round(hc2[1], 2))
+        rel = resample_closed([(x - rc[0], y - rc[1]) for x, y in (cam(p) for p in ref)], 24)
+        pts = [(x + hc2[0], y + hc2[1]) for x, y in rel]
         # authored once round the origin; the roll only moves the origin (a circle on the face
         # projects to the same ellipse anywhere on it, to within a fraction of a pixel)
-        fr.node(14 + k, resample_closed(pts, 24), K, M, LINE, origin=hc2, note="lightening hole: translates with the roll")
+        fr.node(14 + k, pts, K, M, LINE, origin=hc2, note="lightening hole: translates with the roll")
     return fr
 
 
