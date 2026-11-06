@@ -1,0 +1,16 @@
+{
+  "variant": "v2",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "The ground the colony works, seen close and low: sand grains lit along their upper edges, a channel swept clear through them that bends past pebbles, scent lying on its floor as beads that shrink and dry back along it.",
+  "controls": [
+    "ants: count, fresh beads at the head of the channel with a bright rim, 1 to 8; the nearest is the note just landed.",
+    "scent: shape, the channel's width and how cleanly it is swept, from a scuffed narrow track to a wide clean channel.",
+    "fade: scale + count, how fast the beads shrink back along the channel and how far back they last before drying to a mark; the old branch fills with grains.",
+    "scale: count, pebbles the channel bends around: 5 at pent, 7 for the modes, 12 at chrom, closer together."
+  ],
+  "reference": "opxy/craft.md (Think in 3D; edge light on black bodies) and library/theseus-tower (black shapes, grey edges)",
+  "muted": "Muted: every bead rim drops to the grain grey; the channel stays.",
+  "risks": "Hundreds of grains: far over the node and redraw budget, so a device version would need the grains as a few fixed textured paths. At 1:1 the grain field can read as gravel or a starfield, and the beads are small; the channel's bends don't give pitch, only order. The grain field's rounded far boundary reads a little like a mound."
+}

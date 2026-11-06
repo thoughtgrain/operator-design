@@ -1,0 +1,16 @@
+{
+  "variant": "v5",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "bold closed outlines",
+  "subject": "The trail itself, drawn as the thing it is: a band swept clear through the litter in one closed loop past the stones it plays, old spurs fading out from it, seeds carried round it.",
+  "controls": [
+    "ants: count, seeds carried round the loop, 1 to 8.",
+    "scent: shape, the band's width, a narrow scuffed track at 0 to a wide cleared road at 100.",
+    "fade: position, how far the old spurs (hatched) still reach out from the loop before they give out, long at 0, stubs at 100.",
+    "scale: count, stones in the clearing: 5 at pent, 7 for the modes, 12 at chrom; the loop touches the ones its phrase plays."
+  ],
+  "reference": "opxy/craft.md (Detail follows how often the subject changes: bold closed outlines); stock drum-page iconography in approach only",
+  "muted": "Muted: the loop's outer edge drops from the brightest grey to the inner edge's grey and the seeds stop.",
+  "risks": "A closed band in oblique view can read as a race track or a pool; the loop is in a plan-like view that sits near pass 01's field-and-figure loop, though there's no lattice field here. Twig capsules and spur ends are the weakest drawing; the stones the phrase plays are only told by sitting on the loop."
+}

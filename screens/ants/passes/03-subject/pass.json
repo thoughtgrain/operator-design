@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 3,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:48:16",
   "focus": "Too literal: drawn ants and ant scenes. Five unique, less literal versions; the lead shortlists two.",
   "subject": null,
@@ -69,7 +69,163 @@
       "brief": "Start from what ants is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: bold closed outlines. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "A hand-held marble board whose rocker gates are pushed toward each side a marble takes and sprung back to centre, so the route the marbles keep taking wears into one bright groove through the cascade.",
+      "controls": [
+        "ants: count, marbles rolling down the worn groove, 1 to 8, spaced along the route from the entry to the outlets.",
+        "scent: rotation, how far the gates on the worn route are thrown across the branch not taken, from a slight lean (about 11°) at 0 to hard over (about 33°) at 100.",
+        "fade: count, how many older routes still show hatched residue in their channels, several at 0 down to none at 100 (the springs win).",
+        "scale: count, columns of gates and outlets on the board: 5 outlets at pent, 7 for the modes, 12 at chrom, the diamonds narrowing to fit."
+      ],
+      "reference": "library/toro-blocks (solid against hollow as a state); opxy/craft.md (hatching for what's there but not active)",
+      "muted": "Muted: the groove drops from the brightest grey to the gate grey and the marbles stop where they are.",
+      "risks": "A Galton-style board reads as chance first; only the thrown gates and the one bright groove say 'reinforced'. It shows which outlet the colony prefers, not the phrase's order. At chrom (11 columns) the diamonds get small and the gates crowd; the board's hatching is a lot of lines (cost and calm), and the route's residue hatch is close in look to the board's own."
+    },
+    {
+      "variant": "v2",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "The ground the colony works, seen close and low: sand grains lit along their upper edges, a channel swept clear through them that bends past pebbles, scent lying on its floor as beads that shrink and dry back along it.",
+      "controls": [
+        "ants: count, fresh beads at the head of the channel with a bright rim, 1 to 8; the nearest is the note just landed.",
+        "scent: shape, the channel's width and how cleanly it is swept, from a scuffed narrow track to a wide clean channel.",
+        "fade: scale + count, how fast the beads shrink back along the channel and how far back they last before drying to a mark; the old branch fills with grains.",
+        "scale: count, pebbles the channel bends around: 5 at pent, 7 for the modes, 12 at chrom, closer together."
+      ],
+      "reference": "opxy/craft.md (Think in 3D; edge light on black bodies) and library/theseus-tower (black shapes, grey edges)",
+      "muted": "Muted: every bead rim drops to the grain grey; the channel stays.",
+      "risks": "Hundreds of grains: far over the node and redraw budget, so a device version would need the grains as a few fixed textured paths. At 1:1 the grain field can read as gravel or a starfield, and the beads are small; the channel's bends don't give pitch, only order. The grain field's rounded far boundary reads a little like a mound."
+    },
+    {
+      "variant": "v3",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "A ford of stepping stones across a stream, one row per step and one stone per degree, where the crossing everyone takes is worn smooth and dished while the stones nobody uses are mossed over.",
+      "controls": [
+        "ants: count, stones on the worn route that are still wet from a crossing (a short sheen on the near lip), 1 to 8.",
+        "scent: shape, how deep the polished dish is on the route stones and how bare their tops are, from barely worn to a deep tread.",
+        "fade: shape, how far the moss (hatching) has grown back over the old route's bare patches, none at 0 to closed over at 100.",
+        "scale: count, stones per row: 5 at pent, 7 for the modes, 12 at chrom, smaller and closer across the stream."
+      ],
+      "reference": "library/theseus-tower (detailed line art, black bodies over grey outlines)",
+      "muted": "Muted: the lead stone's bright rim drops to the route grey and the wet sheens go.",
+      "risks": "Thirty stones each with flank lines, ripples and hatched moss is far over budget and close to busy at 1:1; the hatched tops can read as biscuits. The route is told by bare against hatched more than by line weight, and reading rows as steps needs the frame to cross from bank to bank, so the crossing's order is only implied. Twelve stones a row at chrom will crowd."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "One iron mooring ring at large scale with ropes running off the frame to the rest of the lattice, the way the colony keeps using laid up thick and taut, the ways it leaves hanging slack and frayed through.",
+      "controls": [
+        "ants: count, strands laid into the taut rope (its lay lines and its girth), 1 to 8.",
+        "scent: shape, how slack the unused ropes hang, all taut alike at 0 to deep sags at 100.",
+        "fade: position, where the slack ropes have frayed through, the break running from the frame edge at 0 back toward the ring at 100, hatched beyond it.",
+        "scale: count, ropes hitched to the ring: 5 at pent, 7 for the modes, 12 at chrom."
+      ],
+      "reference": "library/theseus-tower (hidden-line 3D, one camera); opxy/craft.md (Think in 3D)",
+      "muted": "Muted: the taut rope's edges drop from the brightest grey to the rope grey; nothing else moves.",
+      "risks": "A ring with ropes is a mooring or a lifebuoy before it is a colony; the metaphor (more strands, more trail) needs saying once. It shows one junction's state, not the phrase. Thin ropes are only ~5 px, so their hatched ghosts barely read, and slack curves are mutable outlines (4-path limit) if they move."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "bold closed outlines",
+      "subject": "The trail itself, drawn as the thing it is: a band swept clear through the litter in one closed loop past the stones it plays, old spurs fading out from it, seeds carried round it.",
+      "controls": [
+        "ants: count, seeds carried round the loop, 1 to 8.",
+        "scent: shape, the band's width, a narrow scuffed track at 0 to a wide cleared road at 100.",
+        "fade: position, how far the old spurs (hatched) still reach out from the loop before they give out, long at 0, stubs at 100.",
+        "scale: count, stones in the clearing: 5 at pent, 7 for the modes, 12 at chrom; the loop touches the ones its phrase plays."
+      ],
+      "reference": "opxy/craft.md (Detail follows how often the subject changes: bold closed outlines); stock drum-page iconography in approach only",
+      "muted": "Muted: the loop's outer edge drops from the brightest grey to the inner edge's grey and the seeds stop.",
+      "risks": "A closed band in oblique view can read as a race track or a pool; the loop is in a plan-like view that sits near pass 01's field-and-figure loop, though there's no lattice field here. Twig capsules and spur ends are the weakest drawing; the stones the phrase plays are only told by sitting on the loop."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T09:02:35"
+  },
   "selection": null
 }
