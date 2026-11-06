@@ -156,13 +156,13 @@ CRANK_R = 1.45
 
 # ------------------------------------------------------------------ the flock on its rods
 # Eight birds on four tiers, two a tier, the pair on a tier always more than a bird's length
-# apart along the slot (their offsets differ by 1.2), so they can't touch at any cohere.
+# apart along the slot (their offsets differ by 1.2 or more), so they can't touch at any cohere.
 # offset o (-1..1) along the flock's spread, tier height (rod length above the lid), a small jitter.
 # The tiers rise left to right in two runs, so each bird's raised wing (it points back, to the left)
 # opens away from its neighbour: neighbours are a tier (0.67) apart and the higher one is ahead.
 TIER = {"A": 0.9, "B": 1.57, "C": 2.24, "D": 2.91}
-BIRDS = [(-1.00, "A", 0.00), (-0.75, "B", 0.03), (-0.45, "C", 0.00), (-0.20, "D", -0.03),
-         (0.20, "A", 0.03), (0.45, "B", -0.02), (0.75, "C", 0.02), (1.00, "D", 0.00)]
+BIRDS = [(-1.00, "A", 0.06), (-0.77, "B", -0.04), (-0.47, "C", 0.05), (-0.22, "D", -0.02),
+         (0.20, "A", 0.00), (0.43, "B", 0.07), (0.76, "C", -0.05), (1.00, "D", 0.00)]
 # scatter: these three break away (slide out along the slot and lean out); sign = which way
 STRAYS = {0: -1, 6: +1, 7: +1}
 LEAN_MAX = math.radians(32)
@@ -230,7 +230,7 @@ WING = [(-0.03, -0.05), (0.16, -0.075), (0.40, -0.065), (0.60, -0.016), (0.60, 0
 
 def wing_angle(speed: float) -> float:
     """Degrees from the beak direction, anticlockwise: folded along the back at 0.25, raised at 4.00."""
-    return 186 - 82 * speed
+    return 188 - 84 * speed
 
 
 def _place(pts, top, lean, bob):
@@ -531,7 +531,8 @@ def main(argv: list[str]) -> int:
     scratch.mkdir(exist_ok=True)
     # contact sheet through the repo's tool (it wants c<N>-000 names): copies in scratch
     cs = scratch / "contact"
-    cs.mkdir(exist_ok=True)
+    shutil.rmtree(cs, ignore_errors=True)
+    cs.mkdir()
     shutil.copy(HERE / "rest.svg", cs / "rest.svg")
     for i, (name, _) in enumerate(CONTROL_FRAMES):
         for v in (0, 50, 100):

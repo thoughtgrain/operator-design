@@ -370,19 +370,13 @@ def beam(fr):
 
 
 def hangers(fr, R, cx, colour):
-    """Two straps from the beam's underside to the gudgeons at the headstock's ends: an
-    outlined strap where it's wide enough to read (>= 5 px), a single line where it isn't."""
+    """Two straps from the beam's underside down to the gudgeons at the headstock's ends,
+    each a single Line-weight ribbon flush with the headstock's end (an outlined strap
+    would put its two edges under 3 px apart at every size this ring reaches)."""
     hx = HEAD[0] * R
-    w = 0.11 * R
     for sgn in (-1, 1):
-        if w < 5:
-            x = sgn * hx
-            fr.ribbon([P(x, BEAM_DROP, -BEAM_D * 0.2, cx), P(x, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx)], LINE, colour)
-            continue
-        xa, xb = sorted((sgn * hx, sgn * (hx + w)))
-        fr.path([P(xa, BEAM_DROP, -BEAM_D * 0.2, cx), P(xb, BEAM_DROP, -BEAM_D * 0.2, cx),
-                 P(xb, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx), P(xa, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx)],
-                G0, colour, HAIR)
+        x = sgn * hx
+        fr.ribbon([P(x, BEAM_DROP, -BEAM_D * 0.2, cx), P(x, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx)], LINE, colour)
 
 
 def headstock(R, theta=0.0, cx=0.0):
