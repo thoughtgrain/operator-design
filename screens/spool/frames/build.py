@@ -419,7 +419,7 @@ def changed(a: Frame | None, b: Frame) -> tuple[int, int]:
 # ---------------------------------------------------------------- the scene
 
 RF, RW, LH, TF = 0.40, 0.29, 0.55, 0.06   # flange radius, winding radius, half winding length, flange thickness
-AMP = 0.50                                # amplitude of the laid cycle across the table (world)
+AMP = 0.68                                # amplitude of the laid cycle across the table (world)
 
 
 def camera() -> Camera:
@@ -500,7 +500,7 @@ def trail_point(s: Spool, st: State, q: float):
     else:                                          # over-bias: quieter
         v *= 1 - 0.38 * b
     depth = max(0.0, min(1.0, (sw - 0.25) / 0.4))
-    w = CHORD_W[min(st.voices, 3)] * (1 - 0.55 * sw) * (1 - 0.75 * dropout(u, rep + int(mark * 7), depth))
+    w = CHORD_W[min(st.voices, 3)] * (1 - 0.3 * sw) * (1 - 0.75 * dropout(u, rep + int(mark * 7), depth))
     return v3(x, AMP * v, 0.0), w, rep, mark
 
 
@@ -516,7 +516,7 @@ def shade_for(s: Spool, ws, st: State) -> str:
     from its width (width = base x (1 - 0.55 wear), dropouts excluded by the median)."""
     base = CHORD_W[min(st.voices, 3)]
     med = float(np.median(ws)) / base
-    worn = (1 - med) / 0.55
+    worn = (1 - med) / 0.3
     return B if worn < 0.3 else S2 if worn < 0.62 else S
 
 
@@ -678,7 +678,7 @@ def scene(s: Spool, st: State) -> Frame:
     fp = free_run(s, st, touch)
     fpts = [cam(p) for p in fp]
     base = CHORD_W[min(st.voices, 3)]
-    fw = [base * (1 - 0.55 * worn_now(s, st))] * len(fpts)
+    fw = [base * (1 - 0.3 * worn_now(s, st))] * len(fpts)
     fr.node(3, polyline_fixed(fpts, fw, POINTS // 2), shade_for(s, fw, st), "none", 0,
             note="free run: mutable, 64 points")
 

@@ -113,7 +113,7 @@ def build_raft():
     rnd = random.Random(7)
     spent = []
     allb = list(voiced)
-    N = 24
+    N = 16
     while len(spent) < N:
         best, bestscore = None, -1e9
         for _ in range(2500):
@@ -157,16 +157,59 @@ def build_raft():
         if best is None:
             raise SystemExit(f"spent foam: only {len(spent)} fit")
         x, y, r = best
-        b = {"k": 0, "r": r, "x": x, "y": y, "kind": "spent", "order": len(spent)}
+        b = {"k": 0, "r": r, "x": x, "y": y, "z": 0.0, "kind": "spent", "host": None}
         spent.append(b)
         allb.append(b)
+    # foam that lasts piles up: small bubbles stacked on the backs of the big ones, peeking over the raft
+    stacked = []
+    tries = 0
+    while len(stacked) < 12 and tries < 20000:
+        tries += 1
+        host = rnd.choices(voiced[:5], weights=[5, 3, 2, 1.2, 1])[0]
+        r = rnd.uniform(0.09, 0.15)
+        az = math.radians(rnd.uniform(25, 155))           # round the back
+        el = math.radians(rnd.uniform(28, 62))
+        d = (host["r"] + r) * 1.01
+        P = (host["x"] + d * math.cos(el) * math.cos(az), host["y"] + d * math.cos(el) * math.sin(az), d * math.sin(el))
+        if any(math.dist(P, (b["x"], b["y"], b.get("z", 0.0))) < (r + b["r"]) * 1.03 for b in allb + stacked if b is not host):
+            continue
+        # how much of it shows over the nearer domes (sample its outline)
+        ring = CAM.ps(sphere_contour(P, r, 24))
+        dP = CAM.depth(P)
+        vis = 0
+        for q in ring:
+            cover = False
+            for b in allb + stacked:
+                bz = b.get("z", 0.0)
+                if CAM.depth((b["x"], b["y"], bz)) < dP:
+                    bc = CAM.p((b["x"], b["y"], bz))
+                    br = CAM.f * b["r"] / CAM.depth((b["x"], b["y"], bz))
+                    if math.dist(q, bc) < br and (bz > 0 or q[1] < bc[1]):
+                        cover = True
+                        break
+            vis += not cover
+        if not 0.4 <= vis / len(ring) <= 0.8:
+            continue
+        mine = CAM.p(P), CAM.f * r / dP
+        if any(math.dist(mine[0], CAM.p((b["x"], b["y"], b["z"]))) < 0.75 * (mine[1] + CAM.f * b["r"] / CAM.depth((b["x"], b["y"], b["z"])))
+               for b in stacked):
+            continue
+        stacked.append({"k": 0, "r": r, "x": P[0], "y": P[1], "z": P[2], "kind": "spent", "host": host})
+    # the order they linger in as depth rises: floating and stacked foam alternate
+    order = []
+    fl, st = list(spent), list(stacked)
+    while fl or st:
+        if fl:
+            order.append(fl.pop(0))
+        if st and len(order) % 3 != 1:
+            order.append(st.pop(0))
+    for i, b in enumerate(order):
+        b["order"] = i
+    spent = order
     for i, b in enumerate(voiced + spent):
         b["seed"] = random.Random(100 + i).uniform(0, 2 * math.pi)
+        b.setdefault("z", 0.0)
     return voiced, spent
-
-
-VOICED, SPENT = build_raft()
-BUBBLES = VOICED + SPENT
 
 
 # ---------------------------------------------------------------- per-bubble geometry (authored at rest pose)
@@ -201,6 +244,19 @@ def shadowed(P, me):
             if t > 1e-4 or (-bq + math.sqrt(disc)) > 1e-4 and cq < 0:
                 return True
     return False
+
+
+VOICED, SPENT = build_raft()
+BUBBLES = VOICED + SPENT
+
+
+def stacked_parts(b):
+    """A spent bubble resting on a big one's back: a whole small sphere, drawn hollow (black body,
+    mid-grey outline); the host's dome, nearer, hides its lower half."""
+    P = (b["x"], b["y"], b["z"])
+    ring = CAM.ps(sphere_contour(P, b["r"], 40))
+    centre = CAM.p(P)
+    return {"centre": centre, "dome": dedupe(ring, 0.3), "rp": CAM.f * b["r"] / CAM.depth(P)}
 
 
 def bubble_parts(b):
@@ -311,7 +367,7 @@ def bubble_parts(b):
 
 
 for _b in BUBBLES:
-    _b["parts"] = bubble_parts(_b)
+    _b["parts"] = stacked_parts(_b) if _b.get("host") else bubble_parts(_b)
 
 
 def ribbon(pts, w):
@@ -440,7 +496,7 @@ def partial_t60(k, depth): return depth * k ** -0.5
 NODES = []          # (name, bubble or line index, part)
 for j in range(K_LINES):
     NODES.append(("line", j, "rib"))
-for b in sorted(BUBBLES, key=lambda b: -CAM.depth((b["x"], b["y"], 0))):
+for b in sorted(BUBBLES, key=lambda b: -CAM.depth((b["x"], b["y"], b["z"]))):
     if b["kind"] == "spent":
         NODES.append(("spent", b, "dome"))
     else:
@@ -471,7 +527,7 @@ def raft_layout(c, thetas):
     then a short relaxation pushes touching bubbles apart so none overlaps. The same few lines run on the
     device (24 bubbles, 276 pairs, a handful of passes) and only while drift is non-zero and something moves."""
     n_spent = spent_count(c["depth"])
-    live = [b for b in BUBBLES if b["kind"] == "voiced" or b["order"] < n_spent]
+    live = [b for b in BUBBLES if (b["kind"] == "voiced" or b["order"] < n_spent) and not b.get("host")]
     pos = {}
     for b in live:
         th = thetas[id(b)]
@@ -498,9 +554,18 @@ def raft_layout(c, thetas):
     return pos
 
 
-def pose_bubble(b, c, xy, bob_px=0.0):
-    """Screen translation and uniform scale for a bubble's nodes (about its projected centre)."""
-    x, y = xy
+def pose_bubble(b, c, layout, bob_px=0.0):
+    """Screen translation and uniform scale for a bubble's nodes (about its projected centre).
+    A stacked bubble rides its host: same translation, and its offset from the host scales with it."""
+    if b.get("host"):
+        h = b["host"]
+        (hdx, hdy), hs = pose_bubble(h, c, layout, bob_px)
+        hc = h["parts"]["centre"]
+        mc = b["parts"]["centre"]
+        nx = hc[0] + hdx + (mc[0] - hc[0]) * hs
+        ny = hc[1] + hdy + (mc[1] - hc[1]) * hs
+        return (round(nx - mc[0]), round(ny - mc[1])), hs
+    x, y = layout[id(b)]
     c0 = b["parts"]["centre"]
     c1 = CAM.p((x, y, 0.0))
     persp = CAM.depth((b["x"], b["y"], 0)) / CAM.depth((x, y, 0))
@@ -545,7 +610,7 @@ def node_state(c, sim=None):
             u = ((b["y"] - D_RAFT) / lam_ - rise_frac(T) + phase) % 1.0
             u = min(u, 1 - u)
             bob = 2.2 * min(1.0, T / 1.0) * sim["wave"] * math.cos(math.pi * u) ** 8
-        (dx, dy), s = pose_bubble(b, c, layout[id(b)], round(bob))
+        (dx, dy), s = pose_bubble(b, c, layout, round(bob))
         shade = 0
         if part == "edge":
             steps = sim["steps"][b["k"]] if sim else 0

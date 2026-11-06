@@ -6,22 +6,23 @@ mass: a blow handed ball to ball down the row and out the far end, swinging back
 in as the recirculation) and asked for clean-up and readability. Same idea and
 composition; what changed is in refine.md. In short:
 
-    camera      lower, more frontal, closer: the balls are ~2x the area, the frame
-                is two end posts and one top rail pair instead of crossing wireframe
+    camera      more frontal, a little yaw, fitted tighter: balls ~25 % more area at the
+                default, row centred; the frame is two solid end posts and one pair of
+                top rails instead of four crossing wireframe uprights
     strings     one narrow V per ball (front rail, back rail, same x), no fan
     balls       one light (upper left): hatched shadow crescent lower right, a
                 hairline highlight upper left; the output ball is the one bright thing
-    swings      each end ball's path drawn as a dashed Line under the ball, not a
-                faint dashed hairline through its centre
+    swings      each end ball's sweep hatched as a ghost band, its path a dashed Line
+                under the ball, not a faint dashed hairline through its centre
     base        a quiet outline slab, no hatch
 
 Controls (definition.json), 0..1:
 
     stages    count: 7 .. 18 balls in a row of fixed length (they shrink as they multiply)
-    leak      shape: interior balls take a flat on their struck (left) face, the lost cap
-              hatched, lose their shine and shrink a little so they stop touching
-    clock     position: each ball hangs on its own string length, up to ~±20 px
-    feedback  rotation: how far the input ball has swung back out, 0 .. 40 degrees
+    leak      shape: interior balls take a dent in their struck (left) face, the lost
+              metal hatched, lose their shine and shrink so they stop touching
+    clock     position: each ball hangs on its own string length (~37 px spread at 100)
+    feedback  rotation: how far the input ball has swung back out, 0 .. 60 degrees
 
 An effect page gets its controls (slots), track, shift and elapsed, not the audio,
 so the swing is a notional test note, frozen at the moment it leaves the far end.
@@ -337,7 +338,7 @@ def model(c: dict):
     k_dent = int(round(lk * 0.55 * (n - 2)))
     interior = sorted(range(1, n - 1), key=lambda i: prio[i])
     dented = set(interior[:k_dent])
-    depth = 0.28 + 0.22 * lk                # how deep the flat cuts, as a share of r
+    depth = 0.28 + 0.22 * lk                # how deep the dent goes, as a share of r
     back = FB_MAX * fb
     balls = []
     for i in range(n):

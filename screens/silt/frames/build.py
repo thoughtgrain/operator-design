@@ -67,7 +67,8 @@ RB, RT, DEP = 1.0, 1.8, 0.8          # floor radius, rim radius, depth (world un
 KW = (RT - RB) / DEP                 # wall run per unit rise (45 degrees)
 SHEET = 0.05                         # metal thickness
 BEAD = 0.045                         # rolled rim bead radius
-RIFFLES = [(0.25, 0.05), (0.40, 0.05), (0.55, 0.05)]   # (height, step) on the left wall
+RIFFLES = [(0.30, 0.07), (0.45, 0.07), (0.60, 0.07)]   # (ledge height, ledge width) on the left wall
+RIFFLE_H = 0.10                                         # each tooth rises over this height
 RIFFLE_SECTOR = (math.pi - 1.05, math.pi)               # back-left sector that carries them
 ZW = 0.30                            # water depth at rest
 
@@ -85,8 +86,8 @@ def wall_r(z, a=math.pi):
     r = RB + KW * z
     if RIFFLE_SECTOR[0] <= a <= RIFFLE_SECTOR[1] + 1e-9:
         for zi, s in RIFFLES:
-            if z >= zi:
-                r += s
+            if zi - RIFFLE_H <= z < zi:          # a sawtooth: the tooth leans in, the ledge steps back out
+                r -= s * (z - (zi - RIFFLE_H)) / RIFFLE_H
     return r
 
 
@@ -279,14 +280,34 @@ def section_profile(side):
     """Inner surface of the cut wall + floor half, from the floor centre out to the rim (section plane)."""
     pts = [(0.0, 0.0), (side * RB, 0.0)]
     if side < 0:
-        z = 0.0
         for zi, s in RIFFLES:
-            pts.append((-(wall_r(zi - 1e-6)), zi))           # up the slope to the riffle
-            pts.append((-(wall_r(zi)), zi))                   # step out (the ledge)
-        pts.append((-wall_r(DEP), DEP))
+            z0 = zi - RIFFLE_H
+            pts.append((-(RB + KW * z0), z0))
+            pts.append((-(RB + KW * zi - s), zi))         # tooth tip
+            pts.append((-(RB + KW * zi), zi + 0.004))     # back out along the ledge
+        pts.append((-(RB + KW * DEP), DEP))
     else:
         pts.append((RT, DEP))
     return pts
+
+
+def offset_line(pts, d, side):
+    """Offset an open polyline (section coords) by d to its outer side (miter joins)."""
+    out = []
+    n = len(pts)
+    for i, (x, z) in enumerate(pts):
+        ns = []
+        for j in (i - 1, i):
+            if 0 <= j < n - 1:
+                (ax, az), (bx, bz) = pts[j], pts[j + 1]
+                L = math.hypot(bx - ax, bz - az) or 1
+                ns.append((side * (bz - az) / L, -side * (bx - ax) / L))
+        nx = sum(q[0] for q in ns) / len(ns)
+        nz = sum(q[1] for q in ns) / len(ns)
+        L = math.hypot(nx, nz) or 1
+        cosh = max(0.5, (nx * ns[0][0] + nz * ns[0][1]) / L)
+        out.append((x + nx / L * d / cosh, z + nz / L * d / cosh))
+    return out
 
 
 def static_art(f: Frame):
@@ -298,32 +319,21 @@ def static_art(f: Frame):
     # riffles: the ledges on the back-left wall, ending where the sector ends
     a0, a1 = RIFFLE_SECTOR
     for zi, s in RIFFLES:
-        f.line(arc(lambda a, zi=zi: wall_r(zi), lambda a, zi=zi: zi, a0 + 0.04, a1 - 0.02, 32), HAIR, G4)
-    # the cut: a thin dark sheet (solid body) with a lit inner edge and a bead at each rim
+        f.line(arc(lambda a, zi=zi, s=s: RB + KW * zi - s, lambda a, zi=zi: zi, a0 + 0.04, a1 - 0.02, 32), HAIR, G4)
+    # the cut: a thin dark sheet (solid body) with a lit inner edge and a rolled bead at each rim
     for side in (-1, 1):
         inner = section_profile(side)
-        outer = []
-        # outer skin: offset by the sheet thickness along the outward normal of each segment
-        for i, (x, z) in enumerate(inner):
-            if i == 0:
-                outer.append((x, z - SHEET))
-                continue
-            px, pz = inner[i - 1]
-            dx, dz = x - px, z - pz
-            L = math.hypot(dx, dz) or 1
-            nx, nz = side * dz / L, -side * dx / L      # outward/down
-            outer.append((x + nx * SHEET, z + nz * SHEET))
-        # simplify: the outer skin is the plain trapezoid (riffles are pressed in, the outside is smooth)
-        outer = [(0.0, -SHEET), (side * (RB + SHEET * 0.41), -SHEET), (side * (RT + SHEET * 1.41), DEP)]
+        outer = offset_line(inner, SHEET, side)
         body = [S(x, z) for x, z in inner] + [S(x, z) for x, z in outer[::-1]]
         f.poly(body, G1)
     for side in (-1, 1):
         inner = section_profile(side)
-        f.line([S(x, z) for x, z in inner][::side] if side > 0 else [S(x, z) for x, z in inner], LINE, G5)
-        # rolled rim bead
-        cx, cz = side * (RT + BEAD), DEP + BEAD * 0.2
+        f.line([S(x, z) for x, z in inner[1:]], LINE, G5)
+        cx, cz = side * (RT + BEAD * 0.9), DEP + BEAD * 0.35
         bead = [S(cx + BEAD * math.cos(t / 14 * 2 * math.pi), cz + BEAD * math.sin(t / 14 * 2 * math.pi)) for t in range(14)]
         f.poly(bead, G1, G5, 1.2)
+    # the floor's cut edge across the middle, lit, joining the two halves
+    f.line([S(-RB * 0.98, 0.0), S(RB * 0.98, 0.0)], LINE, G5)
 
 
 # ------------------------------------------------------------------ the water
@@ -474,8 +484,7 @@ def bed(n, gscale):
         r = grain_r_px(k) * gscale / PPU * 0.92
         best = None
         for i in range(260):
-            x = RB + RT - RB - i * 0.006 - 0.8      # sweep from up the wall leftwards across the floor
-            x = RB + 0.35 - i * 0.006
+            x = RB + 0.35 - i * 0.006               # sweep from up the wall leftwards across the floor
             zmin = max(r + SHEET * 0 + 0.012, (x - RB + r * root) / KW if KW else r)
             z = zmin
             for (xj, zj, rj) in placed:
@@ -581,7 +590,7 @@ def pose(state):
             x, z = bx + (tx - bx) * lam, bz + (tz - bz) * lam
             # stay in the water and inside the wall
             zs = surface_z(x, geo["c"], geo["t"]) - grain_r_px(k) * gscale / PPU - 0.02
-            z = max(bz if lam < 1e-3 else 0.02, min(z, zs)) if zs > bz else bz
+            z = max(bz, min(z, zs))
             p = S(x, z)
             pb = S(bx, bz)
             if math.hypot(p[0] - pb[0], p[1] - pb[1]) < 0.5:

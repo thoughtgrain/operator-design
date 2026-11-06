@@ -477,14 +477,14 @@ def crack_geometry(seed=23):
             r = BOWL.outer(t)[0]
             nth = th + math.sin(heading) * ds / r
             nt = t - math.cos(heading) * ds * 0.9
-            if nt < 0.12 or abs(nth - th0) > math.radians(44):
+            if nt < 0.24 or abs(nth - th0) > math.radians(46):
                 return
             segs.append((dist, depth, (th, t), (nth, nt)))
             th, t, dist = nth, nt, dist + ds
-            p_fork = (0.26, 0.2, 0.12)[depth] if depth < 3 else 0
+            p_fork = (0.24, 0.14, 0.0)[depth] if depth < 3 else 0
             if i > 1 and rnd.random() < p_fork:
                 side = rnd.choice((-1, 1))
-                grow(th, t, heading + side * rnd.uniform(0.8, 1.15), budget * rnd.uniform(0.4, 0.6),
+                grow(th, t, side * rnd.uniform(1.05, 1.35), (0.5 if depth == 0 else 0.22) * rnd.uniform(0.6, 1.0),
                      depth + 1, dist)
     grow(th0, 0.99, 0.0, 0.92, 0, 0.0)
     segs.sort(key=lambda q: q[0])
