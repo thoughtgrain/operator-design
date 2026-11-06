@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">cut</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">groove</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wear</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">rumble</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1.00</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+  </g>
+  <path id="lathe_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="lathe_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#969696" stroke="#969696" stroke-width="2"/>
+  <path id="lathe_palette_2" d="M 720 300 L 724 300 L 724 304 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="2"/>
+  <path id="lathe_palette_3" d="M 730 300 L 734 300 L 734 304 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="2"/>
+  <path d="M 20 178 L 460 178 L 460 186 L 20 186 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 30 186 L 450 186 L 446 206 L 34 206 Z" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+  <path d="M 22 56 L 114 56 L 114 178 L 22 178 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 36 70 L 100 70 L 100 104 L 36 104 Z" fill="#000000" stroke="#4B4B4B" stroke-width="1"/>
+  <path d="M 44 82.5 L 92 82.5 L 92 81.5 L 44 81.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 44 92.5 L 92 92.5 L 92 91.5 L 44 91.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 114 94 L 120 94 L 120 138 L 114 138 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 120 70 L 130 70 L 130 162 L 120 162 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 130 80 L 144 80 L 144 70 L 130 68 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 130 152 L 144 152 L 144 162 L 130 164 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 136 82 L 236 82 L 236 150 L 136 150 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path id="lathe_node_0" d="M 236 82.01 L 236 88.49 L 240.48 88.07 L 244.97 88.21 L 249.45 89.14 L 253.93 100.13 L 258.41 102.11 L 262.9 101.07 L 267.38 99.33 L 271.86 93.18 L 276.34 94.18 L 280.83 93.61 L 285.31 86.73 L 289.79 86.15 L 294.28 86.67 L 298.76 92.07 L 303.24 100.76 L 307.72 99.41 L 312.21 98.92 L 316.69 100.13 L 321.17 99.57 L 325.66 99.83 L 330.14 90.45 L 334.62 85.88 L 339.1 86.62 L 343.59 87.89 L 348.07 93.27 L 352.55 94.92 L 357.03 92.91 L 361.52 100.28 L 366 101.92 L 366 130.08 L 361.52 131.72 L 357.03 139.09 L 352.55 137.08 L 348.07 138.73 L 343.59 144.11 L 339.1 145.38 L 334.62 146.12 L 330.14 141.55 L 325.66 132.17 L 321.17 132.43 L 316.69 131.87 L 312.21 133.08 L 307.72 132.59 L 303.24 131.24 L 298.76 139.93 L 294.28 145.33 L 289.79 145.85 L 285.31 145.27 L 280.83 138.39 L 276.34 137.82 L 271.86 138.82 L 267.38 132.67 L 262.9 130.93 L 258.41 129.89 L 253.93 131.87 L 249.45 142.86 L 244.97 143.79 L 240.48 143.93 L 236 143.51 L 236 149.99 Z" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 366 113 L 384 107 L 384 125 L 366 119 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 384 103 L 418 103 L 418 129 L 384 129 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 418 86 L 458 86 L 458 178 L 412 178 L 412 138 L 418 138 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 458 110 L 468 110 L 468 122 L 458 122 Z" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+  <path d="M 202 168 L 294 168 L 294 178 L 202 178 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 238 165.51 L 280 165.51 L 280 168 L 238 168 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path id="lathe_node_1" d="M 236.6 143.91 L 239 143.91 L 258 152.51 L 258 159.51 L 240 159.51 Z" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 231.94 154.01 L 233.26 154.16 L 234.13 152.98 L 233.82 151.29 L 232.43 149.62 L 230.08 148.37 L 227.04 147.91 L 223.73 148.46 L 220.63 150.05 L 218.18 152.45 L 216.68 155.3 L 216.23 158.13 L 216.72 160.48 L 217.86 162 L 219.36 162.42 L 220.43 161.44 L 220.32 159.79 L 219.12 158.08 L 216.93 156.73 L 213.99 156.1 L 210.69 156.46 L 207.52 157.87 L 204.92 160.15 L 203.24 162.95 L 202.6 165.82 L 202.93 168.28 L 203.98 169.98 L 205.45 170.63 L 206.68 169.88 L 206.78 168.44 L 205.78 168.37 L 205.72 169.3 L 205.38 169.5 L 204.67 169.19 L 203.9 167.94 L 203.62 165.86 L 204.18 163.33 L 205.7 160.8 L 208.06 158.72 L 210.96 157.44 L 213.94 157.11 L 216.56 157.67 L 218.42 158.83 L 219.34 160.13 L 219.4 161.03 L 219.1 161.31 L 218.46 161.13 L 217.65 160.05 L 217.25 158.11 L 217.64 155.62 L 218.99 153.06 L 221.22 150.87 L 224.05 149.42 L 227.05 148.92 L 229.76 149.33 L 231.79 150.41 L 232.88 151.73 L 233.07 152.74 L 232.8 153.1 L 232.06 153.02 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+  <path d="M 104 116.5 L 116 116.5 L 116 115.5 L 104 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 119 116.5 L 122 116.5 L 122 115.5 L 119 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 125 116.5 L 137 116.5 L 137 115.5 L 125 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 140 116.5 L 143 116.5 L 143 115.5 L 140 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 146 116.5 L 158 116.5 L 158 115.5 L 146 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 161 116.5 L 164 116.5 L 164 115.5 L 161 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 167 116.5 L 179 116.5 L 179 115.5 L 167 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 182 116.5 L 185 116.5 L 185 115.5 L 182 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 188 116.5 L 200 116.5 L 200 115.5 L 188 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 203 116.5 L 206 116.5 L 206 115.5 L 203 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 209 116.5 L 221 116.5 L 221 115.5 L 209 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 224 116.5 L 227 116.5 L 227 115.5 L 224 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 230 116.5 L 242 116.5 L 242 115.5 L 230 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 245 116.5 L 248 116.5 L 248 115.5 L 245 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 251 116.5 L 263 116.5 L 263 115.5 L 251 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 266 116.5 L 269 116.5 L 269 115.5 L 266 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 272 116.5 L 284 116.5 L 284 115.5 L 272 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 287 116.5 L 290 116.5 L 290 115.5 L 287 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 293 116.5 L 305 116.5 L 305 115.5 L 293 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 308 116.5 L 311 116.5 L 311 115.5 L 308 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 314 116.5 L 326 116.5 L 326 115.5 L 314 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 329 116.5 L 332 116.5 L 332 115.5 L 329 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 335 116.5 L 347 116.5 L 347 115.5 L 335 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 350 116.5 L 353 116.5 L 353 115.5 L 350 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 356 116.5 L 368 116.5 L 368 115.5 L 356 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 371 116.5 L 374 116.5 L 374 115.5 L 371 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 377 116.5 L 389 116.5 L 389 115.5 L 377 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 392 116.5 L 395 116.5 L 395 115.5 L 392 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 398 116.5 L 410 116.5 L 410 115.5 L 398 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 413 116.5 L 416 116.5 L 416 115.5 L 413 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 419 116.5 L 431 116.5 L 431 115.5 L 419 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 434 116.5 L 437 116.5 L 437 115.5 L 434 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 440 116.5 L 452 116.5 L 452 115.5 L 440 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 455 116.5 L 458 116.5 L 458 115.5 L 455 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 461 116.5 L 470 116.5 L 470 115.5 L 461 115.5 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+</svg>
