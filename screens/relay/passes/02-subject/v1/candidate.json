@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "The charge the chain holds, seen close: a stretch of the chain's buckets drawn as thin capacitor plates pulled apart along their line, each as tall as the charge it holds, with the test note riding down the row and each recirculation a smaller copy further on.",
+  "controls": [
+    "stages: how many plates lie between one pass of the note and the next, 5 at 10 ms to 30 at 1 s, so the repeats slide along the row and off its far end (position of the repeat groups, ~60 to 400+ px).",
+    "leak: a seeded share of plates come out short, and the charge each has lost stands above it as a hatched ghost of the plate's full height (shape of the plate heights, hatching as the second cue).",
+    "clock: the plates drift off their even pitch, bunching and spreading along the axis like an exploded view drawn by an unsteady hand (position of each plate, up to ~40% of the pitch).",
+    "feedback: how many groups of plates carry a copy of the note and how tall each is, one group at 0 to five or six at the top (count of repeat groups, height as the second cue)."
+  ],
+  "reference": "opxy/craft.md (Think in 3D: modelled shapes as detailed line art, hidden-line over a black fill); library/toro-blocks (a row of modelled solids whose heights are the signal)",
+  "risks": [
+    "At 1:1 the plates can read as a row of dominoes or glass panes; the exploded-view axis, the source block and the electrode insets are what make them plates.",
+    "stages and clock both move plates along the row; stages moves whole repeat groups, clock jitters every plate, so perceptibility has to prove they read apart.",
+    "Thirty plates of three faces each is ~120 nodes before hatching; leak's hatched ghosts add more, and clock moves every plate while it turns.",
+    "The row is a notional window on the chain with the note and its echoes in it at once; an effect page gets no audio."
+  ]
+}
