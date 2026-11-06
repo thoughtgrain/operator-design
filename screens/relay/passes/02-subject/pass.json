@@ -152,7 +152,7 @@
         "clock: the folds lose their even pitch and bunch and spread across the die (position of each fold, up to ~35% of the pitch).",
         "feedback: how many lit stretches are travelling round the meander and its return trace, one at 0 to five or six at the top, each further one dimmer (count of lit stretches)."
       ],
-      "reference": "opxy/patterns.md P1 Section drawing (inspiration only: the part that makes the sound, cut open); opxy/craft.md (Think in 3D, detailed line art)",
+      "reference": "opxy/craft.md (Think in 3D: hidden-line solids over black fills; Value and fill: hatching for the cut faces); library/theseus-tower (a known object, line drawing, light only on what plays)",
       "risks": [
         "The subject is the chip, not the sound: it explains the device, and the meander that every control acts on is about a quarter of the frame at 1:1.",
         "Edge-lit silhouette leaves most edges dark grey; on the real screen the #323232 outlines may vanish and the package may read as fragments.",
@@ -255,7 +255,7 @@
       }
     ],
     "problems": [],
-    "checked": "2026-11-06T08:27:32"
+    "checked": "2026-11-06T08:27:55"
   },
   "selection": null
 }

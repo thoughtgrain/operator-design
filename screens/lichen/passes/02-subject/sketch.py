@@ -375,33 +375,6 @@ class Svg:
         if on and len(cur) > 1:
             self.line(cur, w, col)
 
-    def hatch(self, polys, col=G3, gap=4.0, w=HAIR, phase=0.0):
-        """45-degree hairlines (rising to the right), gap px apart, clipped to the
-        polygons (even-odd) and to the body."""
-        pts = [p for q in polys for p in q]
-        if not pts:
-            return
-        lo = min(x - y for x, y in pts)
-        hi = max(x - y for x, y in pts)
-        step = gap * math.sqrt(2)
-        c = math.floor((lo - phase) / step) * step + phase
-        while c <= hi:
-            # line: x - y = c ... parametrise by x; y = x - c (screen: rises to the right
-            # means y falls as x grows, so use x + y = c instead)
-            xs = []
-            for q in polys:
-                for a, b in zip(q, q[1:] + q[:1]):
-                    sa, sb = a[0] + a[1], b[0] + b[1]
-                    if (sa - c) * (sb - c) < 0:
-                        t = (c - sa) / (sb - sa)
-                        xs.append(a[0] + (b[0] - a[0]) * t)
-            xs.sort()
-            for x1, x2 in zip(xs[0::2], xs[1::2]):
-                self.seg((x1, c - x1), (x2, c - x2), w, col)
-            c += step
-        # (the loop runs over x - y bounds, which match x + y extents closely enough
-        #  only for square-ish regions; widen to be safe)
-
     def disc(self, cx, cy, r, fill, stroke="none", sw=None, n=20):
         self.poly([(cx + r * math.cos(2 * math.pi * k / n), cy + r * math.sin(2 * math.pi * k / n))
                    for k in range(n)], fill=fill, stroke=stroke, sw=sw)
@@ -798,16 +771,10 @@ def v2():
 # =============================================================================
 # v3 · single-weight contour: the trail the colony has left on the stone
 # =============================================================================
-def warp_x(X, Y):
-    """Hex X stretched by the scale: a cell is as wide as its step to the next degree."""
-    r = Y / RH
-    return pc(X + 1.5 * r) - pc(1.5 * r)
-
-
 def v3():
     """No lattice, no crust: only the trail. Every birth since the first spore
     is one line from parent to child, all at one weight, laid out on the
-    lattice; a half step jogs the line, so the scale shows in its gait. Where the cell it reached has since
+    plain hex lattice (never drawn); a half step jogs the line, so the scale shows in its gait. Where the cell it reached has since
     died the line has worn through; this tick's two births are the bright
     lines; the growing tips feel out towards free cells."""
     s = Svg()
