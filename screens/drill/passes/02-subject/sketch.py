@@ -235,11 +235,11 @@ def revolve_x(cam, profile, y0, z0, n=24):
 # =========================================================================
 def v1():
     s = Svg()
-    cam = Camera(eye=(-150, -430, 260), target=(95, 0, 40), px_per_unit=1.0, cx=232, cy=128)
+    cam = Camera(eye=(-60, -470, 210), target=(120, 0, 30), px_per_unit=1.05, cx=240, cy=128)
     W = LINE  # the one weight this language uses (hatching would be hairline; none here)
 
     # the board: a slab with the bored hole, top face at z = 0
-    bx0, bx1, by0, by1, bt = -95, 70, -45, 55, 22
+    bx0, bx1, by0, by1, bt = -120, 52, -40, 60, 26
     top = [(bx0, by0, 0), (bx1, by0, 0), (bx1, by1, 0), (bx0, by1, 0)]
     front = [(bx0, by0, 0), (bx1, by0, 0), (bx1, by0, -bt), (bx0, by0, -bt)]
     side = [(bx1, by0, 0), (bx1, by1, 0), (bx1, by1, -bt), (bx1, by0, -bt)]
@@ -258,13 +258,13 @@ def v1():
     s.ribbon(cam.proj(wall), W, G[2])
 
     # the shaving: a helical strip rising out of the hole along an axis
-    axis = norm((1.0, 0.15, 0.62))
+    axis = norm((1.0, 0.06, 0.3))
     u = norm(cross(axis, (0, 0, 1)))
     v = cross(u, axis)
-    L = 300.0
+    L = 330.0
     coils = 2.5 + 1.25 * (RATIO * 1.0)        # ratio: coils per length (5 at 2.00)
     width = 4 + BITE * 18                       # bite: how thick a shaving the bite takes
-    rad = 15.0
+    rad = 18.0
     seg = 18
     n = int(coils * seg)
     rng = random.Random(3)
@@ -325,15 +325,15 @@ def v2():
     outer = [wp(R, a) for a in [-span + 2 * span * i / 30 for i in range(31)]]
     web_r = lug_in - 8
     web = [wp(web_r, a) for a in [span - 2 * span * i / 30 for i in range(31)]]
-    rim_poly = cam.proj(outer + web)
+    rim_poly = clip_top(cam.proj(outer + web))
     s.path(rim_poly, BLACK, G[3], LINE)
     # the web: hatched mass, with a lightening hole cut out of it
-    far = [wp(R * 0.2, a) for a in [span - 2 * span * i / 20 for i in range(21)]]
-    web_poly = cam.proj([wp(web_r - 5, a) for a in [-span + 2 * span * i / 40 for i in range(41)]] + far)
+    edge = cam.proj([wp(web_r - 5, a) for a in [-span + 2 * span * i / 40 for i in range(41)]])
+    web_poly = edge + [(-6, edge[-1][1]), (-6, edge[0][1])]
     hole_c = wp(web_r - 52, -0.08)
     hole = cam.proj(ring_pts(hole_c, 30, (1, 0, 0), (0, 0, 1), 40))
     hatch(s, [web_poly, hole], gap=4.0, col=G[2])
-    s.loop(cam.proj([wp(web_r - 5, a) for a in [-span + 2 * span * i / 60 for i in range(61)]]), LINE, G[3])
+    s.ribbon([p for p in edge if p[1] >= BODY_TOP], LINE, G[3])
     s.path(hole, BLACK, G[3], LINE)
 
     # lugs: solid bodies on the face, black with a line edge
@@ -350,6 +350,8 @@ def v2():
         scr = cam.proj(pts)
         if rr > 0.2:
             scr = rounded(scr, rr)
+        if min(p[1] for p in scr) < BODY_TOP + 1:
+            continue
         s.path(scr, BLACK, G[5], LINE)
 
     # the spindle runs across the frame, in front of the face
@@ -382,6 +384,22 @@ def v2():
     s.path(chuck, BLACK, G[3], LINE)
     hatch(s, [chuck], gap=4.0, col=G[2])
     return s
+
+
+def clip_top(pts, y0=BODY_TOP):
+    """Sutherland-Hodgman: keep the part of a polygon below y0 (the frame's edge under the header)."""
+    out = []
+    n = len(pts)
+    for i in range(n):
+        a, b = pts[i - 1], pts[i]
+        ina, inb = a[1] >= y0, b[1] >= y0
+        if inb:
+            if not ina:
+                t = (y0 - a[1]) / (b[1] - a[1]); out.append((a[0] + (b[0] - a[0]) * t, y0))
+            out.append(b)
+        elif ina:
+            t = (y0 - a[1]) / (b[1] - a[1]); out.append((a[0] + (b[0] - a[0]) * t, y0))
+    return out
 
 
 def rounded(pts, r):
@@ -436,7 +454,7 @@ def lit_edges(svg, poly, col, width, light=(-0.45, -0.89), thresh=0.3):
 
 def v3():
     s = Svg()
-    cam = Camera(eye=(30, -1400, 120), target=(30, 0, 0), px_per_unit=1.0, cx=232, cy=104)
+    cam = Camera(eye=(30, -1400, 120), target=(30, 0, 0), px_per_unit=1.0, cx=200, cy=108)
     rod = 4.0
     throw = 32 + 40 * RATIO_N            # ratio: the brace's sweep (52 at 2.00)
     # the brace's centreline, in its own plane (x-z), y = 0
@@ -477,7 +495,7 @@ def v3():
     screwp = cam.proj([(x, 0, z) for x, z in screw])
 
     # board in section: solid above and below the bore, the bore ending at the tip
-    hb, bore = 92, bit_r + 3
+    hb, bore = 78, bit_r + 3
     bend = tip + 13
     board = [(board_x, hb), (300, hb), (300, -hb), (board_x, -hb), (board_x, -bore), (bend - 6, -bore),
              (bend, -2), (bend, 2), (bend - 6, bore), (board_x, bore)]
@@ -515,7 +533,7 @@ def v3():
 # =========================================================================
 def v4():
     s = Svg()
-    cam = Camera(eye=(-60, -520, 230), target=(30, 0, 4), px_per_unit=1.22, cx=236, cy=122)
+    cam = Camera(eye=(-70, -520, 200), target=(24, 0, 8), px_per_unit=1.42, cx=232, cy=124)
     R, t = 54.0, 7.0
     W = (0.0, 0.0, 0.0)
     ex, ez = (1, 0, 0), (0, 0, 1)
@@ -524,10 +542,10 @@ def v4():
     def disc(c, r, n=48):
         return cam.proj(ring_pts(c, r, ex, ez, n))
 
-    # crank, behind the wheel: axle out the back, arm, and the turned grip pointing back
-    ca = math.radians(148)
-    arm_len = R * 1.32
-    yb = t + 10
+    # crank, in front of the wheel: axle boss, arm, and the turned grip toward the hand
+    ca = math.radians(128)
+    arm_len = R * 1.18
+    yb = -30
     arm0 = (0, yb, 0)
     arm1 = (arm_len * math.cos(ca), yb, arm_len * math.sin(ca))
     grip_c = arm1
@@ -543,16 +561,18 @@ def v4():
         prof = [(0, 4), (4, 7), (18, 8), (30, 7), (34, 4)]
         top, bot = [], []
         for dy, r in prof:
-            c = add(grip_c, (0, dy + 2, 0))
+            c = add(grip_c, (0, -dy - 2, 0))
             pts = ring_pts(c, r, ex, ez, 24)
             scr = cam.proj(pts)
             xs = sorted(scr, key=lambda p: p[0])
             top.append(xs[0]); bot.append(xs[-1])
         s.path(top + bot[::-1], BLACK, G[4], LINE)
         for dy in (10, 22):
-            arc = cam.proj(ring_pts(add(grip_c, (0, dy + 2, 0)), 7.6, ex, ez, 16, math.pi * 0.5, math.pi * 1.5))
+            arc = cam.proj(ring_pts(add(grip_c, (0, -dy - 2, 0)), 7.6, ex, ez, 16, math.pi * 0.5, math.pi * 1.5))
             s.ribbon(arc, HAIR, G[3])
-    draws.append((cam.depth(arm1) + 40, crank))
+        s.path(disc(arm0, 7, 20), BLACK, G[4], LINE)
+        s.loop(disc(arm0, 2.5, 12), HAIR, G[3])
+    draws.append((cam.depth(arm0) - 60, crank))
 
     # the wheel: back face, front face with its spokes' openings, lugs on the front
     def wheel():
@@ -577,9 +597,10 @@ def v4():
             back = [(r * math.cos(aa), 0, r * math.sin(aa)) for r, aa in body]
             sp, bp = cam.proj(pts), cam.proj(back)
             # side wall then face (hidden-line by order)
-            s.path([bp[0], bp[1], sp[1], sp[0]], BLACK, G[3], HAIR)
-            s.path([bp[3], bp[2], sp[2], sp[3]], BLACK, G[3], HAIR)
-            s.path([bp[1], bp[2], sp[2], sp[1]], BLACK, G[3], HAIR)
+            for q in ([bp[0], bp[1], sp[1], sp[0]], [bp[3], bp[2], sp[2], sp[3]], [bp[1], bp[2], sp[2], sp[1]]):
+                ar = abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(q, q[1:] + q[:1]))) / 2
+                if ar > 6:
+                    s.path(q, BLACK, G[3], HAIR)
             s.path(sp, BLACK, G[5], LINE)
     draws.append((cam.depth(W), wheel))
 
@@ -591,12 +612,6 @@ def v4():
     def spindle():
         sil, _ = revolve_x(cam, [(-R - 34, 3), (R + 40, 3)], sy, sz, 16)
         s.path(sil, BLACK, G[3], LINE)
-        # frame strap: from the head to the chuck bearing, with a bracket up to the wheel's axle
-        strap = [(-R - 34, sy - 1, -9), (R + 30, sy - 1, -9), (R + 30, sy - 1, -14), (-R - 34, sy - 1, -14)]
-        s.path(cam.proj(strap), BLACK, G[3], LINE)
-        br = [(-6, sy - 1, -9), (-4, sy - 1, -1), (4, sy - 1, -1), (6, sy - 1, -9)]
-        s.path(cam.proj(br), BLACK, G[3], LINE)
-        s.path(disc((0, sy - 1.5, 0), 5, 20), BLACK, G[4], LINE)
     draws.append((cam.depth((0, sy, sz)) + 5, spindle))
 
     def head():
@@ -656,7 +671,7 @@ def v4():
 # =========================================================================
 def v5():
     s = Svg()
-    cam = Camera(eye=(230, -360, 230), target=(10, 40, -58), px_per_unit=1.42, cx=246, cy=118)
+    cam = Camera(eye=(230, -380, 230), target=(10, 40, -58), px_per_unit=1.22, cx=246, cy=126)
     X0, X1, Y0, Y1, H = -120, 120, 0, 80, 110
     r = 26.0
     depth = 26 + BITE * 90               # bite: how deep the bore has gone (57.5 at 35 %)

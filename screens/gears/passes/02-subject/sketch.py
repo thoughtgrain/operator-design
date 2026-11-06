@@ -289,7 +289,7 @@ def gear2d(N, rp, m=1.0, rot=0.0, tips=None):
     for t in range(N):
         a = rot + t * pitch
         rt = rr + (ra - rr) * (1 if tips is None else tips[t])
-        for da, r in ((-0.27, rr), (-0.13, rt), (0.13, rt), (0.27, rr)):
+        for da, r in ((-0.31, rr), (-0.17, rt), (0.17, rt), (0.31, rr)):
             ang = a + da * pitch
             pts.append((r * math.cos(ang), r * math.sin(ang)))
     return pts
@@ -460,7 +460,7 @@ def v1():
         a = math.pi / 4 + k * math.pi / 2
         out.append(ribbon(gA.cap(cam, [(1.5 * math.cos(a), 1.5 * math.sin(a)),
                                         (1.9 * math.cos(a), 1.9 * math.sin(a))]), HAIR, G3))
-    sA, _ = cylinder(cam, (0, 0, 2.0), (0, 0, 1), 0.7, 2.6, edge=G4, cap_edge=G5)
+    sA, _ = cylinder(cam, (0, 0, 2.0), (0, 0, 1), 0.7, 0.9, edge=G4, cap_edge=G5)
     out += sA
     # the meshing tooth: A's tooth 0, its front face edge, brightest
     t0 = gear2d(TEETH_A, rpA)[0:4]
@@ -687,7 +687,7 @@ def v4():
             out.append(poly(hs, G0, G4, LINE))
             out += hatch([hs], spacing=3.2, fill=G3)              # the bore's wall in shade
         else:
-            mark = [(hx + 0.2 * math.cos(t), hy + 0.2 * math.sin(t)) for t in [2 * math.pi * i / 10 for i in range(10)]]
+            mark = [(hx + 0.3 * math.cos(t), hy + 0.2 * math.sin(t)) for t in [2 * math.pi * i / 10 for i in range(10)]]
             out.append(loop(gB.cap(cam, mark), HAIR, G3))
     out += mass(gA)
     out.append(loop(gA.cap(cam, ring(rpA - 1.25 - 0.5, 40)), HAIR, G3))

@@ -532,7 +532,7 @@ def v1() -> Frame:
     surface = 0.0
     zrim = lambda d: -(Bell.H + 0.2 + 0.85 * d)              # depth: crown 0.2 -> 1.05 below the surface
     ends = Bell(zrim(0)).shell() + Bell(zrim(1)).shell() + [(0, 0, surface)]
-    cam.fit(ends, (150, 31, 330, 207))
+    cam.fit(ends, (138, 30, 342, 209))
     b = Bell(zrim(P["depth"]), lip=0.06)
     # the surface: one hairline, full width
     y_s = cam((0, 0, surface))[1]
@@ -590,19 +590,19 @@ def v2() -> Frame:
     """Looking down through the water from above, steeply: the bell is a black cut-out in a hatched
     field (negative space), its rim's ring mode drawn bright. Depth is size from distance."""
     f = Frame()
-    cam = Cam((0.9, -2.6, 4.2), (0, 0, -1.6), persp=True)
+    cam = Cam((0.5, -1.5, 4.6), (0, 0, -1.6), persp=True)
     zrim = lambda d: -(Bell.H + 0.25 + 2.3 * d)
     ends = Bell(zrim(0)).shell() + Bell(zrim(1)).shell()
-    cam.fit(ends, (170, 70, 310, 206))
+    cam.fit(ends, (150, 66, 330, 210))
     b = Bell(zrim(P["depth"]), lip=0.05)
     out = outline_of(cam, b)
     # the field: the water's surface, hatched; the bell cut out of it
-    field = [(14, 34), (466, 34), (466, 210), (14, 210)]
+    # a low horizon: the field is only the lower water, under one hairline; above it, open black
+    hz = 92
+    field = [(14, hz), (466, hz), (466, 210), (14, 210)]
     hole = thin(out)
     f.hatch(field, spacing=6, colour=G50, holes=[hole])
-    # a low horizon: the field's far edge as a single hairline, with the cable dropping through it
-    f.line([(14, 34), (466, 34)], w=HAIR, colour=G75)
-    top = cam((0, 0, 0.0))
+    f.line([(14, hz), (466, hz)], w=HAIR, colour=G75)
     f.body(out, stroke=G100, sw=HAIR)
     cable(f, cam, (0, 0, 0.0), b, colour=G100)
     exterior_detail(f, cam, b, ribs=10, rib_colour=G50, hoop_colour=G75, min_face=0.4)
@@ -645,7 +645,7 @@ def v3() -> Frame:
         f.line([(x1 - 3, y), (x1 + 3, y)], w=HAIR, colour=G75)
     f.line([(x1 + 6, y_rim), (cam(b.P(b.outer[-1][0], 0, math.pi))[0] - 6, y_rim)], w=HAIR, colour=G50)
     # the bell: section on the plane y = 0, both halves; inner rear surface seen through the cut
-    out = outline_of(cam, b)
+    out = hull([cam(b.P(r, z, math.pi * i / 40)) for r, z, _, _ in b.outer for i in range(41)])
     f.body(out, stroke=G50, sw=HAIR)
     for z in (b.zw + 0.2, b.zw + 0.45, b.zw + 0.7):
         if z < b.inner[0][1] - 0.12:
@@ -676,13 +676,13 @@ def v3() -> Frame:
     # column 4, gain: a hammer on a pivot outside the bell, drawn back from the sound-bow (rotation 6 -> 46 deg)
     bow = b.outer[-2]
     hit = cam(b.P(bow[0] + 0.02, bow[1], 0))
-    pv = (hit[0] + 78, hit[1] - 34)
+    pv = (hit[0] + 46, hit[1] - 52)
     arm = math.hypot(hit[0] - pv[0], hit[1] - pv[1])
     rest = math.atan2(hit[1] - pv[1], hit[0] - pv[0])
-    back = math.radians(6 + 40 * gain_amt())
-    ang = rest + back
+    back = math.radians(10 + 40 * gain_amt())
+    ang = rest - back
     head = (pv[0] + arm * math.cos(ang), pv[1] + arm * math.sin(ang))
-    sweep = [(pv[0] + arm * math.cos(rest + back * i / 10), pv[1] + arm * math.sin(rest + back * i / 10))
+    sweep = [(pv[0] + arm * math.cos(rest - back * i / 10), pv[1] + arm * math.sin(rest - back * i / 10))
              for i in range(11)]
     f.dashed(sweep, dash=3, gap=3, colour=G75)
     f.line([pv, head], w=LINE, colour=G125)
@@ -707,18 +707,24 @@ def v4() -> Frame:
     cam = Cam((10 * math.cos(az) * math.cos(el), 10 * math.sin(az) * math.cos(el), 10 * math.sin(el)), (0, 0, 0))
     zrim = lambda d: -(Bell.H + 0.3 + 1.2 * d)
     gscale = lambda g: 0.8 * 1.65 ** g                          # gain: x0.80 -> x1.32 (1.65x)
-    ends = (Bell(zrim(0), scale=gscale(1)).shell() + Bell(zrim(1) * 1.0, scale=gscale(1)).shell())
-    cam.fit(ends, (262, 50, 452, 206))
+    ends = (Bell(zrim(0), scale=gscale(1)).shell() + Bell(zrim(1), scale=gscale(1)).shell() + [(0, 0, 0)])
+    cam.fit(ends, (268, 30, 448, 206))
     b = Bell(zrim(P["depth"]), scale=gscale(P["gain"]), lip=0.05)
-    # the surface plane's near edge runs diagonally across: a world line along -x..x at y = 1.6
-    e0, e1 = cam((-14, 1.4, 0)), cam((6, 1.4, 0))
-    # density gradient: hatch bands under the edge, spacing closing from 11 px to 4 px with depth
+    # the water behind the bell is a vertical plane (y = 1.4); its top edge, the surface, runs diagonally
+    def edge(z):
+        p, q = cam((-1, 1.4, z)), cam((1, 1.4, z))
+        k = (q[1] - p[1]) / (q[0] - p[0])
+        return [(0, p[1] - k * p[0]), (480, p[1] + k * (480 - p[0]))]
+    e0, e1 = edge(0.0)
     out = thin(outline_of(cam, b))
-    bands = [(0.0, 0.6, 11), (0.6, 1.5, 8), (1.5, 2.5, 6), (2.5, 4.5, 4.5)]
+    # density gradient: hatch bands under the edge, spacing closing from 12 px to 4.5 px with depth
+    bands = [(0.0, 0.7, 12), (0.7, 1.5, 9), (1.5, 2.4, 6.5), (2.4, 9.0, 4.5)]
     for z0, z1, sp in bands:
-        reg = [cam((-14, 1.4, -z0)), cam((6, 1.4, -z0)), cam((6, 1.4, -z1)), cam((-14, 1.4, -z1))]
-        f.hatch(reg, spacing=sp, colour=G50, holes=[out])
-    f.line([e0, e1], w=HAIR, colour=G100)
+        a0, a1 = edge(-z0)
+        b0, b1 = edge(-z1)
+        f.hatch([a0, a1, b1, b0], spacing=sp, colour=G50, holes=[out])
+    p0, p1 = clip_box(e0, e1, (0, TOP + 1, W, H - 1))
+    f.line([p0, p1], w=HAIR, colour=G100)
     f.body(out, stroke=G100, sw=HAIR)
     cable(f, cam, (0, 0, 0.0), b, colour=G100)
     exterior_detail(f, cam, b, ribs=16, rib_colour=G75, hoop_colour=G100, min_face=0.28)

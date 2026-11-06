@@ -517,7 +517,7 @@ def v3() -> Frame:
     def P(t, v):
         """t: 0 stem .. 1 tip; v: -1 lower margin .. 1 upper margin."""
         x = -Lh + 2 * Lh * t
-        half = 82 * (math.sin(math.pi * min(t, 0.999)) ** 0.75) * (1 - 0.3 * t)
+        half = 82 * (math.sin(math.pi * min(max(t, 0.0), 0.999)) ** 0.75) * (1 - 0.3 * t)
         y = -(v * half) + 14 * math.sin(math.pi * t) - 6
         c, s = math.cos(rot), math.sin(rot)
         return (cx + x * c - y * s, cy + x * s + y * c)

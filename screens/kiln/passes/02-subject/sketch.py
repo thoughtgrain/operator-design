@@ -220,7 +220,9 @@ class Frame:
             pts = pts + [pts[0]]
         if len(pts) < 2:
             return
-        step = 27
+        segs = len(pts) - 1
+        chunks = max(1, math.ceil(segs / 27))
+        step = math.ceil(segs / chunks)
         i = 0
         while i < len(pts) - 1:
             run = pts[i:i + step + 1]
@@ -237,16 +239,19 @@ class Frame:
 
     def runs(self, pts, mask, w, colour, minlen=3):
         """Draw the runs of a sampled curve where mask is true."""
+        def emit(run):
+            if len(run) >= minlen:
+                xs, ys = [p[0] for p in run], [p[1] for p in run]
+                if max(max(xs) - min(xs), max(ys) - min(ys)) >= 5:
+                    self.line(run, w, colour)
         run = []
         for p, m in zip(pts, mask):
             if m:
                 run.append(p)
             else:
-                if len(run) >= minlen:
-                    self.line(run, w, colour)
+                emit(run)
                 run = []
-        if len(run) >= minlen:
-            self.line(run, w, colour)
+        emit(run)
 
     def hatch(self, inc, exc=(), colour=G4, w=HAIR, spacing=HATCH, phase=0.0):
         """45-degree hairlines inside every polygon of inc and outside every one of exc."""
@@ -261,7 +266,7 @@ class Frame:
             for poly in exc:
                 iv = minus(iv, intervals(poly, c))
             for x0, x1 in iv:
-                if x1 - x0 > 2.0:
+                if x1 - x0 > 3.2:
                     a = (x0 + 0.5, c - x0 - 0.5)
                     b = (x1 - 0.5, c - x1 + 0.5)
                     self.line([a, b], w, colour)
@@ -480,9 +485,9 @@ def v1() -> Frame:
     b = Bowl(Hh=0.74, lip=0.0)
     cam = Cam(elev_deg=30, dist=7.0, azim_deg=-14)
     # mallet: pivot (wrist) up and right; backswing angle from strike
-    swing = math.radians(18 + 42 * STRIKE)               # 18 .. 60 deg above the strike line
+    swing = math.radians(10 + 40 * STRIKE)               # 10 .. 50 deg above the strike line
     contact = b.P(1.0 + 0.26, 0.78, math.radians(-8))   # head centre where it meets the rim
-    wrist = add(contact, (1.55, -0.5, 0.25))
+    wrist = add(contact, (1.25, -0.35, 0.2))
     arm = sub(contact, wrist)
     Lm = math.sqrt(dot(arm, arm))
     # rotate the arm about the wrist in the vertical plane through it
@@ -491,7 +496,7 @@ def v1() -> Frame:
     ang = ang0 + swing
     head = add(wrist, (hd[0] * Lm * math.cos(ang), hd[1] * Lm * math.cos(ang), Lm * math.sin(ang)))
     scene = b.all_outer() + [wrist, head, add(head, (0, 0, 0.3)), add(head, (0, 0, -0.3))]
-    cam.fit(scene, (60, 30, 452, 208))
+    cam.fit(scene, (70, 28, 430, 208))
     sil, rim_o, rim_i = draw_bowl(F, cam, b, edge=G2, inner_rings=(0.3, 0.55, 0.78),
                                   outer_rings=(0.25, 0.5, 0.75), glaze=GLAZE * 0.9 + 0.05, rim=G2)
     # the rim point the mallet aims at: a short travel arc from head back to contact (dashed, hairline)
@@ -512,7 +517,7 @@ def v2() -> Frame:
     rnd = random.Random(5)
     # the wall: a curved slab, concave side up, rising to a rounded lip at the right
     def mid(t):  # centreline, t 0..1
-        return 52 + 296 * t, 182 - 104 * t ** 2.4
+        return 44 + 282 * t, 186 - 86 * t ** 2.4
     thick = 42
     N = 36
     cl = [mid(i / N) for i in range(N + 1)]
@@ -533,7 +538,7 @@ def v2() -> Frame:
     # glaze skin on the concave face: thickness from glaze
     gt = 5 + 16 * GLAZE
     gl = offset_line(cl, thick / 2 + gt)
-    skin = gl[1:] + up[1:][::-1]
+    skin = gl[1:-2] + up[1:-2][::-1]
     F.poly(body, fill=BK, stroke=G0, sw=SUBJ)
     # double outline: a keyline inside the body, parallel to the outer face
     F.line(offset_line(cl[2:-1], -thick / 2 + 5), HAIR, G5)
@@ -563,7 +568,7 @@ def v2() -> Frame:
               for a in [2 * math.pi * i / 20 for i in range(20)]]
         F.poly(ov, fill=BK, stroke=G3, sw=LINE)
     # felt mallet tip resting on the lip (strike: soft and broad .. hard and small)
-    tip_r = 30 - 14 * STRIKE
+    tip_r = 26 - 12 * STRIKE
     top = (ex + nx * thick / 2 * 0.15, ey - thick / 2 * 0.95)
     d = (0.62, -0.78)
     cx, cy = top[0] + d[0] * (tip_r + 1), top[1] + d[1] * (tip_r + 1)
@@ -690,14 +695,14 @@ def v4() -> Frame:
     F = Frame()
     F.palette = [G0, G2, G3, G4]
     b = Bowl()
-    cam = Cam(elev_deg=24, dist=9.0)
+    cam = Cam(elev_deg=26, dist=9.0)
     ncourse = 4
-    ts = [i / ncourse for i in range(ncourse + 1)]
+    ts = [math.acos(1 - i / ncourse) * 2 / math.pi for i in range(ncourse + 1)]   # equal heights
     stretch = 1.0 + 0.24 * FIRE
     # exploded offsets: gap grows up the stack like the stretched upper modes
     gaps = [0.0]
     for k in range(1, ncourse + 1):
-        gaps.append(gaps[-1] + 0.15 * (1 + 2.0 * (stretch - 1) * k))
+        gaps.append(gaps[-1] + 0.2 * (1 + 2.0 * (stretch - 1) * k))
     # foot ring is course 0 (below everything)
     courses = []
     for k in range(ncourse):
@@ -712,22 +717,22 @@ def v4() -> Frame:
     allp = []
     for (oa, ob, ia, ib) in courses:
         allp += b.ring(ob[0], ob[1], 32) + b.ring(oa[0], oa[1], 32)
-    allp += b.ring(b.fr, -0.06, 32)
-    allp += [(0, 0, gaps[-1] + 1.15), (0.0, 0, -0.25)]
+    allp += b.ring(b.fr, -0.2, 32)
+    allp += [(0, 0, gaps[-1] + 1.15), (0.0, 0, -0.4)]
     mallet_head = (1.55, -0.2, gaps[-1] + 0.95)
     mallet_wrist = (2.6, 0.4, gaps[-1] + 1.6)
     allp += [mallet_head, mallet_wrist]
     cam.fit(allp, (110, 30, 380, 208))
     # axis: dashed hairline from below the foot to above the top course
     top = cam.p((0, 0, gaps[-1] + 0.95))
-    bot = cam.p((0, 0, -0.25))
+    bot = cam.p((0, 0, -0.4))
     nd = 22
     axis = [(bot[0] + (top[0] - bot[0]) * i / nd, bot[1] + (top[1] - bot[1]) * i / nd) for i in range(nd + 1)]
     axis_segments = [axis[i:i + 2] for i in range(0, nd, 2)]
     # foot ring (a short cylinder)
-    fa = [cam.p(P) for P in b.ring(b.fr, -0.06, 64)]
-    fb = [cam.p(P) for P in b.ring(b.fr, b.fh - 0.06, 64)]
-    fi = [cam.p(P) for P in b.ring(b.fr - 0.06, b.fh - 0.06, 64)]
+    fa = [cam.p(P) for P in b.ring(b.fr, -0.2, 64)]
+    fb = [cam.p(P) for P in b.ring(b.fr, b.fh - 0.2, 64)]
+    fi = [cam.p(P) for P in b.ring(b.fr - 0.06, b.fh - 0.2, 64)]
     for seg in axis_segments:
         if seg[0][1] > fb[0][1] + 30:
             F.line(seg, HAIR, G5)
@@ -780,7 +785,7 @@ def v5() -> Frame:
         r, z, _, _ = b.outer(k / 12)
         pts += half(r, z, 24)
     pts += half(b.fr, 0, 24)
-    cam.fit(pts + [(-1.5, 0, 0.9)], (60, 30, 410, 206))
+    cam.fit(pts, (52, 34, 372, 206))
     # silhouette of the back half: hull of its outer rings + cut profile
     profL = [cam.p((-b.outer(k / 24)[0], 0, b.outer(k / 24)[1])) for k in range(25)]
     profR = [cam.p((b.outer(k / 24)[0], 0, b.outer(k / 24)[1])) for k in range(25)]
@@ -807,33 +812,29 @@ def v5() -> Frame:
     # glaze: hatched floor pool region below the glaze contour, back half
     rg, zg, _, _ = b.inner(GLAZE * 0.9 + 0.05)
     g_ring = [cam.p(P) for P in half(rg, zg, 48)]
-    F.hatch([g_ring + [cam.p((rg, 0, zg))]], colour=G4, w=HAIR + 0.2, spacing=5)
+    F.hatch([g_ring], colour=G4, w=LINE, spacing=5)
     F.line(g_ring, LINE, G2)
     # inner rim back half
     F.line([cam.p(P) for P in half(ri1, zi1, 64)], LINE, G2)
-    # cut face: the wall section on both sides, closed, the brightest thing
-    for sgn in (-1, 1):
-        sec = []
-        for k in range(25):
-            r, z, _, _ = b.outer(k / 24)
-            sec.append(cam.p((sgn * r, 0, z)))
-        inn = []
-        for k in range(24, -1, -1):
-            r, z, _, _ = b.inner(k / 24)
-            inn.append(cam.p((sgn * r, 0, z)))
-        footp = [cam.p((sgn * b.fr, 0, 0)), cam.p((sgn * (b.fr - 0.07), 0, 0)),
-                 cam.p((sgn * (b.fr - 0.07), 0, b.fh * 0.6))]
-        # section: outer profile up to rim, round over lip, inner profile down to centre, floor back out
-        lip = cam.p((sgn * (b.outer(1)[0] - b.w / 2), 0, b.outer(1)[1] + b.w * 0.45))
-        sect = [footp[0]] + sec + [lip] + inn + [cam.p((0, 0, b.inner(0)[1])), cam.p((0, 0, b.fh * 0.6))] + footp[2:]
-        F.poly(sect, fill=BK, stroke=G0, sw=LINE)
-    # the floor of the cut: a straight base line between the two foot sections
-    # mallet head (felt ball) poised at the right lip, one weight
+    # cut face: the wall section, one closed outline through both walls, the brightest thing
+    n = 13
+    fr2 = b.fr - 0.08
+    sect = [cam.p((-b.fr, 0, 0))]
+    sect += [cam.p((-b.outer(k / n)[0], 0, b.outer(k / n)[1])) for k in range(n + 1)]
+    sect += [cam.p((-(b.outer(1)[0] - b.w / 2), 0, b.outer(1)[1] + b.w * 0.45))]
+    sect += [cam.p((-b.inner(k / n)[0], 0, b.inner(k / n)[1])) for k in range(n, -1, -1)]
+    sect += [cam.p((b.inner(k / n)[0], 0, b.inner(k / n)[1])) for k in range(1, n + 1)]
+    sect += [cam.p((b.outer(1)[0] - b.w / 2, 0, b.outer(1)[1] + b.w * 0.45))]
+    sect += [cam.p((b.outer(k / n)[0], 0, b.outer(k / n)[1])) for k in range(n, -1, -1)]
+    sect += [cam.p((b.fr, 0, 0)), cam.p((fr2, 0, 0)), cam.p((fr2, 0, b.fh)),
+             cam.p((-fr2, 0, b.fh)), cam.p((-fr2, 0, 0))]
+    F.poly(sect, fill=BK, stroke=G0, sw=LINE)
+    # mallet head (felt ball) poised off the right lip, one weight
     lipR = cam.p((b.outer(1)[0], 0, b.outer(1)[1]))
-    rs = 15
+    rs = 14
     gap = 4 + 24 * (1 - STRIKE)
-    cx, cy = lipR[0] + rs + gap, lipR[1] - rs * 0.6
-    sx, sy = cx + 62, cy - 34
+    cx, cy = lipR[0] + rs + gap, lipR[1] - rs * 0.4
+    sx, sy = cx + 46, cy - 30
     dx, dy = sx - cx, sy - cy
     L = math.hypot(dx, dy)
     qx, qy = -dy / L * 3, dx / L * 3

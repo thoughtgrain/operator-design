@@ -201,7 +201,7 @@ def line(pts, w, ink):
         i = 0
         while i < len(run) - 1:
             chunk = run[i:i + 31]
-            if len(chunk) >= 2 and sum(math.dist(a, b) for a, b in zip(chunk, chunk[1:])) > 1.5:
+            if len(chunk) >= 2 and sum(math.dist(a, b) for a, b in zip(chunk, chunk[1:])) > 3.2:
                 out.append(_ribbon(chunk, w, ink))
             i += 30
     return "\n".join(o for o in out if o)
@@ -346,19 +346,18 @@ def v1():
     """One tuned hollow at large scale, exploded: the cup in the shelf (running off the frame),
     the body of water lifted out of it on its axis, the inlet stone drawn out along the line the
     swell comes in on, and the swell's tongue entering at the left edge."""
-    cam = Camera(eye=(0.35, -5.0, 3.1), target=(-0.35, 0, 0.35), f=300, at=(262, 124))
+    cam = Camera(eye=(0.3, -5.0, 3.0), target=(0.0, 0, 0.55), f=470, at=(300, 128))
     body = []
     D = 0.3 + 0.55 * P_DEPTH                     # depth: how deep the cup is
-    notch = math.radians(16)
+    notch = math.radians(22)
 
     # the shelf: its front drop runs off both edges of the frame
-    for yy, zz, ink, w in ((-1.55, 0.0, G4, LINE), (-1.75, -0.32, G3, HAIR)):
+    for yy, zz, ink, w in ((-1.3, 0.0, G4, LINE), (-1.45, -0.32, G3, HAIR)):
         body.append(line(cam.ps([(x / 10, yy if zz == 0 else yy, zz) for x in range(-60, 61)]), w, ink))
-    for x in (-3.9, -3.1, -2.2, 1.5, 2.6, 3.4):
-        body.append(line(cam.ps([(x, -1.55, 0), (x + 0.06, -1.75, -0.32)]), HAIR, G2))
+    for x in (-2.9, -1.7, 1.45, 2.35):
+        body.append(line(cam.ps([(x, -1.3, 0), (x + 0.06, -1.45, -0.32)]), HAIR, G2))
     # a few joints in the shelf, out from the lip
-    for a, r0, r1 in ((math.radians(-40), 1.18, 1.5), (math.radians(30), 1.2, 2.3), (math.radians(140), 1.2, 2.0),
-                      (math.radians(-140), 1.18, 1.5), (math.radians(75), 1.2, 2.6)):
+    for a, r0, r1 in ():
         body.append(line(cam.ps([(r * math.cos(a + 0.12 * (r - r0)), r * math.sin(a + 0.12 * (r - r0)), 0)
                                  for r in (r0, (r0 + r1) / 2, r1)]), HAIR, G2))
 
@@ -381,21 +380,21 @@ def v1():
                          LINE, G5))
 
     # assembly axis of the cup and the lens: hairline, in two runs (the lens hides the middle)
-    LZ = 1.3                                    # how far the water is lifted out
+    LZ = 1.05                                    # how far the water is lifted out
     body.append(line(cam.ps([(0, 0, 0.12), (0, 0, LZ - 0.2)]), HAIR, G2))
     body.append(line(cam.ps([(0, 0, LZ + 0.05), (0, 0, LZ + 0.42)]), HAIR, G2))
 
     # the inlet stone, drawn out along the swell's line (wedge block, hidden-line)
-    off = (-1.3, 0.0, 0.62)
+    off = (-1.0, 0.0, 0.5)
     a0, a1 = math.pi - notch * 0.85, math.pi + notch * 0.85
     ring = []
-    for (r, z) in ((0.98, 0.0), (1.16, 0.0), (1.16, -0.2), (0.98, -0.2)):
+    for (r, z) in ():
         ring.append([(r * math.cos(a), r * math.sin(a), z) for a in (a0, a1)])
     # corners: inner/outer x near/far x top/bottom
     def C(r_i, a_i, z_i):
-        r = (0.98, 1.16)[r_i]
+        r = (0.94, 1.2)[r_i]
         a = (a0, a1)[a_i]
-        z = (0.0, -0.2)[z_i]
+        z = (0.0, -0.3)[z_i]
         return add((r * math.cos(a), r * math.sin(a), z), off)
     faces = [  # (corner list, outward normal)
         ([C(0, 0, 0), C(1, 0, 0), C(1, 1, 0), C(0, 1, 0)], (0, 0, 1)),
@@ -420,7 +419,7 @@ def v1():
     body.append(line(cam.ps([add(home, (-0.05, 0, 0.12)), add(home, (off[0] * 0.62, 0, off[2] * 0.62))]), HAIR, G2))
 
     # the swell's tongue, entering from the left edge along the same line, crests across it
-    tip_x = -3.0
+    tip_x = -2.55
     tongue = []
     for i in range(0, 25):
         a = math.pi / 2 - math.pi * i / 24
@@ -437,7 +436,7 @@ def v1():
         x -= lam
 
     # the water, lifted out on the axis: a lens with a side, standing crests on top, its rim brightest
-    R = 0.8
+    R = 0.72
     topc = circle3((0, 0, LZ), R, 72)
     bot_front = circle3((0, 0, LZ - 0.13), R, 36, math.pi, 2 * math.pi)
     sil = cam.ps(circle3((0, 0, LZ), R, 36, 0, math.pi)) + cam.ps(bot_front)
@@ -462,9 +461,9 @@ def v2():
     """The tide, literally: the swash running up a shore, its lace edge the one bright line,
     the strand marks of earlier waves above it, the swell lines out on the sea, and a ledge of
     eight hollows the water has just filled. Every line one weight."""
-    cam = Camera(eye=(0.0, -7.0, 2.6), target=(0.4, 1.6, 0), f=330, at=(232, 112))
+    cam = Camera(eye=(0.0, -5.5, 5.2), target=(0.6, 0.4, 0), f=280, at=(236, 128))
     body = []
-    th = math.radians(-24)                       # the shore runs diagonally across the view
+    th = math.radians(-16)                       # the shore runs diagonally across the view
 
     def S(u, v, z=0.0):                          # shore coordinates: u along the shore, v up the beach (toward viewer)
         return (u * math.cos(th) + v * math.sin(th), -u * math.sin(th) + v * math.cos(th) * -1, z)
@@ -476,13 +475,13 @@ def v2():
     lam = 0.55 * SWELL_S / 2 + 0.25
     v = -1.2
     k = 0
-    while k < 12:
+    while k < 6:
         pts = cam.ps([S(u / 4, v - 0.05 * math.sin(u * 0.7 + k)) for u in range(-60, 61)])
         ys = [p[1] for p in pts]
-        if min(ys) - hz < 4:
+        if min(ys) - hz < 9:
             break
         body.append(line(pts, LINE, G3 if k < 2 else G2))
-        v -= lam * (1 + 0.25 * k)
+        v -= lam * (1.6 + 0.9 * k)
         k += 1
 
     # wet edge where the sea meets the beach
@@ -491,7 +490,7 @@ def v2():
     n_marks = 1 + round(4 * P_DEPTH)
     rnd = random.Random(4)
     for m in range(n_marks):
-        vv = 0.75 + 0.42 * (m + 1)
+        vv = 0.75 + 0.3 * (m + 1)
         pts = []
         for u in range(-60, 61):
             uu = u / 4
@@ -511,7 +510,7 @@ def v2():
             body.append(line(s, LINE, G3 if m == 0 else G2))
 
     # the ledge with eight hollows, upper right, partly in the swash
-    ledge_c = (1.7, -1.2)
+    ledge_c = (1.9, -0.5)
     ledge = []
     for i in range(14):
         a = 2 * math.pi * i / 14
@@ -536,10 +535,10 @@ def v2():
         body.append(line(run, LINE, G3))
 
     # eight hollows in the ledge: size by partial (bigger hollow, lower partial)
-    spots = [(0.35, -1.15), (1.15, -0.75), (1.95, -1.35), (2.65, -0.85), (3.2, -1.45), (0.95, -1.75),
-             (2.35, -1.9), (3.25, -1.05)]
+    spots = [(0.85, -0.35), (2.05, 0.05), (2.75, -0.85), (1.55, -1.0), (3.3, -0.2), (2.2, -1.25),
+             (3.45, -0.95), (1.35, 0.15)]
     for k, (x, y) in enumerate(spots, start=1):
-        r = 0.5 / ratio(k) ** 0.75
+        r = 0.62 / ratio(k) ** 0.7
         rim = cam.ps(circle3((x, y, 0), r, 40))
         body.append(loop(rim, LINE, G5 if k == 1 else G4))
         if r > 0.12:
@@ -553,15 +552,16 @@ def v3():
     """The mechanism: eight stone pipes standing in the surge, their mouths cut to the
     partial ratios, so each wave blowing across them rings its own pitch. The stone's
     turned-away side is hatched; the fundamental's mouth is the brightest edge."""
-    cam = Camera(eye=(-2.2, -9.0, 4.4), target=(0.0, 0.0, 1.35), f=440, at=(250, 118))
+    cam = Camera(eye=(-2.2, -9.0, 4.4), target=(0.0, 0.0, 1.2), f=430, at=(244, 112))
     body = []
     water_z = 0.25 + 0.5 * P_DEPTH                 # depth: the pool stands higher round the pipes
     R = 0.3
     xs = [-2.55 + i * 0.73 for i in range(8)]
     pipes = []
     for k, x in enumerate(xs, start=1):
-        h = water_z + 3.0 / ratio(k) ** 0.9
-        y = 0.18 * (x / 2.5) ** 2 * 2.5
+        h = water_z + 2.3 / ratio(k) ** 0.9
+        a = math.radians(205 + (k - 1) * 19)
+        x, y = 2.7 * math.cos(a) + 0.2, 1.3 + 1.9 * math.sin(a)
         pipes.append((k, (x, y), h))
     light = norm((-1, -0.6, 0.4))                  # light from the left, in front
 
@@ -572,8 +572,6 @@ def v3():
         pts = cam.ps([(x / 6, yy + 0.06 * math.sin(x / 6 * 1.4 + i), water_z) for x in range(-36, 37)])
         body.append(line(pts, HAIR if i else LINE, G3 if i else G4))
         yy -= lam
-    # far waterline behind the pipes
-    body.append(line(cam.ps([(x / 6, 1.6, water_z) for x in range(-36, 37)]), HAIR, G2))
 
     for k, (x, y), h in sorted(pipes, key=lambda p: -cam.depth((p[1][0], p[1][1], 0))):
         c = (x, y, 0)
@@ -586,13 +584,15 @@ def v3():
         sil = cam.ps(top_back) + cam.ps(wl_front)
         body.append(poly(sil, G0))
         # hatched mass: the half turned from the light, between the centre line and the dark silhouette edge
-        dark = -1 if dot(side, light) > 0 else 1
-        a_dark = ang_r if dark < 0 else ang_r + math.pi
-        mid = math.atan2(-to_eye[1], -to_eye[0]) + math.pi   # the angle facing the eye
-        shade3 = circle3((x, y, h), R, 12, mid + 0.15 * dark * -1, a_dark) if False else None
-        # region: from the angle facing the eye (offset toward dark) to the dark edge, top to waterline
-        a_from = mid + (0.25 if a_dark > mid else -0.25)
-        a_to = a_dark
+        # the dark side is the silhouette edge further right on screen (light from the left)
+        e1 = cam.p((x + R * math.cos(ang_r), y + R * math.sin(ang_r), h))
+        e2 = cam.p((x + R * math.cos(ang_r + math.pi), y + R * math.sin(ang_r + math.pi), h))
+        a_dark = ang_r if e1[0] > e2[0] else ang_r + math.pi
+        a_lit = ang_r + math.pi if a_dark == ang_r else ang_r
+        # the front-facing angle lies halfway round the front between the two edges
+        a_front = ang_r + 1.5 * math.pi
+        a_from = a_front + 0.2 * ((a_dark - a_front + math.pi) % (2 * math.pi) - math.pi)
+        a_to = a_front + ((a_dark - a_front + math.pi) % (2 * math.pi) - math.pi)
         top_arc = [(x + R * math.cos(a), y + R * math.sin(a), h) for a in [a_from + (a_to - a_from) * i / 10 for i in range(11)]]
         bot_arc = [(x + R * math.cos(a), y + R * math.sin(a), water_z) for a in [a_to + (a_from - a_to) * i / 10 for i in range(11)]]
         region = cam.ps(top_arc) + cam.ps(bot_arc)
@@ -686,37 +686,31 @@ def v5():
     """One scene, one subject: a boulder at the sea's edge with the pool in its top,
     drawn as detailed line art (hidden-line facets, strata, the pool's inner wall),
     the swell running in across the sea behind and around it."""
-    cam = Camera(eye=(-3.4, -9.5, 3.9), target=(0.2, 0.0, 0.85), f=430, at=(272, 128))
+    cam = Camera(eye=(-3.0, -9.0, 6.2), target=(0.2, 0.3, 0.7), f=420, at=(262, 132))
     body = []
     rnd = random.Random(23)
 
-    # sea: horizon and wave fronts on the plane z=0, spaced by the swell period
-    hz = cam.p((0, 4000, 0))[1]
-    body.append(line([(0, hz), (480, hz)], HAIR, G2))
-    lam = 0.7 + 0.9 * SWELL_S / 2
-    fronts = [-2.6 + i * lam * (1 + 0.35 * i) for i in range(12)]
-    prev = None
-    for i, yf in enumerate(fronts):
-        pts = cam.ps([(x / 3, yf + 0.12 * math.sin(x / 3 * 0.8 + i), 0) for x in range(-40, 41)])
-        sy = min(p[1] for p in pts)
-        if prev is not None and abs(prev - sy) < 4.5:
-            break
-        prev = sy
-        near = i == 0
-        body.append(line(pts, LINE if near else HAIR, G4 if near else G3 if i < 3 else G2))
+    # sea: wave fronts on the plane z=0 running in toward the rock, spaced by the swell period
+    lam = 0.9 + 1.1 * SWELL_S / 2
+    for i in range(6):
+        yf = 3.6 - i * lam
+        pts = cam.ps([(x / 3, yf + 0.18 * math.sin(x / 3 * 0.7 + i * 1.7) + 0.05 * x / 3, 0) for x in range(-45, 46)])
+        body.append(line(pts, LINE if i == 2 else HAIR, G4 if i == 2 else G3 if i in (1, 3) else G2))
 
-    # the boulder: rings of a faceted body (bottom at the water, a bulge, the top)
-    N = 9
+    # the boulder: rings of an irregular faceted body (foot at the water, two bulges, the shoulder of the top)
+    N = 11
     rings = []
-    for z, rx, ry, jit in ((0.0, 1.85, 1.35, 0.12), (0.75, 2.0, 1.45, 0.1), (1.45, 1.55, 1.1, 0.08)):
+    spec = ((0.0, 2.15, 1.55, 0.14), (0.45, 2.3, 1.7, 0.12), (0.95, 2.1, 1.55, 0.12), (1.3, 1.7, 1.3, 0.1))
+    phase = [rnd.random() * 0.35 for _ in range(N)]
+    for z, rx, ry, jit in spec:
         ring = []
         for i in range(N):
-            a = 2 * math.pi * (i + 0.3 * rnd.random()) / N
-            j = 1 + jit * (rnd.random() - 0.5) * 2
-            ring.append((rx * j * math.cos(a), ry * j * math.sin(a), z + 0.08 * (rnd.random() - 0.5)))
+            a = 2 * math.pi * (i + phase[i]) / N
+            j = 1 + jit * (rnd.random() - 0.5) * 2 + 0.08 * math.sin(2 * a + 1.0)
+            ring.append((rx * j * math.cos(a), ry * j * math.sin(a), z + 0.1 * (rnd.random() - 0.5) + 0.12 * math.cos(a - 0.6)))
         rings.append(ring)
     faces = []
-    for r0, r1 in ((rings[0], rings[1]), (rings[1], rings[2])):
+    for r0, r1 in zip(rings, rings[1:]):
         for i in range(N):
             q = [r0[i], r0[(i + 1) % N], r1[(i + 1) % N], r1[i]]
             n = cross(sub(q[1], q[0]), sub(q[3], q[0]))
@@ -725,27 +719,33 @@ def v5():
                 n = mul(n, -1)
             faces.append((q, n, cen))
     vis = [fc for fc in faces if cam.facing(fc[1], fc[2])]
-    allpts = cam.ps(rings[0] + rings[1] + rings[2])
+    allpts = cam.ps([p for r in rings for p in r])
     sil = hull(allpts)
     body.append(poly(sil, G0))
     for q, n, cen in vis:
         sq = cam.ps(q)
         body.append(loop(sq, HAIR, G3))
-        # strata: lines across the face at fixed fractions, kept >= 3 px apart
-        for t in (0.33, 0.66):
-            a = cam.p(add(mul(q[0], 1 - t), mul(q[3], t)))
-            b = cam.p(add(mul(q[1], 1 - t), mul(q[2], t)))
-            h = abs(cam.p(q[3])[1] - cam.p(q[0])[1])
-            if h * 0.33 >= 4 and math.dist(a, b) > 6:
-                body.append(line([a, b], HAIR, G2))
+    # bedding: a few strata running round the rock's front, in the rock's own surface
+    for zf in (0.25, 0.7):
+        lo = 0 if zf < 0.45 else 1
+        t = (zf - spec[lo][0]) / (spec[lo + 1][0] - spec[lo][0])
+        pts3 = [add(mul(rings[lo][i % N], 1 - t), mul(rings[lo + 1][i % N], t)) for i in range(N + 1)]
+        segs = []
+        for i in range(N):
+            q = faces[lo * N + i]
+            if cam.facing(q[1], q[2]):
+                segs.append(i)
+        for i in segs:
+            a, b = cam.p(pts3[i]), cam.p(pts3[i + 1])
+            body.append(line([a, b], HAIR, G2))
     # the top face (seen from above), and the pool in it
     topq = cam.ps(rings[2])
     body.append(loop(topq, HAIR, G3))
     body.append(loop(sil, LINE, G4))
 
     # pool: the rim, the far inner wall, the water surface (the brightest), sunk by depth
-    pc = (0.15, 0.05, 1.45)
-    pr = 0.82
+    pc = (0.15, 0.1, 1.3)
+    pr = 1.05
     d = 0.08 + 0.3 * P_DEPTH
     rim = cam.ps(circle3(pc, pr, 64))
     body.append(poly(rim, G0))

@@ -196,11 +196,11 @@ def scl(a, k):
 # triangular swept wings, a pointed head, a short square tail. Wing points carry their span
 # fraction so dihedral (wing up or down) and sweep can bend them.
 _HALF = [  # (x, z) from the beak back along the right side, then the tail
-    (1.00, 0.00), (0.86, 0.07), (0.70, 0.11), (0.48, 0.14),            # head, neck
-    (0.40, 0.30), (0.24, 0.56), (0.04, 0.82), (-0.14, 1.00),           # wing leading edge
-    (-0.24, 0.98), (-0.26, 0.86), (-0.22, 0.66), (-0.20, 0.44),        # tip, trailing edge
-    (-0.16, 0.20), (-0.30, 0.13),                                      # wing root, rump
-    (-0.62, 0.15), (-0.64, 0.00),                                       # tail
+    (0.55, 0.00), (0.47, 0.06), (0.34, 0.09), (0.20, 0.11),            # beak, head, neck
+    (0.24, 0.30), (0.22, 0.55), (0.12, 0.85), (-0.05, 1.12),           # wing leading edge
+    (-0.14, 1.18), (-0.16, 1.02), (-0.10, 0.78), (-0.12, 0.50),        # tip, trailing edge
+    (-0.14, 0.26), (-0.12, 0.10),                                      # wing root
+    (-0.30, 0.08), (-0.52, 0.15), (-0.58, 0.00),                       # rump, tail
 ]
 
 
@@ -208,13 +208,13 @@ def bird_local(dihedral=0.25, sweep=0.0, size=1.0):
     pts = []
     side = _HALF + [(x, -z) for x, z in reversed(_HALF[1:-1])]
     for x, z in side:
-        span = max(0.0, (abs(z) - 0.14) / 0.86)
+        span = max(0.0, (abs(z) - 0.1) / 1.08)
         # sweep: wing points rotate back about the root (0.2, 0.15)
         if span > 0:
             ang = sweep * span
-            rx, rz = x - 0.2, abs(z) - 0.15
-            x = 0.2 + rx * math.cos(ang) - rz * math.sin(ang)
-            az = 0.15 + rx * math.sin(ang) + rz * math.cos(ang)
+            rx, rz = x - 0.05, abs(z) - 0.11
+            x = 0.05 + rx * math.cos(ang) - rz * math.sin(ang)
+            az = 0.11 + rx * math.sin(ang) + rz * math.cos(ang)
             z = math.copysign(az, z)
         y = dihedral * span * span * 1.0 + 0.02 * (1 - span)
         pts.append((x * size, y * size, z * size))
