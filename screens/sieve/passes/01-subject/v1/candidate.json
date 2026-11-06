@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P1",
+  "drawing_language": "orthographic elevation",
+  "subject": "A riddle seen dead side-on in elevation: the input's harmonics fall as rods onto its mesh plate, and only the rods over a hole drop through.",
+  "controls": [
+    "mesh: the holes in the plate (count channel): every rod at 'all', every 2nd at 2nd, down to two holes at 8th; the plate's bright ribbon re-segments around them.",
+    "shake: the whole riddle slides sideways on its dimension line (position, ±24 px), and rods that land half over a hole leak through as grey stubs.",
+    "keep: how far the passed rods hang below the plate (position of their lower ends, 24 → 90 px): a short ring is a short rod.",
+    "mix: the bypass gate hinged on the left rim (rotation, 0° flush at 100 % to 70° open at 0 %) through which the unsieved column falls past the riddle."
+  ],
+  "reference": "library/theseus-tower (line drawing, black bodies with grey outlines, one part lit)",
+  "risks": "Sixteen rods plus eight plate segments is a lot of uprights at 15 px pitch; at 8th the plate is nearly whole and the drawing goes quiet, which is honest but reads as 'off'. Shake as a slide only works if leaked stubs also appear, otherwise it's a position change of the whole thing with no sieve meaning. The gate is the weakest part: mix has no physical twin in a riddle."
+}

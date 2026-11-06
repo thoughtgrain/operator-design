@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P2",
+  "drawing_language": "survey plan",
+  "subject": "A surveyed plan of the sieve from above on the left, sixteen numbered stations open or closed, beside a long-section profile of the output spectrum on the right.",
+  "controls": [
+    "mesh: which stations in the plan are open rings and which are survey crosses (count, 16 → 2 open), with the profile's peaks following.",
+    "shake: the station lattice slides off the rim's datum (position, up to 40 px right), and small leaked peaks rise between the kept ones on the profile.",
+    "keep: the width of each profile peak (shape: broad hills at 10 ms, needles at 2 s), because a longer ring is a narrower resonance.",
+    "mix: a grey dry profile lifts off the datum line under the trace (position, 0 px at 100 % to 60 px at 0 %)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one bright figure, ground in low greys, labelled sparingly)",
+  "risks": "Two zones split attention; the plan is the explanation and the profile the result, so neither is clearly the subject. The profile is a spectrum, which drifts toward 'analyser'. Mix at its default (100 %) shows nothing, so the dry line only appears once turned. Two controls touch the profile (keep on shape, shake on leaked peaks); shake's primary channel has to stay the lattice slide."
+}

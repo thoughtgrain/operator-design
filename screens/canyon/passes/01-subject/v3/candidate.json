@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "pattern": "P15",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The canyon floor as a hidden-line isometric grid of cells, where every returning echo front lights a ring of raised blocks out from the shout's block, the nearest ring brightest and the far rings sinking into grey tiles.",
+  "controls": [
+    "distance: position; the rings widen apart, 1.2 to 4.8 cells between fronts, so the lit arcs sweep out across the floor from the source block.",
+    "walls: count; more rings light, 1 to 12, until the floor is combed with arcs (rings past the grid's edge are lost, so the count tops out visibly near 5-6).",
+    "absorb: count (raised vs grey layer); in each later ring more raised blocks drop to flat grey tiles, so at 100 only the first ring stands.",
+    "wind: position; each ring's cells shift outward or inward by a seeded amount per row, breaking the clean arcs into staggered runs, as if the front was blown."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": [
+    "P15 is for noise-like sounds with no mechanism; an echo has a clear mechanism, so this is the texture of the echo, not its cause. Gate 0 says that is the weaker choice.",
+    "Hidden-line cubes on an isometric grid sit close to toro's field in look; the difference (all-wire, rings not heights) must stay obvious.",
+    "Rings are a target shape; on a cell grid they read as arcs, but at long distance with few walls the screen is mostly empty floor.",
+    "14 × 9 = 126 cells at 3 nodes per raised block is over 200 nodes before anything moves; needs sdk 1.8 or bigger cells.",
+    "Walls past ~6 run off the grid, so the top of the range only changes the header."
+  ]
+}

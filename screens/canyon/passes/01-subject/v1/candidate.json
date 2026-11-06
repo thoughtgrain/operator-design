@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "pattern": "P4",
+  "drawing_language": "survey plan",
+  "subject": "A survey plan of the gorge from above: each reflecting wall is a contoured rock bench, stacked back up a dashed chainage line from the station at the mouth, the nearest bench bright.",
+  "controls": [
+    "distance: position; the benches spread apart along the chainage, 14 px to 54 px per bench (about 160 px of travel at the back of a six-bench stack), and the chainage labels read the metres to each wall.",
+    "walls: count; benches step in from 1 to 12 along the line, eased in one by one; past six the extra walls fold behind the last bench and the header carries the real count.",
+    "absorb: shape; the bench rims go from jagged rock to smooth, compounding back up the stack, so the far walls are rounded first (the bright front rim is one mutable outline, the rest pre-drawn variants).",
+    "wind: rotation; each bench swings about its own centre by a fixed seeded angle, up to about ±18°, so the stack loses its alignment the way modulation smears the tap times."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": [
+    "P4 caps visible layers at 5-6 and walls reach 12; the fold-behind rule has to read, or the top of the range looks like it does nothing.",
+    "Absorb's serration change is a few pixels at the rim: it will struggle to reach a score-3 area floor without a second cue (shade down the stack).",
+    "Distance and walls both change how far the stack reaches; distance is spacing, walls is count, but at 1:1 they may read alike.",
+    "Benches seen from above look like stacked plates or cushions more than canyon walls; the plan needs the chainage labels to explain it.",
+    "Rotation of every bench while wind turns redraws up to 12 nodes per frame, fine, but rock outlines with 60 points each cost path budget if more than one is mutable."
+  ]
+}

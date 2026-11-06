@@ -7,35 +7,72 @@
       "id": "cohere",
       "label": "Cohere",
       "default": 0.5,
-      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
       "display": "percent"
     },
     {
       "id": "speed",
       "label": "Speed",
       "default": 0.5,
-      "mapping": {"kind": "exponential", "minimum": 0.25, "maximum": 4},
+      "mapping": {
+        "kind": "exponential",
+        "minimum": 0.25,
+        "maximum": 4
+      },
       "display": "ratio"
     },
     {
       "id": "scatter",
       "label": "Scatter",
       "default": 0.0,
-      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
       "display": "percent"
     },
     {
       "id": "scale",
       "label": "Scale",
       "default": 0.0,
-      "mapping": {"kind": "enum", "labels": ["penta", "major", "minor", "dor", "lyd", "whole", "chrom"]},
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "pent",
+          "maj",
+          "min",
+          "dor",
+          "lyd",
+          "chr"
+        ]
+      },
       "display": "enum"
     }
   ],
   "presets": {
-    "Murmur": {"cohere": 0.5, "speed": 0.5, "scatter": 0.0, "scale": 0.0},
-    "Starling": {"cohere": 0.85, "speed": 0.75, "scatter": 0.15, "scale": 0.3333},
-    "Gulls": {"cohere": 0.2, "speed": 0.25, "scatter": 0.6, "scale": 0.5}
+    "Murmur": {
+      "cohere": 0.5,
+      "speed": 0.5,
+      "scatter": 0.0,
+      "scale": 0.0
+    },
+    "Starling": {
+      "cohere": 0.85,
+      "speed": 0.75,
+      "scatter": 0.15,
+      "scale": 0.4
+    },
+    "Gulls": {
+      "cohere": 0.2,
+      "speed": 0.25,
+      "scatter": 0.6,
+      "scale": 0.6
+    }
   },
   "resources": {
     "voiceBytes": 16,
@@ -56,7 +93,9 @@
       "stateBytes": 192,
       "stateAlignment": 8,
       "savedBytes": 64,
-      "aux": [12],
+      "aux": [
+        12
+      ],
       "unique": true
     }
   }

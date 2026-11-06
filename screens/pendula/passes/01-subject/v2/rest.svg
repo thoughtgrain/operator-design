@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <title>pendula v2 rest</title>
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">length</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">count</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">swing</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">scale</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1.2s</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">8</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">60</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">pent</text>
+  </g>
+  <path d="M 70 26 L 410 26 L 410 33 L 70 33 Z" fill="#323232" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 70 144.75 L 410 144.75 L 410 143.25 L 70 143.25 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 74 165 L 406 165 L 406 164 L 74 164 Z" fill="#323232" stroke="none" stroke-width="0"/>
+  <path d="M 74 181 L 406 181 L 406 180 L 74 180 Z" fill="#323232" stroke="none" stroke-width="0"/>
+  <path d="M 74 197 L 406 197 L 406 196 L 74 196 Z" fill="#323232" stroke="none" stroke-width="0"/>
+  <path d="M 74 213 L 406 213 L 406 212 L 74 212 Z" fill="#323232" stroke="none" stroke-width="0"/>
+  <path d="M 89.5 144 L 89.5 214 L 90.5 214 L 90.5 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 127 144 L 127 214 L 128 214 L 128 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 164.5 144 L 164.5 214 L 165.5 214 L 165.5 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 220.75 144 L 220.75 214 L 221.75 214 L 221.75 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 258.25 144 L 258.25 214 L 259.25 214 L 259.25 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 314.5 144 L 314.5 214 L 315.5 214 L 315.5 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 352 144 L 352 214 L 353 214 L 353 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <path d="M 389.5 144 L 389.5 214 L 390.5 214 L 390.5 144 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <rect x="84" y="152.1" width="12" height="8.8" fill="#000000" stroke="#AFAFAF" stroke-width="1.5"/>
+  <rect x="159" y="152.1" width="12" height="8.8" fill="#000000" stroke="#AFAFAF" stroke-width="1.5"/>
+  <rect x="215.25" y="152.1" width="12" height="8.8" fill="#000000" stroke="#AFAFAF" stroke-width="1.5"/>
+  <rect x="252.75" y="152.1" width="12" height="8.8" fill="#000000" stroke="#AFAFAF" stroke-width="1.5"/>
+  <rect x="309" y="152.1" width="12" height="8.8" fill="#000000" stroke="#AFAFAF" stroke-width="1.5"/>
+  <rect x="384" y="152.1" width="12" height="8.8" fill="#000000" stroke="#AFAFAF" stroke-width="1.5"/>
+  <rect x="121.5" y="168.1" width="12" height="8.8" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <rect x="215.25" y="168.1" width="12" height="8.8" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <rect x="309" y="168.1" width="12" height="8.8" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <rect x="346.5" y="168.1" width="12" height="8.8" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <rect x="384" y="168.1" width="12" height="8.8" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <rect x="84" y="184.1" width="12" height="8.8" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <rect x="159" y="184.1" width="12" height="8.8" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <rect x="252.75" y="184.1" width="12" height="8.8" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <rect x="346.5" y="184.1" width="12" height="8.8" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <rect x="121.5" y="200.1" width="12" height="8.8" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+  <rect x="215.25" y="200.1" width="12" height="8.8" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+  <rect x="309" y="200.1" width="12" height="8.8" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+  <rect x="384" y="200.1" width="12" height="8.8" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+  <path d="M 89.5 33 L 89.5 105.816 L 90.5 105.816 L 90.5 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="90" cy="110.816" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 127 33 L 127 96.93 L 128 96.93 L 128 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="127.5" cy="101.93" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 164.5 33 L 164.5 89.484 L 165.5 89.484 L 165.5 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="165" cy="94.484" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 220.75 33 L 220.75 83.182 L 221.75 83.182 L 221.75 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="221.25" cy="88.182" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 258.25 33 L 258.25 77.802 L 259.25 77.802 L 259.25 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="258.75" cy="82.802" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 314.5 33 L 314.5 73.172 L 315.5 73.172 L 315.5 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="315" cy="78.172" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 352 33 L 352 69.159 L 353 69.159 L 353 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="352.5" cy="74.159" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 389.5 33 L 389.5 65.658 L 390.5 65.658 L 390.5 33 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <circle cx="390" cy="70.658" r="5" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <text transform="matrix(1 0 0 1 414 160)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">now</text>
+  <text transform="matrix(1 0 0 1 414 208)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">-3</text>
+</svg>

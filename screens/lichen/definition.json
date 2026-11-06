@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "id": "lichen",
+  "name": "Lichen",
+  "parameters": [
+    {
+      "id": "grow",
+      "label": "Grow",
+      "default": 0.35,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "decay",
+      "label": "Decay",
+      "default": 0.2,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "seed",
+      "label": "Seed",
+      "default": 0.1667,
+      "mapping": {"kind": "enum", "labels": ["0", "1", "2", "3", "4", "6", "8"]},
+      "display": "enum"
+    },
+    {
+      "id": "scale",
+      "label": "Scale",
+      "default": 0.0,
+      "mapping": {"kind": "enum", "labels": ["maj", "min", "dor", "phr", "lyd", "mix", "pent", "pmin"]},
+      "display": "enum"
+    }
+  ],
+  "presets": {
+    "Crust": {"grow": 0.35, "decay": 0.2, "seed": 0.1667, "scale": 0.0},
+    "Bloom": {"grow": 0.7, "decay": 0.4, "seed": 0.3333, "scale": 0.8571},
+    "Relic": {"grow": 0.15, "decay": 0.05, "seed": 0.1667, "scale": 0.2857}
+  },
+  "resources": {
+    "voiceBytes": 64,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "trackControl": {
+      "stateBytes": 128,
+      "stateAlignment": 4,
+      "savedBytes": 48,
+      "aux": [12],
+      "unique": true
+    },
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

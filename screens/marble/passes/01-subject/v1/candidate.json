@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "pattern": "P14",
+  "drawing_language": "engineering schematic",
+  "subject": "The last four bars woven as cloth on a schematic oblique: each bin is a warp thread, each bar a weft row, and every marble that landed is a slab stacked on its bin's thread, so the bell builds up row by row and drifts back as bars pass.",
+  "controls": [
+    "pegs: the number of warp threads (count, one per bin: 2 threads at 1 row, 13 at 12 rows), with the slabs spreading across them as the bell widens.",
+    "drop: the height of every slab stack (shape of each row's profile: one marble a bar barely raises a slab, 32 a bar builds tall ridges), since a stack is the marbles that bar landed.",
+    "bounce: a hollow rebound cap lifts above each front-row slab, raised further as bounce rises (position, 0 to 24 px), the loom's 'split' role for a retriggered step.",
+    "scale: the warp threads slide to their bins' pitches on a semitone rule (position), so a major scale opens gaps at its whole steps and chromatic packs them evenly."
+  ],
+  "reference": "library/loom-pages/README.md (slabs raised on warp threads, rows receding as earlier passes)",
+  "risks": [
+    "Eight marbles a bar over seven bins makes sparse, low cloth at the default: the bell is only legible across rows, not in one, and the front row reads as scattered boxes.",
+    "Scale moves threads by a few semitone steps (about 21 px a step); the major-to-chromatic change shifts some threads under the 24 px position floor, so scale may need a second cue.",
+    "Slabs are three faces each: 13 threads by 4 rows passes the redraw budget fast when a bar rolls back; flat tops for the older rows or three rows instead of four.",
+    "Mute (bypass) has no natural place in a cloth; the likely answer is the front row going hollow and the warp stopping, which needs a device check that it reads.",
+    "Schematic text (warp, weft, bar −3) is static and must stay; without it this is a bar chart in perspective."
+  ]
+}

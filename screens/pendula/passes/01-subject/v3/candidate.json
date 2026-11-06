@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "pattern": "P5",
+  "drawing_language": "survey plan",
+  "subject": "A survey plan seen from overhead in which the row lies along a dashed datum on a grid and a bright release board holds every bob on one line, ready to snake across it.",
+  "controls": [
+    "length: the span of every bob's lane across the datum, and so how far the board sits from it (position/scale, ~38 to 70 px).",
+    "count: how many lanes cross the datum (count, 3 to 16).",
+    "swing: the size of each bob's proportional symbol, how hard it will cross (scale, 3 to 7 px radius).",
+    "scale: which ticks stand tall on the two-octave strip along the bottom, with each pendulum's note marked above its tick (count and position in the strip)."
+  ],
+  "muted": "The release board comes back down onto the bobs wherever they are and the strip's marks go hollow: held, not playing.",
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "Seen from above the pendulum's length is invisible, so length borrows the lane span (which physically also grows with swing); swing is then a symbol size, a map convention rather than a physical part. The grid is ground decoration and costs nothing, but it is the most 'chart-like' of the five."
+}

@@ -1,0 +1,19 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "patent section",
+  "subject": "The name taken literally, as a patent drawing of a cascade of tipping buckets hung from a sloped frame, each one pouring its charge into the next, the note's bucket tipped and bright, with a riser carrying the overflow back to the top.",
+  "controls": [
+    "stages: how many buckets hang in the cascade, 4 at 0 to 10 at 100, closer together as they multiply (count).",
+    "leak: holes open in a seeded set of buckets, with drops falling from them, and their water levels sink (count of drops, with level as a second cue).",
+    "clock: the buckets that should hang level tilt by uneven amounts, some early to tip and some late, up to ±20° (rotation about each axle).",
+    "feedback: the water column in the return riser climbs from the basin to the top bucket's inlet (position, ~160 px)."
+  ],
+  "reference": "library/theseus-tower/README.md (P11: known object from clean primitives, line drawing, only what plays moves)",
+  "risks": [
+    "Stretch, and honestly a weak one: P11 earns its place when the machine plays an instrument people know by sight, and nobody plays buckets. The exception argument is only that the bucket brigade is named after one, so recognition is free; the picture is a metaphor, not the mechanism or the sound.",
+    "Buckets on hangers flirt with clip-art; it has to stay a patent section (cut walls, numerals, leaders) or it becomes an icon row.",
+    "stages as count is coarse (4..10 buckets for 100..10000 stages): the drawing can't show the delay time it controls, only more or fewer steps.",
+    "Water in tipped buckets is a mutable outline per bucket; clock moving every bucket redraws all of them while it turns."
+  ]
+}

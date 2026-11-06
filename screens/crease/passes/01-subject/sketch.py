@@ -1,0 +1,603 @@
+#!/usr/bin/env python3
+"""Crease, subject pass 01: five rest-frame sketches, one per direction.
+
+    python3 screens/crease/passes/01-subject/sketch.py
+
+Writes v1..v5/rest.svg (480 x 220, the stock header and authoring rules from
+opxy/templates/frame.svg) and v1..v5/candidate.json. Every control at its
+default: crease 2.00 (x2 into the fold), sym 0, paper 40 %, mix 100 %. No notes.
+
+Every picture is computed from one small model of the effect (fold() below), so
+what is drawn is what the folder does: the input is pushed past the paper's
+edge by `crease`, offset by `sym`, folded back at +-1 with corners that go from
+a sharp crease (paper 0) to a soft round bend (paper 100), and blended with the
+dry signal by `mix`.
+
+Every leaf is a closed path, circle, rect or text with explicit paint; lines are
+closed ribbons; grey only. Parts that a control moves carry device ids
+(crease_node_<i>); still artwork is unbound.
+"""
+from __future__ import annotations
+
+import json
+import math
+import random
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+W, H = 480, 220
+
+BRIGHT, G175, G150, G125, G100, G75, G50 = ("#CDCDCD", "#AFAFAF", "#969696", "#7D7D7D",
+                                           "#646464", "#4B4B4B", "#323232")
+BLACK = "#000000"
+HAIR, LINE, SUBJ = 1.0, 1.5, 2.0   # craft.md line weights (subject up to 2.5)
+FONT = "UniversNextPro-Light"
+
+# Defaults from definition.json, shown in the stock header.
+P = {"crease": 0.3333, "sym": 0.5, "paper": 0.4, "mix": 1.0}
+LABELS = ["crease", "sym", "paper", "mix"]
+CAPTIONS = ["2.00", "0", "40", "100"]
+
+
+# ---------------------------------------------------------------- the effect's model
+def gain(p=P):
+    return 8 ** p["crease"]            # exponential 1..8
+
+
+def bias(p=P):
+    return -1 + 2 * p["sym"]           # bipolar -1..1
+
+
+def fold(u: float, paper: float) -> float:
+    """Fold u back into [-1, 1]: a sharp triangle fold blended toward a soft sine fold."""
+    t = (u + 1) % 4
+    hard = t - 1 if t < 2 else 3 - t
+    soft = math.sin(math.pi / 2 * u)
+    return (1 - paper) * hard + paper * soft
+
+
+def out(x: float, p=P) -> float:
+    """Output for an input sample x in [-1, 1]."""
+    wet = fold(gain(p) * x + bias(p) * 0.6, p["paper"])
+    return p["mix"] * wet + (1 - p["mix"]) * x
+
+
+# ---------------------------------------------------------------- SVG frame
+def n(v: float) -> str:
+    s = f"{v:.2f}".rstrip("0").rstrip(".")
+    return "0" if s in ("-0", "") else s
+
+
+class Frame:
+    def __init__(self) -> None:
+        self.parts: list[str] = []
+        self.node = 0
+
+    def _id(self, bound: bool) -> str:
+        if not bound:
+            return ""
+        i = self.node
+        self.node += 1
+        return f' id="crease_node_{i}"'
+
+    def poly(self, pts, fill="none", stroke=BRIGHT, sw=SUBJ, bound=False) -> None:
+        pts = dedupe(pts)
+        assert 3 <= len(pts) <= 64, len(pts)
+        d = "M " + " L ".join(f"{n(x)} {n(y)}" for x, y in pts) + " Z"
+        st = f'stroke="{stroke}" stroke-width="{n(sw)}"' if stroke != "none" else 'stroke="none"'
+        self.parts.append(f'<path{self._id(bound)} d="{d}" fill="{fill}" {st}/>')
+
+    def line(self, pts, w=HAIR, colour=G100, bound=False) -> None:
+        """A polyline as a thin filled closed ribbon (never a stroke traced back)."""
+        pts = dedupe(pts)
+        for chunk in chunks(pts, 31):
+            if len(chunk) >= 2:
+                self.poly(ribbon(chunk, w), fill=colour, stroke="none", bound=bound)
+
+    def circle(self, cx, cy, r, fill=BLACK, stroke=G100, sw=HAIR, bound=False) -> None:
+        st = f'stroke="{stroke}" stroke-width="{n(sw)}"' if stroke != "none" else 'stroke="none"'
+        self.parts.append(f'<circle{self._id(bound)} cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="{fill}" {st}/>')
+
+    def rect(self, x, y, w, h, fill=G50) -> None:
+        self.parts.append(f'<rect x="{n(x)}" y="{n(y)}" width="{n(w)}" height="{n(h)}" fill="{fill}" stroke="none"/>')
+
+    def cell(self, x, y, s, fill, stroke="none", sw=HAIR, bound=True) -> None:
+        self.poly([(x, y), (x + s, y), (x + s, y + s), (x, y + s)], fill=fill, stroke=stroke, sw=sw, bound=bound)
+
+    def text(self, x, y, s, colour=G125, size=10) -> None:
+        self.parts.append(f'<text transform="matrix(1 0 0 1 {n(x)} {n(y)})" fill="{colour}" stroke="none" '
+                          f'font-family="{FONT}" font-size="{size}px">{s}</text>')
+
+    def svg(self, title: str) -> str:
+        palette = "\n  ".join(
+            f'<path id="crease_palette_{i}" d="M {700 + 10 * i} 300 L {704 + 10 * i} 300 L {704 + 10 * i} 304 Z" '
+            f'fill="{c}" stroke="{c}" stroke-width="2"/>'
+            for i, c in enumerate([BRIGHT, G150, G100, G75, G50, BLACK]))
+        body = "\n  ".join(self.parts)
+        return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">\n'
+                f'  <!-- crease · subject pass 01 · {title} · rest (defaults, no notes). Generated by sketch.py -->\n'
+                f'  <g id="preview_canvas">\n    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>\n  </g>\n'
+                f'{header()}\n  {palette}\n  {body}\n</svg>\n')
+
+
+def dedupe(pts):
+    out_ = []
+    for p in pts:
+        p = (round(p[0], 2), round(p[1], 2))
+        if not out_ or math.dist(out_[-1], p) >= 0.3:
+            out_.append(p)
+    if len(out_) > 2 and math.dist(out_[0], out_[-1]) < 0.3:
+        out_.pop()
+    return out_
+
+
+def chunks(pts, size):
+    if len(pts) <= size:
+        yield pts
+        return
+    i = 0
+    while i < len(pts) - 1:
+        yield pts[i:i + size]
+        i += size - 1
+
+
+def norm(v):
+    l = math.hypot(*v) or 1.0
+    return (v[0] / l, v[1] / l)
+
+
+def ribbon(pts, w):
+    """Offset a polyline both ways by w/2 with limited mitre joins and flat ends."""
+    h = w / 2
+    left, right = [], []
+    for i, p in enumerate(pts):
+        if i == 0:
+            nx, ny = norm((-(pts[1][1] - p[1]), pts[1][0] - p[0]))
+            m = 1.0
+        elif i == len(pts) - 1:
+            nx, ny = norm((-(p[1] - pts[i - 1][1]), p[0] - pts[i - 1][0]))
+            m = 1.0
+        else:
+            a = norm((p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]))
+            b = norm((pts[i + 1][0] - p[0], pts[i + 1][1] - p[1]))
+            n1, n2 = (-a[1], a[0]), (-b[1], b[0])
+            nx, ny = norm((n1[0] + n2[0], n1[1] + n2[1]))
+            cos = nx * n1[0] + ny * n1[1]
+            m = min(1 / max(cos, 1e-3), 2.0)
+        left.append((p[0] + nx * h * m, p[1] + ny * h * m))
+        right.append((p[0] - nx * h * m, p[1] - ny * h * m))
+    return left + right[::-1]
+
+
+def header() -> str:
+    steps = [BLACK, G50, G75, G100, G125, G150, G175, BRIGHT]
+    rows = [f'    <rect x="{60 * i}" y="0" width="60" height="20" fill="{c}" stroke="none"/>' for i, c in enumerate(steps)]
+    for i, label in enumerate(LABELS):
+        ink = "#CBCBCB" if i < 2 else BLACK
+        rows.append(f'    <text transform="matrix(1 0 0 1 {5 + 120 * i} 10)" fill="{ink}" stroke="none" '
+                    f'font-family="{FONT}" font-size="10px">{label}</text>')
+        rows.append(f'    <text transform="matrix(1 0 0 1 {65 + 120 * i} 17.44)" fill="{ink}" stroke="none" '
+                    f'font-family="{FONT}" font-size="20px">{CAPTIONS[i]}</text>')
+    return '  <g id="preview_header">\n' + "\n".join(rows) + "\n  </g>"
+
+
+def arc(cx, cy, r, a0, a1, k=10):
+    return [(cx + r * math.cos(a0 + (a1 - a0) * i / k), cy + r * math.sin(a0 + (a1 - a0) * i / k)) for i in range(k + 1)]
+
+
+def unreverse(pts, limit=4.0):
+    """Drop points where an outline turns within `limit` degrees of straight back (near-reversal)."""
+    changed = True
+    while changed and len(pts) > 3:
+        changed = False
+        for i in range(len(pts)):
+            a, b, c = pts[i - 1], pts[i], pts[(i + 1) % len(pts)]
+            u = (a[0] - b[0], a[1] - b[1])
+            v = (c[0] - b[0], c[1] - b[1])
+            lu, lv = math.hypot(*u), math.hypot(*v)
+            if lu == 0 or lv == 0:
+                pts = pts[:i] + pts[i + 1:]
+                changed = True
+                break
+            ang = math.degrees(math.acos(max(-1, min(1, (u[0] * v[0] + u[1] * v[1]) / (lu * lv)))))
+            if ang < limit:
+                pts = pts[:i] + pts[i + 1:]
+                changed = True
+                break
+    return pts
+
+
+def resample(pts, k):
+    """Pick k points spread along a polyline (keeps mutable outlines under 64 points)."""
+    if len(pts) <= k:
+        return pts
+    return [pts[round(i * (len(pts) - 1) / (k - 1))] for i in range(k)]
+
+
+# ---------------------------------------------------------------- v1 · P4 stack in depth, patent section
+def v1() -> Frame:
+    """The strip folded into plies, seen obliquely as a stack of sheets receding up and to the right.
+    Each ply is one pass of the signal between the paper's edges; the creases join them at alternate
+    ends. The top ply, the one the signal leaves on, is the current layer and carries the folded wave."""
+    f = Frame()
+    g, b, paper = gain(), bias(), P["paper"]
+    plies_lit = min(6, math.floor(g + 0.01) + 1)         # x2: the strip is folded twice, three plies
+    plies = plies_lit                              # P4 cap: 6 plies at x5 and over
+    wp, depth, gap = 236, 96, 22                   # ply width, depth into the screen, ply spacing
+    dv = (0.6 * depth, -0.4 * depth)               # oblique depth vector (58, -38)
+    x0, y0 = 88, 196                               # front-left corner of the bottom ply
+    # sym: alternate plies run long or short, so the creases fall off-centre.
+    skew = b * 22
+
+    def ply_x(k):
+        """Left and right ends of ply k (sym moves the alternate creases)."""
+        s = skew if k % 2 else -skew
+        return x0 + max(0.0, s), x0 + wp + min(0.0, s)
+
+    def P3(x, z, d):  # world (x along the ply, z up, d into the screen) -> screen
+        return (x + dv[0] * d, y0 - z + dv[1] * d)
+
+    # Back-to-front is bottom-to-top here: each ply hides the one under it.
+    for k in range(plies):
+        lit = k < plies_lit
+        z = k * gap
+        xl, xr = ply_x(k)
+        a, bb, c, d = P3(xl, z, 0), P3(xr, z, 0), P3(xr, z, 1), P3(xl, z, 1)
+        if lit:
+            top = k == plies_lit - 1
+            f.poly([a, bb, c, d], fill=BLACK, stroke=G150 if top else G100, sw=LINE if top else HAIR, bound=True)
+        else:
+            # Plies still to come (more crease): ghost outlines, hairline, low grey.
+            f.poly([a, bb, c, d], fill=BLACK, stroke=G50, sw=HAIR, bound=True)
+        # The crease joining ply k to k+1, drawn in section on the front edge and as a hairline at the back.
+        if k + 1 < plies:
+            right_end = k % 2 == 0
+            x_end = (xr if right_end else xl)
+            x_next = ply_x(k + 1)[1 if right_end else 0]
+            xe = max(x_end, x_next) if right_end else min(x_end, x_next)
+            r = gap / 2
+            sign = 1 if right_end else -1
+            # paper: sharp crease (a V) at 0, round bend at 100.
+            pts = []
+            for i in range(13):
+                th = -math.pi / 2 + math.pi * i / 12
+                rr = r * (paper + (1 - paper) * (1 - abs(math.sin(th))))
+                pts.append((xe + sign * rr * math.cos(th) * 0.9, z + r - r * math.sin(th)))
+            colour = (G150 if k + 1 < plies_lit else G50)
+            w = LINE if k + 1 < plies_lit else HAIR
+            front = [P3(x, zz, 0) for x, zz in pts]
+            back = [P3(x, zz, 1) for x, zz in pts]
+            f.line(back, w=HAIR, colour=G50 if k + 1 >= plies_lit else G75, bound=True)
+            f.line(front, w=w, colour=colour, bound=True)
+    # The folded wave inked on the top ply (the current layer): x along the ply, out() across its depth.
+    k = plies_lit - 1
+    z = k * gap
+    xl, xr = ply_x(k)
+    trace = []
+    for i in range(30):
+        s = i / 29
+        x_in = math.sin(2 * math.pi * s)
+        trace.append(P3(xl + 10 + s * (xr - xl - 20), z, 0.5 - 0.36 * out(x_in)))
+    f.line(trace, w=2.5, colour=BRIGHT, bound=True)
+    # Patent furniture: reference numerals with leaders, figure label, the cut plane mark.
+    tx, ty = P3(xr - 30, z, 1)
+    f.line([(tx + 6, ty - 3), (tx + 26, ty - 16)], w=HAIR, colour=G100)
+    f.text(tx + 29, ty - 16, "10")
+    cx, cy = P3(ply_x(0)[1] + gap / 2, gap / 2, 0)
+    f.line([(cx + 4, cy + 2), (cx + 26, cy + 6)], w=HAIR, colour=G100)
+    f.text(cx + 29, cy + 10, "12")
+    mx, my = trace[7]
+    f.line([(mx - 3, my - 4), (mx - 26, my - 30)], w=HAIR, colour=G100)
+    f.text(mx - 42, my - 32, "14")
+    f.text(20, 206, "fig. 1")
+    return f
+
+
+# ---------------------------------------------------------------- v2 · P10 voice field, hidden-line isometric
+def v2() -> Frame:
+    """A field of isometric slabs whose heights are the fold surface: across, the input swept from
+    -1 to +1; front to back, the input level rising, so the front row barely bends and the back row
+    is folded in full. The creases (heights at the paper's edge) run through the field as lit ridges."""
+    f = Frame()
+    cols, rows = 14, 5
+    a = 14                                  # iso half-width of a cell
+    ox, oy = 240 - (cols - rows) * a / 2, 70
+    slab = 9
+    rng = random.Random(11)
+    scatter = {(c, r) for c in range(cols) for r in range(rows) if rng.random() < 0.22}
+    order = sorted(((c, r) for c in range(cols) for r in range(rows)), key=lambda cr: (cr[0] + cr[1], cr[0]))
+    for c, r in order:
+        level = 1.0 - 0.75 * r / (rows - 1)          # back row (r = 0) full level, front row quiet
+        u = (-1 + 2 * c / (cols - 1)) * level
+        y = out(u)                                   # -1..1
+        h = round(8 + (y + 1) * 20)                  # 8..48 px above the floor, whole pixels
+        sx, sy = ox + (c - r) * a, oy + (c + r) * a / 2 - h
+        top = [(sx, sy - a / 2), (sx + a, sy), (sx, sy + a / 2), (sx - a, sy)]
+        left = [(sx - a, sy), (sx, sy + a / 2), (sx, sy + a / 2 + slab), (sx - a, sy + slab)]
+        right = [(sx, sy + a / 2), (sx + a, sy), (sx + a, sy + slab), (sx, sy + a / 2 + slab)]
+        crest = abs(y) > 0.93 and abs(gain() * u + bias() * 0.6) > 0.95   # a slab sitting on a crease
+        hollow = (y < -0.3 or (c, r) in scatter) and not crest
+        if hollow:
+            for face in (left, right, top):
+                f.poly(face, fill=BLACK, stroke=G100, sw=HAIR, bound=True)
+        else:
+            f.poly(left, fill=G125, stroke=G125, sw=0.3, bound=True)
+            f.poly(right, fill=G75, stroke=G75, sw=0.3, bound=True)
+            f.poly(top, fill=BRIGHT if crest else G175, stroke=BRIGHT if crest else G175, sw=0.3, bound=True)
+    return f
+
+
+# ---------------------------------------------------------------- v3 · P15 cell field, star atlas
+def harmonics(p=P, count=19):
+    N = 512
+    xs = [out(math.sin(2 * math.pi * i / N), p) for i in range(N)]
+    mags = []
+    for k in range(1, count + 1):
+        re_ = sum(x * math.cos(2 * math.pi * k * i / N) for i, x in enumerate(xs))
+        im_ = sum(x * math.sin(2 * math.pi * k * i / N) for i, x in enumerate(xs))
+        mags.append(2 * math.hypot(re_, im_) / N)
+    return mags
+
+
+def v3() -> Frame:
+    """The folded signal's harmonics charted like a band of sky on an atlas plate: one column of
+    square cells per harmonic, lit about the chart's equator as far as that harmonic is strong.
+    A folder at sym 0 makes odd harmonics only, so the band is striped; the creases' sharpness and
+    count decide how far east it reaches."""
+    f = Frame()
+    cols, rows, s = 19, 7, 20
+    x0, y0 = 50, 46
+    mags = harmonics()
+    # Chart border: a plate frame in hairline and line, ticks every column (the atlas's hour ticks).
+    f.line([(x0 - 6, y0 - 6), (x0 + cols * s + 6, y0 - 6), (x0 + cols * s + 6, y0 + rows * s + 6),
+            (x0 - 6, y0 + rows * s + 6), (x0 - 6, y0 - 5)], w=LINE, colour=G100)
+    f.line([(x0 - 10, y0 - 10), (x0 + cols * s + 10, y0 - 10), (x0 + cols * s + 10, y0 + rows * s + 10),
+            (x0 - 10, y0 + rows * s + 10), (x0 - 10, y0 - 9)], w=HAIR, colour=G75)
+    for c in range(cols + 1):
+        x = x0 + c * s
+        f.line([(x, y0 + rows * s + 6), (x, y0 + rows * s + 10)], w=HAIR, colour=G100)
+        f.line([(x, y0 - 10), (x, y0 - 6)], w=HAIR, colour=G100)
+    # Equator: a hairline across the middle row, the line the band is centred on.
+    eq = y0 + rows * s / 2
+    f.line([(x0 - 14, eq), (x0 - 7, eq)], w=HAIR, colour=G125)
+    f.line([(x0 + cols * s + 7, eq), (x0 + cols * s + 14, eq)], w=HAIR, colour=G125)
+    for c, label in ((0, "1"), (4, "5"), (9, "10"), (14, "15")):
+        f.text(x0 + c * s + 6, y0 + rows * s + 22, label)
+    f.text(x0 + cols * s - 14, y0 + rows * s + 22, "h")
+    # Cells: lit (bright) and the grey layer, about the equator; black elsewhere (still bound: churn swaps palette).
+    mid = rows // 2
+    for c, m in enumerate(mags):
+        db = 20 * math.log10(max(m, 1e-6))
+        reach = max(0.0, (db + 42) / 42) * (mid + 1)          # -42 dB .. 0 dB -> 0 .. 4 rows each side
+        for r in range(rows):
+            dist = abs(r - mid)
+            x, y = x0 + c * s, y0 + r * s
+            if dist < math.floor(reach) or (dist == 0 and reach >= 0.6):
+                f.cell(x, y, s, BRIGHT)
+            elif dist < reach + 0.5 and reach > 0.15:
+                f.cell(x, y, s, G100)
+    return f
+
+
+# ---------------------------------------------------------------- v4 · P1 section drawing, engineering schematic
+def v4() -> Frame:
+    """A folding press cut open: the paper web runs in from the left and is festooned over a fixed
+    upper bank of rollers and under a lower bank that drives down between them. How deep the lower
+    bank goes is how far the signal is pushed past the paper's edge."""
+    f = Frame()
+    g, b, paper, mix = gain(), bias(), P["paper"], P["mix"]
+    upper_y = 70
+    depth = 12 + 108 * math.log(g) / math.log(8)          # crease: 12 px (x1) .. 120 px (x8)
+    lower_y = upper_y + depth
+    r = 4 + 10 * paper                                     # paper: sharp crease r 4 .. soft bend r 14
+    xs_up = [150, 222, 294, 366]
+    shift = b * 26                                         # sym: lower bank slides off-centre
+    xs_lo = [186 + shift, 258 + shift, 330 + shift]
+    # Frame: two hatched mounting rails (schematic ground), hairline.
+    for yy, up in ((upper_y - 26, True), (min(lower_y + 30, 206), False)):
+        f.line([(124, yy), (392, yy)], w=LINE, colour=G100)
+        for x in range(128, 392, 8):
+            f.line([(x, yy - 1 if up else yy + 1), (x - 5, yy - 6 if up else yy + 6)], w=HAIR, colour=G75)
+    # Hangers from the rails to the roller centres (centre lines).
+    for x in xs_up:
+        f.line([(x, upper_y - 26), (x, upper_y - r - 3)], w=HAIR, colour=G75)
+    lo_rail = min(lower_y + 30, 206)
+    for x in xs_lo:
+        f.line([(x, lower_y + r + 3), (x, lo_rail)], w=HAIR, colour=G75, bound=True)
+    # The web: in from the infeed nip, over each upper roller, under each lower one, out to the right.
+    web = [(24, upper_y - r - 2), (60, upper_y - r - 2), (98, upper_y - r - 2)]
+    web += [(124, upper_y - r - 2)]
+    for i, xu in enumerate(xs_up):
+        web += arc(xu, upper_y, r + 1.2, math.pi, 2 * math.pi, 8)
+        if i < len(xs_lo):
+            web += arc(xs_lo[i], lower_y, r + 1.2, math.pi, 0, 8)
+    web += [(392, upper_y - r - 2), (456, upper_y - r - 2)]
+    # (the last upper arc ends on its right side at roller height; run out level from its top)
+    web[-2] = (xs_up[-1] + r + 1.2, upper_y)
+    web.insert(len(web) - 1, (xs_up[-1] + r + 12, upper_y - r - 2))
+    web = resample(dedupe(web), 31)
+    f.line(web, w=2.5, colour=BRIGHT, bound=True)
+    # Rollers: section circles with centre crosses.
+    for x in xs_up:
+        f.circle(x, upper_y, r, fill=BLACK, stroke=G150, sw=LINE, bound=True)
+        f.line([(x - 3, upper_y), (x + 3, upper_y)], w=HAIR, colour=G100)
+    for x in xs_lo:
+        f.circle(x, lower_y, r, fill=BLACK, stroke=G150, sw=LINE, bound=True)
+        f.line([(x - 3, lower_y), (x + 3, lower_y)], w=HAIR, colour=G100, bound=True)
+    # Infeed nip and mix diverter: the blade sits up (100 % wet) sending the web into the press;
+    # at 0 it drops and the web runs straight along the dry path under the rail.
+    f.circle(60, upper_y - r - 2 - 7, 5, fill=BLACK, stroke=G125, sw=LINE)
+    f.circle(60, upper_y - r - 2 + 7, 5, fill=BLACK, stroke=G125, sw=LINE)
+    ang = -math.radians(10 + 50 * (1 - mix))
+    px, py = 98, upper_y - r + 6
+    f.poly([(px, py), (px + 22 * math.cos(ang), py + 22 * math.sin(ang)),
+            (px + 22 * math.cos(ang) + 2, py + 22 * math.sin(ang) + 3), (px + 2, py + 4)],
+           fill=G150, stroke="none", bound=True)
+    f.circle(px, py + 2, 2.5, fill=BLACK, stroke=G150, sw=HAIR)
+    # Dimension of the drive-in depth on the right.
+    dx = 420
+    f.line([(dx, upper_y), (dx, lower_y)], w=HAIR, colour=G125, bound=True)
+    for yy in (upper_y, lower_y):
+        f.line([(dx - 5, yy), (dx + 5, yy)], w=HAIR, colour=G125, bound=yy == lower_y)
+    f.line([(xs_lo[-1] + r + 6, lower_y), (dx - 8, lower_y)], w=HAIR, colour=G50, bound=True)
+    f.text(dx + 8, (upper_y + lower_y) / 2 + 4, "d")
+    f.text(20, upper_y - r - 12, "in")
+    f.text(440, upper_y - r - 12, "out")
+    return f
+
+
+# ---------------------------------------------------------------- v5 · P9 one-bit ink, oscilloscope trace (stretch)
+BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]
+
+
+def inside(pt, poly):
+    x, y = pt
+    c = False
+    for (x1, y1), (x2, y2) in zip(poly, poly[1:] + poly[:1]):
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+            c = not c
+    return c
+
+
+def dither(f: Frame, poly, level: float, cell=2, inset=3.0):
+    """Ordered dither inside poly, run-length rects of 2 px cells, kept a gutter inside the outline."""
+    xs = [p[0] for p in poly]
+    ys = [p[1] for p in poly]
+    for gy in range(int(min(ys)) // cell * cell, int(max(ys)) + cell, cell):
+        run = None
+        for gx in range(int(min(xs)) // cell * cell, int(max(xs)) + 2 * cell, cell):
+            c = (gx + cell / 2, gy + cell / 2)
+            on = (BAYER[(gy // cell) % 4][(gx // cell) % 4] < level * 16
+                  and all(inside((c[0] + dx, c[1] + dy), poly) for dx, dy in
+                          ((0, 0), (inset, 0), (-inset, 0), (0, inset), (0, -inset))))
+            if on and run is None:
+                run = gx
+            elif not on and run is not None:
+                f.rect(run, gy, gx - run, cell, fill=BRIGHT)
+                run = None
+
+
+def v5() -> Frame:
+    """A paper streamer folded into the shape of the output wave, inked like a one-bit print: the
+    front of the paper a light dither, the back a dense one, every fold a hard white outline. It sits
+    on an oscilloscope's graticule, the folded strip standing where the trace would be."""
+    f = Frame()
+    x0, x1, yc, amp = 64, 400, 124, 58
+    dv = (16, -18)
+    N = 120
+    centre = [(x0 + (x1 - x0) * i / N, yc - amp * out(math.sin(2 * math.pi * i / N))) for i in range(N + 1)]
+    # Graticule: corner brackets and centre-axis ticks only, hairline, low grey (scope furniture).
+    gx0, gy0, gx1, gy1 = 40, 34, 450, 206
+    for (cx, cy, sx, sy) in ((gx0, gy0, 1, 1), (gx1, gy0, -1, 1), (gx0, gy1, 1, -1), (gx1, gy1, -1, -1)):
+        f.line([(cx + sx * 12, cy), (cx, cy), (cx, cy + sy * 12)], w=HAIR, colour=G75)
+    for i in range(1, 10):
+        x = gx0 + (gx1 - gx0) * i / 10
+        f.line([(x, yc - 3), (x, yc + 3)], w=HAIR, colour=G75)
+    # sym: the scope's trace-position marker on the left edge, riding up and down with the bias.
+    my = yc - amp * bias() * 0.6
+    f.poly([(gx0 - 14, my - 5), (gx0 - 5, my), (gx0 - 14, my + 5)], fill=G150, stroke="none", bound=True)
+    f.text(gx0 - 30, my + 4, "1", colour=G125)
+    # Panels: runs of the strip that face the same way; each fold flips the face.
+    faces = []
+    run = [centre[0]]
+    facing = None
+    for a, b in zip(centre, centre[1:]):
+        cross = (b[0] - a[0]) * dv[1] - (b[1] - a[1]) * dv[0]
+        fc = cross < 0
+        if facing is None:
+            facing = fc
+        if fc != facing and len(run) > 1:
+            faces.append((facing, run))
+            run = [a]
+            facing = fc
+        run.append(b)
+    faces.append((facing, run))
+    for front, pts in faces:
+        pts = resample(pts, 30)
+        panel = unreverse(dedupe(pts + [(x + dv[0], y + dv[1]) for x, y in reversed(pts)]))
+        f.poly(panel, fill=BLACK, stroke="none")
+        dither(f, panel, 0.25 if front else 0.625)
+        f.poly(panel, fill="none", stroke=BRIGHT, sw=2, bound=True)
+    return f
+
+
+DIRECTIONS = {
+    "v1": ("P4", "patent section", v1),
+    "v2": ("P10", "hidden-line isometric", v2),
+    "v3": ("P15", "star atlas", v3),
+    "v4": ("P1", "engineering schematic", v4),
+    "v5": ("P9", "oscilloscope trace", v5),
+}
+
+CANDIDATES = {
+    "v1": {
+        "subject": "The signal as a strip of paper folded back on itself into plies, drawn as a patent figure of the stack seen obliquely, with the folded wave inked on the top ply.",
+        "controls": [
+            "crease: plies are added to the stack, 2 at x1 (one fold) to 6 at x5 and over, the top ply rising 22 px with each, and the wave on it folds more times; count of plies (position of the top ply), shape of the top trace.",
+            "sym: alternate plies run long and short so the creases fall off-centre, the ends sliding up to 22 px either way; position of the crease ends.",
+            "paper: each crease in section goes from a sharp V to a round bend of half the ply gap; shape of the crease profiles.",
+            "mix: the trace on the top ply relaxes from the folded wave back to the plain sine it started as; shape of the trace, the only control that touches it alone at crease x1."
+        ],
+        "reference": "library/theseus-tower (stacked line drawing of a known object, black bodies behind grey outlines)",
+        "risks": "Crease and mix both reshape the one trace on the top ply, so mix needs its own second cue (the ply outlines dimming toward the dry state is the candidate) or it reads as a weaker crease. Count steps a ply at a time (x2, x3, x4, x5), so crease needs the new ply to ease in from under the stack or it's an on/off change per step; six plies at 22 px reach y 48 and fill the body's height. Opaque plies hide everything but their front edges, so the lower plies read as strips and the back creases are hidden. Patent numerals (10, 12, 14) are honest to the language but are three labels for one subject. Plies are parallelograms, so the oblique projection has to be computed (craft.md, Think in 3D), not nudged; this sketch does that, but the crease arcs are only approximately tangent."
+    },
+    "v2": {
+        "subject": "A hidden-line isometric field of slabs whose heights are the fold surface, the input swept across and its level rising front to back, so the creases run through the field as lit ridges.",
+        "controls": [
+            "crease: the back rows fold into more terraces, 1 ridge at x1 to 7 at x8, the front staying a gentle slope; shape (slab heights).",
+            "sym: the ridges slide sideways and the terraces go uneven, high on one side and low on the other; shape (heights) with position of the lit crest slabs.",
+            "paper: ridges go from knife-edge crests (one slab at the top) to broad rounded shoulders (three or four slabs near the top); shape (heights near the crests), crest count as second cue.",
+            "mix: the field relaxes from folded terraces toward a single plain ramp, with fewer hollow slabs; shape (heights), hollow/solid palette as second cue."
+        ],
+        "reference": "library/toro-blocks (P10 worked example: the model is the drawing)",
+        "risks": "It's toro's visual language on another machine: the brief says not to copy another machine's drawing, and an isometric slab field from the same pattern will look like a sibling, not a new screen. All four controls are shape-of-heights, so they're told apart only by where and how the heights change (back rows, side shift, crest width, overall ramp); paper is the weakest and will need its crest-count cue to clear the floor. 70 slabs x 3 nodes = 210 nodes before the header. Heights over the swept input are a transfer surface, which is truthful but static: notes on an effect have no key position to act on, so note response has to come from the track's level."
+    },
+    "v3": {
+        "subject": "The folded signal's harmonics charted as a band of sky across an atlas plate, one column of square cells per harmonic lit about the equator as far as it is strong, odd columns only while sym is centred.",
+        "controls": [
+            "crease: the band reaches further east, from harmonic 1 alone at x1 to bright cells past harmonic 15 at x8; count of lit columns.",
+            "sym: the dark even columns fill in as even harmonics appear, from stripes to a solid band; count in the alternate columns (pattern).",
+            "paper: the band's eastern half sinks from lit cells to the grey layer as soft folds roll the upper harmonics off; count moved between lit and grey layers.",
+            "mix: the band thins toward the equator, every column but the first losing rows as the wet signal drops; run length per column (rows lit)."
+        ],
+        "reference": "opxy/reference/README.md (dissolve, in detail: one uniform cell field)",
+        "risks": "Gate 0 and P15's own pitfall: a wavefolder isn't texture, it has a mechanism (the fold), and a cell-per-harmonic grid is a spectrum analyser, which is the dashboard-of-meters failure the subject gate rejects. The atlas language sits on it as a frame and tick labels rather than being in the cells; stars on a plate aren't square. Crease and paper both move the band's eastern edge (one adds, one dims), so paper must stay on the lit/grey swap or the two read as one control. Harmonic magnitudes need a DFT per control change on the device, cheap at 19 bins but not free."
+    },
+    "v4": {
+        "subject": "A folding press drawn in section as an engineering schematic: the paper web festooned over a fixed upper bank of rollers and under a lower bank that drives down between them as far as the signal is pushed past the edge.",
+        "controls": [
+            "crease: the lower roller bank drives down from 12 px to 120 px below the upper bank and the web's loops deepen with it, the depth dimension on the right following; position of the bank, shape of the web.",
+            "sym: the lower bank slides sideways up to 26 px either way so the loops lean and go uneven; position.",
+            "paper: every roller grows from a 4 px pin (a sharp crease) to a 14 px drum (a soft round bend) and the web's turns round with it; uniform scale of the rollers, shape of the web at the turns.",
+            "mix: the diverter blade at the infeed swings 50 degrees from sending the web into the press to dropping it on the straight dry path under the rail, the festooned web dimming as it goes; rotation."
+        ],
+        "reference": "library/theseus-tower (line drawing of a mechanism, one bright part, grey structure)",
+        "risks": "The press is a metaphor for folding, not the signal: the web's loops don't trace the output wave, so a player who knows wavefolders sees a machine, not a waveform. Crease mostly moves the lower bank and the web's depth, which is honest (more drive, deeper fold) but it doesn't add folds; the count of loops is fixed at three. The web is one ribbon of 31 centre points and every control re-keys it (it's the only mutable outline, so fine on budget, but every turn redraws it). The hatched rails and hangers are a lot of hairline structure; at 1:1 they risk competing with the web. The mix blade is small (22 px); at 0 the web needs a second drawn path along the dry route, which is a second mutable outline."
+    },
+    "v5": {
+        "subject": "A paper streamer folded into the shape of the output wave and inked as a one-bit print, front of the paper light dither and back dense, standing on an oscilloscope graticule where the trace would be.",
+        "controls": [
+            "crease: the streamer folds more times across the screen, 2 panels at x1 to 15 or more at x8, every fold a hard white edge; shape of the panel outlines, count of panels.",
+            "sym: the scope's trace-position marker on the left edge rides up and down by up to 35 px and the folds go uneven, tall panels on one side and short on the other; position of the marker, shape of the strip.",
+            "paper: the folds' corners go from knife creases to soft rolled edges, the short panels at each fold widening; shape at the fold lines.",
+            "mix: a plain grey sine (the dry signal) rises behind the streamer as mix drops, and the streamer flattens toward it; count/state of the dry trace (absent at 100, as toro's steam is absent at rest), shape of the strip."
+        ],
+        "reference": "opxy/reference/toro-ink-rest.jpg (P9 one-bit ink on the device)",
+        "risks": "Stretch, and it only half earns it. The exception: crease's subject is a material with two faces, and folding is what makes the back of the paper show, which the one-bit language can say with two dither densities better than greys can; one-bit print is also paper's own medium. Where it fails: P9's dither only lives in still artwork, and here the strip's panels change shape with every control, so on the device they'd be flat palette greys with a white outline, losing the look that justifies the pattern (only the sketch is dithered). The panels overlap where the strip doubles back, and painter's order by time isn't depth order, so some folds will draw over the wrong face. P9 wants a figure; a streamer is barely one, and the scope graticule is a second language competing with the print. Caution from the catalog stands: toro moved off P9 to P10."
+    },
+}
+
+
+def main() -> None:
+    for vid, (pattern, language, draw) in DIRECTIONS.items():
+        out_dir = HERE / vid
+        out_dir.mkdir(exist_ok=True)
+        frame = draw()
+        (out_dir / "rest.svg").write_text(frame.svg(f"{vid} {pattern} {language}"))
+        cand = {"variant": vid, "pattern": pattern, "drawing_language": language, **CANDIDATES[vid]}
+        (out_dir / "candidate.json").write_text(json.dumps(cand, indent=2) + "\n")
+        print(f"{vid}: {frame.node} bound nodes")
+
+
+if __name__ == "__main__":
+    main()

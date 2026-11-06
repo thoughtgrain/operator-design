@@ -1,0 +1,19 @@
+{
+  "variant": "v1",
+  "pattern": "P4",
+  "drawing_language": "oscilloscope trace",
+  "subject": "Every trip the test note makes round the chain is one oscilloscope sweep, and the sweeps stack back into depth, the newest bright in front and each recirculation a dimmer screen behind it.",
+  "controls": [
+    "stages: the echo burst slides along every sweep's time axis from just after the dry mark (10 ms) to the far end (1 s), log time, all screens together (position, ~200 px).",
+    "leak: the front trace's burst sags and goes to staircase: the leaky buckets' held samples show as flat steps and its peaks droop, the back screens inheriting it (shape of the bright front trace).",
+    "clock: the screens behind shear sideways by uneven amounts, so successive passes stop lining up, the way a wandering clock smears each recirculation's arrival (position of the back layers, up to ~24 px each).",
+    "feedback: how many screens the stack holds, one at 0 up to six at 100, each further back dimmer and lower (count of layers, with shade as the second cue)."
+  ],
+  "reference": "library/loom-pages/README.md (depth means earlier; repeats as rows behind a pulse)",
+  "risks": [
+    "P3's oscilloscope pitfall applies to every layer: it can read as a stock scope view; the stacked screens are what make it this machine.",
+    "stages and clock are both position; they move different parts (the burst within every screen vs the screens themselves), but perceptibility has to prove the player can tell them apart.",
+    "At the default (leak 0, clock 0) the stack is pristine; the machine's failing character only shows when the player turns it up.",
+    "An effect page gets no audio, so the bursts are a notional test note, not what is playing."
+  ]
+}

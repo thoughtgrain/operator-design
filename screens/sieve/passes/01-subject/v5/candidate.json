@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "star atlas",
+  "subject": "An atlas plate of a constellation drawn as an organ rank, twelve pipes in figure lines with a star at each mouth, the sieve's kept partials the bright named stars joined by the figure line.",
+  "controls": [
+    "mesh: which stars are named and joined by the figure line (count: 12 at 'all', 6 at 2nd, down to 1 at 8th within the twelve drawn).",
+    "shake: rejected stars drift off their mouths along short proper-motion tracks (position, up to 24 px), brightening as they pass.",
+    "keep: the magnitude of the kept stars (scale, 0.8× → 1.6×), since a longer ring is a brighter, longer-lived partial.",
+    "mix: the magnitude of the unsieved stars (scale of a different part, pinpoints at 100 % to full size at 0 %)."
+  ],
+  "reference": "library/theseus-tower (P11: instrument parts as clean primitives in a line drawing)",
+  "risks": "Stretch, outside the effect column. The case for it: an organ's mutation and mixture stops are literally harmonic sieves (a 2 2/3' stop keeps the 3rd harmonic), so a rank of pipes is the one instrument people know by sight whose parts are the harmonic series, and atlases have always drawn constellations as instruments (Lyra, Pyxis). The case against: an effect acts on another track's sound, and the pipes suggest the sieve makes sound. P11's channel fit (only the struck part moves) doesn't map onto a filter. Two of the four controls are star-size scale on different parts. Twelve pipes cover only h1–h12, so 7th and 8th keep one star each."
+}

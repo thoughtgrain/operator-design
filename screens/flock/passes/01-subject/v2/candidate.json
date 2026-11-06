@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "pattern": "P12",
+  "drawing_language": "engineering schematic",
+  "subject": "A plan-view orrery in schematic drafting: birds circle the flock's centre of gravity on four orbits, and a graduated two-octave rim reads off, by a dashed leader, the pitch each bird's bearing points at.",
+  "controls": [
+    "cohere: the angular sector the birds gather in, with its dimension arc and span in semitones on the rim (position along the orbits, about 160 deg of travel from 0 to 100).",
+    "speed: the trailing link behind each planet along its orbit, one beat of travel (shape: 6 deg at 0.25 to ~90 deg at 4.00).",
+    "scatter: birds step off their orbits inward and outward (radial position, up to one orbit spacing ~30 px), so leaders hit the rim out of order.",
+    "scale: tick count on the graduated rim (count: 10 for penta to 24 for chrom), labelled octaves fixed."
+  ],
+  "reference": "library/meikyu-orrery/README.md (orbits modelled in 3D, one camera, planets sized by depth)",
+  "risks": [
+    "P12's own weakness: the centre of gravity does nothing but sit there; the orbits are a stand-in for the flock, not its rule. Birds don't orbit their centroid in a boids model, they travel.",
+    "Pitch as a bearing around a circle wraps c5 onto c3; the rim has a seam the player has to learn.",
+    "The rim's front edge sits at y ~205, against the bottom of the body; there's no room for a strip and a wider sector pushes leaders off screen at the front.",
+    "Eight leaders plus four orbits plus the rim is a lot of hairline; at 1:1 the dashed leaders read as noise. Leaders may only appear on note.",
+    "Lint warns on 1.0 px stroked outlines (orbits, title block): hairlines by craft.md, but they're at the edge of what the panel holds."
+  ]
+}

@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,182 @@
       "brief": "Subject built on P3 Trace as subject; drawing language: survey plan. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P14",
+      "drawing_language": "engineering schematic",
+      "subject": "The last four bars woven as cloth on a schematic oblique: each bin is a warp thread, each bar a weft row, and every marble that landed is a slab stacked on its bin's thread, so the bell builds up row by row and drifts back as bars pass.",
+      "controls": [
+        "pegs: the number of warp threads (count, one per bin: 2 threads at 1 row, 13 at 12 rows), with the slabs spreading across them as the bell widens.",
+        "drop: the height of every slab stack (shape of each row's profile: one marble a bar barely raises a slab, 32 a bar builds tall ridges), since a stack is the marbles that bar landed.",
+        "bounce: a hollow rebound cap lifts above each front-row slab, raised further as bounce rises (position, 0 to 24 px), the loom's 'split' role for a retriggered step.",
+        "scale: the warp threads slide to their bins' pitches on a semitone rule (position), so a major scale opens gaps at its whole steps and chromatic packs them evenly."
+      ],
+      "reference": "library/loom-pages/README.md (slabs raised on warp threads, rows receding as earlier passes)",
+      "risks": [
+        "Eight marbles a bar over seven bins makes sparse, low cloth at the default: the bell is only legible across rows, not in one, and the front row reads as scattered boxes.",
+        "Scale moves threads by a few semitone steps (about 21 px a step); the major-to-chromatic change shifts some threads under the 24 px position floor, so scale may need a second cue.",
+        "Slabs are three faces each: 13 threads by 4 rows passes the redraw budget fast when a bar rolls back; flat tops for the older rows or three rows instead of four.",
+        "Mute (bypass) has no natural place in a cloth; the likely answer is the front row going hollow and the warp stopping, which needs a device check that it reads.",
+        "Schematic text (warp, weft, bar −3) is static and must stay; without it this is a bar chart in perspective."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P5",
+      "drawing_language": "oscilloscope trace",
+      "subject": "The odds of each note as one bright stepped trace over a scope graticule, a pulse standing on every bin at its pitch and as tall as its share of the marbles, with the bar's drops ticking along a strip beneath.",
+      "controls": [
+        "pegs: the trace's shape: one tall pulse pair at 1 row, a wide low bell of up to 13 pulses at 12 rows (shape, the bell's outer pulses move well over 16 px).",
+        "drop: the number of marks in the activity strip under the graticule (count, 1 to 32 a bar), one per marble released.",
+        "bounce: a second, dimmer channel trace rises under the first, its rebound pulses scaled by bounce and offset right of each bin (scale and position on channel 2), flat at 0.",
+        "scale: the pitch ticks on the graticule's baseline and the pulses standing on them slide to the scale's tones (position on the pitch axis, 16 px a semitone)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (low-grey field, one bright figure, activity strip along the bottom)",
+      "risks": [
+        "P3's warning applies here too: a stepped trace on a graticule is the most generic picture of the five and could be any analyser; the scope furniture (ch1 readout, divisions) has to carry the authorship.",
+        "It shows the probability, not the marbles: the board itself never appears, so the Galton idea depends on the player already knowing it.",
+        "Adjacent semitone bins (b and c in major) put pulses 16 px apart, close to merging at 1:1.",
+        "Mute: the trace dims to the channel-off look (flat line at the baseline), a scope's own convention, but a flat line also looks like 'pegs at extreme' to a newcomer; needs a second cue."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P12",
+      "drawing_language": "typeset diagram",
+      "subject": "A radial Galton board seen as an orrery: the hopper is the sun, each peg row is an orbit a marble crosses on its way out, and the bins are planets on the outer orbit placed round the pitch circle, sized by how often they're hit.",
+      "controls": [
+        "pegs: the number of orbits between the sun and the bins (count, 1 to 12 rings), and the planets' sizes redistribute as the bell widens.",
+        "drop: the number of marbles waiting on the innermost ring around the sun (count, 1 to 32), one per drop in a bar, the release clock.",
+        "bounce: moons appear round each planet, up to three per planet, set further out as bounce rises (count with position), one per rebound retrigger.",
+        "scale: the planets move round the outer orbit to their pitch classes, 30° a semitone (position on the orbit), root always at the front."
+      ],
+      "reference": "library/meikyu-orrery/README.md (sun, evenly spaced orbits modelled in 3D, planets that carry meaning)",
+      "risks": [
+        "P12's own weakness: the orbits don't turn for any musical reason here, so the 'cycle' is the pitch circle rather than time; motion would have to be a marble's spiral out, not orbiting.",
+        "Off-centre bins at 1/64 odds are 3 px planets at the back of the orbit, at the legibility floor.",
+        "Twelve rings at 12 rows bring the front spacing to ~5 px: legal, but the board turns into a hatched dish.",
+        "The sun does nothing but release marbles; a second subject (the pitch circle) competes with the first (the board).",
+        "Mute: the sun goes hollow and the waiting marbles grey out; shade plus the marbles stepping back off the ring, to check it isn't shade alone."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P13",
+      "drawing_language": "orthographic elevation",
+      "subject": "The Galton board itself in front elevation, hopper and gate over a triangle of pegs, with each bin a pipe cut to its note's length so its floor sits at its pitch, and the pile of marbles caught in the bins is what plays.",
+      "controls": [
+        "pegs: the number of peg rows in the triangle and bins under it (count, 1 to 12 rows), the pile spreading wider and lower as rows are added.",
+        "drop: the hopper gate's two plates slide apart (position, closed slit at 1/1 to a wide throat at 1/32).",
+        "bounce: a rebound dimension line rises above the pile tops, how high a marble kicks back before it settles (position, 0 to 24 px), with a ghost marble at its height.",
+        "scale: the bin floors step to their pitches, deeper for lower notes (position, 4 px a semitone), so major shows its half steps as short risers and chromatic is an even staircase."
+      ],
+      "reference": "library/meikyu-capture/README.md (find the rule, draw the physical thing with the same shape; wireframe ground, bright captured bodies)",
+      "risks": [
+        "It's the literal machine: no translation for the player to learn, but also no surprise; it lives or dies on the drawing quality of the elevation (hatching, dimensions).",
+        "Bounce has no part of its own in a board; the rebound dimension is a drafting device bolted onto the drawing (P13's 'not every control has a twin' pitfall).",
+        "Twelve rows of pegs in the same height need a 7 px row pitch: pegs 5 px across with 2 px between, near hatching density.",
+        "Pipe floors only span 4 px a semitone, so chromatic versus major moves each floor by 4 to 8 px, under the 24 px floor; the staircase reads, the change between scales may not.",
+        "Mute: the gate shuts (plates meet) and the pile greys; a closed gate is a strong physical cue."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P3",
+      "drawing_language": "survey plan",
+      "subject": "One marble's fall surveyed as a traverse in plan: from the hopper station it runs leg by leg through columns of peg stations, bearing a station up or down at each, to its lot on a boundary line whose parcels are laid out by pitch.",
+      "controls": [
+        "pegs: the number of legs and station columns in the traverse (count, 1 to 12), the lattice opening wider to the east as rows are added.",
+        "drop: the pegs on the chain line along the bottom, one per drop in the bar (count, 1 to 32 between 0 and 1 bar).",
+        "bounce: a short rebound spur off the traverse's last station, out past the lot line and back (shape, its end moving 0 to 24 px), the survey's closing leg.",
+        "scale: the lot boundaries on the right slide to their pitches, 10 px a semitone (position), and the last leg bends to meet its lot."
+      ],
+      "reference": "opxy/reference/README.md (stock engine screens: one object, a ~2 px line for what matters, lots of black)",
+      "risks": [
+        "Stretch: P3 is an engine pattern for waveforms. The case for it is that a player's screen should draw the rule that picks notes in the same shape, and a marble's path IS that rule, a trace in the literal sense; the case against is that one path shows one outcome, not the distribution, which is the thing the machine is about.",
+        "At rest the drawing shows the last marble only, so the bell is invisible until many notes have passed; P3 asks the trace to be the subject, and here the subject is chance.",
+        "Scale moves lots by 10 px a semitone: the major-to-chromatic change shifts some lots by only 10 to 20 px, under the 24 px position floor.",
+        "Station triangles at 8 px are on the edge of reading as icons; they have to stay hairline, open, survey-plan marks.",
+        "Mute: the traverse goes to a dashed, unclosed line (a proposed, not surveyed, route); readable to a surveyor, maybe not to a player."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:29:24"
+  },
   "selection": null
 }

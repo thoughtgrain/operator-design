@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "pattern": "P14",
+  "drawing_language": "orthographic elevation",
+  "subject": "A front elevation of the row whose strings run on down as warp threads into a woven cloth, where every crossing of the last four beats is a slab on its thread and the drift shows as diagonals.",
+  "controls": [
+    "length: how far each bob hangs below the beam (position, 55 to 130 px for the longest), the bob line sloping as the real apparatus does.",
+    "count: how many strings and warp threads there are (count, 3 to 16).",
+    "swing: how high the bobs ride towards the viewer when held back, and how tall each woven slab is (position plus slab height, 4 to 12 px).",
+    "scale: the spacing of the threads, set by the scale's intervals so the cloth's gaps are the scale (shape: gaps of 1 to 3 semitones)."
+  ],
+  "muted": "The weaving stops: the newest row stays empty with a hairline across it and the cloth stops advancing; bobs go mid-grey.",
+  "reference": "library/loom-pages",
+  "risks": "Front-on, the swing goes towards the viewer, so swing only reads as the bobs lifting (~26 px at most); a side elevation would show it but splits the subject. Four rows is little history for a pendulum wave's slow pattern; rows are beats, not cycles. Slab rows are expensive (P14) at 16 threads."
+}

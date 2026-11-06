@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P3",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The output envelope of a fixed four-hit passage extruded into a wall in hidden-line isometric, standing on a makeup plinth with its crests pressed down through a water plane, the unpressed input wall standing grey behind it.",
+  "controls": [
+    "depth: the water plane drops down the wall from 0 to -48 dB (position, about 62 world px), and every crest that crosses it is pressed flatter (shape of the bright front face).",
+    "air: the slope of the wall after each crest, from a sheer drop back to the input at 20 ms to a long ramp that never recovers between hits at 2 s (shape; the primary for the front face).",
+    "knee: two dashed planes open either side of the water plane, 0 to 24 dB apart (position of the band edges), the crests rounding into it.",
+    "gain: the plinth under the wall grows from 0 to 24 dB tall and carries the wall and its water plane up with it (position of the whole wall)."
+  ],
+  "reference": "library/toro-blocks (hidden-line isometric, black bodies, mid-grey edges, one bright edge)",
+  "risks": "P3's own pitfall: an extruded envelope is still an oscilloscope with a camera on it, and nothing in it is a bell except the water plane. Depth and air both reshape the bright front face, which breaks one-channel-per-part unless depth's primary is the plane's position and the crest change is read as consequence. The wall's height is only about 50 px at 1:1 to keep the far corner of the plane out of the header; a taller crest pushes the scene into y 0-20. The front face is one 60-point outline re-keyed on depth, air and knee turns, fine at rest but it's the whole path budget. Like every variant, it's the model on a fixed passage: no live audio on an effect page."
+}

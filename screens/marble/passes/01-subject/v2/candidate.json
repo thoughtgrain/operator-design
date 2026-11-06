@@ -1,0 +1,19 @@
+{
+  "variant": "v2",
+  "pattern": "P5",
+  "drawing_language": "oscilloscope trace",
+  "subject": "The odds of each note as one bright stepped trace over a scope graticule, a pulse standing on every bin at its pitch and as tall as its share of the marbles, with the bar's drops ticking along a strip beneath.",
+  "controls": [
+    "pegs: the trace's shape: one tall pulse pair at 1 row, a wide low bell of up to 13 pulses at 12 rows (shape, the bell's outer pulses move well over 16 px).",
+    "drop: the number of marks in the activity strip under the graticule (count, 1 to 32 a bar), one per marble released.",
+    "bounce: a second, dimmer channel trace rises under the first, its rebound pulses scaled by bounce and offset right of each bin (scale and position on channel 2), flat at 0.",
+    "scale: the pitch ticks on the graticule's baseline and the pulses standing on them slide to the scale's tones (position on the pitch axis, 16 px a semitone)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (low-grey field, one bright figure, activity strip along the bottom)",
+  "risks": [
+    "P3's warning applies here too: a stepped trace on a graticule is the most generic picture of the five and could be any analyser; the scope furniture (ch1 readout, divisions) has to carry the authorship.",
+    "It shows the probability, not the marbles: the board itself never appears, so the Galton idea depends on the player already knowing it.",
+    "Adjacent semitone bins (b and c in major) put pulses 16 px apart, close to merging at 1:1.",
+    "Mute: the trace dims to the channel-off look (flat line at the baseline), a scope's own convention, but a flat line also looks like 'pegs at extreme' to a newcomer; needs a second cue."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P3",
+  "drawing_language": "patent section",
+  "subject": "Fig. 1: the sieved wave itself, emerging from a hatched wall in section and ringing out between dashed envelope lines, with reference numerals.",
+  "controls": [
+    "mesh: the trace's period (shape): at 'all' one fundamental cycle per half, at 2nd an octave up, at 8th eight times as many cycles, so the pitch the sieve leaves is drawn.",
+    "shake: chaff, a count of grey grains scattered under the trace (0 → 24), each a leaked harmonic let through for a moment.",
+    "keep: the dashed envelope lines (shape of their own part): they close in near the wall at 10 ms and run almost parallel to the far end at 2 s, and the trace's amplitude follows them.",
+    "mix: a grey dry trace behind the bright one, scaled from flat on the axis at 100 % to full height at 0 % (scale)."
+  ],
+  "reference": "opxy/reference/toro-ink-rest.jpg (a single bright line as the subject, labels at 10 px in mid grey)",
+  "risks": "Closest to 'oscilloscope', the pattern's own pitfall: what makes it authored is the patent apparatus (wall in section, numerals, leaders), which must stay sparing. At 8th the trace needs more points than one 64-point outline: 2–3 of the 4 paths, which spends the whole path budget on one part. Mesh and keep both reshape the visible trace even though keep's primary part is the envelope."
+}

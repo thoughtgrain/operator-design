@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "pattern": "P12",
+  "drawing_language": "survey plan",
+  "subject": "A round pavilion roof surveyed from directly above: its tile courses are concentric orbits round the ridge finial, one course per note of the span, and each drop that lands sits on its course like a planet, with the gutter as the outermost orbit where the puddle's held notes circle.",
+  "controls": [
+    "rate: how many drop marks sit on the courses from the last bar (count): one or two at 0.25 a beat, about thirty at 8 a beat, newest brightest and older ones fading to hollow rings.",
+    "roof: how many concentric course rings the plan holds between finial and eave (count, plus ring spacing as position): one ring at 0 st, eight at 12, twenty-two at 36 crowding toward the 3 px floor.",
+    "gust: every drop mark slides round its orbit in the wind's direction (rotation about the finial, up to ±90° at full gust), with a bearing arc outside the gutter showing which way and how far.",
+    "puddle: beads collect on the gutter orbit, one per repeated note, joined by a link drawn along the gutter in the direction they replay (count): none at 0, a near-full ring at 100."
+  ],
+  "reference": "library/meikyu-orrery/README.md (concentric orbits round a body, built in 3D and projected; here the projection is straight down)",
+  "risks": [
+    "A plan view throws away the depth that makes meikyu's orrery read as a solar system; at 1:1 it can read as a target, which craft.md names as an icon to avoid. The hips and survey labels are what stop it, and they're hairlines.",
+    "Rings are 10 px apart at 12 st but 3 px at 36 st; the roof control has to cap the drawn rings (one per scale octave degree, not per semitone) or it turns to hatching.",
+    "Gust and puddle are both empty at their defaults (0 and 0), so the rest frame shows neither; gust's rotation of the drops only reads once there are drops.",
+    "Orbits suggest a cycle, but rain isn't periodic; only puddle (the replay loop) is truly a cycle. The metaphor fits one control in four.",
+    "Muted state: the drops would have to go hollow and the finial dark; not yet drawn."
+  ]
+}

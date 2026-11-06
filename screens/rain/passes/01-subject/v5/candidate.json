@@ -1,0 +1,21 @@
+{
+  "variant": "v5",
+  "pattern": "P9",
+  "drawing_language": "engineering schematic",
+  "subject": "Stretch: a gable roof in hard one-bit ink, its tile courses printed as alternating dither bands under a 2 px bright outline, wired like an engineering schematic to labelled terminals for the rain streaks above it, the wind strokes beside it and the puddle plane at the downpipe foot.",
+  "controls": [
+    "rate: how many flat rain-streak glyphs hang above the roof (count, 2 to ~20); the dither can't move, so the streaks are flat greys.",
+    "roof: the gable's pitch (shape: the ridge point rises from 20 to 90 px above the eaves), with the dithered course bands redrawn as static art per span step.",
+    "gust: the wind glyph's strokes lengthen to one side and every streak leans with them (shape, ±30°).",
+    "puddle: the flat puddle plane at the downpipe widens and lightens (scale 1× to 2×, two grey steps)."
+  ],
+  "reference": "opxy/reference/toro-ink-rest.jpg (one-bit ink: 2 px outlines, ordered dither, a glyph per control)",
+  "risks": [
+    "Doesn't fit, plainly. P9 is a hero figure for an engine; a player's screen should show the rule that picks notes, and a house with rain on it shows the setting, not the rule. Nothing on it says which tile is which pitch or what the puddle replays.",
+    "The exception case would be that rain is the one player whose rule is a picture people already know by sight (water on a roof); that holds for the concept but not the controls: the gable at 1:1 is the house icon.",
+    "Dither only lives in still art, but roof (the most visible control) changes the dithered planes: each span step would need its own pre-drawn dither set, or the bands go flat and the language is lost.",
+    "One-bit ink and schematic pull against each other: the terminals and labels read as a legend panel next to a picture (craft.md, Picture not panel).",
+    "The lint flags ~970 2 × 2 dither cells as under the small-part floor; that's the pattern's nature (toro-ink) but a warning wall.",
+    "Muted state: the outline drops to mid grey, the only element allowed to be brightest."
+  ]
+}

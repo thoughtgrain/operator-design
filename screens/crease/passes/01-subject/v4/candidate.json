@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P1",
+  "drawing_language": "engineering schematic",
+  "subject": "A folding press drawn in section as an engineering schematic: the paper web festooned over a fixed upper bank of rollers and under a lower bank that drives down between them as far as the signal is pushed past the edge.",
+  "controls": [
+    "crease: the lower roller bank drives down from 12 px to 120 px below the upper bank and the web's loops deepen with it, the depth dimension on the right following; position of the bank, shape of the web.",
+    "sym: the lower bank slides sideways up to 26 px either way so the loops lean and go uneven; position.",
+    "paper: every roller grows from a 4 px pin (a sharp crease) to a 14 px drum (a soft round bend) and the web's turns round with it; uniform scale of the rollers, shape of the web at the turns.",
+    "mix: the diverter blade at the infeed swings 50 degrees from sending the web into the press to dropping it on the straight dry path under the rail, the festooned web dimming as it goes; rotation."
+  ],
+  "reference": "library/theseus-tower (line drawing of a mechanism, one bright part, grey structure)",
+  "risks": "The press is a metaphor for folding, not the signal: the web's loops don't trace the output wave, so a player who knows wavefolders sees a machine, not a waveform. Crease mostly moves the lower bank and the web's depth, which is honest (more drive, deeper fold) but it doesn't add folds; the count of loops is fixed at three. The web is one ribbon of 31 centre points and every control re-keys it (it's the only mutable outline, so fine on budget, but every turn redraws it). The hatched rails and hangers are a lot of hairline structure; at 1:1 they risk competing with the web. The mix blade is small (22 px); at 0 the web needs a second drawn path along the dry route, which is a second mutable outline."
+}

@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "ferry",
+  "name": "Ferry",
+  "parameters": [
+    {
+      "id": "route",
+      "label": "Route",
+      "default": 0.0,
+      "mapping": {"kind": "enum", "labels": ["up", "down", "shtl", "cross", "tramp"]},
+      "display": "enum"
+    },
+    {
+      "id": "ports",
+      "label": "Ports",
+      "default": 0.3333,
+      "mapping": {"kind": "enum", "labels": ["2", "3", "4", "5", "6", "7", "8"]},
+      "display": "enum"
+    },
+    {
+      "id": "swell",
+      "label": "Swell",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "dwell",
+      "label": "Dwell",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "division"
+    }
+  ],
+  "presets": {
+    "Crossing": {"route": 0.0, "ports": 0.3333, "swell": 0.0, "dwell": 0.5},
+    "Squall": {"route": 1.0, "ports": 1.0, "swell": 0.6, "dwell": 0.3}
+  },
+  "resources": {
+    "voiceBytes": 64,
+    "voiceAlignment": 4,
+    "voiceCapacity": 1,
+    "sharedBytes": 0,
+    "outputPeakQ31": 0,
+    "trackControl": {
+      "stateBytes": 32,
+      "stateAlignment": 4,
+      "savedBytes": 16,
+      "aux": [12],
+      "unique": true
+    },
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

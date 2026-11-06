@@ -1,0 +1,19 @@
+{
+  "variant": "v1",
+  "pattern": "P5",
+  "drawing_language": "star atlas",
+  "subject": "The pitch field charted as a conic atlas sheet, scale degrees as meridians and loudness as parallels, with the flock plotted over it as one asterism whose stars carry proper-motion vectors.",
+  "controls": [
+    "cohere: the asterism's spread over the chart (uniform scale about the flock's centre, about 2x across the range): at 0 the stars span most of the sheet, at 100 they knot into a few neighbouring meridians.",
+    "speed: each star's proper-motion vector, the distance flown in one beat (shape: 6 px at 0.25 to 32 px at 4.00), with the strip's raised marks as the second cue.",
+    "scatter: outlying stars leave the asterism and its join lines drop (position, up to ~60 px off the group's centre), so stray notes land far from the cluster.",
+    "scale: how many meridians the sheet ruled (count: 11 for penta, 25 for chrom over two octaves), each labelled octave meridian staying put."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (field at low grey, one bright figure, activity strip under it)",
+  "risks": [
+    "chrom rules 25 meridians across ~360 px, ~14 px apart at the bottom and closer near the top; fine for spacing but the field gets loud, so meridians may need to fade toward the top.",
+    "Stars are 3-5 px; at 1:1 the asterism is small against the chart and the brightest element only by a little. Bigger stars or a dimmer field in the frames pass.",
+    "The strip is near-dashboard; it earns its place only if it's the note response (raised marks on play) rather than a permanent meter.",
+    "Muted: needs its own cue (stars hollow, vectors hidden), not just dimmer greys."
+  ]
+}

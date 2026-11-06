@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "engineering schematic",
+  "subject": "A door in elevation as an engineering schematic, its parts stacked on the hinge axis: three knuckled hinges on a dash-dot centreline, a closer and folding arm on the head, a ledged plank leaf standing ajar, with callout balloons and a dimension under the leaf.",
+  "controls": [
+    "hold: how many boards make up the leaf, 3 to 12, and the dimension under it reads the slice (count).",
+    "creak: the three hinges' knuckles pull apart along the pin, 1 to 7 px between each, so each barrel lengthens by 24 px (position).",
+    "swing: the closer arm's angle at its pivot, 40 to 100 degrees, as a closer's valve sets how slowly a door comes to rest (rotation).",
+    "mix: how far the door stands ajar, 10 to 70 degrees: the leaf's seen width narrows and the gap at the latch side opens by ~60 px (position of the free edge)."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": "Stretch, and only a partial fit. P11 is for an instrument the sound is played on and whose parts the player picks between (a kit); a door is recognised by sight just as freely, and its parts do each own one control (hinges creak, the closer sets the swing, the leaf is the slice), which is why it's worth trying. But nothing is selected and nothing is struck, so P11's channel fit (only the struck part moves) doesn't apply; this is really P1 in schematic dress. Mix as how far ajar is a strong reading of wet, but the leaf narrowing also thins the boards, so hold's count gets harder to read at high mix. The hinges and closer are small (8 px barrels, a 42 px closer) next to the bright leaf."
+}

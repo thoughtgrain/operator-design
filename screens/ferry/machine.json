@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A track-control player on aux track 12: a ferry runs a route between ports (the held chord's tones), dwells at each port before it plays it, and swell holds it up on the way."
+}

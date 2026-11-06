@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P4",
+  "drawing_language": "survey plan",
+  "subject": "A survey plan of the doorway drawn once per swing, the plans stacked level above level up the hinge pin, the newest swing bright at the front and each older, wider swing a grey plan behind it.",
+  "controls": [
+    "hold: the leaf's length in every plan (50 to 130 px) and the scale bar under it, because the slice is the leaf (scale of each layer).",
+    "creak: each plan's swing arc breaks from a smooth curve into stick-slip steps, more and deeper steps as it rises (shape of the arcs).",
+    "swing: how much each swing keeps of the last one: at 0 the front plans collapse almost shut behind a wide oldest swing, at 100 every level swings nearly as wide (rotation of the layer leaves, over 40 degrees on the front leaf).",
+    "mix: how far the levels stand apart up the pin, 16 to 32 px each, so the stack of past swings spreads out of the front plan as more of it is heard (position of the back layers, over 60 px at the oldest)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "Five overlapping sectors with black fills read as a stack, but the back plans are mostly hidden and their dashed arcs get clipped into fragments at 1:1. The plan oblique (plans squashed to 0.42) is a liberty a survey plan doesn't usually take. Swing and mix both change the stack's silhouette; swing must stay on angle and mix on spacing or they blur together. P4's cap of 5 layers means swing can't be a count."
+}

@@ -13,7 +13,7 @@ Check, in this order, and write each finding with the file and the reason:
 1. **Authority.** Does anything contradict open-xy's `docs/display.md` or `docs/ux.md` as restated in `opxy/constraints.md`? open-xy wins every disagreement.
 2. **Evidence.** Does every cited file exist, and does it show what the proposal says? Run the tools on cited frames (`lint_frames`, `check_perceptibility` with the scores in the cited audit, `render_frame` to look at 1:1). A claim with no evidence is a finding.
 3. **Numbers.** Every number in new prose traces to `tokens.json` or `constraints.md`. A changed token has its `constraints.md` change and a bumped `source.ref`.
-4. **Device safety.** Nothing the proposal recommends breaks a device rule: grey only, no red, node and path budgets, mutable outline rules, nodes slide but never tilt, nothing moves at rest, eases 0.15–0.2 s, no flashing over 3×/s.
+4. **Device safety.** Nothing the proposal recommends breaks a device rule: grey only, no red, node and path budgets, mutable outline rules, nodes slide, scale and turn in the screen's plane but never tilt out of it, nothing moves at rest, eases 0.15–0.2 s, no flashing over 3×/s.
 5. **Rights.** Nothing copies stock OP-XY artwork or another machine's art. Someone else's work is cited as a reference, never brought into `library/`.
 6. **Categories.** A new pattern names the categories it fits, and they exist in `catalog.json`.
 

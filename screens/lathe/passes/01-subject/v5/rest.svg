@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">cut</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">groove</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wear</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">rumble</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1.00</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+  </g>
+  <path id="lathe_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="lathe_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#969696" stroke="#969696" stroke-width="2"/>
+  <path id="lathe_palette_2" d="M 720 300 L 724 300 L 724 304 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="2"/>
+  <path id="lathe_palette_3" d="M 730 300 L 734 300 L 734 304 Z" fill="#646464" stroke="#646464" stroke-width="2"/>
+  <path id="lathe_palette_4" d="M 740 300 L 744 300 L 744 304 Z" fill="#323232" stroke="#323232" stroke-width="2"/>
+  <path d="M 377.97 132.4 L 249.94 206.32 L 249.94 188.4 L 377.97 114.48 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 129.67 136.88 L 249.94 206.32 L 249.94 188.4 L 129.67 118.96 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 257.7 45.04 L 377.97 114.48 L 249.94 188.4 L 129.67 118.96 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 358.57 105.52 L 350.81 110 L 350.81 96.56 L 358.57 92.08 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 236.36 43.92 L 350.81 110 L 350.81 96.56 L 236.36 30.48 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 244.12 26 L 358.57 92.08 L 350.81 96.56 L 236.36 30.48 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 291.65 51.2 L 280.01 57.92 L 280.01 40 L 291.65 33.28 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 262.55 47.84 L 280.01 57.92 L 280.01 40 L 262.55 29.92 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 274.19 23.2 L 291.65 33.28 L 280.01 40 L 262.55 29.92 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 311.1 111.12 L 310.56 115.88 L 308.95 120.55 L 306.3 125.06 L 302.65 129.34 L 298.06 133.3 L 292.62 136.88 L 286.41 140.02 L 279.55 142.67 L 272.15 144.78 L 264.33 146.31 L 256.24 147.24 L 248 147.55 L 239.76 147.24 L 231.67 146.31 L 223.85 144.78 L 216.45 142.67 L 209.59 140.02 L 203.38 136.88 L 197.94 133.3 L 193.35 129.34 L 189.7 125.06 L 187.05 120.55 L 185.44 115.88 L 184.9 111.12 L 184.9 120.08 L 185.44 124.84 L 187.05 129.51 L 189.7 134.02 L 193.35 138.3 L 197.94 142.26 L 203.38 145.84 L 209.59 148.98 L 216.45 151.63 L 223.85 153.74 L 231.67 155.27 L 239.76 156.2 L 248 156.51 L 256.24 156.2 L 264.33 155.27 L 272.15 153.74 L 279.55 151.63 L 286.41 148.98 L 292.62 145.84 L 298.06 142.26 L 302.65 138.3 L 306.3 134.02 L 308.95 129.51 L 310.56 124.84 L 311.1 120.08 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 292.62 136.88 L 286.41 140.02 L 279.55 142.67 L 272.15 144.78 L 264.33 146.31 L 256.24 147.24 L 248 147.55 L 239.76 147.24 L 231.67 146.31 L 223.85 144.78 L 216.45 142.67 L 209.59 140.02 L 203.38 136.88 L 197.94 133.3 L 193.35 129.34 L 189.7 125.06 L 187.05 120.55 L 185.44 115.88 L 184.9 111.12 L 185.44 106.36 L 187.05 101.69 L 189.7 97.18 L 193.35 92.9 L 197.94 88.94 L 203.38 85.36 L 209.59 82.22 L 216.45 79.57 L 223.85 77.46 L 231.67 75.93 L 239.76 75 L 248 74.69 L 256.24 75 L 264.33 75.93 L 272.15 77.46 L 279.55 79.57 L 286.41 82.22 L 292.62 85.36 L 298.06 88.94 L 302.65 92.9 L 306.3 97.18 L 308.95 101.69 L 310.56 106.36 L 311.1 111.12 L 310.56 115.88 L 308.95 120.55 L 306.3 125.06 L 302.65 129.34 L 298.06 133.3 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path id="lathe_node_6" d="M 289.71 133.52 L 283.91 136.46 L 277.49 138.93 L 270.57 140.9 L 263.27 142.33 L 255.7 143.2 L 248 143.49 L 240.3 143.2 L 232.73 142.33 L 225.43 140.9 L 218.51 138.93 L 212.09 136.46 L 206.29 133.52 L 201.21 130.17 L 196.92 126.47 L 193.51 122.47 L 191.03 118.25 L 189.52 113.88 L 189.02 109.44 L 189.52 105 L 191.03 100.63 L 193.51 96.41 L 196.92 92.41 L 201.21 88.71 L 206.29 85.36 L 212.09 82.42 L 218.51 79.95 L 225.43 77.98 L 232.73 76.55 L 240.3 75.68 L 248 75.39 L 255.7 75.68 L 263.27 76.55 L 270.57 77.98 L 277.49 79.95 L 283.91 82.42 L 289.71 85.36 L 294.79 88.71 L 299.08 92.41 L 302.49 96.41 L 304.97 100.63 L 306.48 105 L 306.98 109.44 L 306.48 113.88 L 304.97 118.25 L 302.49 122.47 L 299.08 126.47 L 294.79 130.17 Z" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 285.83 131.28 L 279.44 134.43 L 272.29 136.96 L 264.53 138.81 L 256.37 139.95 L 248 140.33 L 239.63 139.95 L 231.47 138.81 L 223.71 136.96 L 216.56 134.43 L 210.17 131.28 L 204.72 127.59 L 200.33 123.46 L 197.12 118.98 L 195.16 114.27 L 194.5 109.44 L 195.16 104.61 L 197.12 99.9 L 200.33 95.42 L 204.72 91.29 L 210.17 87.6 L 216.56 84.45 L 223.71 81.92 L 231.47 80.07 L 239.63 78.93 L 248 78.55 L 256.37 78.93 L 264.53 80.07 L 272.29 81.92 L 279.44 84.45 L 285.83 87.6 L 291.28 91.29 L 295.67 95.42 L 298.88 99.9 L 300.84 104.61 L 301.5 109.44 L 300.84 114.27 L 298.88 118.98 L 295.67 123.46 L 291.28 127.59 Z" fill="none" stroke="#4B4B4B" stroke-width="1.5"/>
+  <path d="M 256.73 114.48 L 254.17 115.61 L 251.2 116.32 L 248 116.57 L 244.8 116.32 L 241.83 115.61 L 239.27 114.48 L 237.31 113 L 236.08 111.28 L 235.65 109.44 L 236.08 107.6 L 237.31 105.88 L 239.27 104.4 L 241.83 103.27 L 244.8 102.56 L 248 102.31 L 251.2 102.56 L 254.17 103.27 L 256.73 104.4 L 258.69 105.88 L 259.92 107.6 L 260.35 109.44 L 259.92 111.28 L 258.69 113 Z" fill="#000000" stroke="#646464" stroke-width="1.2"/>
+  <path d="M 249.75 110.45 L 248.64 110.82 L 247.36 110.82 L 246.25 110.45 L 245.62 109.81 L 245.62 109.07 L 246.25 108.43 L 247.36 108.06 L 248.64 108.06 L 249.75 108.43 L 250.38 109.07 L 250.38 109.81 L 248 102.16 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.2"/>
+  <path d="M 276.13 40 L 219.87 72.48 L 219.87 68 L 276.13 35.52 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 214.05 69.12 L 219.87 72.48 L 219.87 68 L 214.05 64.64 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 270.31 32.16 L 276.13 35.52 L 219.87 68 L 214.05 64.64 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 226.66 83.12 L 213.08 90.96 L 213.08 67.44 L 226.66 59.6 Z" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path d="M 199.5 83.12 L 213.08 90.96 L 213.08 67.44 L 199.5 59.6 Z" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="lathe_node_0" d="M 213.08 51.76 L 226.66 59.6 L 213.08 67.44 L 199.5 59.6 Z" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="lathe_node_1" d="M 205.81 85.64 L 208.72 87.32 L 210.46 90.79 L 209.88 90.46 Z" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <path id="lathe_node_2" d="M 3.45 -3.26 L 3.44 -2.93 L 2.95 -2.74 L 1.67 -2.87 L 0.44 -3.53 L -0.2 -4.52 L -0.04 -5.7 L 1.1 -6.98 L 3.18 -8.02 L 5.71 -8.53 L 8.06 -8.46 L 9.57 -7.97 L 9.81 -7.7 L 8.88 -7.52 L 7.53 -7.88 L 6.49 -8.7 L 6.16 -9.77 L 6.69 -11.02 L 8.24 -12.25 L 10.58 -13.1 L 13.11 -13.37 L 15.19 -13.09 L 16.21 -12.58 L 15.94 -12.37 L 14.74 -12.4 L 13.45 -12.96 L 12.67 -13.91 L 12.65 -15.25 L 11.45 -15.23 L 11.48 -13.47 L 12.7 -11.98 L 14.48 -11.21 L 16.24 -11.16 L 17.62 -11.96 L 17.23 -13.41 L 15.55 -14.26 L 13.13 -14.58 L 10.3 -14.28 L 7.65 -13.31 L 5.7 -11.77 L 4.89 -9.83 L 5.46 -7.99 L 6.98 -6.78 L 8.81 -6.3 L 10.47 -6.55 L 11.34 -7.77 L 10.25 -9.01 L 8.26 -9.65 L 5.61 -9.74 L 2.79 -9.17 L 0.36 -7.95 L -1.19 -6.22 L -1.44 -4.25 L -0.41 -2.62 L 1.31 -1.7 L 3.11 -1.51 L 4.62 -2.11 L 4.65 -3.22 Z" transform="matrix(1 0 0 1 214 94)" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+  <path d="M 222.78 74.16 L 238.3 67.44 L 238.3 64.08 L 222.78 70.8 Z" fill="#000000" stroke="#646464" stroke-width="1.2"/>
+  <text transform="matrix(1 0 0 1 332 196)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lathe, assembled</text>
+  <path d="M 196.5 65.82 L 159.5 65.82 L 159.5 66.82 L 196.5 66.82 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 105.5 69.32)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">cutter head</text>
+</svg>

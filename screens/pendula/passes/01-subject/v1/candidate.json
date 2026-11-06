@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "pattern": "P13",
+  "drawing_language": "typeset diagram",
+  "subject": "A textbook figure with every pendulum hung from a single pivot on nested swing arcs, where the plumb line is a gate that captures each bob as it crosses and that crossing is the note.",
+  "controls": [
+    "length: the radius of the whole nest of arcs (scale, 90 to 180 px), so longer pendulums hang visibly deeper from the pivot.",
+    "count: how many nested arcs and bobs hang from the pivot (count, 3 to 16), the inner arcs packing in towards the pivot.",
+    "swing: the angle the arcs open to and the bobs are held at, marked θ at the pivot (rotation, 10° to 45° either side).",
+    "scale: the polygon on the pitch-class clock in the lower left (shape), a pentagon for pent up to the full twelve-gon for chrom."
+  ],
+  "muted": "The gate (plumb line and wedge) drops to the ground grey and the bobs go hollow mid-grey; they still swing, nothing is captured.",
+  "reference": "library/meikyu-capture",
+  "risks": "Drawing every pendulum from one pivot is a diagram, not the apparatus; players who know the real row of pendulums may not recognise it. At 16 the inner bobs sit ~7 px apart along the ray and need a smaller bob. At rest every bob sits on one ray, so the drift only shows when playing (it opens into a spiral). The pitch-class clock is a corner figure, the P13 fallback for a control with no twin in the metaphor."
+}

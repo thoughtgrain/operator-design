@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "pattern": "P5",
+  "drawing_language": "star atlas",
+  "subject": "A star chart of the rain as a meteor shower: on a faint conic graticule the roof is a constellation, its tile courses plotted as stars up both slopes to the ridge, each drop a short trail traced back to a radiant the gust slides along the sky, with the puddle as an open cluster below the eave and the last sixteen beats ticked along the bottom strip.",
+  "controls": [
+    "rate: how many meteor trails are plotted at once (count, 1 to ~24), each ending at the tile star it rang, with ticks filling the strip as second cue.",
+    "roof: the constellation's ridge star rises and more course stars appear up the slopes (shape, ridge moves ~50 px; count as second cue): a flat line of one star at 0 st, a steep gable at 36.",
+    "gust: the radiant slides along the top of the chart (position, ±150 px) and every trail swings to point back at it, so drops come in from the side the wind blows from.",
+    "puddle: stars gather inside the dotted cluster ring below the left eave, one per repeated note, and the cluster ring widens (count, then scale)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one bright figure on a low-grey field, activity strip along the bottom)",
+  "risks": [
+    "The gable constellation is the house icon's outline in dots; it has to stay a constellation (broken lines short of each star, magnitudes, the name tegula) or it reads as clip-art.",
+    "Meteors fall away from a radiant, rain falls down: the picture asks the player to read drops as trails pointing up toward their source. Clever, maybe too clever.",
+    "Stars at 2–3 px on the upper courses sit at the small-part floor; the lint flags the cluster dots (1.8 px) and they'd need to grow.",
+    "The strip and the cluster are both secondary furniture in low greys at the bottom; together with the graticule labels the edges get busy.",
+    "Muted state: trails go out and the figure drops to the field's grey."
+  ]
+}

@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,180 @@
       "brief": "Subject built on P11 Instrument stack; drawing language: orthographic elevation. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P5",
+      "drawing_language": "star atlas",
+      "subject": "The pitch field charted as a conic atlas sheet, scale degrees as meridians and loudness as parallels, with the flock plotted over it as one asterism whose stars carry proper-motion vectors.",
+      "controls": [
+        "cohere: the asterism's spread over the chart (uniform scale about the flock's centre, about 2x across the range): at 0 the stars span most of the sheet, at 100 they knot into a few neighbouring meridians.",
+        "speed: each star's proper-motion vector, the distance flown in one beat (shape: 6 px at 0.25 to 32 px at 4.00), with the strip's raised marks as the second cue.",
+        "scatter: outlying stars leave the asterism and its join lines drop (position, up to ~60 px off the group's centre), so stray notes land far from the cluster.",
+        "scale: how many meridians the sheet ruled (count: 11 for penta, 25 for chrom over two octaves), each labelled octave meridian staying put."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (field at low grey, one bright figure, activity strip under it)",
+      "risks": [
+        "chrom rules 25 meridians across ~360 px, ~14 px apart at the bottom and closer near the top; fine for spacing but the field gets loud, so meridians may need to fade toward the top.",
+        "Stars are 3-5 px; at 1:1 the asterism is small against the chart and the brightest element only by a little. Bigger stars or a dimmer field in the frames pass.",
+        "The strip is near-dashboard; it earns its place only if it's the note response (raised marks on play) rather than a permanent meter.",
+        "Muted: needs its own cue (stars hollow, vectors hidden), not just dimmer greys."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P12",
+      "drawing_language": "engineering schematic",
+      "subject": "A plan-view orrery in schematic drafting: birds circle the flock's centre of gravity on four orbits, and a graduated two-octave rim reads off, by a dashed leader, the pitch each bird's bearing points at.",
+      "controls": [
+        "cohere: the angular sector the birds gather in, with its dimension arc and span in semitones on the rim (position along the orbits, about 160 deg of travel from 0 to 100).",
+        "speed: the trailing link behind each planet along its orbit, one beat of travel (shape: 6 deg at 0.25 to ~90 deg at 4.00).",
+        "scatter: birds step off their orbits inward and outward (radial position, up to one orbit spacing ~30 px), so leaders hit the rim out of order.",
+        "scale: tick count on the graduated rim (count: 10 for penta to 24 for chrom), labelled octaves fixed."
+      ],
+      "reference": "library/meikyu-orrery/README.md (orbits modelled in 3D, one camera, planets sized by depth)",
+      "risks": [
+        "P12's own weakness: the centre of gravity does nothing but sit there; the orbits are a stand-in for the flock, not its rule. Birds don't orbit their centroid in a boids model, they travel.",
+        "Pitch as a bearing around a circle wraps c5 onto c3; the rim has a seam the player has to learn.",
+        "The rim's front edge sits at y ~205, against the bottom of the body; there's no room for a strip and a wider sector pushes leaders off screen at the front.",
+        "Eight leaders plus four orbits plus the rim is a lot of hairline; at 1:1 the dashed leaders read as noise. Leaders may only appear on note.",
+        "Lint warns on 1.0 px stroked outlines (orbits, title block): hairlines by craft.md, but they're at the edge of what the panel holds."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P13",
+      "drawing_language": "oscilloscope trace",
+      "subject": "A storage scope plotting every bird's pitch against time as a stepped phosphor trace, with cohesion drawn as two capture cursors that the traces are pulled between as they reach the present.",
+      "controls": [
+        "cohere: the gap between the two capture cursors and its delta readout (position: about 22 semitones apart at 0, 3 at 100, ~150 px of travel), and the traces' older ends sit further outside it.",
+        "speed: steps per trace, one each time a bird crosses a cell (count: ~1 step every 4 beats at 0.25, 4 a beat at 4.00, so 1 to 20 risers across the screen).",
+        "scatter: some traces escape the cursors in the newest division and their beam spots land outside, drawn dimmer (position of the trace ends, up to the full pitch axis).",
+        "scale: the degree ticks on the pitch rail and the step heights every trace can take (count: 11 to 25 levels), octave ticks fixed."
+      ],
+      "reference": "library/meikyu-capture/README.md (the player's own rule drawn as a capture radius; what's inside plays)",
+      "risks": [
+        "Language risk named in P3: this is an oscilloscope, and an oscilloscope is the cliché. The capture cursors are what make it P13 rather than a trace; if they don't lead, it's a plot.",
+        "The capture is a reading of cohesion, not a mechanism: cohere pulls birds toward the centre, it doesn't gate notes the way meikyu's Dens does. Honest but weaker than meikyu's twin.",
+        "Eight stepped traces cross each other; at 1:1 the middle division is busy. Persistence greys help; at speed 4 (20 risers each) it will be hatching.",
+        "Traces are history, so they scroll while playing: eight mutable outlines would be needed and only four paths exist. Each trace has to be built from translated riser/tread nodes, which is costly."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P14",
+      "drawing_language": "typeset diagram",
+      "subject": "The flock's last four bars woven as a book figure: warp threads are the scale's pitches, one weft row per bar recedes behind the newest, and a raised slab stands wherever birds played that pitch in that bar.",
+      "controls": [
+        "cohere: how many neighbouring threads the slabs gather on (shape of the row's footprint: across ~9 threads at 0, two or three at 100).",
+        "speed: slab height, the number of hits per thread per bar (scale of the slabs, one to four courses).",
+        "scatter: lone slabs away from the cluster on far threads (position of outliers, up to the full cloth width).",
+        "scale: warp thread count (11 for penta to 25 for chrom), octave threads labelled under the front edge."
+      ],
+      "reference": "library/loom-pages/README.md (cloth as history, depth means earlier, four rows)",
+      "risks": [
+        "Reads as a 3D bar chart at a glance; the typeset furniture (row numbers, caption) is what makes it a figure and it costs text slots.",
+        "Loom suits a sequence; a flock has no steps. Rows are bars of what was played, so the rest frame shows history, not the flock itself: no bird is on screen.",
+        "Slabs are expensive (two to three faces each, up to ~40 slabs); budget needs flat tops on older rows.",
+        "chrom's 25 threads with 0.34-wide slabs crowd to ~3 px gaps at the back row.",
+        "The caption's 'fig. 1  last four bars' collapses its double space in the preview."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "orthographic elevation",
+      "subject": "Birds on telegraph wires drawn in front elevation: two poles carry one wire per scale degree, every perched bird sounds its wire, and birds in the air are hopping between wires.",
+      "controls": [
+        "cohere: how closely the birds bunch along the span and onto neighbouring wires (position: spacing from ~56 px to ~10 px between birds).",
+        "speed: how many birds are off their wires mid-hop at once, each with its dashed hop path (count: none at 0.25 to five of eight at 4.00).",
+        "scatter: birds that perch far out on the span and on distant wires, away from the bunch (position, up to the full span).",
+        "scale: the number of wires strung between the poles (count: 11 to 25), octave wires labelled at the left pole."
+      ],
+      "reference": "library/theseus-tower/README.md (known object from clean primitives, line drawing, only the struck part moves)",
+      "risks": [
+        "Stretch: P11 is for drum kits, an instrument people know by sight. A player has no instrument. The exception argument is that birds on a wire is already a picture everyone reads as notes on a staff, so the wires work as the 'instrument' and each wire has its own place; that's an analogy, not the pattern's reason, and it may simply not fit.",
+        "Bird silhouettes are the icon trap craft.md warns about; the line has to stay a drafted elevation (one outline, hairline wires, no cartoon eyes) or it becomes clip-art.",
+        "chrom strings 25 wires 5 px apart: under the 6 px stack spacing in accessibility.md. Chrom would need a two-octave fold or a smaller range.",
+        "The poles and insulators are static scenery that does nothing for the sound."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:30:23"
+  },
   "selection": null
 }

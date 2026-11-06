@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P11 Instrument stack; drawing language: star atlas. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "drawing_language": "orthographic elevation",
+      "subject": "A riddle seen dead side-on in elevation: the input's harmonics fall as rods onto its mesh plate, and only the rods over a hole drop through.",
+      "controls": [
+        "mesh: the holes in the plate (count channel): every rod at 'all', every 2nd at 2nd, down to two holes at 8th; the plate's bright ribbon re-segments around them.",
+        "shake: the whole riddle slides sideways on its dimension line (position, ±24 px), and rods that land half over a hole leak through as grey stubs.",
+        "keep: how far the passed rods hang below the plate (position of their lower ends, 24 → 90 px): a short ring is a short rod.",
+        "mix: the bypass gate hinged on the left rim (rotation, 0° flush at 100 % to 70° open at 0 %) through which the unsieved column falls past the riddle."
+      ],
+      "reference": "library/theseus-tower (line drawing, black bodies with grey outlines, one part lit)",
+      "risks": "Sixteen rods plus eight plate segments is a lot of uprights at 15 px pitch; at 8th the plate is nearly whole and the drawing goes quiet, which is honest but reads as 'off'. Shake as a slide only works if leaked stubs also appear, otherwise it's a position change of the whole thing with no sieve meaning. The gate is the weakest part: mix has no physical twin in a riddle."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "drawing_language": "survey plan",
+      "subject": "A surveyed plan of the sieve from above on the left, sixteen numbered stations open or closed, beside a long-section profile of the output spectrum on the right.",
+      "controls": [
+        "mesh: which stations in the plan are open rings and which are survey crosses (count, 16 → 2 open), with the profile's peaks following.",
+        "shake: the station lattice slides off the rim's datum (position, up to 40 px right), and small leaked peaks rise between the kept ones on the profile.",
+        "keep: the width of each profile peak (shape: broad hills at 10 ms, needles at 2 s), because a longer ring is a narrower resonance.",
+        "mix: a grey dry profile lifts off the datum line under the trace (position, 0 px at 100 % to 60 px at 0 %)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one bright figure, ground in low greys, labelled sparingly)",
+      "risks": "Two zones split attention; the plan is the explanation and the profile the result, so neither is clearly the subject. The profile is a spectrum, which drifts toward 'analyser'. Mix at its default (100 %) shows nothing, so the dry line only appears once turned. Two controls touch the profile (keep on shape, shake on leaked peaks); shake's primary channel has to stay the lattice slide."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "drawing_language": "patent section",
+      "subject": "Fig. 1: the sieved wave itself, emerging from a hatched wall in section and ringing out between dashed envelope lines, with reference numerals.",
+      "controls": [
+        "mesh: the trace's period (shape): at 'all' one fundamental cycle per half, at 2nd an octave up, at 8th eight times as many cycles, so the pitch the sieve leaves is drawn.",
+        "shake: chaff, a count of grey grains scattered under the trace (0 → 24), each a leaked harmonic let through for a moment.",
+        "keep: the dashed envelope lines (shape of their own part): they close in near the wall at 10 ms and run almost parallel to the far end at 2 s, and the trace's amplitude follows them.",
+        "mix: a grey dry trace behind the bright one, scaled from flat on the axis at 100 % to full height at 0 % (scale)."
+      ],
+      "reference": "opxy/reference/toro-ink-rest.jpg (a single bright line as the subject, labels at 10 px in mid grey)",
+      "risks": "Closest to 'oscilloscope', the pattern's own pitfall: what makes it authored is the patent apparatus (wall in section, numerals, leaders), which must stay sparing. At 8th the trace needs more points than one 64-point outline: 2–3 of the 4 paths, which spends the whole path budget on one part. Mesh and keep both reshape the visible trace even though keep's primary part is the envelope."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "drawing_language": "hidden-line isometric",
+      "subject": "An exploded column of eight round test sieves receding up and to the right, coarsest at the back, with the tray at the current mesh lit and holding the kept harmonics as grains.",
+      "controls": [
+        "mesh: which tray is lit (position along the stack, 27 px per step, 190 px end to end) and so how fine the grains it holds.",
+        "shake: the whole stack slides along its diagonal on the shaker (position, up to 24 px) and grains spill from the lit tray onto the trays in front.",
+        "keep: the height of the heap of grains on the lit tray (shape, 4 → 18 px).",
+        "mix: the feed spout behind the stack swings from aimed into it at 100 % to 60° aside at 0 % (rotation)."
+      ],
+      "reference": "library/toro-blocks (hidden-line isometric, black-filled wireframes, solid only where it matters)",
+      "risks": "The literal sieve stack is the easiest read of all five but tells the least about the sound: grains on a tray say 'sieve' more than 'harmonics'. Eight trays is past the pattern's 5–6 cap; at 16 px vertical spacing they hold apart at 1:1 but only just. Keep as heap height is small travel for a score-4 control."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "star atlas",
+      "subject": "An atlas plate of a constellation drawn as an organ rank, twelve pipes in figure lines with a star at each mouth, the sieve's kept partials the bright named stars joined by the figure line.",
+      "controls": [
+        "mesh: which stars are named and joined by the figure line (count: 12 at 'all', 6 at 2nd, down to 1 at 8th within the twelve drawn).",
+        "shake: rejected stars drift off their mouths along short proper-motion tracks (position, up to 24 px), brightening as they pass.",
+        "keep: the magnitude of the kept stars (scale, 0.8× → 1.6×), since a longer ring is a brighter, longer-lived partial.",
+        "mix: the magnitude of the unsieved stars (scale of a different part, pinpoints at 100 % to full size at 0 %)."
+      ],
+      "reference": "library/theseus-tower (P11: instrument parts as clean primitives in a line drawing)",
+      "risks": "Stretch, outside the effect column. The case for it: an organ's mutation and mixture stops are literally harmonic sieves (a 2 2/3' stop keeps the 3rd harmonic), so a rank of pipes is the one instrument people know by sight whose parts are the harmonic series, and atlases have always drawn constellations as instruments (Lyra, Pyxis). The case against: an effect acts on another track's sound, and the pipes suggest the sieve makes sound. P11's channel fit (only the struck part moves) doesn't map onto a filter. Two of the four controls are star-size scale on different parts. Twelve pipes cover only h1–h12, so 7th and 8th keep one star each."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:28:18"
+  },
   "selection": null
 }

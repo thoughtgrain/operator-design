@@ -256,7 +256,7 @@ def v1(c):
         dy = dy / abs(dy) * (ys - yn - 6)
     for i, (a, b) in enumerate(zip(pts, pts[1:])):
         shade = G5 if i < bounces * 0.5 else G4
-        s.line(a[0], a[1], b[0], b[1], 1.2, shade)
+        s.line(a[0], a[1], b[0], b[1], 1, shade)
     # --- labels
     s.text(xw + 6, ys + 22, "nave", fill=G4)
     s.text(xs + 6, ys + 22, "choir", fill=G4)
@@ -283,7 +283,7 @@ def v2(c):
     # ---------------- fig. 1: longitudinal section
     floor = 176
     x0 = 26
-    length = 110 + 90 * c["nave"]
+    length = 90 + 64 * c["nave"]
     xe = x0 + length
     spring, apex, vault = 118, 98, 62
     # hatched section cut: floor slab
@@ -306,24 +306,24 @@ def v2(c):
         a = x0 + 4 + i * bay
         b = a + bay
         s.rect(a, spring, 4, floor - spring, fill=G1, stroke=G5, sw=1)
-        # pointed arch: two arcs meeting at the apex
-        m = (a + 4 + b) / 2
-        left = [(a + 4 + (m - a - 4) * math.sin(math.radians(t)), spring - (spring - apex) * (1 - math.cos(math.radians(t))) ** 0.8)
-                for t in range(0, 91, 10)]
-        right = [(2 * m - x, y) for x, y in left[::-1]][1:]
-        s.ribbon(left + right, 1.5, G5)
-    # east end: apse in section (a quarter dome)
-    s.ribbon(arc(xe, floor, floor - vault - 4, -90, 0, 18), 2, G7)
-    s.ribbon(arc(xe, floor, floor - vault + 4, -90, 0, 18), 1.2, G5)
+        # pointed (equilateral) arch: each side struck from the opposite springing
+        w = b - (a + 4)
+        left = arc(a + 4 + w, spring, w, 180, 240, 8)
+        right = arc(a + 4, spring, w, 300, 360, 8)
+        s.ribbon(left + right[1:], 1.5, G5)
+    # east end: apse in section, a half-dome over a short wall
+    ra = spring - vault - 4
+    s.ribbon(arc(xe, spring, ra, -90, 0, 18) + [(xe + ra, floor)], 2, G7)
+    s.ribbon([(xe + 6, vault - 4)] + arc(xe + 6, spring, ra + 2, -90, 0, 14)[1:] + [(xe + ra + 8, floor)], 1.2, G5)
     # choir: arrows from the door, scattering under the vault
     n = 1 + round(13 * c["choir"])
     src = (x0 + 4, floor - 14)
     for k in range(n):
-        ang = -18 - (55 * k / max(1, n - 1) if n > 1 else 0)
-        L = 34 + (k % 3) * 8
-        ex = src[0] + L * math.cos(math.radians(ang)) + k * 3
-        ey = src[1] + L * math.sin(math.radians(ang))
-        sx, sy = src[0] + k * 3, src[1]
+        ang = -12 - (62 * k / (n - 1) if n > 1 else 20)
+        L = 52 + (k % 3) * 12
+        sx, sy = src
+        ex = sx + L * math.cos(math.radians(ang))
+        ey = sy + L * math.sin(math.radians(ang))
         s.line(sx, sy, ex, ey, 1, G4)
         # arrowhead: small closed triangle
         ux, uy = (ex - sx) / math.hypot(ex - sx, ey - sy), (ey - sy) / math.hypot(ex - sx, ey - sy)
@@ -331,7 +331,7 @@ def v2(c):
     # reference numerals with leader lines, patent style
     s.text(x0 + 30, vault - 10, "10", fill=G4)
     s.line(x0 + 36, vault - 7, x0 + 42, vault - 3, 1, G3)
-    s.text(xe - 4, floor - 70, "12", fill=G4)
+    s.text(xe + ra - 8, spring - ra * 0.75, "12", fill=G4)
     s.text(x0 - 14, floor + 26, "fig. 1", fill=G4)
     # ---------------- fig. 2: impulse response
     bx, by = 262, 168                 # time origin, baseline
@@ -340,9 +340,9 @@ def v2(c):
         s.rect(bx + k * 26, by + 3, 1.2, 4, fill=G3)
     # direct sound: a single bright impulse at 0
     s.rect(bx - 1, by - 92, 3, 92, fill=G7)
-    gap = 6 + 90 * c["doors"]
+    gap = 6 + 60 * c["doors"]
     t0 = bx + gap
-    tail = 40 + 150 * c["nave"]
+    tail = 40 + 100 * c["nave"]
     rng = random.Random(3)
     teeth, xs = [], t0
     pts = [(t0 - 1, by)]
@@ -383,13 +383,13 @@ def v3(c):
     doors -> the whole surface slides away from the time origin (position)
     """
     s = Svg()
-    ox, oy = 34, 186                         # time origin, front slice baseline
-    tdir = (0.985, 0.16)                     # time axis on screen
-    fdir = (0.62, -0.52)                     # one band step into depth (x 8 px)
-    step = 8.0
+    ox, oy = 40, 190                         # time origin, front slice baseline
+    tdir = (0.99, 0.08)                      # time axis on screen
+    fdir = (0.75, -0.66)                     # one band step into depth (x 9 px)
+    step = 9.0
     nslice = 12
-    gap = 8 + 90 * c["doors"]
-    length = 60 + 170 * c["nave"]
+    gap = 8 + 60 * c["doors"]
+    length = 80 + 180 * c["nave"]
     hf = hf_ratio(c["stone"])
     diff = c["choir"]
     rng = random.Random(11)
@@ -401,14 +401,13 @@ def v3(c):
     # axes (behind): time axis on the floor, level axis at the origin
     s.ribbon([P(-6, 0, 0), P(gap + length + 30, 0, 0)], 1, G3)
     s.ribbon([P(0, 0, 0), P(0, nslice - 1, 0)], 1, G3)
-    s.ribbon([P(0, nslice - 1, 0), P(0, nslice - 1, 70)], 1, G3)
     for k in range(int((gap + length + 20) // 30) + 1):
         a = P(k * 30, 0, 0)
         s.line(a[0], a[1], a[0] - 3, a[1] + 4, 1, G3)
     for k in range(nslice - 1, -1, -1):
         frac = k / (nslice - 1)
         Lk = length * (1 - (1 - hf) * frac)
-        h0 = 64 * (1 - 0.35 * frac)
+        h0 = 70 * (1 - 0.35 * frac)
         top = []
         n = 26
         for i in range(n):
@@ -430,9 +429,11 @@ def v3(c):
     a, b = P(0, 0, 0), P(0, 0, 80)
     s.line(a[0], a[1], b[0], b[1], 2.5, G7)
     # labels on the axes
-    s.text(*P(gap + length + 18, 0, -14), "time", fill=G4)
-    s.text(*[v + w for v, w in zip(P(0, nslice - 1, 0), (6, 0))], "treble", fill=G4)
-    s.text(P(0, 0, 0)[0] - 4, P(0, 0, 0)[1] + 16, "0", fill=G4)
+    e = P(gap + length + 8, 0, 0)
+    s.text(e[0] + 4, e[1] - 6, "time", fill=G4)
+    b = P(0, nslice - 1, 0)
+    s.text(b[0] - 12, b[1] - 56, "treble", fill=G4)
+    s.text(ox - 8, oy + 18, "bass", fill=G4)
     return s
 
 
@@ -448,12 +449,12 @@ def v4(c):
     doors -> the gap between the source star and the first plate (position)
     """
     s = Svg()
-    src = (34, 150)
+    src = (34, 154)
     gap = 18 + 80 * c["doors"]
-    pw, ph = 168, 104
+    pw, ph = 168, 84
     x0 = src[0] + gap
-    y0 = 186 - ph
-    spacing = 8 + 18 * c["nave"]
+    y0 = 112
+    spacing = 7 + 15 * c["nave"]
     nplates = 5
     hf = hf_ratio(c["stone"])
     nstars = 4 + round(22 * c["choir"])
@@ -554,9 +555,10 @@ def v5(c):
     dither_rect(s, xt1 + 3, eave + 3, xe - xt1 - 6, ground - eave - 6, lvl)
     # nave roof: a long gable seen side-on (a parallelogram band)
     s.poly([(xt1, eave), (xt1 + 10, ridge), (xe - 4, ridge), (xe + 6, eave)], fill=G0, stroke=G7, sw=2)
-    # apse: a half-round end, flat grey with outline
-    s.poly([(xe + 1, eave + 4)] + arc(xe + 1, ground - 1, ground - eave - 5, -90, 0, 14)[1:] + [(xe + 1, ground - 1)],
-           fill=G2, stroke=G7, sw=2)
+    # apse: lower half-round end with a conical roof seen side-on
+    ae = eave + 16
+    s.rect(xe, ae, 34, ground - ae, fill=G2, stroke=G7, sw=2)
+    s.poly([(xe, ae), (xe, eave + 2)] + arc(xe, ae, 34, -60, 0, 8)[1:], fill=G0, stroke=G7, sw=2)
     # windows, one per bay: tall lancets, black with an outline
     bay = 30
     nb = int((xe - xt1 - 20) // bay)
@@ -585,15 +587,11 @@ def v5(c):
     n = 2 + round(14 * c["choir"])
     rng = random.Random(9)
     for k in range(n):
-        a = rng.uniform(-170, -10)
-        rr = rng.uniform(80, 104)
-        sx = xe + 1 + rr * math.cos(math.radians(a)) * 0.7
-        sy = ground - 10 + rr * math.sin(math.radians(a)) * 0.9
-        if sy < 26:
-            continue
-        s.rect(sx - 2, sy - 2, 4, 4, fill=G6)
+        sx = xt1 + 186 + rng.uniform(0, xe - xt1 - 140)
+        sy = rng.uniform(36, ridge - 10)
+        s.rect(round(sx) - 2, round(sy) - 2, 4, 4, fill=G6)
     # stone: decay glyph over the roof, fine teeth survive with harder stone
-    gx, gy = xt1 + 34, 52
+    gx, gy = xt1 + 20, 52
     pts = []
     hf = hf_ratio(c["stone"])
     for i in range(30):
@@ -616,7 +614,7 @@ def main():
     for arg in sys.argv[1:]:            # optional overrides, e.g. nave=1 choir=0
         k, v = arg.split("=")
         c[k] = float(v)
-    out = HERE if len(sys.argv) == 1 else HERE / "_probe"
+    out = HERE if len(sys.argv) == 1 else Path("/tmp/claude-0/-home-claude/c88308e8-ea8c-5f15-87e9-9fd62704285b/scratchpad/nave_probe")
     for name, fn in VARIANTS.items():
         fn(c).write(out / name / "rest.svg", c)
         print(out / name / "rest.svg")

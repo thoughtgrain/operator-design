@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P12",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The moon on its orbit drawing the sea out into a bright spheroid round a dashed, hidden earth, with the twelve pitch classes as beads on a ring between them.",
+  "controls": [
+    "tide: the water spheroid stretches toward the moon, from a sphere just over the earth at 0 st to a long lemon 2.2x its width at 36 st (shape of the brightest outline).",
+    "period: the moon's orbit widens, Kepler-style, from 80 to 124 units of radius as the period runs 1 s to 32 s, carrying the moon outward (scale of the orbit, position of the moon).",
+    "foam: spray marks fly off both tips of the bulge, none to about 16, densest at the tip facing the moon (count).",
+    "scale: the beads on the pitch-class ring fill for the scale's notes and empty for the rest, 5 to 7 of 12 filled, so each scale is a distinct pattern round the ring (count and shade on fixed parts)."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "Real tides have two bulges per lunar day; a spheroid points both ends, so one player period is half a moon orbit, which a physicist would notice and a player won't. The moon turns once per period on a long period it barely moves; it needs to be stepped. Scale lives on fill state of 12 beads; maj and min differ by two or three beads, which is close to shade-only and must also change the ring (e.g. scale notes sit on the ring, others step in). Orbits as concentric ellipses invite the Saturn/target-ring look craft warns about; the hidden earth helps. The spheroid silhouette is a mutable outline re-keyed on tide turns and as the moon moves (its axis turns), so throttle it. Muted: the moon goes hollow and the spheroid relaxes to a sphere."
+}

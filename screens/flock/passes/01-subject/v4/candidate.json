@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "pattern": "P14",
+  "drawing_language": "typeset diagram",
+  "subject": "The flock's last four bars woven as a book figure: warp threads are the scale's pitches, one weft row per bar recedes behind the newest, and a raised slab stands wherever birds played that pitch in that bar.",
+  "controls": [
+    "cohere: how many neighbouring threads the slabs gather on (shape of the row's footprint: across ~9 threads at 0, two or three at 100).",
+    "speed: slab height, the number of hits per thread per bar (scale of the slabs, one to four courses).",
+    "scatter: lone slabs away from the cluster on far threads (position of outliers, up to the full cloth width).",
+    "scale: warp thread count (11 for penta to 25 for chrom), octave threads labelled under the front edge."
+  ],
+  "reference": "library/loom-pages/README.md (cloth as history, depth means earlier, four rows)",
+  "risks": [
+    "Reads as a 3D bar chart at a glance; the typeset furniture (row numbers, caption) is what makes it a figure and it costs text slots.",
+    "Loom suits a sequence; a flock has no steps. Rows are bars of what was played, so the rest frame shows history, not the flock itself: no bird is on screen.",
+    "Slabs are expensive (two to three faces each, up to ~40 slabs); budget needs flat tops on older rows.",
+    "chrom's 25 threads with 0.34-wide slabs crowd to ~3 px gaps at the back row.",
+    "The caption's 'fig. 1  last four bars' collapses its double space in the preview."
+  ]
+}

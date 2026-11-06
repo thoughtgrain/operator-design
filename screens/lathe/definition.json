@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "lathe",
+  "name": "Lathe",
+  "parameters": [
+    {
+      "id": "cut",
+      "label": "Cut",
+      "default": 0.3333,
+      "mapping": {"kind": "exponential", "minimum": 0.5, "maximum": 4.0},
+      "display": "ratio"
+    },
+    {
+      "id": "groove",
+      "label": "Groove",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "wear",
+      "label": "Wear",
+      "default": 0.0,
+      "mapping": {"kind": "power", "maximum": 1, "exponent": 1.5},
+      "display": "percent"
+    },
+    {
+      "id": "rumble",
+      "label": "Rumble",
+      "default": 0.0,
+      "mapping": {"kind": "power", "maximum": 1, "exponent": 2},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Lacquer": {"cut": 0.45, "groove": 0.15, "wear": 0.0, "rumble": 0.05},
+    "Dubplate": {"cut": 0.75, "groove": 0.1, "wear": 0.2, "rumble": 0.15},
+    "Old 78": {"cut": 0.6, "groove": 0.7, "wear": 0.7, "rumble": 0.45}
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

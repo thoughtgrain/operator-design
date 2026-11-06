@@ -3,11 +3,11 @@
   <g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>
   <path d="M 0 0 L 480 0 L 480 20 L 0 20 Z" fill="#000000" stroke="none" stroke-width="0"/>
   <path d="M 230 32 L 233 32.8 L 235.2 35 L 236 38 L 236 194 L 235.2 197 L 233 199.2 L 230 200 L 22 200 L 19 199.2 L 16.8 197 L 16 194 L 16 38 L 16.8 35 L 19 32.8 L 22 32 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
-  <path d="M 28 132.8 L 41.07 56 L 42.94 62.49 L 46.75 74.05 L 51.95 86.8 L 58.31 98.7 L 65.71 108.73 L 74.05 116.56 L 83.28 122.28 L 92.83 126.25 L 93.33 132.8 L 106.4 56 L 108.28 62.49 L 112.09 74.05 L 117.28 86.8 L 123.64 98.7 L 131.04 108.73 L 139.39 116.56 L 148.61 122.28 L 158.17 126.25 L 158.67 132.8 L 171.73 56 L 173.61 62.49 L 177.42 74.05 L 182.61 86.8 L 188.97 98.7 L 196.37 108.73 L 204.72 116.56 L 213.95 122.28 L 224 126.25 L 224 184 L 28 184 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 28 132.8 L 41.07 56 L 42.94 62.49 L 46.75 74.05 L 51.95 86.8 L 58.31 98.7 L 65.71 108.73 L 74.05 116.56 L 83.28 122.28 L 92.83 126.25 L 93.33 132.8 L 106.4 56 L 108.28 62.49 L 112.09 74.05 L 117.28 86.8 L 123.64 98.7 L 131.04 108.73 L 139.39 116.56 L 148.61 122.28 L 158.17 126.25 L 158.67 132.8 L 171.73 56 L 173.61 62.49 L 177.42 74.05 L 182.61 86.8 L 188.97 98.7 L 196.37 108.73 L 204.72 116.56 L 213.95 122.28 L 224 126.25 L 224 185 L 28 185 Z" fill="#000000" stroke="none" stroke-width="0"/>
   <path d="M 348 32 L 351 32.8 L 353.2 35 L 354 38 L 354 106 L 353.2 109 L 351 111.2 L 348 112 L 250 112 L 247 111.2 L 244.8 109 L 244 106 L 244 38 L 244.8 35 L 247 32.8 L 250 32 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
   <circle cx="255" cy="43" r="4" fill="#000000" stroke="none" stroke-width="0"/>
   <text transform="matrix(1 0 0 1 246 26)" font-family="UniversNextPro-Light" font-size="10" fill="#969696" stroke="none" stroke-width="0">depth</text>
-  <text transform="matrix(1 0 0 1 327.04 27)" font-family="UniversNextPro-Light" font-size="13" fill="#CDCDCD" stroke="none" stroke-width="0">60%</text>
+  <text transform="matrix(1 0 0 1 335.36 27)" font-family="UniversNextPro-Light" font-size="13" fill="#CDCDCD" stroke="none" stroke-width="0">60</text>
   <path d="M 466 32 L 469 32.8 L 471.2 35 L 472 38 L 472 106 L 471.2 109 L 469 111.2 L 466 112 L 368 112 L 365 111.2 L 362.8 109 L 362 106 L 362 38 L 362.8 35 L 365 32.8 L 368 32 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
   <circle cx="373" cy="43" r="4" fill="#4B4B4B" stroke="none" stroke-width="0"/>
   <text transform="matrix(1 0 0 1 364 26)" font-family="UniversNextPro-Light" font-size="10" fill="#969696" stroke="none" stroke-width="0">rate</text>
@@ -45,6 +45,6 @@
   <path d="M 446 84 L 447.5 84 L 447.5 96 L 446 96 Z" fill="#000000" stroke="none" stroke-width="0"/>
   <path d="M 452 84 L 453.5 84 L 453.5 96 L 452 96 Z" fill="#000000" stroke="none" stroke-width="0"/>
   <path d="M 399.7 64 L 411.7 64 L 411.7 74 L 405.7 80 L 399.7 74 Z" fill="#000000" stroke="none" stroke-width="0"/>
-  <path d="M 274.74 188.13 L 284.8 128.98 L 283.32 128.72 L 273.26 187.87 Z" fill="#000000" stroke="none" stroke-width="0"/>
-  <path d="M 385.31 136.3 L 409.36 191.27 L 410.73 190.67 L 386.69 135.7 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 274.66 188.35 L 302.83 135.38 L 301.51 134.67 L 273.34 187.65 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 385.54 136.59 L 432.82 173.53 L 433.74 172.35 L 386.46 135.41 Z" fill="#000000" stroke="none" stroke-width="0"/>
 </svg>

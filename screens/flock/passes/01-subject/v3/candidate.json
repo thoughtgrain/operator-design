@@ -1,0 +1,19 @@
+{
+  "variant": "v3",
+  "pattern": "P13",
+  "drawing_language": "oscilloscope trace",
+  "subject": "A storage scope plotting every bird's pitch against time as a stepped phosphor trace, with cohesion drawn as two capture cursors that the traces are pulled between as they reach the present.",
+  "controls": [
+    "cohere: the gap between the two capture cursors and its delta readout (position: about 22 semitones apart at 0, 3 at 100, ~150 px of travel), and the traces' older ends sit further outside it.",
+    "speed: steps per trace, one each time a bird crosses a cell (count: ~1 step every 4 beats at 0.25, 4 a beat at 4.00, so 1 to 20 risers across the screen).",
+    "scatter: some traces escape the cursors in the newest division and their beam spots land outside, drawn dimmer (position of the trace ends, up to the full pitch axis).",
+    "scale: the degree ticks on the pitch rail and the step heights every trace can take (count: 11 to 25 levels), octave ticks fixed."
+  ],
+  "reference": "library/meikyu-capture/README.md (the player's own rule drawn as a capture radius; what's inside plays)",
+  "risks": [
+    "Language risk named in P3: this is an oscilloscope, and an oscilloscope is the cliché. The capture cursors are what make it P13 rather than a trace; if they don't lead, it's a plot.",
+    "The capture is a reading of cohesion, not a mechanism: cohere pulls birds toward the centre, it doesn't gate notes the way meikyu's Dens does. Honest but weaker than meikyu's twin.",
+    "Eight stepped traces cross each other; at 1:1 the middle division is busy. Persistence greys help; at speed 4 (20 risers each) it will be hatching.",
+    "Traces are history, so they scroll while playing: eight mutable outlines would be needed and only four paths exist. Each trace has to be built from translated riser/tread nodes, which is costly."
+  ]
+}

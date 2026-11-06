@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A record-cutting lathe on the send: the signal is cut into a lacquer groove, saturating at the cutter, then played back with inner-groove loss, wear and rumble."
+}

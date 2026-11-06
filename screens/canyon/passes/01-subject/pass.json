@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,183 @@
       "brief": "Subject built on P5 Field and figure; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "drawing_language": "survey plan",
+      "subject": "A survey plan of the gorge from above: each reflecting wall is a contoured rock bench, stacked back up a dashed chainage line from the station at the mouth, the nearest bench bright.",
+      "controls": [
+        "distance: position; the benches spread apart along the chainage, 14 px to 54 px per bench (about 160 px of travel at the back of a six-bench stack), and the chainage labels read the metres to each wall.",
+        "walls: count; benches step in from 1 to 12 along the line, eased in one by one; past six the extra walls fold behind the last bench and the header carries the real count.",
+        "absorb: shape; the bench rims go from jagged rock to smooth, compounding back up the stack, so the far walls are rounded first (the bright front rim is one mutable outline, the rest pre-drawn variants).",
+        "wind: rotation; each bench swings about its own centre by a fixed seeded angle, up to about ±18°, so the stack loses its alignment the way modulation smears the tap times."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "P4 caps visible layers at 5-6 and walls reach 12; the fold-behind rule has to read, or the top of the range looks like it does nothing.",
+        "Absorb's serration change is a few pixels at the rim: it will struggle to reach a score-3 area floor without a second cue (shade down the stack).",
+        "Distance and walls both change how far the stack reaches; distance is spacing, walls is count, but at 1:1 they may read alike.",
+        "Benches seen from above look like stacked plates or cushions more than canyon walls; the plan needs the chainage labels to explain it.",
+        "Rotation of every bench while wind turns redraws up to 12 nodes per frame, fine, but rock outlines with 60 points each cost path budget if more than one is mutable."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "drawing_language": "patent section",
+      "subject": "Fig. 1 of a patent: the echo's impulse response cut in longitudinal section as a row of identical hatched rock columns on a section line, each tap rising as a peak, with reference numerals 10, 12, 14.",
+      "controls": [
+        "distance: shape (heights); the peaks spread apart along the row: at 0 the first peak sits in the first column with the rest packed behind it, at 100 it has walked off the far end of the 1.3 s row (about 380 px of travel).",
+        "walls: shape (heights); peaks rise one by one along the row, 1 to 12 of them, each lower than the last.",
+        "absorb: shape (heights); each peak slumps and broadens into its neighbours, the later ones most, so a hard-rock echo is a row of needles and a soft one is low rolling scree.",
+        "wind: position; every column's height jitters by a seeded amount and the peaks drift a column either way, so the clean comb turns ragged."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "Three of four controls are all 'heights'; P10 allows that, but distance (spacing), walls (count) and absorb (width) have to stay distinct at 1:1 or two of them read as the same knob.",
+        "At distance 0 (40 ms) twelve taps pile into the first few columns; the field reads as one lump and walls appears dead at the short end.",
+        "Hatching at 5 px inside 10 px columns is near the 3 px floor once the columns are short; drop hatching under 8 px.",
+        "It is close to a bar meter: the patent numerals and section ground are what keep it from reading as a dashboard; if they go, it fails.",
+        "Wind as position on the same columns overlaps the shape controls; it needs its own look (a shimmer that only exists while audio passes) to stay separate."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The canyon floor as a hidden-line isometric grid of cells, where every returning echo front lights a ring of raised blocks out from the shout's block, the nearest ring brightest and the far rings sinking into grey tiles.",
+      "controls": [
+        "distance: position; the rings widen apart, 1.2 to 4.8 cells between fronts, so the lit arcs sweep out across the floor from the source block.",
+        "walls: count; more rings light, 1 to 12, until the floor is combed with arcs (rings past the grid's edge are lost, so the count tops out visibly near 5-6).",
+        "absorb: count (raised vs grey layer); in each later ring more raised blocks drop to flat grey tiles, so at 100 only the first ring stands.",
+        "wind: position; each ring's cells shift outward or inward by a seeded amount per row, breaking the clean arcs into staggered runs, as if the front was blown."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "P15 is for noise-like sounds with no mechanism; an echo has a clear mechanism, so this is the texture of the echo, not its cause. Gate 0 says that is the weaker choice.",
+        "Hidden-line cubes on an isometric grid sit close to toro's field in look; the difference (all-wire, rings not heights) must stay obvious.",
+        "Rings are a target shape; on a cell grid they read as arcs, but at long distance with few walls the screen is mostly empty floor.",
+        "14 × 9 = 126 cells at 3 nodes per raised block is over 200 nodes before anything moves; needs sdk 1.8 or bigger cells.",
+        "Walls past ~6 run off the grid, so the top of the range only changes the header."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "drawing_language": "star atlas",
+      "subject": "A section cut across the canyon, charted like a sky atlas: the two rock walls are the dark limb, a hairline graticule fills the gap, and each echo is plotted as a lettered star of falling magnitude on a constellation line zig-zagging up from the shout.",
+      "controls": [
+        "distance: position; the walls draw apart, the floor from 100 px to 300 px wide, and the constellation's segments stretch with them.",
+        "walls: count; more stars are plotted up the chain, a to l, alternating walls, each one higher.",
+        "absorb: scale; the stars' magnitudes fall faster bounce by bounce, the later discs shrinking from ~11 px to ~4 px, as the highs die in the rock.",
+        "wind: position; each star slides along its own short proper-motion track, up to about 16 px, so the constellation line kinks."
+      ],
+      "reference": "opxy/reference/README.md (stock engines: one object chosen for what it does) beside library/theseus-tower",
+      "risks": [
+        "The star atlas is a borrowed language for rock; the graticule may read as decoration rather than as the space inside the canyon.",
+        "Twelve stars between the walls get dense at short distance (narrow canyon); lettering has to drop to every other star.",
+        "Distance moves the walls, and wind moves the stars: both are position, on different parts; the walls' move must stay much bigger.",
+        "Section drawing (P1) wants a part that moves physically; here the walls are fixed for a given distance and nothing physical answers audio except the stars. Audio flare must be on the stars.",
+        "Wall rims at width 100 % reach the screen edges; check the extremes for crowding at the sides."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P5",
+      "drawing_language": "engineering schematic",
+      "subject": "An engineering elevation of the two canyon walls dimensioned across the gap, standing on a receding floor grid, with the tap train ticked off along a time strip at the bottom edge.",
+      "controls": [
+        "distance: scale; the wall pair scales about the floor centre from 0.7× to 1.3× (the gap and its dimension in metres widen), and the strip's ticks spread with it.",
+        "walls: count; the strip gains ticks, 1 to 12, one per reflection along the 1.3 s time line.",
+        "absorb: shape; the ticks' heights fall off faster along the strip, from an even comb to one tall first tick and stubs.",
+        "wind: position; the floor grid slides and skews sideways up to 30 px under the walls, and the ticks jitter off their even spacing."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": [
+        "Stretch: P5 isn't in the effect column. The exception is that an echo's output is a train of discrete events in time, which is exactly what P5's activity strip is for, and a canyon is a place (the field) with an object in it (the walls). The fit is partial: the strip carries two of the four controls, so it does more work than P5 means it to.",
+        "The strip is a meter of taps; with walls and absorb both on it, the screen splits into a picture (top) and a dashboard (bottom).",
+        "Wind on the floor grid moves the most pixels for the quietest control (score 2), which over-states it unless the slide is kept small.",
+        "Distance is scale ≤ 1.3×, under the 1.6× scale floor; it needs the strip's spacing as its second cue or more range.",
+        "The two walls are plain blocks; schematic outline is clean but reads as two pillars, not rock, without the dimension label."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:28:10"
+  },
   "selection": null
 }

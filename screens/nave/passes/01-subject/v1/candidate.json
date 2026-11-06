@@ -1,0 +1,19 @@
+{
+  "variant": "v1",
+  "pattern": "P1",
+  "drawing_language": "survey plan",
+  "subject": "The church measured in plan, cut at sill height: west porch, aisled nave, choir stalls and a round apse, with one sound ray bouncing wall to wall from the door.",
+  "controls": [
+    "nave: position (+ count); the apse slides east about 170 px and arcade bays (piers and bay numbers) are added behind it, from 3 bays at 0.4 s to 10 at 12 s.",
+    "stone: count; the ray from the west door survives more wall-to-wall bounces before it ends, 2 legs on soft stone to 14 on hard, folding back at the apse when it runs out of nave.",
+    "choir: position; the choir screen walks west along the axis about 90 px, so the stall rows (fine hairlines along both walls) lengthen into the nave.",
+    "doors: position; the west porch lengthens about 70 px, pushing the door leaves and their swing arcs away from the nave."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": [
+    "Three of four controls are position; they move different parts in different directions (apse east, screen west, porch west), but the player still has to learn which is which.",
+    "The ray is a picture of an acoustic idea, not the DSP: stone sets high-frequency survival, and a single ray doesn't say 'treble'.",
+    "Choir stalls are hairline rows 5 px apart: right at the hatching limit, and choir (score 2) is the quietest-looking change.",
+    "A plan has no height, so the vault, which is what a listener imagines in a nave, is absent."
+  ]
+}

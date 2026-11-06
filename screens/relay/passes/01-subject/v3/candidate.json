@@ -1,0 +1,19 @@
+{
+  "variant": "v3",
+  "pattern": "P15",
+  "drawing_language": "orthographic elevation",
+  "subject": "A wall of bucket compartments seen face on, the chain running back and forth along its rows, each compartment's held charge drawn as how full and how bright it stands.",
+  "controls": [
+    "stages: how far apart the recirculated runs sit along the wall, from runs almost touching their note at 10 ms to one echo per two rows at 1 s (field statistic: spacing of lit runs, a position channel).",
+    "leak: a growing seeded share of compartments drain to empty, black where the standing bias charge was, and runs passing them lose cells (count of the grey layer).",
+    "clock: runs smear and break up, 3-cell runs stretching to ragged 6-cell runs with a cell missing, because a wandering clock spreads each packet over more buckets (run length).",
+    "feedback: how many lit runs follow each note before the wall goes back to bias, one at 0 to the whole wall lit at 100 (density of lit cells)."
+  ],
+  "reference": "opxy/reference/README.md (dissolve, in detail: one cell size, a few values, clumps as grain)",
+  "risks": [
+    "Gate 0 tension: a BBD has a mechanism (v4 draws it), and P15 is for sounds that are texture; this wall argues the chain's state is the texture, which the owner may not buy.",
+    "A grid of level-filled compartments can read as a meter bank, the dashboard the protocol rejects; the elevation reading (fill from the floor, bias always there) has to carry it.",
+    "216 cell nodes; feedback and clock churn far more than ~20 cells a frame while turning, and the wall shows a notional test phrase since effect pages get no audio.",
+    "stages as spacing of runs is a weak statistic at the long end (one echo every two rows); check it clears the position floor."
+  ]
+}

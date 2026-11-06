@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "pattern": "P12",
+  "drawing_language": "typeset diagram",
+  "subject": "A radial Galton board seen as an orrery: the hopper is the sun, each peg row is an orbit a marble crosses on its way out, and the bins are planets on the outer orbit placed round the pitch circle, sized by how often they're hit.",
+  "controls": [
+    "pegs: the number of orbits between the sun and the bins (count, 1 to 12 rings), and the planets' sizes redistribute as the bell widens.",
+    "drop: the number of marbles waiting on the innermost ring around the sun (count, 1 to 32), one per drop in a bar, the release clock.",
+    "bounce: moons appear round each planet, up to three per planet, set further out as bounce rises (count with position), one per rebound retrigger.",
+    "scale: the planets move round the outer orbit to their pitch classes, 30° a semitone (position on the orbit), root always at the front."
+  ],
+  "reference": "library/meikyu-orrery/README.md (sun, evenly spaced orbits modelled in 3D, planets that carry meaning)",
+  "risks": [
+    "P12's own weakness: the orbits don't turn for any musical reason here, so the 'cycle' is the pitch circle rather than time; motion would have to be a marble's spiral out, not orbiting.",
+    "Off-centre bins at 1/64 odds are 3 px planets at the back of the orbit, at the legibility floor.",
+    "Twelve rings at 12 rows bring the front spacing to ~5 px: legal, but the board turns into a hatched dish.",
+    "The sun does nothing but release marbles; a second subject (the pitch circle) competes with the first (the board).",
+    "Mute: the sun goes hollow and the waiting marbles grey out; shade plus the marbles stepping back off the ring, to check it isn't shade alone."
+  ]
+}

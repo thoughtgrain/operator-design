@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P14",
+  "drawing_language": "survey plan",
+  "subject": "A surveyed sheet of the last four rows of tide, woven as weft threads across sixteen chainage lines, each note a slab sounded on its line and the newest row bright at the front.",
+  "controls": [
+    "tide: every row's weft swings further from its dashed mean-water contour, from flat rows at 0 st to arcs spanning 36 px of the 40 px row at 36 st (shape of the rows).",
+    "period: the weft's waves tighten or relax across the rows: at 1 s each row holds four crests, at 8 s each row is one half arc, at 32 s each row is an almost straight slope (shape, across all rows).",
+    "foam: hollow grace slabs appear beside the solid ones near each crest and trough, scattered differently in every row, so the cloth shows what changed pass to pass (count, and the loom's solid vs hollow role).",
+    "scale: the scale bar in the sheet's corner re-divides into alternating blocks at the scale's degrees, and the slabs snap to its steps so the weft turns from smooth to terraced (shape of the corner bar, second cue in the rows)."
+  ],
+  "reference": "library/loom-pages",
+  "risks": "Loom's power is history that varies; with foam at 0 every row is the same tide, so at defaults it shows no history worth reading, only a periodic wave. Flat on a plan, it loses P14's depth cue (rows recede in 3D) and leans toward a grid of dashes: dashboard-of-meters risk at 1:1. 64 slabs plus 4 weft outlines (all 4 paths) is fine for nodes, but each step shifts every row back (a whole-sheet redraw per eighth note), far over ~20 nodes a frame; it needs a scroll-only-on-bar rule or a playhead instead. The corner scale bar is a legend, the kind of thing P13 permits but craft calls panel. Muted: the newest row's slabs go hollow and the weft stops being added (rows stop moving)."
+}

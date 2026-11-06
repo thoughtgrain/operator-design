@@ -14,22 +14,25 @@ Each control tile holds one glyph that moves in one channel; the two pairs share
 own tile, so place keeps them apart:
   depth    a ruler of static ticks (1.5 px, 6 px apart) and a pointer node that slides up it (position, 54 px)
   rate     the same ruler on its side, the pointer sliding along it (position, 72 px)
-  attack   a rising line turning about its foot (rotation), at the slope of the result's rise
-  release  a falling line turning about its foot, at the slope of the result's fall over one time constant
+  attack   a rising line turning about its foot (rotation, 60 deg: 80 deg above level when fast, 20 when slow)
+  release  a falling line turning about its foot (rotation, 60 deg: 80 deg below level when fast, 20 when slow)
+Each glyph moves with its own encoder only; it agrees with the result by direction (a steeper line is a faster rise
+or fall in both). Glyph weights: the turning lines and pointers at 1.5 px, ruler ticks 1.5 px wide.
 The result tile is one mutable outline (32 points, filled black) at scale 2, authored within +-49 x +-32 so it
 spans 196 x 128 px drawn: the gain over a few cycles, drawn from the controls, not from audio, since an effect page
-gets no signal. Rate sets how many cycles it shows (2 + round(4 x rate), 3 here); the 30 points are shared out a cycle
-at a time so every peak lands on one. Every control reshapes it as well as its own glyph, so each one changes enough
-of the screen to read.
+gets no audio signal. Rate sets how many cycles it shows (2 + round(4 x rate)); 30 points are shared out a cycle at a
+time (the remainder to the last cycles) so every peak lands on one, and the curve stays at least 1 px above the two
+bottom corners, so every setting gives 32 distinct points (`--check` sweeps the controls and asserts it).
 
-Usage: python3 mock_tiles.py OUT.svg
+Usage: python3 mock_tiles.py OUT.svg [--thin]  (--thin: deepest dips, fastest rate and attack, slowest release)
+       python3 mock_tiles.py --check
 """
 import math
 import sys
 
 TILE, INK, TITLE, VALUE = "#CDCDCD", "#000000", "#969696", "#CDCDCD"
-DEPTH, RATE, ATTACK, RELEASE = 0.6, 0.35, 0.3, 0.7
-VALUES = ["60%", "2.1hz", "24ms", "180ms"]
+DEPTH, RATE, ATTACK, RELEASE = (1.0, 1.0, 0.0, 1.0) if "--thin" in sys.argv else (0.6, 0.35, 0.3, 0.7)
+VALUES = ["60", "2.1hz", "24ms", "180ms"]
 f = lambda v: f"{v:.2f}".rstrip("0").rstrip(".")
 
 
@@ -81,21 +84,42 @@ def dot(x, y, k):
 
 # the result: gain over time, from the controls
 RX, RY, RW, RH = 16, 32, 220, 168
-tile(RX, RY, RW, RH)
-cycles = 2 + round(4 * RATE)
 top, base = RY + 24, RY + RH - 16
-n = 30 // cycles
-a = ATTACK * 0.5 + 0.05                      # the rise, as a share of a cycle
-tau = 0.08 + RELEASE * 0.35                  # the fall's time constant, as a share of a cycle
-cw = (RW - 24) / cycles                      # a cycle's width in px
-pts = []
-for c in range(cycles):
-    phases = [0, a] + [a + (1 - a) * (j / (n - 2)) ** 1.6 for j in range(1, n - 1)]
-    for t in phases:
-        g = 1 - DEPTH if t == 0 else (1 - DEPTH * (1 - t / a) if t <= a else 1 - DEPTH * (1 - math.exp(-(t - a) / tau)))
-        x = RX + 12 + (c + t) * cw - (0.5 if t == 1 and c < cycles - 1 else 0)
-        pts.append((x, base - g * (base - top)))
-pts += [(RX + RW - 12, base), (RX + 12, base)]
+
+
+def result_points(depth, rate, attack, release):
+    cycles = 2 + round(4 * rate)
+    counts = [30 // cycles + (1 if k >= cycles - 30 % cycles else 0) for k in range(cycles)]
+    a = attack * 0.5 + 0.05                  # the rise, as a share of a cycle
+    tau = 0.08 + release * 0.35              # the fall's time constant, as a share of a cycle
+    cw = (RW - 24) / cycles
+    pts = []
+    for c, n in enumerate(counts):
+        phases = [0, a] + [a + (1 - a) * (j / (n - 2)) ** 1.6 for j in range(1, n - 1)]
+        for t in phases:
+            g = 1 - depth if t == 0 else (1 - depth * (1 - t / a) if t <= a else 1 - depth * (1 - math.exp(-(t - a) / tau)))
+            x = RX + 12 + (c + t) * cw - (0.5 if t == 1 and c < cycles - 1 else 0)
+            pts.append((x, min(base - 1, base - g * (base - top))))
+    pts += [(RX + RW - 12, base + 1), (RX + 12, base + 1)]
+    return pts
+
+
+if "--check" in sys.argv:
+    steps = [i / 8 for i in range(9)]
+    for d in steps:
+        for r in steps:
+            for at in steps:
+                for rl in steps:
+                    pts = result_points(d, r, at, rl)
+                    assert len(pts) == 32, (d, r, at, rl, len(pts))
+                    for i in range(32):
+                        x0, y0 = pts[i]; x1, y1 = pts[(i + 1) % 32]
+                        assert math.hypot(x1 - x0, y1 - y0) >= 0.25, (d, r, at, rl, i)
+    print("32 distinct points, at least 0.25 px apart, at every setting on a 9-step grid")
+    sys.exit(0)
+
+tile(RX, RY, RW, RH)
+pts = result_points(DEPTH, RATE, ATTACK, RELEASE)
 assert len(pts) == 32
 add(f'  <path d="{path(pts)}" fill="{INK}" stroke="none" stroke-width="0"/>')
 
@@ -126,11 +150,10 @@ for j in range(13):
 px = x + 18 + RATE * 72
 add(f'  <path d="{path([(px - 5.5, y + 32), (px + 6.5, y + 32), (px + 6.5, y + 42), (px + 0.5, y + 48), (px - 5.5, y + 42)])}" fill="{INK}" stroke="none" stroke-width="0"/>')
 
-# attack and release: lines turning about a foot, at the result's own slopes
+# attack and release: lines turning about a foot, each with its own encoder only (60 deg of travel)
 L = 60
-h = DEPTH * (base - top)
-rise = math.atan2(h, a * cw)                           # the rise in the result
-fall = math.atan2(h * (1 - math.exp(-1)), tau * cw)    # the fall over one time constant
+rise = math.radians(80 - 60 * ATTACK)       # fast attack is steep
+fall = math.radians(80 - 60 * RELEASE)      # fast release is steep
 fx, fy = 244 + 30, 120 + 68
 add(f'  <path d="{bar(fx, fy, fx + L * math.cos(rise), fy - L * math.sin(rise))}" fill="{INK}" stroke="none" stroke-width="0"/>')
 fx, fy = 362 + 24, 120 + 16
