@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-06T08:11:59",
   "focus": "Try a lighthouse. Five new, unique variations of a lighthouse.",
   "subject": null,
@@ -272,5 +272,27 @@
     "problems": [],
     "checked": "2026-11-06T08:26:11"
   },
-  "selection": null
+  "selection": {
+    "variant": "v5",
+    "reason": "Owner likes the angle of v5; simplify it, no cutaway, and the waves on the right become surface ripples.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:29:16",
+    "angle": "one scene where this happens, with one subject in it",
+    "pattern": "P1",
+    "drawing_language": "cutaway section",
+    "subject": "A headland at night with the lighthouse cut open in section, thick walls, spiral stair treads, floors, the clock's weight in its shaft sunk into the rock, gallery and lantern with the lens profile round the lamp, and a beam carrying hatched bands of light out over the sea.",
+    "controls": [
+      "pulse: each band of light in the beam widens as a share of its period, 3 px to 27 px of every 30 px, from thin flashes to a nearly solid beam (shape: band width).",
+      "lens: the beam's spread closes from a wide fan (8 degrees each side) to a parallel shaft, its far end narrowing by about 90 px (shape of the beam outline).",
+      "sweep: the beam turns away across the sea and foreshortens, its tip drawing in from the right edge to about 110 px from the lantern (position of the tip).",
+      "fog: a hatched bank rises off the sea up the headland and across the lower beam, up to 130 px (position of the bank's top; nothing at the default 0)."
+    ],
+    "reference": "opxy/patterns.md P1 (section drawing: the part that makes the sound, cut open); library/theseus-tower for one subject with real parts named by drawing, not labels",
+    "risks": [
+      "The tower is small in a wide scene (about 60 px wide, 130 px tall) and its section detail (treads, floors, lens profile) sits at 3-6 px spacing; it may go busy at 1:1 on the device.",
+      "The banded beam is the most model-true picture of the pulse train, but it is also the screen's largest element, so the eye goes to the beam before the tower.",
+      "Sweep as foreshortening is a convention: a beam turning away gets shorter; the player may read it as the beam's reach rather than its turn.",
+      "Section language risks looking like a patent plate; it carries no labels or callouts, but the cut walls and shaft are technical."
+    ]
+  }
 }
