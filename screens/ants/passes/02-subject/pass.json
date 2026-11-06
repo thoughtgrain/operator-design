@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 2,
-  "state": "ready_for_pick",
+  "state": "rejected",
   "created": "2026-11-06T08:11:59",
   "focus": "Five new, unique ones. v1 is kept aside for the sequencer idea.",
   "subject": null,
@@ -227,5 +227,10 @@
     "problems": [],
     "checked": "2026-11-06T08:26:14"
   },
-  "selection": null
+  "selection": null,
+  "rejection": {
+    "reason": "Too literal: drawn ants and ant scenes. Five unique, less literal versions; the lead shortlists two.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:48:16"
+  }
 }

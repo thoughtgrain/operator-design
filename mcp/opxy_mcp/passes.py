@@ -42,14 +42,20 @@ def _seed(*parts: str) -> int:
     return int(hashlib.sha256("|".join(parts).encode()).hexdigest()[:8], 16)
 
 
-def subject_directions(category: str, machine_id: str, exclude: list[str] | None = None) -> list[dict]:
+def subject_directions(category: str, machine_id: str, exclude: list[str] | None = None, number: int = 1,
+                       used: list[str] | None = None) -> list[dict]:
     """Five angle × language pairs, all on the machine's own idea. Patterns that fit the category are offered as
     inspiration in every brief, never assigned: a direction that copies a pattern's look is the failure this guards against."""
     cat, n = catalog(), _settings()["perPass"]
     angles = list(_settings()["ideaAngles"])
     langs = list(_settings()["drawingLanguages"])
-    ra, rl = _seed(machine_id, category, "angles") % len(angles), _seed(machine_id, category) % len(langs)
+    # A later pass on the same machine starts from different angles and pairings, so a pass the person turned
+    # down isn't dealt the same five directions again.
+    salt = "" if number <= 1 else f"#{number}"
+    ra, rl = _seed(machine_id, category, "angles" + salt) % len(angles), _seed(machine_id, category + salt) % len(langs)
     angles, langs = angles[ra:] + angles[:ra], langs[rl:] + langs[:rl]
+    if used:  # angles earlier passes on this machine haven't tried come first
+        angles = [a for a in angles if a not in used] + [a for a in angles if a in used]
     fit = [k for k, v in cat["patterns"].items()
            if v["role"] == "subject" and category in v["categories"] and k not in (exclude or [])]
     hint = (f" Patterns that have worked for {category} machines ({', '.join(fit)}) may inspire you, but don't copy their look: "
@@ -95,7 +101,8 @@ def design_pass_start(machine_id: str, kind: str, category: str | None = None, f
         raise ToolError("run and select a subject pass before a frames pass")
     num = len(existing) + 1
     pdir = passes / f"{num:02d}-{kind}"
-    directions = subject_directions(cat, machine_id, exclude_patterns) if kind == "subject" else frame_directions(machine_id, kind, focus)
+    used = [d.get("angle") for p in existing for d in load_json(p).get("directions", []) if d.get("angle")]
+    directions = subject_directions(cat, machine_id, exclude_patterns, num, used) if kind == "subject" else frame_directions(machine_id, kind, focus)
     if len(directions) < s["perPass"]:
         raise ToolError(f"only {len(directions)} distinct directions available; the catalog needs more patterns or languages")
     for v in directions:
