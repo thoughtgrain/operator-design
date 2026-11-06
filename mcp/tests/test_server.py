@@ -481,6 +481,22 @@ class TestPrecedents(unittest.TestCase):
             self.assertTrue(p["pass"], f"{name} is now under the floor on {p['under']}")
 
 
+class TestGreyByDefault(unittest.TestCase):
+    def test_every_frame_in_the_repo_is_grey(self):
+        """Colour is an override set per harness; nothing checked in may use it unless a machine's brief records one."""
+        import re as _re
+        found = {}
+        for f in list(REAL.glob("**/*.svg")) + list(REAL.glob("**/*.svg.fragment")):
+            if ".git" in f.parts:
+                continue
+            text = f.read_text(encoding="utf-8", errors="ignore")
+            hues = sorted({h for h in _re.findall(r"#([0-9A-Fa-f]{6})\b", text)
+                           if len({h[0:2].lower(), h[2:4].lower(), h[4:6].lower()}) > 1})
+            if hues:
+                found[str(f.relative_to(REAL))] = hues
+        self.assertEqual(found, {}, "colour without the override")
+
+
 def tearDownModule():
     shutil.rmtree(TMP, ignore_errors=True)
 
