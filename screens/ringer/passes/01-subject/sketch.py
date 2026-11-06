@@ -208,7 +208,7 @@ def v1():
     fr = Frame("v1 · P12 orrery · patent section")
     cx, cy = 236, 132
     tilt = 0.4                         # sin(elevation): orthographic camera
-    row = ROWS[4]
+    row = ROWS[2]
     R = [44 + 19 * b for b in range(N)]  # world radius of bell b+1's orbit
     rim = R[-1] + 20
 
@@ -219,7 +219,7 @@ def v1():
     # seen from above (left to right across the front). A handstroke gap would
     # open a sector before place 1 (GAP = 0 at default: no sector).
     span = 2 * math.pi
-    a_start = math.radians(150)
+    a_start = math.radians(120)
 
     def place_angle(p):
         return a_start - span * ((p - 1) + GAP) / (N + GAP)
@@ -237,7 +237,7 @@ def v1():
         fr.ribbon(ellipse_pts(cx, cy, R[b], R[b] * tilt, 40, math.pi, 2 * math.pi), 1.2, col)
 
     # the hub: a vertical arbor drawn in section, hatched at 45 degrees
-    hx, top, base, hw = cx, cy - 58, cy, 9
+    hx, top, base, hw = cx, cy - 34, cy, 9
     bore = 2.5
     for side in (-1, 1):
         x0, x1 = (hx - hw, hx - bore) if side < 0 else (hx + bore, hx + hw)
@@ -273,19 +273,29 @@ def v1():
     near = [t for t in bodies if t[0] >= cy]
 
     def bell(x, y, b):
-        lip = 5.5 + 0.9 * b
-        h = lip * 1.5
+        lip = 7.5 + 1.2 * b
+        h = lip * 1.3
         col, sw = (G7, 2.0) if b == 0 else (G5, 1.5)
         outer = [(x - r * lip, y - h + z * h) for r, z in BELL] + \
                 [(x + r * lip, y - h + z * h) for r, z in reversed(BELL)]
         fr.poly(outer, G0, col, sw)
-        # the cut: inner wall of the section, one side only (a half section)
-        if b >= 2:
-            inner = [(x + r * lip, y - h + z * h) for r, z in BELL_IN]
-            fr.ribbon(inner, 1.0, G3)
+        # half section: the right wall cut, its face filled dark
+        if b >= 1:
+            wall = [(x + r * lip, y - h + z * h) for r, z in BELL[1:]] + \
+                   [(x + r * lip, y - h + z * h) for r, z in reversed(BELL_IN)]
+            fr.poly(wall, G2, "none")
+            fr.line((x, y - h + 1), (x, y - 1), 1.0, G3)   # the section's centre line
         fr.line((x, y - h), (x, y - h - 3), 1.5, col)
         fr.line((x - 3, y - h - 3), (x + 3, y - h - 3), 1.5, col)
 
+    # link: the treble's path along its own orbit over the next three changes,
+    # brightest nearest, in the direction it travels
+    for k, col in ((0, G6), (1, G4), (2, G3)):
+        pa = place_angle(place_of(ROWS[2 + k], 1))
+        pb = place_angle(place_of(ROWS[3 + k], 1))
+        if abs(pa - pb) > 1e-6:
+            arc = [P(R[0], pa + (pb - pa) * t / 16) for t in range(17)]
+            fr.ribbon(arc, 2.0 if k == 0 else 1.5, col)
     for y, b, x in sorted(far):
         bell(x, y, b)
     for b in range(N):
@@ -301,7 +311,7 @@ def v1():
 
     numeral("10", (hx - hw, top + 10), 150, 46)
     tb = [t for t in bodies if t[1] == 0][0]
-    numeral("12", (tb[2] + 6, tb[0] - 6), 330, 64)
+    numeral("12", (tb[2] + 6, tb[0] + 2), 330, 196)
     numeral("14", P(R[-1], math.radians(20)), 420, 160)
     numeral("16", P(rim, math.radians(200)), 52, 120)
     fr.text(20, 208, "fig. 1", G4)
@@ -316,110 +326,98 @@ def v1():
 # ======================================================================
 def v2():
     fr = Frame("v2 · P13 capture · hidden-line isometric")
-    s = 1.0
-    ox, oy = 118, 70
-    c30, s30 = math.cos(math.radians(30)), 0.5
+    ox, oy = 206, 66
+    c30 = math.cos(math.radians(30))
 
     def iso(X, Y, Z):
-        return (ox + (X - Y) * c30 * s, oy + (X + Y) * s30 * s - Z * s)
+        return (ox + (X - Y) * c30, oy + (X + Y) * 0.5 - Z)
 
-    pit = 34
-    L = pit * N
+    pit = 56
+    cols = 3
+    rows_ = (N + cols - 1) // cols
+    LX, LY = pit * cols, pit * rows_
     row = ROWS[4]
-    W = 16                                  # half width of the frame
-    zb = -34                                # frame sill height below the axles
-    # frame: sills and posts, hidden-line (black-filled faces, grey edges)
-    # back rail
-    def beam(X0, X1, Y, Z, col=G3, th=5):
-        pts = [iso(X0, Y, Z), iso(X1, Y, Z), iso(X1, Y, Z - th), iso(X0, Y, Z - th)]
-        fr.poly(pts, G0, col, 1.2)
+    zs = -40                                  # sill level below the axles
+    frac = math.log(PACE / 0.5) / math.log(16)     # 0 slow .. 1 fast
 
-    beam(-6, L + 6, -W, 2)
-    beam(-6, L + 6, -W, zb)
-    for k in range(N + 1):
-        X = k * pit - pit / 2 + pit / 2
-        a, b = iso(X, -W, zb), iso(X, -W, 2)
-        fr.line(a, b, 1.2, G2)
+    def beam(a, b, col, th=4):
+        (X0, Y0, Z0), (X1, Y1, Z1) = a, b
+        fr.poly([iso(X0, Y0, Z0), iso(X1, Y1, Z1), iso(X1, Y1, Z1 - th), iso(X0, Y0, Z0 - th)], G0, col, 1.2)
 
-    # floor of the ringing chamber below: ropes drop through it
-    zf = -78
-    fl = [iso(-10, -W - 10, zf), iso(L + 10, -W - 10, zf), iso(L + 10, W + 10, zf), iso(-10, W + 10, zf)]
-    fr.loop(fl, G2, 1.2)
+    # the frame: sills round the pits and between them, back posts
+    for j in range(rows_ + 1):
+        beam((0, j * pit, zs), (LX, j * pit, zs), G2)
+    for i in range(cols + 1):
+        beam((i * pit, 0, zs), (i * pit, LY, zs), G2)
+    for (X, Y) in ((0, 0), (LX, 0), (0, LY)):
+        fr.line(iso(X, Y, zs), iso(X, Y, 6), 1.2, G2)
 
-    # bells: place p has swung furthest for p = 1 (about to strike), least for p = n
-    order = []
-    for b in range(N):
+    pits = [((b % cols) * pit + pit / 2, (b // cols) * pit + pit / 2, b) for b in range(N)]
+    for X, Y, b in sorted(pits, key=lambda t: t[0] + t[1]):
         p = place_of(row, b + 1)
-        ang = math.radians(165 - (p - 1) * 140 / (N - 1))   # from mouth-up, handstroke side
-        order.append((b, ang))
-
-    for b, ang in order:
-        X = pit / 2 + b * pit
-        lip = 9 + 1.0 * b
-        h = lip * 1.45
+        # how far round the bell has come since it left the balance: the bell
+        # in 1st place has come furthest (about to strike), nth least
+        ang = math.radians(150 - (N - p) * 210 / (N - 1))
+        lip = 13 + 0.9 * b
+        h = lip * 1.35
         ca, sa = math.cos(ang), math.sin(ang)
 
         def rot(u, z):
-            # (u along the row, z up) in the wheel plane, turned by ang about the axle
-            return (X + u * ca - z * sa, u * sa + z * ca)
+            # (u along X, z down from the axle) in the wheel plane, turned by ang
+            return (X + u * ca + z * sa, u * sa - z * ca)
 
-        # wheel: a hairline circle in the X-Z plane, behind the bell
+        # wheel on the bell's back side, hairline; its rope drops to a sally
+        wy = Y - pit / 2 + 6
         wr = h + 6
-        wheel = []
-        for k in range(48):
-            t = 2 * math.pi * k / 48
-            wheel.append(iso(X + wr * math.cos(t), W - 4, wr * math.sin(t)))
-        fr.loop(wheel, G2, 1.2)
-        # rope from the wheel's rim down through the floor to its sally
+        fr.loop([iso(X + wr * math.cos(t), wy, wr * math.sin(t))
+                 for t in [2 * math.pi * k / 44 for k in range(44)]], G1, 1.2)
+        sz = zs - 4 + 22 * (1 - frac)
         rx = X + wr
-        sally_z = zf + 12 + 10 * (1 - math.log(PACE / 0.5) / math.log(16))
-        fr.line(iso(rx, W - 4, 0), iso(rx, W - 4, sally_z + 8), 1.2, G3)
-        fr.loop([iso(rx - 1.8, W - 4, sally_z + 8), iso(rx + 1.8, W - 4, sally_z + 8),
-                 iso(rx + 1.8, W - 4, sally_z), iso(rx - 1.8, W - 4, sally_z)], G4, 1.2, G1)
-        fr.line(iso(rx, W - 4, sally_z), iso(rx, W - 4, zf), 1.2, G3)
+        fr.line(iso(rx, wy, 0), iso(rx, wy, sz + 8), 1.2, G2)
+        fr.loop([iso(rx - 2, wy, sz + 8), iso(rx + 2, wy, sz + 8),
+                 iso(rx + 2, wy, sz), iso(rx - 2, wy, sz)], G3, 1.2, G1)
 
-        # the bell: a solid of revolution about its own axis, hung from the axle
-        # axis direction in the wheel plane
+        # the bell: a solid of revolution about its own axis, hidden-line
         rings = []
         for r, z in BELL:
             ring = []
-            for k in range(24):
-                t = 2 * math.pi * k / 24
-                u = r * lip * math.cos(t)
-                yy = r * lip * math.sin(t)
-                zz = h * 0.15 + z * h        # crown just under the axle... mouth outward
-                Xr, Zr = rot(u, -zz)
-                ring.append(iso(Xr, yy, Zr))
+            for k in range(30):
+                t = 2 * math.pi * k / 30
+                Xr, Zr = rot(r * lip * math.cos(t), 4 + z * h)
+                ring.append(iso(Xr, Y + r * lip * math.sin(t), Zr))
             rings.append(ring)
-        a0 = iso(*(lambda q: (q[0], 0, q[1]))(rot(0, 0)))
-        a1 = iso(*(lambda q: (q[0], 0, q[1]))(rot(0, -h)))
-        ax, ay = a1[0] - a0[0], a1[1] - a0[1]
-        la = math.hypot(ax, ay) or 1
-        nx, ny = -ay / la, ax / la
-        left = [max(r, key=lambda q: q[0] * nx + q[1] * ny) for r in rings]
-        right = [min(r, key=lambda q: q[0] * nx + q[1] * ny) for r in rings]
+        c0, c1 = rot(0, 4), rot(0, 4 + h)
+        a0, a1 = iso(c0[0], Y, c0[1]), iso(c1[0], Y, c1[1])
+        ax_, ay_ = a1[0] - a0[0], a1[1] - a0[1]
+        la = math.hypot(ax_, ay_) or 1
+        nx, ny = -ay_ / la, ax_ / la
+        left = [max(r_, key=lambda q: q[0] * nx + q[1] * ny) for r_ in rings]
+        right = [min(r_, key=lambda q: q[0] * nx + q[1] * ny) for r_ in rings]
         col, sw = (G7, 2.0) if b == 0 else (G5, 1.5)
         lipring = rings[-1]
-        # silhouette: crown, one side, lip, other side
+        facing = math.cos(ang) < -0.15            # mouth turned up: we look into it
         fr.poly(left + right[::-1], G0, col, sw)
-        mouth_up = math.cos(ang) < 0      # mouth faces up/out: show the lip ellipse
-        fr.loop(lipring, col if mouth_up else G4, 1.5 if mouth_up else 1.2, G0 if mouth_up else "none")
-        # headstock and gudgeon on the axle
-        fr.loop([iso(X - 6, -W, 2), iso(X + 6, -W, 2), iso(X + 6, W, 2), iso(X - 6, W, 2)], G3, 1.2, G0)
-        # stay: a short bar standing off the headstock, opposite the mouth
-        st0 = rot(0, 2)
-        st1 = rot(0, 16)
-        fr.line(iso(st0[0], 0, st0[1]), iso(st1[0], 0, st1[1]), 1.5, G4)
+        if facing:
+            fr.poly(lipring, G0, col, 1.5)
+            inner = [((q[0] - a1[0]) * 0.7 + a1[0], (q[1] - a1[1]) * 0.7 + a1[1]) for q in lipring]
+            fr.loop(inner, G3, 1.2)
+        else:
+            fr.loop(lipring, G4, 1.2)
+        # headstock across the axle, the stay standing off opposite the mouth
+        hw = pit / 2 - 6
+        fr.poly([iso(X - 5, Y - hw, 3), iso(X + 5, Y - hw, 3), iso(X + 5, Y + hw, 3), iso(X - 5, Y + hw, 3)],
+                G0, G4, 1.2)
+        s0, s1 = rot(0, -3), rot(0, -18)
+        fr.line(iso(s0[0], Y, s0[1]), iso(s1[0], Y, s1[1]), 1.5, G4)
+        if b == 0:
+            tb = iso(c1[0], Y, c1[1])
 
-    # front rail drawn last so it hides what is behind it
-    beam(-6, L + 6, W, 2, G4)
-    beam(-6, L + 6, W, zb, G3)
-    for k in range(N + 1):
-        X = k * pit
-        fr.line(iso(X, W, zb - 5), iso(X, W, 2), 1.2, G3)
-
-    fr.text(20, 208, "hand", G4)
-    fr.text(392, 46, "frame, 6 pits", G4)
+    # front sill posts last
+    for (X, Y) in ((LX, LY),):
+        fr.line(iso(X, Y, zs - 4), iso(X, Y, 6), 1.2, G3)
+    fr.line((tb[0] - 14, tb[1] - 4), (86, 48), 1.0, G3)
+    fr.text(44, 50, "treble", G4)
+    fr.text(26, 206, "handstroke", G4)
     fr.write("v2")
 
 
@@ -433,9 +431,9 @@ def v2():
 def v3():
     fr = Frame("v3 · P14 loom · star atlas")
     ax, ay = 236, -420                    # apex of the cone, off screen
-    R0 = 612                              # radius of the newest row (front)
-    dr = 15                               # radius step per row (pace: rows per window)
-    shown = 9
+    R0 = 592                              # radius of the newest row (front)
+    dr = 14                               # radius step per row (pace: rows per window)
+    shown = 8
     rows = ROWS[6:6 + shown]
     span = math.radians(17)
 
@@ -451,14 +449,14 @@ def v3():
     # graduation ticks along the inner border, one per 3 px of meridian
     for k in range(0, 37):
         x = x0 + 4 + k * (x1 - x0 - 8) / 36
-        ln = 4 if k % 6 == 0 else 2.5
-        fr.line((x, y1 - 4), (x, y1 - 4 - ln), 1.0, G3)
+        ln = 5 if k % 6 == 0 else 3
+        fr.line((x, y0 + 4), (x, y0 + 4 + ln), 1.0, G3)
 
     # parallels (rows) and meridians (places)
     Rs = [R0 - dr * k for k in range(shown)]
     for k, rr in enumerate(Rs):
         arc = [(ax + rr * math.sin(t), ay + rr * math.cos(t))
-               for t in [-span - 0.05 + (2 * span + 0.1) * i / 40 for i in range(41)]]
+               for t in [-span - 0.025 + (2 * span + 0.05) * i / 40 for i in range(41)]]
         fr.ribbon(arc, 1.0, G1 if k else G2)
     for p in range(1, N + 1):
         fr.ribbon([P(Rs[-1] - 10, p), P(R0 + 10, p)], 1.0, G1)
@@ -487,11 +485,11 @@ def v3():
     # labels: bell numbers on the newest row, row numbers like declinations
     for i, bell in enumerate(rows[-1]):
         x, y = P(R0, i + 1)
-        fr.text(x - 3, y + 2 + 12 if y + 14 < 205 else y - 8, str(bell), G4)
-    for k in (0, 4, 8):
-        x, y = P(Rs[k], N)
-        fr.text(x + 12, y + 3, str(6 + shown - 1 - k), G4)
-    fr.text(52, 46, "plain bob minor", G4)
+        fr.text(x - 3, y + 15, str(bell), G4)
+    for k in (3, 7):
+        x, y = P(Rs[k], 1)
+        fr.text(x - 20, y + 3, str(6 + shown - 1 - k), G4)
+    fr.text(300, 202, "plain bob minor", G4)
     fr.write("v3")
 
 
@@ -582,7 +580,7 @@ def v4():
     for a in (a_from, a_to):
         fr.line((gx + (arc_r - 4) * math.cos(a), gy - (arc_r - 4) * math.sin(a)),
                 (gx + (arc_r + 4) * math.cos(a), gy - (arc_r + 4) * math.sin(a)), 1.2, G4)
-    fr.text(gx + 92, gy - 46, f"{int(math.degrees(ang))}°", G4)
+    fr.text(gx - 128, gy - 50, f"set {int(math.degrees(ang))}°", G4)
     # part labels with leaders
     fr.line((gx + 40, gy - 50), (330, 58), 1.0, G3)
     fr.text(334, 61, "wheel", G4)
@@ -595,7 +593,7 @@ def v4():
     row_h, row_b = ROWS[4], ROWS[5]
     pitch = 10
     xk = sx + GAP * pitch
-    fr.text(sx - 36, sy - 2, "h b", G4)
+    fr.text(sx - 92, sy - 2, "whole pull", G4)
     for r_i, r in enumerate((row_h, row_b)):
         for i, bell in enumerate(r):
             hgt = 4 + (N - bell) * 2.2
@@ -625,9 +623,6 @@ def v5():
     for k in range(5):
         y = gy0 + k * gh / 4
         fr.line((gx0, y), (gx0 + gw, y), 1.0, G1 if k not in (0, 4) else G2)
-    for k in range(51):
-        x = gx0 + k * gw / 50
-        fr.line((x, gy0 + gh / 2 - 2), (x, gy0 + gh / 2 + 2), 1.0, G2) if k % 5 else None
 
     def trace(row, dx, dy):
         lead = GAP * gw / (N + 1)
@@ -667,7 +662,6 @@ def v5():
     fr.poly([(gx0 - 9, gy0 + gh - 12), (gx0 - 3, gy0 + gh - 8), (gx0 - 9, gy0 + gh - 4)], G4)
     fr.text(gx0, gy0 + gh + 13 if gy0 + gh + 13 < 216 else 214, "ch 1", G4)
     fr.text(gx0 + 160, 214, "1 row / sweep", G4)
-    fr.text(gx0 + gw + 8, gy0 + gh / 2 + 3, "1/2 st", G4)
     fr.write("v5")
 
 

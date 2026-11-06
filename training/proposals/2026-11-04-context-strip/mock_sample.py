@@ -14,12 +14,14 @@ outlines are used, and they share one point count (draw.hpp: every mutable outli
   close  the stretch between the markers, magnified, drawn the way the band is: two filled halves at scale 2,
          193 px each drawn (authored within +-48.25), overlapping 2 px (the same seam caveat). The same mapping,
          stretched: x 48-432 is the stretch from begin to end. One rule at every length: each point takes the
-         highest high and lowest low of the bin centres within half a point-spacing of it. Every bin centre lies
-         within half a spacing of some point, so no bin is ever missed: on a long stretch a point gathers several
-         and keeps their peaks; on a short one (under 32 bins) the point nearest each centre carries that bin's
-         real value, drawn at most half a spacing (about 6 px) along from where it belongs, and a point with no
-         centre near it takes the straight line between the two nearest. Nothing is invented, there are no
-         plateaus, and nothing jumps as the stretch grows. Never less than one bin. Fill only.
+         highest high and lowest low of the bin centres within half a point-spacing of it. Every bin centre inside
+         the stretch lies within half a spacing of some point, so none is missed (a bin straddling a marker with
+         its centre outside can drop at the ends). On a long stretch a point gathers several centres and keeps
+         their peaks; on a short one (under about 30 bins, where half a spacing is under half a bin) the point
+         nearest each centre carries that bin's real value, drawn at most half a spacing (about 6 px) along from
+         where it belongs, and a point with no centre near it takes the straight line between the two nearest.
+         Nothing is invented and there are no plateaus. The rule never switches, but as a marker moves a point can
+         step when a bin centre enters or leaves its window. Never less than one bin. Fill only.
 
 Begin and end are two 5 px #969696 squares on the band's bottom edge. The band re-keys only when the overview's
 generation differs from the one stored (display_reset clears it, so the first frame after a reset redraws too). The

@@ -17,12 +17,14 @@ own tile, so place keeps them apart:
   attack   a rising line turning about its foot (rotation, 60 deg: 80 deg above level when fast, 20 when slow)
   release  a falling line turning about its foot (rotation, 60 deg: 80 deg below level when fast, 20 when slow)
 Each glyph moves with its own encoder only; it agrees with the result by direction (a steeper line is a faster rise
-or fall in both). Glyph weights: the turning lines and pointers at 1.5 px, ruler ticks 1.5 px wide.
+or fall in both). Glyph weights: the turning lines at the 1.5 px Line weight, ruler ticks 1.5 px wide (heavier than
+craft.md's hairline on purpose: black hairlines on a light tile break up at 1:1), pointers small solid shapes.
 The result tile is one mutable outline (32 points, filled black) at scale 2, authored within +-49 x +-32 so it
 spans 196 x 128 px drawn: the gain over a few cycles, drawn from the controls, not from audio, since an effect page
 gets no audio signal. Rate sets how many cycles it shows (2 + round(4 x rate)); 30 points are shared out a cycle at a
-time (the remainder to the last cycles) so every peak lands on one, and the curve stays at least 1 px above the two
-bottom corners, so every setting gives 32 distinct points (`--check` sweeps the controls and asserts it).
+time (the remainder to the last cycles) so every peak lands on one; each peak has a 2 px flat top, so no tooth is a
+needle, and the shortest rise is a tenth of a cycle; and the curve stays at least 1 px above the two bottom corners. Every setting gives 32 distinct points with no
+turn within 2.5 deg of straight back (`--check` sweeps the controls and asserts both).
 
 Usage: python3 mock_tiles.py OUT.svg [--thin]  (--thin: deepest dips, fastest rate and attack, slowest release)
        python3 mock_tiles.py --check
@@ -32,7 +34,7 @@ import sys
 
 TILE, INK, TITLE, VALUE = "#CDCDCD", "#000000", "#969696", "#CDCDCD"
 DEPTH, RATE, ATTACK, RELEASE = (1.0, 1.0, 0.0, 1.0) if "--thin" in sys.argv else (0.6, 0.35, 0.3, 0.7)
-VALUES = ["60", "2.1hz", "24ms", "180ms"]
+VALUES = ["100", "8.0hz", "4ms", "800ms"] if "--thin" in sys.argv else ["60", "2.1hz", "24ms", "180ms"]
 f = lambda v: f"{v:.2f}".rstrip("0").rstrip(".")
 
 
@@ -90,22 +92,25 @@ top, base = RY + 24, RY + RH - 16
 def result_points(depth, rate, attack, release):
     cycles = 2 + round(4 * rate)
     counts = [30 // cycles + (1 if k >= cycles - 30 % cycles else 0) for k in range(cycles)]
-    a = attack * 0.5 + 0.05                  # the rise, as a share of a cycle
+    a = attack * 0.5 + 0.1                   # the rise, as a share of a cycle (never a needle)
     tau = 0.08 + release * 0.35              # the fall's time constant, as a share of a cycle
     cw = (RW - 24) / cycles
     pts = []
     for c, n in enumerate(counts):
-        phases = [0, a] + [a + (1 - a) * (j / (n - 2)) ** 1.6 for j in range(1, n - 1)]
+        flat = 2.0 / cw                       # a 2 px flat top on each peak, so no tooth is a needle
+        phases = [0, a, a + flat] + [a + flat + (1 - a - flat) * (j / (n - 3)) ** 1.6 for j in range(1, n - 2)]
         for t in phases:
-            g = 1 - depth if t == 0 else (1 - depth * (1 - t / a) if t <= a else 1 - depth * (1 - math.exp(-(t - a) / tau)))
-            x = RX + 12 + (c + t) * cw - (0.5 if t == 1 and c < cycles - 1 else 0)
+            g = 1 - depth if t == 0 else (1 - depth * (1 - t / a) if t <= a else
+                                         1 if t <= a + flat + 1e-9 else 1 - depth * (1 - math.exp(-(t - a - flat) / tau)))
+            x = RX + 12 + (c + t) * cw - (1.5 if abs(t - 1) < 1e-9 and c < cycles - 1 else 0)
             pts.append((x, min(base - 1, base - g * (base - top))))
     pts += [(RX + RW - 12, base + 1), (RX + 12, base + 1)]
     return pts
 
 
 if "--check" in sys.argv:
-    steps = [i / 8 for i in range(9)]
+    steps = [i / 8 for i in range(9)] + [0.99]
+    worst = 0
     for d in steps:
         for r in steps:
             for at in steps:
@@ -115,7 +120,12 @@ if "--check" in sys.argv:
                     for i in range(32):
                         x0, y0 = pts[i]; x1, y1 = pts[(i + 1) % 32]
                         assert math.hypot(x1 - x0, y1 - y0) >= 0.25, (d, r, at, rl, i)
-    print("32 distinct points, at least 0.25 px apart, at every setting on a 9-step grid")
+                        xp, yp = pts[i - 1]
+                        u = (x0 - xp, y0 - yp); v = (x1 - x0, y1 - y0)
+                        ang = math.degrees(math.acos(max(-1, min(1, (u[0] * v[0] + u[1] * v[1]) / (math.hypot(*u) * math.hypot(*v))))))
+                        worst = max(worst, ang)
+                        assert 180 - ang >= 2.5, (d, r, at, rl, i, 180 - ang)
+    print(f"32 distinct points, at least 0.25 px apart, no turn within 2.5 deg of straight back (sharpest {180 - worst:.2f} deg), at every setting on the grid")
     sys.exit(0)
 
 tile(RX, RY, RW, RH)

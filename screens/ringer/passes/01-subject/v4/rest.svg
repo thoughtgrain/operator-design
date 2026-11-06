@@ -104,12 +104,12 @@
   <path d="M 276.69 78.93 L 274.98 73.96 L 272.96 69.09 L 270.62 64.37 L 268.01 59.79 L 265.11 55.38 L 261.95 51.17 L 258.52 47.15 L 254.86 43.37 L 250.97 39.82 L 246.86 36.52 L 246.24 37.3 L 250.31 40.58 L 254.16 44.09 L 257.78 47.83 L 261.17 51.79 L 264.29 55.96 L 267.15 60.31 L 269.74 64.83 L 272.04 69.51 L 274.04 74.32 L 275.75 79.25 Z" fill="#646464" stroke="none"/>
   <path d="M 195.4 184 L 195.4 192 L 196.6 192 L 196.6 184 Z" fill="#7D7D7D" stroke="none"/>
   <path d="M 244.62 40.47 L 249.44 34.08 L 248.48 33.36 L 243.67 39.75 Z" fill="#7D7D7D" stroke="none"/>
-  <text transform="matrix(1 0 0 1 288 58)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">143°</text>
+  <text transform="matrix(1 0 0 1 68 54)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">set 143°</text>
   <path d="M 235.98 54.5 L 329.98 58.5 L 330.02 57.5 L 236.02 53.5 Z" fill="#646464" stroke="none"/>
   <text transform="matrix(1 0 0 1 334 61)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wheel</text>
   <path d="M 172.09 136.42 L 330.16 82.47 L 329.84 81.53 L 171.77 135.47 Z" fill="#646464" stroke="none"/>
   <text transform="matrix(1 0 0 1 334 85)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">stay</text>
-  <text transform="matrix(1 0 0 1 84 210)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">h b</text>
+  <text transform="matrix(1 0 0 1 28 210)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">whole pull</text>
   <path d="M 120 212 L 124 212 L 124 203.6 L 120 203.6 Z" fill="#7D7D7D" stroke="none"/>
   <path d="M 130 212 L 134 212 L 134 208 L 130 208 Z" fill="#7D7D7D" stroke="none"/>
   <path d="M 140 212 L 144 212 L 144 199.2 L 140 199.2 Z" fill="#7D7D7D" stroke="none"/>

@@ -59,7 +59,8 @@ def hatch(x0, step=10, w=1.5):
 
 
 out = ['<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',
-       "  <!-- P17 Level columns, mock rest frame (illustration only): a four-tap delay effect, taps 1 and 3 switched off. -->",
+       "  <!-- P17 Level columns, mock rest frame (illustration only): a four-tap delay effect, "
+       + ("every tap switched off" if "--all-off" in sys.argv else "taps 1 and 3 switched off") + ". -->",
        '  <g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>']
 for i, g in enumerate(RAMP):
     x = i * W
