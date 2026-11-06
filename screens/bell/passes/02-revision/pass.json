@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "revision",
   "number": 2,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-06T08:11:59",
   "focus": "Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.",
   "subject": {
@@ -138,5 +138,11 @@
     "problems": [],
     "checked": "2026-11-06T08:22:25"
   },
-  "selection": null
+  "selection": {
+    "variant": "v5",
+    "reason": "Owner likes v5; remove the hatched background and think about simple environmental grounding.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:31:45",
+    "frame": "screens/bell/passes/02-revision/v5/rest.svg"
+  }
 }
