@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "Tilt-shift for sound: a spectral tilt about a focal band, with a blur that smears everything outside the band in frequency and in time."
+}

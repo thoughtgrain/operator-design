@@ -27,55 +27,49 @@
   <path id="ants_palette_4" d="M 740 300 L 744 300 L 744 304 Z" fill="#646464" stroke="#646464" stroke-width="2"/>
   <path id="ants_palette_5" d="M 750 300 L 754 300 L 754 304 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="2"/>
   <path id="ants_palette_6" d="M 760 300 L 764 300 L 764 304 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
-  <path d="M 91.5 38 L 91.5 192 L 92.5 192 L 92.5 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 89 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">1</text>
-  <path d="M 140.64 38 L 140.64 192 L 141.64 192 L 141.64 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 138.14 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">2</text>
-  <path d="M 189.79 38 L 189.79 192 L 190.79 192 L 190.79 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 187.29 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">3</text>
-  <path d="M 238.93 38 L 238.93 192 L 239.93 192 L 239.93 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 236.43 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">4</text>
-  <path d="M 288.07 38 L 288.07 192 L 289.07 192 L 289.07 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 285.57 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">5</text>
-  <path d="M 337.21 38 L 337.21 192 L 338.21 192 L 338.21 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 334.71 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">6</text>
-  <path d="M 386.36 38 L 386.36 192 L 387.36 192 L 387.36 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 383.86 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">7</text>
-  <path d="M 435.5 38 L 435.5 192 L 436.5 192 L 436.5 38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 433 32)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">8</text>
-  <path d="M 58 186.5 L 64 186.5 L 64 185.5 L 58 185.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 184.3 L 64 184.3 L 64 183.3 L 61 183.3 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 182.1 L 64 182.1 L 64 181.1 L 61 181.1 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 179.9 L 64 179.9 L 64 178.9 L 61 178.9 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 177.7 L 64 177.7 L 64 176.7 L 61 176.7 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 58 175.5 L 64 175.5 L 64 174.5 L 58 174.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 173.3 L 64 173.3 L 64 172.3 L 61 172.3 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 171.1 L 64 171.1 L 64 170.1 L 61 170.1 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 168.9 L 64 168.9 L 64 167.9 L 61 167.9 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 61 166.7 L 64 166.7 L 64 165.7 L 61 165.7 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 58 164.5 L 64 164.5 L 64 163.5 L 58 163.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 64.5 187 L 64.5 163 L 63.5 163 L 63.5 187 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path id="ants_node_0" d="M 92.05 66.6 L 141.18 62.2 L 190.33 60 L 239.44 55.6 L 288.53 57.8 L 337.7 62.2 L 386.83 60 L 435.92 66.59 L 436.08 65.41 L 386.88 58.8 L 337.73 61 L 288.61 56.6 L 239.42 54.4 L 190.25 58.8 L 141.1 61 L 91.95 65.4 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 14 59)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−4</text>
-  <path id="ants_node_1" d="M 92.08 96.59 L 141.16 90 L 190.31 94.4 L 239.47 85.6 L 288.53 87.8 L 337.67 92.2 L 386.83 94.4 L 435.97 96.6 L 436.03 95.4 L 386.88 93.2 L 337.75 91 L 288.61 86.6 L 239.39 84.4 L 190.26 93.2 L 141.13 88.8 L 91.92 95.41 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 14 89)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−3</text>
-  <path id="ants_node_2" d="M 92.05 126.6 L 141.16 122.2 L 190.31 124.4 L 239.47 117.8 L 288.54 117.8 L 337.67 122.2 L 386.83 124.4 L 435.97 126.6 L 436.03 125.4 L 386.88 123.2 L 337.75 121 L 288.6 116.6 L 239.39 116.6 L 190.26 123.2 L 141.13 121 L 91.95 125.4 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 14 119)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−2</text>
-  <path id="ants_node_3" d="M 92.07 156.75 L 141.19 152.35 L 190.3 150.15 L 239.45 150.15 L 288.55 147.95 L 337.66 152.35 L 386.82 154.55 L 435.97 156.75 L 436.03 155.25 L 386.89 153.05 L 337.76 150.85 L 288.59 146.45 L 239.41 148.65 L 190.27 148.65 L 141.09 150.85 L 91.93 155.25 Z" fill="#969696" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 14 149)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−1</text>
-  <path id="ants_node_4" d="M 92.1 187.1 L 141.22 182.7 L 190.36 180.5 L 239.45 176.1 L 288.5 178.3 L 337.64 182.7 L 386.81 184.9 L 435.95 187.1 L 436.05 184.9 L 386.91 182.7 L 337.79 180.5 L 288.65 176.1 L 239.4 173.9 L 190.21 178.3 L 141.07 180.5 L 91.9 184.9 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
-  <rect x="89.5" y="183.5" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="138.64" y="179.1" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="187.79" y="176.9" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="236.93" y="172.5" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="286.07" y="174.7" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="335.21" y="179.1" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="384.36" y="181.3" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <rect x="433.5" y="183.5" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <text transform="matrix(1 0 0 1 14 179)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">now</text>
-  <path id="ants_node_5" d="M 120.56 183.44 L 120.32 184.19 L 119.51 184.89 L 118.25 185.41 L 116.74 185.69 L 115.2 185.68 L 113.87 185.39 L 112.96 184.85 L 112.59 184.16 L 112.83 183.41 L 113.63 182.71 L 114.89 182.19 L 116.4 181.91 L 117.94 181.92 L 119.27 182.21 L 120.19 182.75 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <path id="ants_node_6" d="M 218.84 176.84 L 218.6 177.59 L 217.79 178.29 L 216.54 178.81 L 215.03 179.09 L 213.49 179.08 L 212.16 178.79 L 211.24 178.25 L 210.87 177.56 L 211.11 176.81 L 211.92 176.11 L 213.18 175.59 L 214.69 175.31 L 216.23 175.32 L 217.55 175.61 L 218.47 176.15 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <path id="ants_node_7" d="M 317.13 179.76 L 316.76 180.45 L 315.84 180.99 L 314.51 181.28 L 312.97 181.29 L 311.46 181.01 L 310.21 180.49 L 309.4 179.79 L 309.16 179.04 L 309.53 178.35 L 310.45 177.81 L 311.77 177.52 L 313.31 177.51 L 314.82 177.79 L 316.08 178.31 L 316.89 179.01 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <path id="ants_node_8" d="M 415.42 185.08 L 415.09 185.79 L 414.19 186.37 L 412.88 186.72 L 411.34 186.8 L 409.82 186.59 L 408.54 186.12 L 407.7 185.46 L 407.43 184.72 L 407.77 184.01 L 408.66 183.43 L 409.98 183.08 L 411.51 183 L 413.04 183.21 L 414.31 183.68 L 415.15 184.34 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 384 212)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">plan, 5 passes</text>
+  <path d="M 91.5 34 L 91.5 194 L 92.5 194 L 92.5 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 89 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">1</text>
+  <path d="M 140.64 34 L 140.64 194 L 141.64 194 L 141.64 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 138.14 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">2</text>
+  <path d="M 189.79 34 L 189.79 194 L 190.79 194 L 190.79 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 187.29 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">3</text>
+  <path d="M 238.93 34 L 238.93 194 L 239.93 194 L 239.93 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 236.43 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">4</text>
+  <path d="M 288.07 34 L 288.07 194 L 289.07 194 L 289.07 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 285.57 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">5</text>
+  <path d="M 337.21 34 L 337.21 194 L 338.21 194 L 338.21 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 334.71 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">6</text>
+  <path d="M 386.36 34 L 386.36 194 L 387.36 194 L 387.36 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 383.86 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">7</text>
+  <path d="M 435.5 34 L 435.5 194 L 436.5 194 L 436.5 34 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 433 28)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">8</text>
+  <path d="M 58 188.5 L 64 188.5 L 64 187.5 L 58 187.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 61 182.83 L 64 182.83 L 64 181.83 L 61 181.83 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 61 177.17 L 64 177.17 L 64 176.17 L 61 176.17 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 61 171.5 L 64 171.5 L 64 170.5 L 61 170.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 61 165.83 L 64 165.83 L 64 164.83 L 61 164.83 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 58 160.17 L 64 160.17 L 64 159.17 L 58 159.17 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 61 154.5 L 64 154.5 L 64 153.5 L 61 153.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path d="M 64.5 189 L 64.5 153 L 63.5 153 L 63.5 189 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <path id="ants_node_0" d="M 92.13 74.58 L 141.24 63.26 L 190.39 57.59 L 239.46 46.27 L 288.47 51.93 L 337.68 63.27 L 386.79 57.61 L 435.8 74.57 L 436.2 73.43 L 386.92 56.39 L 337.75 62.06 L 288.67 50.74 L 239.39 45.06 L 190.18 56.41 L 141.04 62.07 L 91.87 73.42 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 14 61)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−3</text>
+  <path id="ants_node_1" d="M 92.2 112.57 L 141.18 95.62 L 190.35 106.96 L 239.53 84.28 L 288.47 89.93 L 337.61 101.26 L 386.79 106.93 L 435.93 112.6 L 436.07 111.4 L 386.93 105.74 L 337.82 100.07 L 288.67 88.74 L 239.33 83.05 L 190.22 105.7 L 141.11 94.38 L 91.8 111.43 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 14 99)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−2</text>
+  <path id="ants_node_2" d="M 92.17 150.73 L 141.19 139.43 L 190.41 145.1 L 239.55 122.44 L 288.53 128.08 L 337.59 128.08 L 386.69 145.07 L 435.91 150.75 L 436.09 149.25 L 387.02 143.6 L 337.84 126.58 L 288.61 126.58 L 239.31 120.9 L 190.16 143.56 L 141.1 137.91 L 91.83 149.27 Z" fill="#969696" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 14 137)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">−1</text>
+  <path id="ants_node_3" d="M 92.25 189.07 L 141.33 177.75 L 190.47 172.09 L 239.49 160.78 L 288.38 166.42 L 337.53 177.75 L 386.73 183.43 L 435.87 189.09 L 436.13 186.91 L 386.98 181.24 L 337.9 175.58 L 288.76 164.25 L 239.37 158.55 L 190.1 169.91 L 140.96 175.58 L 91.75 186.93 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
+  <rect x="89.5" y="185.5" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="138.64" y="174.17" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="187.79" y="168.5" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="236.93" y="157.17" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="286.07" y="162.83" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="335.21" y="174.17" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="384.36" y="179.83" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="433.5" y="185.5" width="5" height="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <text transform="matrix(1 0 0 1 14 175)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">now</text>
+  <path id="ants_node_4" d="M 121.93 181.1 L 121.76 182.24 L 120.81 183.39 L 119.2 184.38 L 117.2 185.06 L 115.1 185.33 L 113.23 185.14 L 111.86 184.52 L 111.21 183.57 L 111.38 182.43 L 112.34 181.28 L 113.94 180.29 L 115.94 179.6 L 118.04 179.34 L 119.92 179.53 L 121.28 180.15 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_5" d="M 220.22 164.1 L 220.05 165.24 L 219.09 166.39 L 217.49 167.38 L 215.49 168.06 L 213.39 168.33 L 211.51 168.14 L 210.15 167.52 L 209.5 166.57 L 209.66 165.43 L 210.62 164.28 L 212.22 163.29 L 214.23 162.6 L 216.33 162.34 L 218.2 162.53 L 219.57 163.15 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_6" d="M 318.5 172.24 L 317.85 173.19 L 316.49 173.8 L 314.61 173.99 L 312.51 173.73 L 310.51 173.05 L 308.91 172.06 L 307.95 170.9 L 307.78 169.76 L 308.43 168.81 L 309.8 168.2 L 311.67 168.01 L 313.77 168.27 L 315.78 168.95 L 317.38 169.94 L 318.34 171.1 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_7" d="M 416.89 185.8 L 416.35 186.81 L 415.07 187.58 L 413.22 187.98 L 411.11 187.95 L 409.04 187.5 L 407.34 186.69 L 406.26 185.65 L 405.96 184.54 L 406.5 183.52 L 407.79 182.75 L 409.63 182.36 L 411.75 182.39 L 413.82 182.84 L 415.52 183.65 L 416.6 184.68 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 384 212)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">plan, 4 passes</text>
 </svg>

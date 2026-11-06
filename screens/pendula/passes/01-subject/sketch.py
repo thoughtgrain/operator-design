@@ -338,8 +338,8 @@ def v4() -> Svg:
     def circ(r, z, a0, a1, m=30):
         return [P(r * math.cos(a0 + (a1 - a0) * k / m), r * math.sin(a0 + (a1 - a0) * k / m), z) for k in range(m + 1)]
 
-    base_z = -150.0
-    br = 92
+    base_z = -140.0
+    br = 84
     # base plate and its dial
     s.poly(circ(br, base_z, 0, 2 * math.pi, 60)[:-1], G["dim"], W_LINE, G["black"])
     deg = set(SCALES[SCALE])
@@ -355,12 +355,10 @@ def v4() -> Svg:
     while yy < br - 2:
         s.ribbon([P(0, yy, base_z), P(0, min(yy + 8, br - 2), base_z)], W_HAIR, G["mid"])
         yy += 13
-    for y0 in (-br - 11, br + 11):
-        s.ribbon([P(0, y0, base_z + 4), P(0, y0, -20)], W_HAIR, G["ground2"])
     a_lab = P(0, -br - 22, base_z)
     s.text(a_lab[0] - 4, a_lab[1] + 12, "A", G["mid"])
-    a_lab = P(0, br + 22, base_z)
-    s.text(a_lab[0] - 4, a_lab[1] - 4, "A", G["mid"])
+    a_lab = P(0, br + 18, base_z)
+    s.text(a_lab[0] + 6, a_lab[1] + 2, "A", G["mid"])
     orbits = [(L * math.sin(th), -L * math.cos(th)) for L in lens]
     # back halves (far side, y > 0 after the turn is roughly a in (0, pi) shifted by cam)
     lo, hi = -cam, math.pi - cam
@@ -407,7 +405,7 @@ def v5() -> Svg:
     s = Svg()
     n = COUNT
     c30, s30 = math.cos(math.radians(30)), math.sin(math.radians(30))
-    ox, oy = 128.0, 46.0
+    ox, oy = 140.0, 36.0
 
     def P(x, y, z):  # x along the beam (to lower right), y across (to lower left), z up
         return (ox + (x - y) * c30, oy + (x + y) * s30 - z)
@@ -415,22 +413,22 @@ def v5() -> Svg:
     th = math.radians(swing_deg())
     L0 = 50 + 30 * LENGTH_T
     lens = [L0 * (K / (K + i)) ** 2 for i in range(n)]
-    ground = -L0 - 24
-    xa, xb = -6.0, 176.0
-    xs = [6 + 164 * i / max(n - 1, 1) for i in range(n)]
+    ground = -L0 - 16
+    xa, xb = -6.0, 160.0
+    xs = [6 + 148 * i / max(n - 1, 1) for i in range(n)]
     notes = scale_notes(n)
     # ground line under the frame, and the back legs
-    s.ribbon([P(xa, -40, ground), P(xb, -40, ground)], W_HAIR, G["ground2"])
-    s.ribbon([P(xa, -40, ground), P(xa, 0, 0), P(xa, 40, ground)], W_LINE, G["mid"])
+    s.ribbon([P(xa, -22, ground), P(xb, -22, ground)], W_HAIR, G["ground2"])
+    s.ribbon([P(xa, -22, ground), P(xa, 0, 0), P(xa, 22, ground)], W_LINE, G["mid"])
     s.ribbon([P(xa, 0, 0), P(xb, 0, 0)], W_SUBJ, G["mid"])
     fy, fz = math.cos(th), -math.sin(th)      # forward along the seat (tangent to the arc)
     uy, uz = math.sin(th), math.cos(th)       # up along the chains
     for i, x in enumerate(xs):
         L = lens[i]
         # tuned bar on a post under the bottom of this swing: lower note, longer bar
-        bz = -L - 14
+        bz = -L - 13
         bl = 30 - 1.0 * notes[i]
-        s.ribbon([P(x, 0, ground), P(x, 0, bz - 2)], W_HAIR, G["dim"])
+        s.ribbon([P(x, 0, ground), P(x, 0, bz - 2)], W_HAIR, G["ground2"])
         top = [P(x - 3, -bl / 2, bz), P(x + 3, -bl / 2, bz), P(x + 3, bl / 2, bz), P(x - 3, bl / 2, bz)]
         s.poly(top, G["mid"], W_LINE, G["ground"])
         # rider held back
@@ -445,7 +443,7 @@ def v5() -> Svg:
         s.poly([Q(-5, -4, 1), Q(-5, 2, 1), Q(-5, 2, 13), Q(-5, -4, 13)], G["sec"], W_LINE, G["black"])     # torso side
         s.poly([Q(-5, 2, 1), Q(5, 2, 1), Q(5, 2, 13), Q(-5, 2, 13)], G["hi"], W_LINE, G["black"])         # torso front
         s.circle(Q(0, -1, 18), 4.0, G["hi"], W_LINE)                                                      # head
-    s.ribbon([P(xb, -40, ground), P(xb, 0, 0), P(xb, 40, ground)], W_LINE, G["mid"])
+    s.ribbon([P(xb, -22, ground), P(xb, 0, 0), P(xb, 22, ground)], W_LINE, G["mid"])
     return s
 
 

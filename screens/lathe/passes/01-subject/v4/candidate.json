@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P4",
+  "drawing_language": "patent section",
+  "subject": "Five section slices taken across the side from rim to label, stacked diagonally like a patent figure, the slice under the stylus lit and the inner ones carrying shorter waves.",
+  "controls": [
+    "cut: shape - the lit slice's grooved top edge (nodes 0-1) swells and flattens at its crests.",
+    "groove: position + shade - which slice is lit steps from the front (rim, 10) to the back (label, 18), easing through the grey between; the lit outline and edge move with it (~140 px diagonal travel).",
+    "wear: count - nicks are struck into the lit slice's hatched face and edge, 0 to ~12; none at 0.",
+    "rumble: position - the five slices ride a slow vertical wave, up to +-10 px each, so the stack goes out of line; aligned at 0."
+  ],
+  "reference": "opxy/reference/README.md (MNMD DPRO-WAVE stack, linked)",
+  "risks": "groove steps between five slices, so between them it must ease (shade fade plus moving the lit edge) or it reads as on/off. Hatching at 4 px is near the 3 px floor and covers five faces: it's static, but it could smear on the panel. The physics is a little abstract: the player has to know that inner grooves carry shorter waves. Reference numerals (10-18) are patent convention and mean nothing to a player; they're decoration in the language."
+}

@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "pattern": "P15",
+  "drawing_language": "patent section",
+  "subject": "The sound's texture cut through like a patent section, a block of square cells frequency by time in which the focal band stays as crisp solid cells on the hits and everything outside is cross-hatched cut material smeared into long runs.",
+  "controls": [
+    "focus: position. The column pair that stays solid (bright, hits only) moves across the block, 100 Hz to 8 kHz, about 400 px; the hatching closes behind it.",
+    "tilt: count. The density of hatched cells ramps across the block: at −6 the low side fills and the high side empties, at +6 the reverse; about 40 cells change sides over the range.",
+    "blur: run length. Outside the band, hatched cells join into longer vertical runs (time smeared): at 0 they're single cells on the hit rows like the band, at 100 they run most of the block's height.",
+    "mix: count, second look. A seeded scatter of out-of-band cells keeps the dry look (a solid mid-grey cell on the hit rows, no hatching) instead of the cut look; mix 0 is all dry, 100 all hatched."
+  ],
+  "reference": "opxy/reference/README.md (stock dissolve engine, the cell-field approach) beside library/theseus-tower/contact.png (line-drawing restraint)",
+  "risks": [
+    "Hatching is static art (hundreds of 1 px ribbons) and can't be swapped by palette, so each cell needs a pre-hatched variant to show or hide: two nodes per cell, 320 nodes, needs sdk 1.8 and is heavy.",
+    "P15 is for noise-like sounds; tilt processes whatever is sent to it, so this only fits by saying the drawing is the effect's texture, not the source. Gate 0 has to be argued.",
+    "Hatched regions at 5 px pitch look like 'disabled' stipple from desktop UIs; a patent reader sees cut material, a player may see greyed-out.",
+    "Tilt and mix are both counts on the same cells; they differ by which look (hatched vs dry solid) and where (gradient vs scatter), which may not be enough to tell them apart."
+  ],
+  "stretch": null
+}

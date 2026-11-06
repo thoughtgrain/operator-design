@@ -131,7 +131,6 @@
   <path d="M 251.02 120.71 L 250.66 121.39 L 250.77 124.2 L 251.48 126.13 L 252.89 125.62 L 252.26 123.9 L 252.17 121.74 L 252.34 121.42 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
   <path d="M 253.32 129.81 L 253.97 130.94 L 256.25 133.97 L 257.45 133.07 L 255.23 130.12 L 254.62 129.07 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
   <path d="M 259.01 136.98 L 259.64 137.65 L 262.87 140.29 L 263.82 139.13 L 260.66 136.55 L 260.09 135.95 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
-  <path d="M 266.72 142.29 L 269.42 142.87 L 269.74 141.41 L 267.04 140.82 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
   <path d="M 184.33 109.38 L 187.24 109.06 L 189.34 108.64 L 189.04 107.17 L 187.01 107.57 L 184.16 107.89 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 193.27 107.8 L 196.89 106.95 L 198.15 106.61 L 197.77 105.16 L 196.52 105.49 L 192.93 106.34 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 202.02 105.6 L 202.47 105.48 L 206.84 104.22 L 206.43 102.78 L 202.07 104.03 L 201.64 104.15 Z" fill="#646464" stroke="none" stroke-width="0"/>
@@ -150,16 +149,16 @@
   <circle cx="202.83" cy="108.64" r="3.2" fill="#000000" stroke="#969696" stroke-width="1.5"/>
   <circle cx="160.11" cy="121.57" r="3.2" fill="#000000" stroke="#969696" stroke-width="1.5"/>
   <circle cx="121.69" cy="142.14" r="3.2" fill="#000000" stroke="#969696" stroke-width="1.5"/>
-  <path id="ants_node_2" d="M 133.27 184.73 L 132.96 185.46 L 132.1 186.08 L 130.8 186.49 L 129.27 186.63 L 127.74 186.49 L 126.44 186.08 L 125.57 185.46 L 125.27 184.73 L 125.57 184.01 L 126.44 183.39 L 127.74 182.98 L 129.27 182.83 L 130.8 182.98 L 132.1 183.39 L 132.96 184.01 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <path id="ants_node_3" d="M 246.47 128.85 L 247.08 129.35 L 247.41 130.36 L 247.43 131.72 L 247.12 133.23 L 246.53 134.65 L 245.76 135.77 L 244.91 136.42 L 244.13 136.5 L 243.52 135.99 L 243.19 134.98 L 243.17 133.62 L 243.48 132.12 L 244.07 130.7 L 244.84 129.58 L 245.69 128.93 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <path id="ants_node_4" d="M 198.89 109.33 L 199.07 108.56 L 199.81 107.8 L 201.02 107.17 L 202.51 106.77 L 204.04 106.64 L 205.39 106.83 L 206.35 107.29 L 206.77 107.95 L 206.6 108.72 L 205.85 109.47 L 204.64 110.1 L 203.16 110.51 L 201.63 110.63 L 200.28 110.45 L 199.32 109.99 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
-  <path id="ants_node_5" d="M 127.14 137.75 L 127 136.98 L 127.4 135.99 L 128.28 134.95 L 129.49 134 L 130.86 133.3 L 132.17 132.95 L 133.23 133 L 133.88 133.45 L 134.02 134.23 L 133.62 135.21 L 132.74 136.26 L 131.53 137.2 L 130.16 137.91 L 128.85 138.26 L 127.79 138.2 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_2" d="M 134.77 184.73 L 134.35 185.8 L 133.16 186.71 L 131.37 187.32 L 129.27 187.53 L 127.16 187.32 L 125.38 186.71 L 124.19 185.8 L 123.77 184.73 L 124.19 183.66 L 125.38 182.75 L 127.16 182.15 L 129.27 181.93 L 131.37 182.15 L 133.16 182.75 L 134.35 183.66 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_3" d="M 246.91 127.41 L 247.81 128.13 L 248.33 129.53 L 248.39 131.42 L 247.98 133.49 L 247.16 135.44 L 246.06 136.97 L 244.84 137.85 L 243.69 137.93 L 242.79 137.22 L 242.27 135.81 L 242.21 133.93 L 242.62 131.85 L 243.44 129.9 L 244.55 128.38 L 245.76 127.5 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_4" d="M 197.41 109.58 L 197.64 108.46 L 198.66 107.36 L 200.31 106.45 L 202.35 105.88 L 204.46 105.73 L 206.32 106.02 L 207.65 106.71 L 208.25 107.69 L 208.02 108.82 L 207 109.92 L 205.35 110.82 L 203.31 111.4 L 201.2 111.55 L 199.34 111.26 L 198.01 110.57 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+  <path id="ants_node_5" d="M 125.87 138.56 L 125.65 137.43 L 126.17 136.02 L 127.34 134.55 L 129 133.24 L 130.89 132.29 L 132.72 131.84 L 134.22 131.97 L 135.15 132.64 L 135.37 133.77 L 134.85 135.18 L 133.68 136.65 L 132.02 137.96 L 130.13 138.92 L 128.3 139.36 L 126.8 139.24 Z" fill="#AFAFAF" stroke="none" stroke-width="0"/>
   <path d="M 213.84 106.73 L 183.84 43.78 L 182.93 44.22 L 212.93 107.16 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <text transform="matrix(1 0 0 1 169.39 48)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">10</text>
   <path d="M 314.79 108.85 L 340.79 52.21 L 339.88 51.79 L 313.88 108.43 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <text transform="matrix(1 0 0 1 343.34 56)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">12</text>
-  <path d="M 245.6 133.07 L 285.6 103.07 L 285 102.27 L 245 132.27 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <text transform="matrix(1 0 0 1 288.3 106.67)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">14</text>
+  <path d="M 245.28 133.17 L 289.28 135.17 L 289.32 134.17 L 245.32 132.17 Z" fill="#646464" stroke="none" stroke-width="0"/>
+  <text transform="matrix(1 0 0 1 292.3 138.67)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">14</text>
   <path d="M 381 186.5 L 403 186.5 L 403 185.5 L 381 185.5 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <text transform="matrix(1 0 0 1 406 190)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">16</text>
   <text transform="matrix(1 0 0 1 8 44)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">FIG. 2</text>

@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P5",
+  "drawing_language": "oscilloscope trace",
+  "subject": "An X-Y scope plot with wheel A's angle on x and wheel B's on y, so the ratio draws itself as one bright Lissajous figure (three lobes across, two down at 3:2) floating over a dim graticule floor, every mesh a bead on the trace and the repeat cycle's notes as a strip of bars along the bottom.",
+  "controls": [
+    "ratio: the figure's shape follows the ratio, from a single ellipse at 1:1 through three-by-two at 3:2 to three loops on one sweep at 3:1 (shape of the figure).",
+    "teeth: the beads strung along the trace, one per step of the repeat cycle, and the strip's bars respace from a few to many (count on the figure and in the strip).",
+    "mesh: beads whose teeth slip go hollow and shrink to a dot, and their strip bars drop to a 2 px stub, evenly round the cycle (count and size of beads).",
+    "scale: the strip's bar heights re-step to the new scale's degrees, the figure untouched (shape of the strip)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "P3's warning applies: a Lissajous figure over a graticule is the stock picture of an oscilloscope and reads as a screensaver, not as gears; nothing on screen is a wheel. The trace is ~360 points, so on the device it has to fit four mutable outlines of 64 (256 points), re-keyed only when ratio turns. At 3:1 with 16 teeth the cycle is 48 steps, too many beads for the trace, so beads need a cap or only downbeats. Self-crossings stack beads on each other (24 steps show in ~16 places at 3:2). Strip bars are 4 px wide, right at the part floor. Muted: the beam blanks to a dashed #646464 trace and the beads go hollow."
+}

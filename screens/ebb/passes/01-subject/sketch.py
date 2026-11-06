@@ -35,9 +35,9 @@ SCALES = {
     "min": [0, 2, 3, 5, 7, 8, 10],
     "dor": [0, 2, 3, 5, 7, 9, 10],
     "lyd": [0, 2, 4, 6, 7, 9, 11],
+    "phr": [0, 1, 3, 5, 7, 8, 10],
     "pent": [0, 2, 4, 7, 9],
     "hira": [0, 2, 3, 7, 8],
-    "whole": [0, 2, 4, 6, 8, 10],
 }
 SCALE = SCALES["maj"]
 MEAN = 18.0                       # mid register, semitones above the bottom of the 3-octave span

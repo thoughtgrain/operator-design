@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "pattern": "P10",
+  "drawing_language": "survey plan",
+  "subject": "A surveyed plot of square markers laid out frequency by time, where a vertical strip at the focus is surveyed sharp (bright solid markers, crisp hits) and the rest of the ground is smeared into even, hollow, mid-size markers.",
+  "controls": [
+    "focus: position. The two strip boundary lines (1.5 px, past the neat line) and the solid bright markers between them slide across the plan, 100 Hz to 8 kHz, about 330 px.",
+    "tilt: scale. Marker size ramps across the plan from low to high frequency: at −6 the low side swells and the high side shrinks to 4 px, +6 the reverse (each marker 4–14 px).",
+    "blur: scale over time. Outside the strip each column's markers even out down the time axis: at 0 every column has the strip's crisp pattern (big at the three hits, tiny between), at 100 every row is the same mid size, the hits smeared away.",
+    "mix: count. A seeded scatter of markers outside the strip swaps between the dry look (the crisp pattern) and the wet look (smeared); mix sets how many have swapped, 0 to all 160."
+  ],
+  "reference": "library/toro-blocks/contact.png (P10: a field computed from the signal model) beside opxy/reference/field-and-figure.jpg (neat ground, one figure)",
+  "risks": [
+    "At 1:1 it reads as a matrix of LEDs or graph paper: a regular grid of identical squares is close to the 'dashboard of meters' the subject gate rejects.",
+    "Tilt and blur both change marker size (one across frequency, one down time); two controls on the scale channel of the same parts breaks the one-channel-per-control rule unless blur moves to shape (stretching markers into streaks along time) instead.",
+    "Size differences inside the haze are small at the default; the field looks uniform outside the strip, which is right for the sound but dull.",
+    "192 markers is fine for the node budget, but tilt and blur each resize nearly all of them: a turn redraws ~160 nodes, well past ~20 per frame while easing."
+  ],
+  "stretch": null
+}

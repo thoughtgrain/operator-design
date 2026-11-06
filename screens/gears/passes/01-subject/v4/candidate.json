@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P13",
+  "drawing_language": "orthographic elevation",
+  "subject": "Two spur gears in front elevation on a draughtsman's sheet, centre lines and pitch circles drawn, where each tooth's length is its weight and only teeth long enough to reach across the gap between the wheels engage and play, the tooth meshing now lit at the contact point.",
+  "controls": [
+    "ratio: wheel B's diameter and tooth count grow with the ratio, a twin of A at 1:1 and three times A at 3:1, its centre sliding right to stay in mesh (scale of B, with position).",
+    "teeth: wheel A's outline redraws with 3 to 16 teeth and B follows by the ratio (shape).",
+    "mesh: the centre distance opens as mesh falls, B sliding up to ~28 px away from A, so shorter teeth stop reaching across the capture line and draw hollow (position).",
+    "scale: a plain one-octave keyboard in the lower right dots the scale's notes, set apart because the scale has no twin in the gears (position of the dots)."
+  ],
+  "reference": "library/meikyu-capture/README.md",
+  "risks": "Fitting both wheels: at 3:1 and 16 teeth B has 48 teeth (192 outline points, past one 64-point path), so A's diameter stays fixed and the module shrinks with teeth, and B is drawn as up to three outline paths or coarser teeth; B three times A also runs off the right edge unless both scale down. Tooth lengths differ by only 5 px, so weight reads near the contact point but not across the wheel. The keyboard is the P13 'no twin' fallback and looks bolted on next to an elevation. Wheels turn a tooth per step: two rotating nodes, cheap. Muted: B slides fully out of mesh, nothing engages, the lit tooth goes dark, the machine's own picture of bypass."
+}

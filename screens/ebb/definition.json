@@ -7,34 +7,67 @@
       "id": "tide",
       "label": "Tide",
       "default": 0.3333,
-      "mapping": {"kind": "linear", "minimum": 0, "maximum": 36},
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 36
+      },
       "display": "semitones"
     },
     {
       "id": "period",
       "label": "Period",
       "default": 0.6,
-      "mapping": {"kind": "exponential", "minimum": 1, "maximum": 32},
+      "mapping": {
+        "kind": "exponential",
+        "minimum": 1,
+        "maximum": 32
+      },
       "display": "duration"
     },
     {
       "id": "foam",
       "label": "Foam",
       "default": 0.0,
-      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
       "display": "percent"
     },
     {
       "id": "scale",
       "label": "Scale",
       "default": 0.0,
-      "mapping": {"kind": "enum", "labels": ["maj", "min", "dor", "lyd", "pent", "hira", "whole"]},
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "maj",
+          "min",
+          "dor",
+          "phr",
+          "lyd",
+          "pent",
+          "hira"
+        ]
+      },
       "display": "enum"
     }
   ],
   "presets": {
-    "Slack": {"tide": 0.3333, "period": 0.6, "foam": 0.0, "scale": 0.0},
-    "Spring": {"tide": 0.8333, "period": 0.4, "foam": 0.45, "scale": 0.6667}
+    "Slack": {
+      "tide": 0.3333,
+      "period": 0.6,
+      "foam": 0.0,
+      "scale": 0.0
+    },
+    "Spring": {
+      "tide": 0.8333,
+      "period": 0.4,
+      "foam": 0.45,
+      "scale": 0.6667
+    }
   },
   "resources": {
     "voiceBytes": 64,
@@ -46,7 +79,9 @@
       "stateBytes": 32,
       "stateAlignment": 4,
       "savedBytes": 16,
-      "aux": [12],
+      "aux": [
+        12
+      ],
       "unique": true
     },
     "display": {

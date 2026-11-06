@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P9 One-bit ink; drawing language: survey plan. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Figurative; toro moved off it to P10."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P14",
+      "drawing_language": "engineering schematic",
+      "subject": "The last four revolutions of wheel A woven as cloth in schematic projection, one warp thread per tooth and one row per revolution, with a slab raised at the height of its note wherever a mesh sounded and wheel B's index tooth drawn as a centre line stepping across the rows, so the 3:2 repeat shows as cloth that comes round again every third row.",
+      "controls": [
+        "ratio: wheel B's index centre line changes its stride across the rows (a straight column down the cloth at 1:1, a zigzag every half row at 3:2, one vertex in three rows at 3:1), and the row where the cloth starts repeating moves forward or back (position of the index line's vertices).",
+        "teeth: the number of warp threads and slabs across a fixed-width cloth goes from 3 to 16, the thread pitch closing from about 70 to 16 px (count).",
+        "mesh: slabs whose teeth are too short to reach sink flat onto their threads in Euclidean order, so every row loses raised slabs evenly from 100 % down to bare threads at 0 (count of raised slabs, eased height).",
+        "scale: every slab re-steps its height to the new scale's degree while the rhythm stays put (shape: the profile of the slab tops)."
+      ],
+      "reference": "library/loom-pages/README.md",
+      "risks": "Slabs cost three nodes each: 4 rows x 16 threads x 3 = 192 nodes plus the drive, inside 256 but tight, and weaving a row moves every slab back at once, far over ~20 a frame, so the shift has to be stepped or rows moved as flat tops. Teeth and mesh are both counts (threads vs raised slabs), so mesh's sunk slabs must read as rests (no slab, a knot on the thread), not as low notes. Gears are deterministic, so the cloth never wanders: Loom's point (locked vs generated) collapses into 'it repeats', which is true but thin. The index centre line is a 1.2 px dash-dot over busy slabs and is the weakest read at 1:1. The drive circles at the left are a second, small picture. Muted: the front row stops weaving and drops to wire (no bright tops) and the drive's pitch circles break."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P5",
+      "drawing_language": "oscilloscope trace",
+      "subject": "An X-Y scope plot with wheel A's angle on x and wheel B's on y, so the ratio draws itself as one bright Lissajous figure (three lobes across, two down at 3:2) floating over a dim graticule floor, every mesh a bead on the trace and the repeat cycle's notes as a strip of bars along the bottom.",
+      "controls": [
+        "ratio: the figure's shape follows the ratio, from a single ellipse at 1:1 through three-by-two at 3:2 to three loops on one sweep at 3:1 (shape of the figure).",
+        "teeth: the beads strung along the trace, one per step of the repeat cycle, and the strip's bars respace from a few to many (count on the figure and in the strip).",
+        "mesh: beads whose teeth slip go hollow and shrink to a dot, and their strip bars drop to a 2 px stub, evenly round the cycle (count and size of beads).",
+        "scale: the strip's bar heights re-step to the new scale's degrees, the figure untouched (shape of the strip)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "P3's warning applies: a Lissajous figure over a graticule is the stock picture of an oscilloscope and reads as a screensaver, not as gears; nothing on screen is a wheel. The trace is ~360 points, so on the device it has to fit four mutable outlines of 64 (256 points), re-keyed only when ratio turns. At 3:1 with 16 teeth the cycle is 48 steps, too many beads for the trace, so beads need a cap or only downbeats. Self-crossings stack beads on each other (24 steps show in ~16 places at 3:2). Strip bars are 4 px wide, right at the part floor. Muted: the beam blanks to a dashed #646464 trace and the beads go hollow."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P12",
+      "drawing_language": "typeset diagram",
+      "subject": "A textbook figure of the gear train as an orrery round one arbor: wheel A an inner orbit of eight tooth stations, wheel B an outer orbit of twelve, a third ring of twelve semitones with the scale's degrees set on it, and the two bright planets crossing the mesh line toward the reader as their teeth play.",
+      "controls": [
+        "ratio: orbit B's radius follows the ratio, lying on top of orbit A at 1:1 and reaching the semitone ring at 3:1, its stations respacing round it (position and scale of orbit B).",
+        "teeth: the number of stations on orbit A goes from 3 to 16 and B's follows by the ratio (count).",
+        "mesh: stations whose teeth slip drop off their orbit to a small hollow ring just inside it, evenly round the wheel (position plus fill).",
+        "scale: the filled dots on the outer semitone ring move to the new scale's degrees (position)."
+      ],
+      "reference": "library/meikyu-orrery/README.md",
+      "risks": "P12's own pitfall in its sharpest form: the arbor does nothing, and two orbits round one centre isn't how gears meet, so the picture keeps the cycle but loses the mesh, the machine's actual rule. Planets advance a station per step, so the orbit turn costs redraw (two planets, cheap) but stations at 16 teeth and 3:1 are 64 dots. Stations are 5 px dots, at the floor; filled vs hollow is close to a shade channel, so mesh leans on the position drop. Typeset labels (a, b, scale, fig. 1) are static and fine; numbering the degrees would need moving text, so the scale ring uses dots. Muted: both planets go hollow and the mesh line lifts away."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P13",
+      "drawing_language": "orthographic elevation",
+      "subject": "Two spur gears in front elevation on a draughtsman's sheet, centre lines and pitch circles drawn, where each tooth's length is its weight and only teeth long enough to reach across the gap between the wheels engage and play, the tooth meshing now lit at the contact point.",
+      "controls": [
+        "ratio: wheel B's diameter and tooth count grow with the ratio, a twin of A at 1:1 and three times A at 3:1, its centre sliding right to stay in mesh (scale of B, with position).",
+        "teeth: wheel A's outline redraws with 3 to 16 teeth and B follows by the ratio (shape).",
+        "mesh: the centre distance opens as mesh falls, B sliding up to ~28 px away from A, so shorter teeth stop reaching across the capture line and draw hollow (position).",
+        "scale: a plain one-octave keyboard in the lower right dots the scale's notes, set apart because the scale has no twin in the gears (position of the dots)."
+      ],
+      "reference": "library/meikyu-capture/README.md",
+      "risks": "Fitting both wheels: at 3:1 and 16 teeth B has 48 teeth (192 outline points, past one 64-point path), so A's diameter stays fixed and the module shrinks with teeth, and B is drawn as up to three outline paths or coarser teeth; B three times A also runs off the right edge unless both scale down. Tooth lengths differ by only 5 px, so weight reads near the contact point but not across the wheel. The keyboard is the P13 'no twin' fallback and looks bolted on next to an elevation. Wheels turn a tooth per step: two rotating nodes, cheap. Muted: B slides fully out of mesh, nothing engages, the lit tooth goes dark, the machine's own picture of bypass."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "drawing_language": "survey plan",
+      "subject": "Wheel A drawn as a surveyed plot in one-bit ink, a dithered web with each tooth a numbered lot whose flat tone says whether it meshes and a 2 px traverse run out to the lot at the mesh station, beside two survey glyphs: a two-row scale bar for the ratio and a stepped section profile for the scale.",
+      "controls": [
+        "ratio: the scale bar's two rows re-divide into the ratio's two numbers (3 over 2 at 3:2, 1 over 1 at 1:1, 3 over 1 at 3:1) in alternating black and white blocks (shape of the glyph).",
+        "teeth: the plot's outline redraws with 3 to 16 lots, renumbered round the boundary (shape of the hero).",
+        "mesh: lots whose teeth slip pull their tips in to the root circle and drop from their 50 % tone to black, evenly round the wheel (shape, with tone as the second cue).",
+        "scale: the section profile's steps re-rise by the scale's intervals (shape of the glyph)."
+      ],
+      "reference": "opxy/reference/toro-ink-rest.jpg",
+      "risks": "Stretch, and I'd say plainly it doesn't fit. The case for it: a gear is already a flat, chunky, plan-view object, so one-bit ink needs none of the figurative anatomy that sank toro's bull. Against: a lone cog in a 2 px white outline is the settings icon, which craft.md bans outright; only wheel A is drawn, so the mesh between two wheels, the machine's whole rule, is off screen and the ratio is demoted to a glyph; every outline is #CDCDCD, so there's no one brightest element; dither can't move (the web is static run-length rects, ~600 at 2 px, and the lots are flat greys standing in for dither); the survey language (lots, traverse, scale bar, section) is labels on a cog, not a plan of anything. Muted: the lots go black and the traverse hides."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:31:12"
+  },
   "selection": null
 }

@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,159 @@
       "brief": "Subject built on P11 Instrument stack; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P12",
+      "drawing_language": "typeset diagram",
+      "subject": "The colony seen as a textbook orrery: the nest a dark sphere at the centre, each octave of the scale an orbit round it, each degree a planet fixed at its pitch-class angle, and the reinforced trail a bright run of links from planet to planet with the ants walking on it.",
+      "controls": [
+        "ants: count, the number of ant marks on the trail links, 1 to 8 (4 at default); each new ant eases in at the nest and walks out onto the trail, so 1 → 8 is three doublings of bodies spread round the orbits.",
+        "scent: shape, the bright trail itself: at 0 the links scatter into short one-step arcs between many planets, at 100 they close into one loop that repeats, so the run of bright links contracts by ≥ 16 px on its outer points as it locks onto a phrase.",
+        "fade: count + shade, the older trails behind the live one: at 0 up to six grey trail runs stay on the orbits, stepping darker with age; at 100 only the live trail is left, the rest gone within a pass.",
+        "scale: count + position, planets per orbit and the spokes under them: pent 5, major/minor/modes 7, chrom 12 per orbit, each planet sliding to its pitch-class angle so the rings fill from a pentagon to an even clock."
+      ],
+      "reference": "library/meikyu-orrery",
+      "muted": "Muted (bypass): the trail drops from #CDCDCD to the ground grey and the ants stop where they are; the planets and orbits stay, so the colony reads as asleep, not gone.",
+      "risks": "The trail returns over its own arcs (a phrase reuses edges), so at 1:1 the reinforced links double up beside the orbits on the left and read as a thick ring rather than a path. Cross-octave steps can't stay on one orbit (P12's pitfall: links across orbits); here they are short spiral links, which is the one place the pattern is bent. The nest does nothing a control drives, the same objection P13 makes of P12's sun. Ants on a 2.4 px bright link are only a bead; at 1:1 they read as knots, not bodies, and the brightest-element rule makes trail and ants compete. 24 bound nodes at rest in the sketch; twelve planets per orbit at chrom plus 8 ants plus up to 4 trail outlines stays well under 256."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P13",
+      "drawing_language": "orthographic elevation",
+      "subject": "An elevation cut across the lattice where every walked degree has built a mound of scent and fade is a waterline: what the colony keeps walking stands dry and plays, what it leaves is drowned.",
+      "controls": [
+        "ants: count, the ants standing on the dry crests, one per crest, 1 to 8; the extra ants take the next-highest crests in order, so the row of bodies spreads from one mound to most of the lattice.",
+        "scent: shape, the mound profile: each crossing builds its mound in proportion to scent, so at 0 the profile is a low even ripple and at 100 the reinforced degrees stand ≥ 40 px taller than the rest.",
+        "fade: position, the waterline rises from just above the ground at 0 to two thirds of the tallest crest at 100 (≥ 60 px), and every mound below it drops from the bright line weight to the drowned grey.",
+        "scale: count + position, the number of mounds and their spacing along the ground: 11 at pent (two octaves) to 25 at chrom, with the degree names under the ground line moving with them."
+      ],
+      "reference": "library/meikyu-capture",
+      "muted": "Muted: the water stands at the full crest height and the ants lie down (hidden), so the whole profile drowns to grey; unmuting drains it back to the fade level in one ease.",
+      "risks": "The elevation loses the walk's order: it shows which degrees the colony favours, not the phrase it repeats, so 'trails strengthen into repeated phrases' is half told. A row of rounded peaks above a band reads as a waveform or a bar meter at a glance; the earth ticks and the elevation label carry the 'ground' reading, and that may not be enough at arm's length (P3's oscilloscope trap, by another road). The profile needs two or three 64-point mutable outlines and re-keys on every scent or fade turn; the waterline splitting it into dry and drowned runs also re-keys on fade, so turning fade redraws the most."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P14",
+      "drawing_language": "survey plan",
+      "subject": "A survey plan of the colony's recent passes, eight step stations across, each pass plotted as one traverse whose height on its row is the degree it played, the newest at the front and older ones stepping back and greying, so a phrase that has set shows as the same line repeated down the plan.",
+      "controls": [
+        "ants: count, the ant marks walking the newest traverse between its stations, 1 to 8, one per leg the ants are on; at 8 every leg of the front pass carries a body.",
+        "scent: shape, how alike the passes are: at 0 each older traverse wanders off the front one by up to three degrees per station (≥ 16 px), at 100 all rows lie as copies of the same line.",
+        "fade: count + shade, how many past passes are still plotted behind the front one, six at 0 to none at 100, each older row one grey step darker and on a finer line.",
+        "scale: shape + count, the degree ruler at the left margin and the height step per degree: pent quantises the traverses to 5 levels per octave with coarse steps, chrom to 12 with fine ones, so every row redraws finer or coarser."
+      ],
+      "reference": "library/loom-pages",
+      "muted": "Muted: the newest traverse and its stations drop to the oldest row's grey and the ants are hidden; the plotted history stays, so the player sees what will resume.",
+      "risks": "The plan is honest but cool: at 1:1 it reads close to a line chart with a history, and the 'picture, not panel' rule is the one it leans on hardest. Loom's own strength (slabs and depth) is given up for a flat plan, so depth-as-earlier is carried only by row position and grey steps. Eight stations assumes an eight-step phrase; the machine's phrases are whatever the trail makes, so the station count would come from the trail's length, and a long trail crowds the plan. Each row is one mutable outline and there are only 4 paths, so at most four rows can change shape; older rows have to be frozen copies."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "drawing_language": "patent section",
+      "subject": "A patent figure of the lattice as a ground field of degree nodes, step neighbours across and third neighbours into depth, cut along its front edge, with the reinforced trail as one bright closed loop over it, the ants on that loop, and the phrase's steps in a strip below.",
+      "controls": [
+        "ants: count, ant marks spaced along the loop and the lit cells in the step strip, 1 to 8; the strip's lit cells show how many ants landed on a note in the last pass.",
+        "scent: shape, the figure: at 0 the loop frays into three loose strands wandering across the field, at 100 they draw together into one tight loop on the same nodes (strand points move ≥ 16 px).",
+        "fade: count + shade, the dashed ghost loops left on the field by abandoned trails: up to five at 0, stepping darker with age, none at 100.",
+        "scale: count + position, the field's columns: pent's 10 node columns to chrom's 24, the mesh closing up as the lattice gets finer while the loop stays on the degrees it uses."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "muted": "Muted: the loop drops to a dashed grey like the ghosts and the step strip empties; the field and section stay.",
+      "risks": "The patent section (hatched cut face, reference numerals, FIG. 2) is the most decorative language of the five and nothing in the section moves; it may read as costume over P5. The skewed Tonnetz-like field is right for the lattice but at 1:1 its diagonals converge into a fan that reads as perspective noise, and at chrom 24 columns the back rows fall under the 3 px hatching floor and must fade out. The figure is one smooth loop through seven nodes; a real trail can cross itself, so the loop sometimes becomes a figure-eight that needs both 64-point outlines. Closest to the reference's composition (field, one figure, strip), so care is needed not to borrow its look."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "hidden-line isometric",
+      "subject": "A glass-sided formicarium on a plinth in hidden-line isometric, one chamber dug for every degree, the octaves as galleries winding back and forth up the slab, and the reinforced trail as the bright tunnel the ants keep using.",
+      "controls": [
+        "ants: count, ants in the tunnels, 1 to 8, each walking the live trail; the ones not on the trail sit in the nest chamber at the top.",
+        "scent: scale + shape, tunnel bore: the live trail's tunnels widen from a hairline at 0 to a full 2.4 px bore with chambers rimmed bright at 100, while unused tunnels stay hairline.",
+        "fade: count, old tunnels left dashed and collapsing: at 0 every tunnel ever dug stays open (up to ten dashed runs), at 100 only the live trail's tunnels are left.",
+        "scale: count + position, chambers per gallery: 5 at pent to 12 at chrom, sliding closer along each gallery so the slab stays the same size."
+      ],
+      "reference": "library/theseus-tower",
+      "muted": "Muted: the ants are drawn still in the chambers and the live tunnel drops to the collapsed-tunnel grey; the slab stays.",
+      "stretch": "P11 sits outside the player column. The case for an exception: an ant farm is the one picture of this machine people know by sight, the way theseus' drum kit is, and P11's rule (every part the sound can select has its own place) holds, one chamber per degree. The case against, said plainly: in theseus the instrument is what sounds; here the formicarium is a container, the notes come from another track, and the rule that picks notes (scent and fade on edges) is told by the tunnels, which would be just as true on any of the other four subjects. I think it's a weak stretch: recognition is free, but recognition of the wrong thing.",
+      "risks": "Outside the category's column (see stretch). At 1:1 the octave-one gallery's tunnels bunch along the isometric diagonal and the trail reads as a tangle; galleries that wind back and forth help but don't cure it. The slab takes a third of the screen as a frame that never changes. Close to theseus' hidden-line look (black-filled parts, grey edges, a plinth); the shapes are its own, but the family resemblance is strong. A chamber per degree at chrom is 25 chambers on a 184 px gallery, 14 px apart, close to the touching limit."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:32:38"
+  },
   "selection": null
 }

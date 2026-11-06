@@ -87,15 +87,15 @@
       "variant": "v3",
       "pattern": "P4",
       "drawing_language": "star atlas",
-      "subject": "A star atlas of the water column: depth strata stacked as chart plates every 6 dB, receding down and right, with the bell plotted as a body on the plate at its depth, its lit phase the air pocket and its ephemeris track running down from the surface.",
+      "subject": "A star atlas of the water column: depth strata stacked as chart plates every 8 dB, receding down and right, with the bell plotted as a body on the plate at its depth, its lit phase the air pocket and its ephemeris track running down from the surface.",
       "controls": [
-        "depth: the body moves down the stack from plate 0 to plate 48, about 30 px right and 22 px down per 6 dB (position), and the plate it sits on brightens (shade as second cue).",
+        "depth: the body moves down the stack from plate 0 to plate 48, 26 px right and 20 px down per 8 dB (position), and the plate below it brightens (shade as second cue).",
         "air: the body's phase: the lit air cap above a flat waterline grows from 35 % to 90 % of the disc (shape of the lit part).",
         "knee: the ephemeris track's approach, from a straight drop that stops dead at a hard knee to a long easing curve that settles onto the plate at 24 dB (shape of the track).",
         "gain: the body's magnitude, radius 13 to 26 px, the way an atlas sizes a bright star (scale)."
       ],
       "reference": "library/meikyu-orrery (an atlas-drawn body with a terminator, labelled lightly) and library/theseus-tower (black bodies, grey outlines, a stack)",
-      "risks": "P4 is for things the sound moves through; here it's the threshold setting moving through depth, not the audio, so the stack is a scale, not a set of frames. Six plates with 22 px steps overlap heavily: plates read as a stack at 1:1, but their tick borders are close to hatching. A disc with a flat waterline sits one step from a 'level indicator' icon; the atlas labels (plate depths, the body's name) and the ephemeris track are what keep it authored. Nothing shows the signal at all: it's a picture of the settings, which ux.md allows but which makes it the most 'diagram of knobs' of the five. Gain as magnitude is a metaphor only (a bell doesn't get louder by being bigger)."
+      "risks": "P4 is for things the sound moves through; here it's the threshold setting moving through depth, not the audio, so the stack is a scale, not a set of frames. Seven plates at 20 px steps overlap heavily: plates read as a stack at 1:1, but their tick borders are close to hatching. A disc with a flat waterline sits one step from a 'level indicator' icon; the atlas labels (plate depths, the body's name) and the ephemeris track are what keep it authored. Nothing shows the signal at all: it's a picture of the settings, which ux.md allows but which makes it the most 'diagram of knobs' of the five. Gain as magnitude is a metaphor only (a bell doesn't get louder by being bigger)."
     },
     {
       "variant": "v4",
@@ -103,13 +103,13 @@
       "drawing_language": "engineering schematic",
       "subject": "A field of identical air columns in engineering elevation, one per input level from -42 to 0 dB, each standing as tall as the bell lets that level out, so the row of crowns is the compressor's transfer curve built from parts, with a second dashed crown in each showing where it still sits 50 ms after the level falls.",
       "controls": [
-        "depth: the threshold line slides left across the field, x 74 to about 420 over 48 dB (position), and every column right of it is pressed down and its crown turns bright (shape of the field, shade as second cue).",
+        "depth: the threshold line slides left across the field from x about 420 at 0 dB to past its left edge at -48 dB (position), and every column right of it is pressed down and its crown turns bright (shape of the field, shade as second cue).",
         "air: the dashed second crowns inside the pressed columns sink lower as the air refills more slowly, about 0 to 30 px below the crown (position of 22 marks).",
         "knee: the dashed tolerance band either side of the threshold opens from 0 to about 200 px wide, and the crowns inside it round from a sharp corner to a smooth bend (position of the band edges).",
         "gain: the datum the whole field stands on rises 0 to 60 px with the makeup, dimensioned at the left (position of the field)."
       ],
       "reference": "library/toro-blocks (P10: a field of identical parts whose heights come from the machine's own model)",
-      "risks": "It's the transfer curve drawn as bars, which is one step from a level meter or a bar chart, the dashboard the protocol rejects; the schematic furniture (datum, dimensions, tolerance band) is what argues against that, and it may not be enough at 1:1. The dashed second crowns are 9 px marks inside 11 px columns and barely read at 1:1; air needs a stronger channel. 22 columns x 2 nodes is 44 nodes, cheap, but a depth turn redraws most of them at once. Static: the field is the curve, so nothing in it reacts to the audio (there's no audio on an effect page anyway)."
+      "risks": "It's the transfer curve drawn as bars, which is one step from a level meter or a bar chart, the dashboard the protocol rejects; the schematic furniture (datum, dimensions, tolerance band) is what argues against that, and it may not be enough at 1:1. The dashed second crowns are 9 px marks inside 11 px columns and barely read at 1:1; air needs a stronger channel. 22 columns x 2 nodes is 44 nodes, cheap, but a depth turn redraws most of them at once. At gain x16 the tallest crowns reach y 25, right under the header; the scale needs a ceiling. Static: the field is the curve, so nothing in it reacts to the audio (there's no audio on an effect page anyway)."
     },
     {
       "variant": "v5",
@@ -200,7 +200,7 @@
       }
     ],
     "problems": [],
-    "checked": "2026-11-05T23:29:55"
+    "checked": "2026-11-05T23:31:07"
   },
   "selection": null
 }

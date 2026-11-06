@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The lathe itself, assembled in hidden-line isometric: plinth, platter and lacquer, the rail behind and the cutter head hanging over the disc on its arm.",
+  "controls": [
+    "cut: scale - the swarf thread coiling from the stylus up to the suction tube grows from ~0.7x to 2x (node 2).",
+    "groove: position - the carriage, arm and head slide along the rail from the rim toward the spindle (~34 px on screen) and the cut band of turns widens behind it.",
+    "wear: count - dust specks settle on the lacquer, 0 to 14; none at 0.",
+    "rumble: rotation - the lacquer's top outline turns in plane about the spindle, up to ~30 deg, so the disc reads as wobbling on a worn bearing; still at 0."
+  ],
+  "reference": "library/theseus-tower (hidden-line instrument, line weights)",
+  "risks": "Stretch, and it mostly doesn't fit: P11 works because the instrument's parts are what the note selects (theseus' tiers); here no note selects anything and an effect gets no note input, so the 'stack' is just a portrait of the machine. The exception case is recognition: a lathe reads as a turntable at a glance, so the player knows which part is the head, the disc and the plinth without a legend. Against it: the drawing is about the machine, not the sound; cut's swarf coil is tiny at rest (under ~10 px) and hard to see; rumble's in-plane rotation of an ellipse is a fake tilt that may look like the disc sliding off the platter, and 30 deg is a lot; risk of reading as a stock-style product drawing next to TE's own objects."
+}

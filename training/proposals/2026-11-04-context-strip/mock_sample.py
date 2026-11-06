@@ -13,12 +13,13 @@ outlines are used, and they share one point count (draw.hpp: every mutable outli
          Fill only, no stroke.
   close  the stretch between the markers, magnified, drawn the way the band is: two filled halves at scale 2,
          193 px each drawn (authored within +-48.25), overlapping 2 px (the same seam caveat). The same mapping,
-         stretched: x 48-432 is the stretch from begin to end. When the stretch has at least 32 bins (so each
-         half's 16 points are at least a bin apart), each point takes the highest high and lowest low of the bin
-         centres within half a point-spacing, so a long stretch keeps its peaks. Below 32 bins, every point takes
-         the straight line between the two nearest bin centres: every point lies on a line between real values, so
-         nothing is invented and there are no plateaus, but a peak or trough at a bin centre between two points can
-         be shaved by a pixel or two at this scale. Never less than one bin. Fill only.
+         stretched: x 48-432 is the stretch from begin to end. One rule at every length: each point takes the
+         highest high and lowest low of the bin centres within half a point-spacing of it. Every bin centre lies
+         within half a spacing of some point, so no bin is ever missed: on a long stretch a point gathers several
+         and keeps their peaks; on a short one (under 32 bins) the point nearest each centre carries that bin's
+         real value, drawn at most half a spacing (about 6 px) along from where it belongs, and a point with no
+         centre near it takes the straight line between the two nearest. Nothing is invented, there are no
+         plateaus, and nothing jumps as the stretch grows. Never less than one bin. Fill only.
 
 Begin and end are two 5 px #969696 squares on the band's bottom edge. The band re-keys only when the overview's
 generation differs from the one stored (display_reset clears it, so the first frame after a reset redraws too). The
@@ -92,7 +93,7 @@ def close_half(bins, lo_b, hi_b, x_left, width, x0, x1, cy, half_h):
     """16 points evenly over the half; x 48-432 maps linearly onto the stretch lo_b..hi_b (in bins)."""
     xs = [x_left + j * width / 15 for j in range(16)]
     per_px = (hi_b - lo_b) / (x1 - x0)
-    radius = width / 15 * per_px / 2 if hi_b - lo_b >= 32 else 0   # fewer bins than points: interpolate everywhere
+    radius = width / 15 * per_px / 2           # half a point-spacing, in bins: every bin centre is caught
     return outline(xs, [sample_at(bins, lo_b + (x - x0) * per_px, radius) for x in xs], cy, half_h)
 
 

@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "ringer",
+  "name": "Ringer",
+  "parameters": [
+    {
+      "id": "bells",
+      "label": "Bells",
+      "default": 0.25,
+      "mapping": {"kind": "linear", "minimum": 4, "maximum": 12},
+      "display": "ratio"
+    },
+    {
+      "id": "method",
+      "label": "Method",
+      "default": 0.2,
+      "mapping": {"kind": "enum", "labels": ["hunt", "bob", "gran", "sted", "kent", "camb"]},
+      "display": "enum"
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.5, "maximum": 8},
+      "display": "ratio"
+    },
+    {
+      "id": "stroke",
+      "label": "Stroke",
+      "default": 0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Plain bob minor": {"bells": 0.25, "method": 0.2, "pace": 0.5, "stroke": 0},
+    "Grandsire triples": {"bells": 0.375, "method": 0.4, "pace": 0.5, "stroke": 1},
+    "Cambridge major": {"bells": 0.5, "method": 1, "pace": 0.625, "stroke": 1}
+  },
+  "resources": {
+    "voiceBytes": 16,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 0,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    },
+    "trackControl": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "unique": true,
+      "aux": [12]
+    }
+  }
+}

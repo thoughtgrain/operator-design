@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P12",
+  "drawing_language": "typeset diagram",
+  "subject": "A textbook figure of the gear train as an orrery round one arbor: wheel A an inner orbit of eight tooth stations, wheel B an outer orbit of twelve, a third ring of twelve semitones with the scale's degrees set on it, and the two bright planets crossing the mesh line toward the reader as their teeth play.",
+  "controls": [
+    "ratio: orbit B's radius follows the ratio, lying on top of orbit A at 1:1 and reaching the semitone ring at 3:1, its stations respacing round it (position and scale of orbit B).",
+    "teeth: the number of stations on orbit A goes from 3 to 16 and B's follows by the ratio (count).",
+    "mesh: stations whose teeth slip drop off their orbit to a small hollow ring just inside it, evenly round the wheel (position plus fill).",
+    "scale: the filled dots on the outer semitone ring move to the new scale's degrees (position)."
+  ],
+  "reference": "library/meikyu-orrery/README.md",
+  "risks": "P12's own pitfall in its sharpest form: the arbor does nothing, and two orbits round one centre isn't how gears meet, so the picture keeps the cycle but loses the mesh, the machine's actual rule. Planets advance a station per step, so the orbit turn costs redraw (two planets, cheap) but stations at 16 teeth and 3:1 are 64 dots. Stations are 5 px dots, at the floor; filled vs hollow is close to a shade channel, so mesh leans on the position drop. Typeset labels (a, b, scale, fig. 1) are static and fine; numbering the degrees would need moving text, so the scale ring uses dots. Muted: both planets go hollow and the mesh line lifts away."
+}

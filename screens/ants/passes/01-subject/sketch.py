@@ -87,7 +87,7 @@ class Frame:
 
     def dashed(self, pts, w, fill, on=4.0, off=4.0):
         for run in dashes(pts, on, off):
-            if len(run) >= 2 and math.dist(run[0], run[-1]) > 1:
+            if len(run) >= 2 and math.dist(run[0], run[-1]) > 3:
                 self.path(ribbon(run, w), fill=fill)
 
     def text(self, x, y, s, fill=G3, size=10):
@@ -175,7 +175,7 @@ def ellipse(cx, cy, rx, ry, n=24, rot=0.0):
             for k in range(n)]
 
 
-def body(F, x, y, ang, fill, bound=True, L=8.0, Wd=3.8):
+def body(F, x, y, ang, fill, bound=True, L=11.0, Wd=5.6):
     """An ant, drawn as the language's plain mark: a short solid capsule along its heading."""
     c, s = math.cos(ang), math.sin(ang)
     pts = []
@@ -367,14 +367,14 @@ def v3() -> Frame:
     xl, xr = 92, 436
     steps = 8
     xs = [xl + (xr - xl) * k / (steps - 1) for k in range(steps)]
-    rows, yfront, pitch, band = 5, 186, 30, 22
-    lev = band / (len(DEG) - 1)
+    rows, yfront, pitch, band = 4, 188, 38, 34
+    lev = band / 6
     ytop = yfront - pitch * (rows - 1) - band - 6
     for k, x in enumerate(xs):                                 # step threads (warp)
         F.line([(x, ytop), (x, yfront + 6)], 1.0, G5)
         F.text(x - 3, ytop - 6, str(k + 1), G3)
     # degree ruler at the left margin: one tick per lattice degree (scale sets the count)
-    for i in range(len(DEG)):
+    for i in range(7):
         y = yfront - i * lev
         w = 6 if NAMES[i] == "1" else 3
         F.line([(64 - w, y), (64, y)], 1.0, G4)
@@ -386,9 +386,9 @@ def v3() -> Frame:
         ph = list(phrase0)
         for k in range(len(ph)):
             if rnd.random() < (1 - SCENT) * 0.22 * r:
-                ph[k] = max(0, min(len(DEG) - 1, ph[k] + rnd.choice((-2, -1, 1, 2))))
+                ph[k] = max(0, min(6, ph[k] + rnd.choice((-2, -1, 1, 2))))
         st = [(xs[k], y - lev * d) for k, d in enumerate(ph)]
-        shade = [G0, G2, G3, G4, G5][r]
+        shade = [G0, G2, G3, G4][r]
         wgt = 2.2 if r == 0 else (1.5 if r == 1 else 1.2)
         F.line(st, wgt, shade, bound=True)
         if r == 0:
@@ -399,7 +399,7 @@ def v3() -> Frame:
     for k in range(N_ANTS):
         a, b = st0[2 * k], st0[2 * k + 1]
         body(F, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, math.atan2(b[1] - a[1], b[0] - a[0]), G1)
-    F.text(xr - 52, 212, "plan, 5 passes", G3)
+    F.text(xr - 52, 212, "plan, 4 passes", G3)
     return F
 
 
@@ -410,7 +410,7 @@ def v4() -> Frame:
     cols, rws = 10, 5
 
     def P(i, j):                       # i: step neighbours, j: third neighbours (skewed, Tonnetz-like)
-        X = (i - (cols - 1) / 2) + 0.5 * j - 1.0
+        X = (i - (cols - 1) / 2) + 0.5 * (j - (rws - 1) / 2)
         zz = 1 + 0.42 * j
         return (240 + 42 * X / zz, 52 + 128 / zz)
 
@@ -459,7 +459,7 @@ def v4() -> Frame:
     p = P(8, 3)
     label("12", p[0], p[1], p[0] + 26, 52)
     jx = 4 + 1 * (len(curve) // N_ANTS)
-    label("14", curve[jx][0], curve[jx][1], curve[jx][0] + 40, curve[jx][1] - 30)
+    label("14", curve[jx][0], curve[jx][1], curve[jx][0] + 44, curve[jx][1] + 2)
     label("16", xb - 6, yf + 6, xb + 16, yf + 6)
     F.text(8, 44, "FIG. 2", G3)
     for k in range(8):
@@ -490,19 +490,21 @@ def v5() -> Frame:
     F.path([P(0, 0, 0), P(L, 0, 0), P(L, 0, Hh), P(0, 0, Hh)], fill=BK, stroke=G3, sw=1.5)
     soil = Hh - 12
     F.line([P(2 + (L - 4) * k / 30, 0, soil + 1.8 * math.sin(k * 1.1)) for k in range(31)], 1.2, G4)
-    tiers = [14, 40]
+    tiers = [12, 44]
     chambers = []
     for semi in DEG:
         o = semi // 12
         if o < 2:
             k = PENT.index(semi % 12)
-            chambers.append((22 + k * 35, tiers[o] + 4 * (k % 2)))
+            kk = k if o == 0 else 4 - k          # galleries wind back and forth, octave by octave
+            chambers.append((20 + kk * 36, tiers[o] + 7 * (k % 2)))
         else:
-            chambers.append((22 + 2 * 35, 62))
+            chambers.append((20 + 4 * 36, 64))
 
     def tunnel(i, j, w, shade, bound=False, dash=False):
         (xa, za), (xb, zb) = chambers[i], chambers[j]
-        mx, mz = (xa + xb) / 2, (za + zb) / 2 + (5 if za == zb else 0)
+        sgn = 1 if (i + j) % 2 == 0 else -1
+        mx, mz = (xa + xb) / 2, (za + zb) / 2 + sgn * (6 + 0.12 * abs(xb - xa))
         pts = []
         for k in range(12):
             t = k / 11
@@ -528,9 +530,9 @@ def v5() -> Frame:
         seg = tp[(2 * k + 1) % len(tp)]
         m = len(seg) // 2
         body(F, seg[m][0], seg[m][1], heading(seg, m), G1)
-    for name, z in (("oct 1", tiers[0]), ("oct 2", tiers[1]), ("oct 3", 62)):
-        x, y = P(0, 0, z)
-        F.text(x - 34, y + 4, name, G3)
+    for name, z in (("oct 1", tiers[0]), ("oct 2", tiers[1]), ("oct 3", 64)):
+        x, y = P(20, 0, z)
+        F.text(P(0, 0, 0)[0] - 40, y + 4, name, G3)
     return F
 
 

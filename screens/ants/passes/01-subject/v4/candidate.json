@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "pattern": "P5",
+  "drawing_language": "patent section",
+  "subject": "A patent figure of the lattice as a ground field of degree nodes, step neighbours across and third neighbours into depth, cut along its front edge, with the reinforced trail as one bright closed loop over it, the ants on that loop, and the phrase's steps in a strip below.",
+  "controls": [
+    "ants: count, ant marks spaced along the loop and the lit cells in the step strip, 1 to 8; the strip's lit cells show how many ants landed on a note in the last pass.",
+    "scent: shape, the figure: at 0 the loop frays into three loose strands wandering across the field, at 100 they draw together into one tight loop on the same nodes (strand points move ≥ 16 px).",
+    "fade: count + shade, the dashed ghost loops left on the field by abandoned trails: up to five at 0, stepping darker with age, none at 100.",
+    "scale: count + position, the field's columns: pent's 10 node columns to chrom's 24, the mesh closing up as the lattice gets finer while the loop stays on the degrees it uses."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "muted": "Muted: the loop drops to a dashed grey like the ghosts and the step strip empties; the field and section stay.",
+  "risks": "The patent section (hatched cut face, reference numerals, FIG. 2) is the most decorative language of the five and nothing in the section moves; it may read as costume over P5. The skewed Tonnetz-like field is right for the lattice but at 1:1 its diagonals converge into a fan that reads as perspective noise, and at chrom 24 columns the back rows fall under the 3 px hatching floor and must fade out. The figure is one smooth loop through seven nodes; a real trail can cross itself, so the loop sometimes becomes a figure-eight that needs both 64-point outlines. Closest to the reference's composition (field, one figure, strip), so care is needed not to borrow its look."
+}

@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "pattern": "P13",
+  "drawing_language": "orthographic elevation",
+  "subject": "An elevation cut across the lattice where every walked degree has built a mound of scent and fade is a waterline: what the colony keeps walking stands dry and plays, what it leaves is drowned.",
+  "controls": [
+    "ants: count, the ants standing on the dry crests, one per crest, 1 to 8; the extra ants take the next-highest crests in order, so the row of bodies spreads from one mound to most of the lattice.",
+    "scent: shape, the mound profile: each crossing builds its mound in proportion to scent, so at 0 the profile is a low even ripple and at 100 the reinforced degrees stand ≥ 40 px taller than the rest.",
+    "fade: position, the waterline rises from just above the ground at 0 to two thirds of the tallest crest at 100 (≥ 60 px), and every mound below it drops from the bright line weight to the drowned grey.",
+    "scale: count + position, the number of mounds and their spacing along the ground: 11 at pent (two octaves) to 25 at chrom, with the degree names under the ground line moving with them."
+  ],
+  "reference": "library/meikyu-capture",
+  "muted": "Muted: the water stands at the full crest height and the ants lie down (hidden), so the whole profile drowns to grey; unmuting drains it back to the fade level in one ease.",
+  "risks": "The elevation loses the walk's order: it shows which degrees the colony favours, not the phrase it repeats, so 'trails strengthen into repeated phrases' is half told. A row of rounded peaks above a band reads as a waveform or a bar meter at a glance; the earth ticks and the elevation label carry the 'ground' reading, and that may not be enough at arm's length (P3's oscilloscope trap, by another road). The profile needs two or three 64-point mutable outlines and re-keys on every scent or fade turn; the waterline splitting it into dry and drowned runs also re-keys on fade, so turning fade redraws the most."
+}

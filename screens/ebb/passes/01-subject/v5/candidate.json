@@ -7,7 +7,7 @@
     "tide: the ecliptic band's swing between declinations widens from a flat line of stars at the mean at 0 st to the full +0 to +36 chart at 36 st (shape of the field).",
     "period: the band's wavelength across right ascension stretches from 16 crests in the window at 1 s to half a crest at 32 s (shape of the field, along the other axis).",
     "foam: faint stars scatter off the band at its crests and troughs, none to about 30, like a cluster round each turning point (count).",
-    "scale: the rows of stars re-space to the scale's degrees, so pentatonic draws five widely spaced rows per octave and whole-tone six even ones (position of the rows)."
+    "scale: the rows of stars re-space to the scale's degrees, so pentatonic draws five widely spaced rows per octave and hirajoshi five unevenly spaced ones (position of the rows)."
   ],
   "reference": "library/toro-blocks",
   "risks": "Stretch outside the player column. The case for the exception: ebb's rule is a continuous function of time (a sine quantised to a scale), so like an engine's signal it can be computed into a field of identical parts, and each control does to the field what it does to the notes. The honest case against: what results is a scatter plot of pitch over time, a piano roll with star dots; P10's charm is that the field is the sound's shape, and here the shape is just the melody, which any sequencer page already shows. It reads as a graph at 1:1, not as an atlas, despite the graticule and labels. Budget: 40 columns x 22 degrees is 880 cells, past 512 nodes, so only the ~3 nearest degrees per column can be nodes (120), placed per column; the chart scrolls every column step, far over ~20 nodes a frame. Muted: the band stops scrolling and the now star goes hollow."

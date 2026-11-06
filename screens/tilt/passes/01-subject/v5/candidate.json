@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "pattern": "P13",
+  "drawing_language": "hidden-line isometric",
+  "subject": "A tilt-shift miniature: the spectrum built as a row of thin fins on a model base, with an upright glass plane of focus standing across it that captures the fins inside its depth of field as solid and leaves the rest hollow and doubled.",
+  "controls": [
+    "focus: position. The plane of focus and its two depth-of-field lines on the base slide along the row, 100 Hz to 8 kHz, about 260 px of screen travel; fins entering it turn solid, fins leaving it go hollow.",
+    "tilt: shape. The base tips: fin heights ramp along the row about the plane of focus, so at −6 the near end towers and the far end sinks to stubs, at +6 the reverse (each fin 8–56 px).",
+    "blur: position. Each fin outside the depth of field casts a hollow ghost of itself set back into the base; blur pushes the ghost from 0 to ~14 px back, further for fins further from focus.",
+    "mix: position. No twin in the optics; a plain scale along the base's front edge (octave ticks, a 1.5 px bar) fills from 0 to the full length."
+  ],
+  "reference": "library/meikyu-capture/README.md (P13: the machine's rule drawn as a physical thing) beside library/toro-blocks/contact.png (hidden-line boxes)",
+  "stretch": "Why this machine might be the exception: P13 asks for the machine's own rule drawn as a physical thing with the same shape, and tilt's rule is literally an optical one (a plane of focus that keeps a band sharp and lets the rest go soft). The capture is the depth of field: what's inside it is sharp. Where it doesn't fit: P13 is a player/function pattern built on items being let through to play; here nothing is let through, only sharpened, and two of the four controls (tilt, mix) have no twin in the optics, so half the screen is scenery.",
+  "risks": [
+    "Honest verdict on the stretch: it fits for focus and blur, and doesn't for tilt (a sloped base is a stand-in) or mix (a ruler in the corner, which P13 itself warns looks bolted on).",
+    "Twenty-two fins in a row read as a bookshelf or dominoes before they read as a spectrum; the glass plane is the only cue that this is about focus.",
+    "The camera is dimetric (24°/30°), not true isometric, to fit 300 px of row into a 200 px body; a strict 30° row would need ~170 px of drop.",
+    "Close to toro's hidden-line block field in look; the composition (one row, one plane) has to keep it from reading as a copy."
+  ]
+}

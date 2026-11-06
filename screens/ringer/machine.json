@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "Change ringing on aux track 12: a ring of bells permuted by a method, one change per row, at a steady pace, each blow played as a note on the target track. Bells sets the stage (4 to 12), method the permutation rule, pace the blows per beat, stroke the handstroke gap."
+}
