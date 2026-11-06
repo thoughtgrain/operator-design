@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "pattern": "P5",
+  "drawing_language": "engineering schematic",
+  "subject": "One bell drawn as an engineering elevation on its headstock and wheel, turned about the gudgeon to the angle it is rung up to, standing over a receding ringing-chamber floor, with the whole pull (a handstroke change and a backstroke change) ticked along the strip below.",
+  "controls": [
+    "bells: count, ticks per change in the strip, 4 to 12, both changes of the whole pull lengthening; the figure and floor stay.",
+    "method: position, the strip's ticks rise and fall to the bells of the current whole pull (tick height by bell, treble tallest and bright), re-ordered as the method changes.",
+    "pace: rotation, the bell figure turns about its gudgeon from 178 degrees (rung right up to the balance, slow) to about 108 degrees (rung low, fast), the dimensioned angle arc and its figure following.",
+    "stroke: position, the handstroke change slides away from the backstroke change along the strip, a gap opening up to 24 px at 100 %."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": [
+    "The subject fights the machine: the big figure carries only pace, while the method (what ringer is) lives in a 16 px strip of ticks that is close to a meter row.",
+    "One bell drawn alone reads as a single swinging bell, maybe a bell synth, not a ring being permuted.",
+    "Three of four controls sit in the strip; bells, method and stroke all change ticks, so their channels (count, height, gap) must stay strictly apart.",
+    "The floor field is decoration with no control; P5 allows a still field, but here it adds little.",
+    "Mute: the bell is stood at the balance, mouth up, its stay on the slider (rotation), and the strip empties."
+  ]
+}

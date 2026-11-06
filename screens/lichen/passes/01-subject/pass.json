@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P2 Diagram + trace; drawing language: survey plan. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P12",
+      "drawing_language": "engineering schematic",
+      "subject": "The lattice wrapped into an orrery drawn as a schematic: each row of the lattice is an orbit round a root sun, each cell a planet on it, the colony a cluster of filled planets that goes hollow as it dies back while this tick's growth lights brightest.",
+      "controls": [
+        "grow: count. Growth links run along and across the orbits from living planets to the cells they take; none at 0, one from every planet on the colony's margin at 100.",
+        "decay: scale. Each living planet's diameter is its remaining life, so raising decay shrinks the colony's planets from about 2x to 1x and leaves more small hollow dead ones.",
+        "seed: count. Spores wait as hollow bodies on the dashed seed track outside the last orbit, 0 to 8 spaced round it.",
+        "scale: position. The long radial root marks on every orbit move to where the scale's octave falls (every 7th degree, every 5th for the pentatonics, so their count changes too)."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "The sun is the root but nothing moves it (P12's own pitfall). Six nested orbits round a centre lean toward a target, and the back orbits bunch above the sun at tilt 0.4. Wrapping a row into an orbit implies column 12 neighbours column 1, which the model doesn't do: wrap the model or break each orbit at a seam. Between the six seven-note modes the root marks don't move, so scale needs a second mark (half-step seams) or it fails its floor there. 72 planets + 12 orbit runs + links is heavy but under 256 nodes. Muted (mute is this machine's bypass): the planets and orbits drop to hollow mid grey and the links hide; the sun's equator goes."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P13",
+      "drawing_language": "oscilloscope trace",
+      "subject": "A lichen thallus captured on a scope screen: the lattice is the graticule, the colony's growth front is one bright closed trace taking in every cell it crosses, and the dead centre glows inside it as a dimmer afterimage.",
+      "controls": [
+        "grow: shape. The front trace's reach past the living cells swells, hugging them at 0 and bulging most of a cell beyond the margin at 100 (16 px or more at its lobes).",
+        "decay: shape. The inner afterglow trace round the dead centre opens out toward the front, so the living band between the two traces thins from a solid patch at 0 to a narrow ring at 100.",
+        "seed: count. Spores show as hollow spots on bare graticule away from the colony, 0 to 8.",
+        "scale: position. The small root labels on the graticule jump to where each octave's root sits (every 7th or 5th degree); between seven-note modes only half-step markers would move."
+      ],
+      "reference": "library/meikyu-capture",
+      "risks": "Two nested closed traces can read as a contour map or a target. The capture idea is weaker than meikyu's: the front follows the colony rather than deciding what plays. A colony that splits needs more traces than the 4-path limit comfortably allows (front and centre per patch). Each trace re-keys on every tick's growth (a whole-path redraw per tick, not per frame). Scale only has labels to move, the weakest channel on the page. Muted (mute is this machine's bypass): the front trace drops to afterglow grey and the growth spots go hollow; the graticule stays."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P14",
+      "drawing_language": "typeset diagram",
+      "subject": "The colony's last four ticks woven as cloth in a textbook figure: one warp thread per scale degree in pitch order, a slab raised wherever that degree was alive, this tick at the front with new growth capped bright, so old crust stands as unbroken columns and the growing margin as rows that change.",
+      "controls": [
+        "grow: count. Capped slabs in the front row and new slabs between rows, 0 up to the two-per-tick ceiling, so the cloth fills out sideways.",
+        "decay: shape. The solid columns down the cloth break up: at 0 a slab runs all four rows, at 100 most last one row and the cloth goes ragged.",
+        "seed: count. Pins with a hollow bead stand at the front edge on the threads where spores will land, 0 to 8.",
+        "scale: position. The warp re-spaces by semitone (half steps close up), the octave rules under the cloth move, and the pentatonics drop to five threads an octave."
+      ],
+      "reference": "library/loom-pages",
+      "risks": "The loom flattens the lattice to pitch, so where the colony is and its dead centre are lost, and two cells of one degree weave as one slab. Back rows' flat tops are about 6 px at 1:1 and the right of the warp is empty at rest. The caption line is decoration. History of four ticks covers a quarter of a bar, so columns are short at fast clocks. Muted (mute is this machine's bypass): the front slabs drop to wireframe with no caps and the warp dims."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "drawing_language": "orthographic elevation",
+      "subject": "A wall in elevation laid in running bond, one stone per lattice cell, with the lichen as a single lobed patch spreading over it: margin lobes are new growth, the old centre cracks into hollow areolae, and a strip at the foot ticks off what each step grew.",
+      "controls": [
+        "grow: shape. The margin lobes push across neighbouring stones (the outline moves up to a stone, about 30 px, at 100) and the strip's ticks stand taller.",
+        "decay: count. Dead areolae crack open inside the patch, none at 0 to most of the centre at 100, leaving a ring of living crust.",
+        "seed: count. Spore dots on bare stones away from the patch, 0 to 8.",
+        "scale: position. The doubled perpend joints that mark the scale's half steps move along each course; the pentatonics have none."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "A grey body with a bright outline can read as a stain or a map, not a lichen, and the lobes are a texture on the contour rather than drawn lobes. The half-step joints are hairline doubles and won't clear scale's floor alone. The thallus is one mutable outline re-keyed each tick; a colony that splits needs a second. Running bond is exactly the hex lattice, but nothing on the wall says pitch without labels. Muted (mute is this machine's bypass): the patch fill drops to black, its outline to mid grey, and the strip empties."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P2",
+      "drawing_language": "survey plan",
+      "subject": "A survey sheet in plan and profile: on the left the lattice surveyed as running-bond lots with the colony's boundary run as a traverse, on the right a levelled profile of the pitches its new growth played over the last bar.",
+      "controls": [
+        "grow: count. Stations on the profile (notes per bar) and new lots inside the traverse; at 0 the profile is one long hold, at 100 two stations every tick.",
+        "decay: shape. The traverse pulls in and hollow dead lots open inside it; at 100 the boundary is a ragged ring round a dead centre.",
+        "seed: count. Trig-point marks on bare lots where spores land, each starting a fresh run of stations on the profile away from the colony's pitches.",
+        "scale: position. The profile's levels re-space by the scale's semitones, and the root marks on the plan move to where each octave starts."
+      ],
+      "reference": "opxy/reference/README.md (stock OP-XY engine screens) beside library/meikyu-capture",
+      "risks": "Stretch, outside the player column. The case for it: this machine's rule is two-dimensional and its output is a line of pitches, two different shapes, and the profile shows why the melody wanders as the colony moves. Plainly, though, it fits weakly: two halves compete for the eye, the profile is a history list in disguise where categories.md asks a player to draw its rule, and the plan duplicates v4's lattice less beautifully. The trig-point triangle edges toward an icon. Better as a note-response idea than half the screen. Muted (mute is this machine's bypass): the traverse drops to mid grey and the profile stops at a flat hold."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:37:53"
+  },
   "selection": null
 }

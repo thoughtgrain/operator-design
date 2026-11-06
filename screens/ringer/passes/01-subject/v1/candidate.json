@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "pattern": "P12",
+  "drawing_language": "patent section",
+  "subject": "The ring as an orrery: each bell a half-sectioned bell profile on its own orbit round a hatched arbor, treble innermost and tenor outermost, its angle on the orbit being its place in the current change, so a change reads round the plate and a hunting bell travels its orbit.",
+  "controls": [
+    "bells: count, orbits and bells added outward from the arbor, 4 to 12, each new bell a larger section on a new outer orbit, the graduated rim moving out with them.",
+    "method: position, every bell steps along its own orbit to the place the method gives it in the current change (a swap is two neighbours exchanging angles); the treble's link arcs ahead along its orbit trace the method's next three changes as a second cue.",
+    "pace: count, graduations round the plate's rim, one per blow over two bars: 4 at 0.5 a beat, 16 at the default 2, 64 at 8 (a doubling per quarter of travel).",
+    "stroke: rotation, on handstroke changes an empty sector opens before place 1 on every orbit, 0 degrees at 0 % to one blow's width at 100 % (51 degrees at 6 bells, 28 at 12), the places closing up round the rest of the plate."
+  ],
+  "reference": "library/meikyu-orrery/README.md",
+  "risks": [
+    "Bells at 15 to 30 px tall read close to a bell glyph; only the half-section cut (dark wall face, centre line, canon) keeps them in the patent language, and at 1:1 the cut face is barely visible. Needs larger bells or a heavier section.",
+    "The arbor (the sun) does nothing, P12's own weakness; the hatched section makes it look meant, not useful.",
+    "Stroke's sector is 28 degrees at 12 bells, under the 30-degree rotation floor; it needs a fixed minimum sector or a second cue (the rim graduations breaking).",
+    "Twelve bells put 12 places on the treble's inner orbit (44 units): neighbours 23 px apart on screen at the front, much closer at the sides where the plate foreshortens; bodies may touch.",
+    "Mute needs its own state: plate and orbits drop to ground grey and the bells go hollow; not drawn in this sketch."
+  ]
+}

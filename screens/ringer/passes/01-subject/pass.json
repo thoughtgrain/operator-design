@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,184 @@
       "brief": "Subject built on P4 Stack in depth; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P12",
+      "drawing_language": "patent section",
+      "subject": "The ring as an orrery: each bell a half-sectioned bell profile on its own orbit round a hatched arbor, treble innermost and tenor outermost, its angle on the orbit being its place in the current change, so a change reads round the plate and a hunting bell travels its orbit.",
+      "controls": [
+        "bells: count, orbits and bells added outward from the arbor, 4 to 12, each new bell a larger section on a new outer orbit, the graduated rim moving out with them.",
+        "method: position, every bell steps along its own orbit to the place the method gives it in the current change (a swap is two neighbours exchanging angles); the treble's link arcs ahead along its orbit trace the method's next three changes as a second cue.",
+        "pace: count, graduations round the plate's rim, one per blow over two bars: 4 at 0.5 a beat, 16 at the default 2, 64 at 8 (a doubling per quarter of travel).",
+        "stroke: rotation, on handstroke changes an empty sector opens before place 1 on every orbit, 0 degrees at 0 % to one blow's width at 100 % (51 degrees at 6 bells, 28 at 12), the places closing up round the rest of the plate."
+      ],
+      "reference": "library/meikyu-orrery/README.md",
+      "risks": [
+        "Bells at 15 to 30 px tall read close to a bell glyph; only the half-section cut (dark wall face, centre line, canon) keeps them in the patent language, and at 1:1 the cut face is barely visible. Needs larger bells or a heavier section.",
+        "The arbor (the sun) does nothing, P12's own weakness; the hatched section makes it look meant, not useful.",
+        "Stroke's sector is 28 degrees at 12 bells, under the 30-degree rotation floor; it needs a fixed minimum sector or a second cue (the rim graduations breaking).",
+        "Twelve bells put 12 places on the treble's inner orbit (44 units): neighbours 23 px apart on screen at the front, much closer at the sides where the plate foreshortens; bodies may touch.",
+        "Mute needs its own state: plate and orbits drop to ground grey and the bells go hollow; not drawn in this sketch."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P13",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The bells hung in their frame in hidden-line isometric, each turned on its axle to how far it has swung since leaving the balance, because that is the machine's rule: a bell's place in the change is where it is in its swing, so the row reads as which bell has come furthest round.",
+      "controls": [
+        "bells: count, pits filled in the frame, 4 to 12, the frame growing by a row of three pits at a time; empty pits stay as bare sills until a bell is hung in them.",
+        "method: rotation, each bell turns on its axle to the angle of its place in the current change (1st place furthest round and about to strike, the last just off the balance); a new method re-deals the angles, neighbours swapping.",
+        "pace: position, the ropes are taken in: every sally rises up its rope towards the frame, about 22 px from 0.5 to 8 blows a beat, as ringers do when they ring lower and faster.",
+        "stroke: position, the slider under each pit (the bar the stay rests on at the balance) runs out along its runner up to 24 px as the handstroke gap grows, and on handstroke changes the leading bell is held back against it."
+      ],
+      "reference": "library/meikyu-capture/README.md",
+      "risks": [
+        "The bells swing in a plane tilted to the screen, so a node can't turn them: every bell needs pre-drawn swing variants (12 angles x up to 12 bells, plus lip ellipses) and the budget is heavy, as meikyu's planets were.",
+        "Reading the row needs the bells told apart by size alone (treble smallest); at 6 bells it works, at 12 in a 3 x 4 frame the sizes crowd and the frame packs.",
+        "Stroke's slider is not in the sketch, and the held-back leading bell overlaps method's rotation channel on one bell; stroke must lead with the slider.",
+        "Ropes and sallies are hairline and low grey; pace's travel may read weakly at 1:1 behind the bells.",
+        "Mute has a real, honest state: the ring is stood, every bell set mouth-up at the balance on its stay; it is distinct by rotation, not shade."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P14",
+      "drawing_language": "star atlas",
+      "subject": "The method as a star chart: changes are the parallels of a conic projection, woven in at the bottom and sliding back, places are its meridians, every blow a star sized by its bell, and the treble's path through the changes drawn as the bright constellation line.",
+      "controls": [
+        "bells: count, meridians on the chart, 4 to 12, and the stars on every parallel with them; the fan of meridians widens to the neatline.",
+        "method: shape, the constellation line (one mutable outline) bends to the treble's path under the method: an even zig-zag for hunt, dodges for bob, long stretches for Cambridge; bell 2's hairline follows as a fainter figure.",
+        "pace: count, how many changes the chart holds over a fixed six bars: 2 parallels at 0.5 a beat, 8 at the default 2 (6 bells), capped at 12 from about 3 a beat, the parallels closing up as they are added.",
+        "stroke: position, every handstroke parallel stands back from its backstroke partner by up to one parallel's spacing, so the changes pair up as whole pulls with open bands of sky between them."
+      ],
+      "reference": "library/loom-pages/README.md",
+      "risks": [
+        "It is the blue line, the ringer's own method diagram: instant for ringers, but close to a grid of data; the atlas furniture (neatline, graduations, sized stars, labels) is what keeps it a chart and must stay.",
+        "Sliding the chart back one parallel per change moves every star (up to 12 x 12 = 144 nodes) at once, far over ~20 changed nodes a frame; it needs a fixed chart with a moving 'now' parallel that wraps, or few rows.",
+        "Pace (count of parallels) and stroke (spacing of alternate parallels) both act on parallel position; stroke must stay a pairing, not a spacing, to be its own channel.",
+        "At 12 bells meridians are ~30 px apart and fine; at 12 parallels the spacing drops to ~10 px and the small stars near touch.",
+        "Mute: the chart stops weaving and the constellation drops to mid grey; not drawn here."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "drawing_language": "engineering schematic",
+      "subject": "One bell drawn as an engineering elevation on its headstock and wheel, turned about the gudgeon to the angle it is rung up to, standing over a receding ringing-chamber floor, with the whole pull (a handstroke change and a backstroke change) ticked along the strip below.",
+      "controls": [
+        "bells: count, ticks per change in the strip, 4 to 12, both changes of the whole pull lengthening; the figure and floor stay.",
+        "method: position, the strip's ticks rise and fall to the bells of the current whole pull (tick height by bell, treble tallest and bright), re-ordered as the method changes.",
+        "pace: rotation, the bell figure turns about its gudgeon from 178 degrees (rung right up to the balance, slow) to about 108 degrees (rung low, fast), the dimensioned angle arc and its figure following.",
+        "stroke: position, the handstroke change slides away from the backstroke change along the strip, a gap opening up to 24 px at 100 %."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": [
+        "The subject fights the machine: the big figure carries only pace, while the method (what ringer is) lives in a 16 px strip of ticks that is close to a meter row.",
+        "One bell drawn alone reads as a single swinging bell, maybe a bell synth, not a ring being permuted.",
+        "Three of four controls sit in the strip; bells, method and stroke all change ticks, so their channels (count, height, gap) must stay strictly apart.",
+        "The floor field is decoration with no control; P5 allows a still field, but here it adds little.",
+        "Mute: the bell is stood at the balance, mouth up, its stay on the slider (rotation), and the strip empties."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P4",
+      "drawing_language": "oscilloscope trace",
+      "subject": "Each change as the pitch staircase it sends to the target track, traced bright on a scope graticule, with the four changes before it stacked back up and to the right as fading sweeps.",
+      "controls": [
+        "bells: count, steps per sweep, 4 to 12, each a gate pulse at its bell's level (treble top), the levels closing up to fit the graticule.",
+        "method: shape, the front trace (one mutable outline) re-orders its steps to the current change, and the sweeps behind show the last four changes it came from.",
+        "pace: position, the depth step between sweeps, 18 px back per change when slow, packed to 10 px when fast: the time between changes drawn as distance back.",
+        "stroke: position, on handstroke changes the front trace starts later after the trigger mark, a flat lead-in up to one step wide (about 50 px at 6 bells)."
+      ],
+      "reference": "opxy/reference/README.md (stock engine screens: the wavetable stack)",
+      "stretch": "P4 sits outside the player column. The one case for it here: change ringing is the only player whose every step of history is the same set reordered, so a stack of equal sweeps makes each change's difference visible as shifted steps. Said plainly, that is P14's job (depth means earlier) done less well, and drawing a player's output as a scope trace is P3's pitfall: it shows the notes, not the rule that picks them. It doesn't really fit.",
+      "risks": [
+        "Reads as a meter of the output, not a picture of the method; the guidelines' category says a player draws the rule.",
+        "Bells and method both reshape the front trace (count of steps and order of steps); only one may own shape.",
+        "Overlapping sweeps tangle where traces cross; the back sweeps need black-filled sweep frames (hidden-line) to stay legible, which a scope would not have.",
+        "Five sweeps at 10 px depth step approach the 6 px stack floor at the fast end.",
+        "Mute: the front trace goes flat at the baseline (no signal), an honest and legible state."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:38:03"
+  },
   "selection": null
 }

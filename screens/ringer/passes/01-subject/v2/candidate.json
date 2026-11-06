@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "pattern": "P13",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The bells hung in their frame in hidden-line isometric, each turned on its axle to how far it has swung since leaving the balance, because that is the machine's rule: a bell's place in the change is where it is in its swing, so the row reads as which bell has come furthest round.",
+  "controls": [
+    "bells: count, pits filled in the frame, 4 to 12, the frame growing by a row of three pits at a time; empty pits stay as bare sills until a bell is hung in them.",
+    "method: rotation, each bell turns on its axle to the angle of its place in the current change (1st place furthest round and about to strike, the last just off the balance); a new method re-deals the angles, neighbours swapping.",
+    "pace: position, the ropes are taken in: every sally rises up its rope towards the frame, about 22 px from 0.5 to 8 blows a beat, as ringers do when they ring lower and faster.",
+    "stroke: position, the slider under each pit (the bar the stay rests on at the balance) runs out along its runner up to 24 px as the handstroke gap grows, and on handstroke changes the leading bell is held back against it."
+  ],
+  "reference": "library/meikyu-capture/README.md",
+  "risks": [
+    "The bells swing in a plane tilted to the screen, so a node can't turn them: every bell needs pre-drawn swing variants (12 angles x up to 12 bells, plus lip ellipses) and the budget is heavy, as meikyu's planets were.",
+    "Reading the row needs the bells told apart by size alone (treble smallest); at 6 bells it works, at 12 in a 3 x 4 frame the sizes crowd and the frame packs.",
+    "Stroke's slider is not in the sketch, and the held-back leading bell overlaps method's rotation channel on one bell; stroke must lead with the slider.",
+    "Ropes and sallies are hairline and low grey; pace's travel may read weakly at 1:1 behind the bells.",
+    "Mute has a real, honest state: the ring is stood, every bell set mouth-up at the balance on its stay; it is distinct by rotation, not shade."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "variant": "v5",
+  "pattern": "P4",
+  "drawing_language": "oscilloscope trace",
+  "subject": "Each change as the pitch staircase it sends to the target track, traced bright on a scope graticule, with the four changes before it stacked back up and to the right as fading sweeps.",
+  "controls": [
+    "bells: count, steps per sweep, 4 to 12, each a gate pulse at its bell's level (treble top), the levels closing up to fit the graticule.",
+    "method: shape, the front trace (one mutable outline) re-orders its steps to the current change, and the sweeps behind show the last four changes it came from.",
+    "pace: position, the depth step between sweeps, 18 px back per change when slow, packed to 10 px when fast: the time between changes drawn as distance back.",
+    "stroke: position, on handstroke changes the front trace starts later after the trigger mark, a flat lead-in up to one step wide (about 50 px at 6 bells)."
+  ],
+  "reference": "opxy/reference/README.md (stock engine screens: the wavetable stack)",
+  "stretch": "P4 sits outside the player column. The one case for it here: change ringing is the only player whose every step of history is the same set reordered, so a stack of equal sweeps makes each change's difference visible as shifted steps. Said plainly, that is P14's job (depth means earlier) done less well, and drawing a player's output as a scope trace is P3's pitfall: it shows the notes, not the rule that picks them. It doesn't really fit.",
+  "risks": [
+    "Reads as a meter of the output, not a picture of the method; the guidelines' category says a player draws the rule.",
+    "Bells and method both reshape the front trace (count of steps and order of steps); only one may own shape.",
+    "Overlapping sweeps tangle where traces cross; the back sweeps need black-filled sweep frames (hidden-line) to stay legible, which a scope would not have.",
+    "Five sweeps at 10 px depth step approach the 6 px stack floor at the fast end.",
+    "Mute: the front trace goes flat at the baseline (no signal), an honest and legible state."
+  ]
+}

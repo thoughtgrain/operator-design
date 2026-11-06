@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P12",
+  "drawing_language": "engineering schematic",
+  "subject": "The lattice wrapped into an orrery drawn as a schematic: each row of the lattice is an orbit round a root sun, each cell a planet on it, the colony a cluster of filled planets that goes hollow as it dies back while this tick's growth lights brightest.",
+  "controls": [
+    "grow: count. Growth links run along and across the orbits from living planets to the cells they take; none at 0, one from every planet on the colony's margin at 100.",
+    "decay: scale. Each living planet's diameter is its remaining life, so raising decay shrinks the colony's planets from about 2x to 1x and leaves more small hollow dead ones.",
+    "seed: count. Spores wait as hollow bodies on the dashed seed track outside the last orbit, 0 to 8 spaced round it.",
+    "scale: position. The long radial root marks on every orbit move to where the scale's octave falls (every 7th degree, every 5th for the pentatonics, so their count changes too)."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "The sun is the root but nothing moves it (P12's own pitfall). Six nested orbits round a centre lean toward a target, and the back orbits bunch above the sun at tilt 0.4. Wrapping a row into an orbit implies column 12 neighbours column 1, which the model doesn't do: wrap the model or break each orbit at a seam. Between the six seven-note modes the root marks don't move, so scale needs a second mark (half-step seams) or it fails its floor there. 72 planets + 12 orbit runs + links is heavy but under 256 nodes. Muted (mute is this machine's bypass): the planets and orbits drop to hollow mid grey and the links hide; the sun's equator goes."
+}
