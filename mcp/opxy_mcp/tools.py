@@ -144,7 +144,7 @@ TOOLS: list[Tool] = [
          ["machine"], read_only=False),
     # design passes ──────────────────────────────────────────────────────────
     Tool("design_pass_start", "Open a design pass for a screen. Every pass (subject, frames, revision) is exactly five unique "
-         "variants: this assigns each its own direction (pattern × drawing language for subjects, composition × camera × "
+         "variants: this assigns each its own direction (an angle on the machine's own idea × a way of drawing for subjects, with fitting patterns offered as inspiration only; composition × camera × "
          "emphasis for frames) and returns five designer briefs to run in parallel. run=true runs them on "
          "OPXY_AGENT_ENDPOINT instead.",
          _p(machine_id=STR, kind={"type": S, "enum": ["subject", "frames", "revision"]}, category=CATEGORY, focus=STR,
@@ -154,7 +154,7 @@ TOOLS: list[Tool] = [
          ["machine_id", "kind"], compact=True, read_only=False,
          short="Open a five-variant design pass and get five designer briefs."),
     Tool("design_pass_submit", "Submit the five variants of the open pass and check they're unique. Subject variants: "
-         "[{variant, pattern, drawing_language, subject, controls, reference, risks}] (or leave out to read each "
+         "[{variant, angle, drawing_language, subject, controls, reference, risks, pattern (optional inspiration)}] (or leave out to read each "
          "v<N>/candidate.json). Frames: each v<N>/rest.svg is linted and compared pairwise at 1:1.",
          _p(machine_id=STR, variants={"type": "array", "items": {"type": "object"}}, pass_name=STR, two_page=BOOL, definition=STR),
          lambda a: passes.design_pass_submit(a["machine_id"], a.get("variants"), a.get("pass_name"), a.get("two_page", False),
@@ -167,6 +167,11 @@ TOOLS: list[Tool] = [
                                              a.get("apply", False)),
          ["machine_id", "variant", "reason", "chosen_by"], compact=True, read_only=False,
          short="Record the person's pick from a five-variant pass."),
+    Tool("design_pass_reject", "Record that the person wants none of a pass's five, who said so and why. Closes the pass so a "
+         "new one can start. Only call this with the person's decision.",
+         _p(machine_id=STR, reason=STR, chosen_by=STR, pass_name=STR),
+         lambda a: passes.design_pass_reject(a["machine_id"], a["reason"], a["chosen_by"], a.get("pass_name")),
+         ["machine_id", "reason", "chosen_by"], read_only=False, short="Turn down all five variants of a pass."),
     Tool("design_pass_get", "Read a pass record: directions, variants, uniqueness results and the pick.",
          _p(machine_id=STR, pass_name=STR), lambda a: passes.design_pass_get(a["machine_id"], a.get("pass_name")), ["machine_id"]),
     # training ───────────────────────────────────────────────────────────────

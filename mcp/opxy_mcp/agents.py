@@ -135,13 +135,13 @@ def designer_brief(record: dict, direction: dict, pdir: Path) -> dict:
     r = role("design")
     out_dir = rel(pdir / direction["variant"])
     if record["kind"] == "subject":
-        task = (f"Write {out_dir}/candidate.json with keys variant, pattern, drawing_language, subject, controls "
-                f"(list, one sentence per control in order), reference, risks.")
+        task = (f"Write {out_dir}/candidate.json with keys variant, angle, drawing_language, subject, controls "
+                f"(list, one sentence per control in order), reference, risks, and pattern only if one inspired it (else \"none\").")
         reply = "Reply with the candidate as one ```json block."
     else:
         subj = record.get("subject") or {}
         task = (f"Draw {out_dir}/rest.svg (480 × 220, from opxy/templates/frame.svg) of the chosen subject"
-                + (f": {subj.get('subject')} ({subj.get('pattern')}, {subj.get('drawing_language')})" if subj else "")
+                + (f": {subj.get('subject')} ({subj.get('angle') or subj.get('pattern')}, {subj.get('drawing_language')})" if subj else "")
                 + ". Lint it with zero errors and look at it at 1:1.")
         reply = "Reply with the frame as one ```svg block."
     from .paths import colour_policy
@@ -151,6 +151,8 @@ def designer_brief(record: dict, direction: dict, pdir: Path) -> dict:
         f"Colour: {pol['mode']} ({pol['set']})",
         f"Your variant: {direction['variant']} of 5",
         f"Your direction: {direction['brief']}",
+        "House rules for this pass: no text or numbers in the drawing (names and values live in the header); show a "
+        "state with line weight, brightness or hatching, not a flat grey fill; fill only what is a solid body.",
         f"Focus: {record['focus']}" if record.get("focus") else "",
         f"Task: {task}",
         reply,

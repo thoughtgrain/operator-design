@@ -166,7 +166,7 @@ class TestPasses(unittest.TestCase):
 
     def test_five_distinct_directions(self):
         _, s = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
-        pairs = {(d["pattern"], d["drawingLanguage"]) for d in s["directions"]}
+        pairs = {(d["angle"], d["drawingLanguage"]) for d in s["directions"]}
         self.assertEqual(len(s["directions"]), 5)
         self.assertEqual(len(pairs), 5)
         self.assertEqual(len(s["agentBriefs"]), 5)
@@ -185,6 +185,29 @@ class TestPasses(unittest.TestCase):
         self.assertEqual(r["state"], "ready_for_pick")
         _, r = call("design_pass_select", {"machine_id": "passtest", "variant": "v3", "reason": "r", "chosen_by": "me"})
         self.assertEqual(r["selected"], "v3")
+
+    def test_reject_closes_a_pass(self):
+        call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        call("design_pass_submit", {"machine_id": "passtest", "variants": SUBJECTS})
+        err, _ = call("design_pass_reject", {"machine_id": "passtest", "reason": "none fit", "chosen_by": "me"})
+        self.assertFalse(err)
+        err, text = call("design_pass_start", {"machine_id": "passtest", "kind": "frames"})
+        self.assertTrue(err and "subject pass" in text)
+        err, s = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        self.assertFalse(err)
+        self.assertTrue(s["pass"].endswith("02-subject"))
+
+    def test_text_in_drawing_is_flagged(self):
+        svg = ROOT / "screens/passtest/t.svg"
+        svg.write_text('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">'
+                       '<rect x="0" y="0" width="480" height="220" fill="#000000"/>'
+                       '<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" font-family="UniversNextPro-Light" font-size="10px">a</text>'
+                       '<text transform="matrix(1 0 0 1 100 120)" fill="#7D7D7D" font-family="UniversNextPro-Light" font-size="10px">fig. 1</text>'
+                       '</svg>', encoding="utf-8")
+        err, r = call("lint_frames", {"paths": "screens/passtest/t.svg"})
+        self.assertFalse(err, r)
+        got = {g["rule"]: g["count"] for g in r["byRule"]}
+        self.assertEqual(got.get("text-in-drawing"), 1, r)
 
     def test_frames_need_a_subject_first(self):
         err, text = call("design_pass_start", {"machine_id": "passtest", "kind": "frames"})
