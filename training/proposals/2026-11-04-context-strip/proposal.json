@@ -22,8 +22,7 @@
     "https://github.com/etcetc000/open-xy/blob/staging/docs/ux.md#controls"
   ],
   "categories": [
-    "engine",
-    "sampler"
+    "*"
   ],
   "changes": [
     {
@@ -425,6 +424,13 @@
       "stage": "audit",
       "by": "operator-design",
       "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T22:57:11",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "note",
+      "note": "Revision 12: proposal categories set to * (any machine), matching the catalog change."
     }
   ]
 }
