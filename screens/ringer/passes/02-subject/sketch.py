@@ -566,66 +566,61 @@ def v4():
     fr = Frame("v4 the ring cut through")
     tiers = 2
     per = math.ceil(N / tiers)
-    swing = math.radians(26) * (PACE / 2.0) ** -0.25   # pace: how far the clappers stand off across the row
-    Rt = 30.0 * min(1.0, 3 / per) ** 0.6               # tenor lip radius in px
+    swing = math.radians(24) * (PACE / 2.0) ** -0.25   # pace: how far the clappers stand off across the row
+    xw = 444 / per
+    Rt = min(0.44 * xw, 50.0)                          # tenor lip radius in px
     s_ten = bell_scale(N)
-    # tier layout: back tier (upper, smaller bells) left-shifted, front tier lower
     for t in range(tiers):
         bells = [b for b in range(1, N + 1) if (b - 1) // per == t]
-        lip_y = 118 if t == 0 else 204
-        xw = 430 / per
-        x_off = 25 + (xw / 2) * (0.5 if t == 0 else 1.5) - xw * 0.25
+        lip_y = 110 if t == 0 else 207                 # the biggest bell of the tier reaches this
+        Rbig = Rt * bell_scale(bells[-1]) / s_ten
+        crown = lip_y - BELL_H * Rbig                  # one gudgeon height per tier: crowns level
+        shift = (-0.1 if t == 0 else 0.1) * xw
+        x0 = 18 + shift
+        # the tier's sill: a long timber in section-elevation, its end grain hatched
+        sill = [(x0, crown - 12), (x0 + xw * len(bells), crown - 12), (x0 + xw * len(bells), crown - 7),
+                (x0, crown - 7)]
+        fr.shape(sill, G3, LINE)
         for j, b in enumerate(bells):
             R = Rt * bell_scale(b) / s_ten
-            cx = x_off + xw * j
+            cx = x0 + xw * (j + 0.5)
             H = BELL_H * R
-            crown = lip_y - H
             place = PLACE[b]
             now = place == 1
             edge = G7 if now else G5
-            # the frame: a beam on the crown (headstock in section) and the gudgeon centre
-            hs = [(cx - 0.36 * R, crown - 9), (cx + 0.36 * R, crown - 9), (cx + 0.36 * R, crown + 1),
-                  (cx - 0.36 * R, crown + 1)]
+            # headstock in section on the crown, hatched as cut timber
+            hs = [(cx - 0.4 * R, crown - 7), (cx + 0.4 * R, crown - 7), (cx + 0.4 * R, crown),
+                  (cx - 0.4 * R, crown)]
             fr.shape(hs, G3, LINE)
             fr.hatch(hs, G2, 4.0)
-            # inner far wall seen through the cut: the inside profile, hairline
-            inner = [(cx - (rf - w) * R, crown + z * H + w * R * 0.6) for (rf, z), w in zip(BELL, WALL)]
-            inner_r = [(cx + (rf - w) * R, crown + z * H + w * R * 0.6) for (rf, z), w in zip(BELL, WALL)]
-            # the cut walls: left and right, each a closed section, hatched
+            lip_in = (BELL[-1][0] - 0.17) * R
+            # the far inside of the bell, seen through the cut: its lip edge, hairline
+            fr.line((cx - lip_in, crown + H - 0.6), (cx + lip_in, crown + H - 0.6), HAIR, G2)
+            # the cut walls, left and right: closed sections, hatched as cut bronze
             for side in (-1, 1):
                 outer = [(cx + side * rf * R, crown + z * H) for rf, z in BELL]
                 inn = [(cx + side * (rf - w) * R, crown + z * H + w * R * 0.4) for (rf, z), w in zip(BELL, WALL)]
-                inn[-1] = (cx + side * (BELL[-1][0] - 0.16) * R, lip_y)
+                inn[-1] = (cx + side * lip_in, crown + H)
                 sec = outer + inn[::-1]
-                sec = [(x, y) for x, y in sec]
                 fr.shape(sec, edge, SUBJ if now else LINE)
                 fr.hatch(sec, G4 if now else G3, 3.5)
-            # the crown in section across the top
+            # the crown in section
             cr = [(cx - BELL[0][0] * R, crown), (cx + BELL[0][0] * R, crown),
-                  (cx + BELL[0][0] * R, crown + 0.07 * R + 2), (cx - BELL[0][0] * R, crown + 0.07 * R + 2)]
+                  (cx + (BELL[1][0] - WALL[1]) * R, crown + 0.06 * H + 2), (cx - (BELL[1][0] - WALL[1]) * R, crown + 0.06 * H + 2)]
             fr.shape(cr, edge, LINE)
             fr.hatch(cr, G3, 3.5)
-            # the far inside surface: a hairline of the inner profile meeting the lip's back edge
-            fr.ribbon([(cx - (BELL[-1][0] - 0.16) * R, lip_y), (cx + (BELL[-1][0] - 0.16) * R, lip_y)], HAIR, G2)
-            # the clapper: hung from the crown staple, swung toward its strike point by place
-            pivot = (cx, crown + 0.07 * R + 3)
-            a = -swing * (1 - (place - 1) / (N - 1)) - (GAP * 0.15 if now else 0)
-            Lc = H * 0.82
-            ball_r = max(3.0, 0.15 * R)
-            bx, by = pivot[0] + Lc * math.sin(a), pivot[1] + Lc * math.cos(a)
-            # flight: closed bar
+            # the clapper, hung from the crown staple, swung off its strike point by how far the bell is from striking
+            pivot = (cx, crown + 0.06 * H + 4)
+            a = -swing * (1 - (place - 1) / (N - 1)) - (GAP * 0.12 if now else 0)
+            Lc = H * 0.8
+            ball_r = max(3.5, 0.14 * R)
             ux, uy = math.sin(a), math.cos(a)
-            nx, ny = -uy * 1.3, ux * 1.3
+            bx, by = pivot[0] + Lc * ux, pivot[1] + Lc * uy
+            nx, ny = -uy * 1.4, ux * 1.4
             fr.shape([(pivot[0] + nx, pivot[1] + ny), (bx + nx, by + ny), (bx - nx, by - ny),
                       (pivot[0] - nx, pivot[1] - ny)], G6 if now else G4, HAIR)
             fr.circle(bx, by, ball_r, G0, G7 if now else G4, SUBJ if now else LINE)
-            fr.circle(pivot[0], pivot[1], 1.8, G0, G4, HAIR)
-        # the frame's sill under the gudgeons of this tier, a long timber in section
-        sill_y = lip_y - BELL_H * Rt * bell_scale(bells[-1]) / s_ten - 9
-        x0 = x_off - xw * 0.5
-        x1 = x_off + xw * (len(bells) - 0.5)
-        sill = [(x0, sill_y - 6), (x1, sill_y - 6), (x1, sill_y - 2), (x0, sill_y - 2)]
-        fr.shape(sill, G3, LINE)
+            fr.circle(pivot[0], pivot[1], 2.0, G0, G4, HAIR)
     fr.write("v4")
 
 

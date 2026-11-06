@@ -700,9 +700,9 @@ def v5(s: Spool) -> Frame:
     Rw = 0.62 + 0.3 * s.fullness()                       # length: how many layers are wound
     x0, xa, xb, x1 = -1.22, -1.08, 1.08, 1.22
     e = math.radians(31)
-    cam = Camera((1.25, -5.8, 5.8 * math.tan(e)), (0.0, 0, 0.12))
+    cam = Camera((-2.3, -5.6, 5.6 * math.tan(e)), (0.0, 0, 0.1))
     # theta: point = (x, -r cos th, r sin th): th=0 faces the camera (-y), th=90 is up
-    tha, thb = math.radians(-8), math.radians(90)        # the quarter of the winding that's cut away
+    tha, thb = math.radians(-18), math.radians(82)       # the quarter of the winding that's cut away
 
     def P(x, r, th):
         return v3(x, -r * math.cos(th), r * math.sin(th))
@@ -794,7 +794,7 @@ def v5(s: Spool) -> Frame:
         for pts, w, col in edges:
             fr.line([cam(p) for p in pts], w, col)
     # the bore through the near flange
-    bore, _ = ring(v3(x1, 0, 0), v3(1, 0, 0), Rbo, 36)
+    bore, _ = ring(v3(x0, 0, 0), v3(1, 0, 0), Rbo, 36)
     fr.outline([cam(p) for p in bore], M, LINE)
     return fr
 

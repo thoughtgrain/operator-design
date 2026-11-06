@@ -697,12 +697,15 @@ def v4() -> Frame:
     O = (LX, LD, 3.1)
     psi = math.radians(14 + 50 * D["sweep"])    # sweep: the beam swings toward you
     halfa = math.radians(2 + 14 * (1 - D["lens"]))  # lens: the beam tightens
+    # a cone: modelled as its upper and lower generators along the beam's bearing, so it
+    # opens vertically as it comes toward you (the horizontal spread folds into the same band)
+    d = (-math.cos(psi), -math.sin(psi))
+    L = (LD - 2.6) / -d[1]
     edge = []
-    for s in (-1, 1):
-        a = psi + s * halfa
-        d = (-math.cos(a), -math.sin(a))
-        L = (LD - 2.5) / -d[1] if d[1] < 0 else 200
-        edge.append([P(O[0] + 0.35 * d[0], O[1] + 0.35 * d[1], O[2]), P(O[0] + L * d[0], O[1] + L * d[1], O[2])])
+    for s in (1, -1):
+        st = P(O[0] + 0.35 * d[0], O[1] + 0.35 * d[1], O[2] + s * 0.05)
+        far = P(O[0] + L * d[0], O[1] + L * d[1], O[2] + s * L * math.tan(halfa) * 0.5)
+        edge.append([st, far])
     beam = [edge[0][0], edge[0][1], edge[1][1], edge[1][0]]
     F.hatch(beam, G3)
     F.poly(beam, "none", G4, LINE)
