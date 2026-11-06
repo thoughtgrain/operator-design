@@ -266,7 +266,7 @@ class Frame:
             for poly in exc:
                 iv = minus(iv, intervals(poly, c))
             for x0, x1 in iv:
-                if x1 - x0 > 3.2:
+                if x1 - x0 > 4.5:
                     a = (x0 + 0.5, c - x0 - 0.5)
                     b = (x1 - 0.5, c - x1 + 0.5)
                     self.line([a, b], w, colour)

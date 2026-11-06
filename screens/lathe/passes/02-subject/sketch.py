@@ -254,7 +254,8 @@ def v1() -> Frame:
 
     def r(x):
         t = (x - x_tool) / (x_end - x_tool)
-        return base + amp * soft(signal(0.08 + 0.84 * t))
+        u = 0.08 + 0.84 * t
+        return base + amp * soft(0.72 * math.sin(2 * math.pi * 3 * u) + 0.3 * math.sin(2 * math.pi * 7 * u + 1.1))
 
     # bed and ways
     F.outline([(20, 178), (460, 178), (460, 186), (20, 186)], G4)
@@ -286,12 +287,12 @@ def v1() -> Frame:
                (x_end + 46, ax + 22), (x_end + 52, ax + 22)], G4)
     F.outline([(x_end + 92, ax - 6), (x_end + 102, ax - 6), (x_end + 102, ax + 6), (x_end + 92, ax + 6)], G5)
     # carriage, cross-slide and tool post below the work (node 1: moves with groove)
-    tip_y = ax + base + amp * soft(signal(0.08))
+    tip_y = ax + r(x_tool)
     F.outline([(x_tool - 34, 168), (x_tool + 58, 168), (x_tool + 58, 178), (x_tool - 34, 178)], G4)
     F.outline([(x_tool + 2, tip_y + 22), (x_tool + 44, tip_y + 22), (x_tool + 44, 168),
                (x_tool + 2, 168)], G4)
-    tool = [(x_tool + 0.6, tip_y + 0.4), (x_tool + 3, tip_y + 0.4), (x_tool + 22, tip_y + 9),
-            (x_tool + 22, tip_y + 16), (x_tool + 4, tip_y + 16)]
+    tool = [(x_tool + 0.6, tip_y + 0.6), (x_tool + 3, tip_y + 0.6), (x_tool + 30, tip_y + 10),
+            (x_tool + 30, tip_y + 20), (x_tool + 6, tip_y + 20)]
     F.outline(tool, G2, node=1)
     # the chip curling off the cutting point, one hairline helix
     chip = []
@@ -366,8 +367,7 @@ def v2() -> Frame:
     F.outline(hold, G4)
     hatch(F, hold, G5, spacing=4.5, inset=2.2)
     # suction nozzle beside the stylus
-    noz = [(c + 38, 120), (c + 58, 120), (c + 58, 126), (c + 46, 126), (c + 22, surf - 6), (c + 14, surf - 6),
-           (c + 40, 126), (c + 38, 126)]
+    noz = [(c + 30, 138), (c + 38, 138), (c + 16, surf - 7), (c + 9, surf - 7)]
     F.outline(noz, G4)
     # the stylus: armature from its pivot in the window to the cutting tip (node 0: cut turns it)
     piv = (c, 112)
@@ -389,165 +389,163 @@ def v3() -> Frame:
     """The lacquer surface, very close, at grazing light: grooves running away from the eye.
 
     Edge-lit silhouette: the coat is a black mass; only the lips of the grooves catch the light.
-    The near edge of the field is the cut face of the coat, a silhouette with its V notches.
+    The near edge of the field is the cut face of the coat, a silhouette with its V notches,
+    its top edge lit. The camera looks down at the surface, so there's no horizon: the field
+    simply runs out of light at the top of the frame.
     """
     F = Frame([G0, G2, G3, G5])
-    hgt = 1.0
-    cam = Camera((0, 0, hgt), (0, 30, hgt - 1.9), 300, (240, 34))
-    pitch, half, depth = 0.46, 0.15, 0.12
-    shift = -GROOVE * pitch * 4          # groove: the field slides; the rim (right) leaves, more turns come in
-    y0, y1 = 2.0, 17.0
+    cam = Camera((0, 0, 1.0), (0, 4.2, -0.35), 330, (240, 112))
+    pitch, half, depth = 0.5, 0.15, 0.13
+    shift = -GROOVE * pitch * 4          # groove: the field slides left; the rim leaves, more turns come in
+    y0, y1 = 1.75, 9.0
 
-    def wig(k, y, a):
+    def wig(k, y):
         t = (y - y0) / (y1 - y0)
-        return a * soft(signal(0.11 * k + 0.9 * t), DRIVE if k == 0 else 1.0)
+        return 0.055 * soft(signal(0.13 * k + 0.55 * t), DRIVE if k == 0 else 1.0)
 
     rim_x = pitch * 3.5 + shift          # rim bevel: the field ends here at groove 0
-    # near cut face, silhouetted: black mass, its top edge lit, notched where each groove is cut
-    face = []
-    xs = []
-    k = -9
-    while k * pitch < rim_x - pitch * 0.4:
-        xs.append(k)
-        k += 1
-    left = cam((-4.2, y0, 0))[0]
-    face.append(cam((-4.2, y0, 0)))
-    for k in xs:
-        gx = k * pitch + wig(k, y0, 0.05)
-        for px, pz in ((-half, 0), (-0.02, -depth), (0.02, -depth), (half, 0)):
-            p = cam((gx + px, y0, pz))
-            if -2 < p[0] < 482:
-                face.append(p)
-    face.append(cam((rim_x, y0, 0)))
-    face.append(cam((rim_x + 0.12, y0, -0.22)))
-    face.append((cam((rim_x + 0.12, y0, -0.22))[0], 214))
-    face.append((max(left, -2), 214))
-    face = [p for p in face if -4 <= p[0] <= 484]
-    # receding lips of every groove: lit lip a Line, shaded lip a hairline; fade with distance
-    for k in xs:
-        for side, w, col in ((-1, LINE, G3), (1, HAIR, G5)):
+    ks = [k for k in range(-12, 8) if k * pitch + half < rim_x]
+
+    def lip(k, side, y):
+        return (k * pitch + wig(k, y) + side * half, y, 0.0)
+
+    # receding lips: lit lip a Line, shaded lip a hairline; each stops before it would come
+    # within 3 px of its neighbour, and the brighter near part fades to a dimmer far part
+    for k in ks:
+        for side in (-1, 1):
             if k == 0:
-                w, col = (SUBJ, G0) if side < 0 else (LINE, G2)
-            pts = []
-            n = 40
-            for i in range(n):
-                y = y0 + (y1 - y0) * (i / (n - 1)) ** 1.6
-                gx = k * pitch + wig(k, y, 0.05) + side * half
-                p = cam((gx, y, 0))
-                if 0 <= p[0] <= 480:
-                    pts.append(p)
-            # stop where neighbouring lips would come within 3 px
-            keep = []
-            for p, i in zip(pts, range(len(pts))):
-                yv = y0 + (y1 - y0) * (i / (n - 1)) ** 1.6
-                gap = cam((2 * half, yv, 0))[0] - cam((0, yv, 0))[0]
-                if gap < 3.4 and k != 0:
+                w, near_c, far_c = (SUBJ, G0, G0) if side < 0 else (LINE, G2, G2)
+            else:
+                w, near_c, far_c = (LINE, G3, G4) if side < 0 else (HAIR, G4, G5)
+            pts, cols = [], []
+            for i in range(44):
+                y = y0 + (y1 - y0) * (i / 43) ** 1.5
+                p = cam(lip(k, side, y))
+                gap = abs(cam((pitch - 2 * half, y, 0))[0] - cam((0, y, 0))[0])
+                if gap < 3.6 or p[1] < 24:
                     break
-                keep.append(p)
-            if len(keep) >= 2:
-                F.ribbon(keep, w, col, node=0 if (k == 0 and side < 0 and len(keep) <= 31) else None)
+                if -1 <= p[0] <= 481:
+                    pts.append(p)
+                    cols.append(near_c if i < 26 else far_c)
+            if len(pts) < 2:
+                continue
+            cut = cols.index(far_c) if far_c in cols and far_c != near_c else len(pts)
+            node = 0 if (k == 0 and side < 0) else None
+            if cut >= 2:
+                F.ribbon(pts[:cut], w, near_c, node=node if cut <= 31 else None)
+            if len(pts) - cut >= 2:
+                F.ribbon(pts[cut - 1:], w, far_c)
     # the rim bevel: the field's right edge, a lit lip falling away
-    rim = [cam((rim_x, y, 0)) for y in (y0, 3, 4.5, 7, 10, 13, y1)]
-    rim = [p for p in rim if p[0] <= 480]
-    if len(rim) >= 2:
-        F.ribbon(rim, LINE, G3)
-    F.path(face, fill=BK, stroke=G4, sw=LINE)
-    # inside the face: the V notch walls catch a hairline of light along the bright groove
+    rim = []
+    for i in range(20):
+        y = y0 + (y1 - y0) * (i / 19) ** 1.5
+        p = cam((rim_x, y, 0))
+        if p[1] < 24:
+            break
+        rim.append(p)
+    if len(rim) >= 2 and rim[0][0] < 480:
+        F.ribbon([p for p in rim if p[0] <= 480], LINE, G3)
+    # near cut face, a silhouette: black mass below its lit, notched top edge
+    edge = []
+    for k in ks:
+        gx = k * pitch + wig(k, y0)
+        for px, pz in ((-half, 0), (-0.025, -depth), (0.025, -depth), (half, 0)):
+            p = cam((gx + px, y0, pz))
+            if -6 < p[0] < 486:
+                edge.append(p)
+    rb = cam((rim_x + 0.14, y0, -0.2))
+    edge += [cam((rim_x, y0, 0)), rb]
+    body = [(-2, edge[0][1])] + edge + [(rb[0], 214), (-2, 214)]
+    F.path(body, fill=BK)
+    F.ribbon([(-1, edge[0][1])] + edge, LINE, G3)
+    F.seg(rb, (rb[0], 212), HAIR, G5)
     return F
 
 
 # ================================================================ v4
 def v4() -> Frame:
-    """The cut playing back: the disc on the platter in a low perspective, the tonearm reading it."""
+    """The cut playing back: the disc on the platter, close and low, the tonearm reading it."""
     F = Frame([G0, G2, G3, G5])
-    cam = Camera((-0.35, -3.05, 1.18), (0.12, 0.05, -0.05), 345, (226, 116))
+    cam = Camera((-0.2, -2.55, 1.05), (0.18, 0.1, -0.1), 430, (214, 122))
     R, Rl = 1.0, 0.31
-    rp = 0.95 - GROOVE * 0.58            # groove: where the stylus reads, rim to label
+    rp = 0.93 - GROOVE * 0.56            # groove: where the stylus reads, rim to label
+    zt, zb, zd = 0.0, -0.13, 0.012
 
-    def ring(rad, z, n=56):
-        return [cam((rad * math.cos(2 * math.pi * i / n), rad * math.sin(2 * math.pi * i / n), z))
+    def ring(rad, z, n=56, a0=0.0, a1=2 * math.pi):
+        m = n if abs(a1 - a0 - 2 * math.pi) < 1e-9 else n - 1
+        return [cam((rad * math.cos(a0 + (a1 - a0) * i / m), rad * math.sin(a0 + (a1 - a0) * i / m), z))
                 for i in range(n)]
 
-    # plinth top edge behind (a long low plate)
-    plinth = [cam(p) for p in ((-1.25, -1.2, -0.16), (1.75, -1.2, -0.16), (1.75, 1.25, -0.16), (-1.25, 1.25, -0.16))]
-    F.outline(plinth, G5)
-    # platter: a cylinder, its side drawn as the front half band
-    zt, zb = 0.0, -0.11
-    n = 56
-    side = [cam((1.04 * math.cos(a), 1.04 * math.sin(a), zt)) for a in
-            [math.pi + math.pi * i / 27 for i in range(28)]]
-    side += [cam((1.04 * math.cos(a), 1.04 * math.sin(a), zb)) for a in
-             [2 * math.pi - math.pi * i / 27 for i in range(28)]]
+    # platter: a cylinder, its front half side as a band with strobe marks
+    side = ring(1.04, zt, 28, math.pi, 2 * math.pi) + ring(1.04, zb, 28, 2 * math.pi, math.pi)
     F.outline(side, G4)
-    for a in [math.pi + math.pi * i / 13 for i in range(1, 13)]:          # strobe marks on the platter edge
-        p, q = cam((1.04 * math.cos(a), 1.04 * math.sin(a), zt - 0.035)), cam((1.04 * math.cos(a), 1.04 * math.sin(a), zb + 0.02))
+    for i in range(1, 24):
+        a = math.pi + math.pi * i / 24
+        p = cam((1.04 * math.cos(a), 1.04 * math.sin(a), zt - 0.03))
+        q = cam((1.04 * math.cos(a), 1.04 * math.sin(a), zb + 0.03))
         if math.dist(p, q) > 3:
             F.seg(p, q, HAIR, G5)
     F.outline(ring(1.04, zt), G4)
-    # the disc
-    zd = 0.012
+    # the disc, its grooves as hairline rings spaced >= 3 px at the narrowest
     F.outline(ring(R, zd), G3)
-    # grooves: hairline rings across the cut band, spaced so they never come within 3 px
-    rad = 0.94
-    while rad > Rl + 0.06:
-        F.outline(ring(rad, zd, 60), G6 if rad > rp else G5, sw=HAIR, fill="none")
-        rad -= 0.075
-    # the label and spindle
-    F.outline(ring(Rl, zd + 0.002, 40), G4)
-    F.outline(ring(0.24, zd + 0.002, 40), G5, sw=HAIR, fill="none")
-    sp = [cam((0.022 * math.cos(a), 0.022 * math.sin(a), zd)) for a in [math.pi * i / 6 for i in range(7)]]
-    sp += [cam((0.022 * math.cos(a), 0.022 * math.sin(a), zd + 0.09)) for a in [math.pi - math.pi * i / 6 for i in range(7)]]
+    rad = 0.93
+    while rad > Rl + 0.08:
+        F.outline(ring(rad, zd, 60), G5, sw=HAIR, fill="none")
+        rad -= 0.09
+    F.outline(ring(Rl, zd + 0.002, 44), G4)
+    F.outline(ring(0.07, zd + 0.002, 20), G5, sw=HAIR, fill="none")
+    sp = ring(0.022, zd, 7, 0, math.pi) + ring(0.022, zd + 0.1, 7, math.pi, 0)
     F.outline(sp, G3)
-    # tonearm: pivot on the plinth at back right, arm swinging to the stylus on radius rp
-    P = (1.34, 0.62)
-    L = 1.32
-    # stylus point: intersection of circle(0, rp) and circle(P, L), the one at front
+    # tonearm geometry: pivot back right, the stylus on radius rp
+    P = (1.3, 0.5)
+    L = 1.36
     d = math.hypot(*P)
     a = (rp * rp - L * L + d * d) / (2 * d)
-    hgt = math.sqrt(max(0.0, rp * rp - a * a))
+    hh = math.sqrt(max(0.0, rp * rp - a * a))
     bx, by = a * P[0] / d, a * P[1] / d
-    S = (bx + hgt * P[1] / d, by - hgt * P[0] / d)
-    # the groove being read: an arc of the bright ring ahead of the stylus
+    S = (bx + hh * P[1] / d, by - hh * P[0] / d)
+    # the groove being read: the bright arc running into the stylus
     th = math.atan2(S[1], S[0])
-    arc = [cam((rp * math.cos(th + 0.012 * i), rp * math.sin(th + 0.012 * i), zd)) for i in range(0, 31)]
-    arc = [(x, y - 0.0) for x, y in arc]
-    F.ribbon(arc[2:], SUBJ, G0, node=0)
-    # base and bearing housing
-    base = [cam((P[0] + 0.17 * math.cos(t), P[1] + 0.17 * math.sin(t), -0.16)) for t in
-            [math.pi * i / 12 for i in range(13, 25)]]
-    base += [cam((P[0] + 0.17 * math.cos(t), P[1] + 0.17 * math.sin(t), 0.1)) for t in
-             [2 * math.pi - math.pi * i / 12 for i in range(13)]]
-    F.outline(base, G4)
-    F.outline([cam((P[0] + 0.17 * math.cos(t), P[1] + 0.17 * math.sin(t), 0.1)) for t in
-               [2 * math.pi * i / 32 for i in range(32)]], G4)
-    # arm tube, slight S near the headshell, lifted above the disc
+    arc = [cam((rp * math.cos(th - 0.9 + 0.03 * i), rp * math.sin(th - 0.9 + 0.03 * i), zd)) for i in range(31)]
+    F.ribbon(arc, SUBJ, G0, node=0)
     u = ((S[0] - P[0]) / L, (S[1] - P[1]) / L)
     v = (-u[1], u[0])
-    zarm = 0.16
+    zarm = 0.2
+    # base: a short cylinder on the plinth
+    base = ring(0.16, zb, 1)  # placeholder to keep the signature simple
+    bpts = [cam((P[0] + 0.15 * math.cos(t), P[1] + 0.15 * math.sin(t), zb - 0.05)) for t in
+            [math.pi + math.pi * i / 14 for i in range(15)]]
+    bpts += [cam((P[0] + 0.15 * math.cos(t), P[1] + 0.15 * math.sin(t), zarm - 0.06)) for t in
+             [2 * math.pi - math.pi * i / 14 for i in range(15)]]
+    F.outline(bpts, G4)
+    F.outline([cam((P[0] + 0.15 * math.cos(t), P[1] + 0.15 * math.sin(t), zarm - 0.06)) for t in
+               [2 * math.pi * i / 32 for i in range(32)]], G4)
+    # counterweight: a short cylinder on the arm's tail
+    cwc = (P[0] - u[0] * 0.3, P[1] - u[1] * 0.3)
+    cwp = []
+    for s, z in ((-1, 1), (1, 1), (1, -1), (-1, -1)):
+        cwp.append(cam((cwc[0] + u[0] * 0.09 * s, cwc[1] + u[1] * 0.09 * s, zarm + 0.075 * z)))
+    F.outline([cwp[0], cwp[1], cwp[2], cwp[3]], G3)
+    # arm tube: a hollow ribbon from pivot to headshell
     tube = []
-    for i in range(24):
-        t = i / 23
-        off = 0.06 * math.sin(math.pi * max(0.0, t - 0.55) / 0.45) if t > 0.55 else 0.0
-        tube.append(cam((P[0] + u[0] * L * 0.86 * t + v[0] * off, P[1] + u[1] * L * 0.86 * t + v[1] * off,
-                         zarm - 0.02 * t)))
-    F.ribbon(tube, 3.4, G2)
-    F.ribbon(tube, 1.4, BK)
-    # counterweight behind the pivot
-    cw = [(P[0] - u[0] * 0.18 + v[0] * s, P[1] - u[1] * 0.18 + v[1] * s) for s in (-0.07, 0.07)]
-    cwb = [(P[0] - u[0] * 0.36 + v[0] * s, P[1] - u[1] * 0.36 + v[1] * s) for s in (0.07, -0.07)]
-    F.outline([cam((x, y, zarm + dz)) for (x, y), dz in zip(cw + cwb, (0.06, 0.06, 0.06, 0.06))] , G3)
-    F.outline([cam((x, y, zarm - 0.07)) for (x, y) in cw + cwb], G4, sw=HAIR, fill="none")
-    # headshell: a flat plate at the end of the arm, the cartridge under it down to the groove
-    e = (P[0] + u[0] * L * 0.86 + v[0] * 0.06, P[1] + u[1] * L * 0.86 + v[1] * 0.06)
-    shell = [(e[0] - v[0] * 0.05, e[1] - v[1] * 0.05), (e[0] + v[0] * 0.07, e[1] + v[1] * 0.07),
-             (S[0] + u[0] * 0.06 + v[0] * 0.07, S[1] + u[1] * 0.06 + v[1] * 0.07),
-             (S[0] + u[0] * 0.06 - v[0] * 0.05, S[1] + u[1] * 0.06 - v[1] * 0.05)]
-    cart = [cam((x, y, zarm - 0.04)) for x, y in shell]
-    body = [cam((S[0] - v[0] * 0.04, S[1] - v[1] * 0.04, zd + 0.03)), cam((S[0] + v[0] * 0.05, S[1] + v[1] * 0.05, zd + 0.03))]
-    F.outline([cart[0], cart[1], cart[2], body[1], body[0], cart[3]], G2)
-    F.outline(cart, G3, sw=HAIR, fill="none")
-    # arm rest
-    rest = [cam(p) for p in ((1.52, -0.42, -0.16), (1.58, -0.42, -0.16), (1.58, -0.42, 0.12), (1.52, -0.42, 0.12))]
+    for i in range(26):
+        t = i / 25
+        tube.append(cam((P[0] - u[0] * 0.2 + u[0] * (L * 0.88 + 0.2) * t,
+                         P[1] - u[1] * 0.2 + u[1] * (L * 0.88 + 0.2) * t, zarm)))
+    F.ribbon(tube, 4.0, G2)
+    F.ribbon(tube[1:-1], 1.2, BK)
+    # headshell plate and cartridge down to the stylus
+    hs = []
+    for du, dv in ((L * 0.86, -0.05), (L * 0.86, 0.06), (L + 0.05, 0.06), (L + 0.05, -0.05)):
+        hs.append(cam((P[0] + u[0] * du + v[0] * dv, P[1] + u[1] * du + v[1] * dv, zarm - 0.02)))
+    cart = []
+    for du, dv, z in ((L * 0.93, -0.035, zarm - 0.03), (L * 0.93, 0.045, zarm - 0.03),
+                      (L + 0.01, 0.045, zd + 0.035), (L - 0.0, -0.035, zd + 0.035)):
+        cart.append(cam((P[0] + u[0] * du + v[0] * dv, P[1] + u[1] * du + v[1] * dv, z)))
+    F.outline(cart, G3)
+    F.outline(hs, G2)
+    # cueing post at the rest
+    rest = [cam(p) for p in ((1.5, -0.55, zb - 0.05), (1.56, -0.55, zb - 0.05), (1.56, -0.55, zarm), (1.5, -0.55, zarm))]
     F.outline(rest, G5)
     return F
 
@@ -558,61 +556,53 @@ def v5() -> Frame:
 
     Every knob does to it what it would do to the real thing: cut sinks and widens the groove and
     flattens its swings, groove packs the same swings shorter (inner turns move slower under the
-    stylus), wear knocks chips out of the lips, rumble heaves the block.
+    stylus), wear knocks chips out of the lips, rumble heaves the block on its bed.
     """
     F = Frame([G0, G2, G3, G5])
-    cam = Camera((-2.2, -6.4, 4.6), (3.0, 0.9, 0.0), 300, (236, 112))
-    Lx, Wy = 6.4, 2.0
-    zc, zt = 0.55, 0.95                     # core top, coat top
+    cam = Camera((-1.6, -5.6, 3.9), (3.1, 1.0, 0.2), 470, (236, 118))
+    Lx, Wy = 6.4, 2.2
+    zc, zt = 0.55, 0.95
     gy = Wy / 2
-    half = 0.24 * min(1.5, CUT ** 0.3)      # cut: groove gets wider and deeper
-    deep = 0.24 * min(1.5, CUT ** 0.3)
+    half = 0.25 * min(1.5, CUT ** 0.3)      # cut: the groove gets wider and deeper
+    deep = 0.26 * min(1.5, CUT ** 0.3)
     lam = 1.0 - GROOVE * 0.45               # groove: wavelength shortens toward the label
-    amp = 0.22
+    amp = 0.2
+    pitch = 0.78
 
-    def gyx(x):
+    def gyx(x, k=0):
+        if k:
+            return gy + k * pitch + 0.05 * signal(x / Lx * 0.7 + 0.3 * k)
         return gy + amp * soft(signal((x / Lx) / lam * 0.9 + 0.05))
 
-    B = [(0, 0, 0), (Lx, 0, 0), (Lx, Wy, 0), (0, Wy, 0)]
-    T = [(x, y, zt) for x, y, _ in B]
     p = cam
-    # visible faces: front (y=0), left end (x=0), top. Fill the silhouette black first.
-    sil = [p(B[0]), p(B[1]), p(T[1]), p(T[2]), p(T[3]), p((0, Wy, 0))]
+    sil = [p((0, 0, 0)), p((Lx, 0, 0)), p((Lx, 0, zt)), p((Lx, Wy, zt)), p((0, Wy, zt)), p((0, Wy, 0))]
     F.path(sil, fill=BK)
-    # left end face (the section): outline, coat/core boundary, V notch, hatched core
-    end = [(0, 0, 0), (0, Wy, 0), (0, Wy, zt), (0, gyx(0) + half, zt), (0, gyx(0) + 0.02, zt - deep),
-           (0, gyx(0) - 0.02, zt - deep), (0, gyx(0) - half, zt), (0, 0, zt)]
+    # left end face, in section: outline with the V notches, coat line, core hatched
+    end = [(0, 0, 0), (0, Wy, 0), (0, Wy, zt)]
+    for k in (1, 0, -1):
+        c0 = gyx(0, k)
+        h0, d0 = (half, deep) if k == 0 else (0.11, 0.12)
+        end += [(0, c0 + h0, zt), (0, c0 + 0.02, zt - d0), (0, c0 - 0.02, zt - d0), (0, c0 - h0, zt)]
+    end += [(0, 0, zt)]
     F.path([p(q) for q in end], fill=BK, stroke=G3, sw=LINE)
-    core_end = [p((0, 0.06, 0.06)), p((0, Wy - 0.06, 0.06)), p((0, Wy - 0.06, zc - 0.04)), p((0, 0.06, zc - 0.04))]
-    hatch(F, core_end, G5, spacing=4.5, inset=0.6)
+    core_end = [p((0, 0.08, 0.08)), p((0, Wy - 0.08, 0.08)), p((0, Wy - 0.08, zc - 0.06)), p((0, 0.08, zc - 0.06))]
+    hatch(F, core_end, G5, spacing=4.5, inset=0.5)
     F.seg(p((0, 0, zc)), p((0, Wy, zc)), HAIR, G4)
-    # front face
-    front = [p((0, 0, 0)), p((Lx, 0, 0)), p((Lx, 0, zt)), p((0, 0, zt))]
-    F.path(front, fill=BK, stroke=G3, sw=LINE)
-    F.seg(p((0, 0, zc)), p((Lx, 0, zc)), HAIR, G4)
-    # top face outline
-    top = [p((0, 0, zt)), p((Lx, 0, zt)), p((Lx, Wy, zt)), p((0, Wy, zt))]
-    F.path(top, fill=BK, stroke=G3, sw=LINE)
-    # right end: the block breaks off (break line, hairline zigzag on the visible edge)
-    # groove on the top face: far lip (lit, the subject), near lip, and the floor line between
+    # front face, its coat line
+    F.path([p((0, 0, 0)), p((Lx, 0, 0)), p((Lx, 0, zt)), p((0, 0, zt))], fill=BK, stroke=G3, sw=LINE)
+    F.seg(p((0.02, 0, zc)), p((Lx - 0.02, 0, zc)), HAIR, G4)
+    # top face
+    F.path([p((0, 0, zt)), p((Lx, 0, zt)), p((Lx, Wy, zt)), p((0, Wy, zt))], fill=BK, stroke=G3, sw=LINE)
+    # the right end breaks off: the far end face isn't seen, a break mark on the near corner
     xs = [Lx * i / 30 for i in range(31)]
-    far = [p((x, gyx(x) + half, zt)) for x in xs]
-    near = [p((x, gyx(x) - half, zt)) for x in xs]
-    floor = [p((x, gyx(x), zt - deep)) for x in xs]
-    F.ribbon(floor, HAIR, G5)
-    F.ribbon(near, LINE, G2)
-    F.ribbon(far, SUBJ, G0, node=0)
-    # the inner wall's visible slope: hairline ticks down the lit far wall, every half wavelength
-    for x in [Lx * (i + 0.5) / 12 for i in range(12)]:
-        a, b = p((x, gyx(x) + half * 0.92, zt - 0.02)), p((x, gyx(x) + 0.06, zt - deep * 0.85))
-        if math.dist(a, b) > 3:
-            F.seg(a, b, HAIR, G5)
-    # neighbouring turns' lips, each side, quieter
-    for off in (-0.72, 0.72):
+    # neighbouring turns, quieter: their two lips as hairlines
+    for k in (-1, 1):
         for s in (-1, 1):
-            q = [p((x, gyx(x) * 0 + gy + off + s * 0.1 + 0.06 * signal(x / Lx + 0.3), zt)) for x in xs]
-            if all(0 < pt[0] < 480 for pt in q):
-                F.ribbon(q, HAIR, G4)
+            F.ribbon([p((x, gyx(x, k) + s * 0.11, zt)) for x in xs], HAIR, G4)
+    # the groove: floor hairline, near lip a Line, far lip (the lit one) the subject
+    F.ribbon([p((x, gyx(x), zt - deep)) for x in xs], HAIR, G5)
+    F.ribbon([p((x, gyx(x) - half, zt)) for x in xs], LINE, G2)
+    F.ribbon([p((x, gyx(x) + half, zt)) for x in xs], SUBJ, G0, node=0)
     return F
 
 

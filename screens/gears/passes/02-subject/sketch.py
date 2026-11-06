@@ -470,65 +470,59 @@ def v1():
 
 # =================================================================== v2
 def v2():
-    """Exploded view: B lifted straight up off its arbor, so both wheels'
-    faces show the wear the run has left: every mesh leaves a scored mark
-    across the tooth that played, its length the note's height in the scale."""
+    """Exploded view: B lifted straight up its axis off its arbor, A seated on
+    its own, so both faces show what the run has left on them: every mesh
+    scores a short groove across the web behind the tooth that played, at a
+    radius set by the note it played (low near the hub, high near the rim)."""
     rpA, rpB = TEETH_A / 2, TEETH_B / 2
     dAB = rpA + rpB
     X, Z = (1, 0, 0), (0, 0, -1)          # wheels flat, axis +Y (u x v = Y)
-    lift = 5.2
-    gA = Disc((0, 0.9, 0), X, Z, gear2d(TEETH_A, rpA), 1.1)
-    gB = Disc((dAB, 0.9 + lift, 0), X, Z, gear2d(TEETH_B, rpB, rot=math.pi + math.pi / TEETH_B), 1.1)
-    cam = Cam(eye=(2.0, 23.0, 21.0), target=(5.0, 2.0, 0.0))
-    px0, px1, pz0, pz1 = -6.0, 17.0, -7.2, 7.2
-    cam.fit([(px0, -0.8, pz1), (px1, -0.8, pz1), (px0, 0, pz0), (px1, 0, pz0),
-             (dAB - 7.2, 0.9 + lift + 1.1, -7.2), (dAB + 7.2, 0.9 + lift + 1.1, 7.2),
-             (dAB, 0.9 + lift + 1.1, -7.2), (dAB, 0.9 + lift + 1.1, 7.2)],
-            (40, BODY[0] + 2, 440, BODY[1] - 2))
+    lift, T = 4.6, 1.0
+    rotB = math.pi + math.pi / TEETH_B
+    gA = Disc((0, 0, 0), X, Z, gear2d(TEETH_A, rpA), T)
+    gB = Disc((dAB, lift, 0), X, Z, gear2d(TEETH_B, rpB, rot=rotB), T)
+    cam = Cam(eye=(3.0, 22.0, 19.0), target=(5.5, 1.0, 0.0))
+    pts = [gA.w(x, y, z) for x, y in ring(rpA + 1, 16) for z in (0, T)] + \
+          [gB.w(x, y, z) for x, y in ring(rpB + 1, 16) for z in (0, T)] + [(0, -2.6, 0)]
+    cam.fit(pts, (60, BODY[0] + 3, 420, BODY[1] - 3))
     out = []
-    # base plate
-    for name, q in box_faces(cam, px0, px1, -0.8, 0.0, pz0, pz1):
-        out.append(poly(q, G0, G3, LINE))
-    # B's arbor and washer, exploded below it, with the assembly axis
-    arbB, _ = cylinder(cam, (dAB, 0, 0), (0, 1, 0), 0.6, 2.2, edge=G3, cap_edge=G4)
-    out += arbB
-    washer = Disc((dAB, 2.9, 0), X, Z, ring(1.6, 32), 0.35)
-    axis_pts = cam.ps([(dAB, 2.2, 0), (dAB, 2.9, 0)])
-    out += dashed(axis_pts, HAIR, G3, 4, 3)
-    out += draw_disc(cam, washer, edge=G3, cap_edge=G4)
-    out.append(loop(washer.cap(cam, ring(0.6, 20)), HAIR, G3))
-    out += dashed(cam.ps([(dAB, 3.25, 0), (dAB, 0.9 + lift, 0)]), HAIR, G3, 4, 3)
-    # A seated on its arbor
-    arbA, _ = cylinder(cam, (0, 0, 0), (0, 1, 0), 0.6, 2.4, edge=G3, cap_edge=G4)
+    # A's arbor below it, then A
+    arbA, _ = cylinder(cam, (0, -2.4, 0), (0, 1, 0), 0.55, 2.4, edge=G3, cap_edge=G4)
+    out += arbA[:1]
     out += draw_disc(cam, gA)
-    out.append(loop(gA.cap(cam, ring(rpA - 1.25 - 0.45, 40)), HAIR, G3))
-    out.append(loop(gA.cap(cam, ring(0.6, 20)), HAIR, G3))
-    # assembly line: from B's meshing gap down to its place beside A's tooth 0
-    gapB = (dAB - (rpB - 0.2), 0, 0)
-    out += dashed(cam.ps([add(gapB, (0, 0.9 + lift, 0)), add(gapB, (0, 2.0, 0))]), HAIR, G2, 3, 3)
+    out.append(loop(gA.cap(cam, ring(rpA - 1.25 - 0.4, 40)), HAIR, G3))
+    out.append(loop(gA.cap(cam, ring(0.55, 18)), LINE, G4))
+    # B's arbor and washer stand where B came off, beside A's tooth 0
+    arbB, _ = cylinder(cam, (dAB, -2.4, 0), (0, 1, 0), 0.55, 2.9, edge=G3, cap_edge=G4)
+    out += arbB
+    washer = Disc((dAB, 0.5, 0), X, Z, ring(1.5, 32), 0.3)
+    out += draw_disc(cam, washer, edge=G3, cap_edge=G4)
+    out.append(loop(washer.cap(cam, ring(0.55, 18)), HAIR, G3))
+    # assembly lines: B's axis, and B's meshing gap down to its place
+    out += dashed(cam.ps([(dAB, 0.8, 0), (dAB, lift, 0)]), HAIR, G4, 4, 3)
+    gap = rpB - 0.3
+    out += dashed(cam.ps([(dAB - gap, lift, 0), (dAB - gap, T, 0)]), HAIR, G4, 4, 3)
     out += draw_disc(cam, gB)
-    out.append(loop(gB.cap(cam, ring(rpB - 1.25 - 0.45, 60)), HAIR, G3))
-    out.append(loop(gB.cap(cam, ring(0.6, 20)), HAIR, G3))
-    # wear marks: per step k, a radial score on A's tooth i and on B's tooth j
-    rot_B = math.pi + math.pi / TEETH_B
+    out.append(loop(gB.cap(cam, ring(rpB - 1.25 - 0.4, 60)), HAIR, G3))
+    out.append(loop(gB.cap(cam, ring(0.55, 18)), LINE, G4))
 
-    def marks(g, N, rot, rp, partners, k_list_fn, bright_k=None):
+    def grooves(g, N, rot, rp, owner, bright_k=None):
         o = []
-        r_in = rp - 1.25 - 0.45
+        r0, r1 = 1.05, rp - 1.25 - 0.75
+        pitch = 2 * math.pi / N
         for t in range(N):
-            ks = k_list_fn(t)
+            ks = [k for k in range(CYCLE) if owner(k) == t]
             for idx, k in enumerate(ks):
-                off = (idx - (len(ks) - 1) / 2) * 0.32 * 2 * math.pi / N
-                a = rot + t * 2 * math.pi / N + off
-                L = 0.5 + 2.1 * semis(degree(k)) / 23
-                p0 = (r_in * math.cos(a), r_in * math.sin(a))
-                p1 = ((r_in - L) * math.cos(a), (r_in - L) * math.sin(a))
+                lane = (idx - (len(ks) - 1) / 2) * 0.3 * pitch
+                a = rot + t * pitch + lane
+                r = r0 + (r1 - r0) * semis(degree(k)) / 23
+                span = 0.11 * pitch * (rp / r) ** 0.5
+                arc_ = [(r * math.cos(a + span * s), r * math.sin(a + span * s)) for s in (-1, -0.5, 0, 0.5, 1)]
                 br = k == bright_k
-                o.append(ribbon(g.cap(cam, [p0, p1]), SUBJ if br else HAIR, G7 if br else G5))
+                o.append(ribbon(g.cap(cam, arc_), SUBJ if br else LINE, G7 if br else G5))
         return o
-    out += marks(gB, TEETH_B, rot_B, rpB, 2, lambda j: [k for k in range(CYCLE) if k % TEETH_B == j])
-    out += marks(gA, TEETH_A, 0.0, rpA, 3, lambda i: [k for k in range(CYCLE) if k % TEETH_A == i],
-                 bright_k=CYCLE - 1)
+    out += grooves(gB, TEETH_B, rotB, rpB, lambda k: k % TEETH_B)
+    out += grooves(gA, TEETH_A, 0.0, rpA, lambda k: k % TEETH_A, bright_k=CYCLE - 1)
     return frame(out)
 
 
@@ -569,9 +563,9 @@ def v3():
     """Single-weight contour: the mesh itself at large scale. A rises from the
     bottom edge, B comes down from beyond the top; one tooth of B sits in A's
     gap at the pitch point. The rest of both wheels is left to the frame."""
-    m = 21.0
+    m = 19.0
     rpA, rpB = m * TEETH_A / 2, m * TEETH_B / 2
-    P = (240.0, 128.0)                                   # pitch point
+    P = (240.0, 110.0)                                   # pitch point
     cA = (P[0], P[1] + rpA)
     cB = (P[0], P[1] - rpB)
     w = LINE

@@ -401,7 +401,191 @@ def v1() -> Frame:
     return fr
 
 
-VARIANTS = {"v1": v1}
+# ================================================================= v2
+def v2() -> Frame:
+    """One scene: a telegraph line running away over open ground, the old relay chain that
+    handed a signal from station to station. The poles are the stages; the note is a lit
+    stretch of wire between two of them, its recirculations dimmer stretches further on.
+    Single-weight contour: the scene in one 1.5 px line, the pulse heavier, distance in hairline."""
+    fr = Frame("v2 · the relay line")
+    st, lk, ck, fb = D["stages"], D["leak"], D["clock"], D["feedback"]
+    rnd = random.Random(11)
+
+    npoles = round(7 + 13 * st)                       # 7 .. 20 poles to the horizon
+    L = 150.0
+    span = L / (npoles - 1)
+    xs = [k * span * (1 + ck * 0.55 * (rnd.random() - 0.5) * 2) if 0 < k < npoles - 1 else k * span
+          for k in range(npoles)]
+    lean = [ck * 9 * (rnd.random() - 0.5) * 2 for _ in range(npoles)]
+    broken = {k for k in range(1, npoles - 1) if rnd.random() < lk * 0.5}
+    H, arm = 9.0, 2.2
+
+    cam = Camera(eye=(-14, -19, 7.5), target=(40, 6, 3.5))
+    cam.fit([(0, 0, 0), (0, 0, H + 0.6), (L, 0, 0), (L, 0, H), (-6, 0, 0)], (24, 48, 470, 206))
+
+    def top(k, dy):
+        a = math.radians(lean[k])
+        return (xs[k] + math.sin(a) * H, dy, H * math.cos(a))
+
+    # ground: the horizon and a low rise behind the line, hairline
+    hz = [cam.p((x, 400, 0)) for x in (-200, 600)]
+    fr.line((0, hz[0][1]), (480, hz[1][1]), HAIR, G2)
+    rise = [cam.p((x, 260, 9 * math.exp(-((x - 230) / 120) ** 2) + 3 * math.sin(x / 37) + 3)) for x in range(-150, 560, 12)]
+    fr.ribbon([p for p in rise if -10 < p[0] < 490], HAIR, G2)
+    # a track beside the line, single contour on each side
+    for dy in (-5.0, -8.5):
+        fr.ribbon(cam.ps([(-8, dy, 0), (L + 40, dy, 0)]), HAIR if dy < -6 else LINE, G3)
+
+    lv = passes(fb)
+    pulse_at = [1 + round(k * (npoles - 2) / max(1, len(lv))) for k in range(len(lv))]
+
+    # wires: two per span, from the crossarm tips, with sag; far spans in hairline
+    for k in range(npoles - 1):
+        for side, dy in enumerate((-arm, arm)):
+            a, b = top(k, dy), top(k + 1, dy)
+            sag = 0.45 + (2.6 if (k in broken and side == 0) else 0)
+            pts = []
+            for j in range(13):
+                t = j / 12
+                p = (a[0] + (b[0] - a[0]) * t, dy, a[2] + (b[2] - a[2]) * t - 4 * sag * t * (1 - t))
+                pts.append(cam.p(p))
+            w = LINE if xs[k] < 60 else HAIR
+            colour = G4 if xs[k] < 60 else G3
+            if side == 0 and k in pulse_at:
+                i = pulse_at.index(k)
+                colour, w = (G7, SUBJ) if i == 0 else ((G5, LINE) if i == 1 else (G4, LINE))
+            fr.ribbon(pts, w, colour)
+    # poles, near ones in the contour weight, far ones in hairline
+    for k in range(npoles):
+        base = cam.p((xs[k], 0, 0))
+        tp = cam.p(top(k, 0))
+        w, colour = (LINE, G4) if xs[k] < 60 else (HAIR, G3)
+        fr.line(base, tp, w + (0.5 if xs[k] < 20 else 0), colour)
+        a = math.radians(lean[k])
+        arm_z = H * math.cos(a) - 0.9
+        ca = cam.p((xs[k] + math.sin(a) * (H - 0.9), -arm - 0.4, arm_z))
+        cb = cam.p((xs[k] + math.sin(a) * (H - 0.9), arm + 0.4, arm_z))
+        fr.line(ca, cb, w, colour)
+    return fr
+
+
+# ================================================================= v3
+def sphere_disc(cam, c, r, n=40):
+    """Screen outline of a sphere: its centre projected, radius from distance."""
+    cx, cy = cam.p(c)
+    rr = r * cam.f / cam.depth(c)
+    return (cx, cy, rr), [(cx + rr * math.cos(2 * math.pi * k / n), cy + rr * math.sin(2 * math.pi * k / n))
+                          for k in range(n)]
+
+
+def crescent(cx, cy, r, light=(-0.6, -0.8), k=0.45, n=20):
+    """The shadow side of a lit ball: the far half of its outline back along an offset arc."""
+    a0 = math.atan2(-light[1], -light[0])
+    outer = [(cx + r * math.cos(a0 - math.pi / 2 + math.pi * j / n), cy + r * math.sin(a0 - math.pi / 2 + math.pi * j / n))
+             for j in range(n + 1)]
+    # terminator as a flattened half-ellipse on the dark side
+    term = []
+    for j in range(1, n):
+        t = math.pi * j / n
+        u = math.cos(t)                         # along the terminator's long axis
+        v = math.sin(t) * k                     # bulge toward the dark side
+        ax, ay = math.cos(a0 + math.pi / 2), math.sin(a0 + math.pi / 2)
+        dx, dy = math.cos(a0), math.sin(a0)
+        term.append((cx + r * (ax * u + dx * v), cy + r * (ay * u + dy * v)))
+    return outer + term
+
+
+def v3() -> Frame:
+    """The machine's rule on a real object: a long cradle of hanging steel balls. Knock
+    one end and the blow is handed ball to ball down the row and out the other end,
+    then swings back in. Each ball is a stage; stages adds balls, leak dents some so
+    they soak up the blow, clock hangs them unevenly, feedback is how far the input
+    ball swings back up as the output returns. Hatched mass: shadow sides in hatching."""
+    fr = Frame("v3 · a cradle of stages")
+    st, lk, ck, fb = D["stages"], D["leak"], D["clock"], D["feedback"]
+    rnd = random.Random(5)
+
+    n = round(7 + 11 * st)                     # 7 .. 18 balls
+    r = 1.0
+    L = 30.0                                   # the frame stays one length; balls get smaller
+    r = min(1.3, L / (2 * n + 1))
+    pitch = 2 * r
+    xs = []
+    x = r
+    for i in range(n):
+        xs.append(x)
+        x += pitch + ck * r * 0.9 * rnd.random()
+    x0 = (L - (xs[-1] + r)) / 2
+    xs = [v + x0 for v in xs]
+    drop = [ck * 1.6 * (rnd.random() - 0.5) * 2 for _ in range(n)]
+    dented = {i for i in range(1, n - 1) if rnd.random() < lk * 0.5}
+    top, wide, hang = 10.0, 3.2, 8.0
+
+    out_a = math.radians(42)                   # the note leaving at the output end
+    back_a = math.radians(6 + 34 * fb)         # what comes back round to the input
+
+    def ball(i):
+        pivot_z = top
+        l = hang + drop[i]
+        if i == n - 1:
+            return (xs[i] + l * math.sin(out_a), 0, pivot_z - l * math.cos(out_a)), (xs[i], pivot_z)
+        if i == 0:
+            return (xs[i] - l * math.sin(back_a), 0, pivot_z - l * math.cos(back_a)), (xs[i], pivot_z)
+        return (xs[i], 0, pivot_z - l), (xs[i], pivot_z)
+
+    cam = Camera(eye=(L * 0.5 - 9, -42, 13), target=(L * 0.5, 0, 4))
+    cam.fit([(-2.5, -wide, -1), (L + 2.5, wide, -1), (-2.5, -wide, top + 0.4), (L + 2.5, wide, top + 0.4),
+             (-hang * 0.8, 0, 2), (L + hang * 0.8, 0, 2)], (34, 34, 446, 206))
+
+    # the frame: base slab and two end posts, hatched mass on their shadow faces
+    base = box_corners((-2.5, -wide - 1, -1.6), (L + 5, 0, 0), (0, 2 * wide + 2, 0), (0, 0, 0.6))
+    for name, W, S in visible_faces(cam, base):
+        fr.face(S, G3, LINE)
+        if name == "y0":
+            fr.hatch(S, G2)
+    # back rail first (behind the balls), then strings, balls, front rail
+    def rail(dy):
+        return [cam.p((-2.5, dy, top)), cam.p((L + 2.5, dy, top))]
+    posts = []
+    for px in (-2.5, L + 2.5):
+        for dy in (-wide, wide):
+            posts.append((px, dy))
+    for px, dy in posts:
+        if dy > 0:
+            fr.line(cam.p((px, dy, -1)), cam.p((px, dy, top)), LINE, G3)
+    fr.ribbon(rail(wide), LINE, G3)
+
+    centres = [ball(i) for i in range(n)]
+    for i, (c, (px, pz)) in enumerate(centres):   # strings from each rail to the ball top
+        for dy in (wide, -wide):
+            fr.line(cam.p((px, dy, pz)), cam.p((c[0], 0, c[2] + r)), HAIR, G3)
+    order = sorted(range(n), key=lambda i: -cam.depth(centres[i][0]))
+    for i in order:
+        c = centres[i][0]
+        (cx, cy, rr), disc = sphere_disc(cam, c, r)
+        if i == n - 1:
+            fr.face(disc, G7, SUBJ)
+        else:
+            fr.face(disc, G5 if i == 0 else G4, LINE)
+        cres = crescent(cx, cy, rr - 1.2)
+        fr.hatch(cres, G3 if i != n - 1 else G4, gap=3.2)
+        if i in dented:   # a dent: a flat on the lit side, hatched as lost mass
+            a = [(cx - rr * 0.75, cy - rr * 0.65), (cx - rr * 0.1, cy - rr * 1.0), (cx - rr * 0.3, cy - rr * 0.35)]
+            fr.face(a, G4, HAIR + 0.5)
+    for px, dy in posts:
+        if dy < 0:
+            fr.line(cam.p((px, dy, -1)), cam.p((px, dy, top)), LINE, G4)
+    fr.ribbon(rail(-wide), LINE, G4)
+    # swing arcs: where the two end balls travel, hairline
+    for i, a1 in ((n - 1, out_a), (0, -back_a)):
+        px, pz = centres[i][1]
+        l = hang + drop[i]
+        arc_pts = [cam.p((px + l * math.sin(a1 * t), 0, pz - l * math.cos(a1 * t))) for t in [j / 10 for j in range(11)]]
+        fr.dashed(arc_pts, HAIR, G3, on=3, off=3)
+    return fr
+
+
+VARIANTS = {"v1": v1, "v2": v2, "v3": v3}
 
 
 def main() -> None:

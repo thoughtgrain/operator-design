@@ -386,7 +386,7 @@ def v1() -> Frame:
         F.shape([(x - 3.2, top + 4), (x + 3.2, top + 4), (x + 3.2, plank), (x - 3.2, plank)], G4, WT)
         F.shape(ellipse(x, top, 6.5, 5.5, 20), G3, WT)
 
-    def drape(a, b, sag_k=0.30, lift=0.0):
+    def drape(a, b, sag_k=0.62, lift=0.0):
         xa, xb = px[a], px[b]
         L = abs(xb - xa)
         sag = sag_k * L ** 0.92
@@ -394,18 +394,18 @@ def v1() -> Frame:
         for k in range(25):
             t = k / 24
             xx = xa + (xb - xa) * t
-            yy = top + 3 + lift + sag * (4 * t * (1 - t)) ** 0.95
+            yy = top + 3 + lift * (1 - 0.6 * abs(2 * t - 1)) + sag * (4 * t * (1 - t)) ** 0.95
             pts.append((xx, yy))
         return pts
 
     # fallen strands (fade): old threads slipped off one peg and hanging past the board
-    hang = [(7, 1.0, 46.0), (9, -1.0, 58.0)]
+    hang = [(7, 1.0, 22.0), (9, -1.0, 34.0)]
     for peg, side, depth in hang[: 2 if FADE < 0.5 else 1]:
         x = px[peg]
         pts = [(x + side * 3, top + 4)]
         for k in range(1, 22):
             t = k / 21
-            pts.append((x + side * (3 + 14 * math.sin(t * 1.6)), top + 4 + t * (plank + 30 - top)))
+            pts.append((x + side * (3 + 12 * math.sin(t * 1.4)), top + 4 + t * (depth + 34)))
         F.line(pts, WT, G4)
     # live strands: each walked edge carries a bundle (scent: strands per edge)
     edges = {}
@@ -414,18 +414,17 @@ def v1() -> Frame:
         edges[key] = edges.get(key, 0) + 1
     order = sorted(edges, key=lambda e: e[1] - e[0], reverse=True)
     for (a, b) in order:
-        strands = 1 + int(SCENT * 2.0 + 0.2 * edges[(a, b)])
+        strands = 1 + int(SCENT * 1.6 + 0.2 * edges[(a, b)])
         for k in range(strands):
-            F.line(drape(a, b, lift=k * 3.2), WT, G0, bound=(k == 0))
+            F.line(drape(a, b, lift=k * 3.6), WT, G0 if k == 0 else G2, bound=(k == 0))
     # one stray single strand from the wandering part of the walk
-    F.line(drape(5, 6, sag_k=0.42), WT, G3)
+    F.line(drape(5, 6, sag_k=0.9), WT, G3)
     # ants: contour ants walking the strands
-    spots = [((0, 2), 0.42), ((3, 5), 0.6), ((2, 3), 0.5), ((1, 2), 0.35)]
+    spots = [((0, 2), 0.3), ((3, 5), 0.68), ((2, 4), 0.62), ((5, 4), 0.5)]
     for (a, b), t in spots[:N_ANTS]:
         pts = drape(a, b, lift=0)
         (x, y), ang = point_along(pts, t)
-        nx, ny = math.sin(ang), -math.cos(ang)
-        ant_plan(F, x + nx * 0.5, y - 6, ang, 18, G2, WT, legs=G3)
+        ant_side(F, x, y - 1, 22, G2, WT, legs=G3, facing=1 if b > a else -1)
     return F
 
 
@@ -459,23 +458,26 @@ def v2() -> Frame:
     # trail: from the sting tip down to the ground and back along it; fade sets where it dies
     tipa = grot + math.pi
     tip = (gx + (grx + 2) * math.cos(tipa), gyc + (grx + 2) * math.sin(tipa))
-    fresh_end = 92.0
-    dead_end = 8 + FADE * 60
+    fresh_end = 66.0
+    dead_end = 8 + FADE * 50
     trail = [tip, (tip[0] - 4, gy - 4), (tip[0] - 12, gy - 1.2)] + [(x, gy - 1.2) for x in range(int(tip[0]) - 20, int(fresh_end), -10)] + [(fresh_end, gy - 1.2)]
     F.line(trail, SUBJ, G0, bound=True)
     # evaporating stretch: hatched band, there but fading
     F.hatch([(dead_end, gy - 7), (fresh_end, gy - 7), (fresh_end, gy - 0.5), (dead_end, gy - 0.5)], G4, gap=4)
     # followers: small ants walking the trail (ants: count)
     for k in range(N_ANTS - 1):
-        ant_side(F, 116 - k * 26 + 46, gy - 1.5, 20, G3, HAIR, legs=G4)
+        ant_side(F, 120 - k * 30, gy - 1.5, 25, G3, HAIR, legs=G4)
     # hatched masses: head and mesosoma
     for part in (head, meso, petiole):
         F.shape(part, G3, LINE)
         F.hatch(part, G5, gap=4.5, inset=1.5)
     # gaster cut open: wall hatched (cut material), interior black with the gland
     F.shape(gaster, G3, LINE)
-    F.hatch(gaster, G4, gap=3.2, holes=[inner], inset=1.2)
-    F.shape(inner, G4, HAIR)
+    # the cut: a section plane takes away the lower rear of the wall, so the inside shows
+    c, s_ = math.cos(grot), math.sin(grot)
+    window = [p for p in inner if ((p[0] - gx) * -s_ + (p[1] - gyc) * c) > -14]
+    F.hatch(gaster, G4, gap=3.2, holes=[window], inset=1.2)
+    F.shape(window, G3, HAIR)
     for k in (1, 2, 3):                                     # segment plates on the cut wall
         a = grot + math.pi / 2 - 0.15 + 0.0
         u = -0.55 + 0.42 * k
