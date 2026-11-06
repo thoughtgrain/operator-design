@@ -29,6 +29,7 @@ the bell rises to meet it). It lights for the swing and falls back still.
     python3 screens/ringer/frames/build.py            # frames, pngs, sheets, gif
     python3 screens/ringer/frames/build.py --svg-only
     python3 screens/ringer/frames/build.py --check     # lint + perceptibility (scratch, removed)
+    python3 screens/ringer/frames/build.py --budget    # node plan and changed nodes per frame
 
 Needs shapely (silhouette of the swung bell), rsvg-convert, Pillow.
 """
@@ -375,7 +376,7 @@ def hangers(fr, R, cx, colour):
     w = 0.11 * R
     for sgn in (-1, 1):
         if w < 5:
-            x = sgn * (hx + 1.0)
+            x = sgn * hx
             fr.ribbon([P(x, BEAM_DROP, -BEAM_D * 0.2, cx), P(x, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx)], LINE, colour)
             continue
         xa, xb = sorted((sgn * hx, sgn * (hx + w)))
@@ -554,6 +555,68 @@ def png(svg, out=None):
     return out
 
 
+NODES_PER_BELL = 10   # hangers 2, headstock, body, shoulder, waist, bow, outline, mouth, flight
+STATIC_BODY = 6       # hidden while the bell swings: body, three bands, outline, mouth
+LIT_NODES = 2         # repainted when a bell lights or dims while swinging: headstock, flight
+                      # (its other lit parts are the paths, or are hidden / re-shown dim anyway)
+
+
+def trade_start(j, k, blow):
+    """When a bell moving from place k+1 to j+1 starts its trade, after its own blow: once
+    both bells of the pair have struck, half a blow into the next bell's swing (so a trade
+    never starts on the same frame as a swing hand-over)."""
+    return 1.5 * blow if j < k else 2.5 * blow
+
+
+def schedule(c, rows_n=4, bpm=120.0):
+    """Blow times and trades for rows_n changes at control state c, as the device would run
+    them: blows every 60/bpm/pace s, an open-lead gap before handstroke rows, a swing of
+    T = min(0.24 s, 0.95 blow), and each pair trading over min(0.15 s, one blow) once both
+    of its bells have struck."""
+    n = n_bells(c["bells"])
+    blow = 60 / bpm / pace_value(c["pace"])
+    T = min(0.24, 0.95 * blow)
+    trade = min(0.15, blow)
+    rows = rows_of(METHODS[method_index(c["method"])], n, ROW_INDEX + rows_n + 1)[ROW_INDEX:]
+    events, moves, t = [], [], 0.0
+    for r in range(rows_n):
+        cur, nxt = rows[r], rows[r + 1]
+        if (ROW_INDEX + r) % 2 == 0:
+            t += c["stroke"] * blow
+        for k, b in enumerate(cur):
+            events.append((t, b))
+            j = nxt.index(b)
+            if j != k:
+                moves.append((t + trade_start(j, k, blow), b))
+            t += blow
+    return events, moves, T, trade, t
+
+
+def budget(c, bpm=120.0, fps=60):
+    """Changed nodes per frame while ringing (average, peak), counted the way display.cpp
+    would apply them: a bell that moves sets all its nodes, a swing re-keys the four paths
+    each frame and hides / shows the bell's static body, lighting repaints."""
+    events, moves, T, trade, end = schedule(c, bpm=bpm)
+    counts = []
+    prev_swing, prev_lit = None, None
+    for i in range(int(end * fps)):
+        now = i / fps
+        swing = next((b for t0, b in events if t0 <= now < t0 + T), None)
+        lit = swing
+        k = 4 if swing is not None else 0                    # four mutable outlines re-keyed
+        if swing != prev_swing:
+            if prev_swing is not None:
+                k += STATIC_BODY + 4                            # show its body again, park the paths
+            if swing is not None:
+                k += STATIC_BODY                                # hide the next bell's body
+        if lit != prev_lit:
+            k += LIT_NODES * ((lit is not None) + (prev_lit is not None))
+        k += NODES_PER_BELL * sum(1 for t0, b in moves if t0 <= now < t0 + trade)
+        counts.append(k)
+        prev_swing, prev_lit = swing, lit
+    return sum(counts) / len(counts), max(counts)
+
+
 def ease_out(t):
     return 1 - (1 - min(max(t, 0), 1)) ** 3
 
@@ -581,8 +644,7 @@ def motion(tmp, fps=25):
             events.append((t, b))
             j = nxt.index(b)
             if j != k:                                     # trades once both of the pair have struck
-                start = t + T if j < k else t + blow + T
-                moves.append((start, b, xs_cur[k], xs_nxt[j]))
+                moves.append((t + trade_start(j, k, blow), b, xs_cur[k], xs_nxt[j]))
             t += blow
     end = t + 0.6
     frames = []
@@ -637,15 +699,15 @@ def sheets():
 
 
 def playing_frame():
-    """A representative frame mid-row at the defaults: the bell in third place at the top
-    of its swing, the first two (already struck) halfway through trading places."""
+    """A representative frame mid-row at the defaults, timed by trade_start: the bell in
+    fourth place at the top of its swing, the first two (struck earlier) already traded."""
     c = dict(DEFAULTS)
     rows = rows_of("bob", n_bells(c["bells"]), ROW_INDEX + 2)
     row, nxt = rows[ROW_INDEX], rows[ROW_INDEX + 1]
     xs, _, _ = layout(c, row)
     xn, _, _ = layout(c, nxt)
-    pos = {b: (xs[k] + xn[nxt.index(b)]) / 2 for k, b in enumerate(row[:2])}
-    return draw(c, row, "playing", swing=(row[2], SWING_MAX), positions=pos, lit=row[2])
+    pos = {b: xn[nxt.index(b)] for b in row[:2]}
+    return draw(c, row, "playing", swing=(row[3], SWING_MAX), positions=pos, lit=row[3])
 
 
 def check():
@@ -674,7 +736,23 @@ def check():
         shutil.rmtree(tmp)
 
 
+def report_budget():
+    total = 4 + 2 + 18 + 12 * NODES_PER_BELL
+    print(f"nodes: 4 paths x 48 points + beam 2 + open-lead hatch pool 18 + 12 bells x {NODES_PER_BELL} = {total}")
+    for label, c in [("defaults", DEFAULTS),
+                     ("12 bells", {**DEFAULTS, "bells": 1.0}),
+                     ("pace 8", {**DEFAULTS, "pace": 1.0}),
+                     ("12 bells, pace 8, camb", {"bells": 1.0, "method": 1.0, "pace": 1.0, "stroke": 0.0}),
+                     ("12 bells, pace 8, hunt", {"bells": 1.0, "method": 0.0, "pace": 1.0, "stroke": 0.0})]:
+        for bpm in (90, 120, 180):
+            avg, peak = budget(c, bpm)
+            print(f"  {label:24s} {bpm:3d} bpm: {avg:5.1f} avg, {peak:3d} peak")
+
+
 def main():
+    if "--budget" in sys.argv:
+        report_budget()
+        return
     if "--check" in sys.argv:
         check()
         return

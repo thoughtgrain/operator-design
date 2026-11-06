@@ -151,20 +151,20 @@ SLOT_X0, SLOT_X1 = BX0 + 0.45, BX1 - 0.45
 TIP_Z = 0.3                                 # the comb's tips line up here, where the picks reach
 BAR_Z = -1.18                                 # the comb's bar, stepped: long tines root further forward
 COMB_X0, COMB_X1 = SLOT_X0 + 0.15, SLOT_X1 - 0.15
-CRANK_C = (BX1 - 1.15, BY0 + 0.45, BZ0)        # the crank's boss, on the front face
-CRANK_R = 1.12
+CRANK_C = (BX1 - 0.95, BY0 + 0.55, BZ0)        # the crank's boss, on the front face
+CRANK_R = 1.45
 
 # ------------------------------------------------------------------ the flock on its rods
 # Eight birds on four tiers, two a tier, the pair on a tier always more than a bird's length
 # apart along the slot (their offsets differ by 1.2), so they can't touch at any cohere.
 # offset o (-1..1) along the flock's spread, tier height (rod length above the lid), a small jitter.
 # The tiers rise left to right in two runs, so each bird's raised wing (it points back, to the left)
-# opens away from its neighbour: neighbours are a tier (0.7) apart and the higher one is ahead.
-TIER = {"A": 0.9, "B": 1.6, "C": 2.3, "D": 3.0}
+# opens away from its neighbour: neighbours are a tier (0.67) apart and the higher one is ahead.
+TIER = {"A": 0.9, "B": 1.57, "C": 2.24, "D": 2.91}
 BIRDS = [(-1.00, "A", 0.00), (-0.75, "B", 0.03), (-0.45, "C", 0.00), (-0.20, "D", -0.03),
          (0.20, "A", 0.03), (0.45, "B", -0.02), (0.75, "C", 0.02), (1.00, "D", 0.00)]
 # scatter: these three break away (slide out along the slot and lean out); sign = which way
-STRAYS = {0: -1, 1: -1, 7: +1}
+STRAYS = {0: -1, 6: +1, 7: +1}
 LEAN_MAX = math.radians(32)
 SLIDE_MAX = 0.9
 BIRD_LEN = 0.9                                # world units, beak to tail
@@ -224,13 +224,13 @@ BODY = [(0.54, 0.13), (0.54, 0.115), (0.43, 0.09), (0.38, 0.05), (0.30, -0.03), 
         (-0.38, 0.13), (-0.20, 0.15), (-0.02, 0.17), (0.12, 0.175), (0.20, 0.19), (0.28, 0.26),
         (0.38, 0.26), (0.45, 0.19)]
 SHOULDER = (0.08, 0.13)
-WING = [(-0.03, -0.045), (0.16, -0.06), (0.40, -0.05), (0.60, -0.014), (0.60, 0.014), (0.38, 0.06),
-        (0.14, 0.085), (-0.03, 0.06)]           # along +u from the shoulder; +v is the leading edge
+WING = [(-0.03, -0.05), (0.16, -0.075), (0.40, -0.065), (0.60, -0.016), (0.60, 0.016), (0.40, 0.09),
+        (0.16, 0.125), (-0.03, 0.08)]           # along +u from the shoulder; +v is the leading edge
 
 
 def wing_angle(speed: float) -> float:
     """Degrees from the beak direction, anticlockwise: folded along the back at 0.25, raised at 4.00."""
-    return 184 - 72 * speed
+    return 186 - 82 * speed
 
 
 def _place(pts, top, lean, bob):
@@ -354,14 +354,14 @@ def draw(st: State, title: str) -> Frame:
     ux, uy = math.sin(ang), -math.cos(ang)
     nx, ny = -uy, ux
     tip = (cc[0] + R * ux, cc[1] + R * uy)
-    rb, rt = 7.5, 3.6
+    rb, rt = 8.0, 4.0
     arm = [(cc[0] + rb * (math.cos(a) * nx - math.sin(a) * ux), cc[1] + rb * (math.cos(a) * ny - math.sin(a) * uy))
            for a in [math.radians(t) for t in range(0, 181, 15)]]
     arm += [(tip[0] - nx * rt, tip[1] - ny * rt), (tip[0] + nx * rt, tip[1] + ny * rt)]
     F.poly(arm, G0, G5, LINE)
     F.poly([(cc[0] + 2.8 * math.cos(2 * math.pi * k / 12), cc[1] + 2.8 * math.sin(2 * math.pi * k / 12))
             for k in range(12)], G5)
-    F.poly([(tip[0] + 6.5 * math.cos(2 * math.pi * k / 24), tip[1] + 6.5 * math.sin(2 * math.pi * k / 24))
+    F.poly([(tip[0] + 7.5 * math.cos(2 * math.pi * k / 24), tip[1] + 7.5 * math.sin(2 * math.pi * k / 24))
             for k in range(24)], G0, G5, LINE)
 
     # --- rods (each with its pick, a short leg from the foot forward over the comb's tips), then the birds

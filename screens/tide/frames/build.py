@@ -3,6 +3,7 @@
 
     python3 screens/tide/frames/build.py            # rest + per-control frames (svg + png)
     python3 screens/tide/frames/build.py --motion   # also motion.gif, motion-sheet.png, budget numbers
+                                                    # (--keep leaves the per-frame renders in _motion_tmp/)
     python3 screens/tide/frames/build.py --budget   # only the redraw simulation, printed
 
 Everything is one 3D scene (x right, y away from the viewer, z up) through one camera:
@@ -162,62 +163,12 @@ def build_raft():
         if best is None:
             raise SystemExit(f"spent foam: only {len(spent)} fit")
         x, y, r = best
-        b = {"k": 0, "r": r, "x": x, "y": y, "z": 0.0, "kind": "spent", "host": None}
+        b = {"k": 0, "r": r, "x": x, "y": y, "z": 0.0, "kind": "spent"}
         spent.append(b)
         allb.append(b)
-    # foam that lasts piles up: small bubbles stacked on the backs of the big ones, peeking over the raft
-    stacked = []
-    tries = 0
-    while len(stacked) < 0 and tries < 4000:
-        tries += 1
-        host = rnd.choices(voiced[:5], weights=[5, 3, 2, 1.2, 1])[0]
-        r = rnd.uniform(0.09, 0.15)
-        az = math.radians(rnd.choice([rnd.uniform(15, 70), rnd.uniform(110, 165)]))           # round the back
-        el = math.radians(rnd.uniform(15, 45))
-        d = (host["r"] + r) * 1.01
-        P = (host["x"] + d * math.cos(el) * math.cos(az), host["y"] + d * math.cos(el) * math.sin(az), d * math.sin(el))
-        if any(math.dist(P, (b["x"], b["y"], b.get("z", 0.0))) < (r + b["r"]) * 1.03 for b in allb + stacked if b is not host):
-            continue
-        # how much of it shows over the nearer domes (sample its outline)
-        ring = CAM.ps(sphere_contour(P, r, 24))
-        dP = CAM.depth(P)
-        vis = 0
-        for q in ring:
-            cover = False
-            for b in allb + stacked:
-                bz = b.get("z", 0.0)
-                if CAM.depth((b["x"], b["y"], bz)) < dP:
-                    bc = CAM.p((b["x"], b["y"], bz))
-                    br = CAM.f * b["r"] / CAM.depth((b["x"], b["y"], bz))
-                    if math.dist(q, bc) < br and (bz > 0 or q[1] < bc[1]):
-                        cover = True
-                        break
-            vis += not cover
-        if not 0.3 <= vis / len(ring) <= 0.65:
-            continue
-        # off the crown (two on top read as ears), and clear of every lit edge's light
-        hc, hr = CAM.p((host["x"], host["y"], 0)), CAM.f * host["r"] / CAM.depth((host["x"], host["y"], 0))
-        if abs(CAM.p(P)[0] - hc[0]) < 0.6 * hr:
-            continue
-        if any(CAM.p(P)[1] < bc[1] - 0.8 * br for bc, br in [(CAM.p((b["x"], b["y"], 0)), CAM.f * b["r"] / CAM.depth((b["x"], b["y"], 0))) for b in voiced]
-               if abs(CAM.p(P)[0] - bc[0]) < br):
-            continue
-        mine = CAM.p(P), CAM.f * r / dP
-        if any(math.dist(mine[0], CAM.p((b["x"], b["y"], b["z"]))) < 0.75 * (mine[1] + CAM.f * b["r"] / CAM.depth((b["x"], b["y"], b["z"])))
-               for b in stacked):
-            continue
-        stacked.append({"k": 0, "r": r, "x": P[0], "y": P[1], "z": P[2], "kind": "spent", "host": host})
-    # the order they linger in as depth rises: floating and stacked foam alternate
-    order = []
-    fl, st = list(spent), list(stacked)
-    while fl or st:
-        if fl:
-            order.append(fl.pop(0))
-        if st and (len(order) % 3 != 1 or not fl):
-            order.append(st.pop(0))
-    for i, b in enumerate(order):
+    # the order they linger in as depth rises: the placement order, nearest the raft first
+    for i, b in enumerate(spent):
         b["order"] = i
-    spent = order
     for i, b in enumerate(voiced + spent):
         b["seed"] = random.Random(100 + i).uniform(0, 2 * math.pi)
         b.setdefault("z", 0.0)
@@ -262,18 +213,9 @@ VOICED, SPENT = build_raft()
 BUBBLES = VOICED + SPENT
 
 
-def stacked_parts(b):
-    """A spent bubble resting on a big one's back: a whole small sphere, drawn hollow (black body,
-    mid-grey outline); the host's dome, nearer, hides its lower half."""
-    P = (b["x"], b["y"], b["z"])
-    ring = CAM.ps(sphere_contour(P, b["r"], 40))
-    centre = CAM.p(P)
-    return {"centre": centre, "dome": dedupe(ring, 0.3), "rp": CAM.f * b["r"] / CAM.depth(P)}
-
-
 def bubble_parts(b):
     """Dome (black body), waterline (hairline, front half), lit edge (tapered ribbon along the back
-    edge, lit by the real 3D light with neighbours' shadows), inner reflection (big bubbles)."""
+    edge, lit by the real 3D light with neighbours' shadows)."""
     c = (b["x"], b["y"], 0.0)
     r = b["r"]
     ring = sphere_contour(c, r, 96)
@@ -366,20 +308,11 @@ def bubble_parts(b):
         inner.append((x + dx / dl * w, y + dy / dl * w))
     parts["edge"] = dedupe(outer + inner[::-1], 0.15)
     parts["edge_mid"] = outer[m // 2]
-    # inner reflection: light through the dome lands on the inside of its front film, opposite the lit edge
-    if rp > 20:
-        mx, my = outer[m // 2]
-        th = math.atan2(my - centre[1], mx - centre[0]) + math.pi
-        pts = [(centre[0] + 0.68 * rp * math.cos(th + math.radians(a)), centre[1] + 0.62 * rp * math.sin(th + math.radians(a)))
-               for a in [-22 + 44 * j / 10 for j in range(11)]]
-        pts = [p for p in pts if p[1] < centre[1] - 2]
-        if len(pts) >= 3:
-            parts["refl"] = pts
     return parts
 
 
 for _b in BUBBLES:
-    _b["parts"] = stacked_parts(_b) if _b.get("host") else bubble_parts(_b)
+    _b["parts"] = bubble_parts(_b)
 
 
 def ribbon(pts, w):
@@ -411,8 +344,6 @@ def ribbon(pts, w):
 for _b in VOICED:
     p = _b["parts"]
     p["wl_rib"] = ribbon(p["wl"], HAIR)
-    if "refl" in p:
-        p["refl_rib"] = ribbon(p["refl"], HAIR)
 
 # ---------------------------------------------------------------- ripple lines (swell fronts)
 K_LINES = 30
@@ -504,7 +435,7 @@ def partial_t60(k, depth): return depth * k ** -0.5
 
 
 # ---------------------------------------------------------------- node model
-# Node order = paint order: the ripple fronts, then every bubble far to near (dome, waterline, edge, reflection).
+# Node order = paint order: the ripple fronts, then every bubble far to near (dome, waterline, edge).
 NODES = []          # (name, bubble or line index, part)
 for j in range(K_LINES):
     NODES.append(("line", j, "rib"))
@@ -515,8 +446,6 @@ for b in sorted(BUBBLES, key=lambda b: -CAM.depth((b["x"], b["y"], b["z"]))):
         NODES.append(("voiced", b, "dome"))
         NODES.append(("voiced", b, "wl"))
         NODES.append(("voiced", b, "edge"))
-        if "refl" in b["parts"]:
-            NODES.append(("voiced", b, "refl"))
 PALETTE = G[:]          # palette entry i = stock grey step i
 
 
@@ -539,7 +468,7 @@ def raft_layout(c, thetas):
     then a short relaxation pushes touching bubbles apart so none overlaps. The same few lines run on the
     device (24 bubbles, 276 pairs, a handful of passes) and only while drift is non-zero and something moves."""
     n_spent = spent_count(c["depth"])
-    live = [b for b in BUBBLES if (b["kind"] == "voiced" or b["order"] < n_spent) and not b.get("host")]
+    live = [b for b in BUBBLES if (b["kind"] == "voiced" or b["order"] < n_spent)]
     pos = {}
     for b in live:
         th = thetas[id(b)]
@@ -575,16 +504,7 @@ def raft_layout(c, thetas):
 
 
 def pose_bubble(b, c, layout, bob_px=0.0):
-    """Screen translation and uniform scale for a bubble's nodes (about its projected centre).
-    A stacked bubble rides its host: same translation, and its offset from the host scales with it."""
-    if b.get("host"):
-        h = b["host"]
-        (hdx, hdy), hs = pose_bubble(h, c, layout, bob_px)
-        hc = h["parts"]["centre"]
-        mc = b["parts"]["centre"]
-        nx = hc[0] + hdx + (mc[0] - hc[0]) * hs
-        ny = hc[1] + hdy + (mc[1] - hc[1]) * hs
-        return (nx - mc[0], ny - mc[1]), hs
+    """Screen translation and uniform scale for a bubble's nodes (about its projected centre)."""
     x, y = layout[id(b)]
     c0 = b["parts"]["centre"]
     c1 = CAM.p((x, y, 0.0))
@@ -657,7 +577,7 @@ def node_state(c, sim=None):
         if part == "edge":
             steps = sim["steps"][b["k"]] if sim else 0
             shade = min(7, base_edge_shade(b["k"]) + steps)
-        elif part in ("wl", "refl"):
+        elif part == "wl":
             shade = 3
         elif kind == "spent":
             shade = 3          # stroke shade; its fill stays black: a hollow, quiet bubble (wireframe, toro-style)
@@ -697,7 +617,7 @@ def render(c, sim=None):
         b = ref
         p = b["parts"]
         v = st[(id(b), part)]
-        src = {"dome": p["dome"], "wl": p.get("wl_rib"), "edge": p.get("edge"), "refl": p.get("refl_rib")}[part]
+        src = {"dome": p["dome"], "wl": p.get("wl_rib"), "edge": p.get("edge")}[part]
         if v is None:
             out.append(f'<path id="{nid}" transform="matrix(1 0 0 1 640 320)" d="{path_d(src)}" '
                        f'fill="#000000" stroke="{G[3]}" stroke-width="{HAIR}"/>')
@@ -933,6 +853,10 @@ def motion(out_gif=HERE / "motion.gif", sheet=HERE / "motion-sheet.png", fps_out
     img.save(sheet)
     # the frame at the second crest, for the note-response check (scratch, beside the motion frames)
     crest = min(range(len(times)), key=lambda j: abs(times[j] - (t_on + T + peak)))
+    if "--keep" not in sys.argv:          # the per-frame renders are scratch
+        for f in tmp.iterdir():
+            f.unlink()
+        tmp.rmdir()
     return tmp, times, crest, every, sim.fps
 
 
@@ -942,7 +866,7 @@ def main():
     print("\n".join(str(f) for f in files))
     if "--motion" in sys.argv:
         tmp, times, crest, every, fps = motion()
-        print("motion frames in", tmp, "crest frame index", crest)
+        print("motion frames rendered; second crest at frame", crest * every)
     if "--budget" in sys.argv or "--motion" in sys.argv:
         for name, avg, peak, still, after in budget_report():
             print(f"{name:55s} avg {avg:5.1f}  peak {peak:3d}  still {still:4.2f} s after last note-off  (changes after still: {after})")

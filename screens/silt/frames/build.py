@@ -8,16 +8,21 @@ crease (heavy grains at the bottom, fines on top). A note swirls the pan: the
 water tips up the smooth right wall and the fines ride up in it, the finest
 highest; then the water levels and the grains sink back at the settle rate.
 
-Run from anywhere:  python3 screens/silt/frames/build.py [--no-gif]
+Run from anywhere:  python3 screens/silt/frames/build.py [--no-gif] [--budget]
 Writes, beside this file: rest.svg/png, playing.svg/png, <control>-0/50/100.svg/png,
-contact.png, motion.gif, motion-settle.gif, motion-sheet.png, and prints the
-redraw estimate (changed nodes per frame, simulated at 60 Hz).
+contact.png, motion.gif, motion-settle.gif, motion-sheet.png. --budget prints the
+redraw estimate (changed nodes per frame, simulated at 60 Hz, with whole-pixel
+grain positions and the tilt quantised to 0.2 degrees, as display() would).
+
+Stills: rest and layers/grain are settled (no note); playing and stir are 0.2 s
+after one held note (the swirl at its peak); settle is 0.6 s after one held note
+(the fines mid-fall).
 
 Device model (display.md, Frame): every bound part is a node that moves by
 translate, uniform scale <= 2 and an in-plane turn. Mutable outlines (nodes 0, 1)
 are the water's back edge, split in two to stay within +-64 px of their origins.
 Node 2 is the waterline: a level ribbon turned, scaled and placed so its ends land
-on the walls. Nodes 3..66 are the grains (translate + scale). Everything else is
+on the walls. Nodes 3..66 are the grains (translate + scale 1..1.6). Everything else is
 static artwork. Frames bake each node's pose into its points so they lint as
 plain previews (a bound transform must be matrix(1 0 0 1 x y)).
 """
@@ -847,7 +852,7 @@ def motion_gif(tmp):
     states, times = gif_frames(DEFAULTS, PHRASE, PHRASE_END, fps)
     imgs = render_seq(states, tmp, fps)
     gimgs = [im.convert("P", palette=Image.ADAPTIVE, colors=64) for im in imgs]
-    gimgs[0].save(HERE / "motion.gif", save_all=True, append_images=gimgs[1:], duration=int(1000 / fps), loop=0,
+    gimgs[0].save(HERE / "motion.gif", save_all=True, append_images=gimgs[1:], duration=round(1000 / fps), loop=0,
                   optimize=False, disposal=1)
     # key frames
     keys = [0.0, 0.52, 0.62, 1.0, 1.6, 3.4, 3.92, 4.6, 5.6, 8.5]
@@ -895,7 +900,7 @@ def settle_gif(tmp):
         im.paste(a, (0, 0))
         im.paste(b, (W + gap, 0))
         frames.append(im.convert("P", palette=Image.ADAPTIVE, colors=64))
-    frames[0].save(HERE / "motion-settle.gif", save_all=True, append_images=frames[1:], duration=int(1000 / fps),
+    frames[0].save(HERE / "motion-settle.gif", save_all=True, append_images=frames[1:], duration=round(1000 / fps),
                    loop=0, disposal=1)
 
 

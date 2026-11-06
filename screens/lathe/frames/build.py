@@ -41,10 +41,10 @@ PARK = (640, 320)
 NPTS = 32                       # centre-line points of a mutable ribbon -> 64-point outline
 
 # ------------------------------------------------------------------ model
-P = 0.152                       # groove pitch (world)
-HW = 0.036                      # groove half-width at the surface
-DEPTH = 0.046                   # 90 degree stylus: depth = half-width
-CENTRE_X = 172                  # principal point: the newest groove stands upright here
+P = 0.138                       # groove pitch (world)
+HW = 0.033                      # groove half-width at the surface
+DEPTH = 0.042                   # 90 degree stylus: depth = half-width
+CENTRE_X = 156                  # principal point: the newest groove stands upright here
 Y_NEAR_SCREEN, Y_FAR_SCREEN = 166.0, 44.0
 FIELD = (236.0, 310.0, 275.0)   # field stop: centre x, centre y, radius (screen)
 TOP = 40.0                      # nothing above this (header clearance)
@@ -52,7 +52,7 @@ SPLIT_SCREEN = 122.0            # depth of field: lips dim in three runs, walls 
 FAR_SCREEN = 70.0
 WALL_SCREEN = 58.0
 OLD_AMP = 0.014                 # earlier turns: swing as cut at 1.00
-DEFAULT_TURNS, MAX_TURNS = 3, 6
+DEFAULT_TURNS, MAX_TURNS = 4, 8
 COAT = 0.11                     # lacquer coat thickness over the aluminium
 
 
@@ -444,7 +444,7 @@ def _skates():
     for i, (ang, L) in enumerate(((36, 104), (31, 100), (40, 96), (33, 92), (38, 80))):
         best = None
         for cy in range(92, 132, 2):
-            for cx in range(220, 320, 2):
+            for cx in range(190, 340, 2):
                 pts = scratch(cx, cy, ang, L, 3 * i + 1)
                 if not _scratch_ok(pts):
                     continue
@@ -467,7 +467,7 @@ def _wear_items():
     plan = (["speck", "speck", "scratch"] * 8)[:22]
     for n, kind in enumerate(plan):
         for _ in range(4000):
-            k = (1, 2, 3)[(n + rng.randrange(3)) % 3]
+            k = 1 + (n + rng.randrange(DEFAULT_TURNS)) % DEFAULT_TURNS
             y = Y0 + 0.02 + (Y1 - Y0) * rng.uniform(0.02, 0.66)
             cx, cy = _land_x(k, y, rng.uniform(0.25, 0.75))
             if kind == "speck":
@@ -476,9 +476,9 @@ def _wear_items():
                 pts = scratch(cx, cy, rng.uniform(55, 80) * rng.choice([-1, 1]), rng.uniform(11, 17), n)
             if not _clear(pts, k):
                 continue
-            if any(math.dist((cx, cy), (o[1], o[2])) < 11 for o in items):
+            if any(math.dist((cx, cy), (o[1], o[2])) < 10 for o in items):
                 continue
-            if any(min(math.dist(p, q) for q in o[3]) < 5 for o in skates for p in pts):
+            if any(min(math.dist(p, q) for q in o[3]) < 4 for o in skates for p in pts):
                 continue
             items.append((kind, cx, cy, pts))
             break
