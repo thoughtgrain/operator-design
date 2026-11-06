@@ -250,7 +250,7 @@ class Frame:
             i = 0
             while i < len(run) - 1:
                 seg = run[i:i + 30]
-                if len(seg) >= 2 and sum(math.dist(a, b) for a, b in zip(seg, seg[1:])) > 0.8:
+                if len(seg) >= 2 and sum(math.dist(a, b) for a, b in zip(seg, seg[1:])) > 3.0:
                     self.path(ribbon(seg, w), fill=fill, bound=bound)
                 i += 29
 
@@ -293,7 +293,7 @@ class Frame:
                     cut = nxt
                 for a, b in cut:
                     a, b = a + inset * 0.7, b - inset * 0.7
-                    if b - a > 1.6:
+                    if b - a > 2.4:
                         self.path(ribbon([(a, c - a), (b, c - b)], w), fill=fill)
             c += step
 
@@ -347,7 +347,8 @@ def ant_plan(F, x, y, ang, L, edge, sw=HAIR, legs=None, bound=True, legw=HAIR):
             F.line([P(root[0], side * root[1]), P(knee[0], side * knee[1]), P(foot[0], side * foot[1])],
                    legw, legs)
         F.line([P(0.42, side * 0.03), P(0.50, side * 0.12), P(0.66, side * 0.16)], legw, legs)
-    parts = [(-0.26, 0, 0.21, 0.135), (-0.05, 0, 0.035, 0.035), (0.08, 0, 0.12, 0.06), (0.33, 0, 0.1, 0.085)]
+    pr = max(0.035, 1.7 / L)
+    parts = [(-0.26, 0, 0.21, 0.135), (-0.05, 0, pr, pr), (0.08, 0, 0.12, 0.06), (0.33, 0, 0.1, 0.085)]
     for u, v, ru, rv in parts:
         pts = [P(u + ru * math.cos(t), v + rv * math.sin(t)) for t in [2 * math.pi * k / 20 for k in range(20)]]
         F.shape(pts, edge, sw, bound=bound)
@@ -362,7 +363,7 @@ def ant_side(F, x, y, L, edge, sw=HAIR, legs=None, facing=1, hang=False):
     for root, knee, foot in (((0.12, 0.2), (0.24, 0.3), (0.34, 0.0)), ((0.06, 0.2), (0.06, 0.32), (0.02, 0.0)),
                              ((0.0, 0.2), (-0.14, 0.3), (-0.3, 0.0))):
         F.line([P(*root), P(*knee), P(*foot)], HAIR, legs)
-    for u, v, ru, rv in [(-0.25, 0.3, 0.2, 0.14), (-0.04, 0.27, 0.035, 0.06), (0.09, 0.27, 0.12, 0.07),
+    for u, v, ru, rv in [(-0.25, 0.3, 0.2, 0.14), (-0.04, 0.27, max(0.035, 1.7 / L), 0.06), (0.09, 0.27, 0.12, 0.07),
                          (0.32, 0.32, 0.09, 0.09)]:
         F.shape([P(u + ru * math.cos(t), v + rv * math.sin(t)) for t in [2 * math.pi * k / 18 for k in range(18)]],
                 edge, sw, bound=True)
@@ -400,8 +401,9 @@ def v1() -> Frame:
         for fr in (0.224, 0.776):
             F.shape(ellipse(x, y0 + fr * (y1 - y0), 2.6, 2.6, 12), G4, WT)
     # where the phrase lands on each bar (an ant walks the bar top between notes)
-    land = {0: 0.5, 2: 0.36, 3: 0.58, 5: 0.42, 4: 0.7, 1: 0.6}
-    ghost_land = {6: 0.4, 7: 0.62, 8: 0.35, 10: 0.5, 5: 0.6, 3: 0.3, 4: 0.45}
+    out_ = {0: 0.47, 2: 0.37, 3: 0.35, 5: 0.42}
+    back = {4: 0.6, 2: 0.66, 1: 0.62}
+    ghost_land = {6: 0.3, 7: 0.22, 8: 0.3, 10: 0.24, 5: 0.82, 3: 0.84, 4: 0.8}
 
     def at(i, fr):
         x, y0, y1 = bars[i]
@@ -409,10 +411,10 @@ def v1() -> Frame:
     for g in GHOSTS[: 2 if FADE < 0.5 else 1]:
         F.dashed(catmull([at(i, ghost_land.get(i, 0.5)) for i in g], 6, False), WT, G4, on=4, off=5)
     seq = TRAIL[:-1]
-    fr = [land[i] if k != 5 else 0.2 for k, i in enumerate(seq)]
+    fr = [out_[i] if k < 4 else back[i] for k, i in enumerate(seq)]
     loop = catmull([at(i, q) for i, q in zip(seq, fr)], 7, True)
     F.line(loop, WT + 0.5, G0, bound=True)
-    for t in (0.04, 0.3, 0.55, 0.78)[:N_ANTS]:
+    for t in (0.1, 0.33, 0.6, 0.86)[:N_ANTS]:
         (x, y), ang = point_along(loop, t)
         ant_plan(F, x, y, ang, 26, G2, WT, legs=G3, legw=HAIR)
     return F
@@ -456,7 +458,7 @@ def v2() -> Frame:
     F.hatch([(dead_end, gy - 7), (fresh_end, gy - 7), (fresh_end, gy - 0.5), (dead_end, gy - 0.5)], G4, gap=4)
     # followers: small ants walking the trail (ants: count)
     for k in range(N_ANTS - 1):
-        ant_side(F, 120 - k * 30, gy - 1.5, 25, G3, HAIR, legs=G4)
+        ant_side(F, 118 - k * 34, gy - 1.5, 30, G3, HAIR, legs=G4)
     # hatched masses: head and mesosoma
     for part in (head, meso, petiole):
         F.shape(part, G3, LINE)
@@ -465,17 +467,16 @@ def v2() -> Frame:
     F.shape(gaster, G3, LINE)
     # the cut: a section plane takes away the lower rear of the wall, so the inside shows
     c, s_ = math.cos(grot), math.sin(grot)
-    window = [p for p in inner if ((p[0] - gx) * -s_ + (p[1] - gyc) * c) > -14]
+    window = [p for p in ellipse(gx, gyc, grx - 9, gry - 9, 60, grot) if ((p[0] - gx) * -s_ + (p[1] - gyc) * c) > -7]
     F.hatch(gaster, G4, gap=3.2, holes=[window], inset=1.2)
     F.shape(window, G3, HAIR)
     for k in (1, 2, 3):                                     # segment plates on the cut wall
         a = grot + math.pi / 2 - 0.15 + 0.0
         u = -0.55 + 0.42 * k
         px_, py_ = gx + grx * u * math.cos(grot), gyc + grx * u * math.sin(grot)
-    gland = ellipse(gx - 6, gyc + 4, 26, 15, 30, grot + 0.1)
+    gland = ellipse(gx - 4, gyc + 12, 24, 9, 30, grot + 0.05)
     F.shape(gland, G2, LINE)
-    F.hatch(ellipse(gx - 6, gyc + 4, 22, 11, 30, grot + 0.1), G3, gap=3.2, inset=1)
-    duct = [(gx - 30, gyc + 10), (gx - 42, gyc + 18), (tip[0] + 6, tip[1] - 2)]
+    duct = [(gx - 27, gyc + 18), (gx - 40, gyc + 21), (tip[0] + 6, tip[1] - 2)]
     F.line(duct, LINE, G2)
     # near legs (Line weight)
     near = [[(318, 122), (346, 140), (360, gy)], [(300, 126), (300, 150), (292, gy)],
@@ -536,7 +537,7 @@ def v3() -> Frame:
     nodes.append(P(0.93, 0.0))
     # ghost trails (fade): old trails, dashed and dull
     for g in GHOSTS[: 2 if FADE < 0.5 else 1]:
-        F.dashed(catmull([nodes[i] for i in g], 6, False), HAIR, G3, on=3, off=4)
+        F.dashed(catmull([nodes[i] for i in g], 6, False), HAIR, G3, on=4.5, off=4)
     # the live trail: one glistening loop through the phrase (scent: strands merge into one)
     loop = catmull([nodes[i] for i in TRAIL[:-1]], 6, True)
     F.line(loop, SUBJ, G0, bound=True)
@@ -713,7 +714,7 @@ def ant3d(F, cam, pos, heading, size, edge=G3, inner=G4, legc=G3):
             for side in (-1, 1):                         # compound eye
                 ec = (c[0] + 0.02, c[1] + 0.02, c[2] + side * r[2] * 0.82)
                 if cam.depth(W(ec)) < cam.depth(W(c)):
-                    pts = [cam(W((ec[0] + 0.035 * math.cos(t), ec[1] + 0.03 * math.sin(t), ec[2])))
+                    pts = [cam(W((ec[0] + 0.045 * math.cos(t), ec[1] + 0.04 * math.sin(t), ec[2])))
                            for t in [2 * math.pi * k / 14 for k in range(14)]]
                     F.shape(pts, inner, HAIR)
     for side, pts in legs:
@@ -725,10 +726,10 @@ def v5() -> Frame:
     """Ants, drawn literally in hidden-line 3D: a file of modelled ants walking the
     reinforced path across the degree stones, one camera over the whole scene."""
     F = Frame([G0, G2, G3, G4, G5, BK])
-    cam = Camera((0.8, 5.2, 8.2), (0.6, 0.0, -0.9), 300.0, 240.0, 118.0)
-    sp = 2.5
-    stones = ([(-5.0 + i * sp, 0.0, 0.8) for i in range(5)] + [(-3.8 + i * sp, 0.0, -2.6) for i in range(5)]
-              + [(8.7, 0.0, -2.6)])
+    cam = Camera((0.6, 6.6, 7.6), (1.0, 0.0, -1.1), 330.0, 232.0, 106.0)
+    sp = 3.2
+    stones = ([(-6.4 + i * sp, 0.0, 1.6) for i in range(5)] + [(-4.8 + i * sp, 0.0, -3.6) for i in range(5)]
+              + [(11.2, 0.0, -3.6)])
 
     def disc(c, r, y):
         return [(c[0] + r * math.cos(t), y, c[2] + r * math.sin(t)) for t in [2 * math.pi * k / 32 for k in range(32)]]
@@ -746,18 +747,18 @@ def v5() -> Frame:
         F.line([cam(stones[a]), cam(stones[b])], SUBJ, G0, bound=(k == 0))
     # stones, far to near: hidden-line low cylinders
     for c in sorted(stones, key=lambda s: -cam.depth(s)):
-        top = [cam(p) for p in disc(c, 0.55, 0.18)]
-        bot = [cam(p) for p in disc(c, 0.55, 0.0)]
+        top = [cam(p) for p in disc(c, 0.5, 0.2)]
+        bot = [cam(p) for p in disc(c, 0.5, 0.0)]
         F.shape(hull(top + bot), G4, LINE)
         F.shape(top, G5, HAIR)
     # ants on the route, far to near
     spots = []
-    for (a, b), t in (((2, 1), 0.5), ((5, 4), 0.7), ((4, 2), 0.15), ((3, 5), 0.72)):
+    for (a, b), t in (((2, 1), 0.5), ((5, 4), 0.62), ((4, 2), 0.3), ((3, 5), 0.78)):
         A, B = stones[a], stones[b]
         spots.append(((A[0] + (B[0] - A[0]) * t, 0.0, A[2] + (B[2] - A[2]) * t),
                       math.atan2(B[2] - A[2], B[0] - A[0])))
     for p, h in sorted(spots[:N_ANTS], key=lambda s: -cam.depth(s[0])):
-        ant3d(F, cam, p, h, 1.6)
+        ant3d(F, cam, p, h, 1.9)
     return F
 
 

@@ -164,9 +164,12 @@ class Frame:
             run = dedupe(run, closed=False)
             if len(run) < 2:
                 continue
-            if sum(math.dist(a, b) for a, b in zip(run, run[1:])) < max(min_len, 0.6):
-                continue
-            i, n = 0, 28
+            xs, ys = [p[0] for p in run], [p[1] for p in run]
+            if max(max(xs) - min(xs), max(ys) - min(ys)) < max(min_len, 3.0):
+                continue  # a fragment under ~3 px doesn't read at 1:1
+            pieces = max(1, math.ceil((len(run) - 1) / 28))
+            n = math.ceil((len(run) - 1) / pieces)
+            i = 0
             while i < len(run) - 1:
                 self._piece(run[i:i + n + 1], w, colour)
                 i += n

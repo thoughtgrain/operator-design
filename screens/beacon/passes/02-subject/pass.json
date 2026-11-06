@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "Try a lighthouse. Five new, unique variations of a lighthouse.",
   "subject": null,
@@ -94,7 +94,183 @@
       "brief": "Start from what beacon is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: cutaway section. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "The lighthouse's beehive drum lens filling the screen, its dome and pedestal past the frame's edges, the prism rings catching the lamp only round the panel that is flashing while the rest of the glass stays dark, with the flame's image bright in the belt.",
+      "controls": [
+        "pulse: the flame's image in the belt widens from a slit to a broad lens shape, 4 px to 19 px wide (scale of the one bright mass).",
+        "lens: the prism rings above and below the belt step in count, 3 to 11 per zone, so the saw-tooth silhouette tightens as the lens focuses (count, with the outline's shape following).",
+        "sweep: the drum turns, carrying the lit panel, its brass bars and the flame off the axis toward the right silhouette, 0 to 80 degrees round the drum (rotation, faked by redrawing the bars' positions; the lit arcs slide about 120 px).",
+        "fog: diagonal hatching rises from the bottom edge over the glass, clipped to the frame, up to about three quarters of the body (position of the hatched region's top edge; nothing at the default 0)."
+      ],
+      "reference": "library/theseus-tower (a subject that stays, drawn as hidden-line line art with one lit part); opxy/reference/toro-ink-rest.jpg for the black-dominant body",
+      "risks": [
+        "Cropped this close, a beehive lens can read as a barrel or a lampshade to someone who hasn't seen one; the saw-tooth silhouette is what says lens.",
+        "Sweep is a redraw of every bar and lit arc (a 3D turn faked in the plane): heavy on nodes and redraw; the lit run would need to be a few pre-drawn nodes per ring.",
+        "At sweep 100 the lit panel reaches the silhouette and the flame is foreshortened to a sliver, so the brightest element nearly disappears; the range may need capping near 60 degrees.",
+        "Lens at 0 leaves three rings per zone and a mostly empty drum; fine as 'unfocused', but the top end at 11 rings per zone is about 5 px apart, near the hatching floor."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "A stone lighthouse standing on its stepped base at the horizon, drawn as detailed line art from one low camera, coursed masonry, door, windows, corbelled gallery, railing, helical glazing and domed lantern, throwing a hatched beam out to sea.",
+      "controls": [
+        "pulse: the lamp inside the lantern widens behind the glazing bars, 3 px to 13 px (scale of the one bright mass).",
+        "lens: the beam's cone closes from a wide hatched fan (18 degrees each side) to a near-parallel shaft (2 degrees), so its far end narrows by over 100 px (shape of the beam outline).",
+        "sweep: the beam turns toward the viewer about the lantern, 0 to 55 degrees, so in perspective it rises and shortens across the sky (rotation of the beam node about the lamp).",
+        "fog: a hatched bank rises from the sea over the base and up the tower, up to 120 px (position of the bank's top edge; nothing at the default 0)."
+      ],
+      "reference": "library/theseus-tower (a stacked object drawn as line art with real details, one lit part); craft.md, Think in 3D",
+      "risks": [
+        "The most literal of the five: a lighthouse silhouette is close to a postcard or icon if the detail is lost; it depends on the masonry, gallery and glazing reading at 1:1.",
+        "The tower is narrow (about 60 px wide) next to a wide frame; the lantern details are 2-4 px apart, at the legibility floor.",
+        "Pulse is a small bright mass inside a small lantern; its 3-13 px travel may fall short of the perceptibility floor for a score-3 control without a second cue.",
+        "Fog over the tower hatches across masonry lines; the tower stays readable at 60 % in the sanity check but may go grey at 100."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "The turning gear in hidden-line 3D: a four-panel flashing lens on a float in its mercury trough, on a cast pedestal, driven by a weight clock with its great wheel, pinion, fly and cable, the lamp flashing through the panel that faces you.",
+      "controls": [
+        "pulse: the flash in the facing panel's bullseye widens, 2.5 px to 10.5 px (scale of the one bright mass).",
+        "lens: the bullseye rings in each panel's belt step from 2 to 8 and the reflecting prisms above and below from 1 to 4 (count of hairlines on the glass).",
+        "sweep: the carriage turns, 18 to 90 degrees, its panels sliding round and the rack teeth travelling, while the great wheel on the clock turns three times as far (rotation: the wheel is a true in-plane turn, the lens box is redrawn variants).",
+        "fog: mist rises up the glass of each visible panel as hatching clipped to the panel, from its foot to its top (position of the hatched band's top; nothing at the default 0)."
+      ],
+      "reference": "library/toro-blocks (hidden-line 3D with black fills that hide what's behind); craft.md, Think in 3D",
+      "risks": [
+        "Rings on a panel are concentric circles, close to the 'target rings' craft warns about; the prism bars above and below cut them to a belt so they read as a Fresnel panel, but this should be checked by eye.",
+        "Sweep turns a 3D box, which the device can't tilt: every panel position is a pre-drawn variant (many nodes), only the clock wheel is a cheap true turn.",
+        "Two objects (lens carriage and clock) split the eye; the clock is kept smaller and dimmer, but it is still a second thing.",
+        "The fly on the clock reads as a small flag at 1:1; it may need redrawing or dropping."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "P5",
+      "drawing_language": "bold closed outlines",
+      "subject": "The sea seen from the waterline at night, rows of wave crests as bold closed outlines that hide the ones behind, a glitter path of lit crest edges running toward you beneath a small lighthouse on its rock, whose hatched beam swings across the sky.",
+      "controls": [
+        "pulse: each glint on the lit crests lengthens, from a short dash to a long run along the crest, 0.4 to 2.4 world units (shape of the glint ribbons).",
+        "lens: the beam tightens (16 to 2 degrees) and the glitter path reaches further toward you, from the far rows to the nearest (position of the path's near end, about 100 px of travel, with the beam's shape as the second cue).",
+        "sweep: the beam swings from lying along the horizon to coming toward you, 14 to 64 degrees, so it rises and widens over the upper left (rotation of the beam about the lantern).",
+        "fog: a hatched bank rises over the horizon and swallows the rock and the light (position of the bank's top edge; nothing at the default 0)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one small bright figure over a quiet field); library/toro-blocks for many closed shapes that hide one another",
+      "risks": [
+        "The sea of crests is the busiest body of the five (about 80 % black): it can read as texture rather than a picture, and it competes with the small lighthouse.",
+        "The lighthouse is small (about 40 px tall); the subject is the light on the water rather than the tower.",
+        "At sweep 100 with fog up the beam's hatching and the fog's hatching cross into a crosshatch; the fog needs to sit behind the beam or stop below it.",
+        "Lens drives two things (beam width and glitter reach); acceptable as one idea, focus, but the perceptibility check must show the reach clearly."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "P1",
+      "drawing_language": "cutaway section",
+      "subject": "A headland at night with the lighthouse cut open in section, thick walls, spiral stair treads, floors, the clock's weight in its shaft sunk into the rock, gallery and lantern with the lens profile round the lamp, and a beam carrying hatched bands of light out over the sea.",
+      "controls": [
+        "pulse: each band of light in the beam widens as a share of its period, 3 px to 27 px of every 30 px, from thin flashes to a nearly solid beam (shape: band width).",
+        "lens: the beam's spread closes from a wide fan (8 degrees each side) to a parallel shaft, its far end narrowing by about 90 px (shape of the beam outline).",
+        "sweep: the beam turns away across the sea and foreshortens, its tip drawing in from the right edge to about 110 px from the lantern (position of the tip).",
+        "fog: a hatched bank rises off the sea up the headland and across the lower beam, up to 130 px (position of the bank's top; nothing at the default 0)."
+      ],
+      "reference": "opxy/patterns.md P1 (section drawing: the part that makes the sound, cut open); library/theseus-tower for one subject with real parts named by drawing, not labels",
+      "risks": [
+        "The tower is small in a wide scene (about 60 px wide, 130 px tall) and its section detail (treads, floors, lens profile) sits at 3-6 px spacing; it may go busy at 1:1 on the device.",
+        "The banded beam is the most model-true picture of the pulse train, but it is also the screen's largest element, so the eye goes to the beam before the tower.",
+        "Sweep as foreshortening is a convention: a beam turning away gets shorter; the player may read it as the beam's reach rather than its turn.",
+        "Section language risks looking like a patent plate; it carries no labels or callouts, but the cut walls and shaft are technical."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:26:11"
+  },
   "selection": null
 }

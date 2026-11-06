@@ -308,70 +308,80 @@ class Frame:
 # ================================================================ v1
 def v1() -> Frame:
     """The verge at large scale: the gable end of the roof seen from the side, its
-    plain-tile courses as a sawtooth of noses, black against the night and lit only
-    along the edges that face the sky. The eave corner and its gutter are in frame;
-    the roof runs on past the right edge. Rain falls in the open sky and stops at
-    the roof's edge; the course a drop just hit is the lit one."""
+    tile courses a row of rounded noses climbing out of the frame, black against
+    the night and lit only along the edges that face the sky. The eave corner and
+    its gutter are in frame; the roof runs on past the top-right edge. Rain falls in
+    the open sky down to the edge; the course a drop just hit is the lit one."""
     fr = Frame("v1 · the verge, edge-lit")
     cs = courses(SPAN)
     n = len(cs)
-    pitch = math.radians(21)
+    pitch = math.radians(22)
     u = (math.cos(pitch), math.sin(pitch), 0.0)          # up the slope
     v = (-math.sin(pitch), math.cos(pitch), 0.0)         # out of the slope
-    e = 1.0                                              # exposure per course (world)
-    t = 0.42                                             # nose thickness
+    e, t = 1.0, 0.46                                     # exposure, nose thickness (world)
     run = n * e
 
     def P(s, h, z=0.0):
         return add(add(mul(u, s), mul(v, h)), (0.0, 0.0, z))
 
     # one camera, a little forward of the gable and level with the eave
-    cam = Camera((2.0, 1.5, 22.0), (4.0, 2.2, 0.0))
-    cam.fit([P(-0.75, -1.05), P(run - 0.05, t)], (8, 36, 478, 216))
+    cam = Camera((2.0, 1.0, 26.0), (4.0, 2.0, 0.0))
+    cam.fit([P(-0.45, -0.85), P(run - 0.25, 1.2 * t)], (8, 40, 474, 214))
 
-    def tread(k):
-        s0, s1 = k * e, (k + 1) * e
-        foot = 0.0 if k == 0 else 0.4 * t        # a nose rests on the course below
-        return [(s0, foot), (s0, t + foot * 0.5), (s0 + 0.08 * e, t + foot * 0.5 + 0.03), (s1, 0.4 * t + 0.2 * t)]
+    def foot(k):
+        return 0.0 if k == 0 else 0.45 * t        # a nose rests on the course below
 
-    prof = []
+    def edge(k, m=7):
+        """Sky-facing edge of course k: round over the nose, then down the tread."""
+        r = 0.5 * t
+        cu, cv = k * e + r, foot(k) + r
+        arc = [(cu + r * math.cos(math.pi - (math.pi / 2) * q / m), cv + r * math.sin(math.pi - (math.pi / 2) * q / m))
+               for q in range(m + 1)]
+        nxt = (k + 1) * e, foot(k + 1) + r
+        return arc + [nxt]
+
+    prof = [(-0.25, 0.0)]
+    for k in range(n + 3):
+        prof += edge(k)[:-1]
+    # rain in the open sky: streaks falling toward the courses they'll land on
+    rnd = random.Random(8)
     for k in range(n):
-        prof += tread(k)
-    prof.append((run + 2.0, 0.6 * t))
-    # rain in the open sky: streaks above the courses they'll land on
-    for k, frac, ht in ((0, 0.6, 0.55), (2, 0.35, 0.75), (3, 0.7, 0.25), (6, 0.5, 0.6), (7, 0.35, 0.2)):
-        land = cam(P((k + frac) * e, 0.6 * t + 0.7 * t * (1 - frac)))
-        top = max(land[1] - 14 - ht * 70, TOP + 22)
+        frac = 0.3 + 0.4 * rnd.random()
+        land = cam(P((k + frac) * e, 1.1 * t))
+        top = max(land[1] - 26 - rnd.random() * 70, TOP + 30)
+        if land[1] - top < 16:
+            continue
         fr.ribbon([(land[0], top - 18), (land[0], top)], LINE, G3)
-    # receding nose edges: the courses run back into the dark (short, hairline)
-    for k in range(n):
-        nk = tread(k)[1]
-        fr.ribbon([cam(P(*nk)), cam(P(nk[0], nk[1], -2.4))], HAIR, G2)
+    # receding noses: each course's lip runs back into the dark (hairline)
+    for k in range(n + 2):
+        tip = edge(k)[len(edge(k)) // 2]
+        fr.ribbon([cam(P(*tip)), cam(P(tip[0], tip[1], -1.6))], HAIR, G2)
     # the body: the roof's end and barge board, black, hiding what's behind
-    barge = 0.75
-    body = [cam(P(-0.3, 0.0))] + [cam(P(s, h)) for s, h in prof] + \
-           [cam(P(run + 2.0, -barge)), cam(P(-0.3, -barge))]
+    barge = 0.62
+    body = [cam(P(s, h)) for s, h in prof] + [cam(P(run + 3, -barge)), cam(P(-0.25, -barge))]
     fr.poly(body, G0)
-    fr.ribbon([cam(P(-0.3, -barge)), cam(P(run + 2.0, -barge))], HAIR, G3)
+    fr.ribbon([cam(P(-0.25, -barge)), cam(P(run + 3, -barge))], HAIR, G2)
     # rim light on every sky-facing edge
     struck = 4
-    for k in range(n):
-        tr = [cam(P(s, h)) for s, h in tread(k)[1:]]
-        fr.ribbon(tr, SUBJ if k == struck else LINE, G7 if k == struck else G4)
-        s0 = k * e
-        nf = tread(k)
-        fr.ribbon([cam(P(*nf[0])), cam(P(*nf[1]))], HAIR, G2)   # nose face, turned from the light
+    for k in range(n + 3):
+        pts = [cam(P(*p)) for p in edge(k)]
+        if k == struck:
+            fr.ribbon(pts, SUBJ, G7)
+        elif k < n:
+            fr.ribbon(pts, LINE, G4)
+        else:                       # past the roof's span: courses that don't play, unlit
+            fr.ribbon(pts, HAIR, G2)
     # gutter at the eave: a half-round in profile, dark body with a lit rim (empty: puddle 0)
-    gp = P(-0.3, -0.42)
+    gp = P(-0.5, -0.5)
     g = cam(gp)
-    rr = cam.focal * 0.42 / cam.depth(gp)
+    rr = cam.focal * 0.4 / cam.depth(gp)
     gut = ellipse_pts(g[0], g[1], rr, rr, 0, math.pi, 18) + \
         ellipse_pts(g[0], g[1], rr - 3, rr - 3, math.pi, 0, 18)
     fr.outline(gut, G4, LINE)
     # the drop that just landed: a broken crown off the struck tread
-    sp = cam(P((struck + 0.5) * e, 0.6 * t + 0.35 * t + 0.1))
+    sp = cam(P((struck + 0.62) * e, foot(struck) + 0.62 * t))
     for dx in (-1, 1):
-        fr.ribbon([(sp[0] + dx * 3, sp[1] - 3), (sp[0] + dx * 10, sp[1] - 12)], LINE, G5)
+        fr.ribbon([(sp[0] + dx * 3, sp[1] - 4), (sp[0] + dx * 10, sp[1] - 13)], LINE, G5)
     return fr
 
 
@@ -484,7 +494,10 @@ def v3() -> Frame:
     fr.ribbon(rim + rim[:1], LINE, G4)
     # pins: n rings along the stick, six per ring, turning in a spiral; visible heads only
     s0, s1 = -L / 2 + 70, L / 2 - 24
-    struck = {(1, 1): 1, (3, 4): 1, (5, 3): 1, (6, 2): 2}
+    vis = [(k, j) for k in range(n) for j in range(6)
+           if facing(s0 + (s1 - s0) * k / (n - 1), j * math.pi / 3 + k * 0.42) >= 0.3]
+    m = len(vis)
+    struck = {vis[m // 6]: 1, vis[m // 2]: 1, vis[2 * m // 3]: 1, vis[m // 3]: 2}
     for k in range(n):
         s = s0 + (s1 - s0) * k / (n - 1)
         for j in range(6):
@@ -552,7 +565,7 @@ def v4() -> Frame:
             seg = [cam(P(x, s, 0.0)) for x in xs if j * W - 0.02 <= x <= (j + 1) * W + 0.02]
             fr.ribbon(seg, SUBJ + 0.5, G7)
     # drops coming down toward the roof: small closed teardrops
-    for x, s, hgt in ((-0.85, 3.3, 0.55), (1.6, 1.5, 0.5), (0.35, 2.3, 0.75)):
+    for x, s, hgt in ((-0.85, 2.6, 0.45), (1.6, 1.2, 0.5), (0.4, 1.9, 0.75)):
         base = P(x, s, hgt)
         o = cam(base)
         k = max(5.0, cam.focal / cam.depth(base) * 0.07)
@@ -589,7 +602,7 @@ def v5() -> Frame:
         xs.append(x + r)
         x += 2 * r + gap
     shelf = 0.0
-    ey = 118.0
+    ey = 96.0
     cam.fit([(-total / 2 - 8, shelf - 10, 20), (total / 2 + 8, shelf - 10, 20), (0, ey, 0)],
             (14, 34, 466, 212))
 
@@ -606,11 +619,9 @@ def v5() -> Frame:
         arch = [cam((xa + pitch_w * q / 12, ey + 6 * math.sin(math.pi * q / 12), 0)) for q in range(13)]
         fr.ribbon(arch, LINE, G4)
         xa += pitch_w
-    fr.ribbon([cam((W0, ey + 14, 0)), cam((W1, ey + 14, 0))], HAIR, G2)
     # the shelf: a plank running out of frame; top face hairline, front edge Line
     fr.ribbon([cam((W0, shelf, -30)), cam((W1, shelf, -30))], HAIR, G2)
     fr.ribbon([cam((W0, shelf, 30)), cam((W1, shelf, 30))], LINE, G3)
-    fr.ribbon([cam((W0, shelf - 10, 30)), cam((W1, shelf - 10, 30))], HAIR, G2)
     struck = 3
     for i, (cxp, r) in enumerate(zip(xs, radii)):
         H = r * 1.75

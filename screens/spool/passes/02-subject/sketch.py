@@ -385,6 +385,70 @@ def bez3(p0, p1, p2, p3, k=40):
             for t in np.linspace(0, 1, k)]
 
 
+class DepthBuffer:
+    """A small z-buffer (3x supersampled) for exact hidden-line removal of faceted models."""
+
+    SS = 3
+
+    def __init__(self, cam, w=480, h=220):
+        self.cam = cam
+        self.W, self.H = w * self.SS, h * self.SS
+        self.buf = np.zeros((self.H, self.W))          # 1/z of the nearest surface; 0 = nothing
+
+    def _s(self, p):
+        x, y = self.cam(p)
+        return x * self.SS, y * self.SS, 1.0 / self.cam.raw(p)[2]
+
+    def face(self, poly3):
+        v = [self._s(p) for p in poly3]
+        for i in range(1, len(v) - 1):
+            self._tri(v[0], v[i], v[i + 1])
+
+    def _tri(self, a, b, c):
+        xs, ys = (a[0], b[0], c[0]), (a[1], b[1], c[1])
+        x0, x1 = max(int(min(xs)) - 1, 0), min(int(max(xs)) + 2, self.W)
+        y0, y1 = max(int(min(ys)) - 1, 0), min(int(max(ys)) + 2, self.H)
+        if x0 >= x1 or y0 >= y1:
+            return
+        X, Y = np.meshgrid(np.arange(x0, x1) + 0.5, np.arange(y0, y1) + 0.5)
+        den = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1])
+        if abs(den) < 1e-9:
+            return
+        l1 = ((b[1] - c[1]) * (X - c[0]) + (c[0] - b[0]) * (Y - c[1])) / den
+        l2 = ((c[1] - a[1]) * (X - c[0]) + (a[0] - c[0]) * (Y - c[1])) / den
+        l3 = 1 - l1 - l2
+        e = -0.02
+        m = (l1 >= e) & (l2 >= e) & (l3 >= e)
+        z = l1 * a[2] + l2 * b[2] + l3 * c[2]
+        sub = self.buf[y0:y1, x0:x1]
+        np.maximum(sub, np.where(m, z, 0), out=sub)
+
+    def visible(self, p, eps=0.004):
+        x, y, iz = self._s(p)
+        xi, yi = int(x), int(y)
+        if not (0 <= xi < self.W and 0 <= yi < self.H):
+            return False
+        return iz >= self.buf[yi, xi] * (1 - eps)
+
+    def runs(self, pts3, step=0.5):
+        """Visible screen-space runs of a 3D polyline."""
+        out, cur = [], []
+        for a, b in zip(pts3, pts3[1:]):
+            la = math.dist(self.cam(a), self.cam(b))
+            k = max(2, int(la / step))
+            for t in np.linspace(0, 1, k, endpoint=False):
+                p = a + (b - a) * t
+                if self.visible(p):
+                    cur.append(self.cam(p))
+                elif cur:
+                    out.append(cur); cur = []
+        if self.visible(pts3[-1]):
+            cur.append(self.cam(pts3[-1]))
+        if cur:
+            out.append(cur)
+        return [r for r in out if len(r) >= 2 and math.dist(r[0], r[-1]) > 1.0]
+
+
 # ---------------------------------------------------------------- v1 · trace · single-weight contour
 
 def v1(s: Spool) -> Frame:
@@ -396,7 +460,7 @@ def v1(s: Spool) -> Frame:
     amp = 0.55 * (1 - 0.35 * max(s.bias, 0))
     period = 1.25 + 0.9 * (s.pos["length"] - 0.5)      # length: wavelength of one repeat on the table
     x_end = 2.4                                         # where the newest repeat ends
-    reps = 3.6
+    reps = 5.4
     pts = []
     x_start = x_end - reps * period
     k = math.floor(x_start / period) - 1
@@ -416,8 +480,8 @@ def v1(s: Spool) -> Frame:
     zc = Rf
     c = v3(sx, sy, zc)
     # the free run: from the trail's end, lifting to the winding's underside
-    tangent = v3(sx - Rw, sy - 0.05, zc)
-    free = bez3(pts[-1], pts[-1] + v3(0.45, 0, 0), tangent + v3(-0.35, -0.1, -0.15), tangent, 24)
+    land = v3(sx - 0.12, sy + 0.12, zc + Rw)             # comes off the top of the winding
+    free = bez3(pts[-1], pts[-1] + v3(0.55, 0, 0), land + v3(-0.55, -0.05, 0.05), land, 28)
     cam.fit([v3(-1.6, 0.6, 0), v3(sx + Rf, sy - Lh - tf, 0), v3(sx - Rf, sy + Lh, 2 * Rf), v3(1.0, -0.6, 0)],
             (8, 40, 446, 208))
     col, w = M, LINE                                   # one weight for the drawing
@@ -430,13 +494,13 @@ def v1(s: Spool) -> Frame:
     for t in np.linspace(-Lh + 0.08, Lh - 0.08, 7):
         for run in ring_arcs(cam, c + v3(0, t, 0), axis, Rw):
             fr.line(run, w, D)
+    fr.line([cam(p) for p in free], w, B)               # behind the near flange
     draw_cyl(fr, cam, near0, near1, Rf, col, w)
     # the bore in the near flange's face
     bore, _ = ring(near0, axis, 0.09, 36)
     fr.outline([cam(p) for p in bore], col, w)
     # the trail and the free run: the one bright thing, same single weight
     fr.line([cam(p) for p in pts], w, B)
-    fr.line([cam(p) for p in free], w, B)
     return fr
 
 
@@ -498,7 +562,7 @@ def v3_(s: Spool) -> Frame:
     cam.fit([v3(x, y, z) for x in (-Rf, Rf) for y in (-Rf, Rf) for z in (0, 1.5)] + [v3(2.2, -0.6, 0)],
             (140, 30, 396, 206))
     axis = v3(0, 0, 1)
-    light = np.array([1.0, -0.15])                      # screen direction the light comes from
+    light = np.array([0.94, -0.34])                      # screen direction the light comes from
 
     def lit_runs(pts, thresh, closed=True):
         """Split a convex outline into runs lit by the light (outward normal toward it) and dark ones."""
@@ -525,7 +589,7 @@ def v3_(s: Spool) -> Frame:
             (lit if state else dark).append(cur)
         return lit, dark
 
-    def lit_outline(h, w_lit, col_lit, col_dark=D, thresh=0.35, fill=True):
+    def lit_outline(h, w_lit, col_lit, col_dark=F, thresh=0.35, fill=True):
         if fill:
             fr.poly(h)
         lit, dark = lit_runs(h, thresh)
@@ -565,22 +629,34 @@ def v3_(s: Spool) -> Frame:
     bore, _ = ring(v3(0, 0, zt1), axis, 0.13, 40)
     fr.outline([cam(p) for p in bore], D, HAIR)
     # the loose end: off the winding's lit side, over the bottom flange's rim, onto the ground, a curl
-    th = math.radians(-20)
-    p0 = v3(Rw * math.cos(th), Rw * math.sin(th), 0.95)
-    tang = v3(-math.sin(th), math.cos(th), 0) * -1
-    p_rim = v3(Rf * 1.06 * math.cos(th + 0.25), Rf * 1.06 * math.sin(th + 0.25), tf + 0.05)
-    drop = bez3(p0, p0 + tang * 0.25 + v3(0.15, 0, -0.05), p_rim + v3(0, 0, 0.35), p_rim, 18)
-    g0 = p_rim + v3(0.12, -0.05, -tf - 0.05)
-    fall = bez3(p_rim, p_rim + v3(0.1, -0.05, -0.05), g0 + v3(-0.02, 0, 0.05), g0, 8)
-    curl = []
-    gc = g0 + v3(0.45, -0.25, 0)
-    for t in np.linspace(0, 1.55 * math.pi, 40):
-        rr = 0.42 - 0.12 * t / math.pi
-        a = math.atan2(g0[1] - gc[1], g0[0] - gc[0]) + t
-        curl.append(gc + v3(rr * math.cos(a) * 1.2, rr * math.sin(a), 0))
-    lead = bez3(g0, g0 + v3(0.05, -0.1, 0), curl[0] + v3(-0.05, 0.05, 0), curl[0], 6)
-    fr.line([cam(p) for p in drop + fall[1:] + lead[1:] + curl[1:]], SUBJ, B)
+    th = math.radians(-24)
+    out = v3(math.cos(th), math.sin(th), 0)
+    side = v3(-math.sin(th), math.cos(th), 0)
+    p0 = Rw * out + v3(0, 0, 0.98)
+    ctrl = [p0, p0 + 0.1 * out - 0.04 * side + v3(0, 0, -0.18),
+            1.06 * Rf * out - 0.08 * side + v3(0, 0, tf + 0.1),
+            1.18 * Rf * out - 0.12 * side + v3(0, 0, 0.0)]
+    gc = 1.18 * Rf * out + v3(0.42, -0.42, 0)
+    a0 = math.atan2(ctrl[-1][1] - gc[1], ctrl[-1][0] - gc[0])
+    r0 = math.dist(ctrl[-1][:2], gc[:2])
+    for t in np.linspace(0.35, 1.6 * math.pi, 9):
+        rr = r0 * (1 - 0.22 * t / math.pi)
+        ctrl.append(gc + v3(rr * math.cos(a0 - t), rr * math.sin(a0 - t), 0))
+    fr.line([cam(p) for p in catmull(ctrl, 10)], SUBJ, B)
     return fr
+
+
+def catmull(ctrl, k=10):
+    """Smooth 3D curve through control points (Catmull-Rom)."""
+    c = [ctrl[0]] + list(ctrl) + [ctrl[-1]]
+    out = []
+    for i in range(1, len(c) - 2):
+        p0, p1, p2, p3 = c[i - 1], c[i], c[i + 1], c[i + 2]
+        for t in np.linspace(0, 1, k, endpoint=False):
+            out.append(0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
+                              + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3))
+    out.append(ctrl[-1])
+    return out
 
 
 def _arc_split(pts, keep):
@@ -711,7 +787,7 @@ def v5(s: Spool) -> Frame:
         return v3(0, -math.cos(th), math.sin(th))
 
     cam.fit([P(x, Rf, t) for x in (x0, x1) for t in np.linspace(0, 2 * math.pi, 24)],
-            (40, 32, 440, 212))
+            (-10, 26, 470, 262))                        # close: the frame trims the flanges' rims
     faces = []
     full = np.linspace(0, 2 * math.pi, 73)
     mat = np.linspace(thb, tha + 2 * math.pi, 56)       # where the winding still is
@@ -782,17 +858,24 @@ def v5(s: Spool) -> Frame:
                 layer += 1
             add(quad, edges, (th, circles, d))
 
-    faces.sort(key=lambda f: -f[0])
-    for _, fill3, edges, extra in faces:
-        fr.poly([cam(p) for p in fill3], fill=K, stroke=K, sw=0.6)
+    # Hidden lines by a depth buffer: rasterise every face, keep the parts of each
+    # edge (and each thread section) that are at the front. Faces are black on black,
+    # so only the visible lines need drawing.
+    zb = DepthBuffer(cam)
+    for _, fill3, _, _ in faces:
+        zb.face(fill3)
+    for _, fill3, edges, extra in sorted(faces, key=lambda f: -f[0]):
         if extra:
             th, circles, dd = extra
             for x, rr in circles:
-                pts = [cam(P(x + dd * 0.42 * math.cos(a), rr + dd * 0.42 * math.sin(a), th))
+                if not zb.visible(P(x, rr, th)):
+                    continue
+                pts = [cam(P(x + dd * 0.39 * math.cos(a), rr + dd * 0.39 * math.sin(a), th))
                        for a in np.linspace(0, 2 * math.pi, 14, endpoint=False)]
                 fr.outline(pts, B, HAIR)
         for pts, w, col in edges:
-            fr.line([cam(p) for p in pts], w, col)
+            for run in zb.runs(pts):
+                fr.line(run, w, col)
     # the bore through the near flange
     bore, _ = ring(v3(x0, 0, 0), v3(1, 0, 0), Rbo, 36)
     fr.outline([cam(p) for p in bore], M, LINE)

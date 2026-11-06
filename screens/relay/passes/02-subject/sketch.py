@@ -591,10 +591,10 @@ def v4() -> Frame:
     st, lk, ck, fb = D["stages"], D["leak"], D["clock"], D["feedback"]
     rnd = random.Random(3)
 
-    Lx, Wy, Hz, cut_x, cut_z = 10.0, 6.4, 3.0, 3.4, 1.5
-    cam = Camera(eye=(19, -13, 15), target=(5.4, 3.2, 0.2))
-    cam.fit([(0, -1.4, -2.4), (Lx, -1.4, -2.4), (0, Wy + 1.4, Hz), (Lx, Wy + 1.4, Hz), (0, Wy + 1.4, -2.4)],
-            (40, 32, 450, 212))
+    Lx, Wy, Hz, cut_x, cut_z = 10.0, 6.4, 3.0, 3.0, 1.5
+    cam = Camera(eye=(8.5, -6.0, 17), target=(5.8, 3.2, 0.6))
+    cam.fit([(0.6, -1.0, 0), (Lx, -1.0, 0), (0.6, Wy, Hz), (Lx, Wy + 1.0, cut_z), (0.6, -1.0, -0.6)],
+            (24, 26, 466, 216))
 
     def rim(S, edges, colour=G5, w=LINE):
         for i in edges:
@@ -608,7 +608,7 @@ def v4() -> Frame:
         leg = box_corners((px - 0.3, y0 + dy * 0.6, -2.4), (0.6, 0, 0), (0, dy * 0.3, 0), (0, 0, 3.6))
         for c in (leg, sh):
             for name, W, S in visible_faces(cam, c):
-                fr.face(S, G2, LINE)
+                fr.face(S, G1, LINE)
                 if name == "z1":
                     rim(S, [1, 2])
 
@@ -618,29 +618,30 @@ def v4() -> Frame:
     lower = box_corners((0, 0, 0), (Lx, 0, 0), (0, Wy, 0), (0, 0, cut_z))
     upper = box_corners((0, 0, cut_z), (cut_x, 0, 0), (0, Wy, 0), (0, 0, Hz - cut_z))
     for name, W, S in visible_faces(cam, lower):
+        fr.face(S, G1, LINE)
         if name == "z1":
-            fr.face(S, G2, LINE)
             fr.hatch(S, G2, gap=4.0)          # the cut through the moulding
-        else:
-            fr.face(S, G2, LINE)
+            rim(S, [2])
+        elif name == "y0":
+            rim(S, [0])
     # lead-frame: paddle under the die and fingers running in to it, black metal over the section
-    pad = cam.ps([(4.1, 1.3, cut_z), (8.9, 1.3, cut_z), (8.9, 5.1, cut_z), (4.1, 5.1, cut_z)])
-    fr.face(pad, G3, LINE)
+    pad = cam.ps([(3.7, 1.1, cut_z), (9.3, 1.1, cut_z), (9.3, 5.3, cut_z), (3.7, 5.3, cut_z)])
+    fr.face(pad, G2, LINE)
     fingers = []
     for px in pins:
         if px > cut_x:
             for side in (0, 1):
                 ya, yb = (0.0, 1.0) if side == 0 else (Wy - 1.0, Wy)
                 f_pts = cam.ps([(px - 0.3, ya, cut_z), (px + 0.3, ya, cut_z), (px + 0.3, yb, cut_z), (px - 0.3, yb, cut_z)])
-                fr.face(f_pts, G3, LINE)
+                fr.face(f_pts, G2, LINE)
                 fingers.append(((px, 0.85, cut_z) if side == 0 else (px, Wy - 0.85, cut_z)))
     # the die
-    dx0, dx1, dy0, dy1, dz = 4.4, 8.6, 1.6, 4.8, cut_z + 0.25
+    dx0, dx1, dy0, dy1, dz = 4.0, 9.0, 1.4, 5.0, cut_z + 0.25
     die = box_corners((dx0, dy0, cut_z), (dx1 - dx0, 0, 0), (0, dy1 - dy0, 0), (0, 0, 0.25))
     for name, W, S in visible_faces(cam, die):
-        fr.face(S, G3, LINE)
+        fr.face(S, G2, LINE)
         if name == "z1":
-            rim(S, [0, 1], G6)
+            rim(S, [0, 1], G5)
     # bond wires: hairline arcs from die-edge pads to the fingers
     for fx, fy, fz in fingers:
         py = dy0 + 0.25 if fy < Wy / 2 else dy1 - 0.25
@@ -648,11 +649,11 @@ def v4() -> Frame:
         arc_pts = []
         for j in range(9):
             t = j / 8
-            arc_pts.append(cam.p((px + (fx - px) * t, py + (fy - py) * t, dz + (fz - dz) * t + 0.9 * math.sin(math.pi * t))))
+            arc_pts.append(cam.p((px + (fx - px) * t, py + (fy - py) * t, dz + (fz - dz) * t + 0.45 * math.sin(math.pi * t))))
         fr.ribbon(arc_pts, HAIR, G4)
 
     # the chain: a meander of stages across the die, rows unevenly pitched when the clock wanders
-    rows = round(4 + 8 * st)                     # 4 .. 12 folds
+    rows = round(3 + 6 * st)                     # 3 .. 9 folds
     ys, y = [], dy0 + 0.55
     base = (dy1 - dy0 - 1.1) / (rows - 1)
     for r in range(rows):
@@ -703,27 +704,127 @@ def v4() -> Frame:
     lv = passes(fb)
     n = len(chain)
     for k, a in reversed(list(enumerate(lv))):
-        s0 = int(n * (0.12 + 0.8 * k / max(1, len(lv))))
-        ln = int(10 + 6 * a)
+        s0 = int(n * (0.04 + 0.86 * k / max(1, len(lv))))
+        ln = int(12 + 16 * a)
         seg = [cam.p(P) for j, P in enumerate(chain[s0:s0 + ln]) if alive[s0 + j]]
         colour, w = (G7, SUBJ) if k == 0 else (G5, LINE)
         fr.ribbon(seg, w, colour)
 
     # the uncut top of the moulding, with its pin-1 dimple, rim-lit
     for name, W, S in visible_faces(cam, upper):
-        fr.face(S, G2, LINE)
+        fr.face(S, G1, LINE)
         if name == "x1":
             fr.hatch(S, G2, gap=4.0)         # the cut face
         if name == "z1":
             rim(S, [0, 1])
     dimple = cam.ps(circle3((1.0, 1.0, Hz), 0.45, n=24)[:-1])
-    fr.face(dimple, G3, LINE)
+    fr.face(dimple, G2, LINE)
     for px in pins:
         lead(px, 0)
     return fr
 
 
-VARIANTS = {"v1": v1, "v2": v2, "v3": v3, "v4": v4}
+# ================================================================= v5
+def v5() -> Frame:
+    """The mark the process leaves behind: the ring stains a bucket brigade leaves on a
+    plank floor, one wet ring wherever a bucket stood. The row of rings shows how many
+    stages there were, how evenly they stood (clock), which leaked (drip trails) and how
+    many times the line came round (later rings set down over the first, each fainter
+    and more broken). The freshest ring, where the note is now, is the bright one."""
+    fr = Frame("v5 · ring stains")
+    st, lk, ck, fb = D["stages"], D["leak"], D["clock"], D["feedback"]
+    rnd = random.Random(19)
+
+    n = round(5 + 10 * st)                     # 5 .. 15 rings
+    L, r, row_y = 50.0, 2.1, 5.0
+    xs = [L * i / (n - 1) for i in range(n)]
+    xs = [x + (ck * (L / (n - 1)) * 0.4 * (rnd.random() - 0.5) * 2 if 0 < i < n - 1 else 0) for i, x in enumerate(xs)]
+    ys = [row_y + ck * 0.9 * (rnd.random() - 0.5) * 2 for _ in range(n)]
+    leaky = [i for i in range(n - 1) if rnd.random() < lk * 0.5]
+    lv = passes(fb)
+
+    cam = Camera(eye=(14, -30, 34), target=(25, 5, 0))
+    cam.fit([(-2.5, row_y - r - 0.5, 0), (L + 2.5, row_y - r - 0.5, 0), (-2.5, row_y + r + 4, 0), (L + 2.5, row_y + r + 4, 0)],
+            (30, 52, 452, 196))
+
+    # floorboards: seams along the row, staggered end joints, a grain line on every other
+    # board; everything clipped to the body so the floor never runs under the header
+    BOX = (2, 26, 478, 218)
+
+    def clipped(P, Q):
+        (x0, y0), (x1, y1) = P, Q
+        t0, t1, dx, dy = 0.0, 1.0, x1 - x0, y1 - y0
+        for p_, q_ in ((-dx, x0 - BOX[0]), (dx, BOX[2] - x0), (-dy, y0 - BOX[1]), (dy, BOX[3] - y0)):
+            if p_ == 0:
+                if q_ < 0:
+                    return None
+                continue
+            t = q_ / p_
+            if p_ < 0:
+                t0 = max(t0, t)
+            else:
+                t1 = min(t1, t)
+        if t0 >= t1:
+            return None
+        return (x0 + dx * t0, y0 + dy * t0), (x0 + dx * t1, y0 + dy * t1)
+
+    def seg(P, Q, w, colour):
+        c = clipped(cam.p(P), cam.p(Q))
+        if c:
+            fr.line(c[0], c[1], w, colour)
+
+    bw = 4.2
+    xa, xb = -40.0, 100.0
+    for k in range(-6, 12):
+        y = k * bw
+        seg((xa, y, 0), (xb, y, 0), HAIR, G2)
+        off = (k * 13.7) % 21
+        for x in [off - 42 + 21 * j for j in range(8)]:
+            seg((x, y, 0), (x, y + bw, 0), HAIR, G2)
+        if k % 2 == 0:
+            gx = [xa + j * 4.0 for j in range(36)]
+            for j in range(0, len(gx) - 1, 3):
+                for jj in range(j, j + 2):
+                    g0 = (gx[jj], y + bw * 0.5 + 0.3 * math.sin(gx[jj] / 5.3 + k), 0)
+                    g1 = (gx[jj + 1], y + bw * 0.5 + 0.3 * math.sin(gx[jj + 1] / 5.3 + k), 0)
+                    seg(g0, g1, HAIR, G1)
+
+    def ring(cx, cy, rad, a0, cover, w, colour, npts=40):
+        a1 = a0 + 2 * math.pi * cover
+        pts = cam.ps([(cx + rad * math.cos(a0 + (a1 - a0) * j / npts), cy + rad * math.sin(a0 + (a1 - a0) * j / npts), 0)
+                      for j in range(npts + 1)])
+        if cover >= 0.999:
+            fr.poly(pts[:-1], "none", colour, w) if False else fr.ribbon(pts, w, colour)
+        else:
+            fr.ribbon(pts, w, colour)
+
+    note = 3
+    # later passes first (they're fainter), offset a little each time round, more broken
+    for k in range(len(lv) - 1, 0, -1):
+        for i in range(n):
+            ox, oy = 0.55 * k * (1 if k % 2 else -1), 0.45 * k
+            cover = max(0.25, 0.85 - 0.22 * k) * (0.7 + 0.3 * lv[k] / lv[1])
+            ring(xs[i] + ox, ys[i] + oy, r * (1 - 0.04 * k), rnd.uniform(0, 6.28), cover, HAIR, G3)
+    # the first pass: a full ring with the darker tide-mark inside it, broken
+    for i in range(n):
+        if i == note:
+            ring(xs[i], ys[i], r, 0, 1.0, SUBJ, G7)
+            ring(xs[i], ys[i], r - 0.5, 0.6, 0.55, HAIR, G5)
+        else:
+            ring(xs[i], ys[i], r, 0, 1.0, LINE, G4)
+            ring(xs[i], ys[i], r - 0.5, rnd.uniform(0, 6.28), 0.45, HAIR, G3)
+    # drips: a trail of spots from each leaky bucket toward the next, hatched spots
+    for i in leaky:
+        for j in range(4):
+            t = 0.25 + 0.17 * j
+            x = xs[i] + (xs[i + 1] - xs[i]) * t
+            y = ys[i] - r * 0.4 + 0.35 * math.sin(j * 2.1)
+            sp = cam.ps(circle3((x, y, 0), 0.38 - 0.05 * j, n=16)[:-1])
+            fr.face(sp, G3, LINE)
+    return fr
+
+
+VARIANTS = {"v1": v1, "v2": v2, "v3": v3, "v4": v4, "v5": v5}
 
 
 def main() -> None:

@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "The lighthouse's beehive drum lens filling the screen, its dome and pedestal past the frame's edges, the prism rings catching the lamp only round the panel that is flashing while the rest of the glass stays dark, with the flame's image bright in the belt.",
+  "controls": [
+    "pulse: the flame's image in the belt widens from a slit to a broad lens shape, 4 px to 19 px wide (scale of the one bright mass).",
+    "lens: the prism rings above and below the belt step in count, 3 to 11 per zone, so the saw-tooth silhouette tightens as the lens focuses (count, with the outline's shape following).",
+    "sweep: the drum turns, carrying the lit panel, its brass bars and the flame off the axis toward the right silhouette, 0 to 80 degrees round the drum (rotation, faked by redrawing the bars' positions; the lit arcs slide about 120 px).",
+    "fog: diagonal hatching rises from the bottom edge over the glass, clipped to the frame, up to about three quarters of the body (position of the hatched region's top edge; nothing at the default 0)."
+  ],
+  "reference": "library/theseus-tower (a subject that stays, drawn as hidden-line line art with one lit part); opxy/reference/toro-ink-rest.jpg for the black-dominant body",
+  "risks": [
+    "Cropped this close, a beehive lens can read as a barrel or a lampshade to someone who hasn't seen one; the saw-tooth silhouette is what says lens.",
+    "Sweep is a redraw of every bar and lit arc (a 3D turn faked in the plane): heavy on nodes and redraw; the lit run would need to be a few pre-drawn nodes per ring.",
+    "At sweep 100 the lit panel reaches the silhouette and the flame is foreshortened to a sliver, so the brightest element nearly disappears; the range may need capping near 60 degrees.",
+    "Lens at 0 leaves three rings per zone and a mostly empty drum; fine as 'unfocused', but the top end at 11 rings per zone is about 5 px apart, near the hatching floor."
+  ]
+}

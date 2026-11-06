@@ -1,0 +1,16 @@
+{
+  "variant": "v2",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "One ant at large scale in side elevation, its gaster cut open to show the gland and duct laying the scent trail behind it, its antennae reading the trail, followers walking the trail it leaves.",
+  "controls": [
+    "ants: count, the small ants following in file on the trail behind the big one, 0 to 7 (1 to 8 with it), each easing in from the left edge.",
+    "scent: rotation, the flagellum of the near antenna pivots at its elbow from raised and searching (about −35°) at 0 to pressed down onto the ground trail (about +70°) at 100, over 100°.",
+    "fade: position, where the deposited trail dies: the bright fresh stretch runs back from the sting, then a hatched evaporating stretch, whose far end moves from the left edge at 0 to just behind the ant at 100 (over 100 px).",
+    "scale: count + position, the stone slabs under the ground line, one per degree: 11 at pent to 25 at chrom."
+  ],
+  "reference": "opxy/craft.md (Semi-opaque areas are hatched) and library/theseus-tower for black bodies with grey edges",
+  "muted": "Muted: the duct and the fresh trail drop to the hatch grey and the antennae lift off the ground; the ant stays.",
+  "risks": "It explains the rule (deposit, sense, evaporate) better than it shows the phrase: the trail is a straight line along the ground, so the repeating melody isn't visible; the ant is the subject but the bright element is the trail. Hatched masses on head and thorax plus a hatched cut wall is a lot of hatching; at 1:1 it holds, but on the device it may read grey. The followers are 30 px and only just read as ants. The scale slabs along the bottom are close to a strip of cells."
+}

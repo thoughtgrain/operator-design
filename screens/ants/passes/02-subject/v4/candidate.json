@@ -1,0 +1,16 @@
+{
+  "variant": "v4",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "One fork of the lattice at large scale: a twig junction where a step can go to any degree of the octave, one branch per degree, a scout ant on the knot turning onto the scented branch and the rest of the lattice past the frame's edge.",
+  "controls": [
+    "ants: count, ants already out along the scented branch, 0 to 7 behind the scout, the farthest ones leaving the frame.",
+    "scent: rotation, the scout's heading on the knot swings from between branches at 0 to square onto the scented branch at 100 (about 70°).",
+    "fade: position, how far the old scent (hatched band) still reaches up the unused branches: to the frame edge at 0, shrinking back to the knot by 100.",
+    "scale: count + rotation, branches out of the knot: 5 at pent, 7 for the modes, 12 at chrom, fanning closer together."
+  ],
+  "reference": "opxy/craft.md (3D shapes as detailed line art) and library/theseus-tower",
+  "muted": "Muted: the scented branch's bright line drops to the hatch grey and the scout stops mid-turn.",
+  "risks": "Shows one decision, not the phrase: what the colony plays over time isn't drawn, only which way it goes next, so the player sees the rule more than the result. Branches per degree of the octave is a simplification of the real lattice (step and third neighbours). At chrom twelve branches crowd into a fan near the knot. Twigs could pass for roads at a glance; the bark fissures carry the reading."
+}
