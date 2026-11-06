@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P1",
+  "drawing_language": "oscilloscope trace",
+  "subject": "The bellows and its reed block cut open and plotted on a scope graticule, the pleats a triangle trace that closes as pressure rises and the reed tongue a bright stroke lifted over its slot.",
+  "controls": [
+    "press: the moving board slides left and the pleats close up, the bellows shortening from 250 to 140 px; position of the board, shape of the pleat traces.",
+    "reed: the bright tongue over plate a swings open from 6 to 32 px at its tip; rotation about its rivet.",
+    "leak: a dotted breath trace streams out between the lower pleats, 0 to about 16 dots and longer as it rises; count.",
+    "choir: the second tongue on plate b lifts out of unison and its rivet slides along the plate, 0 to 30 px; position, with a ghost beat-trace across ch2 while playing."
+  ],
+  "reference": "library/theseus-tower (line drawing of a known object, one part moves)",
+  "risks": "Two languages pulling: a section drawing wants solid cut faces and hatching, a scope wants one phosphor line on a graticule. The graticule is 11 x 5 hairlines across the body and could read as a dashboard grid behind the drawing; it may need to drop to corner ticks. The pleats are the brightest thing, not the reed that sings; at 1:1 the tongue is a 2 px stroke 90 px long, which is right but small. Press both moves a board and reshapes two traces, so its key changes on every press turn (two paths re-keyed)."
+}

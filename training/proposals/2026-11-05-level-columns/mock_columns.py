@@ -1,18 +1,21 @@
-"""Mock rest frame for P17 Level columns: a four-tap delay effect (illustration only, not a machine).
+"""Mock rest frame for P17 Level columns (draft): a four-tap delay effect (illustration only, not a machine).
 
-Four columns take the whole screen, one per encoder, left to right. Their greys step from dark to light in encoder
-order, the same order as the encoder dots on the stock tile pages, so the ramp ties each column to its encoder
-without a label. The columns cover y 0-20, which hides the stock header (display.md, Artwork); there are no titles,
-values or text slots.
+Four columns take the whole screen, one per encoder, left to right, and their greys step from dark to light in encoder
+order. The columns cover y 0-20, which hides the stock header (display.md, Artwork), so each column carries its own
+title (10 px) and value (20 px) at its top, as the machine's own header text (ux.md, Controls: real units in the header,
+or the machine's own header text). Each column is 120 px, the stock header's column width, and the text follows the
+stock header's rule: light (#CBCBCB) on the two dark columns, black on the two light ones.
 
-Each column's level is one node: a 10 px bar across the column (inset 4 px each side), light on the darkest column
-and black on the rest, so it contrasts with its own ground. 0 rests on the bottom edge, 100 at the top: 196 px of
-travel. Each tap has an on/off switch on the Shift row (an effect's `shift` enum, SDK 1.7). The device wants one
-subpath per path (display.md, Artwork), so the hatching can't be one node. Instead every column's hatching is static
-artwork, one path per diagonal strip (1.5 px, 10 px apart, two grey steps from the column), and a cover node, a
-rectangle in the column's own grey, sits over it while the tap is on. Switching the tap off parks the cover at
-(640, 320) (`hide`), which shows the hatching: one node per column, nothing at rest. The level bar draws over both, so
-the setting stays visible. Here tap 3 is off, so its cover is parked (left out of this still).
+Each column's level is one node: a 12 px bar across the column (inset 4 px each side), light on the darkest column and
+black on the rest. 0 rests at y 206-218 and 100 at y 46-58, under the text: 160 px of travel. A 112 x 12 bar sweeping
+that far changes about 2,690 px, 2.55 % of the whole 480 x 220 screen (perceptibility.py --header-bottom 0).
+
+Each tap has an on/off switch on the Shift row (an effect's `shift` enum, SDK 1.7). The device wants one subpath per
+path (display.md, Artwork), so a column's hatching is static artwork, one path per diagonal strip (1.5 px wide, 10 px
+apart along x, about 7 px apart square to them, two grey steps from the column: lighter on the darkest, darker on the
+rest), and a cover node, a rectangle in the column's own grey, sits over it while the tap is on. Switching off slides
+the cover down out of the column (eased 0.15-0.2 s), then parks it; switching on slides it back. Here taps 1 and 3
+are off, so their covers are away and the darkest column's hatching is on show.
 
 Usage: python3 mock_columns.py OUT.svg
 """
@@ -21,9 +24,12 @@ import sys
 RAMP = ["#323232", "#646464", "#969696", "#CDCDCD"]       # encoder order, dark to light
 BAR = ["#CDCDCD", "#000000", "#000000", "#000000"]         # contrasts with its own column
 HATCH = ["#646464", "#323232", "#646464", "#969696"]      # two steps from each column
-OFF = {2}                                                  # tap 3 off: its cover is parked
+OFF = {0, 2}                                               # taps 1 and 3 off: their covers are away
+TEXT = ["#CBCBCB", "#CBCBCB", "#000000", "#000000"]        # the stock header's rule
+TITLES = ["tap 1", "tap 2", "tap 3", "tap 4"]
 LEVEL = [0.72, 0.38, 0.55, 0.18]
-W, H, BAR_H, INSET = 120, 220, 10, 4
+W, H, BAR_H, INSET = 120, 220, 12, 4
+Y0, Y100 = 206, 46                                         # the bar's top at 0 and at 100
 f = lambda v: f"{v:.2f}".rstrip("0").rstrip(".")
 
 
@@ -59,8 +65,11 @@ for i, g in enumerate(RAMP):
         out.append(f'  <path d="{d}" fill="{HATCH[i]}" stroke="none" stroke-width="0"/>')
     if i not in OFF:  # the cover node, in the column's own grey
         out.append(f'  <path d="{path([(x, 0), (x + W, 0), (x + W, H), (x, H)])}" fill="{g}" stroke="none" stroke-width="0"/>')
-    y = round(H - 2 - BAR_H - LEVEL[i] * (H - 4 - BAR_H - 10))
+    y = round(Y0 - LEVEL[i] * (Y0 - Y100))
     out.append(f'  <path d="{path([(x + INSET, y), (x + W - INSET, y), (x + W - INSET, y + BAR_H), (x + INSET, y + BAR_H)])}" '
                f'fill="{BAR[i]}" stroke="none" stroke-width="0"/>')
+    add_text = out.append
+    add_text(f'  <text x="{x + 8}" y="16" font-family="UniversNextPro-Light" font-size="10" fill="{TEXT[i]}" stroke="none" stroke-width="0">{TITLES[i]}</text>')
+    add_text(f'  <text x="{x + 8}" y="38" font-family="UniversNextPro-Light" font-size="20" fill="{TEXT[i]}" stroke="none" stroke-width="0">{round(LEVEL[i] * 100)}%</text>')
 out.append("</svg>")
 open(sys.argv[1], "w").write("\n".join(out) + "\n")

@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P15",
+  "drawing_language": "orthographic elevation",
+  "subject": "The shore cut in elevation as one grid of square cells: hollow cells for rock, grey cells for water, and lit runs where the swell foams over the rim and glints in the pool.",
+  "controls": [
+    "swell: the crest column in the sea grows taller and wider and lights a longer foam run before the rim (count of lit cells).",
+    "depth: the pool's water line rises cell by cell and the rock floor under it drops, so the grey water body grows from one row to five (count of grey cells).",
+    "salt: lit crystal runs of 2 to 4 cells appear inside the grey water and along the rock edges (density of lit runs).",
+    "drift: the pool's surface tilts a cell at a time from one wall to the other, so the water line steps (run length / position of the surface cells)."
+  ],
+  "reference": "opxy/reference/README.md",
+  "risks": "P15 is meant for sounds with no mechanism, and tide has one (a pool of tuned resonators), so this risks Gate 0's warning. At 20 px cells the shore is coarse and reads like a block game; the hollow rock cells fill a lot of the body, close to the 40% black floor. Salt and swell both add lit cells, so they need different places (in the water vs over the rim) to stay separable."
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "hidden-line isometric",
+  "subject": "Five vowel resonators stacked into a tower on a narrow throat neck, like the short pipes of a vox humana organ stop, with the sung vowel's chamber standing out solid and breath rising off the top in rings.",
+  "controls": [
+    "vowel: shade and position, the sung chamber fills dark with a bright edge while the others stay hidden-line; moving from u (base) to i (top) walks the solid chamber ~90 px up the tower.",
+    "breath: count, rings rise off the top chamber in the same projection, 0 at 0 to ~10 at 100.",
+    "throat: position, the neck between the glottal boot and the chambers lengthens from ~26 px at 0.75 to ~52 px at 1.50, lifting the whole stack.",
+    "glide: count and shade, the chambers between u and the sung vowel light their edges one by one, the route the onset glides along, none at 5 ms to all of them at 2 s."
+  ],
+  "reference": "library/theseus-tower (P11 Instrument stack, hidden-line tiers)",
+  "risks": "Stretch, and plainly a poor fit. P11 works when the player already knows the instrument by sight and the note picks the part; here nobody recognises a vowel resonator stack (the vox humana is real but obscure), and the vowel knob, not the note, picks the chamber, so the tower is an invented diagram dressed as an instrument. The exception case would be that vowel really is a selection among a few named resonances, but vapor's vowel is a continuum and the stack can only show nine enum steps as five tiers. It also sits close to theseus's tower in silhouette, which risks reading as a copy of another machine's drawing. Glide on a five-tier count is under the 12-item floor."
+}

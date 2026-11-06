@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P13 Capture; drawing language: patent section. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P5",
+      "drawing_language": "oscilloscope trace",
+      "subject": "One phosphor trace of the pool ringing after the latest swell stands bright over dim receding traces of earlier swells, with each wave's arrival ticked along the bottom strip.",
+      "controls": [
+        "swell: the arrival ticks in the bottom strip spread from many (0.25 s) to two (8 s) across the window, and the receding traces step back by one period each (count and position).",
+        "depth: the bright trace's ring-down tail stretches from a short burst at the left to a wave that reaches the right edge (shape of the figure).",
+        "salt: the trace's later cycles break into an inharmonic beating ripple as the partials stretch (shape, second-order; needs its own region of the trace).",
+        "drift: the receding persistence traces slide sideways out of register with each other, so the stack shears (position of the field layers)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "P3's warning applies: it can read as a plain oscilloscope that says nothing about a rock pool. Depth and salt both reshape the one trace; salt needs a clearly different kind of change (beating, not length) or it collides with depth. The trace is ~280 points, so on the device it must be four 64-point mutable outlines and re-keyed only on turns. The far persistence traces are small (period ~3.5 px) and close to the hatching floor."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "drawing_language": "typeset diagram",
+      "subject": "A Hinton chart set like a textbook figure: eight resonator rows across four seconds, each square sized by how loudly that resonator rings, so the swells show as bright columns that fade to the right.",
+      "controls": [
+        "swell: the bright onset columns move closer together or further apart along the time axis, from every column (0.25 s) to only one in the window (8 s) (position/count).",
+        "depth: squares stay large for longer after each onset, from one column of decay to a full row of large squares (scale of the cells, i.e. shape of the field).",
+        "salt: the row spacing stretches unevenly downward as partials go inharmonic, so f5..f8 spread apart while f1 stays put (position of rows).",
+        "drift: each row slides its squares a few pixels left or right of the column grid, so the onset columns go ragged (position per row, different axis to salt)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "It is the most legible of the five but the least about a rock pool: no water, no rock, only the model. Row labels f1..f8 and the time axis are static text that the guidelines allow but which push it toward a chart. 128 squares is fine for nodes, but swell moves every column at once, so a swell turn redraws far over 20 nodes (turns only, never at rest). Hinton charts are a known form; it must not drift into a meter grid."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "drawing_language": "orthographic elevation",
+      "subject": "The shore cut in elevation as one grid of square cells: hollow cells for rock, grey cells for water, and lit runs where the swell foams over the rim and glints in the pool.",
+      "controls": [
+        "swell: the crest column in the sea grows taller and wider and lights a longer foam run before the rim (count of lit cells).",
+        "depth: the pool's water line rises cell by cell and the rock floor under it drops, so the grey water body grows from one row to five (count of grey cells).",
+        "salt: lit crystal runs of 2 to 4 cells appear inside the grey water and along the rock edges (density of lit runs).",
+        "drift: the pool's surface tilts a cell at a time from one wall to the other, so the water line steps (run length / position of the surface cells)."
+      ],
+      "reference": "opxy/reference/README.md",
+      "risks": "P15 is meant for sounds with no mechanism, and tide has one (a pool of tuned resonators), so this risks Gate 0's warning. At 20 px cells the shore is coarse and reads like a block game; the hollow rock cells fill a lot of the body, close to the 40% black floor. Salt and swell both add lit cells, so they need different places (in the water vs over the rim) to stay separable."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "drawing_language": "survey plan",
+      "subject": "A surveyed plan of the rock pool: its rim as one bright outline open to the sea, depth contours ringing two basins, spot soundings, a tide mark and the swell fronts arriving through the mouth.",
+      "controls": [
+        "swell: the arc fronts outside the mouth spread apart or crowd together, 3 to 8 visible (position and count).",
+        "depth: each basin gains contour rings inward, two to six, and the soundings deepen (count).",
+        "salt: the rim outline breaks from a smooth curve into crystalline straight facets (shape of the one mutable outline).",
+        "drift: the dotted tide mark slides off concentric and wanders inside the rim (position)."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "Plan view hides the vertical, so depth has to be read from contour count, not height; that's a convention, not something the eye gets for free. Soundings are body text that should move with depth, which the guidelines discourage (text on things that change); they may have to become fixed labels or go. Notes need a strike: a basin's contours brighten from the centre out, which is a shade change and needs a scale cue too. Contours are many closed outlines, budget must be checked."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P13",
+      "drawing_language": "patent section",
+      "subject": "A patent section through the shore: the swell rolling in from the left, the rock rim it overtops, and the pool behind it drilled with three chambers of different depth, each ringing at its own pitch.",
+      "controls": [
+        "swell: the incoming crests spread apart or bunch up along the sea, and the nearest one stands taller against the rim (position).",
+        "depth: the chamber floors drop, lengthening each chamber from shallow cups to deep shafts (shape of the rock outline).",
+        "salt: crystal facets appear along the chamber walls, a few to a dozen (count).",
+        "drift: the pool's water surface tilts and its patent water marks slide, as the pool sloshes off tune (shape/position of the surface)."
+      ],
+      "reference": "library/meikyu-capture",
+      "risks": "Stretch outside the engine column. The exception is partial: tide's sound is a capture rule (only the noise that reaches the pool, and only at its tuned frequencies, survives), so the rim-as-threshold is honest. But P13's power in meikyu was that every visual change is a decision the player is making about what gets in; here swell is a period, not a threshold, so the rim does nothing a control moves. Honestly it is a P1 section drawing wearing P13's argument. The hatching is static but dense (7 px), and the numerals are decoration unless they stay few."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.19,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:19:27"
+  },
   "selection": null
 }

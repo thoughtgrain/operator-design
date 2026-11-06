@@ -35,8 +35,9 @@
   <path d="M 90 220 L 120 190 L 120 192.12 L 92.12 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 100 220 L 120 200 L 120 202.12 L 102.12 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 110 220 L 120 210 L 120 212.12 L 112.12 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 0 0 L 120 0 L 120 220 L 0 220 Z" fill="#323232" stroke="none" stroke-width="0"/>
-  <path d="M 4 67 L 116 67 L 116 77 L 4 77 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
+  <path d="M 4 91 L 116 91 L 116 103 L 4 103 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
+  <text x="8" y="16" font-family="UniversNextPro-Light" font-size="10" fill="#CBCBCB" stroke="none" stroke-width="0">tap 1</text>
+  <text x="8" y="38" font-family="UniversNextPro-Light" font-size="20" fill="#CBCBCB" stroke="none" stroke-width="0">72%</text>
   <path d="M 120 0 L 240 0 L 240 220 L 120 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 120 10 L 130 0 L 132.12 0 L 120 12.12 Z" fill="#323232" stroke="none" stroke-width="0"/>
   <path d="M 120 20 L 140 0 L 142.12 0 L 120 22.12 Z" fill="#323232" stroke="none" stroke-width="0"/>
@@ -72,7 +73,9 @@
   <path d="M 220 220 L 240 200 L 240 202.12 L 222.12 220 Z" fill="#323232" stroke="none" stroke-width="0"/>
   <path d="M 230 220 L 240 210 L 240 212.12 L 232.12 220 Z" fill="#323232" stroke="none" stroke-width="0"/>
   <path d="M 120 0 L 240 0 L 240 220 L 120 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 124 134 L 236 134 L 236 144 L 124 144 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 124 145 L 236 145 L 236 157 L 124 157 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <text x="128" y="16" font-family="UniversNextPro-Light" font-size="10" fill="#CBCBCB" stroke="none" stroke-width="0">tap 2</text>
+  <text x="128" y="38" font-family="UniversNextPro-Light" font-size="20" fill="#CBCBCB" stroke="none" stroke-width="0">38%</text>
   <path d="M 240 0 L 360 0 L 360 220 L 240 220 Z" fill="#969696" stroke="none" stroke-width="0"/>
   <path d="M 240 10 L 250 0 L 252.12 0 L 240 12.12 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 240 20 L 260 0 L 262.12 0 L 240 22.12 Z" fill="#646464" stroke="none" stroke-width="0"/>
@@ -107,7 +110,9 @@
   <path d="M 330 220 L 360 190 L 360 192.12 L 332.12 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 340 220 L 360 200 L 360 202.12 L 342.12 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
   <path d="M 350 220 L 360 210 L 360 212.12 L 352.12 220 Z" fill="#646464" stroke="none" stroke-width="0"/>
-  <path d="M 244 100 L 356 100 L 356 110 L 244 110 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 244 118 L 356 118 L 356 130 L 244 130 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <text x="248" y="16" font-family="UniversNextPro-Light" font-size="10" fill="#000000" stroke="none" stroke-width="0">tap 3</text>
+  <text x="248" y="38" font-family="UniversNextPro-Light" font-size="20" fill="#000000" stroke="none" stroke-width="0">55%</text>
   <path d="M 360 0 L 480 0 L 480 220 L 360 220 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
   <path d="M 360 10 L 370 0 L 372.12 0 L 360 12.12 Z" fill="#969696" stroke="none" stroke-width="0"/>
   <path d="M 360 20 L 380 0 L 382.12 0 L 360 22.12 Z" fill="#969696" stroke="none" stroke-width="0"/>
@@ -143,5 +148,7 @@
   <path d="M 460 220 L 480 200 L 480 202.12 L 462.12 220 Z" fill="#969696" stroke="none" stroke-width="0"/>
   <path d="M 470 220 L 480 210 L 480 212.12 L 472.12 220 Z" fill="#969696" stroke="none" stroke-width="0"/>
   <path d="M 360 0 L 480 0 L 480 220 L 360 220 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
-  <path d="M 364 173 L 476 173 L 476 183 L 364 183 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <path d="M 364 177 L 476 177 L 476 189 L 364 189 Z" fill="#000000" stroke="none" stroke-width="0"/>
+  <text x="368" y="16" font-family="UniversNextPro-Light" font-size="10" fill="#000000" stroke="none" stroke-width="0">tap 4</text>
+  <text x="368" y="38" font-family="UniversNextPro-Light" font-size="20" fill="#000000" stroke="none" stroke-width="0">18%</text>
 </svg>

@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.2",
+  "kind": "synth",
+  "description": "Phase distortion driven by a gear train: the read phase turns with a toothed wheel at a set ratio, stepped by its teeth, rounded by wear, pushed in by bite."
+}

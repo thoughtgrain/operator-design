@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "spool",
+  "name": "Spool",
+  "parameters": [
+    {
+      "id": "wear",
+      "label": "Wear",
+      "default": 0.0,
+      "mapping": {"kind": "power", "maximum": 1, "exponent": 2},
+      "display": "percent"
+    },
+    {
+      "id": "wow",
+      "label": "Wow",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "length",
+      "label": "Length",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.05, "maximum": 2.0},
+      "display": "duration"
+    },
+    {
+      "id": "bias",
+      "label": "Bias",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": -1, "maximum": 1},
+      "display": "bipolar"
+    }
+  ],
+  "presets": {
+    "Fresh": {"wear": 0.0, "wow": 0.0, "length": 0.5, "bias": 0.5},
+    "Attic": {"wear": 0.62, "wow": 0.35, "length": 0.38, "bias": 0.3}
+  },
+  "resources": {
+    "voiceBytes": 4096,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 24,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

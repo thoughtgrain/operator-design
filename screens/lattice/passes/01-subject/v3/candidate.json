@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P2",
+  "drawing_language": "star atlas",
+  "subject": "A chart of the plate as a star field, junctions plotted as stars by how hard they ring with a constellation line from strike to pickup, beside the light curve the pickup records after each strike.",
+  "controls": [
+    "size: count, the chart holds 4 x 4 to 12 x 12 stars and its neat-line ticks follow the mesh pitch.",
+    "tension: shape, the constellation line from strike to pickup sags in a slack arc at 0 and pulls straight at 100.",
+    "damp: shape, the light curve on the right runs long and beating at 0 and dies within its first tenth at 100.",
+    "pickup: position, the pickup star moves across the chart away from the strike, and the light curve's beating changes with it."
+  ],
+  "reference": "library/meikyu-orrery (atlas labelling and restraint) and opxy/reference/README.md (field-and-figure)",
+  "risks": "Two subjects in one frame: the chart and the curve compete, and P2 always asks which is the picture. Tension's sag is a metaphor (a constellation line has no tension), honest only as a reading aid; the plate's real tension change is in the curve's partial spacing. The light curve re-keys one 64-point path on damp and pickup and is coarse for high partials (near-reversal at sharp peaks). Stars at 3 px are at the legibility floor."
+}

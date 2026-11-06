@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.2",
+  "kind": "synth",
+  "description": "A breathy formant voice: a glottal pulse through a throat tube and vowel formants, gliding between vowels."
+}

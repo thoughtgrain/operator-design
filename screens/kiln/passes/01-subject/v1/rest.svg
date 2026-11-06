@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">strike</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">glaze</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">crack</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">fire</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">50</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">30</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1.12</text>
+  </g>
+  <path id="kiln_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="kiln_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#969696" stroke="#969696" stroke-width="2"/>
+  <path id="kiln_palette_2" d="M 720 300 L 724 300 L 724 304 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="2"/>
+  <path id="kiln_palette_3" d="M 730 300 L 734 300 L 734 304 Z" fill="#646464" stroke="#646464" stroke-width="2"/>
+  <path id="kiln_palette_4" d="M 740 300 L 744 300 L 744 304 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  <path id="kiln_palette_5" d="M 750 300 L 754 300 L 754 304 Z" fill="#323232" stroke="#323232" stroke-width="2"/>
+  <path id="kiln_node_0" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 53)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_1" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 53)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_2" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 60)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_3" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 60)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_4" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 60)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_5" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 60)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_6" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 186 67)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_7" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 186 67)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_8" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 67)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_9" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 67)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_10" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 67)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_11" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 67)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_12" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 174 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_13" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 174 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_14" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_15" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_16" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_17" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_18" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_19" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 74)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_20" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 162 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_21" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 162 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_22" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 186 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_23" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 186 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_24" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_25" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_26" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 81)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_27" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 81)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_28" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_29" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 81)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_30" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 150 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_31" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 150 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_32" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 174 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_33" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 174 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_34" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_35" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_36" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_37" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_38" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 88)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_39" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 88)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_40" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_41" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 88)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_42" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 138 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_43" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 138 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_44" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 162 95)" fill="#4B4B4B" stroke="#7D7D7D" stroke-width="1"/>
+  <path id="kiln_node_45" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 162 95)" fill="#969696" stroke="#7D7D7D" stroke-width="1"/>
+  <path id="kiln_node_46" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 186 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_47" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 186 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_48" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_49" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_50" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_51" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_52" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 95)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_53" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 95)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_54" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_55" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 95)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_56" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 126 102)" fill="#4B4B4B" stroke="#7D7D7D" stroke-width="1"/>
+  <path id="kiln_node_57" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 126 102)" fill="#969696" stroke="#7D7D7D" stroke-width="1"/>
+  <path id="kiln_node_58" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 150 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_59" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 150 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_60" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 174 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_61" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 174 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_62" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_63" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_64" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_65" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_66" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_67" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_68" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 102)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_69" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 102)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_70" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_71" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 102)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_72" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 138 109)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_73" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 138 109)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_74" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 162 109)" fill="#646464" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_75" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 162 109)" fill="#CDCDCD" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_76" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 186 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_77" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 186 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_78" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_79" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_80" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_81" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_82" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_83" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_84" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 109)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_85" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 109)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_86" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 306 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_87" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 306 109)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_88" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 150 116)" fill="#646464" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_89" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 150 116)" fill="#CDCDCD" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_90" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 174 116)" fill="#646464" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_91" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 174 116)" fill="#CDCDCD" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_92" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_93" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_94" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_95" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_96" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 116)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_97" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 116)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_98" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_99" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_100" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 116)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_101" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 116)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_102" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 318 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_103" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 318 116)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_104" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 162 123)" fill="#646464" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_105" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 162 123)" fill="#CDCDCD" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_106" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 186 123)" fill="#646464" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_107" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 186 123)" fill="#CDCDCD" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_108" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 123)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_109" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 123)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_110" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 123)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_111" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 123)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_112" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 123)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_113" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 123)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_114" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 123)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_115" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 123)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_116" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 306 123)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_117" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 306 123)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_118" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 330 123)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_119" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 330 123)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_120" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 174 130)" fill="#646464" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_121" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 174 130)" fill="#CDCDCD" stroke="#AFAFAF" stroke-width="1"/>
+  <path id="kiln_node_122" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 130)" fill="#4B4B4B" stroke="#7D7D7D" stroke-width="1"/>
+  <path id="kiln_node_123" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 130)" fill="#969696" stroke="#7D7D7D" stroke-width="1"/>
+  <path id="kiln_node_124" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 130)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_125" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 130)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_126" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 130)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_127" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 130)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_128" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 130)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_129" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 130)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_130" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 130)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_131" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 130)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_132" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 318 130)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_133" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 318 130)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_134" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 342 130)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_135" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 342 130)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_136" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 186 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_137" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 186 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_138" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_139" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_140" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_141" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_142" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 137)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_143" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 137)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_144" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 137)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_145" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 137)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_146" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 306 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_147" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 306 137)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_148" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 330 137)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_149" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 330 137)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_150" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 354 137)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_151" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 354 137)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_152" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 198 144)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_153" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 198 144)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_154" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_155" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_156" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_157" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_158" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 144)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_159" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 144)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_160" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_161" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_162" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 318 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_163" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 318 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_164" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 342 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_165" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 342 144)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_166" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 366 144)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_167" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 366 144)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_168" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 210 151)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_169" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 210 151)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_170" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_171" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_172" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_173" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_174" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_175" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_176" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 306 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_177" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 306 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_178" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 330 151)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_179" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 330 151)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_180" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 354 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_181" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 354 151)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_182" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 222 158)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_183" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 222 158)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_184" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_185" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_186" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_187" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_188" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_189" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_190" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 318 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_191" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 318 158)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_192" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 342 158)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_193" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 342 158)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_194" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 234 165)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_195" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 234 165)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_196" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 165)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_197" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 165)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_198" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 165)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_199" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 165)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_200" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 306 165)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_201" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 306 165)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_202" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 330 165)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_203" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 330 165)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_204" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 246 172)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_205" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 246 172)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_206" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 172)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_207" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 172)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_208" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 172)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_209" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 172)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_210" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 318 172)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_211" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 318 172)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_212" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 258 179)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_213" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 258 179)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_214" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 179)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_215" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 179)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_216" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 306 179)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_217" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 306 179)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_218" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 270 186)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_219" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 270 186)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_220" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 294 186)" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_221" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 294 186)" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_222" d="M -12 0 L 0 7 L 12 0 L 12 5 L 0 12 L -12 5 Z" transform="matrix(1 0 0 1 282 193)" fill="#000000" stroke="#646464" stroke-width="1"/>
+  <path id="kiln_node_223" d="M 0 -7 L 12 0 L 0 7 L -12 0 Z" transform="matrix(1 0 0 1 282 193)" fill="#000000" stroke="#646464" stroke-width="1"/>
+</svg>

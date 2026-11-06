@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "id": "silt",
+  "name": "Silt",
+  "parameters": [
+    {
+      "id": "settle",
+      "label": "Settle",
+      "default": 0.5,
+      "mapping": {
+        "kind": "exponential",
+        "minimum": 0.1,
+        "maximum": 10
+      },
+      "display": "duration"
+    },
+    {
+      "id": "layers",
+      "label": "Layers",
+      "default": 0.5,
+      "mapping": {
+        "kind": "enum",
+        "labels": ["2", "4", "8", "12", "16", "24", "32", "48", "64"]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "stir",
+      "label": "Stir",
+      "default": 0.35,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "grain",
+      "label": "Grain",
+      "default": 0.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Still": {
+      "settle": 0.5,
+      "layers": 0.5,
+      "stir": 0.35,
+      "grain": 0
+    },
+    "Flood": {
+      "settle": 0.8,
+      "layers": 0.875,
+      "stir": 0.9,
+      "grain": 0.4
+    }
+  },
+  "resources": {
+    "voiceBytes": 1024,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 64,
+      "texts": 0,
+      "palette": 8
+    }
+  }
+}

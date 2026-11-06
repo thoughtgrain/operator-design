@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">ratio</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">teeth</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wear</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">bite</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">2.00</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">6</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0%</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">35%</text>
+  </g>
+  <title>drill v1 · P1 section drawing · typeset diagram</title>
+  <path id="drill_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>
+  <path id="drill_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#646464" stroke="#646464" stroke-width="2"/>
+  <path d="M 134.5 120.35 L 386 120.35 L 386 119.65 L 134.5 119.65 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.3"/>
+  <path d="M 305.65 44 L 305.65 196 L 306.35 196 L 306.35 44 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.3"/>
+  <path d="M 148.15 104 L 148.15 136 L 148.85 136 L 148.85 104 Z" fill="#4B4B4B" stroke="#4B4B4B" stroke-width="0.3"/>
+  <path d="M 217.7 50.75 L 224.8 58.63 L 240.08 57.47 L 244.54 64.55 L 248.44 71.96 L 239.8 84.61 L 243.06 94.66 L 245.26 105 L 259.07 111.64 L 259.4 120 L 259.07 128.36 L 245.26 135 L 243.06 145.34 L 239.8 155.39 L 248.44 168.04 L 244.54 175.45 L 240.08 182.53 L 224.8 181.37 L 217.7 189.25 L 218.6 190.05 L 225.3 182.61 L 240.7 183.78 L 245.58 176.05 L 249.84 167.96 L 241.12 155.2 L 244.22 145.65 L 246.31 135.82 L 260.24 129.13 L 260.6 120 L 260.24 110.87 L 246.31 104.18 L 244.22 94.35 L 241.12 84.8 L 249.84 72.04 L 245.58 63.95 L 240.7 56.22 L 225.3 57.39 L 218.6 49.95 Z" fill="#969696" stroke="#969696" stroke-width="0.3"/>
+  <circle cx="148.5" cy="120" r="8" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 156.17 115.26 L 224.13 66.74 L 223.44 65.77 L 155.48 114.28 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.3"/>
+  <path d="M 155.48 125.72 L 223.44 174.23 L 224.13 173.26 L 156.17 124.74 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="0.3"/>
+  <path d="M 260 120 L 261.01 110.44 L 250.92 98.86 L 254.9 90.5 L 260.15 82.87 L 275.22 85.82 L 283 80.16 L 291.79 76.25 L 296.77 61.73 L 306 61 L 315.23 61.73 L 320.21 76.25 L 329 80.16 L 336.78 85.82 L 351.85 82.87 L 357.1 90.5 L 361.08 98.86 L 350.99 110.44 L 352 120 L 350.99 129.56 L 361.08 141.14 L 357.1 149.5 L 351.85 157.13 L 336.78 154.18 L 329 159.84 L 320.21 163.75 L 315.23 178.27 L 306 179 L 296.77 178.27 L 291.79 163.75 L 283 159.84 L 275.22 154.18 L 260.15 157.13 L 254.9 149.5 L 250.92 141.14 L 261.01 129.56 Z" fill="#000000" stroke="#CDCDCD" stroke-width="2.2"/>
+  <circle cx="306" cy="120" r="20" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 287.15 124.13 L 301.87 138.85 L 302.37 138.35 L 287.65 123.63 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 286.78 119.25 L 306.75 139.22 L 307.24 138.73 L 287.27 118.76 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 287.39 115.37 L 310.63 138.61 L 311.13 138.11 L 287.89 114.87 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 288.6 112.07 L 313.93 137.4 L 314.42 136.91 L 289.09 111.58 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 290.27 109.24 L 316.76 135.73 L 317.25 135.24 L 290.76 108.75 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 292.33 106.8 L 319.2 133.67 L 319.69 133.18 L 292.82 106.31 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 294.77 104.74 L 321.26 131.23 L 321.75 130.74 L 295.26 104.25 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 297.61 103.08 L 322.92 128.39 L 323.41 127.9 L 298.1 102.59 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 300.9 101.88 L 324.12 125.1 L 324.62 124.6 L 301.4 101.38 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 304.8 101.27 L 324.73 121.2 L 325.22 120.71 L 305.29 100.78 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <path d="M 309.68 101.66 L 324.34 116.32 L 324.84 115.82 L 310.18 101.16 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <circle cx="306" cy="120" r="6" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 451.69 47.49 L 367.32 99.49 L 367.94 100.51 L 452.31 48.51 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.3"/>
+  <path d="M 369.63 97 L 364.63 102 L 359.63 110 L 361.63 111 L 371.63 101 Z" fill="#AFAFAF" stroke="#AFAFAF" stroke-width="0.3"/>
+  <circle cx="452" cy="48" r="5" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <path d="M 188.27 171.74 L 168.27 189.74 L 168.73 190.26 L 188.73 172.26 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <text transform="matrix(1 0 0 1 158.5 202)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">a</text>
+  <path d="M 275.75 175.75 L 259.75 191.75 L 260.25 192.25 L 276.25 176.25 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <text transform="matrix(1 0 0 1 250 204)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">b</text>
+  <path d="M 411.75 86.25 L 429.75 104.25 L 430.25 103.75 L 412.25 85.75 Z" fill="#646464" stroke="#646464" stroke-width="0.3"/>
+  <text transform="matrix(1 0 0 1 433 116)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">c</text>
+  <text transform="matrix(1 0 0 1 16 204)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">fig. 1 · drive wheel</text>
+</svg>

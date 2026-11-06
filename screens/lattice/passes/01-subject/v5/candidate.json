@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P12",
+  "drawing_language": "oscilloscope trace",
+  "subject": "Each plate mode as a body on its own orbit round the strike point, traced like an oscilloscope in x-y mode, with a phosphor trail behind each body as long as that mode rings.",
+  "controls": [
+    "size: count, 4 to 12 orbits come out, one per mode the mesh can carry.",
+    "tension: position, orbit radii follow mode frequency, evenly spaced at 0 and stretched apart toward the rim at 100 as the plate stiffens.",
+    "damp: shape, the phosphor trails shorten from nearly full circles at 0 to short ticks behind each body at 100.",
+    "pickup: scale, each body's size is that mode's strength at the pickup, so moving the pickup swells some bodies and shrinks others to nothing at a nodal line."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "Stretch, outside the engine column, and only half earned: a modal plate really is a set of independent oscillators each turning at its own rate, and an x-y scope does draw a sine pair as a circle, so the orrery is an honest picture of the modes. But concentric rings read as a target (craft.md), the sun does nothing (P13's complaint about P12), the plate's shape is gone entirely, and calm constant orbiting while playing costs a node per body every frame. Planets have no cycle a player can sequence, which is the reason P12 exists. My read: it doesn't fit; the strongest thing in it, trails as ring time, could move to another variant."
+}

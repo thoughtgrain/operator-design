@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P5",
+  "drawing_language": "oscilloscope trace",
+  "subject": "One phosphor trace of the pool ringing after the latest swell stands bright over dim receding traces of earlier swells, with each wave's arrival ticked along the bottom strip.",
+  "controls": [
+    "swell: the arrival ticks in the bottom strip spread from many (0.25 s) to two (8 s) across the window, and the receding traces step back by one period each (count and position).",
+    "depth: the bright trace's ring-down tail stretches from a short burst at the left to a wave that reaches the right edge (shape of the figure).",
+    "salt: the trace's later cycles break into an inharmonic beating ripple as the partials stretch (shape, second-order; needs its own region of the trace).",
+    "drift: the receding persistence traces slide sideways out of register with each other, so the stack shears (position of the field layers)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "P3's warning applies: it can read as a plain oscilloscope that says nothing about a rock pool. Depth and salt both reshape the one trace; salt needs a clearly different kind of change (beating, not length) or it collides with depth. The trace is ~280 points, so on the device it must be four 64-point mutable outlines and re-keyed only on turns. The far persistence traces are small (period ~3.5 px) and close to the hatching floor."
+}

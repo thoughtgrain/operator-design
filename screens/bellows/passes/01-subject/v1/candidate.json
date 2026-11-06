@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P15",
+  "drawing_language": "engineering schematic",
+  "subject": "The wind chest drawn as a schematic plenum of square cells, the air under pressure a lit mass rising from its floor, with the two reed ports on its lid.",
+  "controls": [
+    "press: how high the lit air stands in the plenum (count of lit rows, 1.5 to 6 of 6), the dimension line beside it following; position plus count.",
+    "reed: the surface of the lit mass, from long flat runs (stiff, closed reed) to short choppy steps (open, bright reed), and the two port tongues lift; shape of the run length.",
+    "leak: the seam on the right wall opens and grey cells bleed out of the mass through it and up the wall, 0 to about 14 cells; count in the grey layer.",
+    "choir: vertical beat bands sweep the mass, lit columns dimming to grey in 0 to 4 bands as reed b detunes from reed a; count of bands (pattern across columns), shade as second cue."
+  ],
+  "reference": "opxy/reference/README.md (dissolve, in detail)",
+  "risks": "Gate 0 fights it: P15 is for sounds that are texture, and bellows has a mechanism (it's air, but air in a box with reeds). The cells read as a level meter if press is the only thing that moves, which is a dashboard; choir as bands and leak as grey cells are both 'how much grey', so one of them must ride run length or position, as P15 warns. Hollow schematic squares plus solid cells is two looks on one grid; at 1:1 the hollow ones could read as a hatch. 96 cells is cheap on nodes but a press turn redraws a whole row of 16 at once."
+}

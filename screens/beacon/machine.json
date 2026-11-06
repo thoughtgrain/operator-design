@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "synth",
+  "description": "A pulse train through a comb 'lens' that focuses it into a pitch, swept by a rotating light, softened by fog."
+}

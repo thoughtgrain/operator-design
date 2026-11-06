@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P3",
+  "drawing_language": "survey plan",
+  "subject": "The output wave drawn as a proposed road alignment on a survey plan, bent off the dashed existing alignment (the plain sine) by the wheel, with one station tick per tooth and chainage along the baseline.",
+  "controls": [
+    "ratio: the chainage marks (one per wheel revolution) spread or bunch along the baseline, 0.5 to 8 turns per cycle; position of the chainage ticks and labels, the alignment's hump count follows.",
+    "teeth: the station ticks along the alignment multiply from a few to many (ratio x teeth per cycle); count of stations.",
+    "wear: the alignment's step corners round off into easy curves; shape of the bright alignment at its kinks.",
+    "bite: the proposed alignment departs further from the dashed existing one, from on top of it at 0 to a hard staircase at 100; shape (offset) of the alignment against the dashed line."
+  ],
+  "reference": "opxy/reference/README.md",
+  "risks": "It risks the 'oscilloscope' pitfall P3 names: survey dressing (grid crosses, chainage) on a waveform. Wear and bite both reshape the one alignment path; they differ in where (corners vs overall offset) but the channel rule wants them apart, so one may need the dashed existing line or the verges. At 24 teeth and ratio 8 the station count is 192 per cycle, so stations must cap or thin out, and they cost nodes. No gear is drawn at all; the mechanism only shows through the steps."
+}

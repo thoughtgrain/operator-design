@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "id": "drill",
+  "name": "Drill",
+  "parameters": [
+    {
+      "id": "ratio",
+      "label": "ratio",
+      "default": 0.5,
+      "mapping": {
+        "kind": "exponential",
+        "minimum": 0.5,
+        "maximum": 8.0
+      },
+      "display": "ratio"
+    },
+    {
+      "id": "teeth",
+      "label": "teeth",
+      "default": 0.15,
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24"
+        ]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "wear",
+      "label": "wear",
+      "default": 0.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "bite",
+      "label": "bite",
+      "default": 0.35,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Clean": {
+      "ratio": 0.5,
+      "teeth": 0.15,
+      "wear": 0.0,
+      "bite": 0.35
+    },
+    "Grind": {
+      "ratio": 0.25,
+      "teeth": 0.05,
+      "wear": 0.4,
+      "bite": 0.8
+    }
+  },
+  "resources": {
+    "voiceBytes": 32,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 16,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 24,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

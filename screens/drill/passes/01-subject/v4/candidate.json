@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P4",
+  "drawing_language": "patent section",
+  "subject": "The wheel's rim unrolled into a toothed rack, one sectioned strip per turn stacked receding up and right like a patent figure, with a pawl biting into the front strip.",
+  "controls": [
+    "ratio: the back strips stagger sideways against the front one by the fractional part of the ratio, lined up at whole ratios and offset by up to a tooth between them; position of the four back strips.",
+    "teeth: the front strip's teeth go from 3 broad lugs to 24 fine ones across its length; shape of the front strip outline.",
+    "wear: the front strip's tooth tips round and wear down unevenly from strip to strip toward the back (older turns are more worn); shape of the back strips, palette swap from crisp to worn variants.",
+    "bite: the pawl drops from resting on the tips to the bottom of the roots; position of the pawl tip (about 16 px plus the lever's swing)."
+  ],
+  "reference": "library/theseus-tower/README.md",
+  "risks": "Strips 22 px apart with 6 to 24 teeth each turn into hatching at high tooth counts; the back strips need to fade or drop teeth above 12. Ratio's stagger is zero at every whole ratio, including the default 2.00, so at rest the stack looks static and regular, and the stagger wraps (2.9 looks like 1.9), which under-tells the loudest control. Wear on the back strips puts the effect where the eye isn't."
+}

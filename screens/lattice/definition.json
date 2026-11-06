@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "lattice",
+  "name": "Lattice",
+  "parameters": [
+    {
+      "id": "size",
+      "label": "Size",
+      "default": 0.5,
+      "mapping": {"kind": "enum", "labels": ["4", "6", "8", "10", "12"]},
+      "display": "enum"
+    },
+    {
+      "id": "tension",
+      "label": "Tension",
+      "default": 0.4,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "damp",
+      "label": "Damp",
+      "default": 0.3,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "pickup",
+      "label": "Pickup",
+      "default": 0.6,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Plate": {"size": 0.5, "tension": 0.4, "damp": 0.3, "pickup": 0.6},
+    "Gong": {"size": 1.0, "tension": 0.8, "damp": 0.08, "pickup": 0.85},
+    "Tin": {"size": 0.0, "tension": 0.2, "damp": 0.65, "pickup": 0.3}
+  },
+  "resources": {
+    "voiceBytes": 4800,
+    "voiceAlignment": 16,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

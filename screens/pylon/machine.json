@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "synth",
+  "description": "An aeolian harp: a span of power line sung by the wind. Wind speed sets which of the wire's modes the shed vortices lock onto, span sets how close those modes sit, gust makes the lock wander, and a mains hum sits under it."
+}

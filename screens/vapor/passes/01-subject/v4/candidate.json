@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P3",
+  "drawing_language": "patent section",
+  "subject": "The pressure wave at the lips drawn as a patent figure, four glottal periods ringing with the vowel, the early ones still gliding out of a closed u, and the aspiration noise traced beneath with numbered leaders.",
+  "controls": [
+    "vowel: shape, the ringing inside each bright period changes, slow single swings for u and o, a fast double ring for e and i, peaks moving up to ~30 px.",
+    "breath: shape, the lower aspiration trace swells from a flat line at 0 to bursts of +/-20 px at every glottal opening at 100.",
+    "throat: scale, the main trace grows uniformly about its left end from 0.75 to 1.50, so each ring is longer and the swing taller, as a bigger tract rings lower and louder.",
+    "glide: count, how many of the four periods are grey ghosts still moving from u into the vowel, 0 at 5 ms to all but the last at 2 s."
+  ],
+  "reference": "opxy/reference/README.md (Stock OP-XY engine screens: wavetable, one waveform drawn large)",
+  "risks": "P3's own pitfall: it drifts toward 'oscilloscope'; the patent numerals and the ghosted onset are what keep it a drawing, and the numerals (10/12/14/16) mean nothing to a player without the legend a patent has. A four-period trace is ~240 points, so as a bound subject it needs four mutable outlines, the whole path budget; each period becomes one path and the ghost/solid change is a re-key. Glide is shown as a count of four, under the 12-item floor; it needs the ghost periods to move (shape) as well as change grey to pass perceptibility. Throat scale grows the trace upward toward the header at 1.50; the axis must sit lower."
+}

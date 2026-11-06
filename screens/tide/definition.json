@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "tide",
+  "name": "Tide",
+  "parameters": [
+    {
+      "id": "swell",
+      "label": "Swell",
+      "default": 0.6,
+      "mapping": {"kind": "exponential", "minimum": 0.25, "maximum": 8.0},
+      "display": "duration"
+    },
+    {
+      "id": "depth",
+      "label": "Depth",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.05, "maximum": 5.0},
+      "display": "duration"
+    },
+    {
+      "id": "salt",
+      "label": "Salt",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "drift",
+      "label": "Drift",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Pool": {"swell": 0.6, "depth": 0.5, "salt": 0.0, "drift": 0.0},
+    "Grotto": {"swell": 0.8, "depth": 0.85, "salt": 0.35, "drift": 0.2}
+  },
+  "resources": {
+    "voiceBytes": 256,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

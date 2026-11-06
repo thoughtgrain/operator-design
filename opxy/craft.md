@@ -68,7 +68,7 @@ If a screen shows depth (orbits round a sun, a drum, an isometric field, a stack
 - **Depth decides order.** Painter's order by distance to the camera: whatever's nearer than an object is drawn after it. For spheres, compare centre distances (exact for two spheres). Split lines (orbits, rings) into runs that are nearer or further than the object they pass, so the near run crosses in front of it and the far run goes behind it. Let the occluder's own fill hide what's behind it.
 - **Size from distance.** A body's drawn size is its world size times pixels-per-unit at its depth. Don't hand-tune a "depth scale".
 - **Check the camera against the frame.** Search camera angle, height and distance for the one that keeps the most of the scene on screen with the key object fixed. Accept what geometry forces and say so: a ring round a point on the screen's edge is always half off-screen.
-- **The device can still only translate and scale.** Projection happens in the generator (and in `display()` on the device); nodes still move by translation plus a uniform scale. Fake rotation with pre-drawn variants (a planet's meridians, a rock's tumble), not by tilting a node.
+- **Nodes move in the screen's plane.** Projection happens in the generator (and in `display()` on the device); a node moves by translation, a uniform scale and a turn about its own origin (`display.md`, Frame: `turn`, `sweep`), never a tilt out of the plane. So a part spinning on the screen (a dial, an arm) can turn, but a 3D rotation that tips a part towards or away from the camera is faked with pre-drawn variants (a planet's meridians, a rock's tumble).
 
 ## Review: side by side
 

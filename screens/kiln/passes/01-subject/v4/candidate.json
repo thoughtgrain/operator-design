@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P3",
+  "drawing_language": "oscilloscope trace",
+  "subject": "The bowl's ring itself, big and bright on a scope graticule: channel 1 is the sum of modes decaying from the trigger, channel 2 below is the highest mode alone, and a cursor marks where it dies away.",
+  "controls": [
+    "strike: scale — channel 1's amplitude grows from ~1 division to ~3 (node scale 0.6 → 1.6 about the axis), harder mallet louder and brighter.",
+    "glaze: position — the −40 dB cursor slides left from near the right edge (~400 px) to a third of the way in (~170 px) as glaze damps the ring; the trace past it is drawn at 0.",
+    "crack: shape — channel 1's envelope breaks into beating lobes and its cycles go uneven, the doublets of a broken bowl.",
+    "fire: shape of channel 2 — the high mode's period shortens and its trace lasts longer, so the grey channel packs from ~8 to ~16 visible cycles."
+  ],
+  "reference": "opxy/reference/README.md",
+  "risks": "P3's own pitfall: it's an oscilloscope, which says nothing about ceramic; nothing on screen says bowl, glaze or crack except by inference. Channel 1 is 200+ points at rest; one mutable outline is 64 points, so the real trace shows ~5 cycles or spends 3–4 paths (the whole path budget). glaze's cursor plus a trace that stops is the clearest control here, but glaze and fire both change how long things last, which might confuse. The graticule is 20 hairlines; keep it at #323232 so the trace is the only bright thing."
+}

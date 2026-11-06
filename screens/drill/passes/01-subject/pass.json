@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P12 Orrery; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "drawing_language": "typeset diagram",
+      "subject": "The toothed wheel itself, drawn as a labelled textbook figure: a big driver rim turning it from the left, a follower lever whose tip rides in its teeth on the right.",
+      "controls": [
+        "ratio: the driver's rim changes size against the fixed wheel (its pitch radius is ratio x the wheel's), sliding its centre and hub off left as the ratio climbs; scale and position of the driver.",
+        "teeth: the wheel's outline gains teeth, 3 chunky lugs at 0 to 24 fine ones at 100; shape of the wheel (one mutable outline).",
+        "wear: the follower's tip blunts from a sharp point to a round worn nub and the lever sags off the true line; shape of the follower tip plus a small rotation of the lever.",
+        "bite: the follower swings in about its pivot, its tip going from clear of the tips to deep in the roots; rotation of the follower (about 30 deg)."
+      ],
+      "reference": "library/theseus-tower/README.md",
+      "risks": "Wear wants to live on the wheel's teeth (that's where it acts in the DSP), but teeth already owns the wheel's shape, so wear is pushed onto the follower; a player may read a blunt stylus as a different control from 'the teeth wore'. The driver at ratio 8 is a near-straight rack off screen left and at 0.5 is smaller than the wheel: both ends need the arc clipped and checked at 1:1. Typeset labels a/b/c are decoration unless a caption line says what they are."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "drawing_language": "orthographic elevation",
+      "subject": "Gear pair in front elevation on the left, with centre lines, pitch circle and datum, and the bent output wave it produces on the right, structure under encoders 1-2 and tone under 3-4.",
+      "controls": [
+        "ratio: the driver's rim grows against the wheel and its centre walks off left (position + scale of the driver); on the right the wave carries more humps per cycle as a side effect.",
+        "teeth: the wheel's tooth count steps 3 to 24 (shape of the wheel outline), and the tick row under the trace counts teeth passed per cycle (count, ratio x teeth).",
+        "wear: the trace's step corners round off and its kinks soften into a smooth bend; shape of the trace, the corners are where some point moves 16 px or more.",
+        "bite: the trace bends from a plain windowed sine at 0 into a hard staircase at 100; shape of the trace's amplitude between the steps."
+      ],
+      "reference": "opxy/reference/README.md",
+      "risks": "Wear and bite both act on the one trace path (shape on the same part), which the channel rule forbids; at subject stage the fix is to give wear a structural mark on the left too (tooth tips rounding on the wheel) and keep bite on the trace, but then teeth and wear share the wheel. Grey elevation on the left can read as a dashboard of two panels if the trace isn't clearly the brightest thing. The driver rim's teeth are only seen as an arc, which reads as a bracket at ratio near 1."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "drawing_language": "survey plan",
+      "subject": "The output wave drawn as a proposed road alignment on a survey plan, bent off the dashed existing alignment (the plain sine) by the wheel, with one station tick per tooth and chainage along the baseline.",
+      "controls": [
+        "ratio: the chainage marks (one per wheel revolution) spread or bunch along the baseline, 0.5 to 8 turns per cycle; position of the chainage ticks and labels, the alignment's hump count follows.",
+        "teeth: the station ticks along the alignment multiply from a few to many (ratio x teeth per cycle); count of stations.",
+        "wear: the alignment's step corners round off into easy curves; shape of the bright alignment at its kinks.",
+        "bite: the proposed alignment departs further from the dashed existing one, from on top of it at 0 to a hard staircase at 100; shape (offset) of the alignment against the dashed line."
+      ],
+      "reference": "opxy/reference/README.md",
+      "risks": "It risks the 'oscilloscope' pitfall P3 names: survey dressing (grid crosses, chainage) on a waveform. Wear and bite both reshape the one alignment path; they differ in where (corners vs overall offset) but the channel rule wants them apart, so one may need the dashed existing line or the verges. At 24 teeth and ratio 8 the station count is 192 per cycle, so stations must cap or thin out, and they cost nodes. No gear is drawn at all; the mechanism only shows through the steps."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "drawing_language": "patent section",
+      "subject": "The wheel's rim unrolled into a toothed rack, one sectioned strip per turn stacked receding up and right like a patent figure, with a pawl biting into the front strip.",
+      "controls": [
+        "ratio: the back strips stagger sideways against the front one by the fractional part of the ratio, lined up at whole ratios and offset by up to a tooth between them; position of the four back strips.",
+        "teeth: the front strip's teeth go from 3 broad lugs to 24 fine ones across its length; shape of the front strip outline.",
+        "wear: the front strip's tooth tips round and wear down unevenly from strip to strip toward the back (older turns are more worn); shape of the back strips, palette swap from crisp to worn variants.",
+        "bite: the pawl drops from resting on the tips to the bottom of the roots; position of the pawl tip (about 16 px plus the lever's swing)."
+      ],
+      "reference": "library/theseus-tower/README.md",
+      "risks": "Strips 22 px apart with 6 to 24 teeth each turn into hatching at high tooth counts; the back strips need to fade or drop teeth above 12. Ratio's stagger is zero at every whole ratio, including the default 2.00, so at rest the stack looks static and regular, and the stagger wraps (2.9 looks like 1.9), which under-tells the loudest control. Wear on the back strips puts the effect where the eye isn't."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The gear train built as an epicyclic orrery in isometric: a sun driver on its arbor, a carrier arm, and one bright planet wheel rolling inside a toothed ring.",
+      "controls": [
+        "ratio: the planet wheel shrinks as the ratio rises (ring/planet = ratio + 1), from nearly filling the ring at 0.5 to a small fast wheel at 8; scale of the planet.",
+        "teeth: the ring's internal teeth step from coarse to fine (twice the wheel's count); shape of the ring outline.",
+        "wear: the planet's teeth round off and shorten; shape of the planet outline.",
+        "bite: the planet slides outward on its arm into the ring's teeth, from just touching to fully meshed; position of the planet along the carrier (about 24 px in iso)."
+      ],
+      "reference": "library/meikyu-orrery/README.md",
+      "risks": "Stretch, and mostly it doesn't fit: P12 earns its keep from a population of items in a cycle (planets as steps, links along orbits) and drill has one continuous phase and one wheel, so nothing here uses what the orrery is good at. The one honest exception is that an orrery is literally a gear train, and planetary gearing is a real way to get a ratio, so the picture is mechanically true. On a note it would want to orbit, which is constant field-wide motion for one voice. Ring teeth at 24 x 2 = 48 teeth blow the 64-point outline unless thinned."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.16,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:20:37"
+  },
   "selection": null
 }

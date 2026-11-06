@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P2",
+  "drawing_language": "typeset diagram",
+  "subject": "A two-figure textbook plate: on the left a weighted wedge reservoir feeding reeds a and b through a wind trunk, on the right the output wave under its envelope, sagging mid-stroke and recovering.",
+  "controls": [
+    "press: the weight on the wedge's top board drops and the board closes from 26 to 8 degrees, while the trace on the right grows in height; rotation of the board (left), the trace's scale as second cue.",
+    "reed: the wave on the right goes from nearly a sine to a sharp pulse with its upper partials; shape of the trace, the two tongues lifting as a small echo on the left.",
+    "leak: breath leaves the wedge's open mouth as a short column of dots (0 to 12) and the envelope line goes rough; count on the left.",
+    "choir: the envelope over the trace pinches into beats, 0 to 4 waists across fig. 2; shape of the envelope line, separate from the trace."
+  ],
+  "reference": "library/toro-blocks (the model is the drawing: the trace is computed from the voice)",
+  "risks": "P2 splits the body, so the screen is two smaller pictures rather than one subject; the eye may not know which to read first. Press moves both the board and the trace height, which risks two parts on one control looking like two controls. The figure captions (fig. 1, fig. 2) are honest to a typeset plate but are two extra labels; at 10 px #7D7D7D they're legible but busy. A 200 px trace with five cycles is fine at 64 points; more cycles at higher pitch would not be."
+}

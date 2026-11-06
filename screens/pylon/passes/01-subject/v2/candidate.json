@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P15",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The wind's wake behind the wire as a flat isometric grid of cells, each raised cell a shed vortex roll, laid out downwind of one bright conductor on two short masts.",
+  "controls": [
+    "wind: count — how many vortex rolls still stand downwind, from 2 at 0.5 m/s to 7 at 20 m/s (each roll a run of raised cells).",
+    "span: run length — the spanwise correlation: rolls go from broken runs of 2 cells to continuous runs of 8 along the wire.",
+    "gust: churn — cells are knocked off the street's lattice by 1–2 cells downwind or upwind, so the even rows break into a ragged wake.",
+    "hum: grey layer — a regular mains lattice of grey (unraised) cells fills in under the wake, 0 to ~40 cells."
+  ],
+  "reference": "opxy/reference/README.md (stock dissolve, cell field)",
+  "risks": "P15 is meant for sounds with no mechanism; pylon has one (a vibrating wire), so Gate 0's 'draw the mechanism' argues against it. The wake is real physics (Kármán street, spanwise correlation), which is why it's worth a try. It shows the wind, not the singing: the wire's modes never appear, so the note itself has nothing obvious to act on beyond a flare near the wire. Isometric cells are rhombi, not the pattern's square cells. Grid of ~104 cells plus raised faces is ~180 nodes."
+}

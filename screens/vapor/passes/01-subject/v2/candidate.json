@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P1",
+  "drawing_language": "orthographic elevation",
+  "subject": "The throat drawn in elevation as a segmented acoustic tube from glottis to lips, its sections widening and narrowing into the shape of the vowel.",
+  "controls": [
+    "vowel: shape, the sixteen section radii re-profile the tube (one mutable outline): a pinch at the back and a flared mouth for a, a front constriction for i, a closed lip end for u; points move up to ~30 px.",
+    "breath: count, short turbulence streaks gather inside the tube just past the glottis, from none at 0 to ~20 at 100.",
+    "throat: scale, the whole tube grows uniformly about the glottis from 0.75 to 1.50 (2x) and the dimension line under it reads the length in cm.",
+    "glide: count, hairline ghost profiles between the closed u onset and the vowel step in behind the tube, from none at 5 ms to ~6 at 2 s."
+  ],
+  "reference": "library/theseus-tower (line drawing, primitives, one subject that every control touches)",
+  "risks": "Mutable outlines must stay within +/-64 px of the node, so the 240 px tube needs authoring at half size and a node scale of ~1.33 at default, which ties tube width to length (fine physically, a bigger throat). Glide's ghost profiles sit 2-4 px from the subject outline in places and start to read as hatching; they may need to step outward or show only the onset. Breath streaks are small and inside the tube, so breath (scored 4) is under-drawn here; it may need streaks out of the lips too. The dimension label is the only text that changes, and it would need a text slot."
+}

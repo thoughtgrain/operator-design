@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P12",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The gear train built as an epicyclic orrery in isometric: a sun driver on its arbor, a carrier arm, and one bright planet wheel rolling inside a toothed ring.",
+  "controls": [
+    "ratio: the planet wheel shrinks as the ratio rises (ring/planet = ratio + 1), from nearly filling the ring at 0.5 to a small fast wheel at 8; scale of the planet.",
+    "teeth: the ring's internal teeth step from coarse to fine (twice the wheel's count); shape of the ring outline.",
+    "wear: the planet's teeth round off and shorten; shape of the planet outline.",
+    "bite: the planet slides outward on its arm into the ring's teeth, from just touching to fully meshed; position of the planet along the carrier (about 24 px in iso)."
+  ],
+  "reference": "library/meikyu-orrery/README.md",
+  "risks": "Stretch, and mostly it doesn't fit: P12 earns its keep from a population of items in a cycle (planets as steps, links along orbits) and drill has one continuous phase and one wheel, so nothing here uses what the orrery is good at. The one honest exception is that an orrery is literally a gear train, and planetary gearing is a real way to get a ratio, so the picture is mechanically true. On a note it would want to orbit, which is constant field-wide motion for one voice. Ring teeth at 24 x 2 = 48 teeth blow the 64-point outline unless thinned."
+}

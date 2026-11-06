@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P1",
+  "drawing_language": "survey plan",
+  "subject": "A surveyed plan of the rock pool: its rim as one bright outline open to the sea, depth contours ringing two basins, spot soundings, a tide mark and the swell fronts arriving through the mouth.",
+  "controls": [
+    "swell: the arc fronts outside the mouth spread apart or crowd together, 3 to 8 visible (position and count).",
+    "depth: each basin gains contour rings inward, two to six, and the soundings deepen (count).",
+    "salt: the rim outline breaks from a smooth curve into crystalline straight facets (shape of the one mutable outline).",
+    "drift: the dotted tide mark slides off concentric and wanders inside the rim (position)."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "Plan view hides the vertical, so depth has to be read from contour count, not height; that's a convention, not something the eye gets for free. Soundings are body text that should move with depth, which the guidelines discourage (text on things that change); they may have to become fixed labels or go. Notes need a strike: a basin's contours brighten from the centre out, which is a shade change and needs a scale cue too. Contours are many closed outlines, budget must be checked."
+}

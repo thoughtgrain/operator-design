@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <title>beacon · subject pass 01 · v1 · P3 trace as subject · survey plan</title>
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">pulse</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">25</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">lens</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">83</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">sweep</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">2.4</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">fog</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+  </g>
+  <path d="M 36 156.6 L 452 156.6 L 452 155.4 L 36 155.4 Z" fill="#646464" stroke="none"/>
+  <path d="M 35.5 151 L 35.5 161 L 36.5 161 L 36.5 151 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 33 174)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">0</text>
+  <path d="M 61.5 153 L 61.5 159 L 62.5 159 L 62.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 87.5 153 L 87.5 159 L 88.5 159 L 88.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 113.5 153 L 113.5 159 L 114.5 159 L 114.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 139.5 151 L 139.5 161 L 140.5 161 L 140.5 151 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 137 174)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">10</text>
+  <path d="M 165.5 153 L 165.5 159 L 166.5 159 L 166.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 191.5 153 L 191.5 159 L 192.5 159 L 192.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 217.5 153 L 217.5 159 L 218.5 159 L 218.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 243.5 151 L 243.5 161 L 244.5 161 L 244.5 151 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 241 174)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">20</text>
+  <path d="M 269.5 153 L 269.5 159 L 270.5 159 L 270.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 295.5 153 L 295.5 159 L 296.5 159 L 296.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 321.5 153 L 321.5 159 L 322.5 159 L 322.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 347.5 151 L 347.5 161 L 348.5 161 L 348.5 151 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 345 174)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">30</text>
+  <path d="M 373.5 153 L 373.5 159 L 374.5 159 L 374.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 399.5 153 L 399.5 159 L 400.5 159 L 400.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 425.5 153 L 425.5 159 L 426.5 159 L 426.5 153 Z" fill="#646464" stroke="none"/>
+  <path d="M 451.5 151 L 451.5 161 L 452.5 161 L 452.5 151 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 449 174)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">40</text>
+  <text transform="matrix(1 0 0 1 426 187)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">ch. ms</text>
+  <path d="M 30 161 L 42 161 L 36 150 Z" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <text transform="matrix(1 0 0 1 6 148)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">stn a</text>
+  <path d="M 44.789 154 L 124.574 131.122 L 124.298 130.161 L 44.514 153.039 Z" fill="#969696" stroke="none"/>
+  <path d="M 70.5 155.991 L 70.479 154.796 L 70.416 153.593 L 70.311 152.394 L 70.164 151.198 L 69.975 150.009 L 69.746 148.827 L 69.475 147.654 L 69.166 146.499 L 68.2 146.757 L 68.505 147.896 L 68.768 149.035 L 68.991 150.183 L 69.174 151.338 L 69.317 152.498 L 69.418 153.663 L 69.479 154.83 L 69.5 156.009 Z" fill="#646464" stroke="none"/>
+  <path d="M 36 200.75 L 62.28 200.53 L 62.28 186.53 L 65.72 186.53 L 65.72 200.53 L 202.28 200.53 L 202.28 186.53 L 205.72 186.53 L 205.72 200.53 L 342.28 200.53 L 342.28 186.53 L 345.72 186.53 L 345.72 200.53 L 452 200.75 L 452 199.25 L 346.78 199.47 L 346.78 185.47 L 341.22 185.47 L 341.22 199.47 L 206.78 199.47 L 206.78 185.47 L 201.22 185.47 L 201.22 199.47 L 66.78 199.47 L 66.78 185.47 L 61.22 185.47 L 61.22 199.47 L 36 199.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 58.05 154 L 58.05 132 L 57.05 132 L 57.05 154 Z" fill="#646464" stroke="none"/>
+  <path d="M 198.05 154 L 198.05 132 L 197.05 132 L 197.05 154 Z" fill="#646464" stroke="none"/>
+  <path d="M 338.05 154 L 338.05 132 L 337.05 132 L 337.05 154 Z" fill="#646464" stroke="none"/>
+  <path d="M 36 129 L 61.245 128.719 L 63.995 44.719 L 66.755 128.719 L 79.243 128.721 L 81.993 58.793 L 84.757 128.721 L 97.24 128.724 L 99.99 70.511 L 102.76 128.724 L 115.237 128.727 L 117.987 80.266 L 120.763 128.727 L 133.233 128.731 L 135.983 88.388 L 138.767 128.731 L 151.228 128.735 L 153.978 95.15 L 156.772 128.735 L 169.222 128.741 L 171.972 100.783 L 174.778 128.741 L 187.214 128.747 L 190.293 104.842 L 188.307 104.608 L 185.886 127.253 L 176.122 127.259 L 173.372 99.301 L 170.628 99.301 L 167.878 127.259 L 158.128 127.265 L 155.378 93.68 L 152.622 93.68 L 149.872 127.265 L 140.133 127.269 L 137.383 86.926 L 134.617 86.926 L 131.867 127.269 L 122.137 127.273 L 119.387 78.812 L 116.613 78.812 L 113.863 127.273 L 104.14 127.276 L 101.39 69.063 L 98.61 69.063 L 95.86 127.276 L 86.143 127.279 L 83.393 57.351 L 80.607 57.351 L 77.857 127.279 L 68.145 127.281 L 65.395 43.281 L 62.605 43.281 L 59.855 127.281 L 36 127 Z" fill="#CDCDCD" stroke="none"/>
+  <path d="M 189.3 105.725 L 190.036 105.472 L 192.786 128.747 L 201.245 128.719 L 203.995 44.719 L 206.755 128.719 L 219.243 128.721 L 221.993 58.793 L 224.757 128.721 L 237.24 128.724 L 239.99 70.511 L 242.76 128.724 L 255.237 128.727 L 257.987 80.266 L 260.763 128.727 L 273.233 128.731 L 275.983 88.388 L 278.767 128.731 L 291.228 128.735 L 293.978 95.15 L 296.772 128.735 L 309.222 128.741 L 311.972 100.783 L 314.455 128.098 L 316.445 127.902 L 313.372 99.301 L 310.628 99.301 L 307.878 127.259 L 298.128 127.265 L 295.378 93.68 L 292.622 93.68 L 289.872 127.265 L 280.133 127.269 L 277.383 86.926 L 274.617 86.926 L 271.867 127.269 L 262.137 127.273 L 259.387 78.812 L 256.613 78.812 L 253.863 127.273 L 244.14 127.276 L 241.39 69.063 L 238.61 69.063 L 235.86 127.276 L 226.143 127.279 L 223.393 57.351 L 220.607 57.351 L 217.857 127.279 L 208.145 127.281 L 205.395 43.281 L 202.605 43.281 L 199.855 127.281 L 194.114 127.253 L 191.364 103.978 L 189.3 103.725 Z" fill="#CDCDCD" stroke="none"/>
+  <path d="M 315.45 129 L 327.214 128.747 L 329.964 105.472 L 332.786 128.747 L 341.245 128.719 L 343.995 44.719 L 346.755 128.719 L 359.243 128.721 L 361.993 58.793 L 364.757 128.721 L 377.24 128.724 L 379.99 70.511 L 382.76 128.724 L 395.237 128.727 L 397.987 80.266 L 400.763 128.727 L 413.233 128.731 L 415.983 88.388 L 418.767 128.731 L 431.228 128.735 L 433.978 95.15 L 436.772 128.735 L 452 129 L 452 127 L 438.128 127.265 L 435.378 93.68 L 432.622 93.68 L 429.872 127.265 L 420.133 127.269 L 417.383 86.926 L 414.617 86.926 L 411.867 127.269 L 402.137 127.273 L 399.387 78.812 L 396.613 78.812 L 393.863 127.273 L 384.14 127.276 L 381.39 69.063 L 378.61 69.063 L 375.86 127.276 L 366.143 127.279 L 363.393 57.351 L 360.607 57.351 L 357.857 127.279 L 348.145 127.281 L 345.395 43.281 L 342.605 43.281 L 339.855 127.281 L 334.114 127.253 L 331.364 103.978 L 328.636 103.978 L 325.886 127.253 L 315.45 127 Z" fill="#CDCDCD" stroke="none"/>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P15",
+  "drawing_language": "patent section",
+  "subject": "The plate seen face on as a square field of junction cells, each lit by how far it swings, clamped in a hatched section frame and keyed with patent numerals.",
+  "controls": [
+    "size: count, the field steps from 4 x 4 to 12 x 12 junction cells (16 to 144) and the clamp frame grows with it.",
+    "tension: shape of the lit pattern (palette swaps across the field), broad lobes at 0 breaking into a finer, stretched checker of nodal lines at 100.",
+    "damp: position, the felt band's inner line moves in from the clamp toward the centre and the cells under it go hollow.",
+    "pickup: position, the bright outlined pickup cell (numeral 14) walks from the strike point at 0 to the far corner at 100."
+  ],
+  "reference": "opxy/reference/README.md (dissolve, in detail; stock cell field) and library/toro-blocks",
+  "risks": "P15 is written for noise-like sounds with no mechanism, and this plate has one (Gate 0 pitfall in P15): the cell field is earned only because the waveguide mesh really is a grid of junctions. Tension and damp both act on cell values; damp is kept on geometry (felt line) so the two don't share 'how much grey'. 14 px cells are under P15's 20 px guidance (12 x 12 has to fit 192 px of body); 144 cells + frame fits 256 nodes but tension re-lights many cells per turn, so churn needs a cap. Patent numerals plus words duplicates the key; drop one at frames."
+}
