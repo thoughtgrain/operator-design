@@ -667,8 +667,7 @@ def v4() -> Frame:
         a, b = (xa, xb) if r % 2 == 0 else (xb, xa)
         path += [(a, yv, dz), (b, yv, dz)]
     # return trace: from the last fold back down the die's left margin to the first
-    ret = [(xa if rows % 2 == 0 else xb, ys[-1], dz)]
-    ret = [path[-1], (xb + 0.0, ys[-1] + 0.0, dz)] if False else [path[-1], (xa - 0.35, ys[-1], dz), (xa - 0.35, ys[0], dz), path[0]]
+    ret = [path[-1], (xa - 0.35, ys[-1], dz), (xa - 0.35, ys[0], dz), path[0]]
 
     def resample(P, step=0.12):
         out = [P[0]]
@@ -793,10 +792,7 @@ def v5() -> Frame:
         a1 = a0 + 2 * math.pi * cover
         pts = cam.ps([(cx + rad * math.cos(a0 + (a1 - a0) * j / npts), cy + rad * math.sin(a0 + (a1 - a0) * j / npts), 0)
                       for j in range(npts + 1)])
-        if cover >= 0.999:
-            fr.poly(pts[:-1], "none", colour, w) if False else fr.ribbon(pts, w, colour)
-        else:
-            fr.ribbon(pts, w, colour)
+        fr.ribbon(pts, w, colour)
 
     note = 3
     # later passes first (they're fainter), offset a little each time round, more broken

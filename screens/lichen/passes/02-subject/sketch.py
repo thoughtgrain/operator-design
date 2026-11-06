@@ -302,7 +302,7 @@ class Svg:
                 self.line(pts + pts[:1], sw, stroke)
                 return
             pts = cp
-        if len(pts) < 3 or abs(area(pts)) < 0.5:
+        if len(pts) < 3 or abs(area(pts)) < 2.5:
             return
         if len(pts) > 64:
             pts = resample(pts, 64)
@@ -333,7 +333,7 @@ class Svg:
 
     def seg(self, a, b, w, col):
         c = clip_seg(a, b)
-        if c and math.dist(*c) > 0.8:
+        if c and math.dist(*c) > 4.5:
             self.ribbon(list(c), w, col)
 
     def line(self, pts, w, col):

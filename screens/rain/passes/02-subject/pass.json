@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "Five new, unique iterations.",
   "subject": null,
@@ -69,7 +69,188 @@
       "brief": "Start from what rain is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: cutaway section. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "The verge of the roof seen side on at large scale: a black mass whose tile noses climb out of the top-right corner, lit only along the edges that face the sky, where each lit nose is a course that can play and the one a drop just hit is the bright one.",
+      "controls": [
+        "rate: how many rain streaks hang in the open sky above the verge (count, about 6 at 1.0 a beat to about 24 at 8), each falling toward the course it will land on.",
+        "roof: how many tile noses carry a rim light (count, with exposure as shape): at 0 st one lit nose, at 36 st twenty-two smaller ones; noses past the span stay as dim hairlines running off the frame.",
+        "gust: the streaks lean (rotation, ±30° from vertical) and the landings walk up or down the lit noses, so a strong gust reads as a run of crowns climbing or descending the edge.",
+        "puddle: the half-round gutter at the eave fills (water hatched in 45° hairlines inside its profile, rising 0 to full) and beads of light hang from its lip, one per note held in memory."
+      ],
+      "reference": "library/theseus-tower (dark bodies behind grey outlines, only the struck part lights); craft.md, One drawing language",
+      "risks": [
+        "Silhouette against a black sky: the roof mass only exists through its rim and the barge-board hairline, so the black body is invisible as a shape; it has to be read from the edge alone.",
+        "At 36 st the 22 noses get ~20 px apart, still clear of the 3 px floor but much busier than at rest; the camera can't scale up without losing the eave.",
+        "The gutter (puddle's whole channel) is a 20 px corner far from the struck course; puddle scores 3 and may struggle for area unless the beads are generous.",
+        "The barge-board hairline running to the right edge can read as a separate diagonal line at 1:1.",
+        "Muted: every rim drops to hairline G2 and the streaks stop where they are (the roof goes dark, nothing lands)."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "Rain itself: the last bar's drops falling through still air, each drawn as a real drop (round on top, flattened underneath the bigger it is) with a strobe ghost where it was a moment ago, where a drop's size is its note and the one that just played is bright.",
+      "controls": [
+        "rate: how many drops are in the air (count, about 7 at 1.0 a beat up to about 28 at 8, each one a note of the last bar).",
+        "roof: the spread of drop sizes (shape/scale per drop): at 0 st every drop is the same size, one note; at 36 st they range from a pin-head to a big flattened drop, so the size range is the pitch range.",
+        "gust: the fall slants (each drop and its ghost offset sideways along the wind, ±35°), and the drops sort themselves big-to-small along the gust's direction, so a run reads as a graded slope of sizes.",
+        "puddle: drops that are replays appear as hatched copies of earlier drops (45° hairlines inside a hairline outline, there but not new), from none at 0 to most of the air at 100."
+      ],
+      "reference": "library/theseus-tower (an object drawn as itself, detail inside a calm outline, one lit part)",
+      "risks": [
+        "Free-floating circles can read as bubbles or bells if the strobe ghosts are lost; the ghost is what says 'falling', so it can't be dropped for budget.",
+        "Each drop is ~4 nodes (outline, ghost, equator, crescent); 28 drops at rate 8 is over 100 nodes and many redraws per beat: will need a pool and a cap.",
+        "Size is both pitch and (slightly) depth: the camera puts drops nearly in one plane so perspective can't fake a pitch; keep depth range small.",
+        "Nothing roof-like remains: the 'roof' label maps to size spread, which must be learned from turning it.",
+        "Muted: drops freeze mid-air and their outlines drop to G3 hairline; no ghosts."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "A rainstick held across the screen, modelled as a hollow tube with a cord grip, growth nodes and pins driven through it in a spiral, where each ring of pins is a course and the pin a falling pebble just struck rings with light at its head.",
+      "controls": [
+        "rate: how many pin heads carry a ring (count: recently struck pins, about 4 at 1.0 a beat to about 20 at 8), the newest filled bright.",
+        "roof: how many rings of pins the stick has (count, 1 ring at 0 st to 22 at 36 st), spaced evenly along the same tube, so a flat roof is a stick with one ring of pins.",
+        "gust: the stick tips (rotation about its centre, ±25° from its rest angle): tipped one way the struck pins run in order down the tube (falling runs), the other way up; at 0 the strikes scatter.",
+        "puddle: pebbles gathered in the open mouth at the near end (count, 0 to ~8 small closed outlines visible inside the rim), the ones that will be poured back through as replays."
+      ],
+      "reference": "library/theseus-tower (a 3D object drawn as detailed line art from one camera; only what plays lights)",
+      "risks": [
+        "Pin heads are 4 px dots at 1:1: right at the size floor; struck rings make them readable but the unstruck spiral is faint.",
+        "Tipping is an in-plane turn of the whole tube, so the 3D yaw stays fixed; at ±25° the ends approach the header and frame edge and the camera fit has to leave room.",
+        "The rainstick is a rain instrument, not a roof: the 'roof' label maps to pin rings, which is the right idea but a new picture for the name.",
+        "Pins on the hidden side of the tube can't show a strike; strikes must be drawn on visible pins only, which biases which notes look played.",
+        "Muted: the stick lies at rest angle, no rings, the mouth empty and its rim dims to G3."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "bold closed outlines",
+      "subject": "Clay pantiles seen close as the rain lands on them: eight courses of broad pans and tall rolls rising away from the viewer, each course's lapped edge one bold line over black, where the tile a drop just struck has the bright edge and a broken crown.",
+      "controls": [
+        "rate: how many falling teardrops and crowns are on the tiles at once (count, about 3 at 1.0 a beat to about 16 at 8).",
+        "roof: how many courses rise up the slope (count, 1 at 0 st to 22 at 36 st, shallower exposure as they multiply), the far ones thinning to hairlines as they recede.",
+        "gust: the drops slant and their crowns throw to one side (rotation ±35°), and successive strikes step across the courses toward the ridge or the eave.",
+        "puddle: water stands in the pans of the nearest courses (45° hairline hatching clipped to each pan, its level rising from dry at 0 to brimming at 100)."
+      ],
+      "reference": "library/toro-blocks (a field drawn in perspective from one camera, solid near, quieter far); craft.md, Detail follows how often the subject changes",
+      "risks": [
+        "Eight full-width bands cover the body: it's the least black of the five (~81 % black at 1:1) and the busiest; the lowest courses must stay calm.",
+        "Close-up perspective makes far courses ~6 px tall: at 36 st (22 courses) the far half becomes a hatch of lines under 3 px apart and has to fade out.",
+        "Pantile rolls carried up the slope as hairlines can read as a grid or a corrugated sheet if they get brighter.",
+        "Splash crowns are small (~10 px); the struck tile's bright edge does most of the note response.",
+        "Muted: every edge drops to Line weight G3, no drops; the struck edge goes back to grey."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "Under a dripping eave, a shelf of clay flowerpots graded from big to small, each cut through its axis to show the clay walls, rim collar and drain hole, where each pot rings its own note when a drip falls into it and the pot that just rang is bright.",
+      "controls": [
+        "rate: how many drips are falling from the eave's tile noses into the pots (count, about 3 at 1.0 a beat to about 16 at 8).",
+        "roof: how many pots stand on the shelf (count, 1 at 0 st to 22 at 36 st, graded big-to-small left to right), smaller overall as more fit.",
+        "gust: the drips slant (rotation ±30°) and land toward one end of the row, so runs climb or fall along the graded pots.",
+        "puddle: water standing in the pots (45° hairline hatching clipped inside each cut, its level rising from dry at 0 to near the rim at 100)."
+      ],
+      "reference": "library/theseus-tower (an instrument of graded parts, each drawn as itself; only the played one lights)",
+      "risks": [
+        "Eight pots across 480 px leaves each 30-60 px wide; at 22 pots they shrink to ~16 px and the cut walls (3 px) start to merge.",
+        "A row of graded vessels is close to a bar chart or a set of tuned bowls; the drain holes, rim collars and eave are what say 'flowerpots in the rain'.",
+        "The eave's row of noses is a thin wave across the top and can read as a divider; it needs to stay a hairline-quiet second subject.",
+        "The 'roof' label maps to pot count, a scene metaphor the player has to learn.",
+        "Muted: drips stop and hang under the eave; the struck pot dims back to grey."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:27:00"
+  },
   "selection": null
 }

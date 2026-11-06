@@ -1,0 +1,21 @@
+{
+  "variant": "v3",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "A rainstick held across the screen, modelled as a hollow tube with a cord grip, growth nodes and pins driven through it in a spiral, where each ring of pins is a course and the pin a falling pebble just struck rings with light at its head.",
+  "controls": [
+    "rate: how many pin heads carry a ring (count: recently struck pins, about 4 at 1.0 a beat to about 20 at 8), the newest filled bright.",
+    "roof: how many rings of pins the stick has (count, 1 ring at 0 st to 22 at 36 st), spaced evenly along the same tube, so a flat roof is a stick with one ring of pins.",
+    "gust: the stick tips (rotation about its centre, ±25° from its rest angle): tipped one way the struck pins run in order down the tube (falling runs), the other way up; at 0 the strikes scatter.",
+    "puddle: pebbles gathered in the open mouth at the near end (count, 0 to ~8 small closed outlines visible inside the rim), the ones that will be poured back through as replays."
+  ],
+  "reference": "library/theseus-tower (a 3D object drawn as detailed line art from one camera; only what plays lights)",
+  "risks": [
+    "Pin heads are 4 px dots at 1:1: right at the size floor; struck rings make them readable but the unstruck spiral is faint.",
+    "Tipping is an in-plane turn of the whole tube, so the 3D yaw stays fixed; at ±25° the ends approach the header and frame edge and the camera fit has to leave room.",
+    "The rainstick is a rain instrument, not a roof: the 'roof' label maps to pin rings, which is the right idea but a new picture for the name.",
+    "Pins on the hidden side of the tube can't show a strike; strikes must be drawn on visible pins only, which biases which notes look played.",
+    "Muted: the stick lies at rest angle, no rings, the mouth empty and its rim dims to G3."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "variant": "v5",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "Under a dripping eave, a shelf of clay flowerpots graded from big to small, each cut through its axis to show the clay walls, rim collar and drain hole, where each pot rings its own note when a drip falls into it and the pot that just rang is bright.",
+  "controls": [
+    "rate: how many drips are falling from the eave's tile noses into the pots (count, about 3 at 1.0 a beat to about 16 at 8).",
+    "roof: how many pots stand on the shelf (count, 1 at 0 st to 22 at 36 st, graded big-to-small left to right), smaller overall as more fit.",
+    "gust: the drips slant (rotation ±30°) and land toward one end of the row, so runs climb or fall along the graded pots.",
+    "puddle: water standing in the pots (45° hairline hatching clipped inside each cut, its level rising from dry at 0 to near the rim at 100)."
+  ],
+  "reference": "library/theseus-tower (an instrument of graded parts, each drawn as itself; only the played one lights)",
+  "risks": [
+    "Eight pots across 480 px leaves each 30-60 px wide; at 22 pots they shrink to ~16 px and the cut walls (3 px) start to merge.",
+    "A row of graded vessels is close to a bar chart or a set of tuned bowls; the drain holes, rim collars and eave are what say 'flowerpots in the rain'.",
+    "The eave's row of noses is a thin wave across the top and can read as a divider; it needs to stay a hairline-quiet second subject.",
+    "The 'roof' label maps to pot count, a scene metaphor the player has to learn.",
+    "Muted: drips stop and hang under the eave; the struck pot dims back to grey."
+  ]
+}
