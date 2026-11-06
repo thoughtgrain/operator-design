@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-06T08:11:59",
   "focus": "None land. Five new, unique variations.",
   "subject": null,
@@ -267,5 +267,26 @@
     "problems": [],
     "checked": "2026-11-06T08:25:22"
   },
-  "selection": null
+  "selection": {
+    "variant": "v4",
+    "reason": "Owner likes v4; curious how it might animate.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:28:07",
+    "angle": "a cutaway of the object at work, so the inside explains it",
+    "pattern": "none",
+    "drawing_language": "edge-lit silhouette",
+    "subject": "A prospector's pan cut in half mid-swirl: the water tips up one wall, the fine grains ride up in it while the heavy ones stay in the crease, and the tilted waterline is the bright line.",
+    "controls": [
+      "settle: position; how high the fine grains still hang in the water, back down in the crease at 0.1 s and up near the surface on the high side at 10 s.",
+      "layers: count; one grain per partial, from big heavy ones in the crease to small fine ones up the slope.",
+      "stir: rotation; the waterline tilts from nearly level at 0 to about 38 degrees at 100, climbing the right-hand wall and taking the fines with it.",
+      "grain: scale; every grain grows up to 2.4 times, from fine silt to coarse sand."
+    ],
+    "reference": "library/theseus-tower (dark bodies, light on the edge that matters)",
+    "risks": [
+      "At 1:1 the pan reads as a bowl or boat as much as a gold pan; the riffles on the back wall are the only cue.",
+      "Grains are 3 to 6 px with a rim light on one side; the smallest sit at the legibility floor.",
+      "The cut wall bodies are a #323232 fill (solid bodies); the water is hatching, the grains black with rim light."
+    ]
+  }
 }
