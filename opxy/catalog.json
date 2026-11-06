@@ -187,7 +187,35 @@
       "machine": "toro",
       "category": "engine",
       "pattern": "P10",
-      "verdict": "meets, with notes"
+      "verdict": "meets, with notes",
+      "regression": {
+        "frames": "screens/toro/blocks/frames",
+        "twoPage": true,
+        "scores": [
+          4,
+          5,
+          5,
+          3,
+          3,
+          2,
+          3,
+          2
+        ],
+        "names": [
+          "spread",
+          "fold",
+          "cutoff",
+          "res",
+          "shape",
+          "noise",
+          "drive",
+          "aphx"
+        ]
+      },
+      "precedent": true,
+      "departures": [
+        "note flash in #FFFFFF, brighter than the stock top grey: a hit is the one moment the screen goes past CDCDCD, then eases back (audited 2026-10-31)"
+      ]
     },
     "theseus-tower": {
       "machine": "theseus",
@@ -217,7 +245,9 @@
           "rate",
           "tune"
         ]
-      }
+      },
+      "precedent": true,
+      "departures": []
     },
     "meikyu-orrery": {
       "machine": "meikyu",

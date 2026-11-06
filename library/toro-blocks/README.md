@@ -9,6 +9,7 @@
 | Pattern | P10 Voice field (from `opxy/patterns.md`) |
 | Audit | **meets, with notes** · 2026-10-31 · tokens `source.ref` pull/260 · [audit.md](audit.md) |
 | Device | **device pending** |
+| Departures | Note flash in `#FFFFFF`, past the stock top grey `#CDCDCD`: the hit is the one moment the screen goes brighter than stock, then eases back. Accepted at audit (2026-10-31); lint warns, by design |
 | Source | `screens/toro/gen_blocks.py` (frames, fragment, prototype); `screens/toro/blocks/` |
 | Video | [toro-blocks.mp4](toro-blocks.mp4), every control swept with toro's own engine as the soundtrack (`screens/toro/blocks_av.py`). Audio: **simulated**, toro's engine code run on a computer with a stand-in envelope, not a recording from an OP-XY; [toro-drum.mp4](toro-drum.mp4), fold rolling the field into a drum (`screens/toro/curl_av.py`) |
 
