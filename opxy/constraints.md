@@ -64,7 +64,7 @@ Grey is the default here, on purpose. The OP-XY's own screens are grey, and the 
 | `palette` | 1–16 | [display] |
 | Node scale | Uniform only, positive, ≤ 2 | [display] |
 | Node turn | Unit vector; `sweep(value, half)` up to ±1800 tenths of a degree | [display] |
-| Redraw | ~**20 changed nodes per frame** on average while notes sound, low peak, at every setting including the heaviest; **zero at rest**. open-xy's CPU profiling leaves graphics out, so this cost only shows on the device | [ux] |
+| Redraw | ~**20 changed nodes per frame** on average while notes sound (release tails included), low peak, at every setting including the heaviest; **zero at rest**. Rest starts when the last note's animation has finished, not at the note-off: motion can fade out with the note (`hold_ended` begins its release; on SDK 1.10 a synth can pace it from `amp`'s release), as long as it reaches a still frame and stops changing nodes. open-xy's CPU profiling leaves graphics out, so this cost only shows on the device | [ux] |
 | Path keys | Change a path's `key` only when its points change. A key that includes time redraws the whole path every frame. | [display], [ux] |
 | Moving fills | Expensive. Allowed where they earn it; check heavy ones on the device. | [ux] |
 
