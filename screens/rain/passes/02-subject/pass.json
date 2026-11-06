@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 2,
-  "state": "ready_for_pick",
+  "state": "rejected",
   "created": "2026-11-06T08:11:59",
   "focus": "Five new, unique iterations.",
   "subject": null,
@@ -252,5 +252,10 @@
     "problems": [],
     "checked": "2026-11-06T08:27:00"
   },
-  "selection": null
+  "selection": null,
+  "rejection": {
+    "reason": "Owner's idea: raindrops on a window, the whole screen is the window; you see rain run down the glass and collect into drops that then fall. Five variants of that.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:34:04"
+  }
 }
