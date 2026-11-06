@@ -431,6 +431,12 @@ class Scene:
             xl = x0 + 1.0 + (i + phase) * p
             poly = [(xl, 0.0), (xl + land, 0.0), (xl + land + p / 2, 1.0), (xl + p / 2, 1.0)]
             poly = clip_x(poly, x0 + 1.0, True)
+            if len(poly) >= 3 and not any(q[1] <= 1e-6 for q in poly):
+                # the land's top is behind the throat: hang what's left from the throat's corner
+                on = [j for j, q in enumerate(poly) if abs(q[0] - (x0 + 1.0)) < 1e-6]
+                if on:
+                    j = min(on, key=lambda j: poly[j][1])
+                    poly[j] = (x0 + 1.0, 0.0)
             if len(poly) >= 3:
                 poly = clip_x(poly, xe - 1.6, False)
             if len(poly) >= 3 and max(q[0] for q in poly) - min(q[0] for q in poly) > 0.8:
@@ -501,6 +507,12 @@ class Scene:
             if seq[1][1] <= 1e-6:
                 seq = [seq[0]] + seq[1:][::-1]
             seq = seq[:]  # ends at the top-left vertex
+        elif len(tops) == 1:
+            i0 = tops[0]
+            seq = [poly[(i0 + j) % n] for j in range(n)]
+            if seq[1][0] < seq[-1][0]:
+                seq = [seq[0]] + seq[1:][::-1]
+            seq = seq + [seq[0]]
         else:
             seq = poly[:]
         # sample the edges

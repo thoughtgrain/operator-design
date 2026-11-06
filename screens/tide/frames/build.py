@@ -575,8 +575,8 @@ def pose_bubble(b, c, layout, bob_px=0.0):
     x, y = layout[id(b)]
     c0 = b["parts"]["centre"]
     c1 = CAM.p((x, y, 0.0))
-    persp = CAM.depth((b["x"], b["y"], 0)) / CAM.depth((x, y, 0))
-    s = persp * (salt_scale(b["k"], c["salt"]) if b["kind"] == "voiced" else 1.0)
+    # (drift's small depth change would also rescale it by under 1 %: left out, it would only cost redraws)
+    s = (salt_scale(b["k"], c["salt"]) if b["kind"] == "voiced" else 1.0)
     return (round(c1[0] - c0[0]), round(c1[1] - c0[1] - bob_px)), round(s * 64) / 64
 
 

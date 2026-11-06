@@ -476,14 +476,14 @@ def bed(n, gscale, settle):
         r = grain_r_px(k) * gscale / PPU * (0.9 + 0.2 * jit(k, 13))
         pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.6 * (0.8 + 0.4 * jit(k, 9))
         best = None
-        for i in range(300):
-            x = RB + 0.30 - i * 0.006
+        for i in range(420):
+            x = RB + 0.30 - i * 0.005
             z = max(r + 0.01, (x - RB + r * root) / KW)
             for (xj, zj, rj) in placed:
-                d = (r + rj) * (0.78 + 0.12 * jit(k, 11))   # piled in depth: neighbours overlap a little
+                d = r + rj + 0.6 / PPU                  # touching, never overlapping: each grain reads
                 if abs(x - xj) < d:
                     z = max(z, zj + math.sqrt(d * d - (x - xj) ** 2))
-            cost = 2.5 * z + 0.6 * abs(x - pref) + 2.0 * max(0.0, x - RB)
+            cost = 3.0 * z + 0.5 * abs(x - pref) + 2.0 * max(0.0, x - RB)
             if best is None or cost < best[0]:
                 best = (cost, x, z)
         placed.append((best[1], best[2], r))
@@ -761,7 +761,7 @@ def stills():
         for v in (0, 50, 100):
             c = dict(DEFAULTS)
             c[ctl_name] = v / 100
-            if ctl_name in ("stir", "layers"):
+            if ctl_name == "stir":
                 s = snapshot(c, STIR_T)
             elif ctl_name == "settle":
                 s = snapshot(c, SETTLE_T)
