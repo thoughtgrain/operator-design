@@ -441,7 +441,7 @@ def _scratch_ok(pts):
 def _skates():
     """Long scratches where a stylus skated across the earlier turns, all running roughly one way."""
     out = []
-    for i, (ang, L) in enumerate(((36, 100), (31, 96), (40, 92), (33, 84))):
+    for i, (ang, L) in enumerate(((36, 104), (31, 100), (40, 96), (33, 92), (38, 80))):
         best = None
         for cy in range(92, 132, 2):
             for cx in range(220, 320, 2):
@@ -449,7 +449,7 @@ def _skates():
                 if not _scratch_ok(pts):
                     continue
                 gap = min((min(math.dist(p, q) for p in pts for q in o[3]) for o in out), default=99)
-                if gap < 12:
+                if gap < 10:
                     continue
                 score = -abs(gap - 22) if out else -abs(cy - 110)
                 if best is None or score > best[0]:
@@ -561,7 +561,7 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
         if kind == "speck":
             F.blob(pts, G2, node=node, shown=shown)
         else:
-            F.ribbon(pts, HAIR, G3, node=node, shown=shown)
+            F.ribbon(pts, 1.2, G3, node=node, shown=shown)
         node += 1
     F.nodes = node
 
