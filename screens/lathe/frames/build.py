@@ -41,15 +41,15 @@ PARK = (640, 320)
 NPTS = 32                       # centre-line points of a mutable ribbon -> 64-point outline
 
 # ------------------------------------------------------------------ model
-P = 0.165                       # groove pitch (world)
-HW = 0.028                      # groove half-width at the surface
-DEPTH = 0.028                   # 90 degree stylus: depth = half-width
-CENTRE_X = 120                  # principal point: the newest groove stands upright here
+P = 0.152                       # groove pitch (world)
+HW = 0.036                      # groove half-width at the surface
+DEPTH = 0.036                   # 90 degree stylus: depth = half-width
+CENTRE_X = 146                  # principal point: the newest groove stands upright here
 Y_NEAR_SCREEN, Y_FAR_SCREEN = 166.0, 40.0
-FIELD = (250.0, 236.0, 236.0)   # field stop: centre x, centre y, radius (screen)
-TOP = 34.0                      # nothing above this (header clearance)
+FIELD = (236.0, 300.0, 290.0)   # field stop: centre x, centre y, radius (screen)
+TOP = 40.0                      # nothing above this (header clearance)
 SPLIT_SCREEN = 104.0            # depth of field: brighter runs below, dimmer above
-OLD_AMP = 0.016                 # earlier turns: swing as cut at 1.00
+OLD_AMP = 0.014                 # earlier turns: swing as cut at 1.00
 DEFAULT_TURNS, MAX_TURNS = 3, 7
 
 
@@ -118,17 +118,16 @@ def amounts(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0):
 def signal(t, k):
     """The modulation cut into turn k, along its length t 0..1; zero at the near face."""
     if k == 0:
-        s = (0.66 * math.sin(2 * math.pi * 3.5 * t) + 0.24 * math.sin(2 * math.pi * 7.0 * t)
-             + 0.10 * math.sin(2 * math.pi * 10.5 * t))
-        return s / 0.95
-    f1 = 2.6 + 0.37 * k
-    return (0.7 * math.sin(2 * math.pi * f1 * t) + 0.3 * math.sin(2 * math.pi * (2.3 * f1) * t + 0.0)) / 0.95
+        s = 0.8 * math.sin(2 * math.pi * 2.25 * t) + 0.2 * math.sin(2 * math.pi * 4.5 * t)
+        return s / 0.93
+    f1 = 1.4 + 0.33 * k
+    return (0.8 * math.sin(2 * math.pi * f1 * t) + 0.2 * math.sin(2 * math.pi * (2.6 * f1) * t)) / 0.93
 
 
 def swing(t, ratio):
     """The cutter: gain into a soft limit. Amplitude grows with the ratio and the crests flatten."""
-    amax = 0.068
-    return amax * math.tanh(0.42 * ratio * signal(t, 0)) / 1.0
+    amax = 0.052
+    return amax * math.tanh(0.3 * ratio * signal(t, 0))
 
 
 def lateral(k, t, ratio):
@@ -369,8 +368,8 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     ratio, turns = a["ratio"], a["turns"]
 
     # --- static: uncut lacquer edge, newest notch, and earlier turns 1..3 with their notches
-    F.ribbon([CAM((-0.62, Y0, 0.0)), CAM((-0.48, Y0, 0.0))], HAIR, G5)
-    F.ribbon([CAM((-0.48, Y0, 0.0)), CAM((-HW, Y0, 0.0)), CAM((-0.003, Y0, -DEPTH)),
+    F.ribbon([CAM((-0.42, Y0, 0.0)), CAM((-0.3, Y0, 0.0))], HAIR, G5)
+    F.ribbon([CAM((-0.3, Y0, 0.0)), CAM((-HW, Y0, 0.0)), CAM((-0.003, Y0, -DEPTH)),
               CAM((0.003, Y0, -DEPTH)), CAM((HW, Y0, 0.0))], LINE, G3)
     for k in range(1, DEFAULT_TURNS + 1):
         F.ribbon(section_piece(k - 1, k), LINE, G3)

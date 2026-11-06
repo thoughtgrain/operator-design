@@ -174,6 +174,29 @@ def vesica(cx, cy, w, h, n=10):
     return right + left
 
 
+def point_in_poly(p, poly):
+    x, y = p
+    inside = False
+    for i in range(len(poly)):
+        (x1, y1), (x2, y2) = poly[i - 1], poly[i]
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            inside = not inside
+    return inside
+
+
+def split_runs(pts, pred):
+    runs, cur = [], []
+    for p in pts:
+        if pred(p):
+            cur.append(p)
+        elif cur:
+            runs.append(cur)
+            cur = []
+    if cur:
+        runs.append(cur)
+    return [r for r in runs if len(r) >= 2]
+
+
 def chaikin(pts, n=2):
     for _ in range(n):
         out = [pts[0]]
@@ -275,6 +298,27 @@ class Frame:
                     self.ribbon([p0, p1], w, colour, min_len=min_len)
             c += step
 
+    def hatch_pred(self, poly, pred, colour=G3, pitch=HATCH, slope=1, w=HAIR, min_len=3.0):
+        """45-degree hairlines over a convex polygon, kept only where pred(point) holds."""
+        poly = clip_poly(list(poly))
+        if len(poly) < 3:
+            return
+        d = (1.0, -1.0) if slope > 0 else (1.0, 1.0)
+        key = (lambda p: p[0] + p[1]) if slope > 0 else (lambda p: p[0] - p[1])
+        cs = [key(p) for p in poly]
+        step = pitch * math.sqrt(2)
+        c = math.floor(min(cs) / step) * step + step
+        while c < max(cs):
+            a = (c, 0.0)
+            ts = poly_line_hits(poly, a, d)
+            for t0, t1 in zip(ts[0::2], ts[1::2]):
+                n = max(2, int((t1 - t0) * 2))
+                pts = [(a[0] + d[0] * lerp(t0, t1, i / n), a[1] + d[1] * lerp(t0, t1, i / n)) for i in range(n + 1)]
+                for run in split_runs(pts, pred):
+                    if math.dist(run[0], run[-1]) >= min_len:
+                        self.ribbon([run[0], run[-1]], w, colour, min_len=min_len)
+            c += step
+
     def svg(self) -> str:
         head = [
             '<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',
@@ -309,9 +353,9 @@ LW = 250.0 - (TX - VX)     # beam length in world units: reaches x 490 when it l
 S0 = 12.0                  # the beam leaves the lantern glazing
 PERIOD = 30.0              # one comb period of the pulse train, world units along the beam
 SWEEP_MAX = 68.0           # degrees the beam leans away at sweep 100
-FOG_TOP = 105.0            # px the fog bank's top rises above the horizon at fog 100
+FOG_TOP = 95.0             # px the fog bank's top rises above the horizon at fog 100
 FOG_FOOT = HORIZON + 14    # the bank's foot on the sea
-ROWS = [3, 7, 12, 19, 28, 40, 55, 67]   # ripple rows, px below the horizon: closer together with distance
+ROWS = [4, 10, 18, 29, 44, 63]   # ripple rows, px below the horizon: closer together with distance
 
 
 def half_angle(lens):
@@ -383,15 +427,15 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
     for off in ROWS:
         y = HORIZON + off
         q = off / ROWS[-1]
-        dashes, x = [], 146 + rng.uniform(0, 8)
+        dashes, x = [], 146 + rng.uniform(0, 30 * q + 6)
         while x < 480:
-            L = (5 + 34 * q) * rng.uniform(0.7, 1.3)
+            L = (12 + 70 * q) * rng.uniform(0.6, 1.4)
             dashes.append((x, min(x + L, 482)))
-            x += L + (4 + 16 * q) * rng.uniform(0.7, 1.4)
+            x += L + (14 + 40 * q) * rng.uniform(0.6, 1.5)
         glints = []
-        n = 1 if q < 0.3 else 2
+        n = 1 if q < 0.25 else (2 if q < 0.6 else 3)
         for j in range(n):
-            u = (-1 if (j + len(rows)) % 2 else 1) * (0.25 + 0.6 * j) * rng.uniform(0.6, 1.2)
+            u = (-1 if (j + len(rows)) % 2 else 1) * (0.2 + 0.55 * j) * rng.uniform(0.6, 1.2)
             cx = gx + u * (3 + 16 * q) * spread + shimmer * 2.0 * math.sin(2.1 * len(rows) + 3.3 * j + 6 * shimmer)
             gl = (3 + 10 * q) * (0.6 + 0.4 * spread)
             glints.append((cx - gl / 2, cx + gl / 2))
@@ -399,7 +443,7 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
 
     def draw_row(y, q, dashes, glints):
         F.part = "ripples"
-        col = G2 if q < 0.45 else G3
+        col = G2
         for a, b in dashes:
             F.line((a, y), (b, y), HAIR, col)
         F.part = "glints"
@@ -412,14 +456,37 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
             draw_row(y, q, dashes, glints)
 
     # ------------------------------------------------ fog: a hatched bank rising off the sea
+    # It hides the far sea and the sky, and smears the pulse train: inside the bank the beam's
+    # bands run together into one continuous hatch (the clicks blur into a breathy tone), while
+    # the beam's outline carries on through it, because the pitch survives.
     if fog > 0:
-        F.part = "fog"
         yt = HORIZON - FOG_TOP * fog
-        top = [(x, yt + 2.5 * math.sin(x / 19 + 1) + 1.5 * math.sin(x / 7.3)) for x in range(-4, 489, 16)]
-        bank = top + [(484, FOG_FOOT), (-4, FOG_FOOT)]
-        F.poly(bank, G0)
-        F.hatch(bank, G3, pitch=6.0, slope=-1)
-        F.ribbon(top, HAIR, G3)
+
+        def top_y(x):
+            return yt + 2.5 * math.sin(x / 19 + 1) + 1.5 * math.sin(x / 7.3)
+
+        def in_bank(p):
+            return top_y(p[0]) <= p[1] <= FOG_FOOT
+
+        cone = [beam_point(S0, theta, lens, -1), beam_point(LW, theta, lens, -1),
+                beam_point(LW, theta, lens, 1), beam_point(S0, theta, lens, 1)]
+
+        def in_cone(p):
+            return point_in_poly(p, cone)
+
+        F.part = "fog"
+        top = [(x, top_y(x)) for x in range(-4, 489, 16)]
+        F.poly(top + [(484, FOG_FOOT), (-4, FOG_FOOT)], G0)
+        box = [(-4, yt - 6), (484, yt - 6), (484, FOG_FOOT), (-4, FOG_FOOT)]
+        F.hatch_pred(box, lambda p: in_bank(p) and not in_cone(p), G2, pitch=7.0, slope=-1)
+        F.part = "fog edge"
+        for run in split_runs([(x / 2, top_y(x / 2)) for x in range(-8, 977)], lambda p: not in_cone(p)):
+            F.ribbon(run[::4] + [run[-1]], HAIR, G3)
+        F.part = "beam smear"
+        F.hatch_pred(cone, in_bank, G4 if note > 0.5 else G3, pitch=HATCH, slope=1)
+        F.part = "beam edges"
+        for side in (-1, 1):
+            F.line(beam_point(S0, theta, lens, side), beam_point(LW, theta, lens, side), HAIR, edge_c)
 
     for y, q, dashes, glints in rows:
         if y >= FOG_FOOT:
@@ -434,32 +501,30 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
     # ------------------------------------------------ the lighthouse, whole, from outside
     F.part = "tower"
     yb, ys, yd = 168.0, 90.0, 80.0          # base, shaft top, gallery deck top
-    F.body([(TX - 27, 174), (TX - 27, yb), (TX + 27, yb), (TX + 27, 174)], G4, LINE)   # plinth
-    outline = [(TX - 21, yb), (TX - 13, ys), (TX - 20, 84), (TX - 20, yd), (TX + 20, yd), (TX + 20, 84),
-               (TX + 13, ys), (TX + 21, yb)]
+    F.body([(TX - 29, 174), (TX - 29, yb), (TX + 29, yb), (TX + 29, 174)], G4, LINE)   # plinth
+    outline = [(TX - 24, yb), (TX - 15, ys), (TX - 22, 84), (TX - 22, yd), (TX + 22, yd), (TX + 22, 84),
+               (TX + 15, ys), (TX + 24, yb)]
     F.body(outline, G5, SUBJ)
-    F.line((TX - 13, ys), (TX + 13, ys), HAIR, G4)                 # corbel line under the gallery
+    F.line((TX - 15, ys), (TX + 15, ys), HAIR, G4)                 # corbel line under the gallery
     # door, arched, at the foot
-    door = [(TX - 4, yb)] + [(TX - 4 * math.cos(math.pi * k / 8), yb - 11 - 4 * math.sin(math.pi * k / 8))
-                             for k in range(9)] + [(TX + 4, yb)]
+    door = [(TX - 4.5, yb)] + [(TX - 4.5 * math.cos(math.pi * k / 8), yb - 11 - 4.5 * math.sin(math.pi * k / 8))
+                               for k in range(9)] + [(TX + 4.5, yb)]
     F.body(door, G4, HAIR)
     # two small windows up the shaft
     for wy in (138.0, 112.0):
-        F.body([(TX - 2.5, wy - 4), (TX + 2.5, wy - 4), (TX + 2.5, wy + 4), (TX - 2.5, wy + 4)], G4, HAIR)
-    # gallery rail: top rail and posts
-    F.line((TX - 19, 71), (TX + 19, 71), HAIR, G4)
-    for k in range(5):
-        x = TX - 19 + k * 38 / 4
-        if abs(x - TX) > 12:
-            F.line((x, 71), (x, yd), HAIR, G4)
+        F.body([(TX - 2.5, wy - 4.5), (TX + 2.5, wy - 4.5), (TX + 2.5, wy + 4.5), (TX - 2.5, wy + 4.5)], G4, HAIR)
+    # gallery rail: top rail and posts (the lantern hides the ones behind it)
+    F.line((TX - 21, 71), (TX + 21, 71), HAIR, G4)
+    for k in range(7):
+        F.line((TX - 21 + k * 7, 71), (TX - 21 + k * 7, yd), HAIR, G4)
     # lantern: glazing, two astragals and a sill, black so the beam starts behind its glass
-    lw, lt = 11.0, 56.0
+    lw, lt = 12.0, 56.0
     F.body([(TX - lw, yd), (TX - lw, lt), (TX + lw, lt), (TX + lw, yd)], G5, LINE)
     for s in (-1, 1):
-        F.line((TX + s * 6, lt + 1), (TX + s * 6, 76), HAIR, G4)
+        F.line((TX + s * 6.5, lt + 1), (TX + s * 6.5, 76), HAIR, G4)
     F.line((TX - lw, 76), (TX + lw, 76), HAIR, G4)
     # dome, ventilator ball and finial
-    dome = [(TX + 13 * math.cos(math.pi * k / 14), lt - 11 * math.sin(math.pi * k / 14)) for k in range(15)]
+    dome = [(TX + 14 * math.cos(math.pi * k / 14), lt - 11 * math.sin(math.pi * k / 14)) for k in range(15)]
     F.body(dome, G5, LINE)
     F.circle(TX, lt - 13.6, 2.6, G0, G5, LINE)
     F.line((TX, lt - 16.5), (TX, lt - 22), HAIR, G5)
@@ -509,6 +574,9 @@ def main():
         written.append(p)
         if stem == "rest":
             print("rest node count by part:", F.count, "total", sum(F.count.values()))
+    for stem in ("pulse-100", "lens-0", "fog-100"):
+        F = draw(frames[stem][0], title=stem)
+        print(stem, "node count by part:", F.count, "total", sum(F.count.values()))
     for p in written:
         print(f"{p.stem:10s} black {black_share(p.with_suffix('.png')) * 100:5.1f} %")
 

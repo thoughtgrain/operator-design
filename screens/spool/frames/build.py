@@ -37,9 +37,9 @@ B, S2, S, M, G, D, F, K = ("#CDCDCD", "#AFAFAF", "#969696", "#7D7D7D",
                            "#646464", "#4B4B4B", "#323232", "#000000")
 FONT = "UniversNextPro-Light"
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2   # craft.md's three weights
-PLY = 1.1                          # stroke of each ply: the thread is a hollow ribbon, two plies
-GAP = (0.5, 0.5, 1.0, 1.0)         # plies apart when fresh, by voices held: ~1.6 px line, ~2.1 px for a chord
-FRAY, SPLIT = 2.6, 3.4             # plies part with wear, and open wide where the oxide thins
+PLY = 1.5                          # stroke of each ply: the thread is a hollow ribbon, two plies
+GAP = (0.4, 0.4, 0.9, 0.9)         # plies apart when fresh, by voices held: a ~1.9 px line, ~2.4 px for a chord
+FRAY, SPLIT = 3.2, 4.2             # plies part with wear, and open wide where the oxide thins
 BODY_TOP = 21.0
 PATHS, POINTS = 4, 64
 CTRL = ["wear", "wow", "length", "bias"]
@@ -454,7 +454,7 @@ def rest_state(s: Spool) -> State:
     """The record a note leaves: written fresh, held until its first repeat reaches the left edge."""
     reps = visible_reps(s)
     phi = 40.0
-    return State(phi, [phi - reps - 0.25])
+    return State(phi, [phi - reps - 0.7])
 
 
 def visible_reps(s: Spool) -> float:
@@ -496,13 +496,14 @@ def trail_point(s: Spool, st: State, q: float):
     a = 0.9 * s.wow
     uw = u + a / (2 * math.pi) * math.sin(2 * math.pi * (u - 0.3))
     v = cycle_at(uw, table)
-    v *= 1 - 0.45 * sw                             # worn: the highs go and the level with them
+    v *= 1 - 0.58 * sw                             # worn: the highs go and the level with them
     if b < 0:                                      # under-bias: louder, saturates hard
         v = max(-1 + 0.48 * -b, min(1 - 0.48 * -b, v * (1 + 0.35 * -b)))
     else:                                          # over-bias: quieter
         v *= 1 - 0.38 * b
     depth = max(0.0, min(1.0, (sw - 0.25) / 0.4))
-    w = GAP[min(st.voices, 3)] + FRAY * sw + SPLIT * dropout(u, rep + int(mark * 7), depth)
+    twist = abs(math.sin(math.pi * 5 * u))         # the plies' twist loosens: they part between crossings
+    w = GAP[min(st.voices, 3)] + FRAY * sw * (0.35 + 0.65 * twist) + SPLIT * dropout(u, rep + int(mark * 7), depth)
     return v3(x, AMP * v, 0.0), w, rep, mark
 
 
@@ -517,7 +518,7 @@ def shade_for(s: Spool, ws, st: State) -> str:
     """The thread dulls as it wears, two stock steps at most: a stretch reads its mean wear back
     from how far its plies have parted (dropouts excluded by the median)."""
     base = GAP[min(st.voices, 3)]
-    worn = (float(np.median(ws)) - base) / FRAY
+    worn = (float(np.median(ws)) - base) / (FRAY * 0.75)
     return B if worn < 0.3 else S2 if worn < 0.62 else S
 
 
@@ -549,7 +550,7 @@ def trail_samples(s: Spool, st: State):
         r0 = math.floor(b0 - mark)
         r1 = math.floor(b1 - mark)
         for rep in range(r0, r1 + 1):
-            ws_ = list(np.linspace(0, 1, 49)[:-1]) + corners
+            ws_ = list(np.linspace(0, 1, 81)[:-1]) + corners
             for uw in sorted(set(round(x, 6) for x in ws_)):
                 for e in (0.0,):
                     u = warp_inv(uw + e, a) if a > 0 else uw + e

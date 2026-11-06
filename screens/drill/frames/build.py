@@ -365,18 +365,14 @@ class Scene:
         """The lead screw's upper edge, from base to point (x, r)."""
         _, ls, blunt, th = self.tip_dims()
         xe = self.X_E + self.dx
-        x0, r0 = xe + 4.5, 4.4
-        out = [(x0, r0)]
-        n = 3
-        for i in range(n):
-            t0, t1 = i / n, (i + 0.55) / n
-            xa = x0 + ls * t1
-            ra = r0 * (1 - t1) + blunt / 2 * t1
-            out.append((xa, ra + th * (1 - t1)))
-            xb = x0 + ls * (i + 1) / n
-            rb = r0 * (1 - (i + 1) / n) + blunt / 2 * (i + 1) / n
-            out.append((xb - 0.4, rb + 0.2))
-        out[-1] = (x0 + ls, blunt / 2)
+        x0, r0 = xe + 4.5, 4.6
+        out = []
+        for i in range(2):
+            t1 = (i + 0.45) / 2.6
+            out.append((x0 + ls * t1, r0 * (1 - t1) + blunt / 2 * t1 + th * (1 - t1)))
+            t2 = (i + 1) / 2.6
+            out.append((x0 + ls * t2 - 0.4, r0 * (1 - t2) + blunt / 2 * t2 + 0.2))
+        out.append((x0 + ls, blunt / 2))
         return out
 
     def cutting_head(self):
@@ -386,8 +382,8 @@ class Scene:
         ls, _, _, _ = self.tip_dims()
         rw = 1.6 * self.wear
         pts = [(xe, R), (xe + ls - rw, R - 0.2 - 0.8 * self.wear), (xe + ls, R - 1.6 - rw), (xe + 1.8, R - 4.2),
-               (xe + 4.5, 6.4)]
-        return pts + self.screw_profile()[:-1] + [self.screw_profile()[-1]]
+               (xe + 4.5, 5.6)]
+        return pts + self.screw_profile()
 
     def twist(self):
         """Paths 1 and 2: the lands, hanging from a lit top edge, crawling as the bit turns."""
@@ -433,25 +429,36 @@ class Scene:
                 poly = clip_x(poly, xe - 1.6, False)
             if len(poly) >= 3 and max(q[0] for q in poly) - min(q[0] for q in poly) > 0.8:
                 lands.append(poly)
-        half = (len(lands) + 1) // 2
-        groups = [lands[:half], lands[half:]]
-        x_mid = (max(q[0] for q in lands[half - 1] if q[1] == 0.0) if any(q[1] == 0.0 for q in lands[half - 1]) else
-                 max(q[0] for q in lands[half - 1])) + 0.3 * (p - land)
-        if half < len(lands):
-            x_next = min(q[0] for q in lands[half] if q[1] <= 0.0001) if any(q[1] <= 0.0001 for q in lands[half]) else min(q[0] for q in lands[half])
-            x_mid = (x_mid + x_next) / 2 if x_next > x_mid else x_mid
-
+        head = [cam((x, 0, z)) for x, z in self.cutting_head()]
+        head = head + [cam((x, 0, -z)) for x, z in self.cutting_head()[::-1]][1:]
         budget = 64
+        mins = [len(self.land_outline(poly, to_screen, 0)) for poly in lands]
+        fixed = [4, 4 + len(head)]
+        half = None
+        for h in range(len(lands), -1, -1):
+            if fixed[0] + sum(mins[:h]) <= budget and fixed[1] + sum(mins[h:]) <= budget:
+                half = h
+                break
+        if half is None:
+            raise ValueError(f"twist: {len(lands)} lands don't fit two 64-point outlines")
+        # balance: move lands to B while both still fit and A is the fuller one
+        while half > 1 and fixed[0] + sum(mins[:half]) - mins[half - 1] >= fixed[1] + sum(mins[half - 1:]) - 4 \
+                and fixed[1] + sum(mins[half - 1:]) <= budget:
+            half -= 1
+        groups = [lands[:half], lands[half:]]
+
+        def top_x(poly, fn):
+            xs = [q[0] for q in poly if q[1] <= 1e-6] or [q[0] for q in poly]
+            return fn(xs)
+        x_mid = top_x(lands[half - 1], max) + 0.5 * (p - land) if half > 0 else x0
+        if half < len(lands):
+            x_mid = min(x_mid, (top_x(lands[half - 1], max) + top_x(lands[half], min)) / 2)
+
         for gi, grp in enumerate(groups):
             xa = x0 if gi == 0 else x_mid
             xb = x_mid if gi == 0 else xe
-            head = []
-            if gi == 1:
-                head = [cam((x, 0, z)) for x, z in self.cutting_head()]
-                lower = [cam((x, 0, -z)) for x, z in self.cutting_head()[::-1]]
-                head = head + lower[1:]
-            fixed = 5 + len(head)
-            per_land = max(4, (budget - fixed) // max(1, len(grp)))
+            spare = budget - fixed[gi] - sum(mins[:half] if gi == 0 else mins[half:])
+            extra = spare // max(1, len(grp))
             # edge samples per land: corners + curved edges
             pts = [top_pt(xa, R * k)]
             if gi == 0:
@@ -463,7 +470,7 @@ class Scene:
                 pts[-1] = cam((xe, 0, -R))
             pts.append(top_pt(xb, under))
             for poly in grp[::-1]:
-                pts += self.land_outline(poly, to_screen, per_land)
+                pts += self.land_outline(poly, to_screen, extra)
             pts.append(top_pt(xa, under) if gi == 1 else top_pt(xa + 0.01, under))
             name = f"twist{'AB'[gi]}"
             col = BRIGHT
@@ -493,7 +500,7 @@ class Scene:
         # sample the edges
         E = len(seq) - 1
         curved = sum(1 for j in range(E) if abs(seq[j + 1][1] - seq[j][1]) > 0.05)
-        per_edge = max(1, (budget - 1 - (E - curved)) // max(1, curved))
+        per_edge = 1 + max(0, budget) // max(1, curved)
         out = []
         wr = 0.42 * self.wear
         for j in range(len(seq) - 1):

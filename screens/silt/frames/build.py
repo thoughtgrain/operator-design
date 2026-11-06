@@ -70,10 +70,10 @@ BEAD = 0.045                         # rolled rim bead radius
 RIFFLES = [(0.30, 0.07), (0.45, 0.07), (0.60, 0.07)]   # (ledge height, ledge width) on the left wall
 RIFFLE_H = 0.10                                         # each tooth rises over this height
 RIFFLE_SECTOR = (math.pi - 1.05, math.pi)               # back-left sector that carries them
-ZW = 0.30                            # water depth at rest
+ZW = 0.20                            # water depth at rest
 
-TH0, TH1 = 3.0, 33.0                 # swirl tilt (world degrees) = TH0 + TH1 * stir
-THMAX = 38.0                         # cap (chord boost)
+TH0, TH1 = 2.0, 18.0                 # swirl tilt (world degrees) = TH0 + TH1 * stir
+THMAX = 21.0                         # cap (chord boost): past ~21 degrees this much water spills over the rim
 HOLD = 0.2                           # held-note tilt, share of the swirl tilt
 T_ATTACK = 0.18                      # swirl rise, s (ease-out, settles in 0.15-0.2 s)
 TAU_UP = 0.05
@@ -341,56 +341,43 @@ def surface_z(x, c, t):
     return c + t * x
 
 
-def section_area(c, t, steps=240):
-    """Water area in the section: between floor and surface, inside the walls."""
-    xl, xr = -wall_r(DEP), RT
-    area = 0.0
-    dx = (xr - xl) / steps
-    for i in range(steps):
-        x = xl + (i + 0.5) * dx
-        zs = surface_z(x, c, t)
-        if zs <= 0:
-            continue
-        # the wall at this x: lowest z the water can have here
-        if abs(x) <= RB:
-            zfloor = 0.0
-        elif x > 0:
-            zfloor = (x - RB) / KW
-        else:
-            zfloor = 0.0
-            # left stepped wall: find z where wall_r(z) == -x
-            lo, hi = 0.0, DEP
-            if wall_r(DEP) < -x:
-                continue
-            for _ in range(30):
-                mid = (lo + hi) / 2
-                if wall_r(mid) < -x:
-                    lo = mid
-                else:
-                    hi = mid
-            zfloor = hi
-        if zs > zfloor:
-            area += (zs - zfloor) * dx
-    return area
+_CELLS = None
+_C = {}
 
 
-A0 = None
+def volume(c, t):
+    return sum(max(0.0, min(c + t * x, DEP) - f) for x, f in _CELLS)
 
 
 def water_c(theta_deg):
-    """Offset c of the tilted surface that keeps the section's water area constant."""
-    global A0
-    if A0 is None:
-        A0 = section_area(ZW, 0.0)
+    """Offset c of the tilted surface that keeps the water's volume (the whole pan, not just the cut)."""
+    global _CELLS
+    key = round(theta_deg, 3)
+    if key in _C:
+        return _C[key]
+    if _CELLS is None:
+        n, top = 90, RB + KW * DEP
+        h = 2 * top / n
+        _CELLS = []
+        for i in range(n):
+            for j in range(n):
+                x, y = -top + (i + 0.5) * h, -top + (j + 0.5) * h
+                r = math.hypot(x, y)
+                if r <= RB:
+                    _CELLS.append((x, 0.0))
+                elif r <= top:
+                    _CELLS.append((x, (r - RB) / KW))
+        _C["v0"] = volume(ZW, 0.0)
     t = math.tan(math.radians(theta_deg))
     lo, hi = -2.0, 2.0
-    for _ in range(50):
+    for _ in range(36):
         mid = (lo + hi) / 2
-        if section_area(mid, t) < A0:
+        if volume(mid, t) < _C["v0"]:
             lo = mid
         else:
             hi = mid
-    return (lo + hi) / 2
+    _C[key] = (lo + hi) / 2
+    return _C[key]
 
 
 def solve_wall(c, t, a):

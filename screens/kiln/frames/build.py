@@ -419,7 +419,7 @@ def lip_wall(fire):
     return 0.10 - 0.035 * fire                # the lip thins as the body vitrifies
 
 
-GLAZE_T = (0.13, 0.5)                        # inner-profile t of the glaze line, glaze 0 .. 100
+GLAZE_T = (0.13, 0.6)                        # inner-profile t of the glaze line, glaze 0 .. 100
 
 
 def glaze_ring(g):
@@ -444,9 +444,11 @@ def glaze_tf(g):
     """The glaze disc's own transform for glaze g: uniform scale + translate of the authored disc."""
     a = bbox(GLAZE_AUTH)
     b = bbox(ellipse_of_ring(*glaze_ring(g)))
-    s = (b[2] - b[0]) / (a[2] - a[0])
-    ca = ((a[0] + a[2]) / 2, (a[1] + a[3]) / 2)
-    cb = ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
+    # the smaller of the width and height ratios, pinned at the back (top) of the ring, so the
+    # scaled disc never rises above the true glaze line or over the lip
+    s = min((b[2] - b[0]) / (a[2] - a[0]), (b[3] - b[1]) / (a[3] - a[1]))
+    ca = ((a[0] + a[2]) / 2, a[1])
+    cb = ((b[0] + b[2]) / 2, b[1])
     return s, ca, cb
 
 
@@ -454,7 +456,7 @@ assert glaze_tf(1.0)[0] <= 2.0, glaze_tf(1.0)[0]
 
 
 # ---------------------------------------------------------------- crack and crazing (authored once)
-def crack_geometry(seed=23):
+def crack_geometry(seed=26):
     """A dunting crack as a tree grown down the front wall from the lip.
 
     Each step is a short segment with its path length from the crack's mouth;
@@ -477,14 +479,14 @@ def crack_geometry(seed=23):
             r = BOWL.outer(t)[0]
             nth = th + math.sin(heading) * ds / r
             nt = t - math.cos(heading) * ds * 0.9
-            if nt < 0.24 or abs(nth - th0) > math.radians(46):
+            if nt < (0.13 if depth == 0 else 0.2) or abs(nth - th0) > math.radians(50):
                 return
             segs.append((dist, depth, (th, t), (nth, nt)))
             th, t, dist = nth, nt, dist + ds
-            p_fork = (0.24, 0.14, 0.0)[depth] if depth < 3 else 0
+            p_fork = (0.26, 0.2, 0.0)[depth] if depth < 3 else 0
             if i > 1 and rnd.random() < p_fork:
                 side = rnd.choice((-1, 1))
-                grow(th, t, side * rnd.uniform(1.05, 1.35), (0.5 if depth == 0 else 0.22) * rnd.uniform(0.6, 1.0),
+                grow(th, t, side * rnd.uniform(1.05, 1.35), (0.62 if depth == 0 else 0.3) * rnd.uniform(0.6, 1.0),
                      depth + 1, dist)
     grow(th0, 0.99, 0.0, 0.92, 0, 0.0)
     segs.sort(key=lambda q: q[0])
@@ -506,12 +508,12 @@ WRIST = (418.0, 118.0)
 SHAFT_L = 152.0
 REST_ANGLE = math.radians(205.0)               # head down-left of the wrist, poised over the rim
 CORE_R = 11.5
-YARN_R = 23.0
+YARN_R = 30.0
 
 
 def head_radius(strike):
     """The yarn ball shrinks onto the bare core as hardness rises (scale 1.0 .. 0.52)."""
-    return max(CORE_R, YARN_R * (1 - 0.48 * strike / 0.96))
+    return max(CORE_R, YARN_R * (1 - (1 - CORE_R / YARN_R) * strike / 0.96))
 
 
 def head_scale(strike):
@@ -572,9 +574,9 @@ def draw_mallet(F, strike, ang, head_colour=G0):
     s = R / YARN_R
     F.circle(c[0], c[1], R, fill=BK, stroke=head_colour, sw=2.4 * s)
     # wraps: latitude bands about the rod's axis, front half only, unwound as hardness rises
-    nwrap = 6
+    nwrap = 10
     shown = max(0, round(nwrap * (1 - strike) + 0.49)) if strike < 0.96 else 0
-    order = [2, 3, 1, 4, 0, 5]
+    order = [4, 5, 3, 6, 2, 7, 1, 8, 0, 9]
     vis = set(order[:shown])
     for k in range(nwrap):
         if k not in vis:
@@ -589,7 +591,7 @@ def draw_mallet(F, strike, ang, head_colour=G0):
             u = cr * math.cos(t)
             v = cr * 0.34 * math.sin(t)
             arc.append((cc[0] + nx * u + ax[0] * v, cc[1] + ny * u + ax[1] * v))
-        F.line(arc, M_HAIR * max(1.0, s), G4 if k in (2, 3) else G5)
+        F.line(arc, M_HAIR * max(1.0, s), G3 if 2 <= k <= 7 else G4)
     return c, R
 
 
@@ -739,9 +741,9 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
                 if xb - xa > 3.0:
                     a = (xa + 0.4, c - xa - 0.4)
                     b = (xb - 0.4, c - xb + 0.4)
-                    F.line([gtf(a), gtf(b)], 1.2 * gs * s, G4)
+                    F.line([gtf(a), gtf(b)], 1.2 * gs * s, G3)
             c += step
-        F.line([gtf(q) for q in poly], 1.2 * gs * s, G3, closed=True)
+        F.line([gtf(q) for q in poly], 1.2 * gs * s, G2, closed=True)
 
     # --- front wall: a black mask from the inner lip's front arc down, hiding what's behind
     front = []
@@ -772,12 +774,12 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
         if main:
             pts = [main[0][2]] + [q[3] for q in main]
             pts = tf.pts([wall_pt(th, tt, 0.004) for th, tt in pts])
-            F.outline(taper_pts(pts, (1.3 + 1.9 * u) * s, 1.0 * s), G2)
-        for depth, col in ((1, G3), (2, G4), (3, G4)):
+            F.outline(taper_pts(pts, (1.4 + 2.8 * u) * s, 1.1 * s), G2)
+        for depth, col in ((1, G2), (2, G3), (3, G3)):
             for q in CRACK:
                 if q[1] == depth and q[0] < reach:
                     seg = [wall_pt(*q[2], 0.004), wall_pt(*q[3], 0.004)]
-                    F.line(tf.pts(seg), hair, col)
+                    F.line(tf.pts(seg), (1.5 if depth == 1 else 1.2) * s, col)
 
     # --- silhouette outline (hidden-line edge)
     F.line(tf.pts(resample_closed(sil, 6)), line, G2, closed=True)

@@ -359,7 +359,7 @@ class Pane:
     """World units: x right, y up, the glass is z = 0. A drop's height is its note."""
 
     def __init__(self, W, H, c, seed, r_land, yc=0.6, band=0.3, speed=110.0, residue=None,
-                 hold=(1.9, 3.2)):
+                 hold=(1.05, 2.2)):
         self.W, self.H = W, H
         self.rate, self.span, self.gust, self.puddle, _ = settings(c)
         self.rng = random.Random(seed)
@@ -390,7 +390,7 @@ class Pane:
     def land(self, t, st=None, x=None, r=None):
         cs = courses(self.span) or [0]
         st = self.rng.choice(cs) if st is None else st
-        y = self.pitch_y(st) + self.rng.uniform(-1, 1) * self.r_land[0] * 0.5
+        y = self.pitch_y(st) + self.rng.uniform(-1, 1) * self.r_land[0] * 0.9
         if x is None:
             x = self.rng.uniform(0.03, 0.97) * self.W
         r = self.rng.uniform(*self.r_land) if r is None else r
