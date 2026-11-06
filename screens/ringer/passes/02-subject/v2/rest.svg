@@ -19,7 +19,7 @@
     <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">6</text>
     <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">bob</text>
     <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">2.0</text>
-    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0%</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
   </g>
   <path d="M 389.29 114.41 L 393.55 98.36 L 398.48 95.54 L 394.21 111.26 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
   <path d="M 393.55 98.36 L 155.24 30.57 L 159.56 30.14 L 398.48 95.54 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>

@@ -20,6 +20,7 @@ grey fill; solid bodies filled black behind their outlines; one subpath and
 from __future__ import annotations
 
 import math
+import pathlib
 import random
 from pathlib import Path
 
@@ -37,6 +38,16 @@ G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
 HAIR, LINE, SUBJ = 1.1, 1.5, 2.25
 
+
+
+def label_header(svg: str) -> str:
+    """Put this machine's titles and default values into the template's header slots (p1–p4, 0),
+    taken from the first pass's header (matched by position), so every pass shows the same header."""
+    import re as _re
+    ref = (pathlib.Path(__file__).resolve().parent.parent / "01-subject" / "v1" / "rest.svg").read_text(encoding="utf-8")
+    by_pos = {m.group(1): m.group(2) for m in _re.finditer(r'<text transform="(matrix\([^)]*\))"[^>]*>([^<]*)</text>', ref)}
+    return _re.sub(r'(<text transform="(matrix\([^)]*\))"[^>]*>)(p[1-4]|0)(</text>)',
+                   lambda m: m.group(1) + by_pos.get(m.group(2), m.group(3)).rstrip("%") + m.group(4), svg)  # ux.md: amounts without %
 
 def flock(seed: int = 11):
     """Eight birds in the flock's own frame: (u across the pitch field 0..1, h height -1..1, d depth -1..1).
@@ -313,7 +324,7 @@ class Frame:
                head[s0:s1].rstrip()]
         out += ["  " + s for s in self.items]
         out.append("</svg>")
-        return "\n".join(out) + "\n"
+        return label_header("\n".join(out) + "\n")
 
 
 # ================================================================== v1 · cutaway · bold closed outlines

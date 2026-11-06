@@ -17,6 +17,7 @@ Run: python3 screens/drill/passes/02-subject/sketch.py
 from __future__ import annotations
 
 import math
+import pathlib
 import random
 from pathlib import Path
 
@@ -35,6 +36,16 @@ BODY_TOP = 22
 
 
 # ------------------------------------------------------------- vectors ----
+
+def label_header(svg: str) -> str:
+    """Put this machine's titles and default values into the template's header slots (p1–p4, 0),
+    taken from the first pass's header (matched by position), so every pass shows the same header."""
+    import re as _re
+    ref = (pathlib.Path(__file__).resolve().parent.parent / "01-subject" / "v1" / "rest.svg").read_text(encoding="utf-8")
+    by_pos = {m.group(1): m.group(2) for m in _re.finditer(r'<text transform="(matrix\([^)]*\))"[^>]*>([^<]*)</text>', ref)}
+    return _re.sub(r'(<text transform="(matrix\([^)]*\))"[^>]*>)(p[1-4]|0)(</text>)',
+                   lambda m: m.group(1) + by_pos.get(m.group(2), m.group(3)).rstrip("%") + m.group(4), svg)  # ux.md: amounts without %
+
 def add(a, b): return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
 def sub(a, b): return (a[0] - b[0], a[1] - b[1], a[2] - b[2])
 def mul(a, k): return (a[0] * k, a[1] * k, a[2] * k)
@@ -160,7 +171,7 @@ class Svg:
         pal = ('  <path id="drill_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>\n'
                '  <path id="drill_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#646464" stroke="#646464" stroke-width="2"/>\n')
         body = "\n".join("  " + p for p in self.parts)
-        path.write_text(head.rstrip() + f"\n  <title>{title}</title>\n" + pal + body + "\n</svg>\n")
+        path.write_text(label_header(head.rstrip() + f"\n  <title>{title}</title>\n" + pal + body + "\n</svg>\n"))
 
 
 # ------------------------------------------------------------- hatching ---

@@ -32,7 +32,7 @@ N = 6                      # bells at default (0.25 of 4..12)
 PACE = 2.0                 # blows per beat at default
 GAP = 0.0                  # handstroke gap in blows (stroke default 0)
 LABELS = ["bells", "method", "pace", "stroke"]
-VALUES = ["6", "bob", "2.0", "0%"]
+VALUES = ["6", "bob", "2.0", "0"]  # ux.md: amounts 0–100 without %
 
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")

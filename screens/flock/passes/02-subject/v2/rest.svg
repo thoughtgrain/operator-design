@@ -12,14 +12,14 @@
     <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
     <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
     <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
-    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p1</text>
-    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p2</text>
-    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p3</text>
-    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">p4</text>
-    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
-    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">cohere</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">speed</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">scatter</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">scale</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">50</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1.00</text>
     <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
-    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">pent</text>
   </g>
   <path d="M 26.61 133.19 L 39.58 128.74 L 54.29 130.25 L 69.17 132.68 L 82.34 127.91 L 97.47 131.86 L 111.63 131.36 L 125.37 128.09 L 140.39 132.96 L 154.22 129.71 L 168.47 129.2 L 183.09 133.13 L 197.03 128.37 L 211.45 130.81 L 225.76 132.31 L 240 127.86 L 254.24 132.31 L 268.55 130.81 L 282.97 128.37 L 296.91 133.13 L 311.53 129.2 L 325.78 129.71 L 339.61 132.96 L 354.63 128.09 L 368.37 131.36 L 382.53 131.86 L 397.66 127.91 L 410.83 132.68 L 425.71 130.25 L 440.42 128.74 L 392.87 53.05 L 383.33 49.51 L 372.88 50.71 L 362.36 52.65 L 352.71 48.85 L 342.05 51.99 L 331.89 51.59 L 321.95 48.99 L 311.36 52.87 L 301.37 50.27 L 291.16 49.87 L 280.77 53 L 270.72 49.21 L 260.43 51.15 L 250.2 52.35 L 240 48.8 L 229.8 52.35 L 219.57 51.15 L 209.28 49.21 L 199.23 53 L 188.84 49.87 L 178.63 50.27 L 168.64 52.87 L 158.05 48.99 L 148.11 51.59 L 137.95 51.99 L 127.29 48.85 L 117.64 52.65 L 107.12 50.71 L 96.67 49.51 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
   <path d="M 44.99 128.17 L 100.72 49.12 L 99.82 48.48 L 44.09 127.54 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
