@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "nave",
+  "name": "Nave",
+  "parameters": [
+    {
+      "id": "nave",
+      "label": "Nave",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.4, "maximum": 12.0},
+      "display": "duration"
+    },
+    {
+      "id": "stone",
+      "label": "Stone",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "choir",
+      "label": "Choir",
+      "default": 0.6,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "doors",
+      "label": "Doors",
+      "default": 0.2828,
+      "mapping": {"kind": "power", "maximum": 0.25, "exponent": 2},
+      "display": "duration"
+    }
+  ],
+  "presets": {
+    "Chapel": {"nave": 0.5, "stone": 0.5, "choir": 0.6, "doors": 0.2828},
+    "Cathedral": {"nave": 0.85, "stone": 0.7, "choir": 0.8, "doors": 0.55},
+    "Crypt": {"nave": 0.2, "stone": 0.25, "choir": 0.35, "doors": 0.1}
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 32,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 32,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

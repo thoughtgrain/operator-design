@@ -184,13 +184,13 @@ def header_values(t: Tape) -> list[str]:
             ("+" if bias > 0 else "") + str(bias)]
 
 
-def wave_xy(t: Tape, x0, x1, yc, amp, cycles=1.0, worn=True, wobble=None):
+def wave_xy(t: Tape, x0, x1, yc, amp, cycles=1.0, worn=True, wobble=None, per_cycle=90):
     """Polyline of the cycle across x0..x1. Fresh at wear 0 keeps its corners."""
     pts = []
     if worn and (t.wear > 0 or t.bias != 0):
         y = t.played()
         N = len(y)
-        steps = int(90 * cycles)
+        steps = int(per_cycle * cycles)
         for i in range(steps + 1):
             u = i / steps * cycles
             v = y[int(round((u % 1) * N)) % N]
@@ -325,7 +325,7 @@ def v3(t: Tape) -> Frame:
         tk = Tape(wear=t.wear_pos, wow=t.wow, length=t.length_pos, bias=t.bias_pos)
         tk.wear = t.wear * passes / 8
         a = amp * ((1 - 0.3 * t.bias) if k == 0 else 1)          # bias: front layer's level (scale)
-        prof = wave_xy(tk, bx, bx + width, by - a - 2, a)
+        prof = wave_xy(tk, bx, bx + width, by - a - 2, a, per_cycle=56)
         f.poly(prof + [(bx + width, by), (bx, by)], fill=K)     # hidden line: black ground under each profile
         f.line([(bx, by), (bx + width, by)], 1.2, D if k else G)
         f.line(prof, 2 if k == 0 else 1.5, greys[k])

@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A send reverb modelled on a stone nave: the nave's length sets the decay, the stone's hardness how long the highs survive, the choir's carving how densely the echoes diffuse, and the west doors how long before the first reflection arrives."
+}
