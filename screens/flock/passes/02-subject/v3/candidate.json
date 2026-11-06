@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "One bird of the flock drawn large and exploded like a model kit, its wings, primaries and tail pulled off the body along assembly axes, with its neighbours cut off by the edges of the frame.",
+  "controls": [
+    "cohere: how far the kit is exploded (position, the wings, primaries and tail pulled out from the body by about 70 px at 0 and nearly seated at 100), and the neighbours at the frame's edge slide further into view as the flock tightens.",
+    "speed: the wings' sweep (rotation of each wing about its root, about 35 degrees from spread at 0.25 to swept back at 4.00).",
+    "scatter: loose primaries drift away from the wings off their assembly axes (position, up to about 40 px), one per stray note.",
+    "scale: how many primaries the wings carry (count, 11 for pent across both wings, low octave on the left wing and high on the right, up to 25 for chr); the one the bird sounds now is the bright feather."
+  ],
+  "reference": "opxy/reference/ (exploded patent views); library/theseus-tower for detail kept on a subject that stays on screen",
+  "risks": [
+    "One bird stands for eight voices: the other seven are only the edge silhouettes, so a note from another bird has to show on its edge neighbour (a wingbeat) or the flock reads as one voice.",
+    "At chr the primaries are 12-13 per wing; at the wing roots they come closer than 3 px, so the fan needs to open wider or the feathers shorten at chr.",
+    "The bright feather is small (about 6 x 60 px); it clears the brightest-element rule but a note on it needs a position or scale flare as well as the shade.",
+    "Muted: the kit goes hatched (every part filled with 45-degree hairlines, there but not playing) and the bright feather goes back to grey."
+  ]
+}

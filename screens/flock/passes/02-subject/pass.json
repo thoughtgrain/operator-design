@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "Five new, unique iterations.",
   "subject": null,
@@ -69,7 +69,183 @@
       "brief": "Start from what flock is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: hatched mass. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "bold closed outlines",
+      "subject": "The pitch field is a reed bed tuned as a pan pipe, every reed cut open down its front to show the node that stops its air column, and the flock skims the mouths so the bird over a reed blows it.",
+      "controls": [
+        "cohere: the flock's spread over the reed mouths (position, birds drawn toward the flock's centre, from about 300 px across at 0 to 2-3 neighbouring reeds at 100).",
+        "speed: each bird's wing sweep and bank (shape, wings swept back and the body tilted further into the dive as speed rises, some wingtip point moving at least 16 px), so fast birds read as stooping across the mouths.",
+        "scatter: strays leave the flock and drop toward reeds far from the cluster (position, up to about 150 px off the flock's centre), so stray notes come from far reeds.",
+        "scale: how many reeds stand in the bed (count, 11 for pent up to 25 for chr), each cut to show its node at the depth of its pitch, the column halving every octave."
+      ],
+      "reference": "opxy/reference/ and library/theseus-tower (an instrument drawn as itself in closed outlines with its own detail; here the reed's node is the detail)",
+      "risks": [
+        "chr is 25 reeds in about 360 px: about 15 px apart, so reeds drop to a radius of 4-5 px and the cutaway window (back-wall hairlines, node ring) may need to lose its hairlines to stay 3 px apart.",
+        "Eleven tall open tubes are a lot of repeated outline; the reeds stay at mid greys so the birds and the playing reed read first, but the body is busier than toro or theseus at rest.",
+        "Muted: every reed mouth is capped with a lid line (the bed stops sounding) and the birds glide with folded wings; the caps are the cue, not a dimmer grey.",
+        "The flock is relaxed apart in the sketch so outlines don't touch; on the device, birds that overlap at high cohere need painter order and black fills to stay legible."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "A block of snow-covered ploughed field cut open in section, one furrow per scale degree, with the wing prints the flock pressed into the snow each time a bird touched down in a furrow.",
+      "controls": [
+        "cohere: how many furrows the prints spread across (position, the line of prints pulled from most of the block's width at 0 into two or three neighbouring furrows at 100).",
+        "speed: how far apart the touch-downs are along the track running back into the field (position and count, more and closer prints at 4.00, a few far-spaced ones at 0.25).",
+        "scatter: stray prints pressed into furrows far from the line (position, up to the block's far ends), one per stray note.",
+        "scale: how many furrows the section shows (count, 11 ridges in the cut profile for pent, 25 for chr), the receding crest lines following."
+      ],
+      "reference": "library/toro-blocks (a modelled block in perspective, hidden-line, hatched where it's cut); patent-style section hatching for the cut soil",
+      "risks": [
+        "Section hatching on the cut soil and the shaded end face is the section convention for a cut solid, not 'inactive'; it uses the same 45-degree hairlines 4 px apart, so it reads as material, but a reviewer may want the end face plain.",
+        "Prints at the back of the block are foreshortened to about half height and crowd; at high speed the track needs a cap (about 8 prints visible) or the far ones merge.",
+        "History is drawn (old prints stay): it must not become a bar history, so prints fade out by being covered (hatched over with fresh snow) rather than stacking up, and only the newest is bright.",
+        "Muted: fresh snow falls over the field: every print is hatched over and the newest loses its bright outline; nothing new is pressed while muted."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "One bird of the flock drawn large and exploded like a model kit, its wings, primaries and tail pulled off the body along assembly axes, with its neighbours cut off by the edges of the frame.",
+      "controls": [
+        "cohere: how far the kit is exploded (position, the wings, primaries and tail pulled out from the body by about 70 px at 0 and nearly seated at 100), and the neighbours at the frame's edge slide further into view as the flock tightens.",
+        "speed: the wings' sweep (rotation of each wing about its root, about 35 degrees from spread at 0.25 to swept back at 4.00).",
+        "scatter: loose primaries drift away from the wings off their assembly axes (position, up to about 40 px), one per stray note.",
+        "scale: how many primaries the wings carry (count, 11 for pent across both wings, low octave on the left wing and high on the right, up to 25 for chr); the one the bird sounds now is the bright feather."
+      ],
+      "reference": "opxy/reference/ (exploded patent views); library/theseus-tower for detail kept on a subject that stays on screen",
+      "risks": [
+        "One bird stands for eight voices: the other seven are only the edge silhouettes, so a note from another bird has to show on its edge neighbour (a wingbeat) or the flock reads as one voice.",
+        "At chr the primaries are 12-13 per wing; at the wing roots they come closer than 3 px, so the fan needs to open wider or the feathers shorten at chr.",
+        "The bright feather is small (about 6 x 60 px); it clears the brightest-element rule but a note on it needs a position or scale flare as well as the shade.",
+        "Muted: the kit goes hatched (every part filled with 45-degree hairlines, there but not playing) and the bright feather goes back to grey."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "Eight starlings in flight seen from above, each in its own wingbeat, over a ploughed field whose drill rows are the scale's degrees, the birds' shadows falling hatched on the rows below them.",
+      "controls": [
+        "cohere: how tightly the eight birds bunch (position about the flock's centre, from spread across most of the field at 0 to a knot over two or three rows at 100).",
+        "speed: the wingbeat pose and spacing along the flight line (shape, wings swept and the line strung out as speed rises, some wingtip point moving at least 16 px).",
+        "scatter: strays break from the flock and fly off over far rows (position, up to about 160 px), their shadows going with them.",
+        "scale: how many drill rows the field has (count, 11 for pent to 25 for chr, rows closing up toward the headland)."
+      ],
+      "reference": "opxy/reference/ (contour line drawing, one weight); library/toro-blocks for a scene modelled and projected through one camera",
+      "risks": [
+        "Single-weight contour against the three-weight rule: every bird is drawn at the Line weight (1.5 px) and the rows at Hairline, with no Subject weight; the bright bird is told apart by its grey only, plus the heavier row under it. A reviewer may want the bright bird at the Subject weight.",
+        "A bird's row is read from its shadow, not the bird, because of the perspective; the hatched shadows are small (about 30 x 15 px) and at 3 px hatching they're on the edge of reading.",
+        "Rows at chr are about 10 px apart at the near edge and about 8 px at the headland, so shadows sit across two rows; the playing row's heavier line resolves it.",
+        "Muted: the flock lands: birds drawn with folded wings sitting in the rows, shadows gone."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "A crank-driven automaton box with eight carved birds on rods that ride a slot over a tuned comb, each rod's pick plucking the tine under it as the crank on the end turns.",
+      "controls": [
+        "cohere: how far apart the rods ride along the slot (position, the birds spread over most of the comb at 0 and gathered over two or three tines at 100).",
+        "speed: the crank (rotation, the handle swept round about 270 degrees across the range, and turning while notes play).",
+        "scatter: rods lean out of line toward far tines (rotation of each rod about its foot, up to about 25 degrees), so their picks reach stray notes.",
+        "scale: how many tines the comb carries (count, 11 for pent to 25 for chr), long and low on the left, short and high on the right."
+      ],
+      "reference": "opxy/reference/ (hatched patent mass); library/theseus-tower for a physical instrument drawn with its own working parts",
+      "risks": [
+        "Hatched mass here hatches the box's front face as shading on a solid body, not as 'inactive'; the hatching stays 4 px apart and mid grey so it doesn't read as a state, but it is the one place a hatch means something else.",
+        "Eight birds near the same tines overlap on the rods at high cohere; heights differ (the model's height channel) but carved birds about 40 px long will touch at 100.",
+        "The tines are short (6-25 px) and at chr about 11 px apart; the playing tine is told by its heavier outline, and needs a note flare to be found.",
+        "Muted: the crank handle is pulled out off its square (position, a visible gap at the boss) and the comb is hatched over, so the birds stand still over a comb that can't sound."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.17,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:26:52"
+  },
   "selection": null
 }

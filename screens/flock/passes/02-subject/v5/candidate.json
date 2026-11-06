@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "A crank-driven automaton box with eight carved birds on rods that ride a slot over a tuned comb, each rod's pick plucking the tine under it as the crank on the end turns.",
+  "controls": [
+    "cohere: how far apart the rods ride along the slot (position, the birds spread over most of the comb at 0 and gathered over two or three tines at 100).",
+    "speed: the crank (rotation, the handle swept round about 270 degrees across the range, and turning while notes play).",
+    "scatter: rods lean out of line toward far tines (rotation of each rod about its foot, up to about 25 degrees), so their picks reach stray notes.",
+    "scale: how many tines the comb carries (count, 11 for pent to 25 for chr), long and low on the left, short and high on the right."
+  ],
+  "reference": "opxy/reference/ (hatched patent mass); library/theseus-tower for a physical instrument drawn with its own working parts",
+  "risks": [
+    "Hatched mass here hatches the box's front face as shading on a solid body, not as 'inactive'; the hatching stays 4 px apart and mid grey so it doesn't read as a state, but it is the one place a hatch means something else.",
+    "Eight birds near the same tines overlap on the rods at high cohere; heights differ (the model's height channel) but carved birds about 40 px long will touch at 100.",
+    "The tines are short (6-25 px) and at chr about 11 px apart; the playing tine is told by its heavier outline, and needs a note flare to be found.",
+    "Muted: the crank handle is pulled out off its square (position, a visible gap at the boss) and the comb is hatched over, so the birds stand still over a comb that can't sound."
+  ]
+}

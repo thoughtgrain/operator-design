@@ -703,6 +703,48 @@ def prism(s, cam, base, z0, h, side=G4, topc=G5, topw=LINE, sidew=HAIR):
 # =============================================================================
 # v2 · exploded view: the colony taken apart into what it's made of
 # =============================================================================
+def sheet(s, cam, cells, z, h, edge=G5, edgew=LINE, seam=G2, hatched=False):
+    """The union of some lattice cells as one extruded sheet, hidden-line:
+    walls facing the camera, then the top (cell by cell, so holes stay open),
+    then the outline and the seams between cells."""
+    P = cam.p
+    key = lambda p: (round(p[0], 3), round(p[1], 3))
+    count, owner = {}, {}
+    for c in cells:
+        hp = hexpoly(*c)
+        for a, b in zip(hp, hp[1:] + hp[:1]):
+            k = frozenset((key(a), key(b)))
+            count[k] = count.get(k, 0) + 1
+            owner[k] = (c, a, b)
+    walls = []
+    for k, n in count.items():
+        if n != 1:
+            continue
+        c, a, b = owner[k]
+        cx, cy = hexc(*c)
+        mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+        nx, ny = mx - cx, my - cy
+        toeye = sub(cam.e, (mx, my, z + h / 2))
+        if nx * toeye[0] + ny * toeye[1] > 0:
+            walls.append((cam.dist((mx, my, z)), [P((a[0], a[1], z)), P((b[0], b[1], z)),
+                                                  P((b[0], b[1], z + h)), P((a[0], a[1], z + h))]))
+    for _, q in sorted(walls, key=lambda t: -t[0]):
+        s.poly(q, fill=G0, stroke=G3, sw=HAIR)
+    tops = [[P((x, y, z + h)) for x, y in hexpoly(*c, 1.002)] for c in cells]
+    for t in tops:
+        s.poly(t, fill=G0, stroke="none")
+    if hatched:
+        for t in tops:
+            hatch_fixed(s, [t], G3, 4.0)
+    for k, n in count.items():
+        c, a, b = owner[k]
+        pa, pb = P((a[0], a[1], z + h)), P((b[0], b[1], z + h))
+        if n == 1:
+            s.seg(pa, pb, edgew, edge)
+        elif seam:
+            s.seg(pa, pb, HAIR, seam)
+
+
 def v2():
     s = Svg()
     cam = Cam((5.6, -13.0, 6.6), (5.6, 2.6, 1.9), 470, 240, 112)
@@ -731,29 +773,18 @@ def v2():
         s.dashed([P((x, y, za)), P((x, y, zb))], HAIR, G2, 4, 3)
     for c in axes:
         axis(c, 0.02, zs["dead"] - 0.02)
-    # 2 · the dead crust layer: hatched plates where the centre died
-    for c in sorted(DEAD, key=lambda c: -cam.dist((*hexc(*c), 0))):
-        hp = [P((x, y, zs["dead"])) for x, y in chamfer(hexpoly(*c, k=0.92), 0.15)]
-        s.poly(hp, fill=G0, stroke=G3, sw=HAIR)
-        hatch_fixed(s, [hp], G3, 4.0)
+    # 2 · the dead crust: one thin hatched sheet where the centre died
+    sheet(s, cam, DEAD, zs["dead"], 0.06, edge=G3, edgew=HAIR, seam=None, hatched=True)
     for c in axes:
-        axis(c, zs["dead"] + 0.02, zs["live"] - 0.02)
-    # 3 · the living crust: prisms whose height is age; births lifted out of it
+        axis(c, zs["dead"] + 0.08, zs["live"] - 0.02)
+    # 3 · the living crust: one sheet with its areolae cracked in; this tick's births lifted out
     g = DEF["grow"]
-    cells = sorted(LIVE, key=lambda c: -cam.dist((*hexc(*c), zs["live"])))
-    lifted = []
-    for c in cells:
-        a = STATE[c]
-        if c in BORN:
-            lifted.append(c)
-            continue
-        hp = chamfer(hexpoly(*c, k=0.92), 0.15)
-        prism(s, cam, hp, zs["live"], thick(a) * 1.6, side=G3, topc=G5, topw=LINE, sidew=HAIR)
+    sheet(s, cam, LIVE - BORN, zs["live"], 0.2, edge=G5, edgew=LINE, seam=G2)
     for c in axes:
-        axis(c, zs["live"] + 0.3, zs["live"] + 0.55 + 1.6 * g)
-    for c in lifted:
-        hp = chamfer(hexpoly(*c, k=0.92), 0.15)
-        prism(s, cam, hp, zs["live"] + 0.55 + 1.6 * g, thick(1) * 1.6, side=G4, topc=G7, topw=SUBJ, sidew=HAIR)
+        axis(c, zs["live"] + 0.22, zs["live"] + 0.5 + 1.6 * g)
+    for c in sorted(BORN, key=lambda c: -cam.dist((*hexc(*c), zs["live"]))):
+        hp = hexpoly(*c, k=0.94)
+        prism(s, cam, hp, zs["live"] + 0.5 + 1.6 * g, 0.12, side=G4, topc=G7, topw=SUBJ, sidew=HAIR)
     # 4 · spores waiting above, one per spore due this bar
     for c in SPORES:
         x, y = hexc(*c)

@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "Eight starlings in flight seen from above, each in its own wingbeat, over a ploughed field whose drill rows are the scale's degrees, the birds' shadows falling hatched on the rows below them.",
+  "controls": [
+    "cohere: how tightly the eight birds bunch (position about the flock's centre, from spread across most of the field at 0 to a knot over two or three rows at 100).",
+    "speed: the wingbeat pose and spacing along the flight line (shape, wings swept and the line strung out as speed rises, some wingtip point moving at least 16 px).",
+    "scatter: strays break from the flock and fly off over far rows (position, up to about 160 px), their shadows going with them.",
+    "scale: how many drill rows the field has (count, 11 for pent to 25 for chr, rows closing up toward the headland)."
+  ],
+  "reference": "opxy/reference/ (contour line drawing, one weight); library/toro-blocks for a scene modelled and projected through one camera",
+  "risks": [
+    "Single-weight contour against the three-weight rule: every bird is drawn at the Line weight (1.5 px) and the rows at Hairline, with no Subject weight; the bright bird is told apart by its grey only, plus the heavier row under it. A reviewer may want the bright bird at the Subject weight.",
+    "A bird's row is read from its shadow, not the bird, because of the perspective; the hatched shadows are small (about 30 x 15 px) and at 3 px hatching they're on the edge of reading.",
+    "Rows at chr are about 10 px apart at the near edge and about 8 px at the headland, so shadows sit across two rows; the playing row's heavier line resolves it.",
+    "Muted: the flock lands: birds drawn with folded wings sitting in the rows, shadows gone."
+  ]
+}

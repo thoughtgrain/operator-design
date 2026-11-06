@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "The lip of one big spool so close that the frame cuts it off: the top flange's rim across the top, the wound mass below it drawn as a hatched mass of turns, and one bright thread peeling off under the rim and out of the frame.",
+  "controls": [
+    "wear: loose fibre loops lift off the wound surface along the turns, 0 to 16 standing loops, and the hatching thins where they leave (count of fibre loops).",
+    "wow: the free thread swings about the point where it leaves the winding, as the spool runs untrue, 0 to 32 degrees (rotation of the thread node).",
+    "length: how much thread is wound: the face of the wound mass moves out toward the flange rim or back toward the barrel, 30 px of travel at its silhouette (position of the wall and its hatching).",
+    "bias: how tightly the turns lie: under-biased the turns pack close (4 px apart), over-biased they lie loose (7 px apart) and the free thread sags further (count of hatch lines)."
+  ],
+  "reference": "opxy/reference/ (field-and-figure for the one-object crop), library/theseus-tower",
+  "risks": "Hatching here is the thread's own turns, not the semi-opaque convention in craft.md, so the reader has to take the 45-degree-ish hairlines as wound thread; at defaults that's helped by the single bright strand leaving the mass. Bias changes the hatch count, which re-keys the whole hatch (dozens of ribbons) on every turn of the knob; the device version needs the hatch as a few mutable outlines or placed nodes, not 40 static ribbons. The crop hides the whole spool, so nothing at rest says 'spool' except the flange rim and bore; if the rim reads as a lampshade the subject fails. The flange's bore sits near the top edge and competes a little with the thread."
+}
