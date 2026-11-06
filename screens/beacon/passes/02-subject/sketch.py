@@ -400,16 +400,24 @@ def v1() -> Frame:
     F.ribbon(left, LINE, G4)
     F.ribbon(right, LINE, G5)
 
-    # prism rings: front arcs; the run over the lit panel is the bright edge
+    # prism rings, edge-lit from the lamp inside: each prism's edge catches light only
+    # near the lit panel (bright), fading to a hairline across the next panels, and as
+    # a short rim where the drum turns away at either silhouette; the rest stays black.
+    reach = math.radians(68)
+
+    def arc3(r, z, a0, a1, n=24):
+        return [(r * math.cos(lerp(a0, a1, k / n)), r * math.sin(lerp(a0, a1, k / n)), z) for k in range(n + 1)]
+
+    def visible(pts3):
+        return [cam.P(p) for p in pts3 if cam.faces(p, (p[0], p[1], 0))]
+
     for z, r in apexes:
-        for run3 in [[(r * math.cos(a), r * math.sin(a), z)
-                      for a in [math.radians(-180 + 2 * k) for k in range(0, 91)]]]:
-            vis = [p for p in run3 if cam.faces(p, (p[0], p[1], 0))]
-            dim = [cam.P(p) for p in vis]
-            F.ribbon(dim, HAIR, G3)
-        lit = [cam.P((r * math.cos(a), r * math.sin(a), z))
-               for a in [th_c - half + 2 * half * k / 16 for k in range(17)]]
-        F.ribbon(lit, LINE, G5)
+        F.ribbon(visible(arc3(r, z, th_c - reach, th_c - half)), HAIR, G3)
+        F.ribbon(visible(arc3(r, z, th_c + half, th_c + reach)), HAIR, G3)
+        for a_edge in (math.radians(-180), math.radians(0)):
+            s = 1 if a_edge == 0 else -1
+            F.ribbon(visible(arc3(r, z, a_edge + s * math.radians(-14), a_edge + s * math.radians(4), 8)), HAIR, G4)
+        F.ribbon([cam.P(p) for p in arc3(r, z, th_c - half, th_c + half, 16)], LINE, G5)
 
     # panel bars: eight brass frames round the drum, turning with the lens
     for i in range(8):
@@ -432,8 +440,6 @@ def v1() -> Frame:
     lx, ly = cam.P((math.cos(th_c), math.sin(th_c), 0))
     w = 3 + 15 * D["pulse"]
     F.poly(vesica(lx, ly, w * abs(math.sin(th_c)) + 1.5, 40), G7)
-    F.line((lx, ly - 30), (lx, ly - 24), HAIR, G5)
-    F.line((lx, ly + 24), (lx, ly + 30), HAIR, G5)
 
     # fog: hatched from the bottom edge up (none at the default)
     if D["fog"] > 0:
