@@ -428,6 +428,24 @@ def glaze_ring(g):
     return r, z
 
 
+def _sil_low():
+    sil = hull([CAM.p(P) for P in BOWL.all_outer()])
+    ring = resample_closed(sil, 4)
+    left = CAM.p(Bowl.P(BOWL.R, BOWL.H, math.radians(166)))
+    right = CAM.p(Bowl.P(BOWL.R, BOWL.H, math.radians(-14)))
+    i0 = min(range(len(ring)), key=lambda i: math.dist(ring[i], left))
+    i1 = min(range(len(ring)), key=lambda i: math.dist(ring[i], right))
+    seq = ring[i0:] + ring[:i0]
+    j = (i1 - i0) % len(ring)
+    a = seq[:j + 1]
+    b = seq[j:] + [seq[0]]
+    low = a if sum(p[1] for p in a) / len(a) > sum(p[1] for p in b) / len(b) else b
+    return [left] + low[1:-1] + [right] if low[0] == seq[0] else [right] + low[1:-1] + [left]
+
+
+SIL_LOW = _sil_low()
+
+
 def ellipse_of_ring(r, z, n=64):
     return [CAM.p(Bowl.P(r, z, 2 * math.pi * i / n)) for i in range(n)]
 
@@ -462,14 +480,17 @@ def crack_geometry(seed=26):
     Each step is a short segment with its path length from the crack's mouth;
     the knob reveals every segment nearer the mouth than its reach, so the crack
     runs down, forks, and its forks fork (a count of segments, eased by length).
-    Returns [(dist, depth, (th, t), (th, t))] sorted by dist.
+    Returns [(dist, depth, (th, t), (th, t), branch)] sorted by dist.
     """
     rnd = random.Random(seed)
     th0 = math.radians(THETA_CRACK)
     segs = []
     ds = 0.034
+    ids = [0]
 
     def grow(th, t, heading, budget, depth, dist):
+        ids[0] += 1
+        bid = ids[0]
         steps = int(budget / ds)
         for i in range(steps):
             heading += rnd.uniform(-0.3, 0.3)
@@ -481,7 +502,7 @@ def crack_geometry(seed=26):
             nt = t - math.cos(heading) * ds * 0.9
             if nt < (0.13 if depth == 0 else 0.2) or abs(nth - th0) > math.radians(50):
                 return
-            segs.append((dist, depth, (th, t), (nth, nt)))
+            segs.append((dist, depth, (th, t), (nth, nt), bid))
             th, t, dist = nth, nt, dist + ds
             p_fork = (0.26, 0.2, 0.0)[depth] if depth < 3 else 0
             if i > 1 and rnd.random() < p_fork:
@@ -686,7 +707,8 @@ def rim_half(fire, r, deform, lo_deg, hi_deg, w, extra_fn):
 
 
 def crack_step(p):
-    """The crack's mouth breaks the lip: the far side sits a little proud."""
+    """A dunting crack springs the lip: the far side stands proud, the near side sinks a little,
+    so the rim's round is broken at the crack (the static half of the doublet idea)."""
     u = p["crack"]
     thc = math.radians(THETA_CRACK)
 
@@ -694,7 +716,9 @@ def crack_step(p):
         if u <= 0:
             return 0.0
         dt = math.atan2(math.sin(th - thc), math.cos(th - thc))
-        return 0.011 * u * (1 if dt > 0 else 0) * math.exp(-abs(dt) / 0.2)
+        if dt > 0:
+            return 0.02 * u * math.exp(-dt / 0.55)
+        return -0.012 * u * math.exp(dt / 0.4)
     return e
 
 
@@ -748,7 +772,7 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
     # --- front wall: a black mask from the inner lip's front arc down, hiding what's behind
     front = []
     for i in range(61):
-        th = math.radians(AZ_SPLIT[1] + 180 * i / 60)       # front arc, left to right... 256 -> 436
+        th = math.radians(166 + 180 * i / 60)                # front arc, left extreme -> right extreme
         front.append(CAM.p(Bowl.P(BOWL.R - lip_wall(0), BOWL.H, th)))
     xl, xr = front[0][0], front[-1][0]
     if xl > xr:
@@ -770,19 +794,30 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
     u = p["crack"]
     if u > 0:
         reach = CRACK_MAX * u
-        main = [q for q in CRACK if q[1] == 0 and q[0] < reach]
-        if main:
-            pts = [main[0][2]] + [q[3] for q in main]
-            pts = tf.pts([wall_pt(th, tt, 0.004) for th, tt in pts])
-            F.outline(taper_pts(pts, (1.4 + 2.8 * u) * s, 1.1 * s), G2)
-        for depth, col in ((1, G2), (2, G3), (3, G3)):
-            for q in CRACK:
-                if q[1] == depth and q[0] < reach:
-                    seg = [wall_pt(*q[2], 0.004), wall_pt(*q[3], 0.004)]
-                    F.line(tf.pts(seg), (1.5 if depth == 1 else 1.2) * s, col)
+        branches = {}
+        for q in CRACK:
+            if q[0] < reach:
+                branches.setdefault(q[4], []).append(q)
+        for bid, segs in sorted(branches.items(), key=lambda kv: kv[1][0][1]):
+            depth = segs[0][1]
+            pts = [segs[0][2]] + [q[3] for q in segs]
+            # the tip grows smoothly (on the device a chunk node scales up about its root)
+            last = segs[-1]
+            k = min(1.0, (reach - last[0]) / 0.034)
+            a, b = last[2], last[3]
+            pts[-1] = (a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k)
+            scr = tf.pts([wall_pt(th, tt, 0.004) for th, tt in pts])
+            if len(scr) < 2 or math.dist(scr[0], scr[-1]) < 3:
+                continue
+            if depth == 0:
+                F.outline(taper_pts(dedupe(scr, 0.8), (1.4 + 2.8 * u) * s, 1.1 * s), G2)
+            else:
+                F.line(scr, (1.5 if depth == 1 else 1.2) * s, G2 if depth == 1 else G3)
 
-    # --- silhouette outline (hidden-line edge)
-    F.line(tf.pts(resample_closed(sil, 6)), line, G2, closed=True)
+    # --- silhouette outline (hidden-line edge): the wall and belly only, from one end of the
+    # lip round under the foot to the other. The lip itself is the rim outlines, so nothing
+    # static doubles the rim when it rings.
+    F.line(tf.pts(SIL_LOW), line, G2)
 
     # --- the lip: four mutable outlines (outer L/R, inner L/R)
     origins = rim_origins(p["fire"])
@@ -794,35 +829,11 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
             F.mutable(k, origins[k], pts, G2)
             k += 1
 
-    # --- contact marks at struck stations: a flash, then a faint scuff while the key is held
+    # head dims for the beat its contact flash is the brightest thing on screen
     head_colour = G0
     for v in voices:
-        tau = t - v.t0
-        if tau < 0:
-            continue
-        held = v.t_off is None or t < v.t_off
-        flash = 0.07 + 0.09 * (1 - v.strike)          # soft: longer, broader contact
-        if tau < flash:
-            col, wid = G0, SUBJ
-            if v.station == 0:
-                head_colour = G2
-        elif tau < flash + 0.16:
-            col, wid = G2, M_LINE
-        elif held:
-            col, wid = G4, M_LINE
-        else:
-            continue
-        span_px = 28 - 20 * v.strike                       # broad soft contact .. crisp hard one
-        R_mark = BOWL.R + 0.05
-        ths = STATIONS[v.station]
-        # convert px span to degrees at this station (approx by sampling)
-        a0 = rim_point(ths - 5, p["fire"], extra=0.05)
-        a1 = rim_point(ths + 5, p["fire"], extra=0.05)
-        deg_per_px = 10 / max(1e-3, math.dist(a0, a1))
-        half = span_px * deg_per_px / 2
-        arc = [rim_point(ths - half + 2 * half * i / 10, p["fire"], extra=0.05) for i in range(11)]
-        F.line(arc, wid, col)
-
+        if v.station == 0 and 0 <= t - v.t0 < 0.07 + 0.09 * (1 - v.strike):
+            head_colour = G2
     # --- the mallet
     latest = None
     for v in voices:
@@ -841,6 +852,32 @@ def draw_scene(p, voices=(), t=0.0, frame_index=0, release=1.2):
             if abs(ang - REST_ANGLE) < math.radians(0.15):
                 ang = REST_ANGLE
     draw_mallet(F, p["strike"], ang, head_colour)
+    # --- contact marks at struck stations: a flash, then a faint scuff while the key is held
+    for v in voices:
+        tau = t - v.t0
+        if tau < 0:
+            continue
+        held = v.t_off is None or t < v.t_off
+        flash = 0.07 + 0.09 * (1 - v.strike)          # soft: longer, broader contact
+        if tau < flash:
+            col, wid = G0, SUBJ
+        elif tau < flash + 0.16:
+            col, wid = G2, M_LINE
+        elif held:
+            col, wid = G4, M_LINE
+        else:
+            continue
+        span_px = 28 - 20 * v.strike                       # broad soft contact .. crisp hard one
+        ths = STATIONS[v.station]
+        # the flash sits on the lip itself; the afterglow and the held mark sit just outside it
+        out = 0.012 if col == G0 else 0.05
+        a0 = rim_point(ths - 5, p["fire"], extra=out)
+        a1 = rim_point(ths + 5, p["fire"], extra=out)
+        deg_per_px = 10 / max(1e-3, math.dist(a0, a1))
+        half = span_px * deg_per_px / 2
+        arc = [rim_point(ths - half + 2 * half * i / 10, p["fire"], extra=out) for i in range(11)]
+        F.line(arc, wid, col)
+
     return F, ringing
 
 

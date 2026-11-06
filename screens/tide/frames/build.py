@@ -113,7 +113,7 @@ def build_raft():
     rnd = random.Random(7)
     spent = []
     allb = list(voiced)
-    N = 16
+    N = 30
     while len(spent) < N:
         best, bestscore = None, -1e9
         for _ in range(2500):
@@ -144,7 +144,7 @@ def build_raft():
             mine = (CAM.p((x, y, 0)), CAM.f * r / dz)
             for b in allb:
                 bd = CAM.depth((b["x"], b["y"], 0))
-                if math.dist(mine[0], CAM.p((b["x"], b["y"], 0))) < 0.7 * (mine[1] + CAM.f * b["r"] / bd):
+                if math.dist(mine[0], CAM.p((b["x"], b["y"], 0))) < 0.6 * (mine[1] + CAM.f * b["r"] / bd):
                     hidden = True
                     break
             if hidden:
@@ -163,12 +163,12 @@ def build_raft():
     # foam that lasts piles up: small bubbles stacked on the backs of the big ones, peeking over the raft
     stacked = []
     tries = 0
-    while len(stacked) < 12 and tries < 20000:
+    while len(stacked) < 0 and tries < 4000:
         tries += 1
         host = rnd.choices(voiced[:5], weights=[5, 3, 2, 1.2, 1])[0]
         r = rnd.uniform(0.09, 0.15)
-        az = math.radians(rnd.uniform(25, 155))           # round the back
-        el = math.radians(rnd.uniform(28, 62))
+        az = math.radians(rnd.choice([rnd.uniform(15, 70), rnd.uniform(110, 165)]))           # round the back
+        el = math.radians(rnd.uniform(15, 45))
         d = (host["r"] + r) * 1.01
         P = (host["x"] + d * math.cos(el) * math.cos(az), host["y"] + d * math.cos(el) * math.sin(az), d * math.sin(el))
         if any(math.dist(P, (b["x"], b["y"], b.get("z", 0.0))) < (r + b["r"]) * 1.03 for b in allb + stacked if b is not host):
@@ -188,7 +188,14 @@ def build_raft():
                         cover = True
                         break
             vis += not cover
-        if not 0.4 <= vis / len(ring) <= 0.8:
+        if not 0.3 <= vis / len(ring) <= 0.65:
+            continue
+        # off the crown (two on top read as ears), and clear of every lit edge's light
+        hc, hr = CAM.p((host["x"], host["y"], 0)), CAM.f * host["r"] / CAM.depth((host["x"], host["y"], 0))
+        if abs(CAM.p(P)[0] - hc[0]) < 0.6 * hr:
+            continue
+        if any(CAM.p(P)[1] < bc[1] - 0.8 * br for bc, br in [(CAM.p((b["x"], b["y"], 0)), CAM.f * b["r"] / CAM.depth((b["x"], b["y"], 0))) for b in voiced]
+               if abs(CAM.p(P)[0] - bc[0]) < br):
             continue
         mine = CAM.p(P), CAM.f * r / dP
         if any(math.dist(mine[0], CAM.p((b["x"], b["y"], b["z"]))) < 0.75 * (mine[1] + CAM.f * b["r"] / CAM.depth((b["x"], b["y"], b["z"])))
@@ -201,7 +208,7 @@ def build_raft():
     while fl or st:
         if fl:
             order.append(fl.pop(0))
-        if st and len(order) % 3 != 1:
+        if st and (len(order) % 3 != 1 or not fl):
             order.append(st.pop(0))
     for i, b in enumerate(order):
         b["order"] = i
@@ -514,8 +521,8 @@ def base_edge_shade(k):
 
 def spent_count(depth_p):
     """Foam that has finished ringing and lingers on the water: none at 50 ms (it pops as it rings),
-    all 24 at 5 s. Linear in the knob's position, which is already logarithmic in time."""
-    return round(24 * depth_p)
+    all 28 at 5 s. Linear in the knob's position, which is already logarithmic in time."""
+    return round(len(SPENT) * depth_p)
 
 
 DRIFT_A = 0.27          # world units of wander at drift 100 (about 28 px across the screen)

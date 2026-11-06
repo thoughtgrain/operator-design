@@ -1,0 +1,30 @@
+/home/claude/operator-design/screens/lichen/frames/rest.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/grow-0.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/grow-50.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/grow-100.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/decay-0.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+  W legibility         <path>: part is 2.9 × 3.0 px; parts under ~3 px don't read at 1:1
+/home/claude/operator-design/screens/lichen/frames/decay-50.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+  W legibility         <path>: part is 2.9 × 2.9 px; parts under ~3 px don't read at 1:1
+  W legibility         <path>: part is 2.9 × 2.9 px; parts under ~3 px don't read at 1:1
+/home/claude/operator-design/screens/lichen/frames/decay-100.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/seed-0.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/seed-50.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/seed-100.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/scale-0.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/scale-50.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+/home/claude/operator-design/screens/lichen/frames/scale-100.svg  nodes=0 texts=0 palette=0 maxPoints=64
+  W palette            <path>: fill #1E1E1E is grey but not in tokens.json; prefer the stock greys
+0 error(s), 16 warning(s)

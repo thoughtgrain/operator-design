@@ -84,6 +84,12 @@ class Ortho:
         self.right = (c, -s, 0.0)
         self.fwd = (s * ce, c * ce, -se)
         self.up = (s * se, c * se, ce)
+        # roll the camera so the brace's axis (world x) lies level on screen
+        rho = math.atan2(dot((1, 0, 0), self.up), dot((1, 0, 0), self.right))
+        cr, sr = math.cos(rho), math.sin(rho)
+        r0, u0 = self.right, self.up
+        self.right = add(mul(r0, cr), mul(u0, sr))
+        self.up = add(mul(r0, -sr), mul(u0, cr))
         self.k, self.cx, self.cy = scale, cx, cy
 
     def __call__(self, p):
@@ -223,12 +229,12 @@ class Scene:
         self.teeth = teeth_value(c["teeth"])
         self.wear = c["wear"]
         self.bite = c["bite"]
-        self.T = 55 + 57 * self.ratio_n                       # the bow's throw (mm)
+        self.T = 32 + 86 * self.ratio_n                       # the bow's throw (mm)
         self.depth = -6 + 80 * self.bite                      # cutting head past the board's face
         self.F = self.X_E + 6                                 # board face, world x
         self.dx = self.F - self.X_E + self.depth - 6 + 6      # brace offset so x_e lands at F + depth
         self.dx = (self.F + self.depth) - self.X_E
-        self.cam = Ortho(self.YAW, self.ELEV, 0.67, 0, 110)
+        self.cam = Ortho(self.YAW, self.ELEV, 0.67, 0, 117)
         # place the scene: head pad's left edge at bite 0 sits ~9 px in from the left
         x_left = min(self.cam((0 + (self.F - 6) - self.X_E, 0, z))[0] for z in (-35, 35))
         self.cam.cx = 9 - x_left + 2
@@ -355,8 +361,8 @@ class Scene:
     # -- the auger -----------------------------------------------------------
     def tip_dims(self):
         w = self.wear
-        spur = 8.0 * (1 - w) + 1.2          # spur length past the lips
-        screw = 15.0 * (1 - 0.6 * w) + 1.0  # lead screw length
+        spur = 10.0 * (1 - w) + 1.0          # spur length past the lips
+        screw = 18.0 * (1 - 0.62 * w) + 1.0  # lead screw length
         blunt = 0.5 + 2.6 * w               # flat at the screw's point
         thread = 1.4 * (1 - 0.8 * w)        # thread depth
         return spur, screw, blunt, thread
@@ -393,7 +399,7 @@ class Scene:
         L = xe - x0 - 2.0
         n = self.teeth
         p = L / n
-        land = p * 0.46
+        land = p * (0.48 - 0.2 * self.wear)    # wear: the lands thin as they're worn back
         phase = (-self.theta / (2 * math.pi)) % 1.0       # lands crawl back towards the chuck as it bores
         d, up = self.axis_perp()
         k = cam.k
@@ -411,9 +417,9 @@ class Scene:
             pt = cam((x, R * math.cos(ph), R * math.sin(ph)))
             # clamp under the top edge
             o = perp_of(pt, x)
-            if o > under:
-                pt = (pt[0] - up[0] * (o - under), pt[1] - up[1] * (o - under))
-            return pt
+            if o > under - 1e-6:
+                return (pt[0] - up[0] * (o - under), pt[1] - up[1] * (o - under)), True
+            return pt, False
 
         def top_pt(x, o):
             a = axis_pt(x)
@@ -502,7 +508,7 @@ class Scene:
         curved = sum(1 for j in range(E) if abs(seq[j + 1][1] - seq[j][1]) > 0.05)
         per_edge = 1 + max(0, budget) // max(1, curved)
         out = []
-        wr = 0.42 * self.wear
+        wr = 0.75 * self.wear
         for j in range(len(seq) - 1):
             a, b = seq[j], seq[j + 1]
             m = per_edge if abs(b[1] - a[1]) > 0.05 else 1
@@ -520,7 +526,16 @@ class Scene:
                     t = 1 - wr * 0.6 + (t - (1 - wr * 0.6)) * 0.35
                 res.append((x, t))
             out = res
-        return [to_screen(x, t) for x, t in out]
+        scr = [to_screen(x, t) for x, t in out]
+        # where the edges run up under the top edge, keep one attachment point per edge
+        # (a run of clamped points would fold back along the underside)
+        i0 = 0
+        while i0 + 1 < len(scr) and scr[i0][1] and scr[i0 + 1][1]:
+            i0 += 1
+        i1 = len(scr) - 1
+        while i1 - 1 > i0 and scr[i1][1] and scr[i1 - 1][1]:
+            i1 -= 1
+        return [q for q, _ in scr[i0:i1 + 1]]
 
     def bit_static(self):
         R = self.R_TWIST
@@ -569,11 +584,20 @@ class Scene:
         th = self.theta
         return (0.0, math.sin(th), -math.cos(th))
 
+    def sweep(self):
+        """The circle the grip's centre travels, a hairline construction line behind the brace."""
+        xm = (self.GRIP0 + self.GRIP1) / 2
+        pts = [self.B(xm, self.T * math.sin(a), -self.T * math.cos(a)) for a in
+               [2 * math.pi * i / 48 for i in range(48)]]
+        if self.style == "line":
+            self.s.ribbon("sweep.a", pts[:25], HAIR, G[2])
+            self.s.ribbon("sweep.b", pts[24:] + [pts[0]], HAIR, G[2])
+
     def bow(self):
         """Path 0: the bow rod, a tube 15 mm across, projected from its centreline."""
         dvec = self.bow_dir()
         cl = [self.B(x, *mul(dvec, u)[1:]) for x, u in self.bow_centerline()]
-        h = 7.5 * self.cam.k
+        h = 8.0 * self.cam.k      # a 16 mm rod: ~11 px at 1:1
         pts = offset(cl, h) + offset(cl, -h)[::-1]
         self.solid("bow", pts)
 
@@ -581,11 +605,13 @@ class Scene:
         dvec = self.bow_dir()
         yc, zc = dvec[1] * self.T, dvec[2] * self.T
         g0, g1 = self.GRIP0, self.GRIP1
-        prof = [(g0, 8.5), (g0 + 1.5, 13), (g0 + 5, 15.5), (g0 + 10, 16.5), (g0 + 20, 17.2), ((g0 + g1) / 2, 17.6),
-                (g1 - 20, 17.2), (g1 - 10, 16.5), (g1 - 5, 15.5), (g1 - 1.5, 13), (g1, 8.5)]
+        prof = [(g0, 9), (g0 + 1.5, 14), (g0 + 5, 17), (g0 + 10, 18.2), (g0 + 20, 19), ((g0 + g1) / 2, 19.5),
+                (g1 - 20, 19), (g1 - 10, 18.2), (g1 - 5, 17), (g1 - 1.5, 14), (g1, 9)]
         self.solid("grip", self.revolve(prof, yc, zc, n=24))
-        self.detail("grip.ring0", self.ring_arc(g0 + 9, 16.4, yc, zc), G[3])
-        self.detail("grip.ring1", self.ring_arc(g1 - 9, 16.4, yc, zc), G[3])
+        self.detail("grip.ring0", self.ring_arc(g0 + 9, 18.1, yc, zc), G[3])
+        self.detail("grip.ring1", self.ring_arc(g1 - 9, 18.1, yc, zc), G[3])
+        self.detail("grip.ring2", self.ring_arc(g0 + 15, 18.7, yc, zc), G[3])
+        self.detail("grip.ring3", self.ring_arc(g1 - 15, 18.7, yc, zc), G[3])
         self.detail("grip.streak", self.streak(prof, yc, zc, inset=3, k=0.93), G[4])
 
     def ratchet_and_chuck(self):
@@ -623,6 +649,7 @@ class Scene:
         self.bore()
         self.bit_static()
         self.twist()
+        self.sweep()
         toward = math.sin(self.theta) < -1e-6           # bow on the camera's side of the axis
         if not toward:
             self.bow(); self.grip()

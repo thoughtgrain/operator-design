@@ -43,14 +43,17 @@ NPTS = 32                       # centre-line points of a mutable ribbon -> 64-p
 # ------------------------------------------------------------------ model
 P = 0.152                       # groove pitch (world)
 HW = 0.036                      # groove half-width at the surface
-DEPTH = 0.036                   # 90 degree stylus: depth = half-width
-CENTRE_X = 146                  # principal point: the newest groove stands upright here
-Y_NEAR_SCREEN, Y_FAR_SCREEN = 166.0, 40.0
-FIELD = (236.0, 300.0, 290.0)   # field stop: centre x, centre y, radius (screen)
+DEPTH = 0.046                   # 90 degree stylus: depth = half-width
+CENTRE_X = 172                  # principal point: the newest groove stands upright here
+Y_NEAR_SCREEN, Y_FAR_SCREEN = 166.0, 44.0
+FIELD = (236.0, 310.0, 275.0)   # field stop: centre x, centre y, radius (screen)
 TOP = 40.0                      # nothing above this (header clearance)
-SPLIT_SCREEN = 104.0            # depth of field: brighter runs below, dimmer above
+SPLIT_SCREEN = 122.0            # depth of field: lips dim in three runs, walls dissolve at WALL_SCREEN
+FAR_SCREEN = 70.0
+WALL_SCREEN = 58.0
 OLD_AMP = 0.014                 # earlier turns: swing as cut at 1.00
-DEFAULT_TURNS, MAX_TURNS = 3, 7
+DEFAULT_TURNS, MAX_TURNS = 3, 6
+COAT = 0.11                     # lacquer coat thickness over the aluminium
 
 
 class Camera:
@@ -76,8 +79,8 @@ class Camera:
         return (self.c[0] + self.F * x / z, self.c[1] - self.F * y / z)
 
 
-_ang = math.radians(50)
-CAM = Camera((0.0, 0.0, 2.0), (0.0, 2.0 / math.tan(_ang), 0.0), 700, (CENTRE_X, 104))
+_ang = math.radians(56)
+CAM = Camera((0.0, 0.0, 2.0), (0.0, 2.0 / math.tan(_ang), 0.0), 680, (CENTRE_X, 104))
 
 
 def _y_for_screen(target):
@@ -93,7 +96,7 @@ def _y_for_screen(target):
 
 Y0 = _y_for_screen(Y_NEAR_SCREEN)
 Y1 = _y_for_screen(Y_FAR_SCREEN)
-Y_SPLIT = _y_for_screen(SPLIT_SCREEN)
+Y_WALL = _y_for_screen(WALL_SCREEN)
 
 
 # ------------------------------------------------------------------ the controls
@@ -120,7 +123,7 @@ def signal(t, k):
     if k == 0:
         s = 0.8 * math.sin(2 * math.pi * 2.25 * t) + 0.2 * math.sin(2 * math.pi * 4.5 * t)
         return s / 0.93
-    f1 = 1.4 + 0.33 * k
+    f1 = 1.25 + 0.3 * k
     return (0.8 * math.sin(2 * math.pi * f1 * t) + 0.2 * math.sin(2 * math.pi * (2.6 * f1) * t)) / 0.93
 
 
@@ -290,45 +293,90 @@ def section_piece(k_from, k_to, x_start=None):
     return pts
 
 
+def field_x(y_screen):
+    """Right edge of the field stop on a screen row."""
+    cx, cy, r = FIELD
+    return cx + math.sqrt(max(0.0, r * r - (y_screen - cy) ** 2))
+
+
+def world_x_at(screen_x, z):
+    lo, hi = -2.0, 4.0
+    for _ in range(60):
+        m = (lo + hi) / 2
+        if CAM((m, Y0, z))[0] < screen_x:
+            lo = m
+        else:
+            hi = m
+    return lo
+
+
+def rim_x(n):
+    return gx(n) + 0.62 * P
+
+
 def rim_parts(n):
-    """The rim bevel just outside turn n: the land out to it, its lit top edge receding, the fall."""
-    xr = gx(n) + 0.62 * P
-    land = [CAM((gx(n) + HW, Y0, 0.0)), CAM((xr, Y0, 0.0))]
-    edge = []
+    """Just outside turn n: the land out to the rim and the rim's lit edge receding, then the coat
+    falling away over the edge. At MAX_TURNS there's no rim in the field: the land runs to the stop."""
+    if n >= MAX_TURNS:
+        xe = world_x_at(field_x(Y_NEAR_SCREEN) - 4, 0.0)
+        return [CAM((gx(n) + HW, Y0, 0.0)), CAM((xe, Y0, 0.0))], None
+    xr = rim_x(n)
+    edge = [CAM((gx(n) + HW, Y0, 0.0))]
     for i in range(30):
         y = Y0 + (Y1 - Y0) * i / 29
         q = CAM((xr, y, 0.0))
         if not in_field(q):
             break
         edge.append(q)
-    fall = [CAM((xr + 0.03 * (1 - math.cos(a)), Y0, -0.05 * math.sin(a)))
-            for a in [math.pi / 2 * i / 8 for i in range(9)]]
-    fall += [CAM((xr + 0.03, Y0, -0.05 - 0.05 * i / 4)) for i in range(1, 5)]
-    foot = []
-    for i in range(30):
-        y = Y0 + (Y1 - Y0) * i / 29
-        q = CAM((xr + 0.03, y, -0.05))
-        if not in_field(q) or q[1] < Y_FAR_SCREEN + 30:
-            break
-        foot.append(q)
-    return land + edge[1:], fall, foot
+    fall = [CAM((xr + 0.03 * (1 - math.cos(t)), Y0, -0.04 * math.sin(t)))
+            for t in [math.pi / 2 * i / 8 for i in range(9)]]
+    fall += [CAM((xr + 0.03, Y0, -0.04 - (COAT - 0.04) * i / 3)) for i in range(1, 4)]
+    return edge, fall
 
 
-def split(pts):
-    near = [p for p in pts if p[1] >= SPLIT_SCREEN]
-    far = [p for p in pts if p[1] <= SPLIT_SCREEN + 0.01]
-    if near and far:
-        far = [near[-1]] + far
-    return near, far
+def runs(pts, cuts):
+    """Split a line at screen rows (descending) into near-to-far runs that share their joints."""
+    out, cur = [], []
+    edges = list(cuts)
+    for p in pts:
+        while edges and p[1] < edges[0]:
+            if cur:
+                out.append(cur)
+                cur = [cur[-1]]
+            else:
+                out.append([])
+            edges.pop(0)
+        cur.append(p)
+    out.append(cur)
+    while len(out) < len(cuts) + 1:
+        out.append([])
+    return [r if len(r) >= 2 else [] for r in out]
 
 
 def turn_parts(k):
-    """An earlier turn, cut at 1.00: its notch in the cut face, then its lit wall (lip, mid-wall, floor)."""
-    ln, lf = split(run(k, "lip", 1.0, Y0, Y1 + 0.5))
-    mn, _ = split(run(k, "mid", 1.0, Y0, Y1 + 0.5))
-    fn, ff = split(run(k, "floor", 1.0, Y0, Y1 + 0.5))
-    return [(section_piece(k - 1, k), LINE, G3), (ln, LINE, G3), (lf, LINE, G4),
-            (mn, HAIR, G5), (fn, HAIR, G4), (ff, HAIR, G5)]
+    """An earlier turn, cut at 1.00: its notch in the cut face, its lit wall as a dark body that the
+    depth of field dissolves halfway up, then its lip (three runs, dimming) and floor (two runs)."""
+    lip = run(k, "lip", 1.0, Y0, Y1 + 0.5, n=48)
+    floor = run(k, "floor", 1.0, Y0, Y_WALL, n=32)
+    l1, l2, l3 = runs(lip, (SPLIT_SCREEN, FAR_SCREEN))
+    f1, f2 = runs(floor, (SPLIT_SCREEN,))
+    return [("fill", wall_body(k, 1.0), G6), ("line", section_piece(k - 1, k), LINE, G3),
+            ("line", l1, LINE, G3), ("line", l2, LINE, G4), ("line", l3, HAIR, G5),
+            ("line", f1, HAIR, G4), ("line", f2, HAIR, G5)]
+
+
+def wall_body(k, ratio, n=24):
+    """The lit wall between lip and floor as one closed outline (lip near->far, floor far->near)."""
+    lip = run(k, "lip", ratio, Y0, Y_WALL, n=n, clip=False)
+    floor = run(k, "floor", ratio, Y0, Y_WALL, n=n, clip=False)
+    return lip + floor[::-1]
+
+
+def draw_part(F, part, node=None, shown=True):
+    if part[0] == "fill":
+        F.blob(part[1], part[2], node=node, shown=shown)
+    else:
+        F.ribbon(part[1], part[2], part[3], node=node, shown=shown)
 
 
 # wear: specks (bright grains) and short scratches across the lands between earlier turns
@@ -375,6 +423,14 @@ def scratch(cx, cy, ang, seed):
             for i in range(5)]
 
 
+def _emit_wall(F, wall):
+    """Node 1: the newest groove's lit wall, a dark body whose floor edge is its hairline outline."""
+    xs = [p[0] for p in wall]
+    ys = [p[1] for p in wall]
+    origin = (round((min(xs) + max(xs)) / 2, 1), round((min(ys) + max(ys)) / 2, 1))
+    F._emit(wall, G6, stroke=G3, sw=HAIR, node=1, origin=origin, exact=2 * NPTS)
+
+
 # ------------------------------------------------------------------ the frame
 def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     a = amounts(cut, groove, wear, rumble)
@@ -386,24 +442,26 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     F.ribbon([CAM((-0.3, Y0, 0.0)), CAM((-HW, Y0, 0.0)), CAM((-0.003, Y0, -DEPTH)),
               CAM((0.003, Y0, -DEPTH)), CAM((HW, Y0, 0.0))], LINE, G3)
     for k in range(1, DEFAULT_TURNS + 1):
-        for pts, w, c in turn_parts(k):
-            F.ribbon(pts, w, c)
+        for part in turn_parts(k):
+            draw_part(F, part)
 
     node = 4
     # --- groove: turns 4..7 appear as the cutter is further in (5 nodes each)
     for k in range(DEFAULT_TURNS + 1, MAX_TURNS + 1):
         shown = k <= turns
-        for pts, w, c in turn_parts(k):
-            F.ribbon(pts, w, c, node=node, shown=shown)
+        for part in turn_parts(k):
+            draw_part(F, part, node=node, shown=shown)
             node += 1
-    # --- groove: the rim bevel just outside the last turn (3 nodes per position; gone at 7)
-    for n in range(DEFAULT_TURNS, MAX_TURNS):
+    # --- groove: the rim just outside the last turn, or the open field at the last (2 nodes per position)
+    for n in range(DEFAULT_TURNS, MAX_TURNS + 1):
         shown = n == turns
-        edge, fall, foot = rim_parts(n)
-        F.ribbon(edge, LINE, G3, node=node, shown=shown)
-        F.ribbon(fall, LINE, G3, node=node + 1, shown=shown)
-        F.ribbon(foot, HAIR, G5, node=node + 2, shown=shown)
-        node += 3
+        edge, fall = rim_parts(n)
+        F.ribbon(edge, LINE, G4 if n < MAX_TURNS else G3, node=node, shown=shown)
+        if fall:
+            F.ribbon(fall, LINE, G4, node=node + 1, shown=shown)
+            node += 2
+        else:
+            node += 1
 
     # --- wear: specks and scratches on the lands (16 nodes)
     n_wear = int(math.floor(a["wear"] * len(WEAR) + 0.5))
@@ -419,7 +477,8 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     # --- the newest groove: floor (node 1), rumble ghosts (nodes 2, 3), lit lip (node 0) on top
     floor = run(0, "floor", ratio, Y0, Y1, n=NPTS, clip=False)
     lip = run(0, "lip", ratio, Y0, Y1, n=NPTS, clip=False)
-    F.ribbon(floor, HAIR, G3, node=1, exact=2 * NPTS)
+    wall = wall_body(0, ratio, n=NPTS)
+    _emit_wall(F, wall)
     shake = 12.0 * a["rumble"] ** 0.6
     lip_out = ribbon_outline(lip, SUBJ)
     xs = [p[0] for p in lip_out]
@@ -481,7 +540,7 @@ def sheets():
     sheet.save(HERE / "before-after.png")
     # contact: rest, then each control's 0 / 50 / 100, all at 1:1
     cells = [("rest", "rest")] + [(f"{c}-{v}", f"{c} {v}") for c in CONTROLS for v in (0, 50, 100)]
-    cols = 4
+    cols = 3
     rows = [cells[:1]] + [cells[1 + 3 * i:4 + 3 * i] for i in range(4)]
     sheet = Image.new("RGB", (cols * W + (cols + 1) * pad, len(rows) * (H + cap + pad) + pad), bg)
     for r, row in enumerate(rows):

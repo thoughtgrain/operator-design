@@ -349,7 +349,7 @@ HORIZON = 150.0
 VX = 240.0                 # vanishing point x (camera axis)
 FOCAL = 420.0              # focal length, px; the tower stands at depth FOCAL (1 world unit = 1 px there)
 LAMP_UP = HORIZON - LAMP[1]   # lamp height above the eye, world units
-LW = 250.0 - (TX - VX)     # beam length in world units: reaches x 490 when it lies across the frame
+LW = 470.0 - TX            # beam length, world units: its end stops at x 470 when it lies across the frame
 S0 = 12.0                  # the beam leaves the lantern glazing
 PERIOD = 30.0              # one comb period of the pulse train, world units along the beam
 SWEEP_MAX = 68.0           # degrees the beam leans away at sweep 100
@@ -394,9 +394,9 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
 
     # ------------------------------------------------ the beam (behind everything)
     F.part = "beam edges"
-    edge_c = G4 if note > 0.5 else G3
+    edge_c = G5 if note > 0.5 else G3
     for side in (-1, 1):
-        F.line(beam_point(S0, theta, lens, side), beam_point(LW, theta, lens, side), HAIR, edge_c)
+        F.line(beam_point(S0, theta, lens, side), beam_point(LW, theta, lens, side), LINE if note > 0.5 else HAIR, edge_c)
 
     F.part = "beam bands"
     band = 3.0 + 24.0 * pulse                       # pulse: each band's width, as a share of the period
@@ -407,11 +407,10 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
                 beam_point(se, theta, lens, 1), beam_point(sb, theta, lens, 1)]
         lit = note > 0 and (sb - S0) / (LW - S0) <= cascade
         F.part = "beam hatching"
-        F.hatch(quad, G4 if lit else G3)
+        F.hatch(quad, G5 if lit else G3)
         F.part = "band wavefronts"
-        wf = G6 if (front is not None and k % 4 == front % 4 and note > 0.5) else (G4 if lit else G3)
-        if se - sb >= 2.5 or k == 0 or True:
-            F.line(quad[1], quad[2], HAIR, wf)       # the band's outer edge: the front of the pulse
+        wf = G6 if (front is not None and k % 4 == front % 4 and note > 0.5) else (G5 if lit else G3)
+        F.line(quad[1], quad[2], HAIR, wf)           # the band's outer edge: the front of the pulse
         k += 1
         sb += PERIOD
 
@@ -437,7 +436,7 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
         for j in range(n):
             u = (-1 if (j + len(rows)) % 2 else 1) * (0.2 + 0.55 * j) * rng.uniform(0.6, 1.2)
             cx = gx + u * (3 + 16 * q) * spread + shimmer * 2.0 * math.sin(2.1 * len(rows) + 3.3 * j + 6 * shimmer)
-            gl = (3 + 10 * q) * (0.6 + 0.4 * spread)
+            gl = (3 + 10 * q) * (0.6 + 0.4 * spread) * (1 + 0.6 * note)
             glints.append((cx - gl / 2, cx + gl / 2))
         rows.append((y, q, dashes, glints))
 
@@ -449,7 +448,7 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
         F.part = "glints"
         for a, b in glints:
             if b > 150:
-                F.line((max(a, 150), y), (b, y), HAIR if q < 0.5 else LINE, G5 if note > 0.5 else G4)
+                F.line((max(a, 150), y), (b, y), HAIR if q < 0.5 else LINE, G6 if note > 0.5 else G4)
 
     for y, q, dashes, glints in rows:
         if y < FOG_FOOT:
@@ -483,10 +482,10 @@ def draw(c, *, note=0.0, theta=None, front=None, cascade=1.0, shimmer=0.0, title
         for run in split_runs([(x / 2, top_y(x / 2)) for x in range(-8, 977)], lambda p: not in_cone(p)):
             F.ribbon(run[::4] + [run[-1]], HAIR, G3)
         F.part = "beam smear"
-        F.hatch_pred(cone, in_bank, G4 if note > 0.5 else G3, pitch=HATCH, slope=1)
+        F.hatch_pred(cone, in_bank, G5 if note > 0.5 else G3, pitch=HATCH, slope=1)
         F.part = "beam edges"
         for side in (-1, 1):
-            F.line(beam_point(S0, theta, lens, side), beam_point(LW, theta, lens, side), HAIR, edge_c)
+            F.line(beam_point(S0, theta, lens, side), beam_point(LW, theta, lens, side), LINE if note > 0.5 else HAIR, edge_c)
 
     for y, q, dashes, glints in rows:
         if y >= FOG_FOOT:
@@ -627,7 +626,7 @@ def motion(td: Path):
             a = off - on
             theta = tmax + (tmax * (0.5 + 0.5 * math.cos(math.pi * a)) - tmax) * (1 - ease(r / 0.4))
             front = None
-            sh = (off - on) if r < 0.6 else (off - on)
+            sh = off - on                                            # glints hold where they are and dim
             if note < 0.02:
                 note, cas = 0.0, 0.0
         F = draw(c, note=note, theta=theta, front=front, cascade=cas, shimmer=sh if note > 0 else 0.0,
@@ -643,9 +642,11 @@ def motion(td: Path):
 
 
 def playing(td: Path):
-    """A held-note frame for the note-response check (not kept): defaults, lit, a front out."""
+    """A held-note frame at the defaults: lit, the bands bright, one wavefront out (note-response check)."""
     F = draw(dict(DEFAULTS), note=1.0, cascade=1.0, front=2, shimmer=1.3, title="playing")
-    (HERE / "_playing.svg").write_text(F.svg())
+    p = HERE / "playing.svg"
+    p.write_text(F.svg())
+    render(p, p.with_suffix(".png"))
     print("playing node count by part:", F.count)
 
 

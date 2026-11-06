@@ -14,7 +14,8 @@ away to the left.
 Everything is one 3D model through one camera (craft.md, Think in 3D). The frames
 are authored as device artwork: every part is a bound node `spool_node_<i>` with a
 `matrix(1 0 0 1 x y)` origin; nodes 0..3 are the four mutable outlines (three
-trail chunks and the free run), 64 points each, filled ribbons. Document order is
+trail chunks and the free run), 64 points each, hollow ribbons
+(two 1.5 px plies) that part as the thread wears. Document order is
 paint order. No text below the header; grey only.
 
 Writes into this folder: rest, playing, <control>-0/50/100 (.svg + .png),
@@ -774,13 +775,16 @@ def simulate(s: Spool, fps=15, t_on=0.5, t_off=4.9, t_end=6.6, chord=(1.7, 3.2),
     dt = 1.0 / fps
     t = 0.0
     stopped = True
+    prev_voices = 0
     while t < t_end + 1e-9:
         voices = 0
         if t_on <= t < t_off:
             voices = 1 + (1 if chord[0] <= t < chord[1] else 0)
         held = voices > 0
-        if held and stopped:
-            marks.append(phi)                 # a fresh write: the newest repeat starts crisp
+        if voices > prev_voices:
+            marks.append(phi)                 # every new key is a fresh write: the newest repeat starts crisp
+        prev_voices = voices
+        if held:
             stopped = False
         if held:
             target = rate

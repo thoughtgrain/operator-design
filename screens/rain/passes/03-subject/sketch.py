@@ -36,7 +36,11 @@ HERE = Path(__file__).resolve().parent
 
 DEFAULTS = {"rate": 0.4, "roof": 1 / 3, "gust": 0.5, "puddle": 0.0}
 # motion clips: the defaults with a little gust and some puddle so a run forms
-MOTION = {"rate": 0.4, "roof": 1 / 3, "gust": 0.6, "puddle": 0.35}
+MOTION = {"rate": 0.4, "roof": 1 / 3, "gust": 0.6, "puddle": 0.0}
+# one score for every clip: seven drops in about three seconds (a drop a beat at ~120 bpm,
+# Poisson-spaced), the 2nd and 5th landing on the heaviest bead at their height so it lets go
+NOTES = [0.2, 0.62, 1.1, 1.45, 1.95, 2.4, 2.9]
+FORCE = {1, 4}
 
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
@@ -337,12 +341,13 @@ class Frame:
 
 # ================================================================ the pane model
 class Bead:
-    __slots__ = ("x", "y", "r", "t", "lit", "res", "id", "tail")
+    __slots__ = ("x", "y", "r", "t", "lit", "res", "id", "tail", "src")
 
     def __init__(self, x, y, r, t, res=False, tail=None):
         self.x, self.y, self.r, self.t = x, y, r, t
         self.lit, self.res, self.tail = False, res, tail
         self.id = None
+        self.src = None
 
 
 class Run:
@@ -374,6 +379,7 @@ class Pane:
         self.trails: list[Run] = []
         self.events: list[tuple] = []
         self.serial = 0
+        self.keep = 4
 
     def pitch_y(self, st):
         if self.span < 1e-6:
@@ -438,7 +444,8 @@ class Pane:
                 run.acc = 0.0
                 rr = self.residue
                 if run.r > rr * 1.6:
-                    self._new(Bead(run.x + self.rng.uniform(-0.3, 0.3) * run.r, run.y + run.r * 1.6, rr, t, res=True))
+                    nb = self._new(Bead(run.x + self.rng.uniform(-0.3, 0.3) * run.r, run.y + run.r * 1.6, rr, t, res=True))
+                    nb.src = id(run)
                     run.r = max(rr, (run.r ** 3 - rr ** 3 * 0.5) ** (1 / 3))
             for o in list(self.beads):
                 if o.res and o.t >= run.t0:
@@ -454,7 +461,9 @@ class Pane:
                 run.done = True
                 self.runs.remove(run)
                 self.trails.append(run)
-                self.trails = self.trails[-4:]
+                self.trails = self.trails[-self.keep:]
+                kept = {id(r) for r in self.trails + self.runs}
+                self.beads = [o for o in self.beads if not (o.res and o.src is not None and o.src not in kept)]
                 b = self._new(Bead(run.x, run.y, run.r, t))
                 b.lit = run.lit
 
@@ -578,10 +587,11 @@ class V1(Variant):
     the beaded glass, each a closed lane drawn in bold outline with the beads it left
     strung inside; the beads themselves are bold closed outlines, double-lined when big."""
     title = "v1 · the trails, bold outline"
-    seed = 31
+    seed = 10
 
     def pane(self):
-        p = Pane(480, 199, self.c, self.seed, r_land=(2.4, 3.6), yc=0.62, band=0.33, speed=120)
+        p = Pane(480, 199, self.c, self.seed, r_land=(1.9, 3.4), yc=0.64, band=0.3, speed=120, residue=1.7)
+        p.keep = 4
         return p
 
     def camera(self, pane):
@@ -620,168 +630,176 @@ class V1(Variant):
 
 # ---------------------------------------------------------------- v2
 class V2(Variant):
-    """The rule as a real pane: the glass seen from the side and cut through at its right
-    edge, so its thickness shows as a hatched section and the bead sitting on the cut shows
-    its meniscus in profile. Every knob does what it would do to a real wet window."""
+    """The rule as a real pane: the glass seen at an angle and cut through at its right
+    edge, so its thickness shows as a hatched section and the heavy bead sitting on the cut
+    shows its meniscus in profile. Every knob does what it would do to a real wet window."""
     title = "v2 · the cut edge, section"
     seed = 47
-    T = 9.0          # glass thickness
-    XC = 300.0       # the cut
+    T = 14.0         # glass thickness
+    XC = 560.0       # the cut
 
     def pane(self):
-        return Pane(self.XC, 200, self.c, self.seed, r_land=(3.2, 5.2), yc=0.6, band=0.34, speed=120)
+        return Pane(self.XC, 200, self.c, self.seed, r_land=(4.0, 6.4), yc=0.6, band=0.34, speed=120)
 
     def camera(self, pane):
-        cam = Camera((self.XC + 170, 150, 330), (self.XC - 110, 92, -10))
-        cam.fit([(0, 0, 0), (self.XC, 0, 0), (self.XC, 200, 0), (0, 200, 0), (self.XC, 0, -self.T)],
-                (-60, 24, 470, 226))
+        cam = Camera((self.XC + 150, 130, 420), (self.XC - 230, 96, 0))
+        cam.fit([(self.XC, 0, 0), (self.XC, 200, 0), (self.XC - 420, 200, 0), (self.XC - 420, 0, 0)],
+                (-10, 20, 430, 236))
+        cam.pin((self.XC, 100, 0), (414, 120))
         return cam
 
     def heavy(self, pane):
         """The bead on the cut: puddle sets how much it holds before it lets go."""
-        r = pane.r_land[1] * (1.5 + 1.6 * pane.puddle) * 1.6
-        return Bead(self.XC, pane.yc - 18, r, -9)
+        r = 30 + 16 * pane.puddle
+        return Bead(self.XC, pane.yc - 34, r, -9)
 
     def draw(self, fr, pane, t, motion):
         cam = self.camera(pane)
         XC, T = self.XC, self.T
-        # the pane's inner face and its bottom edge: hairlines, the glass ends past the frame
-        fr.ribbon([cam((XC, 0, -T)), cam((-200, 0, -T))], HAIR, G2)
-        fr.ribbon([cam((XC, 0, 0)), cam((-200, 0, 0))], LINE, G3)
-        # trails then beads, far ones first
         for run in pane.trails + pane.runs:
-            pts = [cam((x, y, 0)) for x, y in run.trail]
+            pts = [cam((x, y, 0)) for x, y in run.trail if x < XC - 2]
             if len(pts) > 1:
                 fr.ribbon(even(pts, 2.0), HAIR, G3)
-        items = sorted(pane.beads, key=lambda b: -cam.depth((b.x, b.y, 0)))
-        for b in items:
-            if b.x > XC - b.r * 0.4:
+        hk = 0.7
+        for b in sorted(pane.beads, key=lambda b: -cam.depth((b.x, b.y, 0))):
+            if b.x > XC - b.r * 1.2:
                 continue
             bb = scaled(b, self.flare(b, t))
-            fr.outline(cap_outline(cam, bb, h_k=0.75), G7 if b.lit else (G3 if b.res else G4),
+            fr.outline(cap_outline(cam, bb, h_k=hk), G6 if b.lit else (G3 if b.res else G4),
                        SUBJ if b.lit else LINE)
-            if b.r > 4.5:   # one contour at half height
-                ring = footprint(cam, bb, rho=0.6, h_k=0.75)
+            if b.r > 5.5:   # one contour at half height: the bead is a body, not a ring
+                ring = footprint(cam, bb, rho=0.55, h_k=hk)
                 fr.ribbon(ring + ring[:1], HAIR, G3)
         for run in pane.runs:
             hb = Bead(run.x, run.y, run.r, run.t0)
             lit = run.lit or t - run.flash < 0.12
-            fr.outline(cap_outline(cam, hb, h_k=0.75, lean=run.r * 0.5, sag=0.6), G7 if lit else G5, SUBJ)
-        # the section: the cut face of the glass, hatched at 45 deg, outlined
-        face = [cam((XC, -40, 0)), cam((XC, 260, 0)), cam((XC, 260, -T)), cam((XC, -40, -T))]
-        fr.outline(face, G4, LINE)
+            fr.outline(cap_outline(cam, hb, h_k=hk, lean=run.r * 0.5, sag=0.6), G6 if lit else G5, SUBJ)
         hv = self.heavy(pane)
-        # the heavy bead's far half behind the cut (a cap) then its profile on the cut face
-        half = [cam(cap_point(hv, rho, math.pi / 2 + math.pi * k / 30, h_k=0.8, sag=0.55, lean=hv.r * 0.32))
+        kw = dict(h_k=0.85, sag=0.6, lean=hv.r * 0.35)
+        # the heavy bead's far half, still on the glass behind the cut
+        half = [cam(cap_point(hv, rho, math.pi / 2 + math.pi * k / 30, **kw))
                 for rho in (1.0, 0.75, 0.5, 0.25, 0.0) for k in range(31)]
         fr.outline(resample(hull(half), 60), G4, LINE)
-        cut_floor = []
-        for k in range(25):
-            u = -1 + 2 * k / 24
-            # profile: height of the cap along the cut line x = XC, y through the footprint
-            yy = hv.y + hv.r * u * (1 + 0.55 * max(0.0, -u)) - hv.r * 0.32 * (1 - u * u)
-            cut_floor.append((yy, hv.r * 0.8 * (1 - u * u)))
-        prof = [cam((XC, yy, z)) for yy, z in cut_floor]
-        sect = prof + [cam((XC, cut_floor[-1][0], 0)), cam((XC, cut_floor[0][0], 0))][::-1][:0]
-        glassface = [cam((XC, cut_floor[0][0], 0)), cam((XC, cut_floor[-1][0], 0))]
-        region = prof[::-1] + glassface[::1][:0]
-        fr.outline(prof[::-1] + [cam((XC, cut_floor[0][0], -0.01))], G0, 0.0) if False else None
-        # cut glass hatched above and below the bead's foot
+        for rho in (0.66, 0.33):
+            arc = [cam(cap_point(hv, rho, math.pi / 2 + math.pi * k / 24, **kw)) for k in range(25)]
+            fr.ribbon(arc, HAIR, G3)
+        # the section: the cut face of the glass, hatched at 45 deg, then the bead's profile on it
+        face = [cam((XC, -60, 0)), cam((XC, 300, 0)), cam((XC, 300, -T)), cam((XC, -60, -T))]
+        fr.poly(face, G0)
         fr.hatch(face, G3, gap=4.0)
-        fr.ribbon(face + face[:1], LINE, G4)
+        fr.ribbon(face[:2], LINE, G5)
+        fr.ribbon(face[2:], LINE, G4)
+        prof = []
+        for k in range(33):
+            u = -1 + 2 * k / 32
+            y = cap_point(hv, abs(u), math.pi / 2 if u >= 0 else -math.pi / 2, **kw)
+            prof.append(cam((XC, y[1], y[2])))
         fr.poly(prof, G0, "none")
         fr.ribbon(prof, SUBJ, G7)
-        # its meniscus: a hairline a little inside the profile, the water's skin
-        inner = [cam((XC, yy, z * 0.55)) for yy, z in cut_floor[3:-3]]
+        inner = []
+        for k in range(4, 29):
+            u = -1 + 2 * k / 32
+            y = cap_point(hv, abs(u), math.pi / 2 if u >= 0 else -math.pi / 2, **kw)
+            inner.append(cam((XC, y[1], y[2] * 0.5)))
         fr.ribbon(inner, HAIR, G5)
         for x, y in self.arriving(pane, t):
-            a = cam((x - pane.gust * 12, y + 14, 30))
-            b = cam((x - pane.gust * 2, y + 2, 4))
+            a = cam((x - pane.gust * 12, y + 16, 26))
+            b = cam((x - pane.gust * 2, y + 3, 4))
             fr.line(a, b, HAIR, G5)
 
 
 # ---------------------------------------------------------------- v3
 class V3(Variant):
     """Exploded view: the heaviest bead on the glass, with the drops it gathered pulled back
-    off the pane along the line the rain came in on. Each part hangs over the spot where it
+    off the pane along the line the rain came in on. Each part floats over the spot where it
     landed (its height on the glass is its note), a hairline back to that spot."""
     title = "v3 · the gathered drops, exploded"
     seed = 5
 
     def pane(self):
-        return Pane(420, 200, self.c, self.seed, r_land=(3.4, 5.0), yc=0.62, band=0.4, speed=110)
+        return Pane(300, 140, self.c, self.seed, r_land=(3.0, 4.6), yc=0.5, band=0.4, speed=90)
 
     def camera(self, pane):
-        cam = Camera((-170, 330, 470), (215, 85, 0))
-        cam.fit([(0, 0, 0), (420, 0, 0), (420, 200, 0), (0, 200, 0)], (-30, 6, 520, 236))
+        cam = Camera((250, 190, 420), (150, 70, 0))
+        cam.fit([(0, 0, 0), (300, 0, 0), (300, 140, 0), (0, 140, 0)], (-20, 40, 500, 250))
         return cam
 
     def parts(self, pane):
-        n = 2 + round(10 * pane.puddle)
+        n = 3 + round(9 * pane.puddle)
         rng = random.Random(self.seed + 3)
         cs = courses(pane.span) or [0]
-        hx, hy = 250.0, pane.yc - 34
+        hx, hy = 150.0, pane.yc - 30
         out = []
         for i in range(n):
             st = cs[(i * 3 + 1) % len(cs)]
             y = pane.pitch_y(st)
-            x = hx + (i - (n - 1) / 2) * 36 + rng.uniform(-6, 6)
-            out.append(Bead(x, y, rng.uniform(4.4, 6.2), -5))
-        vol = sum(p.r ** 3 for p in out) * 1.1
+            x = hx + (i - (n - 1) / 2) * 26 + rng.uniform(-3, 3)
+            out.append(Bead(x, y, rng.uniform(4.6, 6.0), -5))
+        vol = sum(p.r ** 3 for p in out) * 1.15
         return Bead(hx, hy, vol ** (1 / 3), -1), out
 
     def axis(self, pane):
-        return norm((-pane.gust * 0.6, 0.42, 1.0))
+        return norm((-pane.gust * 0.7, 1.0, 0.8))
 
     def draw(self, fr, pane, t, motion):
         cam = self.camera(pane)
-        # the glazing bar at the foot of the pane: a bar seen from above, its top edge lit
-        fr.outline([cam((-60, 0, 0)), cam((480, 0, 0)), cam((480, 0, 16)), cam((-60, 0, 16))], G3, LINE)
-        fr.outline([cam((-60, 0, 16)), cam((480, 0, 16)), cam((480, -14, 16)), cam((-60, -14, 16))], G3, LINE)
+        # the glazing bar at the foot of the pane (top face, front face)
+        hv, parts = self.parts(pane)
         for run in pane.trails + pane.runs:
             pts = [cam((x, y, 0)) for x, y in run.trail]
             if len(pts) > 1:
                 fr.ribbon(even(pts, 2.0), HAIR, G3)
-        hv, parts = self.parts(pane)
-        beads = [b for b in pane.beads if math.dist((b.x, b.y), (hv.x, hv.y)) > hv.r + b.r + 8]
-        for b in sorted(beads, key=lambda b: -cam.depth((b.x, b.y, 0))):
+        keep = [b for b in pane.beads if math.dist((b.x, b.y), (hv.x, hv.y)) > hv.r + b.r + 10
+                and all(math.dist((b.x, b.y), (p.x, p.y)) > p.r + b.r + 6 for p in parts)
+                and not (abs(b.x - hv.x) < 70 and b.y > hv.y)]
+        for b in sorted(keep, key=lambda b: -cam.depth((b.x, b.y, 0))):
             bb = scaled(b, self.flare(b, t))
-            fr.outline(cap_outline(cam, bb, h_k=0.7), G7 if b.lit else (G3 if b.res else G4), LINE)
+            fr.outline(cap_outline(cam, bb, h_k=0.7), G6 if b.lit else (G3 if b.res else G4), LINE)
         for run in pane.runs:
             hb = Bead(run.x, run.y, run.r, run.t0)
             lit = run.lit or t - run.flash < 0.12
-            fr.outline(cap_outline(cam, hb, h_k=0.7, lean=run.r * 0.5, sag=0.6), G7 if lit else G5, SUBJ)
+            fr.outline(cap_outline(cam, hb, h_k=0.7, lean=run.r * 0.5, sag=0.6), G6 if lit else G5, SUBJ)
         ax = self.axis(pane)
-        # the assembly: the heavy bead on the glass, its contact ring, the parts above
-        for p in parts:   # landing spots and the slide each drop made to the heavy bead
+        for p in parts:   # where each drop landed: its contact ring, and the slide down to the bead
             ring = footprint(cam, p, rho=1.0, h_k=0.7)
             fr.ribbon(ring + ring[:1], HAIR, G3)
-        hvo = cap_outline(cam, hv, h_k=0.7, sag=0.45, lean=hv.r * 0.3)
-        fr.outline(hvo, G5, LINE)
-        for rho in (0.7, 0.4):
-            ring = footprint(cam, hv, rho=rho, h_k=0.7, sag=0.45, lean=hv.r * 0.3)
+            path = [cam((p.x + (hv.x - p.x) * k / 12, p.y + (hv.y - p.y) * k / 12 - 3 * math.sin(math.pi * k / 12), 0))
+                    for k in range(1, 12)]
+            fr.ribbon(path, HAIR, G2)
+        hkw = dict(h_k=0.7, sag=0.45, lean=hv.r * 0.3)
+        hvo = cap_outline(cam, hv, **hkw)
+        fr.outline(hvo, G7, SUBJ)
+        for rho in (0.72, 0.44):
+            ring = footprint(cam, hv, rho=rho, **hkw)
             fr.ribbon(ring + ring[:1], HAIR, G4)
-        lift = 70.0
-        order = sorted(parts, key=lambda p: -cam.depth(add((p.x, p.y, 0), mul(ax, lift))))
-        for p in order:
+        lift = 80.0
+        for p in sorted(parts, key=lambda p: -cam.depth(add((p.x, p.y, 0), mul(ax, lift)))):
             base = (p.x, p.y, 0)
             top = add(base, mul(ax, lift))
-            fr.ribbon([cam(add(base, mul(ax, p.r * 0.5))), cam(add(base, mul(ax, lift - 1)))], HAIR, G3)
-            # the part: a drop as it arrived, a cap with its flat underside showing
+            fr.ribbon([cam(add(base, mul(ax, 3))), cam(add(base, mul(ax, lift - p.r * 0.2)))], HAIR, G3)
             q = Bead(top[0], top[1], p.r, p.t)
-            def P(rho, th, _q=q, _z=top[2]):
-                x, y, z = cap_point(_q, rho, th, h_k=0.7)
-                return (x, y, z + _z)
-            under = [cam(P(1.0, 2 * math.pi * k / 30)) for k in range(30)]
-            dome = [cam(P(rho, 2 * math.pi * k / 30)) for rho in (1.0, 0.6, 0.3, 0.0) for k in range(30)]
-            fr.outline(resample(hull(dome + under), 56), G4, LINE)
-            fr.ribbon(under + under[:1], HAIR, G3)
-        # the drop that just landed joins it: the brightest part is the heavy bead's skin
-        fr.ribbon(hvo + hvo[:1], SUBJ, G7)
+
+            # the drop as it fell: a falling raindrop is a flattened sphere, its leading face
+            # (towards the glass) pressed flat by the air; an equator hairline gives it its turn
+            e1 = norm(cross(ax, (0, 0, 1))) if abs(ax[2]) < 0.99 else (1, 0, 0)
+            e2 = cross(ax, e1)
+            sph, eq = [], []
+            for i in range(11):
+                ph = math.pi * i / 10
+                for j in range(20):
+                    th = 2 * math.pi * j / 20
+                    a_ = p.r * math.cos(ph) * (0.62 if math.cos(ph) < 0 else 0.85)
+                    w_ = p.r * math.sin(ph) * 1.08
+                    sph.append(add(top, add(mul(ax, a_), add(mul(e1, w_ * math.cos(th)), mul(e2, w_ * math.sin(th))))))
+            for j in range(25):
+                th = 2 * math.pi * j / 24
+                eq.append(cam(add(top, add(mul(ax, -p.r * 0.25), add(mul(e1, p.r * 1.04 * math.cos(th)),
+                                                                     mul(e2, p.r * 1.04 * math.sin(th)))))))
+            fr.outline(resample(hull([cam(v) for v in sph]), 56), G4, LINE)
+            near = [q_ for q_ in eq if True]
+            fr.ribbon(near[:13], HAIR, G3)
         for x, y in self.arriving(pane, t):
-            a = cam(add((x, y, 0), mul(ax, 40)))
-            b = cam(add((x, y, 0), mul(ax, 8)))
-            fr.line(a, b, HAIR, G5)
+            fr.line(cam(add((x, y, 0), mul(ax, 36))), cam(add((x, y, 0), mul(ax, 6))), HAIR, G5)
 
 
 # ---------------------------------------------------------------- v4
@@ -792,70 +810,84 @@ class V4(Variant):
     seed = 12
 
     def pane(self):
-        p = Pane(480, 200, self.c, self.seed, r_land=(7.0, 10.0), yc=0.55, band=0.6, speed=150,
-                 hold=(5.5, 7.0))
+        p = Pane(480, 200, self.c, self.seed, r_land=(7.0, 12.0), yc=0.55, band=0.7, speed=170)
+        p.r_break = 44 + 22 * p.puddle
+        p.history(9)
+        p.r_break = 1e9          # (history only places the neighbours)
+        hv = p._new(Bead(292, 110, 40 + 22 * p.puddle, -3))
+        p.beads = [b for b in p.beads if b is hv or math.dist((b.x, b.y), (hv.x, hv.y)) > hv.r * 1.3 + b.r]
+        p.r_break = hv.r + 3
+        p._new(Bead(468, 196, 22, -30))
+        p._new(Bead(236, -4, 17, -30))
+        # an earlier heavy bead's trail, down the left
+        old = Bead(96, 236, 26, -20)
+        run = Run(old, -20)
+        y = 236.0
+        while y > -40:
+            y -= 3
+            run.trail.append((96 + 10 * math.sin(y * 0.02) - (236 - y) * 0.08, y))
+            run.widths.append(22)
+        p.trails = [run]
+        for k, y in enumerate((150, 104, 52, 12)):
+            x = 96 + 10 * math.sin(y * 0.02) - (236 - y) * 0.08 + (5 if k % 2 else -6)
+            p._new(Bead(x, y, 6.2, -20, res=True))
         return p
 
+    def history(self):
+        return 0
+
     def camera(self, pane):
-        cam = Camera((150, 230, 700), (250, 100, 0))
-        cam.fit([(0, 0, 0), (480, 0, 0), (480, 200, 0), (0, 200, 0)], (-40, 4, 520, 236))
+        cam = Camera((90, 360, 420), (260, 100, 0))
+        cam.fit([(0, 0, 0), (480, 0, 0), (480, 200, 0), (0, 200, 0)], (-40, 6, 520, 236))
         return cam
 
-    def heavy(self, pane):
-        r = 36 + 22 * pane.puddle
-        return Bead(300, 104, r, -3)
-
-    def draw(self, fr, pane, t, motion):
-        cam = self.camera(pane)
-        W = LINE
-        for run in pane.trails + pane.runs:
-            fr.outline(lane(cam, run, wk=0.7, step=4.0), G3, W)
-        hv = self.heavy(pane)
-        others = [b for b in pane.beads if math.dist((b.x, b.y), (hv.x, hv.y)) > hv.r * 1.25 + b.r]
-        for b in sorted(others, key=lambda b: -cam.depth((b.x, b.y, 0))):
-            bb = scaled(b, self.flare(b, t))
-            fr.outline(cap_outline(cam, bb, h_k=0.6), G7 if b.lit else G4, W)
-            if b.r > 8:
-                ring = footprint(cam, bb, rho=0.5, h_k=0.6)
-                fr.ribbon(ring + ring[:1], W, G3)
-        for run in pane.runs:
-            hb = Bead(run.x, run.y, run.r, run.t0)
-            lit = run.lit or t - run.flash < 0.12
-            fr.outline(cap_outline(cam, hb, h_k=0.6, lean=run.r * 0.5, sag=0.6), G7 if lit else G5, W)
-        # the heavy bead: silhouette, then its contours, each split into visible runs
-        kw = dict(h_k=0.62, sag=0.7, lean=hv.r * 0.42)
-        sil = cap_outline(cam, hv, n=56, **kw)
-        fr.outline(sil, G7, W)
-        n = 7
+    def contours(self, fr, cam, b, kw, col, n=7):
         for k in range(1, n):
             rho = 1 - k / n
             pts, vis = [], []
             for j in range(73):
                 th = 2 * math.pi * j / 72
-                p = cap_point(hv, rho, th, **kw)
+                p = cap_point(b, rho, th, **kw)
                 e = 0.002
-                pr = cap_point(hv, rho + e, th, **kw)
-                pt = cap_point(hv, rho, th + e, **kw)
-                nrm = cross(sub(pr, p), sub(pt, p))
+                nrm = cross(sub(cap_point(b, rho + e, th, **kw), p), sub(cap_point(b, rho, th + e, **kw), p))
                 if nrm[2] < 0:
                     nrm = mul(nrm, -1)
-                v = dot(nrm, sub(cam.eye, p)) > 0
                 pts.append(cam(p))
-                vis.append(v)
+                vis.append(dot(nrm, sub(cam.eye, p)) > 0)
             runp = []
             for p, v in zip(pts, vis):
                 if v:
                     runp.append(p)
                 elif runp:
                     if len(runp) > 2:
-                        fr.ribbon(runp, W, G5)
+                        fr.ribbon(runp, LINE, col)
                     runp = []
             if len(runp) > 2:
-                fr.ribbon(runp, W, G5)
+                fr.ribbon(runp, LINE, col)
+
+    def draw(self, fr, pane, t, motion):
+        cam = self.camera(pane)
+        W = LINE
+        for run in pane.trails:
+            fr.outline(lane(cam, run, wk=0.62, step=4.0), G3, W)
+        big = max(pane.beads + [Bead(0, 0, 0, 0)], key=lambda b: b.r)
+        for b in sorted(pane.beads, key=lambda b: -cam.depth((b.x, b.y, 0))):
+            if b is big and b.r > 20:
+                continue
+            bb = scaled(b, self.flare(b, t))
+            fr.outline(cap_outline(cam, bb, h_k=0.6), G7 if (b.lit and not (big.r > 20)) else G4, W)
+            if b.r > 9:
+                ring = footprint(cam, bb, rho=0.5, h_k=0.6)
+                fr.ribbon(ring + ring[:1], W, G3)
+        heavy = [b for b in [big] if b.r > 20] + [Bead(r.x, r.y, r.r, r.t0) for r in pane.runs]
+        for run in pane.runs:
+            fr.outline(lane(cam, run, wk=0.62, step=4.0), G4, W)
+        for hv in heavy:
+            kw = dict(h_k=0.62, sag=0.7, lean=hv.r * 0.42)
+            fr.outline(cap_outline(cam, hv, n=56, **kw), G7, W)
+            self.contours(fr, cam, hv, kw, G5)
         for x, y in self.arriving(pane, t):
-            a = cam((x - pane.gust * 30, y + 40, 0))
-            b = cam((x - pane.gust * 10, y + 12, 0))
-            fr.line(a, b, W, G5)
+            fr.line(cam((x - pane.gust * 30, y + 40, 0)), cam((x - pane.gust * 10, y + 12, 0)), W, G5)
 
 
 # ---------------------------------------------------------------- v5
@@ -867,35 +899,38 @@ class V5(Variant):
     seed = 23
 
     def pane(self):
-        return Pane(240, 100, self.c, self.seed, r_land=(2.6, 3.6), yc=0.6, band=0.36, speed=60)
+        return Pane(160, 66.3, self.c, self.seed, r_land=(1.9, 3.6), yc=0.62, band=0.36, speed=42, residue=1.25)
 
     def camera(self, pane):
-        cam = Camera((120, 50, 3000), (120, 50, 0))
-        return cam.fit([(0, 0, 0), (240, 100, 0)], (0, 21, 480, 220))
+        cam = Camera((80, 33, 3000), (80, 33, 0))
+        return cam.fit([(0, 0, 0), (160, 66.3, 0)], (0, 21, 480, 220))
 
     def draw(self, fr, pane, t, motion):
         cam = self.camera(pane)
         for run in pane.trails + pane.runs:
-            ln = lane(cam, run, wk=0.42, step=3.0)
+            ln = lane(cam, run, wk=0.5, step=3.0)
             if len(ln) > 3:
-                fr.hatch(ln, G2, gap=4.0)
+                fr.hatch(ln, G2, gap=4.5)
+                fr.ribbon(ln + ln[:1], HAIR, G2)
+        k = abs(cam((1, 0, 0))[0] - cam((0, 0, 0))[0])
         for b in pane.beads:
             bb = scaled(b, self.flare(b, t))
             ol = cap_outline(cam, bb)
+            if bb.r * k < 6:      # too small to hatch: a drop the size of a few pixels is a closed outline
+                fr.outline(ol, G4, LINE)
+                continue
             fr.poly(ol, G0)
-            fr.hatch(ol, G3, gap=3.2)
+            fr.hatch(ol, G4 if b.lit else G3, gap=3.4)
             self.rim(fr, cam, bb, G7 if b.lit else G5, SUBJ if b.lit else LINE)
         for run in pane.runs:
             hb = Bead(run.x, run.y, run.r, run.t0)
             lit = run.lit or t - run.flash < 0.12
             ol = cap_outline(cam, hb, lean=run.r * 0.5, sag=0.6)
             fr.poly(ol, G0)
-            fr.hatch(ol, G3, gap=3.2)
+            fr.hatch(ol, G3, gap=3.4)
             self.rim(fr, cam, hb, G7 if lit else G5, SUBJ, sag=0.6, lean=run.r * 0.5)
         for x, y in self.arriving(pane, t):
-            a = cam((x - pane.gust * 8, y + 9, 0))
-            b = cam((x - pane.gust * 3, y + 3, 0))
-            fr.line(a, b, HAIR, G5)
+            fr.line(cam((x - pane.gust * 8, y + 9, 0)), cam((x - pane.gust * 3, y + 3, 0)), HAIR, G5)
 
     @staticmethod
     def rim(fr, cam, b, col, w, **kw):
@@ -910,11 +945,12 @@ VARIANTS = {"v1": V1, "v2": V2, "v3": V3, "v4": V4, "v5": V5}
 def rest_pane(V, c, n_hist):
     v = V(c)
     p = v.pane()
-    p.history(n_hist)
+    if n_hist:
+        p.history(n_hist)
     return v, p
 
 
-HIST = {"v1": 70, "v2": 34, "v3": 28, "v4": 14, "v5": 30}
+HIST = {"v1": 150, "v2": 130, "v3": 40, "v4": 0, "v5": 60}
 
 
 def write_rest():
@@ -931,9 +967,8 @@ def write_motion(fps=15, dur=4.6, play=(0.15, 3.0)):
     for name, V in VARIANTS.items():
         v, p = rest_pane(V, MOTION, HIST[name])
         t0 = p.events[-1][1] + 10 if p.events else 0.0
-        notes = score(MOTION, 0, play[1] - play[0], V.seed)
         rng = random.Random(V.seed + 99)
-        times = [t0 + play[0] + n for n in notes]
+        times = [t0 + n for n in NOTES]
         q = list(times)
         plan = {}
         out = tmp / name
@@ -946,22 +981,27 @@ def write_motion(fps=15, dur=4.6, play=(0.15, 3.0)):
 
         def planned(tn):
             if tn not in plan:
+                k = times.index(tn)
                 st = rng.choice(cs)
-                y = p.pitch_y(st)
                 x = rng.uniform(0.05, 0.95) * p.W
-                near = [b for b in p.beads if abs(b.y - y) < b.r * 1.5 and not b.res]
-                if near and rng.random() < 0.6:   # some land on a bead at their height, so beads gather
-                    big = max(near, key=lambda b: b.r)
-                    x = big.x + rng.uniform(-0.4, 0.4) * big.r
-                plan[tn] = (st, x)
+                r = None
+                if k in FORCE:
+                    pool = [b for b in p.beads if not b.res and 0.1 * p.W < b.x < 0.9 * p.W]
+                    if pool:
+                        big = max(pool, key=lambda b: b.r)
+                        st = min(cs, key=lambda c_: abs(p.pitch_y(c_) - big.y))
+                        x = big.x
+                        need = max(0.0, p.r_break ** 3 - big.r ** 3) ** (1 / 3) * 1.05
+                        r = min(max(p.r_land[1], need), p.r_land[1] * 1.6)
+                plan[tn] = (st, x, r)
             return plan[tn]
 
         for i in range(nframes):
             t = t0 + i / fps
             while q and q[0] <= t:
                 tn = q.pop(0)
-                st, x = planned(tn)
-                p.land(tn, st=st, x=x)
+                st, x, r = planned(tn)
+                p.land(tn, st=st, x=x, r=r)
             p.step(t, 1 / fps)
             p.incoming = [(planned(tn)[1], p.pitch_y(planned(tn)[0])) for tn in q if 0 < tn - t <= 0.1]
             fr = v.frame(p, t, motion=True)
