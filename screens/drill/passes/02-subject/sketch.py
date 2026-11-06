@@ -126,11 +126,6 @@ class Svg:
         pts = dedupe(pts)
         if len(pts) < 3:
             return
-        for k in range(0, len(pts), 62):  # never more than 64 points in one outline
-            chunk = pts[k:k + 64] if len(pts) <= 64 else None
-            if chunk is None:
-                break
-            break
         if len(pts) > 64:
             raise ValueError(f"outline with {len(pts)} points")
         d = "M " + " L ".join(f"{f(x)} {f(y)}" for x, y in pts) + " Z"
@@ -327,9 +322,9 @@ def v2():
 
     span = 0.75
     # rim body: outer edge to the lug ring's inside, with the cast web hatched
-    outer = [wp(R, a) for a in [-span + 2 * span * i / 40 for i in range(41)]]
+    outer = [wp(R, a) for a in [-span + 2 * span * i / 30 for i in range(31)]]
     web_r = lug_in - 8
-    web = [wp(web_r, a) for a in [span - 2 * span * i / 40 for i in range(41)]]
+    web = [wp(web_r, a) for a in [span - 2 * span * i / 30 for i in range(31)]]
     rim_poly = cam.proj(outer + web)
     s.path(rim_poly, BLACK, G[3], LINE)
     # the web: hatched mass, with a lightening hole cut out of it

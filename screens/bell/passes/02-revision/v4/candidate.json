@@ -1,0 +1,11 @@
+{
+  "variant": "v4",
+  "subject": "The bell in three-quarter isometric, off to the right below a diagonal surface edge, in water whose hatching closes up with depth, its waterline a dashed hidden ring and its shoulder the bright hoop.",
+  "controls": [
+    "depth: the bell sinks into denser hatching, from the open top bands to the close bottom ones (position + the gradient it sits in).",
+    "air: the dashed hidden waterline ring slides along the bell (position + shape).",
+    "knee: the bright shoulder hoop moves inward and down as the crown rounds, and the outline softens (shape).",
+    "gain: the whole bell grows, x0.80 to x1.32 about its crown (scale)."
+  ],
+  "risks": "Four hatch densities are four nested bands of grey value; spaced 11 to 4.5 px they stay line, not tint, but the 4.5 px band is near the limit. Gain as scale reads as 'bigger', not 'louder', and fights the gradient for what depth means. The surface edge diagonal is a projected world line, so it can't move with depth."
+}

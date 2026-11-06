@@ -1,0 +1,11 @@
+{
+  "variant": "v1",
+  "subject": "The bell centred in front elevation with its front-right quarter cut away, so the air pocket, the hatched water below it and the clapper hanging inside show, on its cable under one surface line.",
+  "controls": [
+    "depth: the bell is lowered on its cable, crown from just under the surface line to about 70 px below it (position).",
+    "air: the waterline inside drops as the air pocket grows from a third to nine tenths of the bell, and the hatched water in the cut shrinks with it (position + hatched area).",
+    "knee: the shoulder between crown and wall goes from a hard corner to a full round crown, fillet radius about 2 to 40 px, in the silhouette, the cut wall and every hoop (shape).",
+    "gain: the clapper swings out toward the cut, from hanging (4 degrees) to 34 degrees, its travel a dashed hairline arc (rotation); the bright ball is the sound source."
+  ],
+  "risks": "The cutaway adds three hatch fields (wall cut, water cut, and the rear interior seen through) inside a 150 px bell: at 1:1 the wall hatching is only 2-3 lines and could read as a grey band. Gain as a clapper's swing angle is a metaphor for loudness, not makeup gain; a resting drawing that shows a swung clapper must stay still at rest. The quarter cut is a fixed drawing; on device every visible run is redrawn when knee or depth change."
+}

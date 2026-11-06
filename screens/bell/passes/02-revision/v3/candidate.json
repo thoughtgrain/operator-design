@@ -1,0 +1,11 @@
+{
+  "variant": "v3",
+  "subject": "The bell cut in section on its cable, its parts under their own columns: a sounding line for depth, the air pocket over hatched water, the shoulder's fillet construction, and a hammer drawn back from the sound-bow.",
+  "controls": [
+    "depth: the bell is lowered, and the sounding line in column 1 pays out with it, its lead weight dropping level with the rim (position).",
+    "air: the waterline across the section drops as the pocket grows, the hatched water cut below it shrinking (position + hatched area).",
+    "knee: the shoulder fillet in column 3 grows from a hard corner to a full round crown; its centre mark and radius lines move with it (shape).",
+    "gain: the hammer in column 4 is drawn back from the sound-bow, from 6 to 46 degrees, its swing a dashed arc (rotation); the struck face of the bow is the brightest line."
+  ],
+  "risks": "Column-affine puts four parts in four columns, which edges toward a panel; the sounding line and hammer are additions beside the bell, not the bell itself. The fillet construction lines are drafting marks that could read as decoration. A pure section is the closest to v1 of the five and the least 3D."
+}

@@ -509,82 +509,75 @@ def v2() -> Frame:
     """The fired body seen close: a rim fragment in section, glaze skin, pores, a felt tip."""
     F = Frame()
     F.palette = [G0, G2, G3, G6]
-    rnd = random.Random(11)
+    rnd = random.Random(5)
     # the wall: a curved slab, concave side up, rising to a rounded lip at the right
     def mid(t):  # centreline, t 0..1
-        x = 40 + 330 * t
-        y = 196 - 120 * t ** 2.2
-        return x, y
-    thick = 44
-    cl = [mid(i / 40) for i in range(41)]
-    up = offset_line(cl, thick / 2)        # inner (glazed) face, left of travel = up
+        return 52 + 296 * t, 182 - 104 * t ** 2.4
+    thick = 42
+    N = 36
+    cl = [mid(i / N) for i in range(N + 1)]
+    up = offset_line(cl, thick / 2)        # inner (glazed) face
     dn = offset_line(cl, -thick / 2)       # outer face
-    # rounded lip
     ex, ey = cl[-1]
     tx, ty = cl[-1][0] - cl[-2][0], cl[-1][1] - cl[-2][1]
     L = math.hypot(tx, ty)
     tx, ty = tx / L, ty / L
     nx, ny = ty, -tx
-    lip = []
-    for i in range(1, 12):
-        a = math.pi * i / 12
-        lip.append((ex + tx * thick / 2 * math.sin(a) + nx * thick / 2 * math.cos(a),
-                    ey + ty * thick / 2 * math.sin(a) + ny * thick / 2 * math.cos(a)))
-    # broken edge at the left: a jagged fracture, closed
-    frac = []
-    for i in range(1, 6):
-        s = i / 6
-        x0, y0 = dn[0][0] + (up[0][0] - dn[0][0]) * s, dn[0][1] + (up[0][1] - dn[0][1]) * s
-        frac.append((x0 + (-5 if i % 2 else 4), y0))
-    body = up + lip + dn[::-1] + frac[::-1]
-    # glaze skin on the concave (upper) face: thickness from glaze
+    lip = [(ex + tx * thick / 2 * math.sin(math.pi * i / 10) + nx * thick / 2 * math.cos(math.pi * i / 10),
+            ey + ty * thick / 2 * math.sin(math.pi * i / 10) + ny * thick / 2 * math.cos(math.pi * i / 10))
+           for i in range(1, 10)]
+    # broken edge at the left: a stepped fracture across the wall
+    a0, b0 = up[0], dn[0]
+    frac = [(b0[0] + 6, b0[1] - 8), (b0[0] - 3, b0[1] - 17), (a0[0] + 8, a0[1] + 14), (a0[0] + 1, a0[1] + 6)]
+    body = up + lip + dn[::-1] + frac
+    # glaze skin on the concave face: thickness from glaze
     gt = 5 + 16 * GLAZE
     gl = offset_line(cl, thick / 2 + gt)
-    skin = gl[2:] + up[2:][::-1]
-    # body
+    skin = gl[1:] + up[1:][::-1]
     F.poly(body, fill=BK, stroke=G0, sw=SUBJ)
-    # double outline: inner keyline 4 px inside the body
-    inner_key = offset_line(cl[3:-1], thick / 2 - 4)
-    F.line(inner_key, HAIR, G5)
-    # glaze skin: hatched (glassy), its free surface a line, closed at both ends
+    # double outline: a keyline inside the body, parallel to the outer face
+    F.line(offset_line(cl[2:-1], -thick / 2 + 5), HAIR, G5)
+    # glaze skin: glassy, so hatched; its free surface a line
     F.poly(skin, fill=BK, stroke=G2, sw=LINE)
     F.hatch([skin], colour=G4, spacing=4)
-    # pores: closed ovals inside the body, count from fire (fewer as it vitrifies)
-    npores = int(round(16 - 12 * FIRE))
+    # pores: closed ovals in the body, fewer as the body vitrifies (fire)
+    npores = int(round(17 - 12 * FIRE))
     placed = []
     tries = 0
-    while len(placed) < npores and tries < 400:
+    while len(placed) < npores and tries < 2000:
         tries += 1
-        t = rnd.uniform(0.08, 0.9)
-        s = rnd.uniform(-0.25, 0.3)
-        x, y = mid(t)
-        k = (cl[min(40, int(t * 40) + 1)][0] - cl[int(t * 40)][0], cl[min(40, int(t * 40) + 1)][1] - cl[int(t * 40)][1])
+        t = rnd.uniform(0.07, 0.93)
+        s = rnd.uniform(-0.22, 0.22)
+        i = min(N - 1, int(t * N))
+        k = (cl[i + 1][0] - cl[i][0], cl[i + 1][1] - cl[i][1])
         Lk = math.hypot(*k) or 1
+        x, y = mid(t)
         px, py = x + (k[1] / Lk) * s * thick, y - (k[0] / Lk) * s * thick
-        rx, ry = rnd.uniform(3.5, 6), rnd.uniform(2.5, 3.5)
-        if any(math.dist((px, py), q) < 15 for q in placed):
+        if any(math.dist((px, py), q) < 17 for q in placed):
             continue
         placed.append((px, py))
-        rot = math.atan2(k[1], k[0])
+        rx, ry = rnd.uniform(4.5, 7), rnd.uniform(2.8, 3.8)
+        rot = math.atan2(k[1], k[0]) + rnd.uniform(-0.3, 0.3)
         ov = [(px + rx * math.cos(a) * math.cos(rot) - ry * math.sin(a) * math.sin(rot),
                py + rx * math.cos(a) * math.sin(rot) + ry * math.sin(a) * math.cos(rot))
               for a in [2 * math.pi * i / 20 for i in range(20)]]
         F.poly(ov, fill=BK, stroke=G3, sw=LINE)
-    # felt mallet tip resting on the lip, from the upper right
-    tip_r = 26 - 12 * STRIKE                         # soft and broad .. hard and small
-    lx, ly = ex + nx * (thick / 2 + gt) * 0.2 + tx * 4, ey + ny * thick / 2 * 0.6
-    ang = math.radians(-58)
-    cx, cy = lx + math.cos(ang) * (tip_r + 22), ly + math.sin(ang) * (tip_r + 22)
-    cx, cy = 418, 50
-    # shaft out to the top right edge
-    sx, sy = cx + 70, cy - 30
+    # felt mallet tip resting on the lip (strike: soft and broad .. hard and small)
+    tip_r = 30 - 14 * STRIKE
+    top = (ex + nx * thick / 2 * 0.15, ey - thick / 2 * 0.95)
+    d = (0.62, -0.78)
+    cx, cy = top[0] + d[0] * (tip_r + 1), top[1] + d[1] * (tip_r + 1)
+    sx, sy = cx + 64, cy - 22
     dx, dy = sx - cx, sy - cy
     L = math.hypot(dx, dy)
     qx, qy = -dy / L * 5, dx / L * 5
     F.poly([(cx + qx, cy + qy), (sx + qx, sy + qy), (sx - qx, sy - qy), (cx - qx, cy - qy)],
            fill=BK, stroke=G3, sw=LINE)
-    F.circle(cx, cy, tip_r, fill=BK, stroke=G2, sw=LINE * 1.33)
-    F.circle(cx, cy, tip_r - 4.5, fill=BK, stroke=G4, sw=HAIR)
+    F.poly([(sx + qx * 1.4, sy + qy * 1.4), (sx + 8 * dx / L + qx * 1.4, sy + 8 * dy / L + qy * 1.4),
+            (sx + 8 * dx / L - qx * 1.4, sy + 8 * dy / L - qy * 1.4), (sx - qx * 1.4, sy - qy * 1.4)],
+           fill=BK, stroke=G3, sw=LINE)
+    F.circle(cx, cy, tip_r, fill=BK, stroke=G2, sw=SUBJ)
+    F.circle(cx, cy, tip_r - 5, fill=BK, stroke=G4, sw=HAIR)
     return F
 
 
@@ -595,7 +588,7 @@ def v3() -> Frame:
     F.palette = [G0, G2, G3, G4]
     x0, x1 = 92, 388          # chamber inside
     yfloor = 196
-    yspring = 96             # arch springs here
+    yspring = 112            # arch springs here
     wall = 26
     bh, bw = 12, 26           # brick course height, brick length
     # walls: brick courses, outlined, staggered
@@ -614,11 +607,11 @@ def v3() -> Frame:
             y -= bh
             row += 1
     # sprung arch: voussoirs between two circles
-    cxa, R1 = (x0 + x1) / 2, (x1 - x0) / 2 / math.sin(math.radians(62))
-    cya = yspring + R1 * math.cos(math.radians(62))
+    cxa, R1 = (x0 + x1) / 2, (x1 - x0) / 2 / math.sin(math.radians(38))
+    cya = yspring + R1 * math.cos(math.radians(38))
     R2 = R1 + wall
-    a0, a1 = math.radians(-90 - 62), math.radians(-90 + 62)
-    nvs = 15
+    a0, a1 = math.radians(-90 - 38), math.radians(-90 + 38)
+    nvs = 17
     for k in range(nvs):
         aa = a0 + (a1 - a0) * k / nvs + 0.004
         ab = a0 + (a1 - a0) * (k + 1) / nvs - 0.004
@@ -640,23 +633,16 @@ def v3() -> Frame:
     cam = Cam(elev_deg=14, dist=8.0)
     cam.fit(b.all_outer(), (166, 104, 290, sy))
     draw_bowl(F, cam, b, edge=G0, outer_rings=(0.35, 0.65), inner_rings=(0.6,), rim=G0, rim_w=SUBJ)
-    # glaze on the outside from the rim down: hatched band between rim and the glaze line
+    # glaze on the outside from the rim down: hatched band between the rim's front and the glaze line
     g = 1 - (0.15 + 0.6 * GLAZE)
     sil = hull([cam.p(P) for P in b.all_outer()])
     r, z, nr, nz = b.outer(g)
     gl, gm = ring_vis(cam, b, r, z, nr, nz)
-    front = [p for p, m in zip(gl, gm) if m]
-    rim_o = [cam.p(P) for P in b.ring(b.outer(1)[0], b.outer(1)[1], 96)]
-    band = [p for p in sil if p[1] < max(y for _, y in front) and p[1] > min(y for _, y in rim_o) - 1]
-    # region: above the glaze line, below the rim's front half, inside the silhouette
-    front_sorted = sorted(front)
-    rim_front = sorted([q for q in rim_o if q[1] >= cam.p(b.o)[1] - 999], key=lambda q: q[0])
-    lower = front_sorted
-    upper = [(x, max(y for xx, y in rim_o if abs(xx - x) < 3) if any(abs(xx - x) < 3 for xx, _ in rim_o) else None)
-             for x, _ in lower]
-    region = [p for p in lower] + [(x, y) for (x, y) in upper[::-1] if y is not None]
-    if len(region) > 4:
-        F.hatch([region, sil], colour=G4)
+    front = sorted([p for p, m in zip(gl, gm) if m])
+    ro_, zo_ = b.outer(1)[0], b.outer(1)[1]
+    rim_front = sorted([cam.p(b.P(ro_, zo_, -math.pi * i / 63)) for i in range(64)])
+    region = front + rim_front[::-1]
+    F.hatch([region, sil], colour=G4)
     F.runs(gl, gm, HAIR, G2)
     # pyrometric cone in its pad, bent by fire, left of the bowl on the shelf
     padx, pady = 140, sy
@@ -705,13 +691,13 @@ def v4() -> Frame:
     F.palette = [G0, G2, G3, G4]
     b = Bowl()
     cam = Cam(elev_deg=24, dist=9.0)
-    ncourse = 5
+    ncourse = 4
     ts = [i / ncourse for i in range(ncourse + 1)]
     stretch = 1.0 + 0.24 * FIRE
     # exploded offsets: gap grows up the stack like the stretched upper modes
     gaps = [0.0]
     for k in range(1, ncourse + 1):
-        gaps.append(gaps[-1] + 0.10 * (k ** (math.log(stretch * 2.2) / math.log(2.2)) / 1.0) * 0.9)
+        gaps.append(gaps[-1] + 0.15 * (1 + 2.0 * (stretch - 1) * k))
     # foot ring is course 0 (below everything)
     courses = []
     for k in range(ncourse):

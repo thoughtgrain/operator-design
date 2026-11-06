@@ -1,0 +1,11 @@
+{
+  "variant": "v5",
+  "subject": "Looking up into the bell's mouth from below, the bell large in a full-bleed hatched field: inside, the water's surface and the clapper hanging over it; the rim bright.",
+  "controls": [
+    "depth: the bell comes down toward the camera, so it grows and lowers in the frame (size from distance, about 1.3x, plus position); the bright rim leads.",
+    "air: the waterline ellipse inside the mouth moves up into the bell or down toward the rim as the pocket grows and shrinks, its hatched water with it (position + area).",
+    "knee: the crown's shoulder rounds in the silhouette above the rim (shape).",
+    "gain: the clapper's ball grows, x0.7 to x1.3 (scale)."
+  ],
+  "risks": "Seen from below, the inside reads only if the mouth is open enough; at full depth the bell fills much of the field. Full-bleed hatching lowers the black share. The clapper hangs on the axis, so gain's change is concentrated in a small spot near the centre; it may miss the 40 px spread floor."
+}
