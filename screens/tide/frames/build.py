@@ -616,7 +616,7 @@ def node_state(c, sim=None):
             # distance from the bubble to the nearest front, in wavelengths
             u = ((b["y"] - D_RAFT) / lam_ - rise_frac(T) + phase) % 1.0
             u = min(u, 1 - u)
-            bob = 2.2 * min(1.0, T / 1.0) * sim["wave"] * math.cos(math.pi * u) ** 8
+            bob = 2.2 * max(0.0, min(1.0, (T - 0.5) / 1.5)) * sim["wave"] * math.cos(math.pi * u) ** 8
         (dx, dy), s = pose_bubble(b, c, layout, round(bob))
         shade = 0
         if part == "edge":
@@ -768,7 +768,7 @@ class Sim:
         # drift: a slow random walk while anything sounds
         if sounding and self.c["drift"] > 0:
             for b in BUBBLES:
-                self.theta[id(b)] += self.rnd.gauss(0, 0.9 * math.sqrt(dt))
+                self.theta[id(b)] += self.rnd.gauss(0, 0.25 * math.sqrt(dt))
         return {"phase": self.phase, "wave": wave, "steps": steps, "theta": dict(self.theta), "sounding": bool(sounding)}
 
 

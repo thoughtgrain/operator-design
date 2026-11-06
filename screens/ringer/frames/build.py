@@ -54,7 +54,7 @@ DEFAULTS = {"bells": 0.25, "method": 0.2, "pace": 0.5, "stroke": 0.0}
 
 PITCH = math.radians(9.0)      # camera looks up at the bells by this much
 SP, CP = math.sin(PITCH), math.cos(PITCH)
-AXLE_Y = 100.0                 # screen y of the headstock axle line (all bells)
+AXLE_Y = 112.0                 # screen y of the headstock axle line (all bells)
 BEAM_DROP = 15.0               # beam underside sits this far above the axle
 BEAM_H, BEAM_D = 10.0, 22.0    # beam front-face height and depth (px)
 BEAM_X0, BEAM_X1 = 12.0, 468.0

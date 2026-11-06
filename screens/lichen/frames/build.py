@@ -351,7 +351,7 @@ def render(svg: Path, png: Path):
                    check=True)
 
 
-def hatch(s, poly, col=DEAD_HATCH, gap=4.0, w=HAIR):
+def hatch(s, poly, col=DEAD_HATCH, gap=4.0, w=HAIR, inset=0.8):
     """45-degree hairlines >= 4 px apart, clipped to a (screen) polygon."""
     if len(poly) < 3:
         return
@@ -369,8 +369,8 @@ def hatch(s, poly, col=DEAD_HATCH, gap=4.0, w=HAIR):
         xs.sort()
         for x1, x2 in zip(xs[0::2], xs[1::2]):
             # pull the ends in a touch so the hatch sits inside the edge line
-            if x2 - x1 > 2.4:
-                s.seg((x1 + 0.8, c - x1 - 0.8), (x2 - 0.8, c - x2 + 0.8), w, col)
+            if x2 - x1 > 3 * inset:
+                s.seg((x1 + inset, c - x1 - inset), (x2 - inset, c - x2 + inset), w, col)
         c += step
 
 
@@ -384,32 +384,34 @@ P = CAM.p
 LIGHT = (0.55, 0.45)             # shadow throw on the stone per unit of height (world x, y)
 
 
-def plate_outline(o, r, live=frozenset(), k=0.92, n=48):
-    """An areola on hex cell (o, r), world XY, CCW. Sides that meet a living
-    neighbour stay nearly straight and close (a packed crust, split by narrow
-    cracks); sides at the margin bulge into rounded lobes, two to a side."""
+def plate_outline(o, r, live=frozenset(), n=48):
+    """An areola on hex cell (o, r), world XY, CCW: a rounded, uneven plate.
+    Sides that meet a living neighbour stay straight and close (a packed crust
+    split by narrow cracks); sides at the margin bulge into rounded lobes,
+    two to a side, the way a crustose lichen's edge does."""
     cx, cy = hexc(o, r)
     rng = random.Random(o * 31 + r * 7)
     ph = rng.random() * 6.28
+    k = 0.9 + 0.05 * rng.random()
+    cx += (rng.random() - 0.5) * 0.04
+    cy += (rng.random() - 0.5) * 0.04
     dirs = {}
     for q in nbrs(o, r):
         qx, qy = hexc(*q)
-        dirs[round(math.degrees(math.atan2(qy - cy, qx - cx)) / 60) % 6] = q in live
+        dirs[round(math.degrees(math.atan2(qy - hexc(o, r)[1], qx - hexc(o, r)[0])) / 60) % 6] = q in live
     pts = []
     for i in range(n):
         th = 2 * math.pi * i / n
         deg = math.degrees(th)
         side = round(deg / 60) % 6
         phi = (deg + 30) % 60 - 30
-        rr = 0.5 / math.cos(math.radians(phi)) ** 0.8
         if dirs.get(side, False):
-            rr *= 0.985 + 0.01 * math.sin(4 * th + ph)
-            kk = 0.95
+            rr = 0.5 / math.cos(math.radians(phi)) ** 0.55
+            rr *= 0.99 + 0.012 * math.sin(4 * th + ph)
         else:
-            rr = 0.5 / math.cos(math.radians(phi)) ** 0.35
-            rr *= 0.97 + 0.055 * math.cos(math.radians(phi) * 6) + 0.012 * math.sin(7 * th + ph)
-            kk = k
-        pts.append((cx + rr * kk * math.cos(th), cy + rr * kk * math.sin(th)))
+            rr = 0.5 / math.cos(math.radians(phi)) ** 0.2
+            rr *= 0.95 + 0.075 * math.cos(math.radians(phi) * 6) + 0.015 * math.sin(7 * th + ph)
+        pts.append((cx + rr * k * math.cos(th), cy + rr * k * math.sin(th)))
     return pts
 
 
@@ -471,8 +473,8 @@ def solid(s, base, h, top, wall, z0=0.0):
         return
     bp = [P((x, y, z0)) for x, y in base]
     tp = [P((x, y, z0 + h)) for x, y in base]
-    s.poly(extrude(bp, tp), fill=wall)
-    s.poly(tp, fill=top)
+    s.poly(extrude(bp, tp), fill=wall, stroke=G0, sw=HAIR)
+    s.poly(tp, fill=top, stroke=G0, sw=HAIR)
 
 
 def scale_about(poly, k):
@@ -506,17 +508,14 @@ def tongue_outline(a, b, length):
     return [(ax + ux * u + nx * v, ay + uy * u + ny * v) for u, v in pts][::-1]
 
 
-def flake_points(base, cx, cy, ang, h):
-    """Dead crust: the front of the remnant lifted on a hinge across its back."""
-    hy = cy + 0.12
-    front = [p for p in base if p[1] <= hy]
-    if len(front) < 3:
-        return None
-    pts = []
-    for x, y in front:
-        dy = y - hy
-        pts.append((x, hy + dy * math.cos(ang), h - dy * math.sin(ang)))
-    return pts
+def flake_points(base, ang, h):
+    """Dead crust: the whole areola, shrunk a little as it dries, lifted on a
+    hinge along its back edge (front edge up, towards the viewer)."""
+    cx = sum(p[0] for p in base) / len(base)
+    cy = sum(p[1] for p in base) / len(base)
+    pts = [(cx + (x - cx) * 0.86, cy + (y - cy) * 0.86) for x, y in base]
+    hy = max(p[1] for p in pts)
+    return [(x, hy + (y - hy) * math.cos(ang), h - (y - hy) * math.sin(ang)) for x, y in pts]
 
 
 def scene(grow=DEF["grow"], decay=DEF["decay"], seed=DEF["seed"], scale="maj", tick=SNAP, phase=None):
@@ -683,18 +682,14 @@ def scene(grow=DEF["grow"], decay=DEF["decay"], seed=DEF["seed"], scale="maj", t
                         s.line([P((x, CUT, -0.005)), P((x + 0.02, CUT, -dz * 0.5)), P((x - 0.01, CUT, -dz))],
                                HAIR, G3)
         else:
-            # dead crust: a thin black remnant, hatched, with its front lifted as a flake
-            h = 0.04
-            rem = [P((x, y, h)) for x, y in base]
-            s.poly(rem, fill=G0, stroke=DEAD_EDGE, sw=HAIR)
-            hatch(s, rem)
-            ang_full = math.radians(14 + 72 * decay ** 0.7)
+            # dead crust: the areola dries and lifts off as a hatched flake, hinged at
+            # its back; the stone it sat on is left as a dark scar
+            s.poly([P((x, y, 0)) for x, y in base], fill=G0, stroke=DEAD_EDGE, sw=HAIR)
+            ang_full = math.radians(12 + 66 * decay ** 0.8)
             ang = ang_full * (e if (o, r) in newly_dead else 1)
-            fl = flake_points(base, cx, cy, ang, h)
-            if fl:
-                fp = [P(q) for q in fl]
-                s.poly(fp, fill=G0, stroke=FLAKE_EDGE, sw=HAIR)
-                hatch(s, [(x, y) for x, y in clean(fp)])
+            fp = [P(q) for q in flake_points(base, ang, 0.03)]
+            s.poly(fp, fill=G0, stroke=FLAKE_EDGE, sw=LINE)
+            hatch(s, clean(fp), inset=1.6)
 
     # spores (seed): solid grains hanging over bare stone, each over its shadow
     for c in spore_cells()[:seed]:

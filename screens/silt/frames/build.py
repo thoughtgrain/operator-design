@@ -473,7 +473,7 @@ def bed(n, gscale, settle):
     root = math.sqrt(1 + KW * KW)
     spread = 0.55 + 0.95 * settle
     for k in range(1, n + 1):
-        r = grain_r_px(k) * gscale / PPU
+        r = grain_r_px(k) * gscale / PPU * (0.9 + 0.2 * jit(k, 13))
         pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.6 * (0.8 + 0.4 * jit(k, 9))
         best = None
         for i in range(300):
@@ -761,7 +761,7 @@ def stills():
         for v in (0, 50, 100):
             c = dict(DEFAULTS)
             c[ctl_name] = v / 100
-            if ctl_name == "stir":
+            if ctl_name in ("stir", "layers"):
                 s = snapshot(c, STIR_T)
             elif ctl_name == "settle":
                 s = snapshot(c, SETTLE_T)

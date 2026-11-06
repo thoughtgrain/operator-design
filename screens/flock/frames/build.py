@@ -142,23 +142,24 @@ def orbit(yaw: float, pitch: float, dist: float, target, ppu: float, centre) -> 
     return Camera(eye, target, dist * ppu, centre)
 
 
-CAM = orbit(-9, 26, 60, (0.1, 0.0, 0.0), 36, (240, 141))
+CAM = orbit(-9, 26, 60, (0.1, 0.0, 0.0), 36, (240, 143))
 
 # the box (world units): long axis x, lid at y = 0, front face at z = BZ0 facing the camera
 BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.7, 4.7, -1.0, 0.0, -1.0, 1.0
-SLOT_Z0, SLOT_Z1 = 0.42, 0.62                 # the groove the rods ride in, near the back of the lid
+SLOT_Z0, SLOT_Z1 = 0.0, 0.16                  # the groove the rods ride in, just behind the comb's tips
 SLOT_X0, SLOT_X1 = BX0 + 0.45, BX1 - 0.45
-TIP_Z = 0.08                                  # the comb's tips line up here, where the picks reach
+TIP_Z = -0.12                                 # the comb's tips line up here, where the picks reach
+BAR_Z = -0.9                                  # the comb's bar, stepped: long tines root further forward
 COMB_X0, COMB_X1 = SLOT_X0 + 0.15, SLOT_X1 - 0.15
-CRANK_C = (BX1 - 0.95, BY0 + 0.5, BZ0)        # the crank's boss, on the front face
-CRANK_R = 0.8
+CRANK_C = (BX1 - 0.9, BY0 + 0.5, BZ0)         # the crank's boss, on the front face
+CRANK_R = 0.92
 
 # ------------------------------------------------------------------ the flock on its rods
 # Eight birds on four tiers, two a tier, the pair on a tier always more than a bird's length
 # apart along the slot (their offsets differ by >= 1.1), so they can't touch at any cohere.
 # offset o (-1..1) along the flock's spread, tier height (rod length above the lid), a small jitter.
-# Neighbours along the slot are always at least one tier (0.5, more than a bird's height) apart.
-TIER = {"A": 1.05, "B": 2.05, "C": 1.55, "D": 2.55}
+# Neighbours along the slot are always at least one tier (0.55, more than a bird's height) apart.
+TIER = {"A": 1.0, "B": 2.1, "C": 1.55, "D": 2.65}
 BIRDS = [(-1.00, "A", 0.00), (-0.70, "B", 0.03), (-0.40, "C", 0.00), (-0.10, "D", -0.03),
          (0.15, "A", 0.03), (0.45, "B", -0.02), (0.75, "C", 0.02), (1.00, "D", 0.00)]
 # scatter: these three break away (slide out along the slot and lean out); sign = which way
@@ -173,6 +174,9 @@ def spread(cohere: float) -> float:
     return 0.95 + (3.75 - 0.95) * (1 - cohere)
 
 
+CENTRE = 0.0 - 0.15 * spread(0.5)              # the lit bird (offset 0.15) sits on the middle tine at the defaults
+
+
 def tines(st: State):
     """[(x, length)] for the comb at this scale, low (long) on the left."""
     deg = degrees(scale_name(st.scale))
@@ -180,7 +184,7 @@ def tines(st: State):
     out = []
     for i, d in enumerate(deg):
         x = COMB_X0 + (COMB_X1 - COMB_X0) * i / (n - 1)
-        out.append((x, 0.30 + 0.62 * 2 ** (-d / 24) - 0.31 * 0.25 * (d / 24)))
+        out.append((x, 0.28 + 0.42 * 2 ** (-d / 12) / 1.0))       # length halves... roughly, an octave a step
     return out
 
 
@@ -191,7 +195,7 @@ def nearest_tine(x: float, ts) -> int:
 def rods(st: State):
     """Per bird: foot (world), lean (radians, + leans right), rod length."""
     W = spread(st.cohere)
-    centre = 0.05 + st.drift
+    centre = CENTRE + st.drift
     ts = tines(st)
     out = []
     for k, (o, tier, jit) in enumerate(BIRDS):
@@ -213,10 +217,10 @@ def rod_top(foot, lean, h):
 
 # a carved songbird in profile, facing right (x forward, y up), one silhouette with the wing
 # raised off the back; beak tip and tail end have small flat ends (no near-reversals)
-BIRD = [(0.50, 0.105), (0.50, 0.085), (0.40, 0.045), (0.30, -0.05), (0.12, -0.11), (-0.10, -0.10),
-        (-0.28, -0.02), (-0.47, 0.10), (-0.50, 0.15), (-0.48, 0.175), (-0.30, 0.13), (-0.16, 0.15),
-        (-0.30, 0.40), (-0.26, 0.43), (-0.04, 0.27), (0.10, 0.21), (0.22, 0.24), (0.33, 0.24),
-        (0.42, 0.18)]
+BIRD = [(0.54, 0.13), (0.54, 0.115), (0.43, 0.09), (0.38, 0.05), (0.30, -0.03), (0.18, -0.09),
+        (0.02, -0.12), (-0.14, -0.10), (-0.30, -0.03), (-0.44, 0.05), (-0.56, 0.11), (-0.56, 0.145),
+        (-0.38, 0.12), (-0.24, 0.12), (-0.38, 0.32), (-0.35, 0.35), (-0.10, 0.22), (0.10, 0.17),
+        (0.20, 0.19), (0.28, 0.26), (0.38, 0.26), (0.45, 0.19)]
 
 
 def bird_outline(top, lean, bob=0.0):
@@ -299,62 +303,51 @@ def draw(st: State, title: str) -> Frame:
     F.poly(C([(SLOT_X0, BY1, SLOT_Z0), (SLOT_X1, BY1, SLOT_Z0), (SLOT_X1, BY1, SLOT_Z1), (SLOT_X0, BY1, SLOT_Z1)]),
            G0)
 
-    # --- the comb: tips in a line at TIP_Z, the bar stepped behind them (long, low tines on the left)
+    # --- the comb: steel tongues with their tips in a line at TIP_Z (where the picks reach them),
+    #     rooted in a bar that steps forward under the long, low tines on the left
     ts = tines(st)
     n = len(ts)
     pitch = (COMB_X1 - COMB_X0) / (n - 1)
-    half = min(0.13, 0.25 * pitch)
-    pad = pitch * 0.5 + 0.05
-    root_l = TIP_Z - ts[0][1]
-    root_r = TIP_Z - ts[-1][1]
-    bar_front = TIP_Z - ts[0][1] - 0.22
-    F.poly(C([(COMB_X0 - pad, BY1, bar_front), (COMB_X1 + pad, BY1, bar_front),
-              (COMB_X1 + pad, BY1, root_r), (COMB_X0 - pad, BY1, root_l)]), G0, G4, HAIR)
+    pad = 0.5 * pitch
+    roots = [(x, BY1, TIP_Z - L) for x, L in ts]
+    bar = [(COMB_X0 - pad, BY1, BAR_Z), (COMB_X1 + pad, BY1, BAR_Z), (COMB_X1 + pad, BY1, roots[-1][2])]
+    bar += roots[::-1] + [(COMB_X0 - pad, BY1, roots[0][2])]
+    F.poly(C(bar), G0, G4, HAIR)
     feet = rods(st)
     lit_tine = nearest_tine(feet[st.lit][0][0], ts)
     for i, (x, L) in enumerate(ts):
-        flick = 0.0
-        if i == lit_tine and st.pluck:
-            flick = 0.07 * st.pluck              # tip pushed sideways by the pick, ringing down
-        root = TIP_Z - L
-        poly = C([(x - half, BY1, root), (x + half, BY1, root),
-                  (x + half + flick, BY1, TIP_Z), (x - half + flick, BY1, TIP_Z)])
+        flick = 0.06 * st.pluck if i == lit_tine else 0.0     # tip pushed sideways by the pick, ringing down
         playing = i == lit_tine and st.playing
-        F.poly(poly, G0, G6 if playing else G5, LINE if playing else HAIR)
+        F.ribbon(CAM((x, BY1, TIP_Z - L + 0.02)), CAM((x + flick, BY1, TIP_Z)),
+                 SUBJ if playing else LINE, G6 if playing else G5)
 
-    # --- the crank on the front face: boss, arm, knob; it parks at the speed angle
+    # --- the crank on the front face: arm round the boss, a stud for the axle, the knob end-on;
+    #     it parks at the speed angle and turns about the stud (a turn in the screen's plane)
     park = -135 + 270 * st.speed
     ang = math.radians(park + st.crank_turn)
     cc = CAM(CRANK_C)
-    ppu = CAM.ppu(CRANK_C)
-    R = CRANK_R * ppu
-    tip = (cc[0] + R * math.sin(ang), cc[1] - R * math.cos(ang))
-    # tapered arm as one closed outline round the boss and out to the knob
+    R = CRANK_R * CAM.ppu(CRANK_C)
     ux, uy = math.sin(ang), -math.cos(ang)
     nx, ny = -uy, ux
-    arm = []
-    rb, rt = 6.0, 3.0
-    for t in range(0, 181, 15):                  # round end at the boss
-        a = math.radians(90 + t)
-        arm.append((cc[0] + rb * (math.cos(a) * nx + math.sin(a) * -ux) * 1,
-                    cc[1] + rb * (math.cos(a) * ny + math.sin(a) * -uy)))
+    tip = (cc[0] + R * ux, cc[1] + R * uy)
+    rb, rt = 6.5, 3.0
+    arm = [(cc[0] + rb * (math.cos(a) * nx - math.sin(a) * ux), cc[1] + rb * (math.cos(a) * ny - math.sin(a) * uy))
+           for a in [math.radians(t) for t in range(0, 181, 15)]]
     arm += [(tip[0] - nx * rt, tip[1] - ny * rt), (tip[0] + nx * rt, tip[1] + ny * rt)]
-    F.poly(arm[::-1], G0, G5, LINE)
-    F.poly([(cc[0] + 2.2 * math.cos(2 * math.pi * k / 12), cc[1] + 2.2 * math.sin(2 * math.pi * k / 12))
-            for k in range(12)], G5)             # the axle's end: a small solid stud
-    F.poly([(tip[0] + 4.6 * math.cos(2 * math.pi * k / 20), tip[1] + 4.6 * math.sin(2 * math.pi * k / 20))
-            for k in range(20)], G0, G5, LINE)   # the knob, seen end on
+    F.poly(arm, G0, G5, LINE)
+    F.poly([(cc[0] + 2.4 * math.cos(2 * math.pi * k / 12), cc[1] + 2.4 * math.sin(2 * math.pi * k / 12))
+            for k in range(12)], G5)
+    F.poly([(tip[0] + 5.5 * math.cos(2 * math.pi * k / 24), tip[1] + 5.5 * math.sin(2 * math.pi * k / 24))
+            for k in range(24)], G0, G5, LINE)
 
-    # --- rods and picks, then the birds over them
+    # --- rods (each with its pick, a short spur reaching forward over the comb's tips), then the birds
     for k, (foot, lean, h) in enumerate(feet):
         lit = k == st.lit
-        # pick: from the rod's foot forward over the lid to the comb's tips, with a small plectrum
-        f0 = CAM(foot)
-        p1 = CAM((foot[0], BY1, TIP_Z + 0.06))
-        F.ribbon(f0, p1, 1.5, G6 if (lit and st.playing) else G5)
-        F.poly([(p1[0] - 2.2, p1[1] - 1.0), (p1[0] + 2.2, p1[1] - 1.0), (p1[0] + 0.6, p1[1] + 3.2),
-                (p1[0] - 0.6, p1[1] + 3.2)], G6 if (lit and st.playing) else G5)
-        # rod
+        hot = lit and st.playing
+        flick = 0.06 * st.pluck if lit else 0.0
+        a, b = CAM(foot), CAM((foot[0] + flick, BY1, TIP_Z - 0.07))
+        F.poly([(a[0] - 1.7, a[1]), (a[0] + 1.7, a[1]), (b[0] + 0.7, b[1]), (b[0] - 0.7, b[1])],
+               G6 if hot else G5)
         top = rod_top(foot, lean, h)
         F.ribbon(CAM(foot), CAM(top), 1.5, G5)
     for k, (foot, lean, h) in enumerate(feet):

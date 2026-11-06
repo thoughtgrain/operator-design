@@ -456,8 +456,9 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     for k in range(DEFAULT_TURNS + 1, MAX_TURNS + 1):
         shown = k <= turns
         for part in turn_parts(k):
-            draw_part(F, part, node=node, shown=shown)
-            node += 1
+            if len(part[1]) >= 2:
+                draw_part(F, part, node=node, shown=shown)
+                node += 1
     # --- groove: the rim just outside the last turn, or the open field at the last (2 nodes per position)
     for n in range(DEFAULT_TURNS, MAX_TURNS + 1):
         shown = n == turns
