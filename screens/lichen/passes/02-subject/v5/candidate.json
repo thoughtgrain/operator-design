@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "The lichen itself, a leafy thallus lying on stone drawn as a black silhouette lit along the edges that face the light, its lobes reaching out from the living margin, its old centre crumbling to hatched dead crust, fruiting cups on the cells a half step below their neighbour.",
+  "controls": [
+    "grow: shape. The margin lobes lengthen and branch, a short fringe at 0 to lobes about 35 px long at 100.",
+    "decay: shape. The hatched dead centre spreads outward through the thallus, nothing at 0 to a crumbling ring at 100.",
+    "seed: count. Spores lie on the stone round the thallus, 0 to 8.",
+    "scale: position. The fruiting cups (apothecia) sit on living cells whose next degree up is a half step; each mode moves them, the pentatonics have none."
+  ],
+  "reference": "library/theseus-tower (black bodies, edge light marks what's active)",
+  "risks": "An edge-lit black shape on a black screen depends on the rim; the unlit side disappears, so the thallus can read smaller than it is. Pass 01's v4 was also a literal lichen patch; this one differs in being lobed, unfilled and lit, but the owner may see it as the same idea. The outline is a mutable path that re-keys on every birth and its lit runs need several paths, which presses the four-path limit. Muted: the rim light goes out to a G3 hairline all round."
+}

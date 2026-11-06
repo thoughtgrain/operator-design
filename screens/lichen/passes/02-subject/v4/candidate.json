@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "One stretch of the colony's margin at large scale, the rest implied past the frame's edges: the living crust as cracked black areolae, the dead centre as a hatched mass behind it, the cell just taken drawn bright, lobes pushing out over the bare stone joints.",
+  "controls": [
+    "grow: shape. Lobes of crust push from each living margin cell into its free neighbours, from a nub at 0 to about 45 px at 100.",
+    "decay: count. The hatched dead mass spreads through the old crust, none at 0 to most of the window at 100.",
+    "seed: count. Spores lie on the bare stone right of the margin, 0 to 8.",
+    "scale: shape. The lattice is stretched by the scale: each cell is as wide as its step to the next degree, so half steps are narrow cells and the stone joints shift with each mode."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg; craft.md hatching",
+  "risks": "Large cells mean the whole lattice is never seen, so where the colony is overall is lost; the window has to follow the newest growth, which is a camera move on every birth (expensive, and it fights the calm). Hatching over a third of the window is a lot of nodes. The stretched lattice is honest but can read as random paving. Muted: the bright cell drops to G4 and the lobes withdraw."
+}

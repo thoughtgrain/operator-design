@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "The colony taken apart into what it is made of, floated in an exploded stack over the bare scale lattice: the stone plate with raised half-step seams at the bottom, the dead centre as a thin hatched sheet, the living crust as one cracked sheet with holes where it died, and this tick's two births lifted clear on their assembly axes.",
+  "controls": [
+    "grow: position. The two cells just born lift out of the living sheet along their dashed axes, a little at 0 to about 40 px higher at 100.",
+    "decay: shape. The hatched dead sheet grows and the holes in the living sheet above it open to match.",
+    "seed: count. Spores wait at the top of the stack, each with a dashed line down to its cell, 0 to 8.",
+    "scale: position. On the stone plate the edge between two cells a half step apart stands up as a short raised ridge; the ridges move with the mode, and the pentatonics have none."
+  ],
+  "reference": "library/theseus-tower (a stack of parts, only what plays moves); exploded assembly drawings",
+  "risks": "The plate is 72 tiles of hairline and carries a lot of line for a part that only scale changes; the live sheet sits over the dead one, so their overlap needs the camera kept where it is. A hole's far wall can read as a stray cylinder. Lifting births reads well for grow but it also answers every note, so the note response and grow share the lift: grow sets how far, a note sets which. Muted: the stack closes (layers drop back together onto the plate) and nothing is bright."
+}

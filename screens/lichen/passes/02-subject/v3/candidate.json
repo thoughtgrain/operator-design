@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "Only the trail the colony has left on the stone, one line weight throughout: every birth since the first spore is a line from parent to child, worn through where that cell has died, jogged where it stepped a half step, and the two lines grown this tick are the bright ones.",
+  "controls": [
+    "grow: shape. A probe reaches from each living margin cell towards the free cell furthest from the start, a few px at 0 to about 20 px at 100.",
+    "decay: shape. Lines into dead cells are dashed and their gaps open with decay, so at 100 the old centre of the trail is mostly worn away.",
+    "seed: count. Small rings mark where spores will land, each with a dashed fall above it, 0 to 8.",
+    "scale: shape. A link that moved a half step has a small jog in it; a wider step is a plain bow. Each mode moves the jogs; the pentatonics have none."
+  ],
+  "reference": "opxy/reference/toro-ink-rest.jpg (one line language, black ground)",
+  "risks": "At rest it's sparse (about 20 lines) and doesn't say lichen or lattice without the motion; the shape of the trail is the colony's history, not its body, so where the colony is alive has to be read from brightness. The jogs are 9 px features and may sit near scale's floor. A long run grows a dense trail that needs a history limit (the last N births) for the node budget. Muted: every line drops to G3 and the bright births go out."
+}
