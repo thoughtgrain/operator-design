@@ -699,9 +699,9 @@ def v5(s: Spool) -> Frame:
     Rw = 0.62 + 0.3 * s.fullness()                       # length: how many layers are wound
     x0, xa, xb, x1 = -1.25, -1.08, 1.08, 1.25
     e = math.radians(30)
-    cam = Camera((2.0, -5.4, 5.4 * math.tan(e) + 0.4), (0.05, 0, 0.05))
+    cam = Camera((2.4, -5.6, 5.6 * math.tan(e) + 0.3), (0.05, 0, 0.1))
     # theta: point = (x, -r cos th, r sin th): th=0 faces the camera (-y), th=90 is up
-    tha, thb = math.radians(28 - 58), math.radians(28 + 58)   # the wedge that's cut away
+    tha, thb = math.radians(0), math.radians(90)          # the quarter that's cut away
 
     def P(x, r, th):
         return v3(x, -r * math.cos(th), r * math.sin(th))
@@ -718,7 +718,7 @@ def v5(s: Spool) -> Frame:
         ctr = sum(fill3) / len(fill3)
         faces.append((cam.dist(ctr), fill3, edges, extra))
 
-    def cylinder(r, xl, xr):
+    def cylinder(r, xl, xr, turns=0.0):
         for i, (t0, t1) in enumerate(zip(ths, ths[1:])):
             tm = (t0 + t1) / 2
             if not cam.faces(P((xl + xr) / 2, r, tm), radial(tm)):
@@ -729,6 +729,11 @@ def v5(s: Spool) -> Frame:
                 end = (i == 0 and tt == t0) or (i == len(ths) - 2 and tt == t1)
                 if end or not cam.faces(P((xl + xr) / 2, r, nb), radial(nb)):
                     edges.append([P(xl, r, tt), P(xr, r, tt)])
+            if turns:                                     # the outermost turns, hairline
+                x = xl + turns / 2 + 0.006
+                while x < xr - turns / 2:
+                    edges.append(([P(x, r, t0), P(x, r, t1)], HAIR, G))
+                    x += turns + 0.004
             add(quad, edges)
 
     def annulus(x, rin, rout, nx):
@@ -741,7 +746,7 @@ def v5(s: Spool) -> Frame:
 
     cylinder(Rf, x0, xa)
     cylinder(Rf, xb, x1)
-    cylinder(Rw, xa, xb)
+    cylinder(Rw, xa, xb, 0.068)
     annulus(x0, Rbo, Rf, -1)
     annulus(xa, Rw, Rf, 1)
     annulus(xb, Rw, Rf, -1)
@@ -796,7 +801,8 @@ def v5(s: Spool) -> Frame:
                     pts.append(cam(q))
                 fr.outline(pts, B, HAIR)
         for e in edges:
-            fr.line([cam(p) for p in e], LINE if not extra else LINE, M)
+            pts, w, col = e if isinstance(e, tuple) else (e, LINE, M)
+            fr.line([cam(p) for p in pts], w, col)
     return fr
 
 

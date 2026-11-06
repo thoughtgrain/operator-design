@@ -498,7 +498,7 @@ def v3() -> Frame:
             ang = math.radians(8 + 72 * t)       # fanned from forward-out to back-out
             L = 0.62 - 0.22 * t
             d = (-math.sin(ang), 0.05, side * math.cos(ang))
-            gap = 0.06 + 0.22 * E
+            gap = 0.06 + 0.22 * E / S_
             base = add(wrist, scl(d, gap))
             pts = []
             for s in range(13):
@@ -571,14 +571,14 @@ def v3() -> Frame:
 def v4() -> Frame:
     """Eight starlings in flight over a ploughed field, drawn in one contour weight; shadows hatched."""
     F = Frame("v4 · starlings over the field · single-weight contour")
-    cam = Camera((0.0, 8.5, -8.0), (0.0, 0.0, 6.5), 300, (240, 120))
+    cam = Camera((0.0, 12.0, -3.5), (0.0, 0.0, 6.5), 330, (240, 112))
     n = N_DEG
     X0, X1 = -6.0, 6.0
     zf = 60.0
     rows = [X0 + (X1 - X0) * i / n for i in range(n + 1)]
     birds = []
     for k, (u, h, d) in enumerate(BIRDS):
-        birds.append((X0 + (X1 - X0) * u, 3.1 + 0.9 * d, 5.0 + 3.2 * h))
+        birds.append((X0 + (X1 - X0) * u, 4.2 + 1.0 * d, 5.4 + 3.4 * h))
     lo = min(range(N_BIRDS), key=lambda k: cam.depth(birds[k]))   # nearest bird plays now
     ci = cell((birds[lo][0] - X0) / (X1 - X0))
     # drill rows, one per cell, to the horizon; the row under the playing bird is drawn heavier
@@ -592,11 +592,12 @@ def v4() -> Frame:
     for k in range(N_BIRDS):
         phase = (k * 3) % 4
         poses.append(dict(heading=math.radians(-12 + 16 * BIRDS[k][1]), bank=math.radians(6 * (phase - 1.5)),
-                          dihedral=(-0.2, 0.05, 0.3, 0.5)[phase], sweep=(0.0, 0.15, 0.3, 0.1)[phase], size=0.95))
+                          dihedral=(-0.2, 0.05, 0.3, 0.5)[phase], sweep=(0.0, 0.15, 0.3, 0.1)[phase], size=1.25))
     # shadows on the field straight below, hatched (there but not a body)
     for k in range(N_BIRDS):
         x, y, z = birds[k]
-        sh = [cam((p[0], 0.0, p[2])) for p in bird_world((x, 0.0, z), **poses[k])]
+        # sun from the front left: each shadow falls behind and to the right of its bird
+        sh = [cam((p[0] + 0.28 * y, 0.0, p[2] + 0.5 * y)) for p in bird_world((x, 0.0, z), **poses[k])]
         F.hatch(sh, G3, 3.0)
     for k in sorted(range(N_BIRDS), key=lambda k: -cam.depth(birds[k])):
         pts = [cam(p) for p in bird_world(birds[k], **poses[k])]
@@ -608,9 +609,9 @@ def v4() -> Frame:
 def v5() -> Frame:
     """A crank automaton: eight carved birds on rods over a comb; each rod's pick plucks the tine under it."""
     F = Frame("v5 · crank automaton · hatched mass")
-    cam = Camera((3.6, 4.6, -9.5), (0.4, 0.9, 0.0), 360, (232, 132))
+    cam = Camera((5.0, 4.2, -8.0), (0.3, 0.9, 0.0), 340, (226, 128))
     n = N_DEG
-    BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.2, 4.2, -1.5, 0.0, -0.9, 0.9
+    BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.2, 4.2, -1.0, 0.0, -0.8, 0.8
 
     def C(pts):
         return [cam(p) for p in pts]
@@ -632,7 +633,7 @@ def v5() -> Frame:
     xs = [BX0 + 0.5 + (BX1 - BX0 - 1.0) * i / (n - 1) for i in range(n)]
     rods = []
     for k, (u, h, d) in enumerate(BIRDS):
-        rods.append((BX0 + 0.5 + (BX1 - BX0 - 1.0) * u, 1.55 + 0.6 * h))
+        rods.append((BX0 + 0.5 + (BX1 - BX0 - 1.0) * u, 1.7 + 0.7 * h))
     lo = min(range(N_BIRDS), key=lambda k: rods[k][1])
     ci = cell((rods[lo][0] - BX0 - 0.5) / (BX1 - BX0 - 1.0))
     rods[lo] = (xs[ci], rods[lo][1])
@@ -644,10 +645,10 @@ def v5() -> Frame:
                   (x - 0.08, BY1 + 0.03, -L)])
         F.outline(tine, G5 if i == ci else G3, LINE if i == ci else HAIR)
     # crank on the right end: boss, arm, handle (the thing in the hand)
-    axle = (BX1, -0.75, 0.0)
-    ang = math.radians(-35)
-    arm_end = (BX1 + 0.45, -0.75 + 1.0 * math.sin(ang), 1.0 * math.cos(ang))
-    boss = C([(BX1 + 0.02, -0.75 + 0.3 * math.sin(t), 0.3 * math.cos(t)) for t in
+    axle = (BX1, -0.5, 0.0)
+    ang = math.radians(200)
+    arm_end = (BX1 + 0.35, -0.5 + 0.95 * math.sin(ang), 0.95 * math.cos(ang))
+    boss = C([(BX1 + 0.02, -0.5 + 0.26 * math.sin(t), 0.26 * math.cos(t)) for t in
               [2 * math.pi * s / 28 for s in range(28)]])
     F.outline(boss, G4, LINE)
     F.hatch(boss, G2, 3.5)
@@ -662,8 +663,8 @@ def v5() -> Frame:
         if hatch_:
             F.hatch(poly, hatch_, 3.2)
 
-    bar(add(axle, (0.45, 0, 0)), arm_end, 3.0, G4, LINE)
-    bar(arm_end, add(arm_end, (1.0, 0.0, 0.0)), 4.5, G5, LINE, G3)
+    bar(add(axle, (0.35, 0, 0)), arm_end, 3.0, G4, LINE)
+    bar(arm_end, add(arm_end, (0.9, 0.0, 0.0)), 4.5, G5, LINE, G3)
 
     # a carved bird in profile (x forward, y up), wing raised, mounted on its rod
     body = [(0.55, 0.12), (0.42, 0.26), (0.26, 0.3), (0.08, 0.2), (-0.3, 0.2), (-0.62, 0.34), (-0.66, 0.27),
@@ -676,8 +677,8 @@ def v5() -> Frame:
         bar((x, BY1, 0.32), (x, ht, 0.32), 1.6, G4, HAIR)
         # pick at the rod's foot, reaching over the comb
         F.line(cam((x, BY1 + 0.16, 0.3)), cam((x, BY1 + 0.16, -0.25)), LINE, G6 if lit else G3)
-        s = 0.62
-        yaw = math.radians(-25)
+        s = 0.85
+        yaw = math.radians(-35)
         bp = [cam(add(rot_y((px * s, py * s, 0.0), yaw), (x, ht + 0.1, 0.32))) for px, py in body]
         wp = [cam(add(rot_y((px * s, py * s, -0.02), yaw), (x, ht + 0.1, 0.32))) for px, py in wingp]
         F.outline(bp, G7 if lit else G5, SUBJ if lit else LINE)

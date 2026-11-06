@@ -165,7 +165,7 @@ class Frame:
         self.poly(left + right[::-1], colour)
 
     def line(self, a, b, w, colour):
-        if math.dist(a, b) >= 0.5:
+        if math.dist(a, b) >= 3.0:  # anything shorter doesn't read at 1:1
             self._piece([a, b], w, colour)
 
     def dashed(self, pts, w, colour, on=4.0, off=3.0):
@@ -423,7 +423,7 @@ def v2() -> Frame:
     wires = [(-arm, H - 0.8), (arm * 0.6, H - 3.0)]
 
     cam = Camera(eye=(-12, -24, 3.2), target=(48, 2, 5.5))
-    cam.fit([(0, 0, -0.2), (0, -arm, H + 0.3), (L, 0, 0), (L, 0, H)], (44, 36, 470, 208))
+    cam.fit([(0, 0, -0.2), (0, -arm, H + 0.3), (L, 0, 0), (L, 0, H)], (44, 40, 470, 208))
 
     def at(k, dy, z):
         a = math.radians(lean[k])
@@ -576,7 +576,7 @@ def v3() -> Frame:
         px, pz = centres[i][1]
         l = hang + drop[i]
         arc_pts = [cam.p((px + l * math.sin(a1 * t), 0, pz - l * math.cos(a1 * t))) for t in [j / 10 for j in range(11)]]
-        fr.dashed(arc_pts, HAIR, G3, on=3, off=3)
+        fr.dashed(arc_pts, HAIR, G3, on=4, off=3)
     return fr
 
 

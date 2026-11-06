@@ -183,7 +183,7 @@ def hatch(polys, spacing=3.5, w=HAIR, fill=G3, slope=1):
                 ts.append(ax + (bx - ax) * t)
         ts.sort()
         for x0, x1 in zip(ts[::2], ts[1::2]):
-            if x1 - x0 > 1.2:
+            if x1 - x0 > 2.2:
                 out.append(seg((x0 + 0.3, c - slope * (x0 + 0.3)), (x1 - 0.3, c - slope * (x1 - 0.3)), w, fill))
         c += stepc
     return out
@@ -644,7 +644,7 @@ def v4():
         for _, q, nw in g.sides(cam):
             sq = cam.ps(q)
             o.append(poly(sq, G0, G4, LINE))
-            if dot(nw, light) < 0.15:
+            if dot(nw, light) < 0.4:
                 o += hatch([sq], spacing=3.2, fill=G3)
         cap = g.cap(cam, g.o)
         o.append(poly(cap, G0, G5, LINE))

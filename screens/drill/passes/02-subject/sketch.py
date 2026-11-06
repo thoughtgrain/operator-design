@@ -495,7 +495,7 @@ def v3():
     screwp = cam.proj([(x, 0, z) for x, z in screw])
 
     # board in section: solid above and below the bore, the bore ending at the tip
-    hb, bore = 78, bit_r + 3
+    hb, bore = 78, bit_r + 6
     bend = tip + 13
     board = [(board_x, hb), (300, hb), (300, -hb), (board_x, -hb), (board_x, -bore), (bend - 6, -bore),
              (bend, -2), (bend, 2), (bend - 6, bore), (board_x, bore)]
