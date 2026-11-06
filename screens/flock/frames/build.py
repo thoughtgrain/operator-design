@@ -142,7 +142,7 @@ def orbit(yaw: float, pitch: float, dist: float, target, ppu: float, centre) -> 
     return Camera(eye, target, dist * ppu, centre)
 
 
-CAM = orbit(-9, 29, 60, (0.1, 0.0, 0.0), 34.5, (240, 145))
+CAM = orbit(-9, 29, 60, (0.1, 0.0, 0.0), 33.5, (240, 147))
 
 # the box (world units): long axis x, lid at y = 0, front face at z = BZ0 facing the camera
 BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.7, 4.7, -0.9, 0.0, -1.35, 1.05
@@ -158,15 +158,15 @@ CRANK_R = 1.12
 # Eight birds on four tiers, two a tier, the pair on a tier always more than a bird's length
 # apart along the slot (their offsets differ by 1.2), so they can't touch at any cohere.
 # offset o (-1..1) along the flock's spread, tier height (rod length above the lid), a small jitter.
-# Neighbours along the slot are always at least one tier (0.66, more than a bird's height) apart.
-TIER = {"A": 0.95, "B": 2.27, "C": 1.61, "D": 2.93}
+# Neighbours along the slot are always at least one tier (0.7, more than a bird's height) apart.
+TIER = {"A": 0.9, "B": 2.3, "C": 1.6, "D": 3.0}
 BIRDS = [(-1.00, "A", 0.00), (-0.75, "B", 0.03), (-0.45, "C", 0.00), (-0.20, "D", -0.03),
          (0.20, "A", 0.03), (0.45, "B", -0.02), (0.75, "C", 0.02), (1.00, "D", 0.00)]
 # scatter: these three break away (slide out along the slot and lean out); sign = which way
 STRAYS = {0: -1, 1: -1, 7: +1}
 LEAN_MAX = math.radians(32)
 SLIDE_MAX = 0.9
-BIRD_LEN = 0.95                                # world units, beak to tail
+BIRD_LEN = 0.9                                # world units, beak to tail
 
 
 def spread(cohere: float) -> float:
@@ -223,13 +223,13 @@ BODY = [(0.54, 0.13), (0.54, 0.115), (0.43, 0.09), (0.38, 0.05), (0.30, -0.03), 
         (-0.38, 0.13), (-0.20, 0.15), (-0.02, 0.17), (0.12, 0.175), (0.20, 0.19), (0.28, 0.26),
         (0.38, 0.26), (0.45, 0.19)]
 SHOULDER = (0.08, 0.13)
-WING = [(-0.02, -0.04), (0.15, -0.055), (0.35, -0.045), (0.52, -0.012), (0.52, 0.012), (0.33, 0.05),
-        (0.13, 0.07), (-0.02, 0.05)]           # along +u from the shoulder; +v is the leading edge
+WING = [(-0.03, -0.045), (0.16, -0.06), (0.40, -0.05), (0.60, -0.014), (0.60, 0.014), (0.38, 0.06),
+        (0.14, 0.085), (-0.03, 0.06)]           # along +u from the shoulder; +v is the leading edge
 
 
 def wing_angle(speed: float) -> float:
     """Degrees from the beak direction, anticlockwise: folded along the back at 0.25, raised at 4.00."""
-    return 178 - 72 * speed
+    return 184 - 72 * speed
 
 
 def _place(pts, top, lean, bob):
