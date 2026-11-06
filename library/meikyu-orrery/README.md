@@ -8,7 +8,7 @@
 | Author | Brian Hinton (thoughtgrain) · MIT |
 | Pattern | P12 Orrery (from `opxy/patterns.md`) |
 | Audit | **not audited**: kept as a pattern reference |
-| Device | **needs the player page to bind nodes** (today a player page is 24 on/off dots); device pending |
+| Device | needs to run where it can bind nodes: the stock player page is 24 on/off dots, but a track-control synth on aux track 12 (open-xy SDK 1.9) draws its own page; device pending |
 | Source | `screens/meikyu/concepts/orrery3.py` (scene, camera, layout), `orrery4.py` (page, motion, demo), `planet_kinds.py`; render with `MEIKYU_VARIANT=no-belt python3 orrery4.py <tmpdir>` |
 | Video | [meikyu-orrery.mp4](meikyu-orrery.mp4): the real player logic (a port of `press()`) with a stand-in voice |
 

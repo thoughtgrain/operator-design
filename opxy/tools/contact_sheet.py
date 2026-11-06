@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tile a machine's frames into one contact sheet at 1:1.
 
-PR #260's ux.md (open, kept here as a house rule) asks for a contact sheet of every control at 0, 50 and 100, judged at
+open-xy's ux.md (Before you submit) asks for a contact sheet of every control at 0, 50 and 100, judged at
 1:1. This lays frames out as one row per control (c<N>-000/050/100), with
 rest and playing frames on the first row, each at exactly 480 x 220, labelled
 underneath. Output is SVG; if rsvg-convert is installed, a PNG at 1:1 too.

@@ -418,6 +418,32 @@ class TestOpenXYSync(unittest.TestCase):
         self.assertNotIn("more than 16 text slots need sdk 1.7+", errs)
         self.assertFalse(self.lint_def(defn, "1.8") & {"more than 256 nodes need sdk 1.8+"})
 
+    def test_staging_definition_fields(self):
+        base = json.loads((ROOT / "screens/toro/definition.json").read_text(encoding="utf-8"))
+        hide = dict(base, hidePages=["envelope"])
+        self.assertIn("hidePages needs sdk 1.9+", self.lint_def(hide, "1.8"))
+        self.assertFalse(self.lint_def(hide, "1.9"))
+        tc = json.loads(json.dumps(base))
+        tc["resources"]["trackControl"] = {"stateBytes": 16, "stateAlignment": 4, "unique": True, "aux": [12]}
+        self.assertFalse(self.lint_def(tc, "1.9"))
+        tc["resources"]["trackControl"]["aux"] = [9]
+        self.assertTrue(any("aux lists [12]" in e for e in self.lint_def(tc, "1.9")))
+
+    def test_mutable_outline_may_keep_a_fill(self):
+        src = (ROOT / "screens/toro/frames/rest.svg").read_text(encoding="utf-8")
+        d = Path(tempfile.mkdtemp(dir=ROOT / "screens"))
+        try:
+            import re as _re
+            m = _re.search(r'(<path id="toro_node_0"[^>]*?)fill="none"', src)
+            if not m:
+                self.skipTest("toro's node 0 isn't a hollow mutable outline")
+            (d / "f.svg").write_text(src.replace(m.group(0), m.group(1) + 'fill="#323232"', 1))
+            defn = str(ROOT / "screens/toro/definition.json")
+            _, r = call("lint_frames", {"paths": str(d / "f.svg"), "definition": defn, "two_page": True})
+            self.assertNotIn("mutable-topology", [x["rule"] for x in r["byRule"] if x["level"] == "error"])
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
     def test_sdk_test_without_a_checkout(self):
         os.environ.pop("OPXY_SDK", None)
         err, text = call("sdk_test", {"machine": "screens/toro"})

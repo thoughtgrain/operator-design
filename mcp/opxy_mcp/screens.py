@@ -265,7 +265,7 @@ def audit_run(material_dir: str, scores: list[int] | None = None, names: list[st
             "report": rel(report_path) if report_path else None,
             "byEye": ["contact sheet at 1:1: one subject, every control reads, no dashboard",
                       "craft review beside a reference (opxy/craft.md)", "accessibility checklist",
-                      "motion", "before you submit (PR #260 checklist)", "rights: author confirms it's theirs to share"]}
+                      "motion", "ux.md before you submit", "rights: author confirms it's theirs to share"]}
 
 
 def _audit_report(name, results, author, licence, automated, blockers) -> str:
@@ -292,7 +292,7 @@ def _audit_report(name, results, author, licence, automated, blockers) -> str:
     p = results.get("perceptibility")
     lines.append("| Perceptibility | " + ("not checked" if p is None else "pass" if p["pass"] else "under on: " + ", ".join(p["under"])) + " | table below |")
     lines += ["| Contact sheet, by eye | not checked | `contact.png` |", "| Accessibility checklist | not checked | |",
-              "| Motion | not checked | |", "| Before you submit (PR #260 checklist) | not checked | |", ""]
+              "| Motion | not checked | |", "| ux.md before you submit | not checked | |", ""]
     if p:
         lines += ["### Perceptibility", "", "| control | score | need % | 0→100 % | 0→50 % | 50→100 % | span | |",
                   "| --- | --- | --- | --- | --- | --- | --- | --- |"]
