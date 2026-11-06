@@ -79,7 +79,7 @@ Grey is the default here, on purpose. The OP-XY's own screens are grey, and the 
 | Fills | Only elements authored with a fill ever fill; paint recolours a fill but never adds or removes one. A mutable outline authored `fill="none"` draws hollow; one authored with an explicit `#RRGGBB` fill stays filled, and may only have one when its geometry encloses area | [display] |
 | Subpaths | Every `path`, bound or not: one subpath, ≤ 64 points | [display] |
 | Touching parts | Parts that meet share one outline or the same pivot/transform | [display] |
-| Bound path shape | Exactly `M`, `points − 1` × `L`, `Z`; no fill; every point distinct | [display] |
+| Bound path shape | Exactly `M`, `points − 1` × `L`, `Z`; `fill="none"`, or an explicit `#RRGGBB` fill when the outline encloses area (Fills, above); every point distinct; every mutable outline in a frame has the same point count | [display] |
 | Bound transforms | `matrix(1 0 0 1 x y)` or none | [display] |
 | Mutable outline extent | Points within ±64 px of the node's origin (place the node, author points relative to it) | [display] |
 | Numbers | ≤ 4 fractional digits, no exponent notation | [display] |
