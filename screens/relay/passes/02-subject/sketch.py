@@ -515,6 +515,7 @@ def v3() -> Frame:
     drop = [ck * 1.6 * (rnd.random() - 0.5) * 2 for _ in range(n)]
     dented = {i for i in range(1, n - 1) if rnd.random() < lk * 0.5}
     top, wide, hang = 10.0, 3.2, 8.0
+    fx0, fx1 = -6.5, L + 6.5                   # the frame clears both swinging end balls
 
     out_a = math.radians(42)                   # the note leaving at the output end
     back_a = math.radians(6 + 34 * fb)         # what comes back round to the input
@@ -529,20 +530,19 @@ def v3() -> Frame:
         return (xs[i], 0, pivot_z - l), (xs[i], pivot_z)
 
     cam = Camera(eye=(L * 0.5 - 9, -42, 13), target=(L * 0.5, 0, 4))
-    cam.fit([(-2.5, -wide, -1), (L + 2.5, wide, -1), (-2.5, -wide, top + 0.4), (L + 2.5, wide, top + 0.4),
-             (-hang * 0.8, 0, 2), (L + hang * 0.8, 0, 2)], (34, 34, 446, 206))
+    cam.fit([(fx0, -wide, -1.6), (fx1, wide, -1.6), (fx0, -wide, top + 0.4), (fx1, wide, top + 0.4)], (34, 34, 446, 206))
 
     # the frame: base slab and two end posts, hatched mass on their shadow faces
-    base = box_corners((-2.5, -wide - 1, -1.6), (L + 5, 0, 0), (0, 2 * wide + 2, 0), (0, 0, 0.6))
+    base = box_corners((fx0, -wide - 1, -1.6), (fx1 - fx0, 0, 0), (0, 2 * wide + 2, 0), (0, 0, 0.6))
     for name, W, S in visible_faces(cam, base):
         fr.face(S, G3, LINE)
         if name == "y0":
             fr.hatch(S, G2)
     # back rail first (behind the balls), then strings, balls, front rail
     def rail(dy):
-        return [cam.p((-2.5, dy, top)), cam.p((L + 2.5, dy, top))]
+        return [cam.p((fx0, dy, top)), cam.p((fx1, dy, top))]
     posts = []
-    for px in (-2.5, L + 2.5):
+    for px in (fx0, fx1):
         for dy in (-wide, wide):
             posts.append((px, dy))
     for px, dy in posts:
