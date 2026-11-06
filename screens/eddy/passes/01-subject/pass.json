@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -54,7 +54,153 @@
       "brief": "Subject built on P12 Orrery; drawing language: patent section. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "drawing_language": "oscilloscope trace",
+      "subject": "The horn chamber cut through in plan and drawn by a scope beam: the twin horn is one bright trace on a graticule, its phosphor trail fading behind each mouth.",
+      "controls": [
+        "spin: the phosphor trail behind each horn mouth lengthens from 20 to 280 degrees of arc (shape: sweep), so a fast rotor leaves nearly a full ring of afterglow.",
+        "flutter: the trail's radius breaks into irregular ripples, up to 12 % of the horn length (shape), so the eddies show as a trail that no longer follows a clean circle.",
+        "depth: the horn grows from 36 to 86 px from the hub (uniform scale, 2.4x), because a longer horn is a larger doppler swing.",
+        "mix: the number of ghost horns the beam leaves behind the bright one, 0 to 4 (count, stepped in with an ease), so dry is a lone horn and full wet a fan of afterimages."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": "A rest frame is a single still horn; the trail is the only thing that says 'spinning', and at spin 0 it is a stub. Ghost horns at 1 px #4B4B4B-#646464 are faint at 1:1 and the count channel needs doubling to clear its floor (0-4 does, 1-2 would not). The graticule must stay at #323232-#4B4B4B or it turns into a dashboard. Effects get no notes, so motion only answers turns unless the host passes an input level."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "drawing_language": "typeset diagram",
+      "subject": "A typeset signal-path diagram on the left (input, rotor wheel, an eddy line feeding its speed, a dry/wet vane) beside the output trace of a steady tone whose cycles the doppler squeezes and stretches.",
+      "controls": [
+        "spin: the speed ticks set round the rotor wheel step from 3 to 24 (count), in column 1 under its label.",
+        "flutter: the eddy line feeding the rotor from below goes from a near-flat rule to a 16 px turbulent scrawl (shape), in column 1-2.",
+        "depth: the bright output trace's cycles bunch and spread around the grey dry tone, from identical at 0 to clearly frequency-modulated at 100 (shape, cycle ends move well over 16 px).",
+        "mix: the vane at the sum node turns 90 degrees from the dry contact to the wet one (rotation)."
+      ],
+      "reference": "opxy/reference/README.md",
+      "risks": "Two halves risk reading as a panel: the diagram has labels (in, rotor, dry, wet, eddies, out) and a vane that is close to a schematic switch symbol, which craft.md would call iconic. Spin as a tick count says 'faster' only by convention; the trace does not show rotor speed at all unless depth is up. The trace's 64-point budget over 220 px is coarse once flutter makes cycles irregular."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "drawing_language": "orthographic elevation",
+      "subject": "The path of the horn mouth through time drawn as a helix in orthographic elevation, front half-turns bright and back half-turns as hidden lines, projected from an end view of the rotor.",
+      "controls": [
+        "spin: the helix pitch tightens from 1 to 12 turns across the elevation (shape/count of half-turns).",
+        "flutter: the spacing between turns goes uneven, each half-turn shifted by up to a fifth of a turn (shape).",
+        "depth: the helix radius and the end-view circle grow together from 18 to 58 px (shape, ±40 px at the crests), with the r dimension following.",
+        "mix: the helix crossfades in from the left: at 0 the elevation is the flat axis (dry), and the point where the helix reaches full radius slides 374 px to the left edge at 100 (position)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "Read quickly at 1:1 it is a sine wave with alternate strokes greyed: exactly the 'oscilloscope says nothing new' pitfall P3 warns about. The elevation only reads as a helix if the eye catches the front/back weight change. Two paths (front and back runs) re-key on every spin, flutter and depth turn; runs split per half-turn could need more than 4 mutable outlines unless the helix is one 64-point path with shade per segment, which the device cannot do."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "drawing_language": "survey plan",
+      "subject": "Survey sheets of the rotor, one per past revolution, stacked back in time on a diagonal: the horn's bearing moves on from sheet to sheet, and the front sheet maps the horn's sound throw as contours.",
+      "controls": [
+        "spin: the bearing advance from one sheet to the next opens from 25 to 165 degrees (rotation of each back sheet's horn), so a fast rotor fans its bearings round the stack.",
+        "flutter: sheets slip out of register, up to 10 px off the diagonal and half a radian off their bearing (position), so turbulence reads as an untidy stack.",
+        "depth: the throw lobe on the front sheet reaches from 30 to 90 px (uniform scale, 3x).",
+        "mix: the stack grows from 2 to 5 sheets (count, stepping in with an ease), dry being the present sheet and one echo."
+      ],
+      "reference": "library/loom-pages",
+      "risks": "Mix as sheet count gives 2-5 items: under the count floor of 12, so it would need the step plus a second channel (stack depth offset) to pass. A stack of past revolutions shows history, but an effect has no notes, so nothing on screen moves until a knob turns and 'past revolutions' is a fiction at rest. Five overlapping circles plus contour lobes are on the edge of busy; bearing labels and the scale bar must stay #7D7D7D and sparse."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "drawing_language": "patent section",
+      "subject": "The rotary cabinet cut open as a patent section: one shaft carries the horn and the drum rotor on two orbits like a two-planet orrery, with louvred walls and reference numerals on leaders.",
+      "controls": [
+        "spin: phantom positions of the horn mouth trail along its orbit, from 1 to 13 (count), the stroboscopic way a patent drawing shows a part in motion.",
+        "flutter: the drum's orbit loses its circle, rippling by up to 14 % of its radius (shape).",
+        "depth: the horn's orbit radius grows from 60 to 120 px about the shaft (uniform scale, 2x), since radius is what makes the doppler.",
+        "mix: the louvres in both walls open from 10 to 70 degrees (rotation), letting the rotor's sound into the room."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "Stretch: P12 is a player/sequencer pattern, an orbit standing for a cycle of items. The exception is that a rotary speaker is a literal orrery: two bodies circling one shaft at two rates, so the orbits are the mechanism, not a metaphor, and nothing has to stand for steps. What doesn't fit: P12's life is constant calm orbiting, and an effect page has no notes and must be still at rest, so the 'planets' never travel unless a knob turns; the orbit is then just a drawing of the cabinet. The cabinet outline, hatched base and numerals push the frame toward 40 % black territory; louvres at 1:1 are 6 px slats and read as zigzags."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.16,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:26:08"
+  },
   "selection": null
 }

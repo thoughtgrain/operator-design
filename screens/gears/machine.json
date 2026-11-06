@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A track-control player on aux track 12: two meshed spur gears, each tooth that meshes plays a note on the target track; the wheels' tooth ratio sets a polyrhythm between their revolutions."
+}

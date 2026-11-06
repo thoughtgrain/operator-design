@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P3",
+  "drawing_language": "orthographic elevation",
+  "subject": "The path of the horn mouth through time drawn as a helix in orthographic elevation, front half-turns bright and back half-turns as hidden lines, projected from an end view of the rotor.",
+  "controls": [
+    "spin: the helix pitch tightens from 1 to 12 turns across the elevation (shape/count of half-turns).",
+    "flutter: the spacing between turns goes uneven, each half-turn shifted by up to a fifth of a turn (shape).",
+    "depth: the helix radius and the end-view circle grow together from 18 to 58 px (shape, ±40 px at the crests), with the r dimension following.",
+    "mix: the helix crossfades in from the left: at 0 the elevation is the flat axis (dry), and the point where the helix reaches full radius slides 374 px to the left edge at 100 (position)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "Read quickly at 1:1 it is a sine wave with alternate strokes greyed: exactly the 'oscilloscope says nothing new' pitfall P3 warns about. The elevation only reads as a helix if the eye catches the front/back weight change. Two paths (front and back runs) re-key on every spin, flutter and depth turn; runs split per half-turn could need more than 4 mutable outlines unless the helix is one 64-point path with shade per segment, which the device cannot do."
+}

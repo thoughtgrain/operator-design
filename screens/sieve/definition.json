@@ -6,10 +6,19 @@
     {
       "id": "mesh",
       "label": "Mesh",
-      "default": 0.0,
+      "default": 0.1429,
       "mapping": {
         "kind": "enum",
-        "labels": ["all", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"]
+        "labels": [
+          "all",
+          "2nd",
+          "3rd",
+          "4th",
+          "5th",
+          "6th",
+          "7th",
+          "8th"
+        ]
       },
       "display": "enum"
     },
@@ -48,7 +57,7 @@
     }
   ],
   "presets": {
-    "Octaves": {
+    "Octave": {
       "mesh": 0.1429,
       "shake": 0.0,
       "keep": 0.4,

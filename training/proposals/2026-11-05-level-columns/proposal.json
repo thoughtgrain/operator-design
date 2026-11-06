@@ -64,11 +64,24 @@
     }
   ],
   "changesHash": "a9a3aa1ef800eefe",
-  "state": "audit",
+  "state": "draft",
   "iteration": 2,
   "draftedBy": "claude-drafter@claude-code",
   "created": "2026-11-05T23:08:12",
-  "audit": null,
+  "audit": {
+    "verdict": "changes_requested",
+    "findings": [
+      "1. Authority (open-xy ux.md, Controls: 'Amounts are 0 to 100 without a percent sign'): the cited mock's values read 72%, 38%, 55%, 18%. Drop the percent sign in mock_columns.py, regenerate the SVG and PNG, and have 'The whole screen' bullet say the values follow ux.md's real-units rule (amounts 0–100, no %, about five characters, measured in the device font). The Shift-held enum labels go in the same slots, so they need measuring too.",
+      "2. False claim in 'Why it works' and the P8 bullet: 'the title and value sit exactly where the header would put them' / 'the header grown down the screen'. The stock template (open-xy sdk/platform/opxy-1.2.1/screen.svg; constraints.md Control columns) puts titles at (5+120i, 10) and values at (65+120i, 17.44), side by side in one 20 px band. The mock stacks them at x+8, with the title at y 16 and the value baseline at y 38. Either draw them at the stock positions or change the sentence to describe what the page actually does (same column width and the stock text colours, but stacked).",
+      "3. Text contrast (opxy/accessibility.md: text 4.5:1; it specifically warns about own-header small text over #4B4B4B–#7D7D7D). Column 2 puts its 10 px title and 20 px value in #CBCBCB on #646464 (3.65:1); stock keeps that column's title on #4B4B4B (5.4:1). On an off column the text also sits over hatching: #646464 strips behind column 1's #CBCBCB text, and black text over #646464 strips (3.55:1) in column 3. Keep the hatching out of the text band (start the strips below about y 44), and for column 2 either change something (its ground or its text) or add a sentence saying this is the stock header's own trade-off and why it's accepted.",
+      "4. Hatching contrast (opxy/accessibility.md: meaningful non-text parts 3:1). Hatching is the only cue that a column is off, since the bar stays where it was, yet strips two grey steps from the ground measure 2.17:1 (#646464 on #323232), 2.17:1 (#323232 on #646464), 2.0:1 (#646464 on #969696) and 1.86:1 (#969696 on #CDCDCD). The weakest case, column 4, is never shown. Pick strip greys that clear 3:1, for example #7D7D7D on column 1 (3.1:1) and black on columns 2–4 (3.55, 7.1, 13.2:1), the same rule the bar uses. Or state the exception with a reason. Then show every column hatched at 1:1, and say in the text why the hatching survives low contrast rather than just asserting it.",
+      "5. 'Off is hatching' calls the space between strips 'a black gap of about 5.6 px'. The gap is the column's own grey, not black; the 5.6 px figure itself is right (7.07 − 1.5).",
+      "6. The comment in mock_columns.py and mock-columns.svg says 'tap 3 switched off', but OFF = {0, 2} and the pattern text says taps 1 and 3. Make them agree."
+    ],
+    "by": "opxy-auditor@claude-code",
+    "at": "2026-11-05T23:26:14",
+    "changesHash": "a9a3aa1ef800eefe"
+  },
   "review": null,
   "gate": null,
   "approval": null,
@@ -119,6 +132,26 @@
       "stage": "audit",
       "by": "operator-design",
       "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T23:26:14",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 6
+    },
+    {
+      "at": "2026-11-05T23:26:14",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "note",
+      "note": "Reviewed iteration 2 in parallel with the audit: changes_requested, 4 findings (text contrast, hatch contrast, hatching out of the text band, strip direction and gap wording). Folded into iteration 3.",
+      "findings": [
+        "1. Column-2 text misses the text floor. #CBCBCB on #646464 is about 3.7:1 (accessibility.md calls this the stock header's weakest spot and asks for a check before putting your own small text on #4B4B4B-#7D7D7D). The checklist asks 4.5:1, and the value is read during play. Either change the ramp so every column's text clears 4.5:1 with the stock onDark/onLight greys (for example #CBCBCB on #4B4B4B is about 5.3:1, black on #7D7D7D about 5.1:1), or say plainly that P17 keeps the stock trade-off on purpose and why. Then give the actual ratios for all four columns.",
+        "2. Hatching misses the 3:1 non-text floor, and the 'survives low contrast' claim overstates it. Two palette steps give about 2.2:1 (#646464 on #323232 and #323232 on #646464), about 2.0:1 (#646464 on #969696) and about 1.9:1 (#969696 on #CDCDCD). Choose strip greys that clear 3:1 on each column (for example #7D7D7D on #323232 is about 3.2:1, #646464 on #CDCDCD about 3.7:1, #323232 on #969696 about 4.4:1), checking that the bar still reads on top. Or state the departure with a reason and soften the 'Why it works' sentence. Regenerate the mock to match.",
+        "3. Keep the hatching and its cover below the text band (for example from y 44 down) so the 10 px title and 20 px value never sit on strips. As a bonus, this reduces the strip count and shrinks the moving fill that's pending a device check. Update the strip count and the mock.",
+        "4. In 'Off is hatching', say which way the strips run (bottom-left to top-right, as mock_columns.py draws them) so every P17 screen hatches the same way. Also replace 'a black gap of about 5.6 px' with 'a gap of about 5.6 px in the column's own grey'."
+      ]
     }
   ]
 }

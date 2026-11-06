@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "pendula",
+  "name": "Pendula",
+  "parameters": [
+    {
+      "id": "length",
+      "label": "Length",
+      "default": 0.4771,
+      "mapping": {"kind": "exponential", "minimum": 0.4, "maximum": 4.0},
+      "display": "duration"
+    },
+    {
+      "id": "count",
+      "label": "Count",
+      "default": 0.3846,
+      "mapping": {"kind": "linear", "minimum": 3, "maximum": 16},
+      "display": "ratio"
+    },
+    {
+      "id": "swing",
+      "label": "Swing",
+      "default": 0.6,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "scale",
+      "label": "Scale",
+      "default": 0,
+      "mapping": {"kind": "enum", "labels": ["pent", "major", "minor", "dor", "hira", "chrom"]},
+      "display": "enum"
+    }
+  ],
+  "presets": {
+    "Wave": {"length": 0.4771, "count": 0.3846, "swing": 0.6, "scale": 0},
+    "Long drift": {"length": 0.8, "count": 0.6923, "swing": 0.4, "scale": 0.4}
+  },
+  "resources": {
+    "voiceBytes": 16,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 0,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    },
+    "trackControl": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "unique": true,
+      "aux": [12]
+    }
+  }
+}

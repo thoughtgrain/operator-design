@@ -13,11 +13,12 @@ outlines are used, and they share one point count (draw.hpp: every mutable outli
          Fill only, no stroke.
   close  the stretch between the markers, magnified, drawn the way the band is: two filled halves at scale 2,
          193 px each drawn (authored within +-48.25), overlapping 2 px (the same seam caveat). The same mapping,
-         stretched: x 48-432 is the stretch from begin to end. When the stretch has at least as many bins as the
-         half has points, each point takes the highest high and lowest low of the bin centres within half a
-         point-spacing, so a long stretch keeps its peaks. When it has fewer, every point takes the straight line
-         between the two nearest bin centres, so a short stretch is exactly the polyline through the real values,
-         with no plateaus. Never less than one bin. Fill only.
+         stretched: x 48-432 is the stretch from begin to end. When the stretch has at least 32 bins (so each
+         half's 16 points are at least a bin apart), each point takes the highest high and lowest low of the bin
+         centres within half a point-spacing, so a long stretch keeps its peaks. Below 32 bins, every point takes
+         the straight line between the two nearest bin centres: every point lies on a line between real values, so
+         nothing is invented and there are no plateaus, but a peak or trough at a bin centre between two points can
+         be shaved by a pixel or two at this scale. Never less than one bin. Fill only.
 
 Begin and end are two 5 px #969696 squares on the band's bottom edge. The band re-keys only when the overview's
 generation differs from the one stored (display_reset clears it, so the first frame after a reset redraws too). The

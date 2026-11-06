@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "id": "rain",
+  "name": "Rain",
+  "parameters": [
+    {
+      "id": "rate",
+      "label": "Rate",
+      "default": 0.4,
+      "mapping": {"kind": "exponential", "minimum": 0.25, "maximum": 8},
+      "display": "ratio"
+    },
+    {
+      "id": "roof",
+      "label": "Roof",
+      "default": 0.3333,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 36},
+      "display": "semitones"
+    },
+    {
+      "id": "gust",
+      "label": "Gust",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": -1, "maximum": 1},
+      "display": "bipolar"
+    },
+    {
+      "id": "puddle",
+      "label": "Puddle",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Drizzle": {"rate": 0.4, "roof": 0.3333, "gust": 0.5, "puddle": 0.0},
+    "Squall": {"rate": 0.8, "roof": 0.6667, "gust": 0.8, "puddle": 0.35},
+    "Eaves": {"rate": 0.2, "roof": 0.1667, "gust": 0.4, "puddle": 0.7}
+  },
+  "resources": {
+    "voiceBytes": 64,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "trackControl": {
+      "stateBytes": 256,
+      "stateAlignment": 4,
+      "savedBytes": 64,
+      "aux": [12],
+      "unique": true
+    },
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

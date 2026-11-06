@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P4",
+  "drawing_language": "survey plan",
+  "subject": "Survey sheets of the rotor, one per past revolution, stacked back in time on a diagonal: the horn's bearing moves on from sheet to sheet, and the front sheet maps the horn's sound throw as contours.",
+  "controls": [
+    "spin: the bearing advance from one sheet to the next opens from 25 to 165 degrees (rotation of each back sheet's horn), so a fast rotor fans its bearings round the stack.",
+    "flutter: sheets slip out of register, up to 10 px off the diagonal and half a radian off their bearing (position), so turbulence reads as an untidy stack.",
+    "depth: the throw lobe on the front sheet reaches from 30 to 90 px (uniform scale, 3x).",
+    "mix: the stack grows from 2 to 5 sheets (count, stepping in with an ease), dry being the present sheet and one echo."
+  ],
+  "reference": "library/loom-pages",
+  "risks": "Mix as sheet count gives 2-5 items: under the count floor of 12, so it would need the step plus a second channel (stack depth offset) to pass. A stack of past revolutions shows history, but an effect has no notes, so nothing on screen moves until a knob turns and 'past revolutions' is a fiction at rest. Five overlapping circles plus contour lobes are on the edge of busy; bearing labels and the scale bar must stay #7D7D7D and sparse."
+}
