@@ -533,10 +533,10 @@ def v4() -> Frame:
     struck = (4, 1)
     x0, x1 = -3.4, 4.2
     xs = [x0 + (x1 - x0) * q / 60 for q in range(61)]
-    for k in reversed(range(n)):
+    for k in range(n):                    # each course laps over the one below it
         s = k * e
         lower = [cam(P(x, s, 0.0)) for x in xs]
-        top = [cam(P(x, s + e * 1.6, 0.0)) for x in reversed(xs)]
+        top = [cam(P(x, s + e * 1.35, 0.0)) for x in reversed(xs)]
         fr.poly([cam(P(x, s, -thick)) for x in xs] + top, G0)
         near = k < 4
         # rolls carried up the slope: one hairline on each crest, inner structure
@@ -552,10 +552,10 @@ def v4() -> Frame:
             seg = [cam(P(x, s, 0.0)) for x in xs if j * W - 0.02 <= x <= (j + 1) * W + 0.02]
             fr.ribbon(seg, SUBJ + 0.5, G7)
     # drops coming down toward the roof: small closed teardrops
-    for x, s, hgt in ((-0.75, 6.2, 0.5), (1.45, 2.4, 0.45), (0.15, 3.4, 0.9)):
+    for x, s, hgt in ((-0.85, 3.3, 0.55), (1.6, 1.5, 0.5), (0.35, 2.3, 0.75)):
         base = P(x, s, hgt)
         o = cam(base)
-        k = cam.focal / cam.depth(base) * 0.06
+        k = max(5.0, cam.focal / cam.depth(base) * 0.07)
         tear = []
         for q in range(28):
             a = 2 * math.pi * q / 28
@@ -589,7 +589,7 @@ def v5() -> Frame:
         xs.append(x + r)
         x += 2 * r + gap
     shelf = 0.0
-    ey = 150.0
+    ey = 118.0
     cam.fit([(-total / 2 - 8, shelf - 10, 20), (total / 2 + 8, shelf - 10, 20), (0, ey, 0)],
             (14, 34, 466, 212))
 
@@ -599,9 +599,14 @@ def v5() -> Frame:
 
     W0, W1 = -400.0, 400.0
     # the eave above: a dark slab whose drip edge catches the light
-    fr.poly([cam((W0, ey, 0)), cam((W1, ey, 0)), cam((W1, ey + 60, 0)), cam((W0, ey + 60, 0))], G0)
-    fr.ribbon([cam((W0, ey, 0)), cam((W1, ey, 0))], LINE, G4)
-    fr.ribbon([cam((W0, ey + 8, 0)), cam((W1, ey + 8, 0))], HAIR, G2)
+    # the drip edge is the eave's row of tile noses, each a shallow arch, seen face on
+    pitch_w = 34.0
+    xa = W0
+    while xa < W1:
+        arch = [cam((xa + pitch_w * q / 12, ey + 6 * math.sin(math.pi * q / 12), 0)) for q in range(13)]
+        fr.ribbon(arch, LINE, G4)
+        xa += pitch_w
+    fr.ribbon([cam((W0, ey + 14, 0)), cam((W1, ey + 14, 0))], HAIR, G2)
     # the shelf: a plank running out of frame; top face hairline, front edge Line
     fr.ribbon([cam((W0, shelf, -30)), cam((W1, shelf, -30))], HAIR, G2)
     fr.ribbon([cam((W0, shelf, 30)), cam((W1, shelf, 30))], LINE, G3)
@@ -624,7 +629,7 @@ def v5() -> Frame:
     # drops falling from the drip edge into the pots, straight down in still air
     for i, frac in ((1, 0.35), (5, 0.6), (6, 0.15)):
         cxp, r = xs[i], radii[i]
-        yb = r * 1.75 + 16 + 70 * frac
+        yb = r * 1.75 + 14 + 40 * frac
         fr.ribbon([cam((cxp - r * 0.2, yb + 16, 0)), cam((cxp - r * 0.2, yb, 0))], LINE, G4)
     # the one that just rang: a short crown off the floor of the bright pot
     c = cam((xs[struck] - radii[struck] * 0.2, shelf + 4.5, 0))

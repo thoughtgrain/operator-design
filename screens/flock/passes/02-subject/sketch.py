@@ -324,7 +324,7 @@ def v1() -> Frame:
     cutaway explains the field: a bird skimming a reed's mouth blows it.
     """
     F = Frame("v1 · reed bed cut open · bold closed outlines")
-    cam = Camera((0.0, 6.6, -11.5), (0.2, 0.9, 0.0), 500, (240, 146))
+    cam = Camera((0.0, 10.0, -10.0), (0.0, 0.6, 0.0), 470, (244, 150))
     rnd = random.Random(4)
     n = N_DEG
     R = 0.27
@@ -460,7 +460,7 @@ def v3() -> Frame:
     F = Frame("v3 · one bird, exploded · exploded view")
     cam = Camera((-2.6, 8.4, -7.0), (0.3, 0.0, 0.25), 300, (236, 124))
     E = 3.3 * (0.18 + 0.36 * (1 - COHERE))               # explosion: cohere pulls the parts together
-    yaw = math.radians(8)
+    yaw = math.radians(-72)
     S_ = 3.3
 
     def P(p, off=(0, 0, 0)):
@@ -487,8 +487,9 @@ def v3() -> Frame:
 
     # wing: the arm (coverts) plus the primaries fanned from the wrist, each pulled out a little
     def wing(side):
-        arm = [(0.18, 0.04, 0.12), (0.24, 0.06, 0.32), (0.22, 0.08, 0.56), (0.06, 0.09, 0.66),
-               (-0.12, 0.09, 0.6), (-0.14, 0.06, 0.32), (-0.12, 0.04, 0.12)]
+        arm = [(0.17, 0.04, 0.12), (0.23, 0.05, 0.26), (0.25, 0.06, 0.4), (0.22, 0.08, 0.53), (0.13, 0.09, 0.62),
+               (0.03, 0.09, 0.66), (-0.08, 0.09, 0.63), (-0.12, 0.08, 0.52), (-0.11, 0.06, 0.38),
+               (-0.14, 0.05, 0.24), (-0.12, 0.04, 0.12)]
         arm = [(x, y, side * z) for x, y, z in arm]
         k = 5 if side < 0 else 6                  # degrees: low octave on the left, high on the right
         feathers = []
@@ -607,7 +608,7 @@ def v4() -> Frame:
 def v5() -> Frame:
     """A crank automaton: eight carved birds on rods over a comb; each rod's pick plucks the tine under it."""
     F = Frame("v5 · crank automaton · hatched mass")
-    cam = Camera((4.6, 4.0, -7.6), (0.3, 1.0, 0.0), 400, (222, 132))
+    cam = Camera((2.0, 4.5, -9.5), (0.6, 0.6, 0.0), 380, (230, 140))
     n = N_DEG
     BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.2, 4.2, -1.0, 0.0, -0.8, 0.8
 
