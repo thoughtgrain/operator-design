@@ -580,7 +580,150 @@ def v3() -> Frame:
     return fr
 
 
-VARIANTS = {"v1": v1, "v2": v2, "v3": v3}
+# ================================================================= v4
+def v4() -> Frame:
+    """A cutaway of the chip at work: an eight-pin bucket-brigade package with the top of
+    its moulding cut off, showing the die on its lead frame and the chain itself, a
+    meander of stages folded back and forth across the silicon, with the test note as a
+    lit stretch of it and a return trace carrying it round again. Edge-lit silhouette:
+    black bodies, a bright rim only on edges facing the light, section faces hatched."""
+    fr = Frame("v4 · the chip, cut open")
+    st, lk, ck, fb = D["stages"], D["leak"], D["clock"], D["feedback"]
+    rnd = random.Random(3)
+
+    Lx, Wy, Hz, cut_x, cut_z = 10.0, 6.4, 3.0, 3.4, 1.5
+    cam = Camera(eye=(19, -13, 15), target=(5.4, 3.2, 0.2))
+    cam.fit([(0, -1.4, -2.4), (Lx, -1.4, -2.4), (0, Wy + 1.4, Hz), (Lx, Wy + 1.4, Hz), (0, Wy + 1.4, -2.4)],
+            (40, 32, 450, 212))
+
+    def rim(S, edges, colour=G5, w=LINE):
+        for i in edges:
+            fr.line(S[i], S[(i + 1) % len(S)], w, colour)
+
+    pins = [1.25 + 2.5 * k for k in range(4)]
+
+    def lead(px, side):
+        y0, dy = (0.0, -1.0) if side == 0 else (Wy, 1.0)
+        sh = box_corners((px - 0.3, y0, 0.9), (0.6, 0, 0), (0, dy * 0.9, 0), (0, 0, 0.3))
+        leg = box_corners((px - 0.3, y0 + dy * 0.6, -2.4), (0.6, 0, 0), (0, dy * 0.3, 0), (0, 0, 3.6))
+        for c in (leg, sh):
+            for name, W, S in visible_faces(cam, c):
+                fr.face(S, G2, LINE)
+                if name == "z1":
+                    rim(S, [1, 2])
+
+    # back leads first, then the body, then the front leads
+    for px in pins:
+        lead(px, 1)
+    lower = box_corners((0, 0, 0), (Lx, 0, 0), (0, Wy, 0), (0, 0, cut_z))
+    upper = box_corners((0, 0, cut_z), (cut_x, 0, 0), (0, Wy, 0), (0, 0, Hz - cut_z))
+    for name, W, S in visible_faces(cam, lower):
+        if name == "z1":
+            fr.face(S, G2, LINE)
+            fr.hatch(S, G2, gap=4.0)          # the cut through the moulding
+        else:
+            fr.face(S, G2, LINE)
+    # lead-frame: paddle under the die and fingers running in to it, black metal over the section
+    pad = cam.ps([(4.1, 1.3, cut_z), (8.9, 1.3, cut_z), (8.9, 5.1, cut_z), (4.1, 5.1, cut_z)])
+    fr.face(pad, G3, LINE)
+    fingers = []
+    for px in pins:
+        if px > cut_x:
+            for side in (0, 1):
+                ya, yb = (0.0, 1.0) if side == 0 else (Wy - 1.0, Wy)
+                f_pts = cam.ps([(px - 0.3, ya, cut_z), (px + 0.3, ya, cut_z), (px + 0.3, yb, cut_z), (px - 0.3, yb, cut_z)])
+                fr.face(f_pts, G3, LINE)
+                fingers.append(((px, 0.85, cut_z) if side == 0 else (px, Wy - 0.85, cut_z)))
+    # the die
+    dx0, dx1, dy0, dy1, dz = 4.4, 8.6, 1.6, 4.8, cut_z + 0.25
+    die = box_corners((dx0, dy0, cut_z), (dx1 - dx0, 0, 0), (0, dy1 - dy0, 0), (0, 0, 0.25))
+    for name, W, S in visible_faces(cam, die):
+        fr.face(S, G3, LINE)
+        if name == "z1":
+            rim(S, [0, 1], G6)
+    # bond wires: hairline arcs from die-edge pads to the fingers
+    for fx, fy, fz in fingers:
+        py = dy0 + 0.25 if fy < Wy / 2 else dy1 - 0.25
+        px = min(max(fx, dx0 + 0.3), dx1 - 0.3)
+        arc_pts = []
+        for j in range(9):
+            t = j / 8
+            arc_pts.append(cam.p((px + (fx - px) * t, py + (fy - py) * t, dz + (fz - dz) * t + 0.9 * math.sin(math.pi * t))))
+        fr.ribbon(arc_pts, HAIR, G4)
+
+    # the chain: a meander of stages across the die, rows unevenly pitched when the clock wanders
+    rows = round(4 + 8 * st)                     # 4 .. 12 folds
+    ys, y = [], dy0 + 0.55
+    base = (dy1 - dy0 - 1.1) / (rows - 1)
+    for r in range(rows):
+        ys.append(y)
+        y += base * (1 + ck * 0.7 * (rnd.random() - 0.5) * 2)
+    scale_y = (dy1 - 0.55 - ys[0]) / (ys[-1] - ys[0])
+    ys = [ys[0] + (v - ys[0]) * scale_y for v in ys]
+    xa, xb = dx0 + 0.7, dx1 - 0.35
+    path = []
+    for r, yv in enumerate(ys):
+        a, b = (xa, xb) if r % 2 == 0 else (xb, xa)
+        path += [(a, yv, dz), (b, yv, dz)]
+    # return trace: from the last fold back down the die's left margin to the first
+    ret = [(xa if rows % 2 == 0 else xb, ys[-1], dz)]
+    ret = [path[-1], (xb + 0.0, ys[-1] + 0.0, dz)] if False else [path[-1], (xa - 0.35, ys[-1], dz), (xa - 0.35, ys[0], dz), path[0]]
+
+    def resample(P, step=0.12):
+        out = [P[0]]
+        for a, b in zip(P, P[1:]):
+            d = math.dist(a, b)
+            k = max(1, int(d / step))
+            out += [(a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k, a[2]) for j in range(1, k + 1)]
+        return out
+
+    chain = resample(path)
+    fr.ribbon(cam.ps(resample(ret, 0.5)), HAIR, G4)
+    # leaky stages: gaps in the meander, hatched patches where the charge escapes
+    gaps = sorted(rnd.sample(range(10, len(chain) - 10), 14))
+    gaps = [g for k, g in enumerate(gaps) if rnd.random() < lk * 0.8]
+    alive = [True] * len(chain)
+    for g in gaps:
+        for j in range(g - 2, g + 3):
+            alive[j] = False
+    run = []
+    for j, P in enumerate(chain):
+        if alive[j]:
+            run.append(cam.p(P))
+        elif run:
+            fr.ribbon(run, LINE, G3)
+            run = []
+    if run:
+        fr.ribbon(run, LINE, G3)
+    for g in gaps:
+        c = chain[g]
+        fr.hatch(cam.ps([(c[0] - 0.3, c[1] - 0.18, dz), (c[0] + 0.3, c[1] - 0.18, dz),
+                         (c[0] + 0.3, c[1] + 0.18, dz), (c[0] - 0.3, c[1] + 0.18, dz)]), G3, gap=3)
+    # the note and the passes still going round: lit stretches, one per audible pass
+    lv = passes(fb)
+    n = len(chain)
+    for k, a in reversed(list(enumerate(lv))):
+        s0 = int(n * (0.12 + 0.8 * k / max(1, len(lv))))
+        ln = int(10 + 6 * a)
+        seg = [cam.p(P) for j, P in enumerate(chain[s0:s0 + ln]) if alive[s0 + j]]
+        colour, w = (G7, SUBJ) if k == 0 else (G5, LINE)
+        fr.ribbon(seg, w, colour)
+
+    # the uncut top of the moulding, with its pin-1 dimple, rim-lit
+    for name, W, S in visible_faces(cam, upper):
+        fr.face(S, G2, LINE)
+        if name == "x1":
+            fr.hatch(S, G2, gap=4.0)         # the cut face
+        if name == "z1":
+            rim(S, [0, 1])
+    dimple = cam.ps(circle3((1.0, 1.0, Hz), 0.45, n=24)[:-1])
+    fr.face(dimple, G3, LINE)
+    for px in pins:
+        lead(px, 0)
+    return fr
+
+
+VARIANTS = {"v1": v1, "v2": v2, "v3": v3, "v4": v4}
 
 
 def main() -> None:

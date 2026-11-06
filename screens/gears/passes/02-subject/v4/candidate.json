@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "Two thick spur wheels on a low camera, meshed and lit from the upper left, their shaded flanks hatched in hairlines and their top faces left black, with B's web drilled through at the scale's seven of twelve positions.",
+  "controls": [
+    "ratio: B grows from A's twin at 1:1 to three times A at 3:1, its centre sliding back and right to stay in mesh (scale of B, with position).",
+    "teeth: A redraws with 3 to 16 teeth and B follows by the ratio, the faces and hatched flanks re-cut (shape).",
+    "mesh: teeth that don't engage are milled down to half the face width, their top faces stepping down so they visibly pass under the other wheel's teeth, in Euclidean order (shape: tooth height along the axis).",
+    "scale: B's drilled holes move to the new scale's positions; undrilled positions keep a small spot-face ring (position/count of holes)."
+  ],
+  "reference": "library/toro-blocks/README.md",
+  "risks": "The most literal and the most like a stock illustration of 'gears'; the hatching has to stay at 3.2 px spacing on flanks only a few px wide, so some flanks carry two or three lines and the hatch must be re-cut whenever a wheel turns (a moving fill, expensive); on the device the hatching would be static per tooth and the wheels turn by whole teeth. Holes at the scale's degrees sit on B's face, so their positions (not their count) carry the scale; seven drilled to five punched is the difference between scales of seven and five notes (pent shows two more blanks). The brightest edge is B's tooth in A's gap; it sits behind A's teeth and could be lost when A grows. Muted: B lifts off along its axis, its bright tooth goes out."
+}

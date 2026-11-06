@@ -23,6 +23,7 @@ FONT = "UniversNextPro-Light"
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2
+DEBUG = False
 
 # ---------------------------------------------------------------- the model
 DEFAULTS = {"settle": 0.5, "layers": 0.5, "stir": 0.35, "grain": 0.0}
@@ -289,11 +290,11 @@ def v1(c):
     s = Svg()
     n, stir, grain, sn = n_partials(c["layers"]), c["stir"], c["grain"], c["settle"]
     rad = [1.0 * k ** -0.32 for k in range(1, n + 1)]
-    thick = [0.07 * r + 0.035 for r in rad]
+    thick = [0.12 * r + 0.05 for r in rad]
     z, zs = 0.0, []
     for k in range(1, n + 1):
         zs.append(z)
-        gap = (0.02 + stir * 1.25 * lift(k + 1, n)) * 16 / max(n, 8)
+        gap = (0.06 + stir * 0.75 * lift(k + 1, n)) * 16 / max(n, 8)
         z += thick[k - 1] + gap
     slope = 1.25  # leader line runs up and downstream
     plates = []
@@ -335,6 +336,7 @@ def v1(c):
         bright = idx == len(plates) - 1
         s.poly(outline, fill=G0, stroke=G7 if bright else G5, sw=SUBJ if bright else LINE)
         rs = r * cam.ppu(ctop)
+        print('rs', k, round(rs,1)) if DEBUG else None
         if rs >= 6:
             s.loop(T, HAIR, G6 if bright else G4)
             # vertical edges on the front: top vertex below the face centre
@@ -376,16 +378,18 @@ def v2(c):
     for rr in (0.35, 0.68, 1.0):
         ring = [cam((sx + rr * math.cos(a / 40 * 2 * math.pi), rr * math.sin(a / 40 * 2 * math.pi), WS)) for a in range(40)]
         s.poly(ring, fill="none", stroke=G4, sw=LINE)
-    # plume: one curl per partial, in the vertical plane through the pebble
+    # plume: one billow per partial, in the vertical plane through the pebble; high partials
+    # ride highest, the column leans downstream for as long as the silt stays up
     lean = math.radians(4 + 36 * sn)
     circles = []
     for k in range(1, n + 1):
         L = lift(k, n)
-        h = 0.28 + stir * 2.1 * L + 0.05 * L
-        h = min(h, WS - 0.18)
-        x = sx + (h - 0.25) * math.tan(lean) + grain * 0.35 * jitter(k, 11)
+        h = 0.3 + stir * 2.1 * L
+        h = min(h, WS - 0.22)
+        rho = 0.12 + 0.13 * L ** 0.6
+        side = (1 if k % 2 else -1) * rho * 0.85 * min(1.0, 4 * L)
+        x = sx + (h - 0.3) * math.tan(lean) + side + grain * 0.4 * jitter(k, 11)
         zc = h + grain * 0.12 * jitter(k, 13)
-        rho = 0.14 + 0.2 * L ** 0.7
         circles.append((x, zc, rho))
     ctr = (sum(c_[0] for c_ in circles) / n, sum(c_[1] for c_ in circles) / n)
     outline = []
@@ -404,20 +408,21 @@ def v2(c):
     bed = [cam((x / 10, 0, bed_z(x / 10))) for x in range(-60, 80)]
     s.ribbon(bed, LINE, G5)
     s.poly(outline, fill=G0, stroke=G7, sw=LINE)
-    # the curls inside: a three-quarter turn each, one per partial
-    for (x, zc, rho) in circles:
-        rs = rho * cam.ppu((x, 0, zc)) * 0.5
-        if rs < 2.6:
-            continue
-        p0 = cam((x, 0, zc))
-        a0 = rng.uniform(0, 2 * math.pi)
-        pts = []
-        for j in range(18):
-            t = j / 17
-            a = a0 + t * 1.5 * math.pi
-            rr = rs * (0.45 + 0.55 * t)
-            pts.append((p0[0] + rr * math.cos(a), p0[1] + rr * math.sin(a)))
-        s.ribbon(pts, LINE, G5)
+    # inside: each billow's upper fold, hidden where a higher billow covers it
+    for i, (x, zc, rho) in enumerate(circles):
+        run = []
+        for j in range(25):
+            a = math.radians(200 + 120 * j / 24)
+            px, pz = x + rho * 0.97 * math.cos(a), zc + rho * 0.97 * math.sin(a)
+            covered = i == 0 or any((px - x2) ** 2 + (pz - z2) ** 2 < (r2 * 0.97) ** 2 for (x2, z2, r2) in circles[:i])
+            if covered:
+                if len(run) > 3:
+                    s.ribbon(run, LINE, G5)
+                run = []
+            else:
+                run.append(cam((px, 0, pz)))
+        if len(run) > 3:
+            s.ribbon(run, LINE, G5)
     peb = []
     for i in range(36):
         a = i / 36 * 2 * math.pi

@@ -767,63 +767,71 @@ def v2():
 # =============================================================================
 # v3 · single-weight contour: the trail the colony has left on the stone
 # =============================================================================
+def warp_x(X, Y):
+    """Hex X stretched by the scale: a cell is as wide as its step to the next degree."""
+    r = Y / RH
+    return pc(X + 1.5 * r) - pc(1.5 * r)
+
+
 def v3():
+    """No lattice, no crust: only the trail. Every birth since the first spore
+    is one line from parent to child, all at one weight, laid out on the
+    lattice as the scale stretches it. Where the cell it reached has since
+    died the line has worn through; this tick's two births are the bright
+    lines; the growing tips feel out towards free cells."""
     s = Svg()
-    pmax = pitch_of_degree(19)
+    u = 40.0
+    cx0 = sum(warp_x(*hexc(*c)) for c in LIVE | DEAD) / len(LIVE | DEAD)
 
     def pos(c):
-        o, r = c
-        return (44 + pitch(o, r) * 392 / pmax, 196 - r * 30)
+        X, Y = hexc(*c)
+        return (236 + (warp_x(X, Y) - cx0) * u, 196 - Y * u * 0.98)
 
-    # every birth since the start, parent to child, as one bent contour
-    links = []
-    for t in range(SNAP + 1):
-        for q, p in BIRTHS[t]:
-            links.append((t, q, p))
-    g = DEF["grow"]
+    links = [(t, q, p) for t in range(SNAP + 1) for q, p in BIRTHS[t] if p is not None]
+    g, dcy = DEF["grow"], DEF["decay"]
 
-    def curve(a, b, bend=0.18, n=14):
+    def curve(a, b, bend, n=12):
         mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
         dx, dy = b[0] - a[0], b[1] - a[1]
         cx, cy = mx - dy * bend, my + dx * bend
-        return [((1 - u) ** 2 * a[0] + 2 * (1 - u) * u * cx + u * u * b[0],
-                 (1 - u) ** 2 * a[1] + 2 * (1 - u) * u * cy + u * u * b[1]) for u in (k / n for k in range(n + 1))]
+        return [((1 - v) ** 2 * a[0] + 2 * (1 - v) * v * cx + v * v * b[0],
+                 (1 - v) ** 2 * a[1] + 2 * (1 - v) * v * cy + v * v * b[1]) for v in (k / n for k in range(n + 1))]
 
-    # the origin: where the first spore landed, a small closed ring
-    o0 = pos(START)
-    ring = [(o0[0] + 4 * math.cos(2 * math.pi * k / 18), o0[1] + 4 * math.sin(2 * math.pi * k / 18)) for k in range(19)]
-    s.line(ring, LINE, G4)
+    def bend_of(q, p):
+        return 0.16 if (q[0] * 7 + q[1] * 3 + p[0]) % 2 else -0.16
 
+    def ring(x, y, r, n=18):
+        return [(x + r * math.cos(2 * math.pi * k / n), y + r * math.sin(2 * math.pi * k / n)) for k in range(n + 1)]
+
+    # the first spore: a small closed contour where it all began
+    s.line(ring(*pos(START), 4.5), LINE, G4)
+    # older trail: solid where the cell still lives, worn through where it died (decay)
     for t, q, p in links:
-        if p is None:
+        if t == SNAP:
             continue
-        a, b = pos(p), pos(q)
-        pts = curve(a, b)
-        if q in BORN and t == SNAP:
-            continue
+        pts = curve(pos(p), pos(q), bend_of(q, p))
         if STATE[q] < 0:
-            # dead: the trail has worn through in places, the gaps opening with decay
-            s.dashed(pts, LINE, G3, 6 - 4 * DEF["decay"], 2 + 6 * DEF["decay"])
+            s.dashed(pts, LINE, G3, 7 - 4 * dcy, 2 + 6 * dcy)
         else:
             s.line(pts, LINE, G5)
-    # growing tips: from each live margin cell, short probes towards free neighbours (grow)
-    for c in LIVE:
+    # growing tips: probes from each living margin cell towards free cells (grow)
+    for c in sorted(LIVE):
         for q in nbrs(*c):
             if q in FREE:
                 a, b = pos(c), pos(q)
-                L = 0.12 + 0.5 * g
+                L = 0.14 + 0.5 * g
                 e = (a[0] + (b[0] - a[0]) * L, a[1] + (b[1] - a[1]) * L)
-                s.line(curve(a, e, 0.1, 6), LINE, G3)
-    # this tick's births: the one bright line
+                s.line([a, e], LINE, G3)
+    # this tick's births: the bright lines, each closed off at the cell it reached
     for t, q, p in links:
-        if t == SNAP and p is not None:
-            s.line(curve(pos(p), pos(q)), LINE, G7)
-    # spores: a closed contour where each will land, with its fall drawn in from above
+        if t == SNAP:
+            s.line(curve(pos(p), pos(q), bend_of(q, p)), LINE, G7)
+            s.line(ring(*pos(q), 3.0, 14), LINE, G7)
+    # spores: where each will land, a ring, with its fall dashed in from above (seed)
     for c in SPORES:
         x, y = pos(c)
-        ring = [(x + 3 * math.cos(2 * math.pi * k / 14), y + 3 * math.sin(2 * math.pi * k / 14)) for k in range(15)]
-        s.line(ring, LINE, G4)
-        s.dashed([(x, y - 24), (x, y - 6)], LINE, G3, 3, 3)
+        s.line(ring(x, y, 3.0, 14), LINE, G4)
+        s.dashed([(x, y - 28), (x, y - 6)], LINE, G3, 3, 3)
     s.save(HERE / "v3" / "rest.svg")
 
 
@@ -908,122 +916,135 @@ def v4():
 
 
 # =============================================================================
-# v5 · edge-lit silhouette: the lichen itself, a foliose rosette on stone
+# v5 · edge-lit silhouette: the lichen itself, a foliose thallus on stone
 # =============================================================================
 def v5():
+    """The lichen drawn as a lichen: a leafy thallus lying on stone, a black
+    silhouette lit along the edges that face the light, with a thickness
+    shadow under it. Every living margin cell puts out lobes that fork at the
+    tip; the dead centre is a hole hatched with the old crust; fruiting cups
+    sit where the colony's next step up is a half step; spores lie downwind."""
     s = Svg()
-    cam = Cam((5.6, -6.2, 8.4), (5.6, 2.3, 0), 285, 240, 120)
+    cam = Cam((5.4, -3.6, 9.4), (5.4, 2.2, 0), 300, 236, 122)
     P = cam.p
     g = DEF["grow"]
-    cen = (sum(hexc(*c)[0] for c in LIVE) / len(LIVE), sum(hexc(*c)[1] for c in LIVE) / len(LIVE))
-    blobs = []
-    for c in LIVE:
-        x, y = hexc(*c)
-        blobs.append((x, y, 0.5, 1.0))
+    cells = LIVE
+    cen = (sum(hexc(*c)[0] for c in cells) / len(cells), sum(hexc(*c)[1] for c in cells) / len(cells))
+
+    discs = [(*hexc(*c), 0.5) for c in cells]
+    caps = []                                  # lobes: from each margin cell outward, widening to the tip
+    jr = random.Random(5)
+    for c in sorted(cells):
         frees = [q for q in nbrs(*c) if q in FREE]
+        if not frees:
+            continue
+        x, y = hexc(*c)
         for q in frees:
             bx, by = hexc(*q)
-            dx, dy = bx - x, by - y
-            for k, (t, sg) in enumerate(((0.32, 0.27), (0.5 + 0.2 * g, 0.2), (0.62 + 0.45 * g, 0.14))):
-                blobs.append((x + dx * t, y + dy * t, sg, 0.75))
-    holes = [hexc(*c) for c in DEAD]
+            nx_, ny_ = norm((bx - x, by - y, 0))[:2]
+            rx, ry = norm((x - cen[0], y - cen[1], 0))[:2]
+            ang = math.atan2(ny_ * 0.6 + ry * 0.4, nx_ * 0.6 + rx * 0.4) + jr.uniform(-0.25, 0.25)
+            L = 0.42 + 0.6 * g + jr.uniform(0, 0.18)
+            tip = (x + math.cos(ang) * L, y + math.sin(ang) * L)
+            caps.append(((x, y), tip, 0.13, 0.19))
+            for sgn in (-1, 1):                # crenate tip: two short rounded lobules
+                a2 = ang + sgn * 0.5
+                caps.append((tip, (tip[0] + math.cos(a2) * 0.13, tip[1] + math.sin(a2) * 0.13), 0.15, 0.12))
+    holes = [(*hexc(*c), 0.36) for c in DEAD]
 
-    def field(x, y):
-        v = 0.0
-        for bx, by, sg, w in blobs:
-            d2 = (x - bx) ** 2 + (y - by) ** 2
-            if d2 < 9 * sg * sg:
-                v += w * math.exp(-d2 / (sg * sg))
-        for hx, hy in holes:
-            d2 = (x - hx) ** 2 + (y - hy) ** 2
-            if d2 < 1.2:
-                v -= 0.95 * math.exp(-d2 / 0.13)
-        return v
+    def capsule(px, py, a, b, ra, rb):
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        t = max(0.0, min(1.0, ((px - a[0]) * dx + (py - a[1]) * dy) / (dx * dx + dy * dy)))
+        return math.hypot(px - a[0] - dx * t, py - a[1] - dy * t) - (ra + (rb - ra) * t)
 
-    loops = contours(field, -0.5, -0.8, 12.5, 5.6, step=0.05, level=0.55)
-    # outward normal from the field gradient, light from the upper left of the screen
-    L = (-0.55, -0.83)
+    def smin(a, b, k=0.12):
+        h = max(0.0, min(1.0, 0.5 + 0.5 * (b - a) / k))
+        return b + (a - b) * h - k * h * (1 - h)
 
-    def outward(x, y):
-        e = 0.02
-        gx = field(x + e, y) - field(x - e, y)
-        gy = field(x, y + e) - field(x, y - e)
-        return (-gx, -gy)
+    def sdf(x, y):
+        d = 9.0
+        for dx, dy, r in discs:
+            d = smin(d, math.hypot(x - dx, y - dy) - r)
+        for a, b, ra, rb in caps:
+            if abs(x - a[0]) < 1.6 and abs(y - a[1]) < 1.6:
+                d = smin(d, capsule(x, y, a, b, ra, rb), 0.08)
+        for hx, hy, r in holes:
+            d = max(d, -(math.hypot(x - hx, y - hy) - r) + 0.0)
+        return d
+
+    loops = contours(lambda x, y: -sdf(x, y), 0.8, -1.4, 10.4, 6.4, step=0.045, level=0.0)
+    Lt = (-0.5, -0.86)                          # light from the upper left of the screen
 
     born_pts = [hexc(*c) for c in BORN]
     sl = []
     for lp in loops:
-        lp = resample(lp, max(24, min(400, int(len(lp)))))
         scr = [P((x, y, 0.0)) for x, y in lp]
-        mx, my = sum(p[0] for p in lp) / len(lp), sum(p[1] for p in lp) / len(lp)
         sl.append((lp, scr, abs(area(scr))))
     sl.sort(key=lambda t: -t[2])
-    outer = [t for t in sl if not any(inpoly(t[1][0], o[1]) for o in sl if o is not t and o[2] > t[2])]
+    outer = [t for t in sl if not any(o[2] > t[2] and inpoly(t[1][0], o[1]) for o in sl)]
     inner = [t for t in sl if t not in outer]
-    # thickness: the shadow edge under the lit edge, 3 px down
+    # the thallus's thickness: its edge shadowed 3 px below, then the black body over it
     for lp, scr, _ in outer:
         s.poly([(x, y + 3) for x, y in scr], fill=G0, stroke=G2, sw=HAIR)
-        s.poly(scr, fill=G0, stroke=G2, sw=HAIR)
-    # the dead centre: hatched, the old crust that's there but no longer living
-    for lp, scr, _ in inner:
+    for lp, scr, _ in outer:
         s.poly(scr, fill=G0, stroke="none")
+    # the dead centre: a hole, hatched with the old crust still lying in it
+    for lp, scr, _ in inner:
         hatch_fixed(s, [scr], G2, 4.0)
-    # lobe ridges: one hairline down each lobe, tip to base
-    for c in LIVE:
-        x, y = hexc(*c)
-        for q in nbrs(*c):
-            if q in FREE:
-                bx, by = hexc(*q)
-                dx, dy = bx - x, by - y
-                pts = [P((x + dx * t, y + dy * t, 0)) for t in (0.08, 0.3, 0.42 + 0.35 * g)]
-                s.line(pts, HAIR, G3)
-    # apothecia: fruiting cups on cells a half step below their neighbour (scale)
+    # lobe ridges: one hairline along each lobe
+    for a, b, ra, rb in caps:
+        if ra > 0.14:
+            continue
+        pts = [P((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, 0)) for t in (0.45, 0.7, 0.88)]
+        s.line(pts, HAIR, G3)
+    # apothecia: fruiting cups on living cells whose next degree is a half step up (scale)
     for c in sorted(LIVE):
         if semitone_after(degree(*c)) and c not in BORN:
             x, y = hexc(*c)
-            cup = [P((x + 0.17 * math.cos(2 * math.pi * k / 20), y + 0.17 * math.sin(2 * math.pi * k / 20), 0))
-                   for k in range(20)]
-            s.poly(cup, fill=G0, stroke=G4, sw=LINE)
-            lit = [P((x + 0.11 * math.cos(math.radians(a)), y + 0.11 * math.sin(math.radians(a)), 0))
-                   for a in range(200, 341, 20)]
+            cup = [P((x + 0.19 * math.cos(2 * math.pi * k / 22), y + 0.19 * math.sin(2 * math.pi * k / 22), 0))
+                   for k in range(22)]
+            s.poly(cup, fill=G0, stroke=G3, sw=LINE)
+            lit = [P((x + 0.12 * math.cos(math.radians(a)), y + 0.12 * math.sin(math.radians(a)), 0))
+                   for a in range(-20, 181, 20)]
             s.line(lit, HAIR, G5)
-    # rims: lit where the edge faces the light, bright where a lobe was just born
+    # rims: lit where the edge faces the light, brightest where a lobe was just born
     for group in (outer, inner):
         for lp, scr, _ in group:
             n = len(lp)
             cls = []
             for i in range(n):
-                ox, oy = outward(*lp[i])
-                a, b = scr[i - 1], scr[(i + 1) % n]
-                tx, ty = b[0] - a[0], b[1] - a[1]
-                # screen normal: pick the side the world outward normal projects to
-                w0 = P((lp[i][0], lp[i][1], 0))
-                w1 = P((lp[i][0] + ox * 0.05 / (math.hypot(ox, oy) or 1), lp[i][1] + oy * 0.05 / (math.hypot(ox, oy) or 1), 0))
+                x, y = lp[i]
+                e = 0.02
+                gx = sdf(x + e, y) - sdf(x - e, y)
+                gy = sdf(x, y + e) - sdf(x, y - e)
+                ln = math.hypot(gx, gy) or 1
+                w0 = scr[i]
+                w1 = P((x + gx / ln * 0.05, y + gy / ln * 0.05, 0))
                 nx, ny = w1[0] - w0[0], w1[1] - w0[1]
-                ln = math.hypot(nx, ny) or 1
-                lit = (nx * L[0] + ny * L[1]) / ln
-                near_born = any(math.dist(lp[i], bp) < 0.62 for bp in born_pts) and group is outer
-                cls.append(3 if near_born else (2 if lit > 0.35 else (1 if lit > -0.2 else 0)))
-            style = {3: (SUBJ, G7), 2: (LINE, G5), 1: (HAIR, G4), 0: None}
+                lit = (nx * Lt[0] + ny * Lt[1]) / (math.hypot(nx, ny) or 1)
+                near_born = group is outer and any(math.dist(lp[i], bp) < 0.75 for bp in born_pts)
+                if near_born and lit > -0.3:
+                    cls.append(3)
+                else:
+                    cls.append(2 if lit > 0.3 else (1 if lit > -0.35 else 0))
+            style = {3: (SUBJ, G7), 2: (LINE, G5), 1: (HAIR, G4), 0: (HAIR, G3)}
             i0 = next((i for i in range(n) if cls[i] != cls[i - 1]), 0)
             runs, cur = [], [i0]
             for k in range(1, n + 1):
                 i = (i0 + k) % n
-                if cls[i] == cls[cur[0]] and k < n:
-                    cur.append(i)
-                else:
-                    cur.append(i)
+                cur.append(i)
+                if cls[i] != cls[cur[0]] or k == n:
                     runs.append((cls[cur[0]], cur))
                     cur = [i]
             for cl, idx in runs:
                 st = style[cl]
-                if st:
-                    s.line([scr[i] for i in idx], st[0], st[1])
-    # spores: released downwind of the rosette (seed)
-    for k, c in enumerate(SPORES):
+                s.line([scr[i] for i in idx], st[0], st[1])
+    # spores: lying on bare stone (seed)
+    for c in SPORES:
         x, y = hexc(*c)
+        x = min(x, 9.6)
         p = P((x, y, 0.0))
-        s.disc(p[0], p[1], 1.8, fill=G4)
+        s.disc(p[0], p[1], 2.0, fill=G4)
     s.save(HERE / "v5" / "rest.svg")
 
 

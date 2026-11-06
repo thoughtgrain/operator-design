@@ -324,15 +324,25 @@ BELL_H = 1.45   # height / lip radius
 # woollen grips and the ropes between are drawn. A sally's height is its
 # bell's place in the change: the lowest is being pulled now.
 # ======================================================================
+def clip_y(a, b, y0=21.0, y1=219.0):
+    """Screen segment a-b cut to the band y0..y1 (a projected straight line stays straight)."""
+    (ax, ay), (bx, by) = a, b
+    t0, t1 = 0.0, 1.0
+    if abs(by - ay) > 1e-9:
+        ta, tb = (y0 - ay) / (by - ay), (y1 - ay) / (by - ay)
+        t0, t1 = max(0.0, min(ta, tb)), min(1.0, max(ta, tb))
+    return (ax + (bx - ax) * t0, ay + (by - ay) * t0), (ax + (bx - ax) * t1, ay + (by - ay) * t1)
+
+
 def v1():
     fr = Frame("v1 sallies at large scale")
     pitch = 4.0
     xs = [(i - (N - 1) / 2) * pitch for i in range(N)]
-    amp = 4.2 * (PACE / 2.0) ** -0.35            # pace: how far the wave of sallies spreads
-    rs, rr, L = 0.62, 0.2, 7.0                   # sally radius, rope radius, sally length
-    cam = Camera((0, 3.4, -30), (0, 0, 0))
+    amp = 4.0 * (PACE / 2.0) ** -0.35            # pace: how far the wave of sallies spreads
+    rs, rr, L = 0.95, 0.24, 7.4                  # sally radius, rope radius, sally length
+    cam = Camera((0, 3.0, -34), (0, 1.2, 0))
     span_x = xs[-1] + pitch / 2
-    cam.fit([(-span_x, -L / 2 - 0.4, 0), (span_x, amp + L / 2 + 0.4, 0)], (34, 32, 446, 206))
+    cam.fit([(-span_x, -L / 2 - 0.2, 0), (span_x, amp + L / 2 + 0.2, 0)], (24, 28, 456, 210))
 
     def sally_y(b):
         y = (PLACE[b] - 1) / (N - 1) * amp
@@ -341,50 +351,50 @@ def v1():
         return y
 
     def radius_at(t):
-        """Radius along the sally, t from 0 (bottom) to L (top): tapers into the rope at both ends."""
-        taper = 0.9
+        taper = 1.0
         if t < taper:
             return rr + (rs - rr) * math.sin(t / taper * math.pi / 2)
         if t > L - taper:
             return rr + (rs - rr) * math.sin((L - t) / taper * math.pi / 2)
         return rs
 
-    for i, b in enumerate(ROW if False else range(1, N + 1)):
+    for i in range(N):
+        b = i + 1                                 # ropes hang in bell order round the room
         x = xs[i]
-        y0 = sally_y(b) - L / 2                   # sally bottom
+        y0 = sally_y(b) - L / 2
         bright = PLACE[b] == 1
         edge, sw = (G7, SUBJ) if bright else (G5, LINE)
         band = G5 if bright else G3
         rope = G4 if bright else G3
-        # rope above, out of the top edge; rope below to the tail end, out of the bottom edge
-        for ya, yb in ((y0 + L - 0.1, 40.0), (-40.0, y0 + 0.1)):
-            pa, pb = cam.p((x - rr, ya, 0)), cam.p((x - rr, yb, 0))
-            qa, qb = cam.p((x + rr, ya, 0)), cam.p((x + rr, yb, 0))
-            top = max(pa[1], pb[1]) if ya > yb else min(pa[1], pb[1])
-            pts = [pa, pb, qb, qa]
-            pts = [(px, min(max(py, 21.0), 219.0)) for px, py in pts]
-            fr.shape(pts, rope, HAIR)
-            # the rope's lay: short diagonal hairlines along it, 6 px apart
-            ylo, yhi = sorted((pts[0][1], pts[1][1]))
-            xl, xr_ = pts[0][0], pts[2][0]
-            yy = ylo + 3
-            while yy < yhi - 4:
-                fr.line((xl + 0.8, yy + 2), (xr_ - 0.8, yy - 1), HAIR, G2)
-                yy += 6
-        # the sally: outline from its tapered silhouette
+        # rope above to the ceiling and below to the tail end, both out of the frame
+        for ya, yb in ((y0 + L - 0.15, 30.0), (-30.0, y0 + 0.15)):
+            la, lb = clip_y(cam.p((x - rr, ya, 0)), cam.p((x - rr, yb, 0)))
+            ra, rb = clip_y(cam.p((x + rr, ya, 0)), cam.p((x + rr, yb, 0)))
+            fr.shape([la, lb, rb, ra], rope, HAIR)
+            # the rope's lay: short diagonal hairlines across it, 6 px apart
+            n = int(abs(lb[1] - la[1]) // 6)
+            for k in range(1, n):
+                t = k / n
+                pl = (la[0] + (lb[0] - la[0]) * t, la[1] + (lb[1] - la[1]) * t)
+                pr = (ra[0] + (rb[0] - ra[0]) * t, ra[1] + (rb[1] - ra[1]) * t)
+                fr.line((pl[0] + 1.2, pl[1] + 1.6), (pr[0] - 1.2, pr[1] - 1.6), HAIR, G2)
+        # the sally: its tapered silhouette over black
         ts = [k * L / 40 for k in range(41)]
         left = [cam.p((x - radius_at(t), y0 + t, 0)) for t in ts]
         right = [cam.p((x + radius_at(t), y0 + t, 0)) for t in ts]
-        outline = left + right[::-1]
-        fr.shape(outline, edge, sw)
-        # the woollen bands: front halves of rings round the cylinder, bending with the view
-        t = 1.2
+        fr.shape(left + right[::-1], edge, sw)
+        # the tufted wool: helical stripes, front halves only, the way they wrap the grip
+        hp = 1.9                                  # helix pitch (world units per turn)
+        y = 1.05
         k = 0
-        while t < L - 1.1:
-            ring = [cam.p(p) for p in ring3((x, y0 + t, 0), rs * 0.985, 32)]
-            arc = split_arc(ring, front=cam.pos[1] > y0 + t)
-            fr.ribbon(arc, HAIR if k % 3 else LINE, band if k % 3 else edge)
-            t += 0.42
+        while y + hp / 2 < L - 1.0:
+            pts = []
+            for j in range(25):
+                th = math.pi + math.pi * j / 24     # front half: z < 0, toward the camera
+                pts.append(cam.p((x + rs * 0.97 * math.cos(th), y0 + y + hp * (th - math.pi) / (2 * math.pi),
+                                  rs * 0.97 * math.sin(th))))
+            fr.ribbon(pts, LINE if k % 3 == 0 else HAIR, edge if k % 3 == 0 else band)
+            y += hp / 4
             k += 1
     fr.write("v1")
 
@@ -446,11 +456,11 @@ def v2():
     xs = [lead + k * spacing for k in range(N)]   # place k+1 stands at xs[k]
     top = 0.0                                     # crown height (all bells hang from one beam)
     zr = 2.2                                      # the far frame side
-    cam = Camera((-7.5, 6.5, -11.0), (xs[-1] * 0.55, -1.2, 0.5))
+    cam = Camera((-5.0, 4.6, -8.5), (xs[-1] * 0.5, -1.0, 0.6))
     Rmax = R0 * bell_scale(N)
     key = [(-1.8, top + 0.9, -1.4), (xs[-1] + 2.2, top + 0.9, zr + 0.3),
            (-Rmax, top - 0.4 - BELL_H * Rmax, -Rmax), (xs[-1] + 1.5, top - BELL_H * Rmax, 0)]
-    cam.fit(key, (22, 34, 458, 204))
+    cam.fit(key, (18, 30, 462, 208))
 
     # the far frame side: a long timber the gudgeons bear on
     x0, x1 = -2.0, xs[-1] + 2.4
@@ -473,7 +483,7 @@ def v2():
         # gudgeon pin from the headstock to the far side, then the headstock on the crown
         a, c2 = cam.p((xs[k], top + 0.55, 0.9 * R)), cam.p((xs[k], top + 0.55, zr - 0.38))
         fr.line(a, c2, LINE, G3)
-        box(fr, cam, (xs[k], top + 0.42, 0), 0.34 * R, 0.4, 0.95 * R, edge if now else G4, LINE)
+        box(fr, cam, (xs[k], top + 0.3, 0), 0.26 * R, 0.28, 0.8 * R, edge if now else G4, LINE)
         bell_hidden(fr, cam, (xs[k], top, 0), R, edge, sw, inner)
     fr.write("v2")
 
@@ -491,6 +501,8 @@ def v3():
     cy = 84.0
     sally_y = 176 - 26 * math.log2(PACE / 0.5) / 4    # pace: sallies ride up as the ropes are taken in
     slide = GAP * 14                                 # stroke: the sliders run out
+    # the frame head the sliders run under: one long timber
+    fr.shape([(8, cy - r - 21), (472, cy - r - 21), (472, cy - r - 14), (8, cy - r - 14)], G3, LINE)
     for i in range(N):
         b = i + 1
         cx = 20 + pitch * (i + 0.5)
@@ -501,9 +513,8 @@ def v3():
         # garter hole angle: place 1 is wound furthest, about to pull off; the last barely started
         g = math.radians(25 + (place - 1) / (N - 1) * 130)    # screen angle, y down; rope leaves at 180 deg
         # slider and its runner, above the wheel, with the stay resting toward it
-        fr.line((cx - 4 + slide, cy - r - 13), (cx + 22 + slide, cy - r - 13), LINE, G3)
-        fr.shape([(cx + 4 + slide, cy - r - 16), (cx + 14 + slide, cy - r - 16),
-                  (cx + 14 + slide, cy - r - 10), (cx + 4 + slide, cy - r - 10)], G4, LINE)
+        fr.shape([(cx + 2 + slide, cy - r - 13), (cx + 16 + slide, cy - r - 13),
+                  (cx + 16 + slide, cy - r - 8), (cx + 2 + slide, cy - r - 8)], G4, LINE)
         # rim: two closed outlines
         fr.circle(cx, cy, r, G0, edge, sw)
         fr.circle(cx, cy, r - 6, G0, dim, LINE)
@@ -635,7 +646,7 @@ def v5():
     sally_h = 1.1 + 1.6 * math.log2(PACE / 0.5) / 4   # pace: sallies ride up the ropes
     cam = Camera((-14, 15, -20), (0, 2.6, 0))
     key = [(sx * S, y, sz * S) for sx in (-1, 1) for sz in (-1, 1) for y in (yb - 0.6, yt + 1.6)]
-    cam.fit(key, (60, 30, 420, 210))
+    cam.fit(key, (40, 26, 440, 212))
     th = 0.45
 
     def slab(y, edge):
@@ -699,7 +710,7 @@ def v5():
         R = 0.62 * bell_scale(b) / bell_scale(N) * (6 / max(N, 6)) ** 0.5 * 1.25
         now = PLACE[b] == 1
         base = (x, yt + BELL_H * R + 0.05, z)
-        bell_hidden(fr, cam, base, R, G7 if now else G4, SUBJ if now else LINE, G5 if now else G3)
+        bell_hidden(fr, cam, base, R, G6 if now else G4, SUBJ if now else LINE, G5 if now else G3)
     fr.write("v5")
 
 

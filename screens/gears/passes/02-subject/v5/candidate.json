@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "The hand-cranked gear pair close up as black masses lit only along their upper-left edges, a crank arm and handle on driver A turning spoked follower B, whose twelve spokes stand for the semitones and catch the light at the scale's degrees.",
+  "controls": [
+    "ratio: B grows with the ratio, running off the right edge at 3:1, and turns slower against the crank (scale of B, with position).",
+    "teeth: A redraws with 3 to 16 teeth under the crank, B following by the ratio (shape).",
+    "mesh: teeth that slip lose their rim light and go dark against the black, in Euclidean order round both wheels (line brightness, with the tooth's tip pulled in to the root so it isn't only a shade change).",
+    "scale: B's spokes at the new scale's degrees catch the light (a 1.5 px rim), the others stay a dark hairline (which spokes are lit, by position round the wheel)."
+  ],
+  "reference": "library/theseus-tower/README.md",
+  "risks": "Silhouettes rely on rim light, so anything on the shadow side (lower right of every part) is a near-black hairline and the lower half of B is quiet by design; at 1:1 B's shadowed teeth almost vanish. Scale on spokes is the weakest mapping: a spoke per semitone is a convention, not mechanics, and a spoke's lit edge depends on its angle to the light, so as B turns, spokes on the shadow side lose their light whether they're in the scale or not; the spokes would need to be lit by membership, not by angle. The crank and handle are the brightest thing and answer every note (the handle advances a tooth's turn), which is right for 'the thing in the hand' but puts the brightest element on a part no control moves. Muted: the handle drops its light and the crank stops."
+}

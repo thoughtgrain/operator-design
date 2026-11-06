@@ -640,13 +640,22 @@ def v3() -> Frame:
         def at(u, v):
             return cam.P((c[0] + u * tan[0], c[1] + u * tan[1], c[2] + v))
         F.body([at(-hw, -hz), at(hw, -hz), at(hw, hz), at(-hw, hz)], G5, SUBJ)
-        for k in range(n_rings + 1):
-            r = lerp(0.14, 1.12, k / n_rings)
+        # a flashing panel: a refracting belt of bullseye rings, cut off top and bottom
+        # by the reflecting prisms above and below it (straight bars)
+        vb = 0.42
+        for s in (-1, 1):
+            F.ribbon([at(-hw, s * vb), at(hw, s * vb)], HAIR, G4)
+            n_pr = round(1 + 3 * D["lens"])
+            for k in range(1, n_pr + 1):
+                v = s * lerp(vb, hz, k / (n_pr + 1))
+                F.ribbon([at(-hw + 0.06, v), at(hw - 0.06, v)], HAIR, G3)
+        for k in range(1, n_rings + 1):
+            r = lerp(0.12, 1.1, k / n_rings)
             run = []
             for j in range(97):
                 t = 2 * math.pi * j / 96
                 u, v = r * math.cos(t), r * math.sin(t) * 1.0
-                if abs(u) < hw - 0.05 and abs(v) < hz - 0.05:
+                if abs(u) < hw - 0.05 and abs(v) < vb - 0.04:
                     run.append(at(u, v))
                 elif run:
                     F.ribbon(run, HAIR, G3)
@@ -656,10 +665,10 @@ def v3() -> Frame:
         if c is frontmost[1]:
             # the flash: the lamp seen through the bullseye facing us. pulse: its size
             px, py = at(0, 0)
-            F.circle(px, py, 2.5 + 7 * D["pulse"], G7)
+            F.poly(vesica(px, py, 2.5 + 8 * D["pulse"], 12), G7)
         else:
             px, py = at(0, 0)
-            F.circle(px, py, 2.6, G0, G4, HAIR)
+            F.poly(vesica(px, py, 2.5, 8), G0, G4, HAIR)
         if D["fog"] > 0:  # fog: mist creeping up the glass, hatched
             zf = -hz + 2 * hz * D["fog"]
             F.hatch([at(-hw, -hz), at(hw, -hz), at(hw, zf), at(-hw, zf)], G3, slope=-1)
@@ -686,8 +695,8 @@ def v4() -> Frame:
 
     # the beam, a closed outline, hatched
     O = (LX, LD, 3.1)
-    psi = math.radians(8 + 55 * D["sweep"])     # sweep: the beam swings toward you
-    halfa = math.radians(1.5 + 9 * (1 - D["lens"]))  # lens: the beam tightens
+    psi = math.radians(14 + 50 * D["sweep"])    # sweep: the beam swings toward you
+    halfa = math.radians(2 + 14 * (1 - D["lens"]))  # lens: the beam tightens
     edge = []
     for s in (-1, 1):
         a = psi + s * halfa
@@ -710,24 +719,27 @@ def v4() -> Frame:
 
     # swell, far to near: each crest a closed shape that hides what's behind
     rng = random.Random(7)
-    rows = [16.0, 12.0, 9.0, 7.0, 5.6, 4.6, 3.8]
-    reach = lerp(LD, 3.5, 0.15 + 0.85 * D["lens"])  # lens also sets how far the glitter reaches
+    rows = [3.3 * 1.2 ** k for k in range(9, -1, -1)]     # far to near, evenly spaced in log depth
+    reach = lerp(LD, 3.0, 0.3 + 0.7 * D["lens"])  # lens: how far toward you the glitter reaches
     col_X = lambda Dp: (lx - cx) * Dp / f          # world X under the light at depth Dp
+
+    def crest(s, k):
+        # a wave's back rises slowly, its face falls steeply past a sharp crest at s = k
+        return (s / k) ** 1.6 if s <= k else (1 - (s - k) / (1 - k)) ** 0.8
     for ri, Dp in enumerate(rows):
-        W = 2.6 + 0.2 * rng.random()
+        W = 1.5
         off = rng.random() * W
-        sw = SUBJ if Dp < 6 else LINE if Dp < 10 else HAIR
-        hgt = 0.34
+        sw = SUBJ if Dp < 5.5 else LINE if Dp < 10 else HAIR
+        hgt = 0.26
         X = -Dp * cx / f - off - W
         while P(X, Dp, 0)[0] < 480:
-            w = W * (0.8 + 0.3 * rng.random())
-            k = rng.uniform(0.35, 0.5)       # where the crest peaks (waves lean one way)
+            w = W * (0.75 + 0.5 * rng.random())
+            k = rng.uniform(0.55, 0.68)
             top, bot = [], []
-            for j in range(15):
-                s = j / 14
-                bump = math.sin(math.pi * s ** (k / 0.5)) ** 1.4
-                top.append(P(X + w * s, Dp, hgt * bump))
-                bot.append(P(X + w * s, Dp, 0.09 * math.sin(math.pi * s)))
+            for j in range(17):
+                s = j / 16
+                top.append(P(X + w * s, Dp, hgt * crest(s, k)))
+                bot.append(P(X + w * s, Dp, -0.05 * math.sin(math.pi * s)))
             shape = top + bot[-2:0:-1]
             F.body(shape, G4, sw)
             # glitter: crests under the light catch it, as far as the lens throws it
@@ -735,15 +747,14 @@ def v4() -> Frame:
             if Dp >= reach and X < xc < X + w:
                 gl = (0.25 + 1.2 * D["pulse"]) / 2   # pulse: how long each glint is
                 seg = []
-                for j in range(15):
-                    s = j / 14
+                for j in range(41):
+                    s = j / 40
                     xx = X + w * s
                     if abs(xx - xc) <= gl:
-                        bump = math.sin(math.pi * s ** (k / 0.5)) ** 1.4
-                        seg.append(P(xx, Dp, hgt * bump))
+                        seg.append(P(xx, Dp, hgt * crest(s, k)))
                 if len(seg) >= 2:
                     F.ribbon(seg, sw + 0.5, G6)
-            X += w + 0.5 + 0.4 * rng.random()
+            X += w * (0.55 + 0.2 * rng.random())
     # glints on the far water, between the rock and the first row
     for Dp in (24.0, 20.0):
         if Dp >= reach:

@@ -692,16 +692,17 @@ def v4(s: Spool) -> Frame:
 # ---------------------------------------------------------------- v5 · the winding seen close · hidden-line 3D
 
 def v5(s: Spool) -> Frame:
-    """A spool on its side with a wedge cut out of it toward the camera, so the winding
-    shows in section: every turn of thread a small round cut, layer on layer on the barrel."""
+    """A spool on its side with a quarter of the winding cut away toward the camera,
+    so the thread shows in section: every turn a small round cut, layer on layer
+    on the barrel, between two whole flanges."""
     fr = Frame("v5 · the material, seen close · hidden-line 3D", s.header())
-    Rf, Rbo, Rb = 1.0, 0.13, 0.36
+    Rf, Rbo, Rb = 1.0, 0.13, 0.34
     Rw = 0.62 + 0.3 * s.fullness()                       # length: how many layers are wound
-    x0, xa, xb, x1 = -1.25, -1.08, 1.08, 1.25
-    e = math.radians(30)
-    cam = Camera((2.4, -5.6, 5.6 * math.tan(e) + 0.3), (0.05, 0, 0.1))
+    x0, xa, xb, x1 = -1.22, -1.08, 1.08, 1.22
+    e = math.radians(31)
+    cam = Camera((1.25, -5.8, 5.8 * math.tan(e)), (0.0, 0, 0.12))
     # theta: point = (x, -r cos th, r sin th): th=0 faces the camera (-y), th=90 is up
-    tha, thb = math.radians(0), math.radians(90)          # the quarter that's cut away
+    tha, thb = math.radians(-8), math.radians(90)        # the quarter of the winding that's cut away
 
     def P(x, r, th):
         return v3(x, -r * math.cos(th), r * math.sin(th))
@@ -710,25 +711,27 @@ def v5(s: Spool) -> Frame:
         return v3(0, -math.cos(th), math.sin(th))
 
     cam.fit([P(x, Rf, t) for x in (x0, x1) for t in np.linspace(0, 2 * math.pi, 24)],
-            (60, 34, 420, 212))
-    faces = []                                            # (depth, fill pts3, edges [pts3 lists], extra)
-    ths = np.linspace(thb, tha + 2 * math.pi, 52)
+            (40, 32, 440, 212))
+    faces = []
+    full = np.linspace(0, 2 * math.pi, 73)
+    mat = np.linspace(thb, tha + 2 * math.pi, 56)       # where the winding still is
+    cut = np.linspace(tha, thb, 14)                     # the notch
 
     def add(fill3, edges, extra=None):
         ctr = sum(fill3) / len(fill3)
         faces.append((cam.dist(ctr), fill3, edges, extra))
 
-    def cylinder(r, xl, xr, turns=0.0):
+    def cylinder(r, xl, xr, ths, open_ends, turns=0.0, col=M):
         for i, (t0, t1) in enumerate(zip(ths, ths[1:])):
             tm = (t0 + t1) / 2
             if not cam.faces(P((xl + xr) / 2, r, tm), radial(tm)):
                 continue
             quad = [P(xl, r, t0), P(xr, r, t0), P(xr, r, t1), P(xl, r, t1)]
-            edges = [[P(xl, r, t0), P(xl, r, t1)], [P(xr, r, t0), P(xr, r, t1)]]
+            edges = [([P(xl, r, t0), P(xl, r, t1)], LINE, col), ([P(xr, r, t0), P(xr, r, t1)], LINE, col)]
             for tt, nb in ((t0, t0 - (t1 - t0)), (t1, t1 + (t1 - t0))):
-                end = (i == 0 and tt == t0) or (i == len(ths) - 2 and tt == t1)
+                end = open_ends and ((i == 0 and tt == t0) or (i == len(ths) - 2 and tt == t1))
                 if end or not cam.faces(P((xl + xr) / 2, r, nb), radial(nb)):
-                    edges.append([P(xl, r, tt), P(xr, r, tt)])
+                    edges.append(([P(xl, r, tt), P(xr, r, tt)], LINE, col))
             if turns:                                     # the outermost turns, hairline
                 x = xl + turns / 2 + 0.006
                 while x < xr - turns / 2:
@@ -736,56 +739,47 @@ def v5(s: Spool) -> Frame:
                     x += turns + 0.004
             add(quad, edges)
 
-    def annulus(x, rin, rout, nx):
-        nn = v3(nx, 0, 0)
-        if not cam.faces(v3(x, 0, 0), nn):
+    def annulus(x, rin, rout, nx, ths, draw_in=True):
+        if not cam.faces(v3(x, 0, 0), v3(nx, 0, 0)):
             return
         for t0, t1 in zip(ths, ths[1:]):
             quad = [P(x, rin, t0), P(x, rout, t0), P(x, rout, t1), P(x, rin, t1)]
-            add(quad, [[P(x, rout, t0), P(x, rout, t1)], [P(x, rin, t0), P(x, rin, t1)]])
+            edges = [([P(x, rout, t0), P(x, rout, t1)], LINE, M)]
+            if draw_in:
+                edges.append(([P(x, rin, t0), P(x, rin, t1)], LINE, M))
+            add(quad, edges)
 
-    cylinder(Rf, x0, xa)
-    cylinder(Rf, xb, x1)
-    cylinder(Rw, xa, xb, 0.068)
-    annulus(x0, Rbo, Rf, -1)
-    annulus(xa, Rw, Rf, 1)
-    annulus(xb, Rw, Rf, -1)
-    annulus(x1, Rbo, Rf, 1)
+    d = 0.07                                             # thread diameter
+    cylinder(Rf, x0, xa, full, False)
+    cylinder(Rf, xb, x1, full, False)
+    cylinder(Rw, xa, xb, mat, True, turns=d)
+    cylinder(Rb, xa, xb, cut, False)
+    annulus(x0, Rbo, Rf, -1, full)
+    annulus(x1, Rbo, Rf, 1, full)
+    annulus(xa, Rw, Rf, 1, mat)
+    annulus(xa, Rb, Rf, 1, cut)
+    annulus(xb, Rw, Rf, -1, mat)
+    annulus(xb, Rb, Rf, -1, cut)
 
-    # the two cut faces: an outline in (x, r), split in x pieces for depth order
-    d = 0.068                                            # thread diameter
+    # the two cut faces of the winding, split along x for depth order, thread sections on them
     for th, side in ((tha, 1), (thb, -1)):
-        tangent = v3(0, math.sin(th), math.cos(th))      # d/dth of the radial direction
-        nn = tangent * side
+        nn = v3(0, math.sin(th), math.cos(th)) * side
         if not cam.faces(P(0, (Rb + Rw) / 2, th), nn):
             continue
-        pieces = [(x0, xa, Rbo, Rf, "flange"), (xb, x1, Rbo, Rf, "flange")]
-        xs = np.linspace(xa, xb, 5)
-        pieces += [(l, r, Rbo, Rw, "mid") for l, r in zip(xs, xs[1:])]
-        for l, r, rin, rout, kind in pieces:
-            quad = [P(l, rin, th), P(r, rin, th), P(r, rout, th), P(l, rout, th)]
-            edges = [[P(l, rout, th), P(r, rout, th)], [P(l, rin, th), P(r, rin, th)]]
-            if kind == "flange":
-                edges += [[P(l, rin, th), P(l, rout, th)], [P(r, rin, th), P(r, rout, th)]]
-            else:
-                edges += [[P(l, Rb, th), P(r, Rb, th)]]
-                if l == xa:
-                    edges += [[P(l, Rw, th), P(l, Rf, th)]]
-                if abs(r - xb) < 1e-9:
-                    edges += [[P(r, Rw, th), P(r, Rf, th)]]
+        xs = np.linspace(xa, xb, 9)
+        for l, r in zip(xs, xs[1:]):
+            quad = [P(l, Rb, th), P(r, Rb, th), P(r, Rw, th), P(l, Rw, th)]
+            edges = [([P(l, Rw, th), P(r, Rw, th)], LINE, M), ([P(l, Rb, th), P(r, Rb, th)], LINE, M)]
             circles = []
-            if kind == "mid":
-                layer = 0
-                rr = Rb + d / 2 + 0.004
-                while rr + d / 2 <= Rw + 1e-6:
-                    off = (d / 2) * (layer % 2)
-                    x = xa + d / 2 + 0.006 + off
-                    while x + d / 2 <= xb - 0.004:
-                        if l - 1e-9 <= x < r:
-                            circles.append((x, rr))
-                        x += d + 0.004
-                    rr += d * 0.9
-                    layer += 1
+            layer, rr = 0, Rb + d / 2 + 0.004
+            while rr + d / 2 <= Rw + 1e-6:
+                x = xa + d / 2 + 0.006 + (d / 2) * (layer % 2)
+                while x + d / 2 <= xb - 0.004:
+                    if l - 1e-9 <= x < r:
+                        circles.append((x, rr))
+                    x += d + 0.004
+                rr += d * 0.9
+                layer += 1
             add(quad, edges, (th, circles, d))
 
     faces.sort(key=lambda f: -f[0])
@@ -793,16 +787,16 @@ def v5(s: Spool) -> Frame:
         fr.poly([cam(p) for p in fill3], fill=K, stroke=K, sw=0.6)
         if extra:
             th, circles, dd = extra
+            tvec = v3(0, math.sin(th), math.cos(th))
             for x, rr in circles:
-                pts = []
-                tvec = v3(0, math.sin(th), math.cos(th))
-                for a in np.linspace(0, 2 * math.pi, 14, endpoint=False):
-                    q = P(x + dd * 0.44 * math.cos(a), rr, th) + tvec * dd * 0.44 * math.sin(a)
-                    pts.append(cam(q))
+                pts = [cam(P(x + dd * 0.42 * math.cos(a), rr, th) + tvec * dd * 0.42 * math.sin(a))
+                       for a in np.linspace(0, 2 * math.pi, 14, endpoint=False)]
                 fr.outline(pts, B, HAIR)
-        for e in edges:
-            pts, w, col = e if isinstance(e, tuple) else (e, LINE, M)
+        for pts, w, col in edges:
             fr.line([cam(p) for p in pts], w, col)
+    # the bore through the near flange
+    bore, _ = ring(v3(x1, 0, 0), v3(1, 0, 0), Rbo, 36)
+    fr.outline([cam(p) for p in bore], M, LINE)
     return fr
 
 

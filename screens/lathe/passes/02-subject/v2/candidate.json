@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "The record lathe's cutter head riding its lead screw side-on, every body a hatched mass, the bright stylus hanging from its pivot into the lacquer it is cutting.",
+  "controls": [
+    "cut: rotation (node 0, the stylus about its pivot) - the stylus swings from a still rest to +-30 deg excursion as drive rises, and at the top of the range it presses against the stop pads in the head's window (saturation drawn as hitting the stops).",
+    "groove: position (carriage, column, head and nozzle as one group) - the whole head runs along the screw from the rim (left) toward the label step (right), ~190 px, and the cut turns behind it lengthen.",
+    "wear: count - small chips appear on the lacquer behind the stylus among the earlier turns, 0 to ~14, none at 0.",
+    "rumble: shape (the lacquer coat's top edge) - the coat and core slab heave into a slow wave under the head, +-6 px; flat at 0."
+  ],
+  "reference": "opxy/craft.md (hatching: 45 deg hairlines over black, >= 3 px clear); patent section lining as the language's source",
+  "risks": "Hatched masses are a lot of 45 deg texture at 1:1 (spacing 4.5 px, 3.5 px clear); on the panel the hatching may shimmer as the carriage moves, so the moving group may need its hatching pre-drawn per node. The stylus is a filled bright body (the one solid bright mass). groove moves ~6 nodes as a group. The coat notches (earlier turns) sit close to the 3 px floor."
+}

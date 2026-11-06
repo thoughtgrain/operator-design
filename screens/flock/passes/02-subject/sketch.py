@@ -376,8 +376,8 @@ def v1() -> Frame:
     # birds over the mouths, flying right and banking towards us; the one at a mouth is brightest
     for k in sorted(range(N_BIRDS), key=lambda k: -cam.depth(birds[k])):
         x, y, z = birds[k]
-        pts = [cam(p) for p in bird_world((x, y, z), heading=math.radians(-6 + 14 * BIRDS[k][2]),
-                                          bank=math.radians(-12), dihedral=(0.05, 0.25, 0.4)[(k * 5) % 3],
+        pts = [cam(p) for p in bird_world((x, y, z), heading=math.radians(-62 + 12 * BIRDS[k][2]),
+                                          bank=math.radians(0), dihedral=(0.05, 0.25, 0.4)[(k * 5) % 3],
                                           size=0.62)]
         F.outline(pts, G7 if k == lo else G5, SUBJ if k == lo else LINE)
     return F
@@ -459,16 +459,16 @@ def v3() -> Frame:
     """One bird at large scale, exploded like a model kit; its neighbours cut by the frame's edge."""
     F = Frame("v3 · one bird, exploded · exploded view")
     cam = Camera((-2.6, 8.4, -7.0), (0.3, 0.0, 0.25), 300, (236, 124))
-    E = 2.6 * (0.18 + 0.36 * (1 - COHERE))               # explosion: cohere pulls the parts together
+    E = 3.3 * (0.18 + 0.36 * (1 - COHERE))               # explosion: cohere pulls the parts together
     yaw = math.radians(8)
-    S_ = 2.6
+    S_ = 3.3
 
     def P(p, off=(0, 0, 0)):
         return cam(add(rot_y(scl(p, S_), yaw), off))
 
     # neighbours, assembled, cut by the frame's edge: the rest of the flock
-    for (pos, hd, sz) in (((-7.4, 0.0, 2.6), 0.1, 2.4), ((7.6, 0.0, -0.4), -0.1, 2.4),
-                          ((-5.6, 0.0, -5.6), 0.15, 2.2), ((5.4, 0.0, 6.4), -0.2, 2.2)):
+    for (pos, hd, sz) in (((-8.6, 0.0, 1.4), 0.1, 2.2), ((8.4, 0.0, -2.6), -0.1, 2.2),
+                          ((5.8, 0.0, 6.2), -0.2, 2.0)):
         pts = [cam(p) for p in bird_world(pos, heading=hd, dihedral=0.15, size=sz)]
         F.outline(pts, G3, LINE)
 
@@ -571,28 +571,26 @@ def v3() -> Frame:
 def v4() -> Frame:
     """Eight starlings in flight over a ploughed field, drawn in one contour weight; shadows hatched."""
     F = Frame("v4 · starlings over the field · single-weight contour")
-    cam = Camera((0.0, 12.0, -3.5), (0.0, 0.0, 6.5), 330, (240, 112))
+    cam = Camera((0.0, 26.0, -10.0), (0.0, 0.0, 7.0), 640, (240, 116))
     n = N_DEG
     X0, X1 = -6.0, 6.0
     zf = 60.0
     rows = [X0 + (X1 - X0) * i / n for i in range(n + 1)]
     birds = []
     for k, (u, h, d) in enumerate(BIRDS):
-        birds.append((X0 + (X1 - X0) * u, 4.2 + 1.0 * d, 5.4 + 3.4 * h))
+        birds.append((X0 + (X1 - X0) * u, 4.2 + 1.0 * d, 7.0 + 4.4 * h))
     lo = min(range(N_BIRDS), key=lambda k: cam.depth(birds[k]))   # nearest bird plays now
     ci = cell((birds[lo][0] - X0) / (X1 - X0))
     # drill rows, one per cell, to the horizon; the row under the playing bird is drawn heavier
     for i in range(n):
         xc = (rows[i] + rows[i + 1]) / 2
-        p0, p1 = cam((xc, 0, -0.5)), cam((xc, 0, zf))
+        p0, p1 = cam((xc, 0, -2.0)), cam((xc, 0, 16.0))
         F.line(p0, p1, LINE if i == ci else HAIR, G4 if i == ci else G2)
-    hz = cam((0, 0, zf))[1]
-    F.line((16, hz), (464, hz), HAIR, G2)
     poses = []
     for k in range(N_BIRDS):
         phase = (k * 3) % 4
         poses.append(dict(heading=math.radians(-12 + 16 * BIRDS[k][1]), bank=math.radians(6 * (phase - 1.5)),
-                          dihedral=(-0.2, 0.05, 0.3, 0.5)[phase], sweep=(0.0, 0.15, 0.3, 0.1)[phase], size=1.25))
+                          dihedral=(-0.2, 0.05, 0.3, 0.5)[phase], sweep=(0.0, 0.15, 0.3, 0.1)[phase], size=1.0))
     # shadows on the field straight below, hatched (there but not a body)
     for k in range(N_BIRDS):
         x, y, z = birds[k]
@@ -609,7 +607,7 @@ def v4() -> Frame:
 def v5() -> Frame:
     """A crank automaton: eight carved birds on rods over a comb; each rod's pick plucks the tine under it."""
     F = Frame("v5 · crank automaton · hatched mass")
-    cam = Camera((5.0, 4.2, -8.0), (0.3, 0.9, 0.0), 340, (226, 128))
+    cam = Camera((4.6, 4.0, -7.6), (0.3, 1.0, 0.0), 400, (222, 132))
     n = N_DEG
     BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.2, 4.2, -1.0, 0.0, -0.8, 0.8
 
@@ -646,7 +644,7 @@ def v5() -> Frame:
         F.outline(tine, G5 if i == ci else G3, LINE if i == ci else HAIR)
     # crank on the right end: boss, arm, handle (the thing in the hand)
     axle = (BX1, -0.5, 0.0)
-    ang = math.radians(200)
+    ang = math.radians(55)
     arm_end = (BX1 + 0.35, -0.5 + 0.95 * math.sin(ang), 0.95 * math.cos(ang))
     boss = C([(BX1 + 0.02, -0.5 + 0.26 * math.sin(t), 0.26 * math.cos(t)) for t in
               [2 * math.pi * s / 28 for s in range(28)]])

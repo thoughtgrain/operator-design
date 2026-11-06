@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "The lacquer coat under the microscope at grazing light, grooves running away from the eye with only their lips catching the light, the newest groove the bright one and the cut face of the coat a notched silhouette at the bottom.",
+  "controls": [
+    "cut: shape (node 0, the bright groove's lit lip) - its swing widens and the crests flatten as the cutter saturates; the V notch it makes in the near face deepens with it.",
+    "groove: position (the whole field) - the field slides sideways: the rim's bevel leaves at the right and more turns come in from the left, ~90 px at the near edge.",
+    "wear: count - specks and short scratches catch the light on the lands between grooves, 0 to ~16, none at 0.",
+    "rumble: rotation (the field about its near centre) - the surface tilts slowly in the screen plane, up to +-3 deg, as the platter heaves; still at 0."
+  ],
+  "reference": "opxy/reference (MNMD wireframe outlines over black); opxy/craft.md, Think in 3D (one camera, spacing in the world)",
+  "risks": "Lines converging upward can read as a retro perspective grid if pushed; the camera looks down so there's no horizon, and each lip stops before it comes within 3 px of its neighbour. groove as a whole-field slide is many lines moving at once (one node per lip, ~25 nodes), expensive on a turn. rumble's rotation is under the 30 deg floor. The bright lip is 44 points split in two ribbons; as one mutable outline it must drop to <= 31 points per side."
+}

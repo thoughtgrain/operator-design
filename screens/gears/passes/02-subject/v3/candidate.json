@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "The point where the two wheels meet, drawn large in one weight of line: wheel A rising from the bottom edge, wheel B coming down from beyond the top, one of B's involute teeth sitting in A's gap at the pitch point, and A's rim notched at the scale's degrees.",
+  "controls": [
+    "ratio: B's rim flattens as the ratio rises (the same curve as A's at 1:1, nearly straight at 3:1) because its centre moves further off the top of the frame (shape: the curvature of B's arc).",
+    "teeth: with A's diameter fixed, fewer teeth are bigger teeth, so 3 to 16 teeth run from three huge teeth to a fine row, both wheels re-cut with the same module (shape and count).",
+    "mesh: teeth that don't engage are cut back to the root circle in Euclidean order, a flat land where a tooth was, round A and through the visible arc of B (shape).",
+    "scale: the notches on A's inner rim move to the new scale's seven of twelve positions, degree 0 straight up under the pitch point (position)."
+  ],
+  "reference": "library/theseus-tower/README.md (line art held to one subject); opxy/craft.md, Line weights",
+  "risks": "Simplest drawing and the calmest, but the frame shows only part of each wheel: B's centre is above the screen, so its tooth count and the ratio read from curvature and spacing, not from a whole wheel; at 1:1 and 3:2 the curvature difference is modest. The notched ring at A's rim sits mostly in view (A's centre is about 30 px above the bottom edge), so nine of twelve positions show; at 16 teeth the rim moves and the notches with it. Single weight means the brightest element is only a brighter colour on B's contact tooth, not a heavier line. Involute flanks are 16 points a tooth, so B's visible teeth fit in four 64-point paths only if the off-screen teeth are dropped. Muted: B lifts up and out of A's gap, the contact tooth goes grey."
+}

@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "The eggbeater drill's face wheel seen huge and cropped: its hatched cast web and rim of lugs fill the left, the bright pinion sits on the lugs, and the spindle runs off the right edge into a chuck.",
+  "controls": [
+    "ratio: the wheel grows against the pinion, its radius 150 to 300 px, so the rim's arc flattens from a tight curve to nearly straight while its right-most point stays put (shape of the rim and web outline).",
+    "teeth: lugs round the rim, 18 to 144 on the whole wheel, about 3 to 20 in view (count).",
+    "wear: each lug's corners round off, a crisp block at 0 to a worn lozenge at 100 (shape of the lug outlines).",
+    "bite: the pinion slides along the spindle from clear of the rim onto the lug ring, about 40 px of travel (position of the pinion node)."
+  ],
+  "reference": "library/theseus-tower/README.md; opxy/craft.md (hatching for a solid's mass, here the cast web)",
+  "risks": "Hatching here is the drawing language for the cast web's mass, not a state; craft.md reserves hatching for semi-opaque or inactive regions, so the owner should say whether a hatched solid reads as 'there but not active'. Ratio reshapes the rim, web edge and every lug at once (one path plus many nodes repositioned): expensive on change. The visible lug count at teeth 3 is under three, and the frame's 20 % hatched area is the densest of the five (82 % black)."
+}

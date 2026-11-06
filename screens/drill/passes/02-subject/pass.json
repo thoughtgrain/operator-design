@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "Be true to the name: an old crank-style hand drill. Five new variations.",
   "subject": null,
@@ -94,7 +94,158 @@
       "brief": "Start from what drill is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: hidden-line 3D. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "The shaving the bit throws: one long helical curl of wood rising out of the bored hole in a plank, its outer face the one bright line.",
+      "controls": [
+        "ratio: the curl winds tighter, 3 loose coils at 0.50 to 12 at 8.00 along the same length (shape of the shaving, one mutable outline per edge).",
+        "teeth: chatter marks pressed across the strip, one per tooth on every coil, 3 to 24 per coil (count of short cross-strokes).",
+        "wear: the shaving's leading edge goes from a clean cut to torn and ragged, up to about 4 px either side (shape of that edge).",
+        "bite: the shaving thickens, a 4 px ribbon at 0 to 22 px at 100, as the bit takes a deeper cut (shape, the strip's width)."
+      ],
+      "reference": "library/theseus-tower/README.md (one object, outlined, nothing labelled)",
+      "risks": "Every control is a shape of the same strip, so four shape channels share one subject; on the device ratio and bite both rewrite the helix and need separate keys. At 24 chatter marks per coil and 12 coils the marks fall under 3 px apart on the back runs; draw them on front runs only. The plank is cropped by the frame's left and bottom edges and could read as a ramp; the single weight leaves the hole and the curl at the same line width, so brightness alone separates subject from ground (bright vs mid grey, 5 steps, fine at 1:1). Many tiny ribbon pieces near the hole lint as legibility warnings; merge runs in the real build."
+    },
+    {
+      "variant": "v2",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "The eggbeater drill's face wheel seen huge and cropped: its hatched cast web and rim of lugs fill the left, the bright pinion sits on the lugs, and the spindle runs off the right edge into a chuck.",
+      "controls": [
+        "ratio: the wheel grows against the pinion, its radius 150 to 300 px, so the rim's arc flattens from a tight curve to nearly straight while its right-most point stays put (shape of the rim and web outline).",
+        "teeth: lugs round the rim, 18 to 144 on the whole wheel, about 3 to 20 in view (count).",
+        "wear: each lug's corners round off, a crisp block at 0 to a worn lozenge at 100 (shape of the lug outlines).",
+        "bite: the pinion slides along the spindle from clear of the rim onto the lug ring, about 40 px of travel (position of the pinion node)."
+      ],
+      "reference": "library/theseus-tower/README.md; opxy/craft.md (hatching for a solid's mass, here the cast web)",
+      "risks": "Hatching here is the drawing language for the cast web's mass, not a state; craft.md reserves hatching for semi-opaque or inactive regions, so the owner should say whether a hatched solid reads as 'there but not active'. Ratio reshapes the rim, web edge and every lug at once (one path plus many nodes repositioned): expensive on change. The visible lug count at teeth 3 is under three, and the frame's 20 % hatched area is the densest of the five (82 % black)."
+    },
+    {
+      "variant": "v3",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "A carpenter's brace lying level across the screen, head pad, swept crank, grip, ratchet and chuck as black silhouettes lit along their top edges, its auger bit sunk into a board shown in section.",
+      "controls": [
+        "ratio: the brace's sweep deepens, the crank's throw 32 to 72 px (position of the grip and the two bends).",
+        "teeth: flute grooves along the auger's twist, 3 to 24 over its cutting length (count of hairline grooves).",
+        "wear: the screw point and spurs blunt from a sharp lead into a stub, the point pulling back about 8 px (shape of the bit's tip).",
+        "bite: the board slides onto the bit, sinking it 14 to 84 px into the wood (position of the board node, the bore follows)."
+      ],
+      "reference": "library/theseus-tower/README.md (the instrument as the subject, its own details instead of labels)",
+      "risks": "A long thin object makes the body mostly empty: calm, but the brace is small (rod 7 px) and the lit edges carry everything. The lit edge is one bright element made of several ribbons; light direction must stay fixed as parts move or the rim light jumps. Teeth grooves at 24 are about 4.5 px apart, close to the 3 px floor. Ratio moving the crank changes the rod's outline (two bends), so it's a shape change on device rather than a single translation."
+    },
+    {
+      "variant": "v4",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "The eggbeater drill in three-quarter view as a working mechanism: crank and turned grip on the face wheel, lugs on its face driving a bright pinion on the spindle, from the wooden head handle to the chuck and bit.",
+      "controls": [
+        "ratio: the pinion shrinks against the wheel, about 1.6x to 0.8x its rest size (uniform scale of the pinion node).",
+        "teeth: lugs on the wheel's face, 3 to 24 (count, each a small solid block with its side walls).",
+        "wear: the lugs' outer edges taper and round, crisp square blocks at 0 to worn wedges at 100 (shape of the lug faces).",
+        "bite: the bit stands further out of the chuck, 34 to 84 world units (position of the bit node)."
+      ],
+      "reference": "library/theseus-tower/README.md (detailed line art of a modelled object, hidden-line by painter's order)",
+      "risks": "Most parts at once: the node count is the highest of the five and lug side walls double the count at teeth 24. Bite as bit length is the weakest link to the sound ('follower depth'); a crank-turn alternative (rotation about the wheel's axle, ≥ 30°) is available if the owner prefers. The pinion at ratio 0.50 scaled 1.6x pushes past the lug ring and nears the spindle head; check extremes. The diagonal of the spindle across the wheel makes a busy centre where crank arm, hub and spindle cross."
+    },
+    {
+      "variant": "v5",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "A laminated block of plywood cut away through the middle of a bored hole, close: plies stacked up its faces, the bore's far wall scored by the bit, its conical floor, and the cut edge of the bore as the one bright line.",
+      "controls": [
+        "ratio: the bit's helical score marks on the bore wall wind tighter, pitch 68 to 4 world units (shape of the score lines).",
+        "teeth: the plies the block is laid up from, two per tooth, 6 to 48 glue lines over its height (count of hairlines on the cut face and the side).",
+        "wear: the bore's top rim goes from a clean circle to torn fibres, up to 5 px of tear (shape of the top face's hole edge).",
+        "bite: the bore deepens from a shallow dish to most of the block's height, 26 to 116 units (position of the floor and the cut edge)."
+      ],
+      "reference": "library/toro-blocks/README.md (hidden-line solids, black fills, mid-grey edges)",
+      "risks": "It's a still life of a hole: the drill itself never appears, so the name rests on the bore and the cone the lips cut. Teeth as ply count saturates (needs a cap near 24 plies to keep lines ≥ 3 px apart). Score lines are faint hairlines and may not clear ratio's perceptibility floor at 1:1; give them a Line weight or more of them. Bite moving the floor rewrites the front face's outline (shape) as well as the cut edge."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.25,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:23:43"
+  },
   "selection": null
 }

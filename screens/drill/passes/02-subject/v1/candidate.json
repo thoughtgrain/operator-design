@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "The shaving the bit throws: one long helical curl of wood rising out of the bored hole in a plank, its outer face the one bright line.",
+  "controls": [
+    "ratio: the curl winds tighter, 3 loose coils at 0.50 to 12 at 8.00 along the same length (shape of the shaving, one mutable outline per edge).",
+    "teeth: chatter marks pressed across the strip, one per tooth on every coil, 3 to 24 per coil (count of short cross-strokes).",
+    "wear: the shaving's leading edge goes from a clean cut to torn and ragged, up to about 4 px either side (shape of that edge).",
+    "bite: the shaving thickens, a 4 px ribbon at 0 to 22 px at 100, as the bit takes a deeper cut (shape, the strip's width)."
+  ],
+  "reference": "library/theseus-tower/README.md (one object, outlined, nothing labelled)",
+  "risks": "Every control is a shape of the same strip, so four shape channels share one subject; on the device ratio and bite both rewrite the helix and need separate keys. At 24 chatter marks per coil and 12 coils the marks fall under 3 px apart on the back runs; draw them on front runs only. The plank is cropped by the frame's left and bottom edges and could read as a ramp; the single weight leaves the hole and the curl at the same line width, so brightness alone separates subject from ground (bright vs mid grey, 5 steps, fine at 1:1). Many tiny ribbon pieces near the hole lint as legibility warnings; merge runs in the real build."
+}
