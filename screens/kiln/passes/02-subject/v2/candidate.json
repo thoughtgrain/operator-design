@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "bold closed outlines",
+  "subject": "A fragment of the fired bowl wall seen edge-on and close: the clay body with its pores, the glassy glaze skin on its face, and a felt mallet tip resting on the lip.",
+  "controls": [
+    "strike: scale — the mallet tip goes from a broad soft felt ball (r 26) to a small hard tip (r 14), about 1.9×; a note presses it into the lip.",
+    "glaze: position — the glaze skin's free surface lifts off the body from 5 to 21 px thick, its hatched glass growing with it.",
+    "crack: shape — a fissure opens from the glaze surface down through the body, its two faces parting up to ~16 px at the surface; closed at 0.",
+    "fire: count — the pores in the body close up as it vitrifies, from 17 open pores at 0 to 5 at 100 (11 at rest)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one bold figure on black); stock drum page's bold closed shapes",
+  "risks": "Close-up can lose the bowl: it must still read as a rim with a lip, not a banana or a sausage. Fire as pores closing is physically right but counts down; check it eases rather than pops. The tip touches the lip by design; keep it a shared contact point through strike's range."
+}

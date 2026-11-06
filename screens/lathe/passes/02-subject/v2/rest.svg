@@ -234,7 +234,7 @@
   <path d="M 142.4 143.82 L 146.77 139.46 L 146.06 138.75 L 141.7 143.12 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
   <path d="M 144.51 148.09 L 153.13 139.46 L 152.42 138.75 L 143.8 147.38 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
   <path d="M 148.27 150.68 L 159.49 139.46 L 158.79 138.75 L 147.56 149.98 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
-  <path d="M 188 120 L 208 120 L 208 126 L 196 126 L 172 164 L 164 164 L 190 126 L 188 126 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
+  <path d="M 180 138 L 188 138 L 166 163 L 159 163 Z" fill="#000000" stroke="#646464" stroke-width="1.5"/>
   <path id="lathe_node_0" d="M -2.5 -4 L 2.5 -4 L 3.5 24 L 1.6 58 L 0.6 63 L -0.6 63 L -1.6 58 L -3.5 24 Z" transform="matrix(1 0 0 1 150 112)" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="1"/>
   <path d="M 153.2 112 L 152.77 113.6 L 151.6 114.77 L 150 115.2 L 148.4 114.77 L 147.23 113.6 L 146.8 112 L 147.23 110.4 L 148.4 109.23 L 150 108.8 L 151.6 109.23 L 152.77 110.4 Z" fill="#000000" stroke="#CDCDCD" stroke-width="1"/>
   <path d="M 142 114.5 L 145.5 114.5 L 145.5 113.5 L 142 113.5 Z" fill="#646464" stroke="none" stroke-width="0"/>

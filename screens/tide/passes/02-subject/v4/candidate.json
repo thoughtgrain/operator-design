@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "Foam on the pool's surface seen at water level: a raft of bubbles in eight sizes, each ringing at the pitch its size sets, drawn as black domes lit only along their back edges, the largest the brightest.",
+  "controls": [
+    "swell: the ripple lines running under the raft spread apart or crowd together (position).",
+    "depth: more bubbles survive in the raft, from 6 at 50 ms to 18 at 5 s (count).",
+    "salt: the bubble sizes stretch apart, the small ones shrinking toward the 3 px floor while the largest stays (scale per bubble, up to 1.6x).",
+    "drift: the bubbles jostle out of their packed places, each its own way, up to about 24 px (position per bubble)."
+  ],
+  "reference": "opxy/reference/ (edge-lit forms) and library/toro-blocks (hollow bodies over black)",
+  "risks": "A bubble's own resonance is real physics, but the link from foam to tuned hollows is a step the player must take; it could read as a bath or a drink. Bright crescents on black domes can tip toward moons if the arcs get too even. The upper half of the body is empty; the raft could sit higher or bigger."
+}

@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "None of the five land. Five new, unique directions.",
   "subject": null,
@@ -94,7 +94,158 @@
       "brief": "Start from what kiln is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: single-weight contour. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "A yarn-wound mallet held poised over the rim of a thrown bowl, both modelled and drawn as hidden-line line art, the mallet head the brightest thing.",
+      "controls": [
+        "strike: rotation — the mallet swings back about the wrist, from 10° above the strike line at 0 to 50° at 100 (40° of travel), so a harder strike is a bigger backswing; on a note it swings down to the rim and back.",
+        "glaze: position — the glaze line inside the bowl rises from the floor to near the lip (~40 px on screen), with the glazed interior hatched below it.",
+        "crack: shape — a hairline crack runs down the front wall from the rim, lengthening and forking (0 to ~40 px) as crack rises; none at 0.",
+        "fire: shape — the wall profile tightens and the lip thins and flares a little as the body vitrifies, so the throwing rings and rim ellipse draw stiffer and wider (~16 px at the rim)."
+      ],
+      "reference": "library/theseus-tower (hidden-line line art of the instrument itself, light on use)",
+      "risks": "Strike is mallet hardness, not force; a backswing reads as force. A swap of head (felt to bare core) is truer but a weaker channel. Glaze and fire both change the bowl, keep fire on the rim outline and glaze on the interior hatching. The mallet must not touch the bowl through strike's range except at the hit."
+    },
+    {
+      "variant": "v2",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "bold closed outlines",
+      "subject": "A fragment of the fired bowl wall seen edge-on and close: the clay body with its pores, the glassy glaze skin on its face, and a felt mallet tip resting on the lip.",
+      "controls": [
+        "strike: scale — the mallet tip goes from a broad soft felt ball (r 26) to a small hard tip (r 14), about 1.9×; a note presses it into the lip.",
+        "glaze: position — the glaze skin's free surface lifts off the body from 5 to 21 px thick, its hatched glass growing with it.",
+        "crack: shape — a fissure opens from the glaze surface down through the body, its two faces parting up to ~16 px at the surface; closed at 0.",
+        "fire: count — the pores in the body close up as it vitrifies, from 17 open pores at 0 to 5 at 100 (11 at rest)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one bold figure on black); stock drum page's bold closed shapes",
+      "risks": "Close-up can lose the bowl: it must still read as a rim with a lip, not a banana or a sausage. Fire as pores closing is physically right but counts down; check it eases rather than pops. The tip touches the lip by design; keep it a shared contact point through strike's range."
+    },
+    {
+      "variant": "v3",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "The kiln opened after the firing, cut away in section: brick walls and a sprung arch round one bowl on its shelf, a pyrometric cone bent beside it and a tapping rod ringing the bowl through the spy hole.",
+      "controls": [
+        "strike: position — the tapping rod draws back from the rim through the spy hole, 36 px off at 0 to 6 px at 100; a note taps it in.",
+        "glaze: position — the glaze line on the bowl's outside creeps down from just under the rim to near the foot, the glazed band hatched above it.",
+        "crack: shape — a dunting crack runs across the bowl's front from the rim, lengthening and stepping as crack rises; none at 0.",
+        "fire: rotation — the pyrometric cone bends over, from nearly upright (10°) at 0 to flat on its pad (90°) at 100, the potter's own gauge of how hot the firing went."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg; a kiln builder's section",
+      "risks": "The kiln is a frame round the subject; brickwork must stay quiet (darkest grey hairlines) so the bowl stays the one bright thing. The bowl is small (~125 px) and the cone smaller (~35 px), so crack's line and the cone need checking at 1:1. Striking a bowl inside a kiln is a stretch of the scene (potters ring fresh pots by hand at unloading)."
+    },
+    {
+      "variant": "v4",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "The bowl taken apart along its axis into four thrown ring courses and its foot, spaced the way its modes are, with the mallet lifted off along its line of strike.",
+      "controls": [
+        "strike: rotation — the exploded mallet turns on its line of strike, from lying back (soft) to pointing steeply at the top course (hard), ~40°.",
+        "glaze: position — hatched glaze climbs the inside of the courses from the foot up, course by course, so heavy glaze hatches the whole stack.",
+        "crack: shape — each course above the floor opens a split, a gap widening up to ~14 px, so every ring reads as two halves, like the modes splitting into doublets.",
+        "fire: position — the gaps between courses stretch more the higher they are (stack top moves ~30 px), the upper modes pulling apart as the body stiffens."
+      ],
+      "reference": "library/toro-blocks (a model of the engine drawn as hidden-line solids)",
+      "risks": "An exploded stack of rings can read as a lampshade or a spring rather than a bowl; the top course must keep the bowl's rim and the foot its foot. Glaze climbing by course is a count in disguise; it has to ease within a course. Stretch on fire is the same channel as nothing else here, but only ~30 px of travel."
+    },
+    {
+      "variant": "v5",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "The ringing bowl cut through its axis and drawn in one line weight: the bright cut wall, the interior's height contours, a glaze pool, and the felt mallet just off the lip.",
+      "controls": [
+        "strike: position — the mallet head stands off the cut lip by 28 px at 0, closing to 4 px at 100; a note brings it in to the lip and the contours ripple.",
+        "glaze: position — the pooled glaze's contour rises up the interior contours (from the floor to about two thirds up), the pool hatched in the same weight.",
+        "crack: count — crazing lines cross the cut wall and the interior contours, from none to ~14 as crack rises.",
+        "fire: shape — the cut wall thins (wall from 0.075 to 0.045 of the radius) and the lip sharpens as the body vitrifies; the section's outline moves ~6–16 px."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg; patent cutaway of a vessel",
+      "risks": "Single weight leaves no Subject weight for the cut face; brightness alone has to make it the subject. Hatching in the line weight is heavier than the hairline rule; check it doesn't go grey at 1:1. Fire's wall-thinning travel is small; may need the lip shape to carry it. Close in spirit to pass 01's section, but a 3D cutaway, not a flat a–a section with a chart."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.18,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:22:21"
+  },
   "selection": null
 }

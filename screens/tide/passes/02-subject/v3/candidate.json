@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "The mechanism as eight stone pipes standing in an arc in the surge, each cut to a partial's length, so every wave that blows across their mouths rings a chord; the stone's turned-away sides are hatched and the fundamental's mouth is the brightest edge.",
+  "controls": [
+    "swell: the surge crests on the water in front of the pipes spread apart or crowd together (position).",
+    "depth: the pool stands higher round the pipes, the waterline rising up every pipe, over 24 px (position of the waterline).",
+    "salt: the pipes' heights stretch from a harmonic ladder to an inharmonic one, the short pipes getting shorter (shape of the skyline; each pipe a node scaled or pre-drawn).",
+    "drift: each pipe leans its own small way about its foot, tops wandering up to ~25 px (rotation per pipe)."
+  ],
+  "reference": "library/theseus-tower (cylinders in a row, outlines over black)",
+  "risks": "A row of graduated cylinders can read as a bar chart or organ pipes rather than a rock pool; the arc helps but it is still close. Hatching on eight pipes is static but dense (~60 hairlines). Salt changing pipe heights needs per-pipe pre-drawn variants or scaled nodes, and scaling would thicken the hatching."
+}

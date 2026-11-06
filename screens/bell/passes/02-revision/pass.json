@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "revision",
   "number": 2,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-06T08:11:59",
   "focus": "Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.",
   "subject": {
@@ -60,7 +60,83 @@
       "brief": "full-bleed field; low angle; brightest element on the most-played control's part. Focus of this pass: Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "frame": "screens/bell/passes/02-revision/v1/rest.svg"
+    },
+    {
+      "variant": "v2",
+      "frame": "screens/bell/passes/02-revision/v2/rest.svg"
+    },
+    {
+      "variant": "v3",
+      "frame": "screens/bell/passes/02-revision/v3/rest.svg"
+    },
+    {
+      "variant": "v4",
+      "frame": "screens/bell/passes/02-revision/v4/rest.svg"
+    },
+    {
+      "variant": "v5",
+      "frame": "screens/bell/passes/02-revision/v5/rest.svg"
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "bodyDiffPct": 15.92,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "bodyDiffPct": 9.24,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "bodyDiffPct": 15.96,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "bodyDiffPct": 20.3,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "bodyDiffPct": 17.21,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "bodyDiffPct": 18.15,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "bodyDiffPct": 24.41,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "bodyDiffPct": 17.31,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "bodyDiffPct": 21.45,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "bodyDiffPct": 24.44,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:22:25"
+  },
   "selection": null
 }

@@ -610,10 +610,14 @@ def v2() -> Frame:
     ring = [cam(p) for p, _, _ in b.ring(b.inner, b.zw, 72)]
     f.dashed(ring, dash=4, gap=3, colour=G100)
     # gain: the rim rings in its (2,0) mode, an oval about the round rim; deflection 0.02 -> 0.24
-    amp = 0.02 + 0.22 * gain_amt()
+    amp = 0.05 + 0.2 * gain_amt()
     r0 = b.outer[-1][0]
     rim_rest = [cam(b.P(r0, 0, 2 * math.pi * i / 72)) for i in range(73)]
     f.line(rim_rest, w=HAIR, colour=G75)
+    # the mode's four nodes, where the flexing rim crosses its rest circle: short radial hairline ticks
+    for k in range(4):
+        th = math.pi / 4 + k * math.pi / 2
+        f.line([cam(b.P(r0 * 0.9, 0, th)), cam(b.P(r0 * 1.12, 0, th))], w=HAIR, colour=G125)
     rim_mode = [cam(b.P(r0 * (1 + amp * math.cos(2 * (2 * math.pi * i / 56))), 0, 2 * math.pi * i / 56))
                 for i in range(56)]
     f.poly(rim_mode, fill="none", stroke=BRIGHT, sw=SUBJ)
@@ -676,7 +680,7 @@ def v3() -> Frame:
     # column 4, gain: a hammer on a pivot outside the bell, drawn back from the sound-bow (rotation 6 -> 46 deg)
     bow = b.outer[-2]
     hit = cam(b.P(bow[0] + 0.02, bow[1], 0))
-    pv = (hit[0] + 46, hit[1] - 52)
+    pv = (hit[0] + 34, hit[1] - 50)
     arm = math.hypot(hit[0] - pv[0], hit[1] - pv[1])
     rest = math.atan2(hit[1] - pv[1], hit[0] - pv[0])
     back = math.radians(10 + 40 * gain_amt())
@@ -703,16 +707,16 @@ def v4() -> Frame:
     """Three-quarter isometric, the bell off to the right on a diagonal surface edge, the water's
     hatching closing up with depth (a density gradient). Hidden-line ribs; the waterline dashed."""
     f = Frame()
-    az, el = math.radians(-50), math.radians(26)
+    az, el = math.radians(-130), math.radians(26)
     cam = Cam((10 * math.cos(az) * math.cos(el), 10 * math.sin(az) * math.cos(el), 10 * math.sin(el)), (0, 0, 0))
     zrim = lambda d: -(Bell.H + 0.3 + 1.2 * d)
     gscale = lambda g: 0.8 * 1.65 ** g                          # gain: x0.80 -> x1.32 (1.65x)
     ends = (Bell(zrim(0), scale=gscale(1)).shell() + Bell(zrim(1), scale=gscale(1)).shell() + [(0, 0, 0)])
     cam.fit(ends, (268, 30, 448, 206))
     b = Bell(zrim(P["depth"]), scale=gscale(P["gain"]), lip=0.05)
-    # the water behind the bell is a vertical plane (y = 1.4); its top edge, the surface, runs diagonally
+    # the water behind the bell is the vertical plane through its axis; its top edge, the surface, runs diagonally
     def edge(z):
-        p, q = cam((-1, 1.4, z)), cam((1, 1.4, z))
+        p, q = cam((-1, 0, z)), cam((1, 0, z))
         k = (q[1] - p[1]) / (q[0] - p[0])
         return [(0, p[1] - k * p[0]), (480, p[1] + k * (480 - p[0]))]
     e0, e1 = edge(0.0)
@@ -729,7 +733,7 @@ def v4() -> Frame:
     cable(f, cam, (0, 0, 0.0), b, colour=G100)
     exterior_detail(f, cam, b, ribs=16, rib_colour=G75, hoop_colour=G100, min_face=0.28)
     # silhouette edge
-    f.poly(out, fill="none", stroke=G175, sw=SUBJ)
+    f.poly(out, fill="none", stroke=G125, sw=LINE)
     # air: the waterline as a hidden ring, dashed
     ring = [cam(p) for p, _, _ in b.ring(b.inner, b.zw, 72)]
     f.dashed(ring, dash=4, gap=3, colour=G125)

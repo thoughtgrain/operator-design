@@ -477,11 +477,11 @@ def v2():
     rpA, rpB = TEETH_A / 2, TEETH_B / 2
     dAB = rpA + rpB
     X, Z = (1, 0, 0), (0, 0, -1)          # wheels flat, axis +Y (u x v = Y)
-    lift, T = 4.6, 1.0
+    lift, T = 5.4, 1.0
     rotB = math.pi + math.pi / TEETH_B
     gA = Disc((0, 0, 0), X, Z, gear2d(TEETH_A, rpA), T)
     gB = Disc((dAB, lift, 0), X, Z, gear2d(TEETH_B, rpB, rot=rotB), T)
-    cam = Cam(eye=(3.0, 22.0, 19.0), target=(5.5, 1.0, 0.0))
+    cam = Cam(eye=(1.0, 15.0, 23.0), target=(5.5, 1.5, 0.0))
     pts = [gA.w(x, y, z) for x, y in ring(rpA + 1, 16) for z in (0, T)] + \
           [gB.w(x, y, z) for x, y in ring(rpB + 1, 16) for z in (0, T)] + [(0, -2.6, 0)]
     cam.fit(pts, (60, BODY[0] + 3, 420, BODY[1] - 3))
@@ -496,7 +496,7 @@ def v2():
     arbB, _ = cylinder(cam, (dAB, -2.4, 0), (0, 1, 0), 0.55, 2.9, edge=G3, cap_edge=G4)
     out += arbB
     washer = Disc((dAB, 0.5, 0), X, Z, ring(1.5, 32), 0.3)
-    out += draw_disc(cam, washer, edge=G3, cap_edge=G4)
+    out += cylinder(cam, (dAB, 0.5, 0), (0, 1, 0), 1.5, 0.3, edge=G3, cap_edge=G4)[0]
     out.append(loop(washer.cap(cam, ring(0.55, 18)), HAIR, G3))
     # assembly lines: B's axis, and B's meshing gap down to its place
     out += dashed(cam.ps([(dAB, 0.8, 0), (dAB, lift, 0)]), HAIR, G4, 4, 3)
@@ -592,40 +592,22 @@ def v3():
     out += draw(A, G5)
     # B's rim, inner edge of the rim
     out += draw(put(cB, ring(rpB - 1.25 * m - 0.75 * m, 180)), G3)
-    # A: rim, hub, bore with the scale's index notches
-    out += draw(put(cA, ring(rpA - 1.25 * m - 0.75 * m, 120)), G3)
-    hub_r, bore_r = 1.55 * m, 0.62 * m
-    out += draw(put(cA, ring(hub_r, 90)), G3)
-    # index ring: 12 positions round the hub, the scale's seven cut as notches
-    notch = []
-    for k in range(12):
-        a0 = -math.pi / 2 + 2 * math.pi * k / 12
-        for da in (-0.13, 0.13):
-            a = a0 + da
-            notch.append(((bore_r + 0.0) * math.cos(a), (bore_r + 0.0) * math.sin(a)))
+    # A: the rim's inner edge is an index ring of twelve positions; at the
+    # scale's seven it is cut with a notch (degree 0 straight up, clockwise)
+    rim_in = rpA - 2.0 * m
     ring_pts = []
     for k in range(12):
         a0 = -math.pi / 2 + 2 * math.pi * k / 12
-        deep = 0.42 * m if k in PCS else 0.0
-        for da, r in ((-0.16, bore_r), (-0.09, bore_r + deep), (0.09, bore_r + deep), (0.16, bore_r)):
-            if deep == 0 and r != bore_r:
-                continue
-            a = a0 + da
-            ring_pts.append((r * math.cos(a), r * math.sin(a)))
-        for i in range(1, 4):
-            a = a0 + 0.16 + (2 * math.pi / 12 - 0.32) * i / 4
-            ring_pts.append((bore_r * math.cos(a), bore_r * math.sin(a)))
+        if k in PCS:
+            for da, r in ((-0.11, rim_in), (-0.07, rim_in - 0.38 * m), (0.07, rim_in - 0.38 * m), (0.11, rim_in)):
+                ring_pts.append((r * math.cos(a0 + da), r * math.sin(a0 + da)))
+        for i in range(5):
+            a = a0 + 0.11 + (2 * math.pi / 12 - 0.22) * i / 4
+            ring_pts.append((rim_in * math.cos(a), rim_in * math.sin(a)))
     out += draw(put(cA, ring_pts), G4)
-    # web lightening: four spokes' edges between rim and hub
-    rim_in = rpA - 2.0 * m
-    for k in range(4):
-        a = -math.pi / 2 + math.pi / 4 + k * math.pi / 2
-        for s in (-1, 1):
-            off = 0.32 * m
-            nx, ny = -math.sin(a) * off * s, math.cos(a) * off * s
-            p0 = (cA[0] + hub_r * math.cos(a) + nx, cA[1] + hub_r * math.sin(a) + ny)
-            p1 = (cA[0] + rim_in * math.cos(a) + nx, cA[1] + rim_in * math.sin(a) + ny)
-            out += draw([p0, p1], G3, close=False)
+    hub_r, bore_r = 0.95 * m, 0.42 * m
+    out += draw(put(cA, ring(hub_r, 60)), G3)
+    out += draw(put(cA, ring(bore_r, 40)), G3)
     # the pair in contact: B's tooth in A's gap, brightest
     tB = put(cB, involute_tooth(rpB, m, rotB))
     out += draw(tB, G7, close=False)
@@ -695,122 +677,115 @@ def v4():
 
 # =================================================================== v5
 def v5():
-    """Edge-lit silhouette: a hand-cranked pair seen nearly face on. Every part
-    is a black mass; only edges turned to the light (upper left) catch a rim.
-    The crank handle, the thing in the hand, is the brightest edge. B is
-    spoked; the spokes at the scale's degrees catch the light."""
+    """Edge-lit silhouette: the hand-cranked pair, close up. Every part is a
+    black mass; only edges turned to the light (upper left) catch a rim, the
+    rest is a ground line. The crank handle, the thing in the hand, carries the
+    brightest edge. B is spoked, one spoke a semitone: the scale's seven are
+    polished and catch the light, the other five stay dark."""
     rpA, rpB = TEETH_A / 2, TEETH_B / 2
     dAB = rpA + rpB
     X, Y = (1, 0, 0), (0, 1, 0)
-    cam = Cam(eye=(-10.0, 8.0, 46.0), target=(4.0, 0.5, 0.0))
     rotB = math.pi + math.pi / TEETH_B
-    gA = Disc((0, 0, 0), X, Y, gear2d(TEETH_A, rpA), 1.6)
-    gB = Disc((dAB, 0, 0), X, Y, gear2d(TEETH_B, rpB, rot=rotB), 1.6)
-    crank_a = math.radians(140)
-    arm_len = 6.8
+    T = 1.4
+    gA = Disc((0, 0, 0), X, Y, gear2d(TEETH_A, rpA), T)
+    gB = Disc((dAB, 0, 0), X, Y, gear2d(TEETH_B, rpB, rot=rotB), T)
+    crank_a = math.radians(128)
+    arm_len = 7.4
     hc = (arm_len * math.cos(crank_a), arm_len * math.sin(crank_a))
-    cam.fit([gA.w(x, y, z) for x, y in ring(rpA + 1, 12) for z in (0, 1.6)] +
-            [gB.w(x, y, z) for x, y in ring(rpB + 1, 12) for z in (0, 1.6)] +
-            [(hc[0] - 1.2, hc[1] + 1.2, 6.4), (hc[0] - 1.2, hc[1] - 1.2, 2.2)],
-            (40, BODY[0] + 4, 440, BODY[1] - 4))
-    light = (-0.62, -0.78)                               # screen: towards upper left
+    cam = Cam(eye=(-14.0, 6.0, 30.0), target=(3.0, 0.0, 0.0))
+    cam.fit([gA.w(x, y, 0) for x, y in ring(rpA + 1, 12)] +
+            [(hc[0] - 1, hc[1] + 1, 6.0), (hc[0] - 1, hc[1] - 1, 2.0),
+             (dAB, -rpB - 1, 0), (dAB, rpB + 1, 0), (dAB - 3, -rpB - 1, 0)],
+            (36, BODY[0] + 4, 330, BODY[1] - 2))
+    light = norm2((-0.62, -0.78))
 
-    def lit(pts, closed=True, hi=G5, lo=G1, wd=LINE, thresh=0.12):
-        """Rim-light a screen outline: lit runs bright, the rest a ground line."""
+    def lit(pts, closed=True, hi=G5, lo=G1, wd=LINE, thresh=0.15, lo_w=HAIR):
+        """Rim-light a screen outline (CCW or CW): runs facing the light in
+        `hi`, the rest in a ground line."""
         ring_ = list(pts) + ([pts[0]] if closed else [])
-        cx = sum(p[0] for p in pts) / len(pts)
-        cy = sum(p[1] for p in pts) / len(pts)
-        # orientation: outward normal is the one pointing away from centroid
+        area = sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(ring_, ring_[1:]))
+        sgn = 1 if area > 0 else -1
         o, run, state = [], [ring_[0]], None
         for a, b in zip(ring_, ring_[1:]):
             ex, ey = b[0] - a[0], b[1] - a[1]
             L = math.hypot(ex, ey) or 1
-            nx, ny = ey / L, -ex / L
-            mx, my = (a[0] + b[0]) / 2 - cx, (a[1] + b[1]) / 2 - cy
-            if nx * mx + ny * my < 0:
-                nx, ny = -nx, -ny
+            nx, ny = -sgn * ey / L, sgn * ex / L
+            nx, ny = -nx, -ny
             s = (nx * light[0] + ny * light[1]) > thresh
             if state is None:
                 state = s
             if s != state:
-                o.append(ribbon(run, wd if state else HAIR, hi if state else lo))
+                if lo is not None or state:
+                    o.append(ribbon(run, wd if state else lo_w, hi if state else lo))
                 run, state = [a], s
             run.append(b)
-        o.append(ribbon(run, wd if state else HAIR, hi if state else lo))
+        if lo is not None or state:
+            o.append(ribbon(run, wd if state else lo_w, hi if state else lo))
         return o
-    out = []
 
-    def body(g, rim=True):
-        o = []
-        for _, q, _ in g.sides(cam):
-            o.append(poly(cam.ps(q), G0))
-        back = cam.ps([g.w(x, y, 0) for x, y in g.o])
+    def mass(g):
+        o = [poly(cam.ps(q), G0) for _, q, _ in g.sides(cam)]
+        sil = cam.ps([g.w(x, y, 0) for x, y in g.o])
+        o.append(poly(sil, G0) if len(sil) <= 64 else big_poly(sil, G0))
         cap = g.cap(cam, g.o)
         o.append(poly(cap, G0))
-        if rim:
-            o += lit(back, hi=G4, lo=G0, wd=HAIR, thresh=0.3)
-            o += lit(cap)
+        o += lit(cap)
         return o
-    # B: rim with teeth, spokes, hub (spokes are open: black between them)
-    out += body(gB)
-    rin = rpB - 1.25 - 0.9
-    hole_r = 1.6
-    for k in range(12):                                  # windows between spokes
-        a0 = rotB + math.pi / 2 - 2 * math.pi * k / 12
-        a1 = a0 - 2 * math.pi / 12
-        sw = 0.22
-        win = [(rin * math.cos(a), rin * math.sin(a)) for a in
-               [a0 - sw + (a1 + sw - (a0 - sw)) * i / 6 for i in range(7)]]
-        win += [(hole_r * math.cos(a), hole_r * math.sin(a)) for a in
-                [a1 + sw * 2.2 - (a1 + sw * 2.2 - (a0 - sw * 2.2)) * i / 3 for i in range(4)]]
-        ws = gB.cap(cam, win)
-        out.append(poly(ws, G0))
-    for k in range(12):                                  # each spoke's lit edge
-        a = rotB + math.pi / 2 - 2 * math.pi * k / 12
+    out = []
+    out += mass(gB)
+    rin, hub = rpB - 1.25 - 0.8, 1.5
+    out += lit(gB.cap(cam, ring(rin, 72)[::-1]), hi=G4, lo=G1, wd=HAIR)
+    out += lit(gB.cap(cam, ring(hub, 32)), hi=G4, lo=G1, wd=HAIR)
+    out += lit(gB.cap(cam, ring(0.55, 16)), hi=G1, lo=G4, wd=HAIR, lo_w=LINE)
+    for k in range(12):
+        a = math.pi / 2 - 2 * math.pi * k / 12
         on = k in PCS
+        ca, sa = math.cos(a), math.sin(a)
         for s in (-1, 1):
-            off = 0.22 * s
-            p0 = (hole_r * math.cos(a) - off * math.sin(a), hole_r * math.sin(a) + off * math.cos(a))
-            p1 = (rin * math.cos(a) - off * math.sin(a), rin * math.sin(a) + off * math.cos(a))
+            off = 0.3 * s
+            p0 = (hub * ca - off * sa, hub * sa + off * ca)
+            p1 = (rin * ca - off * sa, rin * sa + off * ca)
             sp = gB.cap(cam, [p0, p1])
-            nx, ny = -(sp[1][1] - sp[0][1]), sp[1][0] - sp[0][0]
-            L = math.hypot(nx, ny) or 1
-            # the side of the spoke facing the light
-            side = (-math.sin(a) * s, -math.cos(a) * s)
-            facing = (side[0] * light[0] + side[1] * light[1]) > -0.05
+            # the screen normal of this edge, pointing out of the spoke
+            mx, my = gB.cap(cam, [(0.5 * (hub + rin) * ca, 0.5 * (hub + rin) * sa)])[0]
+            ex, ey = sp[1][0] - sp[0][0], sp[1][1] - sp[0][1]
+            nx, ny = -ey, ex
+            if nx * (sp[0][0] - mx) + ny * (sp[0][1] - my) < 0:
+                nx, ny = -nx, -ny
+            facing = nx * light[0] + ny * light[1] > 0
             if on and facing:
                 out.append(ribbon(sp, LINE, G5))
+            elif on:
+                out.append(ribbon(sp, HAIR, G2))
             else:
-                out.append(ribbon(sp, HAIR, G2 if on else G1))
-    out += lit(gB.cap(cam, ring(rin, 60)), hi=G3, lo=G1, wd=HAIR, thresh=-0.3)[:0]
-    out += lit(gB.cap(cam, ring(hole_r, 28)), hi=G4, lo=G1, wd=HAIR)
-    # A: solid wheel with the crank arm on its face
-    out += body(gA)
-    out += lit(gA.cap(cam, ring(rpA - 1.25 - 0.5, 40)), hi=G3, lo=G0, wd=HAIR, thresh=-0.2)
-    # crank arm: a flat bar from A's hub to the handle, on A's front face
-    arm = Disc((0, 0, 1.6), X, Y, [], 0.5)
+                out.append(ribbon(sp, HAIR, G1))
+    out += mass(gA)
+    out += lit(gA.cap(cam, ring(rpA - 1.25 - 0.45, 40)[::-1]), hi=G3, lo=None, wd=HAIR)
+    # crank arm on A's face
     ux, uy = math.cos(crank_a), math.sin(crank_a)
-    nx, ny = -uy, ux
     arm_o = []
-    for t in range(9):                                   # hub end: half round
-        a = math.atan2(-uy, -ux) - math.pi / 2 + math.pi * t / 8
-        arm_o.append((1.1 * math.cos(a), 1.1 * math.sin(a)))
-    for t in range(9):                                   # handle end
-        a = math.atan2(uy, ux) - math.pi / 2 + math.pi * t / 8
+    for t in range(9):
+        a = crank_a + math.pi / 2 + math.pi * t / 8           # round boss at the hub
+        arm_o.append((1.15 * math.cos(a), 1.15 * math.sin(a)))
+    for t in range(9):
+        a = crank_a - math.pi / 2 + math.pi * t / 8           # round end at the handle
         arm_o.append((hc[0] + 0.8 * math.cos(a), hc[1] + 0.8 * math.sin(a)))
-    arm.o = arm_o
-    out += body(arm)
-    # handle: a cylinder standing out of the arm toward the viewer
-    hd = Disc((hc[0], hc[1], 2.1), X, Y, ring(0.75, 24), 4.0)
-    for _, q, _ in hd.sides(cam):
-        out.append(poly(cam.ps(q), G0))
-    hcap = hd.cap(cam, hd.o)
-    out.append(poly(hcap, G0))
-    sil = convex_hull(cam.ps([hd.w(x, y, z) for x, y in hd.o for z in (0, 4.0)]))
-    out += lit(sil, hi=G7, lo=G1, wd=SUBJ, thresh=0.2)
-    out += lit(hcap, hi=G5, lo=G2, wd=HAIR, thresh=-1.1)[:1]
-    out += lit(gA.cap(cam, ring(1.1, 24)), hi=G4, lo=G1, wd=HAIR)
+    arm = Disc((0, 0, T), X, Y, arm_o, 0.5)
+    out += mass(arm)
+    out += lit(arm.cap(cam, ring(0.45, 14)), hi=G1, lo=G4, wd=HAIR, lo_w=LINE)
+    # the handle stands out of the arm toward the viewer
+    hd = Disc((hc[0], hc[1], T + 0.5), X, Y, ring(0.7, 24), 4.2)
+    body = cam.ps([hd.w(x, y, z) for x, y in hd.o for z in (0, 4.2)])
+    sil = convex_hull(body)
+    out.append(poly(sil, G0))
+    out += lit(sil, hi=G7, lo=G1, wd=SUBJ, thresh=0.25)
+    out += lit(hd.cap(cam, hd.o), hi=G1, lo=G4, wd=HAIR, thresh=0.25)
     return frame(out)
+
+
+def norm2(v):
+    L = math.hypot(*v)
+    return (v[0] / L, v[1] / L)
 
 
 def main():

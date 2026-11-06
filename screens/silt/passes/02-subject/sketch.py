@@ -169,6 +169,12 @@ class Svg:
 
     def poly(self, pts, fill="none", stroke="none", sw=LINE):
         pts = dedupe(pts, closed=True)
+        seen, uniq = set(), []
+        for q in pts:
+            if q not in seen:
+                seen.add(q)
+                uniq.append(q)
+        pts = uniq
         if len(pts) < 3:
             return
         pts = resample(pts, 64)
@@ -223,7 +229,7 @@ def hatch_lines(svg, poly, spacing, fill, w, minlen, offset=0.0):
                 hits.append((x1 + (x2 - x1) * t, y1 + (y2 - y1) * t))
         hits.sort()
         for p, q in zip(hits[0::2], hits[1::2]):
-            if math.hypot(q[0] - p[0], q[1] - p[1]) >= minlen:
+            if math.hypot(q[0] - p[0], q[1] - p[1]) >= max(minlen, 3.0):
                 svg.ribbon([p, q], w, fill)
         c += step
 
@@ -282,14 +288,14 @@ def v1(c):
     the plate count, grain breaks the hexagons into coarse chipped grains off the line."""
     s = Svg()
     n, stir, grain, sn = n_partials(c["layers"]), c["stir"], c["grain"], c["settle"]
-    rad = [0.95 * k ** -0.42 for k in range(1, n + 1)]
+    rad = [1.0 * k ** -0.32 for k in range(1, n + 1)]
     thick = [0.07 * r + 0.035 for r in rad]
     z, zs = 0.0, []
     for k in range(1, n + 1):
         zs.append(z)
-        gap = (0.10 + stir * 3.2 * lift(k + 1, n)) * 16 / max(n, 8)
+        gap = (0.02 + stir * 1.25 * lift(k + 1, n)) * 16 / max(n, 8)
         z += thick[k - 1] + gap
-    slope = 1.15  # leader line runs up and downstream
+    slope = 1.25  # leader line runs up and downstream
     plates = []
     for k in range(1, n + 1):
         r, t, z0 = rad[k - 1], thick[k - 1], zs[k - 1]
@@ -315,9 +321,9 @@ def v1(c):
         top = [place(x, y, t) for x, y in verts]
         bot = [place(x, y, 0) for x, y in verts]
         plates.append((k, r, top, bot, place(0, 0, t)))
-    cam = Camera(eye=(2.0, -9.5, 6.4), target=(slope * z * 0.5, 0, z * 0.45))
+    cam = Camera(eye=(slope * z * 0.35, -9.0, z * 0.5 + 6.5), target=(slope * z * 0.5, 0, z * 0.5))
     key = [p for (_, _, top, bot, _) in plates for p in top + bot]
-    cam.fit(key, (60, 36, 420, 208))
+    cam.fit(key, (56, 34, 424, 200))
     # leader line through the centres, behind every plate (exploded-view convention)
     a = cam((plates[0][4][0] - 0.0, 0, -0.35))
     b = cam((slope * (zs[-1] + 0.5), 0, zs[-1] + 0.5))
@@ -352,8 +358,8 @@ def v2(c):
     s = Svg()
     n, stir, grain, sn = n_partials(c["layers"]), c["stir"], c["grain"], c["settle"]
     WS = 1.55                      # water surface height
-    cam = Camera(eye=(0.6, -9.0, 2.35), target=(0.9, 0, 0.85))
-    cam.fit([(-3.6, 0, 0), (5.2, 0, 0), (0.9, 0, WS + 0.05), (0.9, 0, -0.25)], (0, 40, 480, 206))
+    cam = Camera(eye=(0.6, -7.0, 2.5), target=(0.6, 0, 0.8))
+    cam.fit([(-2.4, 0, 0), (3.6, 0, 0), (0.6, 0, WS + 0.05), (0.6, 0, -0.2)], (0, 34, 480, 206))
     rng = random.Random(4)
 
     def bed_z(x, y=0.0):
@@ -371,15 +377,15 @@ def v2(c):
         ring = [cam((sx + rr * math.cos(a / 40 * 2 * math.pi), rr * math.sin(a / 40 * 2 * math.pi), WS)) for a in range(40)]
         s.poly(ring, fill="none", stroke=G4, sw=LINE)
     # plume: one curl per partial, in the vertical plane through the pebble
-    lean = math.radians(8 + 50 * sn)
+    lean = math.radians(4 + 36 * sn)
     circles = []
     for k in range(1, n + 1):
         L = lift(k, n)
-        h = 0.32 + stir * 1.05 * L + 0.06 * L
+        h = 0.28 + stir * 2.1 * L + 0.05 * L
         h = min(h, WS - 0.18)
         x = sx + (h - 0.25) * math.tan(lean) + grain * 0.35 * jitter(k, 11)
         zc = h + grain * 0.12 * jitter(k, 13)
-        rho = 0.13 + 0.26 * (1 - L) ** 1.3 + 0.04
+        rho = 0.14 + 0.2 * L ** 0.7
         circles.append((x, zc, rho))
     ctr = (sum(c_[0] for c_ in circles) / n, sum(c_[1] for c_ in circles) / n)
     outline = []
@@ -461,7 +467,7 @@ def v3(c):
         zb = drift(max(min(x, w0), -w0)) + hang
         u = (x + 0.82) / 1.64
         bulge = math.sin(math.pi * u) ** 0.7
-        zt = zb + 0.12 + stir * 1.05 * bulge * (0.75 + 0.25 * math.sin(7 * u + 1))
+        zt = zb + 0.02 + 0.12 * bulge + stir * 1.05 * bulge * (0.75 + 0.25 * math.sin(7 * u + 1))
         zt += grain * 0.12 * random.Random(50 + i).uniform(-1, 1)
         lim_t = zc + math.sqrt(max(Ri * Ri - x * x, 0)) - 0.04
         lim_b = zc - math.sqrt(max(Ri * Ri - x * x, 0)) + 0.04
@@ -521,8 +527,8 @@ def v4(c):
     the bright line."""
     s = Svg()
     n, stir, grain, sn = n_partials(c["layers"]), c["stir"], c["grain"], c["settle"]
-    rb, rt, dep, wall = 0.75, 1.75, 0.6, 0.07
-    cam = Camera(eye=(0, -6.8, 3.0), target=(0, 0.3, 0.2))
+    rb, rt, dep, wall = 0.8, 1.7, 0.85, 0.07
+    cam = Camera(eye=(0, -7.5, 2.2), target=(0, 0.3, 0.3))
     cam.fit([(-rt - 0.1, 0, dep), (rt + 0.1, 0, dep), (0, rt, dep + 0.02), (0, 0, -wall - 0.02),
              (-rt - 0.1, 0, -0.05), (rt + 0.1, 0, -0.05)], (50, 44, 430, 204))
 
@@ -542,7 +548,7 @@ def v4(c):
     s.ribbon(back_bot, HAIR, G3)
     # water: tilted plane through the axis; stir sets its angle
     ang = math.radians(4 + 34 * stir)
-    zw = 0.3
+    zw = 0.4
 
     def water_z(x):
         return zw + math.tan(ang) * x
@@ -575,7 +581,6 @@ def v4(c):
     surf = [cam((x, 0, z)) for x, z in sec[:1]] + back_wl[::-1][1:-1] + [cam((xr, 0, zr))]
     # water region seen: section polygon plus the visible surface sheet behind it, hatched
     sheet = [cam((xl, 0, zl))] + back_wl[::-1] + [cam((xr, 0, zr))]
-    hatch_lines(s, sheet, 4.0, G2, HAIR, 2.0)
     s.ribbon(back_wl, HAIR, G4)
     hatch_lines(s, water, 4.0, G3, HAIR, 2.0)
     # particles in the section plane: heavy (low partials) in the crease, fines lifted up
@@ -588,9 +593,9 @@ def v4(c):
         ztop = water_z(x) - 0.06
         z = 0.04 + (ztop - 0.04) * L * (0.25 + 0.75 * sn) * (0.85 + 0.15 * jitter(kk, 4))
         z = max(0.045, min(z, ztop))
-        size = (0.075 * (1 - L) + 0.03) * (1 + 1.4 * grain)
+        size = (0.1 * (1 - L) + 0.045) * (1 + 1.4 * grain)
         p = cam((x, 0, z + size * 0.6))
-        rpx = max(1.6, size * cam.ppu((x, 0, z)))
+        rpx = max(3.0, size * cam.ppu((x, 0, z)))
         rng = random.Random(400 + kk)
         pts = [(p[0] + rpx * (1 + 0.25 * rng.uniform(-1, 1)) * math.cos(a / 7 * 2 * math.pi),
                 p[1] + rpx * 0.75 * (1 + 0.25 * rng.uniform(-1, 1)) * math.sin(a / 7 * 2 * math.pi)) for a in range(7)]

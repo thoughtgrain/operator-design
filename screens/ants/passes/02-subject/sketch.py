@@ -353,10 +353,11 @@ def ant_plan(F, x, y, ang, L, edge, sw=HAIR, legs=None, bound=True, legw=HAIR):
         F.shape(pts, edge, sw, bound=bound)
 
 
-def ant_side(F, x, y, L, edge, sw=HAIR, legs=None, facing=1):
-    """A small ant seen from the side, feet on y, walking towards +x (facing)."""
+def ant_side(F, x, y, L, edge, sw=HAIR, legs=None, facing=1, hang=False):
+    """A small ant seen from the side, feet on y, walking towards +x (facing);
+    hang=True walks it upside down under a thread."""
     def P(u, v):
-        return (x + facing * u * L, y - v * L)
+        return (x + facing * u * L, y + (v if hang else -v) * L)
     legs = legs or edge
     for root, knee, foot in (((0.12, 0.2), (0.24, 0.3), (0.34, 0.0)), ((0.06, 0.2), (0.06, 0.32), (0.02, 0.0)),
                              ((0.0, 0.2), (-0.14, 0.3), (-0.3, 0.0))):
@@ -386,10 +387,10 @@ def v1() -> Frame:
         F.shape([(x - 3.2, top + 4), (x + 3.2, top + 4), (x + 3.2, plank), (x - 3.2, plank)], G4, WT)
         F.shape(ellipse(x, top, 6.5, 5.5, 20), G3, WT)
 
-    def drape(a, b, sag_k=0.62, lift=0.0):
+    def drape(a, b, sag_k=0.5, lift=0.0):
         xa, xb = px[a], px[b]
         L = abs(xb - xa)
-        sag = sag_k * L ** 0.92
+        sag = sag_k * L ** 1.05
         pts = []
         for k in range(25):
             t = k / 24
@@ -414,17 +415,23 @@ def v1() -> Frame:
         edges[key] = edges.get(key, 0) + 1
     order = sorted(edges, key=lambda e: e[1] - e[0], reverse=True)
     for (a, b) in order:
-        strands = 1 + int(SCENT * 1.6 + 0.2 * edges[(a, b)])
+        strands = 1 + int(SCENT * 1.6 + 0.2 * edges[(a, b)]) if b - a == 1 else 1
         for k in range(strands):
             F.line(drape(a, b, lift=k * 3.6), WT, G0 if k == 0 else G2, bound=(k == 0))
     # one stray single strand from the wandering part of the walk
     F.line(drape(5, 6, sag_k=0.9), WT, G3)
     # ants: contour ants walking the strands
-    spots = [((0, 2), 0.3), ((3, 5), 0.68), ((2, 4), 0.62), ((5, 4), 0.5)]
+    # thread wound round the pegs the phrase uses
+    for p in sorted(set(TRAIL)):
+        x = px[p]
+        for k in range(2):
+            F.line([(x - 4.5, top + 10 + 4 * k), (x + 4.5, top + 7 + 4 * k)], WT, G2)
+    # ants walk upside down under the deepest strands
+    spots = [((0, 2), 0.42), ((3, 5), 0.6), ((2, 4), 0.45), ((1, 2), 0.5)]
     for (a, b), t in spots[:N_ANTS]:
         pts = drape(a, b, lift=0)
         (x, y), ang = point_along(pts, t)
-        ant_side(F, x, y - 1, 22, G2, WT, legs=G3, facing=1 if b > a else -1)
+        ant_side(F, x, y + 1.2, 24, G2, WT, legs=G3, facing=1 if b > a else -1, hang=True)
     return F
 
 
@@ -555,7 +562,7 @@ def v3() -> Frame:
     # ants: silhouettes on the trail, rim-lit
     for t in (0.06, 0.31, 0.55, 0.8)[:N_ANTS]:
         (x, y), ang = point_along(loop, t)
-        ant_plan(F, x, y, ang, 17, G2, HAIR, legs=G3)
+        ant_plan(F, x, y, ang, 23, G2, HAIR, legs=G3)
     return F
 
 
@@ -564,64 +571,65 @@ def v4() -> Frame:
     """One fork of the lattice at large scale: a twig junction where a step can go to any
     degree of the octave, one branch per degree, the rest of the lattice past the frame."""
     F = Frame([G0, G2, G3, G4, G5, BK])
-    kx, ky = 132.0, 196.0
+    kx, ky = 118.0, 192.0
     n = 5                                        # scale: branches (degrees per octave)
-    angs = [math.radians(-168 + 150 * k / (n - 1)) for k in range(n)]
-    chosen = 3                                   # the branch the trail takes
+    angs = [math.radians(-162 + 146 * k / (n - 1)) for k in range(n)]
+    chosen = n - 1                               # the branch the trail takes
     branches = []
     for k, a in enumerate(angs):
-        bend = 0.12 * (1 if k % 2 else -1)
-        cl = []
-        for j in range(16):
-            r = 26 + j * 30
-            aa = a + bend * math.sin(j / 15 * math.pi * 0.8)
+        bend = 0.10 * (1 if k % 2 else -1)
+        cl, wid = [], []
+        for j in range(18):
+            r = 20 + j * 24
+            aa = a + bend * math.sin(j / 17 * math.pi * 0.8)
             cl.append((kx + r * math.cos(aa), ky + r * math.sin(aa)))
-        wid = [13 - 4.5 * j / 15 for j in range(16)]
+            wid.append(15 - 7.5 * (j / 17) ** 0.8)
         branches.append((cl, wid))
-    order = sorted(range(n), key=lambda k: k == chosen)
-    for k in order:
+
+    def frame_of(cl, j):
+        a, b = cl[max(0, j - 1)], cl[min(len(cl) - 1, j + 1)]
+        d = math.atan2(b[1] - a[1], b[0] - a[0])
+        return d, -math.sin(d), math.cos(d)
+
+    def at(k, j, fr):
         cl, wid = branches[k]
-        left, right = [], []
-        for j, (x, y) in enumerate(cl):
-            a, b = cl[max(0, j - 1)], cl[min(15, j + 1)]
-            d = math.atan2(b[1] - a[1], b[0] - a[0])
-            nx, ny = -math.sin(d), math.cos(d)
-            left.append((x + nx * wid[j], y + ny * wid[j]))
-            right.append((x - nx * wid[j], y - ny * wid[j]))
-        body = left + right[::-1]
+        d, nx, ny = frame_of(cl, j)
+        return (cl[j][0] + nx * wid[j] * fr, cl[j][1] + ny * wid[j] * fr)
+
+    for k in sorted(range(n), key=lambda k: k == chosen):
+        cl, wid = branches[k]
+        body = [at(k, j, 1) for j in range(18)] + [at(k, j, -1) for j in range(17, -1, -1)]
         F.shape(body, G3, LINE)
-        # bark: two grain lines inside, ring scars across
-        for fr in (-0.42, 0.42):
-            F.line([(x + (-math.sin(math.atan2(cl[min(15, j + 1)][1] - cl[max(0, j - 1)][1], cl[min(15, j + 1)][0] - cl[max(0, j - 1)][0]))) * wid[j] * fr,
-                     y + math.cos(math.atan2(cl[min(15, j + 1)][1] - cl[max(0, j - 1)][1], cl[min(15, j + 1)][0] - cl[max(0, j - 1)][0])) * wid[j] * fr)
-                    for j, (x, y) in enumerate(cl) if j >= 1], HAIR, G5)
-        for j in (3, 7, 11):
-            F.line([left[j], ((left[j][0] + right[j][0]) / 2 + 2, (left[j][1] + right[j][1]) / 2 + 2), right[j]], HAIR, G4)
+        # bark: short broken fissures running along the twig, and leaf scars
+        for i in range(6):
+            fr = (-0.55, 0.15, -0.2, 0.5, -0.45, 0.3)[i]
+            j0 = (2, 3, 6, 8, 10, 12)[i]
+            pts = [at(k, j0 + q * 0.5 if False else j0 + q, fr + 0.08 * math.sin(q * 1.7 + k)) for q in range(3)]
+            F.line(pts, HAIR, G5)
         if k == chosen:
-            F.line([(x, y) for x, y in cl[1:]], SUBJ, G0, bound=True)
-        elif k in (1, 4)[: 2 if FADE < 0.5 else 1]:
-            # old scent left on an unused branch: deposits that haven't evaporated yet
-            for j in range(2, 2 + int(9 * (1 - FADE))):
-                x, y = cl[j]
-                a2 = math.atan2(cl[j + 1][1] - y, cl[j + 1][0] - x)
-                F.line([(x - 4 * math.cos(a2), y - 4 * math.sin(a2)), (x + 4 * math.cos(a2), y + 4 * math.sin(a2))], LINE, G3)
-    # the knot where the branches meet
-    knot = [(kx + (34 + 4 * math.sin(3 * t)) * math.cos(t), ky + (30 + 3 * math.cos(5 * t)) * math.sin(t))
+            F.line([at(k, j, 0.0) for j in range(1, 18)], SUBJ, G0, bound=True)
+        elif k in (1, 3)[: 2 if FADE < 0.5 else 1]:
+            # old scent left on an unused branch: deposits not yet evaporated (fade: how far they reach)
+            reach = 2 + int(10 * (1 - FADE))
+            band = [at(k, j, 0.4) for j in range(1, reach)] + [at(k, j, -0.4) for j in range(reach - 1, 0, -1)]
+            F.hatch(band, G4, gap=3.5)
+    # the fork: the branches swell into one knot; no rings, only two bark creases
+    knot = [(kx + (30 + 3 * math.sin(3 * t + 1)) * math.cos(t), ky + (24 + 2 * math.cos(4 * t)) * math.sin(t))
             for t in [2 * math.pi * k / 40 for k in range(40)]]
     F.shape(knot, G3, LINE)
-    for r in (22, 13):
-        F.line(ellipse(kx + 2, ky - 2, r * 1.1, r * 0.9, 28, 0.2, closed=False), HAIR, G4)
+    F.line([(kx - 22, ky - 6), (kx - 8, ky - 12), (kx + 6, ky - 10)], HAIR, G5)
+    F.line([(kx - 4, ky + 6), (kx + 12, ky + 2), (kx + 24, ky + 6)], HAIR, G5)
     # the scout at the fork: its heading swings onto the scented branch with scent
-    target = math.atan2(branches[chosen][0][2][1] - ky, branches[chosen][0][2][0] - kx)
-    wander = angs[1]
+    target = angs[chosen]
+    wander = angs[2]
     head = wander + (target - wander) * (0.3 + 0.7 * SCENT)
-    ant_plan(F, kx + 18 * math.cos(head), ky - 8 + 18 * math.sin(head), head, 40, G2, LINE, legs=G3, legw=LINE)
-    # ants already on the scented branch (ants: count)
+    ant_plan(F, kx + 6 + 10 * math.cos(head), ky - 6 + 10 * math.sin(head), head, 44, G2, LINE, legs=G3, legw=LINE)
+    # ants already out on the scented branch (ants: count)
     cl = branches[chosen][0]
-    for k, j in enumerate((4, 7, 10)[: N_ANTS - 1]):
-        x, y = cl[j]
-        a2 = math.atan2(cl[j + 1][1] - y, cl[j + 1][0] - x)
-        ant_plan(F, x, y, a2, 32 - 3 * k, G2, HAIR, legs=G3)
+    for k, j in enumerate((5, 8, 11)[: N_ANTS - 1]):
+        x, y = at(chosen, j, 0.0)
+        d, nx, ny = frame_of(cl, j)
+        ant_plan(F, x, y, d, 34 - 3 * k, G2, HAIR, legs=G3)
     return F
 
 
@@ -734,36 +742,39 @@ def v5() -> Frame:
     """Ants, drawn literally in hidden-line 3D: a file of modelled ants walking the
     reinforced path across the degree stones, one camera over the whole scene."""
     F = Frame([G0, G2, G3, G4, G5, BK])
-    cam = Camera((3.2, 3.6, 7.4), (0.6, 0.1, -0.6), 300.0, 232.0, 116.0)
-    # degree stones: two rows, octave one near, octave two far; one more for the top root
-    sp = 1.9
-    stones = [(-3.8 + i * sp, 0.0, 0.6) for i in range(5)] + [(-2.9 + i * sp, 0.0, -2.0) for i in range(5)] + [(6.6, 0.0, -2.0)]
+    cam = Camera((0.8, 3.4, 8.4), (0.6, 0.0, -1.0), 330.0, 240.0, 118.0)
+    sp = 2.5
+    stones = ([(-5.0 + i * sp, 0.0, 0.8) for i in range(5)] + [(-3.8 + i * sp, 0.0, -2.6) for i in range(5)]
+              + [(8.7, 0.0, -2.6)])
 
     def disc(c, r, y):
         return [(c[0] + r * math.cos(t), y, c[2] + r * math.sin(t)) for t in [2 * math.pi * k / 32 for k in range(32)]]
-    # ground marks: a few hairline contours of the ground, far ones only
     # ghost paths (fade): old routes, thin and dashed on the ground
     for g in GHOSTS[: 2 if FADE < 0.5 else 1]:
-        pts = [cam(stones[i]) for i in g]
-        F.dashed(pts, HAIR, G4, on=4, off=4)
-    # live path: the bright trail on the ground
-    route = [cam(stones[i]) for i in TRAIL]
-    F.line(catmull(route[:-1], 6, True), SUBJ, G0, bound=True)
+        for a, b in zip(g, g[1:]):
+            F.dashed([cam(stones[a]), cam(stones[b])], HAIR, G4, on=4, off=5)
+    # live path: the bright trail on the ground, one run per walked edge
+    done = set()
+    for k, (a, b) in enumerate(zip(TRAIL, TRAIL[1:])):
+        key = (min(a, b), max(a, b))
+        if key in done:
+            continue
+        done.add(key)
+        F.line([cam(stones[a]), cam(stones[b])], SUBJ, G0, bound=(k == 0))
     # stones, far to near: hidden-line low cylinders
     for c in sorted(stones, key=lambda s: -cam.depth(s)):
-        top = [cam(p) for p in disc(c, 0.5, 0.16)]
-        bot = [cam(p) for p in disc(c, 0.5, 0.0)]
+        top = [cam(p) for p in disc(c, 0.55, 0.18)]
+        bot = [cam(p) for p in disc(c, 0.55, 0.0)]
         F.shape(hull(top + bot), G4, LINE)
         F.shape(top, G5, HAIR)
-    # ants along the route, far to near
-    walk = [stones[i] for i in TRAIL]
+    # ants on the route, far to near
     spots = []
-    for (a, b), t in zip(zip(walk, walk[1:]), (0.55, 0.0, 0.5, 0.0, 0.0, 0.45, 0.5)):
-        if t:
-            spots.append(((a[0] + (b[0] - a[0]) * t, 0.0, a[2] + (b[2] - a[2]) * t),
-                          math.atan2(b[2] - a[2], b[0] - a[0])))
+    for (a, b), t in (((2, 1), 0.5), ((5, 4), 0.42), ((4, 2), 0.3), ((3, 5), 0.72)):
+        A, B = stones[a], stones[b]
+        spots.append(((A[0] + (B[0] - A[0]) * t, 0.0, A[2] + (B[2] - A[2]) * t),
+                      math.atan2(B[2] - A[2], B[0] - A[0])))
     for p, h in sorted(spots[:N_ANTS], key=lambda s: -cam.depth(s[0])):
-        ant3d(F, cam, p, h, 1.15)
+        ant3d(F, cam, p, h, 1.6)
     return F
 
 

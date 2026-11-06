@@ -262,9 +262,8 @@ def v1() -> Frame:
     F.outline([(30, 186), (450, 186), (446, 206), (34, 206)], G5)
     # headstock and its spindle nose
     F.outline([(22, 56), (114, 56), (114, 178), (22, 178)], G4)
-    F.outline([(36, 70), (100, 70), (100, 104), (36, 104)], G5, sw=HAIR)
-    for y in (82, 92):
-        F.seg((44, y), (92, y), HAIR, G5)
+    F.outline(ellipse(66, 98, 26, 26, 40), G5, sw=HAIR, fill="none")     # belt guard over the spindle pulley
+    F.outline(ellipse(66, 98, 8, 8, 20), G5, sw=HAIR, fill="none")
     F.outline([(114, ax - 22), (120, ax - 22), (120, ax + 22), (114, ax + 22)], G4)
     # chuck body and jaws gripping the raw stock
     F.outline([(120, ax - 46), (130, ax - 46), (130, ax + 46), (120, ax + 46)], G3)
@@ -397,14 +396,14 @@ def v3() -> Frame:
     cam = Camera((0, 0, 1.0), (0, 4.2, -0.35), 330, (240, 112))
     pitch, half, depth = 0.5, 0.15, 0.13
     shift = -GROOVE * pitch * 4          # groove: the field slides left; the rim leaves, more turns come in
-    y0, y1 = 1.75, 9.0
+    y0, y1 = 1.75, 8.0
 
     def wig(k, y):
         t = (y - y0) / (y1 - y0)
         return 0.055 * soft(signal(0.13 * k + 0.55 * t), DRIVE if k == 0 else 1.0)
 
-    rim_x = pitch * 3.5 + shift          # rim bevel: the field ends here at groove 0
-    ks = [k for k in range(-12, 8) if k * pitch + half < rim_x]
+    rim_x = pitch * 2.5 + shift          # rim bevel: the field ends here at groove 0
+    ks = [k for k in range(-6, 8) if k * pitch + half < rim_x]
 
     def lip(k, side, y):
         return (k * pitch + wig(k, y) + side * half, y, 0.0)
@@ -444,7 +443,9 @@ def v3() -> Frame:
             break
         rim.append(p)
     if len(rim) >= 2 and rim[0][0] < 480:
-        F.ribbon([p for p in rim if p[0] <= 480], LINE, G3)
+        F.ribbon([p for p in rim if p[0] <= 480], LINE, G2)
+        foot = [cam((rim_x + 0.16, y, -0.22)) for y in (y0, 2.4, 3.2, 4.4, 6.0, y1)]
+        F.ribbon([q for q in foot if q[0] <= 480 and q[1] > 24], HAIR, G5)
     # near cut face, a silhouette: black mass below its lit, notched top edge
     edge = []
     for k in ks:
@@ -466,7 +467,7 @@ def v3() -> Frame:
 def v4() -> Frame:
     """The cut playing back: the disc on the platter, close and low, the tonearm reading it."""
     F = Frame([G0, G2, G3, G5])
-    cam = Camera((-0.2, -2.55, 1.05), (0.18, 0.1, -0.1), 430, (214, 122))
+    cam = Camera((-0.15, -2.75, 1.2), (0.22, 0.05, -0.12), 330, (210, 120))
     R, Rl = 1.0, 0.31
     rp = 0.93 - GROOVE * 0.56            # groove: where the stylus reads, rim to label
     zt, zb, zd = 0.0, -0.13, 0.012
@@ -497,8 +498,8 @@ def v4() -> Frame:
     sp = ring(0.022, zd, 7, 0, math.pi) + ring(0.022, zd + 0.1, 7, math.pi, 0)
     F.outline(sp, G3)
     # tonearm geometry: pivot back right, the stylus on radius rp
-    P = (1.3, 0.5)
-    L = 1.36
+    P = (1.6, 0.3)
+    L = 1.24
     d = math.hypot(*P)
     a = (rp * rp - L * L + d * d) / (2 * d)
     hh = math.sqrt(max(0.0, rp * rp - a * a))
@@ -512,7 +513,6 @@ def v4() -> Frame:
     v = (-u[1], u[0])
     zarm = 0.2
     # base: a short cylinder on the plinth
-    base = ring(0.16, zb, 1)  # placeholder to keep the signature simple
     bpts = [cam((P[0] + 0.15 * math.cos(t), P[1] + 0.15 * math.sin(t), zb - 0.05)) for t in
             [math.pi + math.pi * i / 14 for i in range(15)]]
     bpts += [cam((P[0] + 0.15 * math.cos(t), P[1] + 0.15 * math.sin(t), zarm - 0.06)) for t in
@@ -544,9 +544,6 @@ def v4() -> Frame:
         cart.append(cam((P[0] + u[0] * du + v[0] * dv, P[1] + u[1] * du + v[1] * dv, z)))
     F.outline(cart, G3)
     F.outline(hs, G2)
-    # cueing post at the rest
-    rest = [cam(p) for p in ((1.5, -0.55, zb - 0.05), (1.56, -0.55, zb - 0.05), (1.56, -0.55, zarm), (1.5, -0.55, zarm))]
-    F.outline(rest, G5)
     return F
 
 
@@ -559,7 +556,7 @@ def v5() -> Frame:
     stylus), wear knocks chips out of the lips, rumble heaves the block on its bed.
     """
     F = Frame([G0, G2, G3, G5])
-    cam = Camera((-1.6, -5.6, 3.9), (3.1, 1.0, 0.2), 470, (236, 118))
+    cam = Camera((-1.6, -5.6, 3.9), (3.1, 1.0, 0.2), 420, (236, 116))
     Lx, Wy = 6.4, 2.2
     zc, zt = 0.55, 0.95
     gy = Wy / 2

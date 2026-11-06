@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "One boulder at the sea's edge holding a pool in its worn top, drawn as detailed hidden-line facets, with the swell's fronts running in across the sea around it and the pool's water the brightest line.",
+  "controls": [
+    "swell: the wave fronts on the sea spread apart or crowd together as they run in round the boulder (position).",
+    "depth: the pool's water sinks lower inside the rim, showing more of the inner wall, over about 20 px (position of the water ring).",
+    "salt: a band of salt crust spreads up the boulder's flank above the waterline, drawn as 45-degree hatching (hatched area).",
+    "drift: the pool's water ring tips and slides off centre inside the rim (shape of one mutable outline)."
+  ],
+  "reference": "library/theseus-tower (detailed line art, hidden-line over black)",
+  "risks": "The pool is small on the boulder's top and reads partly as a collar; it needs to grow or the camera to rise. A single pool shows one hollow, not eight resonators. Depth moves the water ring only ~15-20 px at this scale, close to the floor. The facets are 40-odd hairlines; static, but count them against the node budget."
+}

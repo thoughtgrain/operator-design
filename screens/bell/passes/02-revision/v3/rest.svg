@@ -160,8 +160,8 @@
   <path d="M 281.59 67.76 L 281.59 64.76 L 280.59 64.76 L 280.59 67.76 Z" fill="#4B4B4B" stroke="none"/>
   <path d="M 281.59 61.76 L 281.59 58.76 L 280.59 58.76 L 280.59 61.76 Z" fill="#4B4B4B" stroke="none"/>
   <path d="M 281.25 68.23 L 284.09 67.26 L 283.77 66.32 L 280.93 67.29 Z" fill="#4B4B4B" stroke="none"/>
-  <path d="M 374.99 100.4 L 349.55 165 L 350.95 165.54 L 376.39 100.94 Z" fill="#7D7D7D" stroke="none"/>
-  <circle cx="375.69" cy="100.67" r="3.5" fill="#000000" stroke="#7D7D7D" stroke-width="1"/>
-  <path d="M 345.04 162.14 L 342.1 169.58 L 353.27 173.98 L 356.2 166.54 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
+  <path d="M 362.96 102.49 L 348.11 161.1 L 349.57 161.46 L 364.42 102.85 Z" fill="#7D7D7D" stroke="none"/>
+  <circle cx="363.69" cy="102.67" r="3.5" fill="#000000" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 343.27 158.84 L 341.31 166.6 L 352.94 169.54 L 354.91 161.79 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.5"/>
   <path d="M 320.77 144.31 L 326.69 153.05 L 326.69 160.08 L 329.19 160.08 L 329.19 152.29 L 322.85 142.91 Z" fill="#CDCDCD" stroke="none"/>
 </svg>

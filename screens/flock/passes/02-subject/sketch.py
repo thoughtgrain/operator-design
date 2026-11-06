@@ -324,25 +324,24 @@ def v1() -> Frame:
     cutaway explains the field: a bird skimming a reed's mouth blows it.
     """
     F = Frame("v1 · reed bed cut open · bold closed outlines")
-    cam = Camera((0.0, 7.6, -10.5), (0.35, 1.25, 0.0), 470, (240, 122))
+    cam = Camera((0.0, 6.6, -11.5), (0.2, 0.9, 0.0), 500, (240, 146))
     rnd = random.Random(4)
     n = N_DEG
-    R = 0.3
+    R = 0.27
     reeds = []
     for i in range(n):
-        x = -5.0 + 10.0 * i / (n - 1)
-        z = 0.35 * math.sin(i * 1.7) + rnd.uniform(-0.15, 0.15)
-        top = 2.55 + 0.22 * math.sin(i * 2.3 + 0.4) + rnd.uniform(-0.08, 0.08)
-        col = 2.0 * 2 ** (-DEG[i] / 12)          # air column, 2.0 .. 0.5
+        x = -4.9 + 9.8 * i / (n - 1)
+        z = 0.3 * math.sin(i * 1.7) + rnd.uniform(-0.12, 0.12)
+        top = 1.75 + 0.2 * math.sin(i * 2.3 + 0.4) + rnd.uniform(-0.08, 0.08)
+        col = 1.6 * 2 ** (-DEG[i] / 12)          # air column, 1.6 .. 0.4: two octaves
         reeds.append((x, z, top, top - col))
     birds = []
     for k, (u, h, d) in enumerate(BIRDS):
-        x = -5.0 + 10.0 * u
-        birds.append((x, 3.75 + 0.9 * h, 0.5 * d))
+        birds.append((-4.9 + 9.8 * u, 2.75 + 0.45 * h, 0.4 * d))
     # the bird that plays now: skimming the mouth of the reed under it
     lo = min(range(N_BIRDS), key=lambda k: birds[k][1])
-    ri = cell((birds[lo][0] + 5) / 10)
-    birds[lo] = (reeds[ri][0] - 0.25, reeds[ri][2] + 0.55, reeds[ri][1])
+    ri = cell((birds[lo][0] + 4.9) / 9.8)
+    birds[lo] = (reeds[ri][0] - 0.2, reeds[ri][2] + 0.42, reeds[ri][1])
 
     def ring(x, z, y, r, a0=0.0, a1=2 * math.pi, n_=40):
         return [cam((x + r * math.cos(a0 + (a1 - a0) * t / n_), y, z + r * math.sin(a0 + (a1 - a0) * t / n_)))
@@ -352,38 +351,35 @@ def v1() -> Frame:
     for i in order:
         x, z, top, node = reeds[i]
         playing = i == ri
-        cut = node - 0.28
-        bottom = -3.2
+        cut = node - 0.3
+        bottom = -4.0
+        edge = G5 if playing else G4
         sil = hull(ring(x, z, top, R) + ring(x, z, bottom, R))
-        F.outline(sil, G5 if playing else G4, LINE)
-        # back wall inside: three vertical hairlines from the rim down to the node
-        for a in (math.radians(60), math.radians(90), math.radians(120)):
-            p0 = cam((x + 0.8 * R * math.cos(a), top, z + 0.8 * R * math.sin(a)))
-            p1 = cam((x + 0.8 * R * math.cos(a), node, z + 0.8 * R * math.sin(a)))
+        F.outline(sil, edge, LINE)
+        # back wall inside: two hairlines from the rim down to the node
+        for a in (math.radians(65), math.radians(115)):
+            p0 = cam((x + 0.82 * R * math.cos(a), top, z + 0.82 * R * math.sin(a)))
+            p1 = cam((x + 0.82 * R * math.cos(a), node, z + 0.82 * R * math.sin(a)))
             F.line(p0, p1, HAIR, G4 if playing else G2)
         # rim: the inner back arc shows the wall's thickness
-        F.ribbon(ring(x, z, top, 0.78 * R, 0, math.pi, 20), HAIR, G3)
-        # the node that stops the column, seen from above
-        F.outline(ring(x, z, node, 0.8 * R, n_=36)[:-1], G6 if playing else G4, LINE)
-        # the front wall, cut: its top edge is the front half of a ring at the cut height
+        F.ribbon(ring(x, z, top, 0.8 * R, 0, math.pi, 20), HAIR, G3)
+        # the node that stops the column
+        F.outline(ring(x, z, node, 0.82 * R, n_=36)[:-1], G6 if playing else G4, LINE)
+        # the front wall, cut away above the node: its cut edge is the front half of a ring
         front = ring(x, z, cut, R, math.pi, 2 * math.pi, 20)
         lower = ring(x, z, bottom, R, math.pi, 2 * math.pi, 20)
-        F.outline(front + lower[::-1], G4, LINE)
-        F.ribbon(ring(x, z, cut, 0.78 * R, math.pi, 2 * math.pi, 20), HAIR, G2)
+        F.outline(front + lower[::-1], edge, LINE)
         # joints further down the stalk
-        for j in (1.25, 2.6):
+        for j in (1.1, 2.3):
             yj = cut - j
-            if yj > bottom + 0.3:
-                F.ribbon(ring(x, z, yj, R, math.pi * 1.04, math.pi * 1.96, 16), HAIR, G3)
-    # birds over the mouths, flying right; the one at the mouth is the brightest thing
+            F.ribbon(ring(x, z, yj, R, math.pi * 1.06, math.pi * 1.94, 14), HAIR, G2)
+    # birds over the mouths, flying right and banking towards us; the one at a mouth is brightest
     for k in sorted(range(N_BIRDS), key=lambda k: -cam.depth(birds[k])):
         x, y, z = birds[k]
-        pts = [cam(p) for p in bird_world((x, y, z), heading=math.radians(-8 + 10 * BIRDS[k][2]),
-                                          dihedral=0.18 + 0.12 * ((k * 5) % 3), size=0.62)]
-        if k == lo:
-            F.outline(pts, G7, SUBJ)
-        else:
-            F.outline(pts, G5, LINE)
+        pts = [cam(p) for p in bird_world((x, y, z), heading=math.radians(-6 + 14 * BIRDS[k][2]),
+                                          bank=math.radians(-12), dihedral=(0.05, 0.25, 0.4)[(k * 5) % 3],
+                                          size=0.62)]
+        F.outline(pts, G7 if k == lo else G5, SUBJ if k == lo else LINE)
     return F
 
 
@@ -407,66 +403,54 @@ def v2() -> Frame:
         return ground(x) * 0.45 + SNOW
 
     xs = [X0 + (X1 - X0) * k / 60 for k in range(61)]
-    # top surface, outlined; drawn first so the section sits over its front edge
     back = [cam((x, snow(x), Z1)) for x in xs]
     front = [cam((x, snow(x), Z0)) for x in xs]
     F.outline(thin(front[::2] + back[::-2], 62), G3, LINE)
-    # ridge lines receding along each furrow crest (hairlines)
+    # ridge lines receding along each furrow crest
     for i in range(n):
         xc = X0 + pitch * (i + 0.5)
         F.line(cam((xc, snow(xc), Z0)), cam((xc, snow(xc), Z1)), HAIR, G2)
-    # the section face at z = Z0: snow layer over hatched soil
+    # the section face at z = Z0: snow layer (black) over cut soil (hatched)
     base = -1.25
     soil = [cam((x, ground(x), Z0)) for x in xs[::2]]
     soil_poly = soil + [cam((X1, base, Z0)), cam((X0, base, Z0))]
     F.poly(soil_poly, G0)
     F.hatch(soil_poly, G3, 4.0)
     F.ribbon(soil, HAIR, G4)
-    # right end face of the block (in shadow): hatched too
     side = [cam((X1, snow(X1), Z0)), cam((X1, snow(X1), Z1)), cam((X1, base, Z1)), cam((X1, base, Z0))]
     F.outline(side, G3, LINE)
     F.hatch(side, G2, 4.0)
     sec = [cam((x, snow(x), Z0)) for x in xs[::2]] + [cam((X1, base, Z0)), cam((X0, base, Z0))]
     F.outline(sec, G4, LINE, fill="none")
 
-    # wing prints: each landing pressed a bird's spread wings into the snow
-    def print_pts(x, z, yaw, size, open_=1.0):
-        out = []
-        for (px, py, pz) in bird_local(0.0, -0.2 * open_, size):
+    def on_snow(x, z):
+        return cam((x, snow(x) - 0.02, z))
+
+    def print_at(x, z, yaw, size, newest):
+        """A bird's spread wings pressed into the snow, with the primaries' marks."""
+        pts = []
+        for (px, _, pz) in bird_local(0.0, 0.0, size):
             p = rot_y((px, 0, pz), yaw)
-            out.append(cam((x + p[0], snow(x + p[0]) - 0.02, z + p[2])))
-        return out
-
-    def feathers(x, z, yaw, size, colour):
-        for side_ in (1, -1):
-            root = (0.2 * size, 0.15 * size * side_)
-            for f_ in range(4):
-                t = 0.5 + 0.16 * f_
-                tip = (-0.05 - 0.2 * f_ * 0.4, side_ * (0.55 + 0.12 * f_))
-                p0 = rot_y((root[0] - 0.25 * size, 0, root[1]), yaw)
-                p1 = rot_y((tip[0] * size, 0, tip[1] * size), yaw)
-                F.line(cam((x + p0[0], snow(x + p0[0]), z + p0[2])),
-                       cam((x + p1[0], snow(x + p1[0]), z + p1[2])), HAIR, colour)
-                del t
-
-    rnd = random.Random(9)
-    prints = []
-    for k, (u, h, d) in enumerate(BIRDS):
-        # each bird's track runs back into the field; speed sets how far apart its touch-downs are
-        x = X0 + (X1 - X0) * u
-        z = 3.9 + 0.6 * d
-        prints.append((x, z, rnd.uniform(-0.3, 0.3), 0)) if k % 2 else None
-    tracks = []
-    for k, (u, h, d) in enumerate(BIRDS[:5]):
-        x = X0 + (X1 - X0) * u + 0.1 * k
-        z = 4.3 - 0.85 * k + 0.25 * d
-        tracks.append((x, z, math.radians(-90 + 25 * d), k))
-    tracks.sort(key=lambda t: -t[1])
-    for j, (x, z, yaw, k) in enumerate(tracks):
-        newest = j == len(tracks) - 1
-        pts = print_pts(x, z, yaw, 0.95)
+            pts.append(on_snow(x + p[0], z + p[2]))
         F.outline(pts, G7 if newest else G4, SUBJ if newest else LINE)
-        feathers(x, z, yaw, 0.95, G5 if newest else G2)
+        for side_ in (1, -1):
+            wrist = (0.1 * size, side_ * 0.62 * size)
+            for f_ in range(3):
+                tip = ((-0.06 - 0.03 * f_) * size, side_ * (0.82 + 0.13 * f_) * size)
+                p0 = rot_y((wrist[0], 0, wrist[1]), yaw)
+                p1 = rot_y((tip[0], 0, tip[1]), yaw)
+                F.line(on_snow(x + p0[0], z + p0[2]), on_snow(x + p1[0], z + p1[2]), HAIR, G5 if newest else G2)
+
+    # each touch-down left one print; the flock landed across a few furrows (cohere), in a line
+    # running back into the field (speed spaces them); the nearest is the newest, the note now
+    marks = []
+    for k, (u, h, d) in enumerate(BIRDS):
+        x = X0 + (X1 - X0) * u
+        z = 0.9 + 0.5 * k + 0.2 * d
+        marks.append((x, z, math.radians(-90 + 22 * d + (8 if k % 2 else -8)), k))
+    marks.sort(key=lambda t: -t[1])
+    for j, (x, z, yaw, k) in enumerate(marks):
+        print_at(x, z, yaw, 0.82, j == len(marks) - 1)
     return F
 
 
@@ -474,212 +458,232 @@ def v2() -> Frame:
 def v3() -> Frame:
     """One bird at large scale, exploded like a model kit; its neighbours cut by the frame's edge."""
     F = Frame("v3 · one bird, exploded · exploded view")
-    cam = Camera((2.2, 4.4, -7.5), (0.1, 0.2, 0.0), 300, (240, 124))
-    E = 0.55 + 0.75 * (1 - COHERE)               # explosion distance: cohere pulls the parts together
-    yaw = math.radians(-14)
+    cam = Camera((-2.6, 8.4, -7.0), (0.3, 0.0, 0.25), 300, (236, 124))
+    E = 2.6 * (0.18 + 0.36 * (1 - COHERE))               # explosion: cohere pulls the parts together
+    yaw = math.radians(8)
+    S_ = 2.6
 
-    def W(p, off=(0, 0, 0)):
-        return cam(add(rot_y(p, yaw), off))
+    def P(p, off=(0, 0, 0)):
+        return cam(add(rot_y(scl(p, S_), yaw), off))
 
-    # neighbours, assembled and cut by the frame's edge (the rest of the flock)
-    for (pos, hd, sz) in (((-6.4, 2.6, 3.4), -0.2, 1.6), ((6.1, -1.3, 1.0), 0.15, 1.5),
-                          ((-5.0, -2.9, -1.4), -0.05, 1.3), ((3.6, 3.55, 4.2), 0.1, 1.5)):
-        pts = [cam(p) for p in bird_world(pos, heading=hd, dihedral=0.25, size=sz)]
+    # neighbours, assembled, cut by the frame's edge: the rest of the flock
+    for (pos, hd, sz) in (((-7.4, 0.0, 2.6), 0.1, 2.4), ((7.6, 0.0, -0.4), -0.1, 2.4),
+                          ((-5.6, 0.0, -5.6), 0.15, 2.2), ((5.4, 0.0, 6.4), -0.2, 2.2)):
+        pts = [cam(p) for p in bird_world(pos, heading=hd, dihedral=0.15, size=sz)]
         F.outline(pts, G3, LINE)
 
-    # body: an ellipsoid (silhouette from its projected hull) with section rings inside
-    a, b, c = 0.95, 0.36, 0.34
-    body = []
-    for i in range(24):
-        th = math.pi * i / 23
-        for j in range(24):
-            ph = 2 * math.pi * j / 24
-            body.append(W((a * math.cos(th), b * math.sin(th) * math.cos(ph), c * math.sin(th) * math.sin(ph))))
-    # exploded parts' offsets (world, before yaw): wings out sideways and up, tail back, head forward
-    off_r = scl((0.0, 0.55, 1.0), E)
-    off_l = scl((0.0, 0.55, -1.0), E)
-    off_t = scl((-1.0, 0.1, 0.0), E)
-    wing_l, wing_r = [], []
-    for x, z in _HALF[3:13]:
-        span = max(0.0, (abs(z) - 0.14) / 0.86)
-        p = (x * 1.9, 0.12 + 0.32 * span * span, z * 1.9)
-        wing_r.append(p)
-    wing_r = [(0.4, 0.12, 0.2), (0.62, 0.13, 0.42)] + [(x * 1.9 + 0.3, 0.12 + 0.3 * ((z - 0.14) / 0.86) ** 2, z * 1.9 + 0.1)
-                                                       for x, z in _HALF[4:12]] + [(-0.12, 0.12, 0.32)]
-    wing_l = [(x, y, -z) for x, y, z in wing_r]
-    tail = [(-0.75, 0.05, 0.12), (-1.5, 0.08, 0.3), (-1.62, 0.08, 0.1), (-1.6, 0.08, -0.1), (-1.5, 0.08, -0.3),
-            (-0.75, 0.05, -0.12)]
-    # assembly lines: dashed hairlines from each part back to its seat on the body
-    for seat, off in (((0.18, 0.1, 0.3), off_r), ((0.18, 0.1, -0.3), off_l), ((-0.7, 0.05, 0.0), off_t)):
-        p0 = rot_y(seat, yaw)
-        p1 = add(p0, off)
-        L = math.dist(p0, p1)
-        nseg = int(L / 0.16)
-        for s in range(0, nseg, 2):
-            q0 = add(p0, scl(sub(p1, p0), s / nseg))
-            q1 = add(p0, scl(sub(p1, p0), (s + 1) / nseg))
-            F.line(cam(q0), cam(q1), HAIR, G3)
+    # body: an ellipsoid; silhouette from its projected hull, section rings and spine inside
+    a, b, c = 0.62, 0.2, 0.19
+    body_pts = []
+    for i in range(20):
+        th = math.pi * i / 19
+        for j in range(20):
+            ph = 2 * math.pi * j / 20
+            body_pts.append(P((a * math.cos(th), b * math.sin(th) * math.cos(ph), c * math.sin(th) * math.sin(ph))))
 
-    def part(pts, off):
-        return [cam(add(rot_y(p, yaw), off)) for p in pts]
+    off_r = scl((0.0, 0.25, 1.0), E)            # right wing: out and up
+    off_l = scl((0.0, 0.25, -1.0), E)           # left wing
+    off_t = scl((-1.0, 0.05, 0.0), E * 0.8)     # tail back
 
-    def feather_lines(wing, off, side, bright):
-        # primaries: one per scale degree, five on the left wing (low octave), six on the right
-        root = (0.25, 0.14, 0.32 * side)
-        k = 5 if side < 0 else 6
+    # wing: the arm (coverts) plus the primaries fanned from the wrist, each pulled out a little
+    def wing(side):
+        arm = [(0.18, 0.04, 0.12), (0.24, 0.06, 0.32), (0.22, 0.08, 0.56), (0.06, 0.09, 0.66),
+               (-0.12, 0.09, 0.6), (-0.14, 0.06, 0.32), (-0.12, 0.04, 0.12)]
+        arm = [(x, y, side * z) for x, y, z in arm]
+        k = 5 if side < 0 else 6                  # degrees: low octave on the left, high on the right
+        feathers = []
+        wrist = (0.04, 0.09, side * 0.62)
         for f in range(k):
-            t = (f + 0.5) / k
-            tip = ((0.55 - 1.2 * t) * 1.0 + 0.0, 0.12 + 0.3 * (0.35 + 0.65 * t) ** 2,
-                   side * (0.9 + 0.95 * (1 - abs(t - 0.55))))
-            colour = G7 if (bright is not None and f == bright) else G2
-            w = SUBJ if colour == G7 else HAIR
-            F.line(cam(add(rot_y(root, yaw), off)), cam(add(rot_y(tip, yaw), off)), w, colour)
+            t = f / (k - 1)
+            ang = math.radians(8 + 72 * t)       # fanned from forward-out to back-out
+            L = 0.62 - 0.22 * t
+            d = (-math.sin(ang), 0.05, side * math.cos(ang))
+            gap = 0.06 + 0.22 * E
+            base = add(wrist, scl(d, gap))
+            pts = []
+            for s in range(13):
+                u = s / 12
+                w = 0.055 * math.sin(math.pi * min(1, u * 1.05)) ** 0.7 + 0.012
+                q = add(base, scl(d, L * u))
+                nrm = (math.cos(ang), 0, side * math.sin(ang))
+                pts.append(add(q, scl(nrm, w)))
+            for s in range(12, -1, -1):
+                u = s / 12
+                w = 0.055 * math.sin(math.pi * min(1, u * 1.05)) ** 0.7 + 0.012
+                q = add(base, scl(d, L * u))
+                nrm = (math.cos(ang), 0, side * math.sin(ang))
+                pts.append(sub(q, scl(nrm, w)))
+            feathers.append((pts, base, add(base, scl(d, L))))
+        return arm, feathers
 
-    parts = [("tail", tail, off_t), ("wl", wing_l, off_l), ("body", None, (0, 0, 0)), ("wr", wing_r, off_r)]
-    parts.sort(key=lambda p: -cam.depth(p[2]))
-    for name, pts, off in parts:
+    tail = [(-0.5, 0.0, 0.06), (-0.95, 0.0, 0.17), (-1.0, 0.0, 0.06), (-1.0, 0.0, -0.06), (-0.95, 0.0, -0.17),
+            (-0.5, 0.0, -0.06)]
+
+    def assembly(p0, off):
+        q0 = rot_y(scl(p0, S_), yaw)
+        q1 = add(q0, off)
+        L = math.dist(q0, q1)
+        nseg = max(2, int(L / 0.07))
+        for s in range(0, nseg, 2):
+            F.line(cam(add(q0, scl(sub(q1, q0), s / nseg))), cam(add(q0, scl(sub(q1, q0), (s + 1) / nseg))),
+                   HAIR, G3)
+
+    assembly((0.05, 0.05, 0.2), off_r)
+    assembly((0.05, 0.05, -0.2), off_l)
+    assembly((-0.5, 0.0, 0.0), off_t)
+
+    parts = [("tail", off_t), ("wl", off_l), ("body", (0, 0, 0)), ("wr", off_r)]
+    parts.sort(key=lambda p: -cam.depth(add(p[1], (0, 0, 0.6 if p[0] == "wr" else (-0.6 if p[0] == "wl" else 0)))))
+    for name, off in parts:
         if name == "body":
-            sil = hull(body)
-            F.outline(sil, G5, LINE)
-            for t in (-0.45, 0.0, 0.45):          # section rings: front halves only
-                ring = [W((a * t, b * math.sqrt(1 - t * t) * math.cos(ph), c * math.sqrt(1 - t * t) * math.sin(ph)))
-                        for ph in [math.pi * (0.5 + s / 20) for s in range(21)]]
+            F.outline(hull(body_pts), G5, LINE)
+            for t in (-0.5, 0.0, 0.5):
+                r = math.sqrt(1 - t * t)
+                ring = [P((a * t, b * r * math.cos(ph), c * r * math.sin(ph)))
+                        for ph in [math.pi * (-0.5 + s / 20) for s in range(21)]]
                 F.ribbon(ring, HAIR, G3)
-            spine = [W((a * math.cos(th), b * math.sin(th), 0)) for th in [math.pi * s / 20 for s in range(21)]]
+            spine = [P((a * math.cos(th), b * math.sin(th), 0)) for th in [math.pi * s / 20 for s in range(21)]]
             F.ribbon(spine, HAIR, G3)
-            # beak, a closed cone outline at the front
-            bk = [W((0.92, 0.06, 0.07)), W((1.3, 0.0, 0.0)), W((0.92, -0.06, -0.07)), W((0.9, 0.08, -0.05))]
+            bk = [P((0.58, 0.04, 0.05)), P((0.86, 0.0, 0.0)), P((0.58, -0.04, -0.05)), P((0.57, 0.05, -0.04))]
             F.outline(hull(bk), G5, LINE)
-            ex = W((0.62, 0.17, 0.2))
-            F.outline(ell(ex[0], ex[1], 3.2, 3.2, 16), G5, HAIR)
+            e = P((0.45, 0.1, 0.09))
+            F.outline(ell(e[0], e[1], 2.6, 2.6, 14), G5, HAIR)
         elif name == "tail":
-            F.outline(part(pts, off), G4, LINE)
-            for zz in (-0.2, 0.0, 0.2):
-                F.line(cam(add(rot_y((-0.8, 0.05, zz * 0.5), yaw), off)), cam(add(rot_y((-1.55, 0.08, zz), yaw), off)),
-                       HAIR, G2)
+            F.outline([P(p, off) for p in tail], G4, LINE)
+            for zz in (-0.08, 0.0, 0.08):
+                F.line(P((-0.55, 0.0, zz * 0.4), off), P((-0.97, 0.0, zz * 1.4), off), HAIR, G2)
         else:
             side = 1 if name == "wr" else -1
-            F.outline(part(pts, off), G4, LINE)
-            feather_lines(pts, off, side, 3 if side > 0 else None)
+            arm, feathers = wing(side)
+            fs = sorted(enumerate(feathers), key=lambda kv: -cam.depth(add(rot_y(kv[1][1], yaw), off)))
+            for f, (pts, b0, b1) in fs:
+                lit = side > 0 and f == 2         # the degree this bird sounds now
+                F.outline([P(p, off) for p in pts], G7 if lit else G4, SUBJ if lit else LINE)
+                F.line(P(b0, off), P(add(b0, scl(sub(b1, b0), 0.85)), off), HAIR, G5 if lit else G2)
+            F.outline([P(p, off) for p in arm], G4, LINE)
+            for t in (0.33, 0.66):
+                F.line(P((0.2 - 0.3 * t * 0, 0.05, side * (0.14 + 0.45 * t)), off),
+                       P((-0.12, 0.06, side * (0.14 + 0.45 * t)), off), HAIR, G2)
     return F
 
 
 # ================================================================== v4 · the flock itself · single-weight contour
 def v4() -> Frame:
-    """Eight starlings in flight over a ploughed field, drawn in one contour weight."""
+    """Eight starlings in flight over a ploughed field, drawn in one contour weight; shadows hatched."""
     F = Frame("v4 · starlings over the field · single-weight contour")
-    cam = Camera((0.0, 1.4, -8.0), (0.0, 2.6, 6.0), 330, (240, 112))
+    cam = Camera((0.0, 8.5, -8.0), (0.0, 0.0, 6.5), 300, (240, 120))
     n = N_DEG
-    # field: one drill row per cell, running away from us to the horizon
-    X0, X1 = -6.5, 6.5
-    zf = 30.0
-    rows = []
-    for i in range(n + 1):
-        x = X0 + (X1 - X0) * i / n
-        rows.append(x)
-    horizon = cam((0, 0, 400))[1]
+    X0, X1 = -6.0, 6.0
+    zf = 60.0
+    rows = [X0 + (X1 - X0) * i / n for i in range(n + 1)]
     birds = []
     for k, (u, h, d) in enumerate(BIRDS):
-        x = X0 + (X1 - X0) * u
-        birds.append((x * 0.9, 3.0 + 1.2 * h, 5.5 + 2.2 * d))
-    lo = min(range(N_BIRDS), key=lambda k: cam.depth(birds[k]))  # nearest bird plays now
-    ci = cell((birds[lo][0] / 0.9 - X0) / (X1 - X0))
-    for i, x in enumerate(rows[:-1]):
-        xc = (x + rows[i + 1]) / 2
-        p0, p1 = cam((xc, 0, -1.0)), cam((xc, 0, zf))
-        playing = i == ci
-        F.line(p0, p1, LINE if playing else HAIR, G4 if playing else G2)
-    F.line((0, horizon), (480, horizon), HAIR, G3)
-    for k in sorted(range(N_BIRDS), key=lambda k: -cam.depth(birds[k])):
-        x, y, z = birds[k]
+        birds.append((X0 + (X1 - X0) * u, 3.1 + 0.9 * d, 5.0 + 3.2 * h))
+    lo = min(range(N_BIRDS), key=lambda k: cam.depth(birds[k]))   # nearest bird plays now
+    ci = cell((birds[lo][0] - X0) / (X1 - X0))
+    # drill rows, one per cell, to the horizon; the row under the playing bird is drawn heavier
+    for i in range(n):
+        xc = (rows[i] + rows[i + 1]) / 2
+        p0, p1 = cam((xc, 0, -0.5)), cam((xc, 0, zf))
+        F.line(p0, p1, LINE if i == ci else HAIR, G4 if i == ci else G2)
+    hz = cam((0, 0, zf))[1]
+    F.line((16, hz), (464, hz), HAIR, G2)
+    poses = []
+    for k in range(N_BIRDS):
         phase = (k * 3) % 4
-        pts = [cam(p) for p in bird_world((x, y, z), heading=math.radians(-10 + 12 * BIRDS[k][2]),
-                                          pitch=math.radians(4), bank=math.radians(8 * (phase - 1.5)),
-                                          dihedral=(-0.15, 0.1, 0.35, 0.55)[phase], sweep=0.15, size=0.85)]
-        if k == lo:
-            F.outline(pts, G7, SUBJ)
-        else:
-            F.outline(pts, G5, LINE)
+        poses.append(dict(heading=math.radians(-12 + 16 * BIRDS[k][1]), bank=math.radians(6 * (phase - 1.5)),
+                          dihedral=(-0.2, 0.05, 0.3, 0.5)[phase], sweep=(0.0, 0.15, 0.3, 0.1)[phase], size=0.95))
+    # shadows on the field straight below, hatched (there but not a body)
+    for k in range(N_BIRDS):
+        x, y, z = birds[k]
+        sh = [cam((p[0], 0.0, p[2])) for p in bird_world((x, 0.0, z), **poses[k])]
+        F.hatch(sh, G3, 3.0)
+    for k in sorted(range(N_BIRDS), key=lambda k: -cam.depth(birds[k])):
+        pts = [cam(p) for p in bird_world(birds[k], **poses[k])]
+        F.outline(pts, G7 if k == lo else G5, LINE)
     return F
 
 
 # ================================================================== v5 · mechanism · hatched mass
 def v5() -> Frame:
-    """A crank automaton: eight carved birds on rods over a comb; each rod plucks the tine under it."""
+    """A crank automaton: eight carved birds on rods over a comb; each rod's pick plucks the tine under it."""
     F = Frame("v5 · crank automaton · hatched mass")
-    cam = Camera((-3.2, 5.6, -9.5), (0.2, 1.3, 0.0), 360, (232, 126))
+    cam = Camera((3.6, 4.6, -9.5), (0.4, 0.9, 0.0), 360, (232, 132))
     n = N_DEG
-    BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.6, 4.6, -1.6, 0.0, -1.0, 1.0
+    BX0, BX1, BY0, BY1, BZ0, BZ1 = -4.2, 4.2, -1.5, 0.0, -0.9, 0.9
 
-    def box_face(pts):
+    def C(pts):
         return [cam(p) for p in pts]
 
-    top = box_face([(BX0, BY1, BZ0), (BX1, BY1, BZ0), (BX1, BY1, BZ1), (BX0, BY1, BZ1)])
-    front = box_face([(BX0, BY1, BZ0), (BX1, BY1, BZ0), (BX1, BY0, BZ0), (BX0, BY0, BZ0)])
-    left = box_face([(BX0, BY1, BZ0), (BX0, BY1, BZ1), (BX0, BY0, BZ1), (BX0, BY0, BZ0)])
-    # the mass: the box's front face hatched (in shadow), lid and end plain
-    F.outline(left, G4, LINE)
+    top = C([(BX0, BY1, BZ0), (BX1, BY1, BZ0), (BX1, BY1, BZ1), (BX0, BY1, BZ1)])
+    front = C([(BX0, BY1, BZ0), (BX1, BY1, BZ0), (BX1, BY0, BZ0), (BX0, BY0, BZ0)])
+    end = C([(BX1, BY1, BZ0), (BX1, BY1, BZ1), (BX1, BY0, BZ1), (BX1, BY0, BZ0)])
+    # the box is a solid mass: front face hatched (away from the light), end and lid plain
+    F.outline(end, G4, LINE)
     F.outline(front, G4, LINE)
     F.hatch(front, G2, 4.0)
     F.outline(top, G4, LINE)
-    # slot along the lid the rods ride in
-    slot = box_face([(BX0 + 0.4, BY1, 0.08), (BX1 - 0.4, BY1, 0.08), (BX1 - 0.4, BY1, 0.28), (BX0 + 0.4, BY1, 0.28)])
-    F.outline(slot, G3, HAIR)
-    # the comb: one tine per scale degree along the lid's front edge, long (low) to short (high)
-    tines = []
-    for i in range(n):
-        x = BX0 + 0.55 + (BX1 - BX0 - 1.1) * i / (n - 1)
-        L = 0.95 * 2 ** (-DEG[i] / 24) + 0.25
-        tines.append((x, L))
+    # plinth line under the lid's lip
+    F.line(cam((BX0, BY1 - 0.18, BZ0)), cam((BX1, BY1 - 0.18, BZ0)), HAIR, G3)
+    # slot the rods ride in
+    F.outline(C([(BX0 + 0.35, BY1, 0.22), (BX1 - 0.35, BY1, 0.22), (BX1 - 0.35, BY1, 0.42),
+                 (BX0 + 0.35, BY1, 0.42)]), G3, HAIR)
+    # the comb: one tine per scale degree, long (low) to short (high), on a bar along the front
+    xs = [BX0 + 0.5 + (BX1 - BX0 - 1.0) * i / (n - 1) for i in range(n)]
     rods = []
     for k, (u, h, d) in enumerate(BIRDS):
-        x = BX0 + 0.55 + (BX1 - BX0 - 1.1) * u
-        rods.append((x, 1.9 + 0.55 * h))
+        rods.append((BX0 + 0.5 + (BX1 - BX0 - 1.0) * u, 1.55 + 0.6 * h))
     lo = min(range(N_BIRDS), key=lambda k: rods[k][1])
-    ci = cell((rods[lo][0] - BX0 - 0.55) / (BX1 - BX0 - 1.1))
-    for i, (x, L) in enumerate(tines):
-        p = [cam((x - 0.09, BY1 + 0.02, -0.15)), cam((x + 0.09, BY1 + 0.02, -0.15)),
-             cam((x + 0.09, BY1 + 0.02, -0.15 - L)), cam((x - 0.09, BY1 + 0.02, -0.15 - L))]
-        F.outline(p, G5 if i == ci else G3, LINE if i == ci else HAIR)
-    # comb bar holding the tines
-    bar = box_face([(BX0 + 0.3, BY1 + 0.02, -0.1), (BX1 - 0.3, BY1 + 0.02, -0.1),
-                    (BX1 - 0.3, BY1 + 0.02, 0.0), (BX0 + 0.3, BY1 + 0.02, 0.0)])
-    F.outline(bar, G4, HAIR)
-    # crank on the right end: axle boss, arm, handle (the thing in the hand)
-    ax = (BX1, -0.8, 0.0)
-    ang = math.radians(-40)
-    arm_end = (BX1 + 0.35, -0.8 + 1.1 * math.sin(ang), 1.1 * math.cos(ang))
-    a0, a1 = cam(add(ax, (0.35, 0, 0))), cam(arm_end)
-    boss = [cam((BX1 + 0.05, -0.8 + 0.28 * math.sin(t), 0.28 * math.cos(t))) for t in [2 * math.pi * s / 28 for s in range(28)]]
+    ci = cell((rods[lo][0] - BX0 - 0.5) / (BX1 - BX0 - 1.0))
+    rods[lo] = (xs[ci], rods[lo][1])
+    F.outline(C([(BX0 + 0.25, BY1, 0.0), (BX1 - 0.25, BY1, 0.0), (BX1 - 0.25, BY1 + 0.12, 0.0),
+                 (BX0 + 0.25, BY1 + 0.12, 0.0)]), G4, LINE)
+    for i, x in enumerate(xs):
+        L = 0.85 * 2 ** (-DEG[i] / 24) + 0.12
+        tine = C([(x - 0.08, BY1 + 0.03, 0.0), (x + 0.08, BY1 + 0.03, 0.0), (x + 0.08, BY1 + 0.03, -L),
+                  (x - 0.08, BY1 + 0.03, -L)])
+        F.outline(tine, G5 if i == ci else G3, LINE if i == ci else HAIR)
+    # crank on the right end: boss, arm, handle (the thing in the hand)
+    axle = (BX1, -0.75, 0.0)
+    ang = math.radians(-35)
+    arm_end = (BX1 + 0.45, -0.75 + 1.0 * math.sin(ang), 1.0 * math.cos(ang))
+    boss = C([(BX1 + 0.02, -0.75 + 0.3 * math.sin(t), 0.3 * math.cos(t)) for t in
+              [2 * math.pi * s / 28 for s in range(28)]])
     F.outline(boss, G4, LINE)
-    F.hatch(boss, G2, 4.0, phase=1)
-    dx, dy = a1[0] - a0[0], a1[1] - a0[1]
-    L = math.hypot(dx, dy)
-    nx, ny = -dy / L * 3.2, dx / L * 3.2
-    F.outline([(a0[0] + nx, a0[1] + ny), (a1[0] + nx, a1[1] + ny), (a1[0] - nx, a1[1] - ny), (a0[0] - nx, a0[1] - ny)],
-              G4, LINE)
-    h0, h1 = cam(add(arm_end, (0.0, 0, 0))), cam(add(arm_end, (0.95, 0, 0)))
-    hx, hy = h1[0] - h0[0], h1[1] - h0[1]
-    hl = math.hypot(hx, hy)
-    mx, my = -hy / hl * 4.2, hx / hl * 4.2
-    handle = [(h0[0] + mx, h0[1] + my), (h1[0] + mx, h1[1] + my), (h1[0] - mx, h1[1] - my), (h0[0] - mx, h0[1] - my)]
-    F.outline(handle, G5, LINE)
-    F.hatch(handle, G3, 3.2)
-    # rods and their birds, back to front; the rod over the playing tine carries the bright bird
-    order = sorted(range(N_BIRDS), key=lambda k: -cam.depth((rods[k][0], rods[k][1], 0.18)))
+    F.hatch(boss, G2, 3.5)
+
+    def bar(p, q, half, colour, weight, hatch_=None):
+        a0, a1 = cam(p), cam(q)
+        dx, dy = a1[0] - a0[0], a1[1] - a0[1]
+        L = math.hypot(dx, dy)
+        nx, ny = -dy / L * half, dx / L * half
+        poly = [(a0[0] + nx, a0[1] + ny), (a1[0] + nx, a1[1] + ny), (a1[0] - nx, a1[1] - ny), (a0[0] - nx, a0[1] - ny)]
+        F.outline(poly, colour, weight)
+        if hatch_:
+            F.hatch(poly, hatch_, 3.2)
+
+    bar(add(axle, (0.45, 0, 0)), arm_end, 3.0, G4, LINE)
+    bar(arm_end, add(arm_end, (1.0, 0.0, 0.0)), 4.5, G5, LINE, G3)
+
+    # a carved bird in profile (x forward, y up), wing raised, mounted on its rod
+    body = [(0.55, 0.12), (0.42, 0.26), (0.26, 0.3), (0.08, 0.2), (-0.3, 0.2), (-0.62, 0.34), (-0.66, 0.27),
+            (-0.4, 0.06), (-0.05, -0.12), (0.25, -0.08), (0.42, 0.04)]
+    wingp = [(0.12, 0.2), (-0.02, 0.62), (-0.3, 0.56), (-0.24, 0.2)]
+    order = sorted(range(N_BIRDS), key=lambda k: -cam.depth((rods[k][0], 0, 0.32)))
     for k in order:
         x, ht = rods[k]
-        r0, r1 = cam((x, BY1, 0.18)), cam((x, ht, 0.18))
-        F.outline([(r0[0] - 1.4, r0[1]), (r1[0] - 1.4, r1[1]), (r1[0] + 1.4, r1[1]), (r0[0] + 1.4, r0[1])],
-                  G4, HAIR)
-        # pick at the rod's foot, leaning over the comb
-        pk0, pk1 = cam((x, BY1 + 0.08, 0.1)), cam((x, BY1 + 0.08, -0.35))
-        F.line(pk0, pk1, LINE, G7 if k == lo else G4)
-        pts = [cam(p) for p in bird_world((x, ht + 0.12, 0.18), heading=math.radians(-15),
-                                          dihedral=0.3, size=0.55)]
-        F.outline(pts, G6 if k == lo else G4, LINE)
-        if k == lo:
-            pass
+        lit = k == lo
+        bar((x, BY1, 0.32), (x, ht, 0.32), 1.6, G4, HAIR)
+        # pick at the rod's foot, reaching over the comb
+        F.line(cam((x, BY1 + 0.16, 0.3)), cam((x, BY1 + 0.16, -0.25)), LINE, G6 if lit else G3)
+        s = 0.62
+        yaw = math.radians(-25)
+        bp = [cam(add(rot_y((px * s, py * s, 0.0), yaw), (x, ht + 0.1, 0.32))) for px, py in body]
+        wp = [cam(add(rot_y((px * s, py * s, -0.02), yaw), (x, ht + 0.1, 0.32))) for px, py in wingp]
+        F.outline(bp, G7 if lit else G5, SUBJ if lit else LINE)
+        F.outline(wp, G5 if lit else G4, LINE)
+        e = cam(add(rot_y((0.36 * s, 0.2 * s, 0.0), yaw), (x, ht + 0.1, 0.32)))
+        F.outline(ell(e[0], e[1], 1.6, 1.6, 10), G5, HAIR)
     return F
 
 

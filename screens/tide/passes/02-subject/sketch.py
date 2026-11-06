@@ -620,7 +620,7 @@ def v4():
     """The material, close: foam on the pool's surface. Each bubble rings at a pitch set by
     its size (a bubble's own resonance), so the raft is sorted into eight sizes, the
     partials. Black domes, lit only along their back edges; the largest is the brightest."""
-    cam = Camera(eye=(0.0, -7.5, 1.15), target=(0.0, 0.6, 0.15), f=520, at=(240, 140))
+    cam = Camera(eye=(0.0, -7.5, 1.15), target=(0.0, 0.6, 0.15), f=520, at=(240, 128))
     body = []
     rnd = random.Random(11)
 
@@ -630,10 +630,11 @@ def v4():
     last = None
     while y < 30:
         sy = cam.p((0, y, 0))[1]
-        if last is not None and last - sy < 4:
+        if last is not None and last - sy < 6:
             break
         if sy < H:
-            body.append(line(cam.ps([(x / 3, y + 0.05 * math.sin(x / 3 + y), 0) for x in range(-45, 46)]), HAIR, G2))
+            body.append(line(cam.ps([(x / 3, y + 0.16 * math.sin(x / 3 * 0.55 + y * 1.7), 0) for x in range(-45, 46)]),
+                             HAIR, G3 if y < 1.0 else G2))
         last = sy
         y += lam * (1 + 0.15 * (y + 1.6))
 
@@ -644,8 +645,8 @@ def v4():
     for k in classes[:n]:
         r = 0.62 / ratio(k) ** 0.8
         for _ in range(4000):
-            x = rnd.uniform(-2.6, 2.6)
-            yy = rnd.uniform(-0.6, 1.9)
+            x = rnd.uniform(-2.1, 2.3)
+            yy = rnd.uniform(-0.5, 1.6)
             if k == 1:
                 x, yy = 0.25, 0.55
             if all(math.hypot(x - px, yy - py) > (r + pr) * 1.02 for px, py, pr, _ in placed):
@@ -686,7 +687,7 @@ def v5():
     """One scene, one subject: a boulder at the sea's edge with the pool in its top,
     drawn as detailed line art (hidden-line facets, strata, the pool's inner wall),
     the swell running in across the sea behind and around it."""
-    cam = Camera(eye=(-3.0, -9.0, 6.2), target=(0.2, 0.3, 0.7), f=420, at=(262, 132))
+    cam = Camera(eye=(-3.0, -9.0, 6.2), target=(0.0, 0.2, 0.8), f=540, at=(270, 122))
     body = []
     rnd = random.Random(23)
 
@@ -697,55 +698,47 @@ def v5():
         pts = cam.ps([(x / 3, yf + 0.18 * math.sin(x / 3 * 0.7 + i * 1.7) + 0.05 * x / 3, 0) for x in range(-45, 46)])
         body.append(line(pts, LINE if i == 2 else HAIR, G4 if i == 2 else G3 if i in (1, 3) else G2))
 
-    # the boulder: rings of an irregular faceted body (foot at the water, two bulges, the shoulder of the top)
-    N = 11
-    rings = []
-    spec = ((0.0, 2.15, 1.55, 0.14), (0.45, 2.3, 1.7, 0.12), (0.95, 2.1, 1.55, 0.12), (1.3, 1.7, 1.3, 0.1))
-    phase = [rnd.random() * 0.35 for _ in range(N)]
-    for z, rx, ry, jit in spec:
-        ring = []
-        for i in range(N):
-            a = 2 * math.pi * (i + phase[i]) / N
-            j = 1 + jit * (rnd.random() - 0.5) * 2 + 0.08 * math.sin(2 * a + 1.0)
-            ring.append((rx * j * math.cos(a), ry * j * math.sin(a), z + 0.1 * (rnd.random() - 0.5) + 0.12 * math.cos(a - 0.6)))
-        rings.append(ring)
-    faces = []
-    for r0, r1 in zip(rings, rings[1:]):
-        for i in range(N):
-            q = [r0[i], r0[(i + 1) % N], r1[(i + 1) % N], r1[i]]
-            n = cross(sub(q[1], q[0]), sub(q[3], q[0]))
-            cen = mul(add(add(q[0], q[1]), add(q[2], q[3])), 0.25)
-            if dot(n, (cen[0], cen[1], 0)) < 0:
-                n = mul(n, -1)
-            faces.append((q, n, cen))
-    vis = [fc for fc in faces if cam.facing(fc[1], fc[2])]
-    allpts = cam.ps([p for r in rings for p in r])
-    sil = hull(allpts)
+    # the boulder: the hull of a scatter of points on a squat, lumpy body, cut flat at the water
+    # and worn flat on top, drawn as facets (hidden-line: only faces turned to the camera)
+    from scipy.spatial import ConvexHull
+    TOPZ = 1.55
+    pts3 = []
+    for i in range(70):
+        u, v = rnd.uniform(0, 2 * math.pi), math.acos(rnd.uniform(-0.2, 1))
+        lump = 1 + 0.16 * math.sin(3 * u + 0.4) + 0.08 * math.cos(5 * u) + rnd.uniform(-0.06, 0.06)
+        x, y, z = 2.0 * lump * math.sin(v) * math.cos(u), 1.45 * lump * math.sin(v) * math.sin(u), 2.1 * math.cos(v)
+        z = min(max(z, 0.0), TOPZ + 0.04 * math.cos(u - 0.5))
+        pts3.append((x - 0.2 * z, y, z))
+    hl = ConvexHull(pts3)
+    cen0 = tuple(sum(p[i] for p in pts3) / len(pts3) for i in range(3))
+    vis = []
+    for simplex, eq in zip(hl.simplices, hl.equations):
+        q = [pts3[j] for j in simplex]
+        n = tuple(eq[:3])
+        c = mul(add(add(q[0], q[1]), q[2]), 1 / 3)
+        if cam.facing(n, c) and n[2] > -0.9:
+            vis.append((q, n, c))
+    sil = hull(cam.ps([pts3[j] for j in hl.vertices]))
     body.append(poly(sil, G0))
-    for q, n, cen in vis:
-        sq = cam.ps(q)
-        body.append(loop(sq, HAIR, G3))
-    # bedding: a few strata running round the rock's front, in the rock's own surface
-    for zf in (0.25, 0.7):
-        lo = 0 if zf < 0.45 else 1
-        t = (zf - spec[lo][0]) / (spec[lo + 1][0] - spec[lo][0])
-        pts3 = [add(mul(rings[lo][i % N], 1 - t), mul(rings[lo + 1][i % N], t)) for i in range(N + 1)]
-        segs = []
-        for i in range(N):
-            q = faces[lo * N + i]
-            if cam.facing(q[1], q[2]):
-                segs.append(i)
-        for i in segs:
-            a, b = cam.p(pts3[i]), cam.p(pts3[i + 1])
-            body.append(line([a, b], HAIR, G2))
+    # facet edges: draw each visible edge once, skipping near-coplanar seams
+    edges = {}
+    for q, n, c in vis:
+        for i in range(3):
+            a3, b3 = q[i], q[(i + 1) % 3]
+            key = tuple(sorted((tuple(round(v, 5) for v in a3), tuple(round(v, 5) for v in b3))))
+            edges.setdefault(key, []).append(n)
+    for (a3, b3), ns in edges.items():
+        if len(ns) == 2 and dot(norm(ns[0]), norm(ns[1])) > 0.985:
+            continue
+        sa, sb = cam.p(a3), cam.p(b3)
+        if math.dist(sa, sb) > 3.5:
+            body.append(line([sa, sb], HAIR, G3))
     # the top face (seen from above), and the pool in it
-    topq = cam.ps(rings[2])
-    body.append(loop(topq, HAIR, G3))
     body.append(loop(sil, LINE, G4))
 
     # pool: the rim, the far inner wall, the water surface (the brightest), sunk by depth
-    pc = (0.15, 0.1, 1.3)
-    pr = 1.05
+    pc = (-0.32, 0.0, TOPZ)
+    pr = 0.62
     d = 0.08 + 0.3 * P_DEPTH
     rim = cam.ps(circle3(pc, pr, 64))
     body.append(poly(rim, G0))
@@ -758,9 +751,6 @@ def v5():
     water = cam.ps(circle3((pc[0], pc[1], pc[2] - d), pr * 0.94, 72))
     for run in runs_where(water, lambda p: inside(p, rim)):
         body.append(line(run, SUBJ, G7))
-    # wet foot: the wash line hugging the boulder's front at the water
-    foot = cam.ps(rings[0][:])
-    body.append(line([foot[i] for i in (5, 6, 7, 8, 0, 1)] if False else [], LINE, G4))
     return frame(body)
 
 

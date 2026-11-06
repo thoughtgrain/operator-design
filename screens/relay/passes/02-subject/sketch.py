@@ -404,68 +404,63 @@ def v1() -> Frame:
 # ================================================================= v2
 def v2() -> Frame:
     """One scene: a telegraph line running away over open ground, the old relay chain that
-    handed a signal from station to station. The poles are the stages; the note is a lit
-    stretch of wire between two of them, its recirculations dimmer stretches further on.
+    handed a signal on from station to station. The poles are the stages; the note is a
+    lit span of the top wire, its recirculations dimmer spans further down the line.
     Single-weight contour: the scene in one 1.5 px line, the pulse heavier, distance in hairline."""
     fr = Frame("v2 · the relay line")
     st, lk, ck, fb = D["stages"], D["leak"], D["clock"], D["feedback"]
     rnd = random.Random(11)
 
     npoles = round(7 + 13 * st)                       # 7 .. 20 poles to the horizon
-    L = 150.0
+    L = 170.0
     span = L / (npoles - 1)
     xs = [k * span * (1 + ck * 0.55 * (rnd.random() - 0.5) * 2) if 0 < k < npoles - 1 else k * span
           for k in range(npoles)]
     lean = [ck * 9 * (rnd.random() - 0.5) * 2 for _ in range(npoles)]
     broken = {k for k in range(1, npoles - 1) if rnd.random() < lk * 0.5}
-    H, arm = 9.0, 2.2
+    H, arm = 10.0, 1.8
+    # two wires: one on the crossarm, one on a lower bracket, so they never merge
+    wires = [(-arm, H - 0.8), (arm * 0.6, H - 3.0)]
 
-    cam = Camera(eye=(-14, -19, 7.5), target=(40, 6, 3.5))
-    cam.fit([(0, 0, 0), (0, 0, H + 0.6), (L, 0, 0), (L, 0, H), (-6, 0, 0)], (24, 48, 470, 206))
+    cam = Camera(eye=(-12, -24, 3.2), target=(48, 2, 5.5))
+    cam.fit([(0, 0, -0.2), (0, -arm, H + 0.3), (L, 0, 0), (L, 0, H)], (44, 36, 470, 208))
 
-    def top(k, dy):
+    def at(k, dy, z):
         a = math.radians(lean[k])
-        return (xs[k] + math.sin(a) * H, dy, H * math.cos(a))
+        return (xs[k] + math.sin(a) * z, dy, z * math.cos(a))
 
-    # ground: the horizon and a low rise behind the line, hairline
-    hz = [cam.p((x, 400, 0)) for x in (-200, 600)]
-    fr.line((0, hz[0][1]), (480, hz[1][1]), HAIR, G2)
-    rise = [cam.p((x, 260, 9 * math.exp(-((x - 230) / 120) ** 2) + 3 * math.sin(x / 37) + 3)) for x in range(-150, 560, 12)]
+    # ground: the horizon and a low rise far behind the line, hairline
+    hz = cam.p((L * 4, 0, 0))
+    fr.line((0, hz[1] + 1), (480, hz[1] + 1), HAIR, G2)
+    rise = [cam.p((x, 420, max(0.0, 26 * math.exp(-((x - 260) / 140) ** 2) - 2 + 4 * math.sin(x / 41))))
+            for x in range(-260, 900, 16)]
     fr.ribbon([p for p in rise if -10 < p[0] < 490], HAIR, G2)
-    # a track beside the line, single contour on each side
-    for dy in (-5.0, -8.5):
-        fr.ribbon(cam.ps([(-8, dy, 0), (L + 40, dy, 0)]), HAIR if dy < -6 else LINE, G3)
+    # the track along the line: two ruts, single contour
+    for dy in (-5.0, -8.0):
+        fr.ribbon(cam.ps([(-2, dy, 0), (L * 3, dy, 0)]), HAIR if dy < -6 else LINE, G3)
 
     lv = passes(fb)
-    pulse_at = [1 + round(k * (npoles - 2) / max(1, len(lv))) for k in range(len(lv))]
+    every = max(2, round((npoles - 2) / len(lv)))
+    pulse_at = [1 + k * every for k in range(len(lv)) if 1 + k * every < npoles - 1]
 
-    # wires: two per span, from the crossarm tips, with sag; far spans in hairline
     for k in range(npoles - 1):
-        for side, dy in enumerate((-arm, arm)):
-            a, b = top(k, dy), top(k + 1, dy)
-            sag = 0.45 + (2.6 if (k in broken and side == 0) else 0)
-            pts = []
-            for j in range(13):
-                t = j / 12
-                p = (a[0] + (b[0] - a[0]) * t, dy, a[2] + (b[2] - a[2]) * t - 4 * sag * t * (1 - t))
-                pts.append(cam.p(p))
-            w = LINE if xs[k] < 60 else HAIR
-            colour = G4 if xs[k] < 60 else G3
+        near = xs[k] < 70
+        for side, (dy, z) in enumerate(wires):
+            a, b = at(k, dy, z), at(k + 1, dy, z)
+            sag = 0.35 + (2.4 if (k in broken and side == 0) else 0)
+            pts = [cam.p((a[0] + (b[0] - a[0]) * t, dy, a[2] + (b[2] - a[2]) * t - 4 * sag * t * (1 - t)))
+                   for t in [j / 16 for j in range(17)]]
+            w, colour = (LINE, G4) if near else (HAIR, G3)
             if side == 0 and k in pulse_at:
                 i = pulse_at.index(k)
                 colour, w = (G7, SUBJ) if i == 0 else ((G5, LINE) if i == 1 else (G4, LINE))
             fr.ribbon(pts, w, colour)
-    # poles, near ones in the contour weight, far ones in hairline
     for k in range(npoles):
-        base = cam.p((xs[k], 0, 0))
-        tp = cam.p(top(k, 0))
-        w, colour = (LINE, G4) if xs[k] < 60 else (HAIR, G3)
-        fr.line(base, tp, w + (0.5 if xs[k] < 20 else 0), colour)
-        a = math.radians(lean[k])
-        arm_z = H * math.cos(a) - 0.9
-        ca = cam.p((xs[k] + math.sin(a) * (H - 0.9), -arm - 0.4, arm_z))
-        cb = cam.p((xs[k] + math.sin(a) * (H - 0.9), arm + 0.4, arm_z))
-        fr.line(ca, cb, w, colour)
+        near = xs[k] < 70
+        w, colour = (LINE, G4) if near else (HAIR, G3)
+        fr.line(cam.p(at(k, 0, 0)), cam.p(at(k, 0, H)), w + (0.5 if xs[k] < 20 else 0), colour)
+        fr.line(cam.p(at(k, -arm - 0.5, H - 0.8)), cam.p(at(k, arm + 0.5, H - 0.8)), w, colour)
+        fr.line(cam.p(at(k, 0, H - 3.0)), cam.p(at(k, arm * 0.6 + 0.3, H - 3.0)), w, colour)
     return fr
 
 

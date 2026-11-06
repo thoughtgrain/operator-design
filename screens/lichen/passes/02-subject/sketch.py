@@ -494,6 +494,17 @@ def contours(fn, x0, y0, x1, y1, step=3.0, level=0.5):
     return loops
 
 
+def chamfer(poly, k):
+    """Cut each corner back by k of its edges: a rounded areola."""
+    out = []
+    n = len(poly)
+    for i in range(n):
+        a, b, c = poly[i - 1], poly[i], poly[(i + 1) % n]
+        out.append((b[0] + (a[0] - b[0]) * k, b[1] + (a[1] - b[1]) * k))
+        out.append((b[0] + (c[0] - b[0]) * k, b[1] + (c[1] - b[1]) * k))
+    return out
+
+
 def thick(age):
     return 0.07 + 0.03 * min(abs(age), 8)
 
@@ -502,11 +513,19 @@ def thick(age):
 # v1 · cutaway section: the colony as crust on a block of stone, cut open
 # =============================================================================
 def v1():
+    """A block of stone carrying the colony, cut open along row 2 (the start
+    row). The cut face is a section: stone with its bedding, the crust's
+    thickness (its age) on top, the cortex inside it, rhizines into the stone.
+    Behind the cut, the rest of the colony stands as crust plates. Every knob
+    is something physical: grow pushes tongues of crust over bare stone, decay
+    lifts dead crust off in flakes, seed drops spores, scale opens the cracks
+    between stones a half step apart."""
     s = Svg()
-    cut = 2 * RH                                   # the cut runs through row 2's centres
-    yb = 5 * RH + 0.62
-    x0w, x1w, zb = -0.45, 12.95, -1.25
-    cam = Cam((6.25, -7.2, 5.2), (6.25, 2.6, -0.55), 300, 240, 128)
+    cut = 2 * RH
+    yb = 5 * RH + 0.55
+    x0w, x1w, zb = 2.15, 9.75, -1.0
+    TK = 0.85
+    cam = Cam((5.95, -9.6, 5.0), (5.95, 2.9, -0.3), 690, 240, 112)
     P = cam.p
 
     def keep(pt):
@@ -516,33 +535,48 @@ def v1():
         t = (cut - a[1]) / (b[1] - a[1])
         return (a[0] + (b[0] - a[0]) * t, cut)
 
+    def xclip(poly):
+        poly = clip_half(poly, lambda p: p[0] >= x0w, lambda a, b: (x0w, a[1] + (b[1] - a[1]) * (x0w - a[0]) / (b[0] - a[0])))
+        if poly:
+            poly = clip_half(poly, lambda p: p[0] <= x1w, lambda a, b: (x1w, a[1] + (b[1] - a[1]) * (x1w - a[0]) / (b[0] - a[0])))
+        return poly
+
     def half(poly):
         return clip_half(poly, keep, ycut)
 
-    # stone block: top face, front (cut) face
     top = [(x0w, cut, 0), (x1w, cut, 0), (x1w, yb, 0), (x0w, yb, 0)]
     front = [(x0w, cut, zb), (x1w, cut, zb), (x1w, cut, 0), (x0w, cut, 0)]
+    side = [(x1w, cut, zb), (x1w, yb, zb), (x1w, yb, 0), (x1w, cut, 0)]
+    s.poly([P(q) for q in side], fill=G0, stroke=G3, sw=LINE)
     s.poly([P(q) for q in top], fill=G0, stroke=G3, sw=LINE)
     s.poly([P(q) for q in front], fill=G0, stroke=G4, sw=LINE)
 
-    # bedding planes in the cut face: hairlines, slightly irregular, >= 5 px apart
+    # half-step joints: open cracks down the cut face and back across the top (scale)
+    joints = [hexc(o, 2)[0] + 0.5 for o in range(C - 1) if semitone_after(degree(o, 2))]
+    joints = [x for x in joints if x0w + 0.2 < x < x1w - 0.2]
+    # bedding planes in the cut face: hairlines >= 6 px apart, broken at the cracks
     rng = random.Random(7)
-    joints = []                                    # x of half-step joints along row 2
-    for o in range(C - 1):
-        if semitone_after(degree(o, 2)):
-            joints.append(hexc(o, 2)[0] + 0.5)
-    for k, z in enumerate((-0.3, -0.52, -0.76, -1.0)):
-        xs = [x0w + 0.15]
-        while xs[-1] < x1w - 0.4:
-            xs.append(xs[-1] + 0.6 + rng.random() * 0.5)
-        pts = [P((x, cut, z + 0.03 * math.sin(x * 1.7 + k))) for x in xs]
-        s.line(pts, HAIR, G2)
-    # half-step joints: open cracks down the cut face and back across the top
+    for k, z in enumerate((-0.34, -0.6, -0.86)):
+        xs = [x0w + 0.1 + rng.random() * 0.3]
+        while xs[-1] < x1w - 0.3:
+            xs.append(min(x1w - 0.1, xs[-1] + 0.35 + rng.random() * 0.3))
+        pts = [(x, z + 0.025 * math.sin(x * 2.1 + k * 1.3)) for x in xs]
+        runs, cur = [], []
+        for x, zz in pts:
+            if any(abs(x - j) < 0.12 for j in joints):
+                if len(cur) > 1:
+                    runs.append(cur)
+                cur = []
+            else:
+                cur.append(P((x, cut, zz)))
+        if len(cur) > 1:
+            runs.append(cur)
+        for rr in runs:
+            s.line(rr, HAIR, G2)
     for jx in joints:
-        a = P((jx - 0.05, cut, 0))
-        b = P((jx + 0.05, cut, 0))
-        m = P((jx + 0.02, cut, -0.42))
-        e = P((jx - 0.03, cut, -0.75))
+        a, b = P((jx - 0.06, cut, 0)), P((jx + 0.06, cut, 0))
+        m = P((jx + 0.02, cut, -0.45))
+        e = P((jx - 0.04, cut, -0.82))
         s.poly([a, m, b], fill=G0, stroke="none")
         s.line([a, m, e], HAIR, G4)
         s.line([b, m], HAIR, G4)
@@ -550,29 +584,23 @@ def v1():
         for o in range(C - 1):
             if semitone_after(degree(o, r)):
                 x, y = hexc(o, r)
-                ya, yb2 = max(cut, y - 0.29), y + 0.29
-                for dx in (0.47, 0.53):
-                    s.seg(P((x + dx, ya, 0)), P((x + dx, yb2, 0)), HAIR, G3)
+                if not (x0w + 0.2 < x + 0.5 < x1w - 0.2):
+                    continue
+                ya, yb2 = max(cut, y - 0.289), min(yb, y + 0.289)
+                if yb2 <= ya:
+                    continue
+                s.seg(P((x + 0.47, ya, 0)), P((x + 0.47, yb2, 0)), HAIR, G3)
+                s.seg(P((x + 0.54, ya, 0)), P((x + 0.54, yb2, 0)), HAIR, G3)
 
-    # stone joints between the other cells on the top face: faint
-    for r in range(2, R):
-        for o in range(C):
-            hp = half(hexpoly(o, r)) if r == 2 else hexpoly(o, r)
-            if (o, r) in FREE:
-                pts = [P((x, y, 0)) for x, y in hp]
-                for a, b in zip(pts, pts[1:] + pts[:1]):
-                    if r == 2 and abs(a[1] - P((0, cut, 0))[1]) < 0.5 and abs(b[1] - a[1]) < 0.5:
-                        continue
-                    s.seg(a, b, HAIR, G1)
-
-    # crust: prisms (live), hatched remnants and lifted flakes (dead), tongues (grow)
+    # crust: plates (live), hatched remnants with lifted flakes (dead), tongues (grow)
     items = []
     for (o, r), a in STATE.items():
         if r < 2 or a == 0:
             continue
-        hp = hexpoly(o, r)
+        hp = chamfer(hexpoly(o, r, 0.94), 0.24)
         if r == 2:
             hp = half(hp)
+        hp = xclip(hp)
         cx, cy = hexc(o, r)
         items.append((cam.dist((cx, cy, 0)), "cell", (o, r), hp, a))
     g = DEF["grow"]
@@ -580,28 +608,25 @@ def v1():
         if r < 2:
             continue
         for q in nbrs(o, r):
-            if q in FREE:
-                ax, ay = hexc(o, r)
-                bx, by = hexc(*q)
-                dx, dy = bx - ax, by - ay
-                ln = math.hypot(dx, dy)
-                ux, uy = dx / ln, dy / ln
-                nx, ny = -uy, ux
-                base = 0.5
-                L = base + 0.55 * g
-                tw = 0.17
-                poly = [(ax + ux * (base - 0.05) + nx * tw, ay + uy * (base - 0.05) + ny * tw),
-                        (ax + ux * (base + L * 0.55) + nx * tw * 0.7, ay + uy * (base + L * 0.55) + ny * tw * 0.7),
-                        (ax + ux * (base + L * 0.5 + 0.12) + nx * 0.02, ay + uy * (base + L * 0.5 + 0.12) + ny * 0.02),
-                        (ax + ux * (base + L * 0.5 + 0.12) - nx * 0.02, ay + uy * (base + L * 0.5 + 0.12) - ny * 0.02),
-                        (ax + ux * (base + L * 0.55) - nx * tw * 0.7, ay + uy * (base + L * 0.55) - ny * tw * 0.7),
-                        (ax + ux * (base - 0.05) - nx * tw, ay + uy * (base - 0.05) - ny * tw)]
-                if q[1] <= 2 or r == 2:
-                    poly = half(poly)
-                if len(poly) >= 3:
-                    mx = sum(p[0] for p in poly) / len(poly)
-                    my = sum(p[1] for p in poly) / len(poly)
-                    items.append((cam.dist((mx, my, 0)) + 0.01, "tongue", (o, r), poly, 1))
+            if q not in FREE:
+                continue
+            ax, ay = hexc(o, r)
+            bx, by = hexc(*q)
+            dx, dy = bx - ax, by - ay
+            ln = math.hypot(dx, dy)
+            ux, uy, nx, ny = dx / ln, dy / ln, -dy / ln, dx / ln
+            L = 0.42 + 0.7 * g
+            pts = []
+            for k in range(11):
+                tt = k / 10
+                along = 0.4 + (L - 0.4) * math.sin(tt * math.pi) ** 0.5
+                sd = 0.2 * math.cos(tt * math.pi)
+                pts.append((ax + ux * along + nx * sd, ay + uy * along + ny * sd))
+            poly = xclip(half(pts))
+            if len(poly) >= 3:
+                mx = sum(p[0] for p in poly) / len(poly)
+                my = sum(p[1] for p in poly) / len(poly)
+                items.append((cam.dist((mx, my, 0)) + 0.01, "tongue", (o, r), poly, 1))
     items.sort(key=lambda t: -t[0])
 
     for _, kind, (o, r), hp, a in items:
@@ -610,53 +635,49 @@ def v1():
         if area(hp) < 0:
             hp = hp[::-1]
         if kind == "tongue":
-            h = 0.045
-            prism(s, cam, hp, 0, h, side=G3, topc=G4, topw=HAIR, sidew=HAIR)
+            # a thin lobe of crust over bare stone: drawn as a flat sheet, edge only
+            s.poly([P((x, y, 0.03)) for x, y in hp], fill=G0, stroke=G4, sw=HAIR)
             continue
         if a > 0:
-            h = thick(a)
+            h = thick(a) * TK
             born = (o, r) in BORN
             prism(s, cam, hp, 0, h, side=G4, topc=G7 if born else G5,
                   topw=SUBJ if born else LINE, sidew=HAIR)
-            if r == 2:          # section details on the cut face: cortex, medulla, rhizines
+            if r == 2:          # section: cortex line inside the crust, rhizines into the stone
                 x, _ = hexc(o, r)
-                if h > 0.15:
-                    pts = [P((x - 0.5 + 0.04 + 0.92 * k / 8, cut, h * 0.62)) for k in range(9)]
-                    s.line(pts, HAIR, G3)
-                for k in (-0.3, -0.05, 0.22):
-                    s.line([P((x + k, cut, 0)), P((x + k + 0.03, cut, -0.12)),
-                            P((x + k - 0.01, cut, -0.2))], HAIR, G3)
+                pts = [P((x - 0.44 + 0.88 * k / 8, cut, h * 0.55)) for k in range(9)]
+                s.line(pts, HAIR, G3)
+                for k in (-0.28, 0.0, 0.26):
+                    s.line([P((x + k, cut, 0)), P((x + k + 0.03, cut, -0.1)),
+                            P((x + k - 0.02, cut, -0.19))], HAIR, G3)
         else:
-            # dead crust: a thin hatched remnant with one flake lifted along an edge
-            h = 0.04
-            pts = [P((x, y, h)) for x, y in hp]
+            # dead crust: a thin hatched remnant, one flake hinged at its back edge
+            h = 0.05
             prism(s, cam, hp, 0, h, side=G3, topc=G3, topw=HAIR, sidew=HAIR)
-            hatch_fixed(s, [pts], G3, 4.0)
+            hatch_fixed(s, [[P((x, y, h)) for x, y in hp]], G3, 4.0)
             cx, cy = hexc(o, r)
-            ang = math.radians(15 + 70 * DEF["decay"])
-            # flake hinged on the cell's back-left edge, tipping towards the camera
-            hx0, hy0 = cx - 0.32, cy + 0.12
-            hx1, hy1 = cx + 0.18, cy + 0.26
-            reach = 0.32
-            fl = [(hx0, hy0, h), (hx1, hy1, h),
-                  (hx1 - 0.05, hy1 - reach * math.cos(ang), h + reach * math.sin(ang)),
-                  (hx0 + 0.08, hy0 - reach * math.cos(ang) * 0.9, h + reach * 0.9 * math.sin(ang))]
+            ang = math.radians(12 + 75 * DEF["decay"])
+            hy = max(cut, cy + 0.06) if r == 2 else cy + 0.06
+            hx0, hx1 = cx - 0.36, cx + 0.36
+            reach = 0.36
+            fl = [(hx0, hy, h), (hx1, hy, h),
+                  (hx1 - 0.08, hy - reach * math.cos(ang), h + reach * math.sin(ang)),
+                  (hx0 + 0.1, hy - reach * 0.9 * math.cos(ang), h + reach * 0.9 * math.sin(ang))]
             if r == 2:
                 fl = [(x, max(y, cut), z) for x, y, z in fl]
             fp = [P(q) for q in fl]
             s.poly(fp, fill=G0, stroke=G4, sw=HAIR)
             hatch_fixed(s, [fp], G3, 4.0)
 
-    # spores: falling onto bare stone, a dashed hairline to where each lands
+    # spores: falling onto bare stone, a dashed hairline to where each lands (seed)
     for (o, r) in SPORES:
-        if r < 2:
-            r = 3
-        x, y = hexc(o, r)
-        a = P((x, y, 0.95))
-        b = P((x, y, 0.02))
-        s.dashed([(a[0], a[1] + 4), b], HAIR, G3, 3, 3)
-        s.disc(a[0], a[1], 2.4, fill=G5)
-        s.disc(b[0], b[1], 1.4, fill=G3)
+        x, y = hexc(o, max(r, 3))
+        x = min(max(x, x0w + 0.3), x1w - 0.3)
+        a = P((x, y, 0.75))
+        b = P((x, y, 0.0))
+        s.dashed([(a[0], a[1] + 4), (b[0], b[1] - 2)], HAIR, G3, 3, 3)
+        s.disc(a[0], a[1], 2.3, fill=G5)
+        s.line([(b[0] - 3, b[1]), (b[0] + 3, b[1])], HAIR, G3)
     s.save(HERE / "v1" / "rest.svg")
 
 
@@ -684,9 +705,9 @@ def prism(s, cam, base, z0, h, side=G4, topc=G5, topw=LINE, sidew=HAIR):
 # =============================================================================
 def v2():
     s = Svg()
-    cam = Cam((6.0, -9.5, 9.0), (6.0, 2.6, 1.35), 330, 250, 116)
+    cam = Cam((5.6, -13.0, 6.6), (5.6, 2.6, 1.9), 470, 240, 112)
     P = cam.p
-    zs = {"plate": 0.0, "dead": 1.25, "live": 2.55, "spore": 3.75}
+    zs = {"plate": 0.0, "dead": 1.3, "live": 2.6, "spore": 4.4}
     # 1 · the stone lattice plate: every cell a tile; half-step seams raised
     pl = [(-0.6, -0.65), (12.15, -0.65), (12.15, 5 * RH + 0.65), (-0.6, 5 * RH + 0.65)]
     prism(s, cam, pl, -0.22, 0.22, side=G3, topc=G3, topw=LINE, sidew=HAIR)
@@ -712,7 +733,7 @@ def v2():
         axis(c, 0.02, zs["dead"] - 0.02)
     # 2 · the dead crust layer: hatched plates where the centre died
     for c in sorted(DEAD, key=lambda c: -cam.dist((*hexc(*c), 0))):
-        hp = [P((x, y, zs["dead"])) for x, y in hexpoly(*c, k=0.92)]
+        hp = [P((x, y, zs["dead"])) for x, y in chamfer(hexpoly(*c, k=0.92), 0.24)]
         s.poly(hp, fill=G0, stroke=G3, sw=HAIR)
         hatch_fixed(s, [hp], G3, 4.0)
     for c in axes:
@@ -726,12 +747,12 @@ def v2():
         if c in BORN:
             lifted.append(c)
             continue
-        hp = hexpoly(*c, k=0.92)
+        hp = chamfer(hexpoly(*c, k=0.92), 0.24)
         prism(s, cam, hp, zs["live"], thick(a) * 1.6, side=G3, topc=G5, topw=LINE, sidew=HAIR)
     for c in axes:
         axis(c, zs["live"] + 0.3, zs["live"] + 0.55 + 1.6 * g)
     for c in lifted:
-        hp = hexpoly(*c, k=0.92)
+        hp = chamfer(hexpoly(*c, k=0.92), 0.24)
         prism(s, cam, hp, zs["live"] + 0.55 + 1.6 * g, thick(1) * 1.6, side=G4, topc=G7, topw=SUBJ, sidew=HAIR)
     # 4 · spores waiting above, one per spore due this bar
     for c in SPORES:

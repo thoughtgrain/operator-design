@@ -391,7 +391,7 @@ def v1(s: Spool) -> Frame:
     """A spool lying on a table, seen from high above, and the trail of thread it has
     paid out behind it: the written cycle laid in thread, repeat after repeat."""
     fr = Frame("v1 · the trace left behind · single-weight contour", s.header())
-    cam = Camera((1.2, -5.0, 9.5), (1.2, 0.2, 0))
+    cam = Camera((6.4, -4.6, 3.4), (1.0, 0.4, 0.2))
     # world: table z=0; trail runs along +x at y=0, cycle amplitude along y.
     amp = 0.55 * (1 - 0.35 * max(s.bias, 0))
     period = 1.25 + 0.9 * (s.pos["length"] - 0.5)      # length: wavelength of one repeat on the table
@@ -418,8 +418,8 @@ def v1(s: Spool) -> Frame:
     # the free run: from the trail's end, lifting to the winding's underside
     tangent = v3(sx - Rw, sy - 0.05, zc)
     free = bez3(pts[-1], pts[-1] + v3(0.45, 0, 0), tangent + v3(-0.35, -0.1, -0.15), tangent, 24)
-    cam.fit([v3(-1.2, -0.6, 0), v3(sx + Rf, sy + Lh + 0.3, 0), v3(sx + Rf, sy - Lh, 2 * Rf)],
-            (20, 36, 460, 208))
+    cam.fit([v3(-1.6, 0.6, 0), v3(sx + Rf, sy - Lh - tf, 0), v3(sx - Rf, sy + Lh, 2 * Rf), v3(1.0, -0.6, 0)],
+            (8, 40, 446, 208))
     col, w = M, LINE                                   # one weight for the drawing
     # spool, far flange first (camera is at -y, so +y is far)
     far0, far1 = c + v3(0, Lh, 0), c + v3(0, Lh + tf, 0)
@@ -447,11 +447,11 @@ def v2(s: Spool) -> Frame:
     the wound mass under it, the turns drawn as a hatched mass, one thread peeling away."""
     fr = Frame("v2 · one detail at large scale · hatched mass", s.header())
     Rf, tf = 1.0, 0.1
-    Rw = 0.70 + 0.2 * s.fullness()
+    Rw = 0.80 + 0.12 * s.fullness()
     z_top = 1.4
-    cam = Camera((-0.55, -3.1, 2.35), (0.35, 0, 1.05))
-    cam.fit([v3(-Rf, 0, z_top + tf), v3(-Rf, 0, 0.55), v3(Rf * 0.4, -Rf, z_top + tf)],
-            (150, 34, 520, 250))
+    cam = Camera((-1.1, -5.2, 2.15), (0.2, 0, 1.0))
+    cam.fit([v3(-Rf, 0, z_top + tf), v3(-Rf, 0, 0.35), v3(Rf * 0.5, -Rf * 0.85, z_top + tf)],
+            (176, 38, 560, 260))
     axis = v3(0, 0, 1)
     # the wound mass: black body, silhouette
     wall = cyl_hull(cam, v3(0, 0, -0.6), v3(0, 0, z_top), Rw)
@@ -500,24 +500,35 @@ def v3_(s: Spool) -> Frame:
     axis = v3(0, 0, 1)
     light = np.array([1.0, -0.15])                      # screen direction the light comes from
 
-    def lit_outline(h, w_lit, col_lit, col_dark=D, thresh=0.35):
-        fr.poly(h)                                      # black body
-        ring2 = h + [h[0]]
-        lit, dark = [], []
-        cur_l, cur_d = [], []
+    def lit_runs(pts, thresh, closed=True):
+        """Split a convex outline into runs lit by the light (outward normal toward it) and dark ones."""
+        cx_ = sum(p[0] for p in pts) / len(pts)
+        cy_ = sum(p[1] for p in pts) / len(pts)
+        ring2 = pts + [pts[0]] if closed else pts
+        lit, dark, cur, state = [], [], [], None
         for a, b in zip(ring2, ring2[1:]):
+            mx, my = (a[0] + b[0]) / 2 - cx_, (a[1] + b[1]) / 2 - cy_
             dx, dy = b[0] - a[0], b[1] - a[1]
             ln = math.hypot(dx, dy) or 1
-            nx, ny = dy / ln, -dx / ln                  # outward normal for a CCW hull in screen space
+            nx, ny = dy / ln, -dx / ln
+            if nx * mx + ny * my < 0:
+                nx, ny = -nx, -ny
             on = nx * light[0] + ny * light[1] > thresh
-            (cur_l if on else cur_d).extend([a, b])
-            (cur_d if on else cur_l) and None
-            if on and cur_d:
-                dark.append(cur_d); cur_d = []
-            if not on and cur_l:
-                lit.append(cur_l); cur_l = []
-        if cur_l: lit.append(cur_l)
-        if cur_d: dark.append(cur_d)
+            if state is not None and on != state:
+                (lit if state else dark).append(cur)
+                cur = [a]
+            if not cur:
+                cur = [a]
+            cur.append(b)
+            state = on
+        if cur:
+            (lit if state else dark).append(cur)
+        return lit, dark
+
+    def lit_outline(h, w_lit, col_lit, col_dark=D, thresh=0.35, fill=True):
+        if fill:
+            fr.poly(h)
+        lit, dark = lit_runs(h, thresh)
         for r in dark:
             fr.line(r, HAIR, col_dark)
         for r in lit:
@@ -529,13 +540,11 @@ def v3_(s: Spool) -> Frame:
         top, _ = ring(v3(0, 0, z1), axis, Rf, 96)
         tp = [cam(p) for p in top]
         fr.poly(tp)
-        # top face rim: lit on the right-hand side only
-        right = [p for p in tp if p[0] > cam(v3(0, 0, z1))[0] + 0.55 * (max(q[0] for q in tp) - cam(v3(0, 0, z1))[0])]
-        arcs = _arc_split(tp, lambda p: p[0] > cam(v3(0, 0, z1))[0] + 0.5 * (max(q[0] for q in tp) - cam(v3(0, 0, z1))[0])
-                          and p[1] < cam(v3(0, 0, z1))[1] + 4)
-        for a in arcs:
-            fr.line(a, LINE, S)
-        fr.line(tp + [tp[0]], HAIR, D)
+        lit, dark = lit_runs(tp, 0.55)
+        for r in dark:
+            fr.line(r, HAIR, D)
+        for r in lit:
+            fr.line(r, LINE, S)
 
     flange(zb0, zb1)
     # the winding: black body, the brightest rim on its lit edge, a few turns near that edge
@@ -543,14 +552,14 @@ def v3_(s: Spool) -> Frame:
     fr.poly(h)
     cx = cam(v3(0, 0, (zb1 + zt0) / 2))[0]
     xmax = max(p[0] for p in h)
-    for z in np.arange(zb1 + 0.06, zt0 - 0.03, 0.055):
-        pts, ts = ring(v3(0, 0, z), axis, Rw, 160)
+    for z in np.arange(zb1 + 0.05, zt0 - 0.02, 0.05):
+        pts, ts = ring(v3(0, 0, z), axis, Rw, 200)
         nrm = [v3(math.cos(t), math.sin(t), 0) for t in ts]
         for run in visible_runs(cam, pts, nrm):
-            seg = [p for p in run if p[0] > cx + 0.62 * (xmax - cx)]
+            seg = [p for p in run if p[0] > cx + 0.55 * (xmax - cx)]
             if len(seg) >= 2:
                 fr.line(seg, HAIR, D)
-    lit_outline(h, SUBJ, B, thresh=0.6)
+    lit_outline(h, SUBJ, B, thresh=0.7, fill=False)
     flange(zt0, zt1)
     # the bore in the top face
     bore, _ = ring(v3(0, 0, zt1), axis, 0.13, 40)

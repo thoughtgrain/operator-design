@@ -454,7 +454,7 @@ def lit_edges(svg, poly, col, width, light=(-0.45, -0.89), thresh=0.3):
 
 def v3():
     s = Svg()
-    cam = Camera(eye=(30, -1400, 120), target=(30, 0, 0), px_per_unit=1.0, cx=200, cy=108)
+    cam = Camera(eye=(30, -1400, 120), target=(30, 0, 0), px_per_unit=0.9, cx=238, cy=112)
     rod = 4.0
     throw = 32 + 40 * RATIO_N            # ratio: the brace's sweep (52 at 2.00)
     # the brace's centreline, in its own plane (x-z), y = 0
@@ -516,14 +516,14 @@ def v3():
         s.ribbon(cam.proj([(x, 0, 9), (x, 0, -9)]), HAIR, G[2])
     for x in (50, 60):
         s.ribbon(cam.proj([(x, 0, 9.5), (x, 0, -9.5)]), HAIR, G[2])
-    s.path(boardp, BLACK, G[3], LINE)
+    s.path(boardp, BLACK, G[4], LINE)
     # the board's grain, end-on in section: hairlines across the cut, ≥ 6 px apart
     for z in (-70, -48, -26, 26, 48, 70):
-        s.ribbon(cam.proj([(board_x + 4, 0, z), (300, 0, z + 3)]), HAIR, G[1])
+        s.ribbon(cam.proj([(board_x + 4, 0, z), (300, 0, z + 3)]), HAIR, G[2])
     for name, poly in parts:
         lit_edges(s, poly, BRIGHT, SUBJ)
     lit_edges(s, bitp, BRIGHT, SUBJ)
-    lit_edges(s, boardp, G[4], LINE)
+    lit_edges(s, boardp, G[5], LINE)
     return s
 
 
@@ -533,7 +533,7 @@ def v3():
 # =========================================================================
 def v4():
     s = Svg()
-    cam = Camera(eye=(-70, -520, 200), target=(24, 0, 8), px_per_unit=1.42, cx=232, cy=124)
+    cam = Camera(eye=(-180, -480, 150), target=(22, 0, 6), px_per_unit=1.32, cx=238, cy=128)
     R, t = 54.0, 7.0
     W = (0.0, 0.0, 0.0)
     ex, ez = (1, 0, 0), (0, 0, 1)
@@ -544,7 +544,7 @@ def v4():
 
     # crank, in front of the wheel: axle boss, arm, and the turned grip toward the hand
     ca = math.radians(128)
-    arm_len = R * 1.18
+    arm_len = R * 1.4
     yb = -30
     arm0 = (0, yb, 0)
     arm1 = (arm_len * math.cos(ca), yb, arm_len * math.sin(ca))
@@ -564,8 +564,10 @@ def v4():
             c = add(grip_c, (0, -dy - 2, 0))
             pts = ring_pts(c, r, ex, ez, 24)
             scr = cam.proj(pts)
-            xs = sorted(scr, key=lambda p: p[0])
-            top.append(xs[0]); bot.append(xs[-1])
+            p0, p1 = cam(grip_c), cam(add(grip_c, (0, -40, 0)))
+            nrm = normal2(p0, p1)
+            ds = [(q[0] - p0[0]) * nrm[0] + (q[1] - p0[1]) * nrm[1] for q in scr]
+            top.append(scr[ds.index(min(ds))]); bot.append(scr[ds.index(max(ds))])
         s.path(top + bot[::-1], BLACK, G[4], LINE)
         for dy in (10, 22):
             arc = cam.proj(ring_pts(add(grip_c, (0, -dy - 2, 0)), 7.6, ex, ez, 16, math.pi * 0.5, math.pi * 1.5))
@@ -671,7 +673,7 @@ def v4():
 # =========================================================================
 def v5():
     s = Svg()
-    cam = Camera(eye=(230, -380, 230), target=(10, 40, -58), px_per_unit=1.22, cx=246, cy=126)
+    cam = Camera(eye=(230, -380, 230), target=(10, 40, -58), px_per_unit=1.16, cx=246, cy=133)
     X0, X1, Y0, Y1, H = -120, 120, 0, 80, 110
     r = 26.0
     depth = 26 + BITE * 90               # bite: how deep the bore has gone (57.5 at 35 %)
