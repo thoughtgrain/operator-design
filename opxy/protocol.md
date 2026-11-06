@@ -117,7 +117,7 @@ Start with a frames pass: five `rest.svg` variants of the chosen subject, each f
 
 Authoring rules for frames (they're meant to become `panel.svg.fragment`, so I author them that way from the start):
 
-- Bound parts get device IDs (`<id>_node_<i>`), mutable outlines are `M L… Z` with no fill and distinct points.
+- Bound parts get device IDs (`<id>_node_<i>`), mutable outlines are `M L… Z` with distinct points, all at the frame's one point count, and either `fill="none"` or an explicit `#RRGGBB` fill when the outline encloses area (`constraints.md`, Fills).
 - Every leaf has explicit `fill`, `stroke`, `stroke-width`. No group styles, no gradients, filters, masks, `<use>`, CSS.
 - Lines are closed ribbons, not strokes traced back.
 - Text uses `font-family="UniversNextPro-Light"`. Previews will fall back to another font locally, so I treat rendered widths as approximate.
