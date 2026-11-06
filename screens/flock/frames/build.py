@@ -158,8 +158,9 @@ CRANK_R = 1.12
 # Eight birds on four tiers, two a tier, the pair on a tier always more than a bird's length
 # apart along the slot (their offsets differ by 1.2), so they can't touch at any cohere.
 # offset o (-1..1) along the flock's spread, tier height (rod length above the lid), a small jitter.
-# Neighbours along the slot are always at least one tier (0.7, more than a bird's height) apart.
-TIER = {"A": 0.9, "B": 2.3, "C": 1.6, "D": 3.0}
+# The tiers rise left to right in two runs, so each bird's raised wing (it points back, to the left)
+# opens away from its neighbour: neighbours are a tier (0.7) apart and the higher one is ahead.
+TIER = {"A": 0.9, "B": 1.6, "C": 2.3, "D": 3.0}
 BIRDS = [(-1.00, "A", 0.00), (-0.75, "B", 0.03), (-0.45, "C", 0.00), (-0.20, "D", -0.03),
          (0.20, "A", 0.03), (0.45, "B", -0.02), (0.75, "C", 0.02), (1.00, "D", 0.00)]
 # scatter: these three break away (slide out along the slot and lean out); sign = which way

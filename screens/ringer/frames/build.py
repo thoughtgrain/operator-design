@@ -63,7 +63,7 @@ BEAM_H, BEAM_D = 10.0, 22.0    # beam front-face height and depth (px)
 BEAM_X0, BEAM_X1 = 12.0, 468.0
 ROW_W = 440.0                  # widest row (slowest pace, full stroke) fits this
 SWING_MAX = math.radians(22)   # how far toward you a striking bell swings (a stand-in for the full circle)
-HATCH_H, HATCH_GAP = 18.0, 4.0  # the open-lead band: line height and spacing (px)
+HATCH_H, HATCH_GAP = 20.0, 4.0  # the open-lead band: line height and spacing (px)
 MIN_SEP = 3.0                  # detail lines closer than this at 1:1 are dropped
 
 
@@ -201,13 +201,14 @@ def gap_px(s, u):
 
 
 def size_for(n):
-    """Treble lip radius (px) so the widest row (pace 0, stroke 100) fits ROW_W."""
+    """Treble lip radius (px) so the widest row (pace 0, stroke 100, with the open lead's
+    hatch leaning out to its left) fits ROW_W."""
     widths = sum(2 * bell_scale(b) for b in range(1, n + 1))
     mean = widths / n
     # widths*s + (n-1)*(3.5+0.55s) + bay(mean*s + 3.5 + 0.55s) = ROW_W
     a = widths + (n - 1) * 0.55 + mean + 0.55
     c = (n - 1) * 3.5 + 3.5
-    return (ROW_W - c) / a
+    return (ROW_W - HATCH_H - c) / a
 
 
 def layout(c, order):
@@ -219,7 +220,8 @@ def layout(c, order):
     mean = sum(2 * s * bell_scale(b) for b in range(1, n + 1)) / n
     bay = c["stroke"] * (mean + g)
     total = sum(widths) + (n - 1) * g + bay
-    x = 240 - total / 2
+    lean = min(HATCH_H, bay)                      # room for the hatch leaning out left
+    x = 240 - (total + lean) / 2 + lean
     bay_span = (x, x + bay - g * c["stroke"]) if bay > 0.5 else None
     x += bay
     xs = []
@@ -506,9 +508,9 @@ def draw(c, row, title, swing=None, positions=None, lit=None, values=None):
         # the open lead: a hatched band of fixed-length 45-degree hairlines under the beam,
         # one node each from a pool, shown as many as the bay holds (count, not reshaping)
         y0 = P(0, BEAM_DROP, -BEAM_D / 2)[1] + 3
-        x = bay[0]
-        while x + HATCH_H <= bay[1] + 0.01:
-            fr.ribbon([(x, y0 + HATCH_H), (x + HATCH_H, y0)], HAIR, G2)
+        x = bay[0] + 1
+        while x <= bay[1] + 0.01:                  # tops along the bay, leaning out to the left
+            fr.ribbon([(x - HATCH_H, y0 + HATCH_H), (x, y0)], HAIR, G2)
             x += HATCH_GAP
     lit = row[0] if lit is None else lit
     for b in sorted(range(1, n + 1), reverse=True):           # tenor first: smaller bells pass in front
