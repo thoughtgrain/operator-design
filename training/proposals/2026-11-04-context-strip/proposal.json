@@ -82,11 +82,22 @@
     }
   ],
   "changesHash": "37a3109918247e03",
-  "state": "audit",
+  "state": "draft",
   "iteration": 12,
   "draftedBy": "claude-drafter@claude-code",
   "created": "2026-11-04T20:38:01",
-  "audit": null,
+  "audit": {
+    "verdict": "changes_requested",
+    "findings": [
+      "1. Close-up re-key and cost not stated, and the mock's docstring is false. P16 gives the sample map's cost as 'two nodes on the frame a sample arrives', but the close-up is built from the bins between begin and end, which follow edits in any frame without generation changing (display.md, Sample overview), or from the engine's own controls via Input. So a new sample changes four outlines plus the markers, and each marker edit that crosses a bin reshapes two filled 32-point outlines, a moving fill (constraints.md 'Moving fills', [ux]) to check on the device. State when the close-up re-keys and what it costs. Fix the docstring in training/proposals/2026-11-04-context-strip/mock_sample.py ('Everything re-keys only when the overview's generation differs'), which is wrong for the close-up.",
+      "2. Close-up resampling drops detail. 'Resampled to 16 bins ... shows what the device knows and nothing finer' doesn't say how to reduce more than 16 bins, and mock_sample.py picks the nearest bin (region[int(k*len(region)/16)]), which drops peaks when the stretch is longer than 16 bins. Say each step takes the highest high and lowest low of its bins (as the band does) and that bins repeat when there are fewer than 16. Add a one-bin minimum: when begin and end round to the same bin the generator's region is empty and it raises an IndexError.",
+      "3. The constraints.md row 82 sync is incomplete. opxy/protocol.md line 120 ('mutable outlines are M L… Z with no fill') and opxy/templates/frame.svg line 19 ('fill=\"none\"') still contradict display.md ('Mutable paths may have an explicit #RRGGBB fill when their authored geometry encloses area') and the corrected row 82, and P16's sample build depends on filled mutable outlines. Update both in the same direct sync. Row 82 itself is correct against display.md lines 308 and 312-314 and draw.hpp Path<Points>/Frame.",
+      "4. 'The two overlap 2 px at the middle so they read as one sample, never as a split' asserts a device result. The halves must have different origins (±64 authored at scale 2 covers only 256 px), and display.md says separately transformed parts that touch can land apart on the device. Say the overlap is meant to hide the seam and mark it pending a device check; the same goes for the close-up's halves 'overlapping a few pixels'."
+    ],
+    "by": "opxy-auditor@claude-code",
+    "at": "2026-11-05T23:08:24",
+    "changesHash": "37a3109918247e03"
+  },
   "review": null,
   "gate": null,
   "approval": null,
@@ -431,6 +442,25 @@
       "by": "claude-drafter@claude-code",
       "event": "note",
       "note": "Revision 12: proposal categories set to * (any machine), matching the catalog change."
+    },
+    {
+      "at": "2026-11-05T23:08:24",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 4
+    },
+    {
+      "at": "2026-11-05T23:08:24",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "note",
+      "note": "Reviewed revision 12 in parallel with the audit: changes_requested, 3 findings (close-up as joined vertices like the band, not flat steps; keep the one-sentence test hard, only which wholes qualify is a default; exact close-up overlap). Folded into revision 13.",
+      "findings": [
+        "1. Replace the flat-step close-up with the band's own drawing: the same 32 points as vertices (each a bin's high or low, joined by straight lines, still from the bins between the markers, still no finer than the overview). At 1:1 the 24 px steps read as a column chart, not the OP-XY. They break One drawing language, because the band draws the same sample as joined points. They also show only half the data the point budget allows (8 bins a half instead of 16). Keep the sentence about not inventing detail; joining real bin values with straight lines doesn't. Re-render mock-sample.png and check it at 1:1.",
+        "2. In 'When it's there' and the matching craft.md sentence, make only the first condition (which wholes qualify) a breakable default. The one-sentence test of what the map tells the player that the drawing doesn't should hold every time, because the pattern itself says 'a map of nothing the player needs is a panel'. Suggested wording: 'A screen can use it for a whole outside these, saying why in a sentence, but never without the one sentence of what the map tells the player.'",
+        "3. In 'The sample's close-up', replace 'overlapping a few pixels' with an exact value, as the band does (2 px), so the two halves are built the same way in both places."
+      ]
     }
   ]
 }

@@ -1,0 +1,89 @@
+{
+  "id": "2026-11-05-control-tiles",
+  "kind": "new_pattern",
+  "title": "Control tiles",
+  "summary": "Adds P18 Control tiles (draft): for an effect, player or function whose controls do different jobs, light tiles on black, one per encoder with its encoder dot and one moving glyph, labels outside, around one result tile that every control reshapes, taken from the stock modulator pages' form; plus a P8 bullet and the function row in categories.md.",
+  "rationale": "Asked for by the guidelines' owner on 2026-11-05, with screenshots of two stock OP-XY pages as the reference (kept out of the repo; the patterns take the approach, not the artwork). The second is the ducker, a stock modulator page: light rounded tiles on black, one per encoder with its encoder dot, labels outside the tiles, a glyph per tile, and a signal tile; the owner sees it for modulator, player and effect pages. The owner chose: one column or tile per encoder, four at most; a parameter's state drives the inactive hatching; the page takes the whole screen; and the stock grey ramp in encoder order stays. Grounded in open-xy staging: one subpath per path and hide/park (display.md, Artwork), covering y 0-20 hides the stock header, the effect shift row (SDK 1.7), track-control display words and mute as bypass (SDK 1.9), and the perceptibility floors in tokens.json. Precedents: toro-blocks and theseus-tower keep the stock header and a single drawing; nothing here changes a rule they rely on.",
+  "evidence": [
+    "opxy/patterns.md",
+    "opxy/craft.md",
+    "opxy/categories.md",
+    "opxy/constraints.md",
+    "opxy/tokens.json",
+    "training/proposals/2026-11-05-control-tiles/mock-tiles.svg",
+    "training/proposals/2026-11-05-control-tiles/mock-tiles.png",
+    "training/proposals/2026-11-05-control-tiles/mock_tiles.py",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/display.md#artwork",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/ux.md#controls",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/api.md"
+  ],
+  "categories": [
+    "effect",
+    "player",
+    "function"
+  ],
+  "changes": [
+    {
+      "op": "insert_section",
+      "file": "opxy/patterns.md",
+      "before": "## P8 · Headers",
+      "content": "## P18 · Control tiles\n\n**The idea.** The way the stock modulator pages are built (the ducker is one): light tiles on black, one per encoder, each marked in its top-left corner with the encoder's dot, with its label outside the tile and inside it one small black glyph that moves in one channel, such as a pointer on a ruler or a line that turns. One more tile, with no dot, shows what the controls do together. It's for effects, players and functions whose controls do different jobs, where the stock look for that kind of page is already tiles. `training/proposals/2026-11-05-control-tiles/mock-tiles.png` shows a tremolo.\n\n**Why it works.** A modulator's controls are unlike each other (a source, an amount, two times), so one drawing that every knob reshapes ends up forced. Tiles give each control its own small picture and its own place, and the dot ties the place to the encoder without words. The result tile keeps it from being a panel: it's the one picture of what the player is shaping, and every control moves it.\n\n**When it's there.** My default is an effect, player or function page whose controls do different jobs, at most four of them. If there's a subject that every control can reshape, I draw that instead (P1–P3, P13); tiles are for when a single drawing would have to be forced. `categories.md`'s \"not a panel of function cells\" still holds: a grid of cells, one per function, is a panel, while a tile per encoder around one result is this pattern. A screen can break these defaults with a sentence saying why.\n\n**Build it.**\n\n- **The whole screen.** A static black backing covers y 0–20, which hides the stock header (`display.md`, Artwork), and the tiles use the whole screen. No values sit in the header's place, so the page trades them (`ux.md`, Controls), and I say so in the handoff and the machine's README, as P8's own header does.\n- **Tiles.** Static artwork in `#CDCDCD` with 6 px rounded corners and 8 px gaps. Sizes follow importance: the result tile is the largest, at least a quarter of the screen. The corners are a plain SVG `rect` with `rx`, which lints clean; how the device draws them stays pending until someone photographs it.\n- **The encoder dots.** 8 px, 11 px in from the tile's top-left corner: encoder 1 black, 2 `#4B4B4B`, 3 `#969696`, 4 a black ring 1.5 px wide. That's the order the stock tile pages use, dark to light. Each dot sits in its own tile, so place tells the encoders apart before shade does, and the fourth differs in form as well.\n- **Labels outside.** The parameter's own label, lower case, 10 px device font in `#CDCDCD` (`ux.md`: one or two words, ≤ 8 characters), above the top row's tiles and below the bottom row's. They never move, so they're static artwork rather than text slots.\n- **One glyph per control tile, in black.** One channel each: a pointer sliding along a ruler (position; ticks 1 px wide, at least 3 px apart), a line turning about its foot (rotation, at least 30° over the range), a count of marks. One or two nodes a tile.\n- **The result tile.** One mutable outline, filled black at the frame's point count, redrawn while a control turns: the curve the controls make, drawn from the parameters rather than from audio, since an effect page gets no signal (`constraints.md`, Which machines draw a screen). A track-control machine can pass its own state in its four display words instead. Every control reshapes it as well as its own glyph, because a glyph alone changes too little of the screen to pass perceptibility: a pointer moving 56 px changes a few hundred pixels, and the result tile carries the rest.\n- **A choice with no picture.** Which track, which source: its name goes in its tile as a text slot, at the header value's 20 px.\n\n**Pitfalls.**\n\n- **No icons.** Some stock tiles carry small glyphs for things; I leave them out (`craft.md`). A glyph that moves with its control is a picture, and one that only names something is an icon.\n- **Not a dashboard.** No meters, no number on every tile, and no tile for something neither an encoder nor the result needs: four control tiles and one result, at most.\n- **The light ground.** The tiles are the page's lightest grey, so \"one brightest element\" applies to the ink: the result's black fill is the subject, the way black ink is on paper.\n- **Still at rest.** The result redraws only while a control turns; at rest nothing changes (`constraints.md`, Redraw).\n- **Leaving draft.** It stops being a draft when an audited library screen uses it and its card says what the tiles added."
+    },
+    {
+      "op": "set_json",
+      "file": "opxy/catalog.json",
+      "pointer": "/patterns/P18",
+      "value": {
+        "name": "Control tiles",
+        "role": "subject",
+        "categories": [
+          "effect",
+          "player",
+          "function"
+        ],
+        "caution": "Draft pattern: no audited screen uses it yet. For controls that do different jobs; always one result tile every control moves."
+      }
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n",
+      "replace": "| P18 Control tiles (draft) |  | | | ● | ● | | ● |\n| P7 Column affinity, P8 Headers | * | * | * | * | * | * | * |\n"
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/patterns.md",
+      "find": "- **Own header.** Only when the header itself needs to show something stock can't.",
+      "replace": "- **Control tiles.** P18 gives the whole screen to its own page: cover y 0–20, no titles or values, and say in the handoff and the machine's README that the page trades values for it.\n- **Own header.** Only when the header itself needs to show something stock can't."
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "| The target being acted on, not a panel of function cells |",
+      "replace": "| The target being acted on, not a panel of function cells; for a modulator, P18's control tiles around one result |"
+    }
+  ],
+  "changesHash": "775ec6450dd61207",
+  "state": "audit",
+  "iteration": 1,
+  "draftedBy": "claude-drafter@claude-code",
+  "created": "2026-11-05T23:08:12",
+  "audit": null,
+  "review": null,
+  "gate": null,
+  "approval": null,
+  "history": [
+    {
+      "at": "2026-11-05T23:08:12",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "proposed"
+    },
+    {
+      "at": "2026-11-05T23:08:12",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    }
+  ]
+}

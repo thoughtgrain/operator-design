@@ -1,0 +1,89 @@
+{
+  "id": "2026-11-05-level-columns",
+  "kind": "new_pattern",
+  "title": "Level columns",
+  "summary": "Adds P17 Level columns (draft): for an effect, or the odd engine or player, whose four controls are amounts of one kind, four whole-height columns in encoder-order greys with a level bar each and hatching when a parameter switches a column off, taken from the stock mixer's form; plus a craft.md note and P8 bullet.",
+  "rationale": "Asked for by the guidelines' owner on 2026-11-05, with screenshots of two stock OP-XY pages as the reference (kept out of the repo; the patterns take the approach, not the artwork). The first is the mixer page: tall columns stepping from dark to light, a bar at each level, and diagonal hatching on a column that's switched off; the owner sees it for effect pages and the odd engine or player page. The owner chose: one column or tile per encoder, four at most; a parameter's state drives the inactive hatching; the page takes the whole screen; and the stock grey ramp in encoder order stays. Grounded in open-xy staging: one subpath per path and hide/park (display.md, Artwork), covering y 0-20 hides the stock header, the effect shift row (SDK 1.7), track-control display words and mute as bypass (SDK 1.9), and the perceptibility floors in tokens.json. Precedents: toro-blocks and theseus-tower keep the stock header and a single drawing; nothing here changes a rule they rely on.",
+  "evidence": [
+    "opxy/patterns.md",
+    "opxy/craft.md",
+    "opxy/categories.md",
+    "opxy/constraints.md",
+    "opxy/tokens.json",
+    "training/proposals/2026-11-05-level-columns/mock-columns.svg",
+    "training/proposals/2026-11-05-level-columns/mock-columns.png",
+    "training/proposals/2026-11-05-level-columns/mock_columns.py",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/display.md#artwork",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/ux.md#controls",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/api.md"
+  ],
+  "categories": [
+    "engine",
+    "effect",
+    "player"
+  ],
+  "changes": [
+    {
+      "op": "insert_section",
+      "file": "opxy/patterns.md",
+      "before": "## P8 · Headers",
+      "content": "## P17 · Level columns\n\n**The idea.** A page that is its four controls, drawn the way the stock mixer draws its tracks: four tall columns across the whole screen, one per encoder, left to right, each with a bar at its level. The columns step from dark to light in encoder order, the same order as the encoder dots on the stock tile pages (P18), so the ramp says which encoder owns which column without a label. When something switches a column off, the column carries diagonal hatching and its bar stays where it was. It's for effects, and the odd engine or player, whose four controls are parallel amounts of the same kind: four taps, four bands, four sends, four voices. `training/proposals/2026-11-05-level-columns/mock-columns.png` shows a four-tap delay with tap 3 switched off.\n\n**Why it works.** When the controls really are four of the same thing, the picture is their levels side by side, and the OP-XY already has a way to draw that: the mixer. Taking its form, not its artwork, makes the page read at once as \"four levels, and this one's off\", and it looks like the OP-XY made it because the OP-XY makes pages like it. Hatching says \"off\" by form rather than shade, so it survives grayscale and low contrast. It also keeps the setting visible, so switching a column back on brings back what was there.\n\n**When it's there.** My default is to use it when all of the machine's controls are amounts of the same kind and there are at most four of them: the columns take the header's place, so there's no page header for a second page. Controls that do different jobs want a drawing (P1–P3) or tiles (P18); columns for unlike controls make a panel. A screen can break the default with a sentence saying why.\n\n**Build it.**\n\n- **The whole screen.** Four columns, 120 px each, edge to edge over y 0–220. Covering y 0–20 hides the stock header (`display.md`, Artwork). There are no titles, values or text slots, so the page trades the header's real-unit values (`ux.md`, Controls), and I say so in the handoff and the machine's README, as P8's own header does.\n- **The ramp.** `#323232`, `#646464`, `#969696`, `#CDCDCD`, encoder 1 to 4. Position tells the columns apart; the ramp only ties each one to its encoder, and no column means anything by its grey alone.\n- **The level.** One node per column: a bar 10 px tall, inset 4 px each side, light (`#CDCDCD`) on the darkest column and black on the rest, so it contrasts with its own ground. 0 rests at the bottom edge and 100 near the top, about 196 px of travel. The 10 px is deliberate: a 112 × 10 bar moving its full range changes about 2,240 px, just over the 2.5 % a score-5 control needs (`perceptibility.py`), so a thinner bar caps how much a control can be heard to matter.\n- **Off is hatching.** The device wants one subpath per path (`display.md`, Artwork), so the hatching can't be one node. Each column that can switch off gets its hatching as static artwork, one path per diagonal strip: 1.5 px wide, 10 px apart (well clear of the ~3 px floor for hatching, `constraints.md`), two grey steps from the column. Over it sits a cover node, a rectangle in the column's own grey. Off parks the cover (`hide`), which shows the hatching; on brings it back. That's one node per column on the frame it switches, and nothing at rest. The level bar comes after both in the SVG, so it stays on top. Only the columns that can switch off get hatching, since every strip is an element.\n- **What switches it.** A parameter's state, never the level reaching 0: 0 is a level, not \"off\". On an effect the natural place is the Shift row, an on/off enum per column (`shift`, SDK 1.7) chosen with Shift + that column's encoder. On a track-control player or function it's the machine's own state, passed in its four display words, and mute: mute is its bypass and has to show (`ux.md`, Aux tracks), so a muted track hatches all four columns.\n\n**Pitfalls.**\n\n- **Not a mixer.** It takes the form for four controls of one kind. Track numbers, meters and a selected-column marker are the stock mixer's furniture for its own job; they don't come along.\n- **The black space goes, on purpose.** The columns fill the screen, so `craft.md`'s 40 % black default doesn't hold: the page is the controls. That's the reason nothing else goes on it.\n- **The brightest thing is ground.** `#CDCDCD` is the fourth column's ground, not a subject. Keep everything drawn on a column to the bar and the hatching, never a third grey.\n- **Still at rest.** The columns answer turns, not notes. An effect has no notes to answer, and a player's notes belong to the track it plays.\n- **Leaving draft.** It stops being a draft when an audited library screen uses it and its card says what the columns added."
+    },
+    {
+      "op": "set_json",
+      "file": "opxy/catalog.json",
+      "pointer": "/patterns/P17",
+      "value": {
+        "name": "Level columns",
+        "role": "subject",
+        "categories": [
+          "engine",
+          "effect",
+          "player"
+        ],
+        "caution": "Draft pattern: no audited screen uses it yet. Only when the controls are amounts of one kind, at most four."
+      }
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "| P15 Cell field | ● | | ● | ● | | | |\n",
+      "replace": "| P15 Cell field | ● | | ● | ● | | | |\n| P17 Level columns (draft) | ● | | | ● | ● | |  |\n"
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/patterns.md",
+      "find": "- **Own header.** Only when the header itself needs to show something stock can't.",
+      "replace": "- **Level columns.** P17 gives the whole screen to its own page: cover y 0–20, no titles or values, and say in the handoff and the machine's README that the page trades values for it.\n- **Own header.** Only when the header itself needs to show something stock can't."
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/craft.md",
+      "find": "\n## Composition\n",
+      "replace": "\nTwo stock-look pages trade the drawing for the controls on purpose, because the OP-XY itself draws those jobs that way: P17's level columns for four controls of one kind, and P18's control tiles for an effect, player or function whose controls do different jobs. Both keep one picture that every control changes (the levels, the result tile), take the whole screen, and stay still at rest.\n\n## Composition\n"
+    }
+  ],
+  "changesHash": "b7b2dd021285f021",
+  "state": "audit",
+  "iteration": 1,
+  "draftedBy": "claude-drafter@claude-code",
+  "created": "2026-11-05T23:08:12",
+  "audit": null,
+  "review": null,
+  "gate": null,
+  "approval": null,
+  "history": [
+    {
+      "at": "2026-11-05T23:08:12",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "proposed"
+    },
+    {
+      "at": "2026-11-05T23:08:12",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    }
+  ]
+}
