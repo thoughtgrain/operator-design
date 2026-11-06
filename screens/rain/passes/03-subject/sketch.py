@@ -139,7 +139,7 @@ def dedupe(pts, close=True):
     return out
 
 
-def clip_poly(pts, x0=0.0, y0=TOP, x1=480.0, y1=220.0):
+def clip_poly(pts, x0=-3.0, y0=TOP, x1=483.0, y1=223.0):
     def clip(poly, inside, cut):
         out = []
         for i in range(len(poly)):
@@ -380,6 +380,8 @@ class Pane:
         self.events: list[tuple] = []
         self.serial = 0
         self.keep = 4
+        self.floor = None
+        self.landed = []
 
     def pitch_y(self, st):
         if self.span < 1e-6:
@@ -406,6 +408,7 @@ class Pane:
             run.lit = False
         b = self._new(Bead(x, y, r, t, tail=(self.gust, 1.0)))
         b.lit = True
+        self.landed.append((t, st, r))
         self.events.append(("land", t, b.x, b.y))
         self._merge(b, t)
         return b
@@ -456,7 +459,12 @@ class Pane:
                     self.beads.remove(o)
                     run.flash = t
                     self.events.append(("echo", t, run.x, run.y))
-            if run.y < run.r * 1.25 + 1:
+            if self.floor is not None and run.y < self.floor:
+                run.done = True
+                self.runs.remove(run)
+                self.trails.append(run)
+                continue
+            if self.floor is None and run.y < run.r * 1.25 + 1:
                 run.y = run.r * 1.25 + 1
                 run.done = True
                 self.runs.remove(run)
@@ -536,11 +544,21 @@ def lane(cam, run, wk=0.8, step=3.0):
         dx, dy = b[0] - a[0], b[1] - a[1]
         ln = math.hypot(dx, dy) or 1
         nx, ny = -dy / ln, dx / ln
-        taper = min(1.0, 0.35 + i / max(1, len(c) - 1) * 0.9)
+        taper = min(1.0, 0.75 + i / max(1, len(c) - 1) * 0.5)
         w = max(1.6, ws[i] * k * wk * taper)
         left.append((x + nx * w, y + ny * w))
         right.append((x - nx * w, y - ny * w))
-    poly = left + right[::-1]
+    # round the top of the lane, where the bead sat before it let go
+    (x0, y0), (lx, ly), (rx, ry) = c[0], left[0], right[0]
+    w0 = math.dist((lx, ly), (rx, ry)) / 2
+    a0 = math.atan2(ly - y0, lx - x0)
+    cap = [(x0 + w0 * math.cos(a0 + math.pi * k / 8), y0 + w0 * math.sin(a0 + math.pi * k / 8)) for k in range(1, 8)]
+    # sweep the side away from the travel direction
+    d = (c[min(1, len(c) - 1)][0] - x0, c[min(1, len(c) - 1)][1] - y0)
+    mid = cap[3]
+    if (mid[0] - x0) * d[0] + (mid[1] - y0) * d[1] > 0:
+        cap = [(x0 + w0 * math.cos(a0 - math.pi * k / 8), y0 + w0 * math.sin(a0 - math.pi * k / 8)) for k in range(1, 8)]
+    poly = left + right[::-1] + cap[::-1]
     return resample(dedupe(poly), 62)
 
 
@@ -725,16 +743,18 @@ class V3(Variant):
         return cam
 
     def parts(self, pane):
+        """The puddle's memory: the last n drops, oldest on the left, each over the height
+        it landed at. A new drop enters on the right and the oldest one leaves."""
         n = 3 + round(9 * pane.puddle)
-        rng = random.Random(self.seed + 3)
-        cs = courses(pane.span) or [0]
         hx, hy = 150.0, pane.yc - 30
+        mem = pane.landed[-n:]
         out = []
-        for i in range(n):
-            st = cs[(i * 3 + 1) % len(cs)]
+        for i, (t_, st, r_) in enumerate(mem):
             y = pane.pitch_y(st)
-            x = hx + (i - (n - 1) / 2) * 26 + rng.uniform(-3, 3)
-            out.append(Bead(x, y, rng.uniform(4.6, 6.0), -5))
+            x = hx + (i - (n - 1) / 2) * 26
+            b = Bead(x, y, max(4.4, min(6.0, r_ * 1.25)), t_)
+            b.lit = i == len(mem) - 1
+            out.append(b)
         vol = sum(p.r ** 3 for p in out) * 1.15
         return Bead(hx, hy, vol ** (1 / 3), -1), out
 
@@ -768,7 +788,7 @@ class V3(Variant):
             fr.ribbon(path, HAIR, G2)
         hkw = dict(h_k=0.7, sag=0.45, lean=hv.r * 0.3)
         hvo = cap_outline(cam, hv, **hkw)
-        fr.outline(hvo, G7, SUBJ)
+        fr.outline(hvo, G5, SUBJ)
         for rho in (0.72, 0.44):
             ring = footprint(cam, hv, rho=rho, **hkw)
             fr.ribbon(ring + ring[:1], HAIR, G4)
@@ -795,7 +815,10 @@ class V3(Variant):
                 th = 2 * math.pi * j / 24
                 eq.append(cam(add(top, add(mul(ax, -p.r * 0.25), add(mul(e1, p.r * 1.04 * math.cos(th)),
                                                                      mul(e2, p.r * 1.04 * math.sin(th)))))))
-            fr.outline(resample(hull([cam(v) for v in sph]), 56), G4, LINE)
+            sc = self.flare(p, t)
+            if sc != 1.0:
+                sph = [add(top, mul(sub(v_, top), sc)) for v_ in sph]
+            fr.outline(resample(hull([cam(v) for v in sph]), 56), G7 if p.lit else G4, SUBJ if p.lit else LINE)
             near = [q_ for q_ in eq if True]
             fr.ribbon(near[:13], HAIR, G3)
         for x, y in self.arriving(pane, t):
@@ -817,19 +840,21 @@ class V4(Variant):
         hv = p._new(Bead(292, 110, 40 + 22 * p.puddle, -3))
         p.beads = [b for b in p.beads if b is hv or math.dist((b.x, b.y), (hv.x, hv.y)) > hv.r * 1.3 + b.r]
         p.r_break = hv.r + 3
+        p.floor = -70
         p._new(Bead(468, 196, 22, -30))
         p._new(Bead(236, -4, 17, -30))
         # an earlier heavy bead's trail, down the left
-        old = Bead(96, 236, 26, -20)
+        old = Bead(96, 186, 26, -20)
         run = Run(old, -20)
-        y = 236.0
+        run.trail, run.widths = [], []
+        y = 189.0
         while y > -40:
             y -= 3
-            run.trail.append((96 + 10 * math.sin(y * 0.02) - (236 - y) * 0.08, y))
+            run.trail.append((96 + 10 * math.sin(y * 0.02) - (186 - y) * 0.08, y))
             run.widths.append(22)
         p.trails = [run]
-        for k, y in enumerate((150, 104, 52, 12)):
-            x = 96 + 10 * math.sin(y * 0.02) - (236 - y) * 0.08 + (5 if k % 2 else -6)
+        for k, y in enumerate((140, 98, 52, 12)):
+            x = 96 + 10 * math.sin(y * 0.02) - (186 - y) * 0.08 + (5 if k % 2 else -6)
             p._new(Bead(x, y, 6.2, -20, res=True))
         return p
 
@@ -872,14 +897,14 @@ class V4(Variant):
             fr.outline(lane(cam, run, wk=0.62, step=4.0), G3, W)
         big = max(pane.beads + [Bead(0, 0, 0, 0)], key=lambda b: b.r)
         for b in sorted(pane.beads, key=lambda b: -cam.depth((b.x, b.y, 0))):
-            if b is big and b.r > 20:
+            if b is big and b.r > 30:
                 continue
             bb = scaled(b, self.flare(b, t))
-            fr.outline(cap_outline(cam, bb, h_k=0.6), G7 if (b.lit and not (big.r > 20)) else G4, W)
+            fr.outline(cap_outline(cam, bb, h_k=0.6), G7 if (b.lit and not (big.r > 30)) else G4, W)
             if b.r > 9:
                 ring = footprint(cam, bb, rho=0.5, h_k=0.6)
                 fr.ribbon(ring + ring[:1], W, G3)
-        heavy = [b for b in [big] if b.r > 20] + [Bead(r.x, r.y, r.r, r.t0) for r in pane.runs]
+        heavy = [b for b in [big] if b.r > 30] + [Bead(r.x, r.y, r.r, r.t0) for r in pane.runs]
         for run in pane.runs:
             fr.outline(lane(cam, run, wk=0.62, step=4.0), G4, W)
         for hv in heavy:
@@ -927,7 +952,7 @@ class V5(Variant):
             lit = run.lit or t - run.flash < 0.12
             ol = cap_outline(cam, hb, lean=run.r * 0.5, sag=0.6)
             fr.poly(ol, G0)
-            fr.hatch(ol, G3, gap=3.4)
+            fr.hatch(ol, G3, gap=4.5)
             self.rim(fr, cam, hb, G7 if lit else G5, SUBJ, sag=0.6, lean=run.r * 0.5)
         for x, y in self.arriving(pane, t):
             fr.line(cam((x - pane.gust * 8, y + 9, 0)), cam((x - pane.gust * 3, y + 3, 0)), HAIR, G5)
@@ -962,11 +987,12 @@ def write_rest():
         print("wrote", d / "rest.svg")
 
 
-def write_motion(fps=15, dur=4.6, play=(0.15, 3.0)):
+def write_motion(fps=20, dur=4.8, play=(0.15, 3.0)):
     tmp = HERE / "_frames"
     for name, V in VARIANTS.items():
         v, p = rest_pane(V, MOTION, HIST[name])
         t0 = p.events[-1][1] + 10 if p.events else 0.0
+        p.keep = 99
         rng = random.Random(V.seed + 99)
         times = [t0 + n for n in NOTES]
         q = list(times)

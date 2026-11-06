@@ -63,17 +63,17 @@ def jit(k, seed):
 
 
 # ------------------------------------------------------------------- geometry
-RB, RT, DEP = 1.05, 1.8, 0.75        # floor radius, rim radius, depth (world units): a shallow pan
+RB, RT, DEP = 1.05, 1.9, 0.85        # floor radius, rim radius, depth (world units): a shallow pan
 KW = (RT - RB) / DEP                 # wall run per unit rise (45 degrees)
 SHEET = 0.05                         # metal thickness
 BEAD = 0.045                         # rolled rim bead radius
-RIFFLES = [(0.28, 0.07), (0.42, 0.07), (0.56, 0.07)]   # (ledge height, ledge width) on the left wall
+RIFFLES = [(0.36, 0.07), (0.52, 0.07), (0.68, 0.07)]   # (ledge height, ledge width) on the left wall
 RIFFLE_H = 0.10                                         # each tooth rises over this height
 RIFFLE_SECTOR = (math.pi - 0.85, math.pi)               # back-left sector that carries them
-ZW = 0.20                            # water depth at rest
+ZW = 0.27                            # water depth at rest
 
-TH0, TH1 = 2.0, 15.0                 # swirl tilt (world degrees) = TH0 + TH1 * stir
-THMAX = 18.0                         # cap (chord boost): past ~21 degrees this much water spills over the rim
+TH0, TH1 = 2.0, 13.0                 # swirl tilt (world degrees) = TH0 + TH1 * stir
+THMAX = 16.5                         # cap (chord boost): past ~21 degrees this much water spills over the rim
 HOLD = 0.2                           # held-note tilt, share of the swirl tilt
 T_ATTACK = 0.18                      # swirl rise, s (ease-out, settles in 0.15-0.2 s)
 TAU_UP = 0.05
@@ -442,7 +442,7 @@ def water_geometry(theta_deg):
 
 
 # ------------------------------------------------------------------ grains
-R1_PX, ALPHA = 5.6, 0.18          # grain radius in px at scale 1: k = 1 -> 5.6, k = 64 -> ~2.6
+R1_PX, ALPHA = 7.0, 0.19          # grain radius in px at scale 1: k = 1 -> 7.0, k = 64 -> ~3.2
 
 
 def grain_r_px(k):
@@ -471,19 +471,20 @@ def bed(n, gscale, settle):
         return _BED[key]
     placed = []
     root = math.sqrt(1 + KW * KW)
-    spread = 0.55 + 0.95 * settle
+    spread = (1.15 + 0.85 * settle) * gscale ** 0.8   # coarser grains need a longer drift to stay under water
     for k in range(1, n + 1):
         r = grain_r_px(k) * gscale / PPU * (0.9 + 0.2 * jit(k, 13))
-        pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.6 * (0.8 + 0.4 * jit(k, 9))
+        pref = RB - 0.04 - spread * ((k - 1) / (NMAX - 1)) ** 0.75 * (0.8 + 0.4 * jit(k, 9))
         best = None
-        for i in range(420):
+        for i in range(440):
             x = RB + 0.30 - i * 0.005
             z = max(r + 0.01, (x - RB + r * root) / KW)
             for (xj, zj, rj) in placed:
                 d = r + rj + 0.6 / PPU                  # touching, never overlapping: each grain reads
                 if abs(x - xj) < d:
                     z = max(z, zj + math.sqrt(d * d - (x - xj) ** 2))
-            cost = 3.0 * z + 0.5 * abs(x - pref) + 2.0 * max(0.0, x - RB)
+            cost = (1.4 * z + 0.5 * abs(x - pref) + 2.0 * max(0.0, x - RB) + 20.0 * max(0.0, z + r - 0.9 * ZW)
+                    + 0.03 * jit(k * 1000 + i, 17))
             if best is None or cost < best[0]:
                 best = (cost, x, z)
         placed.append((best[1], best[2], r))
@@ -510,17 +511,18 @@ def bed(n, gscale, settle):
     return _BED[key]
 
 
-def grain_target(k, n, geo, gscale):
-    """Where grain k rides to at full lift: out over the floor into the water, high in the column.
-    The water decides: at the swirl's peak it's piled up the right wall, so the fines go up there;
-    as it levels, the same targets slide back over the middle of the pan."""
+def grain_target(k, n, geo, gscale, bx):
+    """Where grain k rides to at full lift: up off its own spot toward the surface, and along the
+    tilt toward the high wall, so the fines ride up in the swirl. Starting from its own spot keeps
+    lifted grains from piling onto each other."""
     c, t = geo["c"], geo["t"]
-    xl, xr = geo["left"][0], geo["right"][0]
-    x = xl + (0.18 + 0.70 * jit(k, 3)) * (xr - xl)
+    xr = geo["right"][0]
+    tilt = t / math.tan(math.radians(THMAX))
+    x = bx + (xr - 0.25 - bx) * 0.55 * tilt * (0.6 + 0.4 * jit(k, 3))
     zs = surface_z(x, c, t)
     zf = 0.0 if abs(x) <= RB else (abs(x) - RB) / KW
     r = grain_r_px(k) * gscale / PPU
-    z = zf + r + (0.45 + 0.50 * jit(k, 5)) * max(0.0, zs - zf - 2 * r - 0.02)
+    z = zf + r + (0.70 + 0.25 * jit(k, 5)) * max(0.0, zs - zf - 2 * r - 0.03)
     return x, z
 
 
@@ -590,7 +592,7 @@ def pose(state):
     """Node poses for a state: what display() writes. Returns dict with screen geometry."""
     ctl = state.ctl
     n = n_partials(ctl["layers"])
-    gscale = 1 + 0.8 * ctl["grain"]               # node scale 1 .. 1.8
+    gscale = 1 + 0.6 * ctl["grain"]               # node scale 1 .. 1.6
     th = round(state.theta / 0.2) * 0.2           # quantised tilt: the outlines' key
     geo = water_geometry(th)
     beds = bed(n, gscale, ctl["settle"])
@@ -599,7 +601,7 @@ def pose(state):
         bx, bz = beds[k - 1]
         lam = state.lam[k]
         if lam > 0:
-            tx, tz = grain_target(k, n, geo, gscale)
+            tx, tz = grain_target(k, n, geo, gscale, bx)
             u = math.sqrt(lam)                    # travel grows with lift, eased so a default stir reads
             x, z = bx + (tx - bx) * u, bz + (tz - bz) * u
             # stay in the water and inside the wall
@@ -639,7 +641,7 @@ def draw(state, captions_=None):
     f = Frame()
     # palette entries, parked off screen
     f.items.append(f'  <path id="{PREFIX}_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="{G7}" stroke="none"/>')
-    f.items.append(f'  <path id="{PREFIX}_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="{G4}" stroke="{G0}" stroke-width="0.8"/>')
+    f.items.append(f'  <path id="{PREFIX}_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="{G4}" stroke="{G0}" stroke-width="0.6"/>')
     f.items.append(f'  <path id="{PREFIX}_palette_2" d="M 720 300 L 724 300 L 724 304 Z" fill="{G4}" stroke="none"/>')
     # back half and the cut (static)
     static_back = Frame()
@@ -668,10 +670,10 @@ def draw(state, captions_=None):
         if k in gpos:
             (x, y), sc = gpos[k]
             pts = [(x + sc * u, y + sc * v) for u, v in shape]
-            f.poly(pts, G4, G0, 0.8, ident=ident, origin=(x, y))
+            f.poly(pts, G4, G0, 0.6, ident=ident, origin=(x, y))
         else:
             pts = [(640 + u, 320 + v) for u, v in shape]
-            f.poly(pts, G4, G0, 0.8, ident=ident, origin=(640, 320))
+            f.poly(pts, G4, G0, 0.6, ident=ident, origin=(640, 320))
     # node 2: the waterline, brightest, last
     mid_, ang, sc, a, b = waterline_pose(p["geo"])
     rib = ribbon_pts([a, b], WL_W0 * sc)
@@ -706,7 +708,20 @@ def run(ctl, events, t_end, fps=60, sample=None):
             i += 1
         st.step(dt)
         ps = pose(st)
-        sig = (round(ps["theta"], 2), tuple(xy for _, xy, _ in ps["grains"]))
+        want = [xy for _, xy, _ in ps["grains"]]
+        groups = grain_groups(len(want))
+        if prev is None:
+            shown = list(want)
+        else:
+            shown = list(prev[1])
+            if len(shown) != len(want):
+                shown = list(want)
+            else:
+                # grains take turns: group g moves on frames where frame % groups == g (the stagger)
+                for j in range(len(want)):
+                    if (j % groups) == (frame % groups):
+                        shown[j] = want[j]
+        sig = (round(ps["theta"], 2), tuple(shown))
         if prev is not None:
             changed = 0
             if sig[0] != prev[0]:
@@ -720,6 +735,11 @@ def run(ctl, events, t_end, fps=60, sample=None):
         tt += dt
         frame += 1
     return out, counts
+
+
+def grain_groups(n):
+    """Grains move in turns when there are many: at most ~17 grain nodes a frame (+3 for the water)."""
+    return max(1, math.ceil(n / 17))
 
 
 def snapshot(ctl, t):

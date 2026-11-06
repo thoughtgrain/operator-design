@@ -19,13 +19,16 @@ dropped by hiding its node. A fill-none outline goes over the bands so the
 body edge stays one weight, then the mouth (the lip ellipse, seen from below)
 and the clapper's flight hanging below the lip.
 
-A strike: the striking bell swings up toward you about its headstock axle
-(out of the screen plane), drawn with the four mutable outlines (body, sound
-bow line, mouth, headstock) re-projected per frame, while that bell's static
-nodes are hidden. It lights as it rises and falls back still.
+A strike: the striking bell tips up toward you about its headstock axle (out
+of the screen plane, up to SWING_MAX), drawn with the four mutable outlines
+(body, waist line, sound-bow line, mouth) re-projected per frame while that
+bell's six static body nodes are hidden. Its headstock and flight stay put (the
+headstock's change is under a pixel at this angle; the clapper hangs plumb as
+the bell rises to meet it). It lights for the swing and falls back still.
 
     python3 screens/ringer/frames/build.py            # frames, pngs, sheets, gif
     python3 screens/ringer/frames/build.py --svg-only
+    python3 screens/ringer/frames/build.py --check     # lint + perceptibility (scratch, removed)
 
 Needs shapely (silhouette of the swung bell), rsvg-convert, Pillow.
 """
@@ -59,7 +62,8 @@ BEAM_DROP = 15.0               # beam underside sits this far above the axle
 BEAM_H, BEAM_D = 10.0, 22.0    # beam front-face height and depth (px)
 BEAM_X0, BEAM_X1 = 12.0, 468.0
 ROW_W = 440.0                  # widest row (slowest pace, full stroke) fits this
-SWING_MAX = math.radians(62)   # how far toward you a striking bell swings
+SWING_MAX = math.radians(22)   # how far toward you a striking bell swings (a stand-in for the full circle)
+HATCH_H, HATCH_GAP = 18.0, 4.0  # the open-lead band: line height and spacing (px)
 MIN_SEP = 3.0                  # detail lines closer than this at 1:1 are dropped
 
 
@@ -179,6 +183,12 @@ BANDS = {"shoulder": 2, "waist": 4, "bow": 6}
 HEAD = (0.62, 0.13, 0.30)     # headstock half sizes (x, y, z) / lip radius
 
 
+def hy_of(R):
+    """Headstock half-height: in proportion, but never under 2.5 px so a small bell's
+    headstock stays a box at 1:1 rather than a blob."""
+    return max(HEAD[1] * R, 2.5)
+
+
 def bell_scale(b):
     """Lip radius factor: treble 1, each bell down the major scale bigger (size ~ 1/pitch)."""
     steps = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19]
@@ -187,15 +197,15 @@ def bell_scale(b):
 
 def gap_px(s, u):
     """Pace: the space between neighbouring lips, wide at 0.5 a beat, nearly touching at 8."""
-    return 3.5 + s * 0.8 * (1 - u)
+    return 3.5 + s * 0.55 * (1 - u)
 
 
 def size_for(n):
     """Treble lip radius (px) so the widest row (pace 0, stroke 100) fits ROW_W."""
     widths = sum(2 * bell_scale(b) for b in range(1, n + 1))
     mean = widths / n
-    # widths*s + (n-1)*(3.5+0.8s) + bay(mean*s + 3.5 + 0.8s) = ROW_W
-    a = widths + (n - 1) * 0.8 + mean + 0.8
+    # widths*s + (n-1)*(3.5+0.55s) + bay(mean*s + 3.5 + 0.55s) = ROW_W
+    a = widths + (n - 1) * 0.55 + mean + 0.55
     c = (n - 1) * 3.5 + 3.5
     return (ROW_W - c) / a
 
@@ -231,7 +241,7 @@ def depth(X, Y, Z):
 
 def ring(R, k, n=40):
     rf, z = BELL[k]
-    hy = HEAD[1] * R
+    hy = hy_of(R)
     Y = -hy - z * BELL_H * R
     return [(rf * R * math.cos(2 * math.pi * j / n), Y, rf * R * math.sin(2 * math.pi * j / n)) for j in range(n)]
 
@@ -239,7 +249,7 @@ def ring(R, k, n=40):
 def arc(R, k, near=True, cx=0.0, n=40):
     """The near (upper, seen from below) or far (lower) half of ring k, left to right."""
     rf, z = BELL[k]
-    Y = -HEAD[1] * R - z * BELL_H * R
+    Y = -hy_of(R) - z * BELL_H * R
     r = rf * R
     pts = []
     for j in range(n // 2 + 1):
@@ -252,7 +262,7 @@ def arc(R, k, near=True, cx=0.0, n=40):
 
 def side(R, k, sgn, cx=0.0):
     rf, z = BELL[k]
-    return P(sgn * rf * R, -HEAD[1] * R - z * BELL_H * R, 0, cx)
+    return P(sgn * rf * R, -hy_of(R) - z * BELL_H * R, 0, cx)
 
 
 # ---------------------------------------------------------------- svg primitives
@@ -370,18 +380,24 @@ def beam(fr):
 
 
 def hangers(fr, R, cx, colour):
-    """Two straps from the beam's underside to the gudgeons at the headstock's ends."""
+    """Two straps from the beam's underside to the gudgeons at the headstock's ends: an
+    outlined strap where it's wide enough to read (>= 5 px), a single line where it isn't."""
     hx = HEAD[0] * R
-    w = max(3.0, 0.11 * R)
+    w = 0.11 * R
     for sgn in (-1, 1):
+        if w < 5:
+            x = sgn * (hx + 1.0)
+            fr.ribbon([P(x, BEAM_DROP, -BEAM_D * 0.2, cx), P(x, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx)], LINE, colour)
+            continue
         xa, xb = sorted((sgn * hx, sgn * (hx + w)))
         fr.path([P(xa, BEAM_DROP, -BEAM_D * 0.2, cx), P(xb, BEAM_DROP, -BEAM_D * 0.2, cx),
-                 P(xb, -HEAD[1] * R * 0.9, -BEAM_D * 0.2, cx), P(xa, -HEAD[1] * R * 0.9, -BEAM_D * 0.2, cx)],
+                 P(xb, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx), P(xa, -hy_of(R) * 0.9, -BEAM_D * 0.2, cx)],
                 G0, colour, HAIR)
 
 
 def headstock(R, theta=0.0, cx=0.0):
-    hx, hy, hz = (h * R for h in HEAD)
+    hx, hz = HEAD[0] * R, HEAD[2] * R
+    hy = hy_of(R)
     if theta == 0.0:
         return [P(-hx, hy, -hz, cx), P(hx, hy, -hz, cx), P(hx, -hy, -hz, cx), P(-hx, -hy, -hz, cx)]
     pts = [P(*rot((sx * hx, sy * hy, sz * hz), theta), cx) for sx in (-1, 1) for sy in (-1, 1) for sz in (-1, 1)]
@@ -403,10 +419,24 @@ def detail_kept(R):
     return kept
 
 
-def bell_static(fr, R, cx, now):
-    """A hanging bell at rest: headstock, nested bands, outline, mouth, flight."""
+def flight(fr, R, cx, inner):
+    """The clapper's flight, hanging plumb below the lip. Authored after everything else,
+    so it shows in the swung bell's mouth too: the clapper hangs still while the bell rises."""
+    if R < 13:
+        return
+    ylip = P(0, -hy_of(R) - BELL_H * R, 0)[1]
+    w = max(1.6, 0.06 * R)
+    tip = ylip + R * SP + max(4.0, 0.2 * R)
+    fr.path([(cx - w, ylip - 0.2 * R * SP), (cx + w, ylip - 0.2 * R * SP), (cx + w * 0.7, tip),
+             (cx - w * 0.7, tip)], G0, inner, HAIR)
+
+
+def bell_static(fr, R, cx, now, head_only=False):
+    """A hanging bell at rest: headstock, nested bands, outline, mouth (flight drawn later)."""
     edge, sw, inner = (G7, SUBJ, G5) if now else (G4, LINE, G3)
-    fr.path(headstock(R, cx=cx), G0, G5 if now else G3, LINE)
+    fr.path(headstock(R, cx=cx), G0, G5 if (now or head_only) else G3, LINE)
+    if head_only:
+        return
     body = (arc(R, 0, True, cx) + [side(R, k, 1, cx) for k in range(1, 8)]
             + arc(R, 8, False, cx)[::-1] + [side(R, k, -1, cx) for k in range(7, 0, -1)])
     fr.path(body, G0)                                         # body: black fill, hides what's behind
@@ -420,12 +450,6 @@ def bell_static(fr, R, cx, now):
     fr.path(body, "none", edge, sw)                           # outline over the bands' sides
     mouth = arc(R, 8, True, cx) + arc(R, 8, False, cx)[::-1][1:-1]
     fr.path(mouth, G0, edge, sw)                              # the lip, and the dark inside
-    if R >= 13:                                               # the clapper's flight, below the lip
-        ylip = P(0, -HEAD[1] * R - BELL_H * R, 0)[1]
-        w = max(1.6, 0.06 * R)
-        tip = ylip + R * SP + max(4.0, 0.2 * R)
-        fr.path([(cx - w, ylip - 0.2 * R * SP), (cx + w, ylip - 0.2 * R * SP), (cx + w * 0.7, tip),
-                 (cx - w * 0.7, tip)], G0, inner, HAIR)
 
 
 def rot(p, th):
@@ -437,7 +461,7 @@ def rot(p, th):
 def bell_swung(fr, R, cx, theta, lit):
     """The striking bell in its swing, drawn as the four mutable outlines (48 points each)."""
     edge, sw, inner = (G7, SUBJ, G5) if lit else (G4, LINE, G3)
-    hy = HEAD[1] * R
+    hy = hy_of(R)
     prof = []
     for i in range(len(BELL) - 1):                            # dense rings for the silhouette
         for t in (0, 0.34, 0.67):
@@ -454,32 +478,31 @@ def bell_swung(fr, R, cx, theta, lit):
     if isinstance(sil, MultiPolygon):
         sil = max(sil.geoms, key=lambda g: g.area)
     body = list(sil.exterior.coords)[:-1]
-    head = headstock(R, theta, cx)
-    # sound-bow line: the half of its ring facing the camera
+    # band lines: the half of each ring facing the camera
     view = (0, -SP, -CP)                                      # toward the camera
-    rf, z = BELL[BANDS["bow"]]
-    pts3 = ring_pts(rf, z, 48)
-    centre = rot((0, -hy - z * BELL_H * R, 0), theta)
-    vis = [j for j, q in enumerate(pts3)
-           if sum((q[i] - centre[i]) * view[i] for i in range(3)) > 0]
-    bow = None
-    if vis:
-        # contiguous run (wraps round)
+    lines = []
+    for name in ("waist", "bow"):
+        if name not in detail_kept(R):
+            continue
+        rf, z = BELL[BANDS[name]]
+        pts3 = ring_pts(rf, z, 48)
+        centre = rot((0, -hy - z * BELL_H * R, 0), theta)
+        vis = [j for j, q in enumerate(pts3) if sum((q[i] - centre[i]) * view[i] for i in range(3)) > 0]
+        if not vis:
+            continue
         start = next(j for j in vis if (j - 1) % 48 not in vis)
-        run = []
-        j = start
+        run, j = [], start
         while j in vis:
             run.append(P(*pts3[j], cx))
             j = (j + 1) % 48
             if j == start:
                 break
-        bow = run
+        lines.append(run)
     lip = [P(*q, cx) for q in ring_pts(1.0, 1.0, 48)]
-    fr.path(resample(head, 48), G0, G5 if lit else G3, LINE, exact=True)       # path 3
-    fr.path(resample(body, 48), G0, edge, sw, exact=True)                     # path 0
-    if bow and len(bow) > 2:
-        fr.ribbon(bow, HAIR, inner)                                           # path 1 (a 48-point ribbon)
-    fr.path(resample(lip, 48), G0, edge, sw, exact=True)                      # path 2: mouth, lit lip
+    fr.path(resample(body, 48), G0, edge, sw, exact=True)                     # path 0: body
+    for run in lines:
+        fr.ribbon(run, HAIR, inner)                                           # paths 1, 2: waist, sound bow
+    fr.path(resample(lip, 48), G0, edge, sw, exact=True)                      # path 3: the mouth, lit lip
 
 
 def draw(c, row, title, swing=None, positions=None, lit=None, values=None):
@@ -493,21 +516,25 @@ def draw(c, row, title, swing=None, positions=None, lit=None, values=None):
         xpos.update(positions)
     beam(fr)
     if bay:
-        R1 = s * bell_scale(row[0])
-        y0 = P(0, BEAM_DROP, -BEAM_D / 2)[1] + 4
-        y1 = P(0, -HEAD[1] * R1 - BELL_H * R1, 0)[1]
-        fr.hatch([(bay[0], y0), (bay[1], y0), (bay[1], y1), (bay[0], y1)], G2)
+        # the open lead: a hatched band of fixed-length 45-degree hairlines under the beam,
+        # one node each from a pool, shown as many as the bay holds (count, not reshaping)
+        y0 = P(0, BEAM_DROP, -BEAM_D / 2)[1] + 3
+        x = bay[0]
+        while x + HATCH_H <= bay[1] + 0.01:
+            fr.ribbon([(x, y0 + HATCH_H), (x + HATCH_H, y0)], HAIR, G2)
+            x += HATCH_GAP
     lit = row[0] if lit is None else lit
     for b in sorted(range(1, n + 1), reverse=True):           # tenor first: smaller bells pass in front
         R = s * bell_scale(b)
         hangers(fr, R, xpos[b], G3)
     for b in sorted(range(1, n + 1), reverse=True):
-        if swing and b == swing[0]:
-            continue
-        bell_static(fr, s * bell_scale(b), xpos[b], b == lit and not swing)
-    if swing:                                                  # mutable outlines, authored last: in front
+        bell_static(fr, s * bell_scale(b), xpos[b], b == lit and not swing,
+                    head_only=bool(swing and b == swing[0]))
+    if swing:                                                  # mutable outlines, authored after the bells
         b, th = swing
         bell_swung(fr, s * bell_scale(b), xpos[b], th, True)
+    for b in sorted(range(1, n + 1), reverse=True):           # flights last: plumb in every mouth
+        flight(fr, s * bell_scale(b), xpos[b], G5 if (b == lit) else G3)
     return fr
 
 
@@ -588,10 +615,12 @@ def motion(tmp, fps=25):
                 pos[b] = x0 + (x1 - x0) * ease_out((now - t0) / trade)
         row_shown = rows[0]
         if now > events[-1][0] + T:
-            lit = None
             row_shown = final_row
-        fr = draw(c, row_shown, f"motion {i}", swing=swing, positions=pos,
-                  lit=lit if lit else (row_shown[0] if now > events[-1][0] + T else -1))
+        if now < events[0][0]:
+            lit = rows[0][0]                                # still, before the first blow
+        elif now > events[-1][0] + T:
+            lit = final_row[0]                              # settled: the next lead
+        fr = draw(c, row_shown, f"motion {i}", swing=swing, positions=pos, lit=lit or -1)
         p = write(f"m{i:03d}", fr, tmp)
         frames.append(Image.open(png(p)).convert("P", palette=Image.ADAPTIVE, colors=32))
     hold = [int(1000 / fps)] * (len(frames) - 1) + [1500]
@@ -618,7 +647,48 @@ def sheets():
     sheet.save(HERE / "contact.png")
 
 
+def playing_frame():
+    """A representative frame mid-row at the defaults: the bell in third place at the top
+    of its swing, the first two (already struck) halfway through trading places."""
+    c = dict(DEFAULTS)
+    rows = rows_of("bob", n_bells(c["bells"]), ROW_INDEX + 2)
+    row, nxt = rows[ROW_INDEX], rows[ROW_INDEX + 1]
+    xs, _, _ = layout(c, row)
+    xn, _, _ = layout(c, nxt)
+    pos = {b: (xs[k] + xn[nxt.index(b)]) / 2 for k, b in enumerate(row[:2])}
+    return draw(c, row, "playing", swing=(row[2], SWING_MAX), positions=pos, lit=row[2])
+
+
+def check():
+    """Lint every frame, then perceptibility on c<N>-000/050/100 copies + rest/playing,
+    in a scratch folder that is removed afterwards."""
+    svgs = sorted(str(p) for p in HERE.glob("*.svg"))
+    subprocess.run([sys.executable, str(ROOT / "opxy/tools/lint_frame.py"), *svgs])
+    tmp = HERE / "_percept"
+    tmp.mkdir(exist_ok=True)
+    try:
+        for i, name in enumerate(LABELS, start=1):
+            for v in (0, 50, 100):
+                shutil.copy(HERE / f"{name}-{v}.svg", tmp / f"c{i}-{v:03d}.svg")
+        shutil.copy(HERE / "rest.svg", tmp / "rest.svg")
+        write("playing", playing_frame(), tmp)
+        subprocess.run([sys.executable, str(ROOT / "opxy/tools/perceptibility.py"), str(tmp),
+                        "--scores", "4,3,5,2", "--names", ",".join(LABELS)])
+        # a lone first blow (only the lead swinging), for the record
+        c = dict(DEFAULTS)
+        row = row_for(c)
+        write("playing", draw(c, row, "first blow", swing=(row[0], SWING_MAX), lit=row[0]), tmp)
+        print("first blow alone:")
+        subprocess.run([sys.executable, str(ROOT / "opxy/tools/perceptibility.py"), str(tmp),
+                        "--scores", "4,3,5,2", "--names", ",".join(LABELS)])
+    finally:
+        shutil.rmtree(tmp)
+
+
 def main():
+    if "--check" in sys.argv:
+        check()
+        return
     svg_only = "--svg-only" in sys.argv
     print("row index", ROW_INDEX, {m: "".join(map(str, rows_of(m, 6, ROW_INDEX + 1)[ROW_INDEX])) for m in METHODS})
     for name, c in control_frames().items():
@@ -630,11 +700,10 @@ def main():
         return
     tmp = HERE / "_scratch"
     tmp.mkdir(exist_ok=True)
-    # a mid-strike frame for the note-response check (scratch only)
-    c = dict(DEFAULTS)
-    row = row_for(c)
-    write("playing", draw(c, row, "playing", swing=(row[0], SWING_MAX), lit=row[0]), tmp)
-    motion(tmp)
+    try:
+        motion(tmp)
+    finally:
+        shutil.rmtree(tmp)
     sheets()
 
 

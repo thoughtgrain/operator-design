@@ -17,13 +17,13 @@ light (upper left, towards the camera). One brightest element: the auger's
 twist and cutting head (#CDCDCD), the part the sound comes from.
 
 Controls (others at default):
-  ratio  the bow's throw (sweep), 55 -> 112 mm, so the grip drops 37 px; on a note
-         the crank also turns faster at higher ratio
+  ratio  the bow's throw (sweep), 32 -> 118 mm, so the grip and its ferrules drop
+         ~58 px; on a note the crank also turns faster at higher ratio
   teeth  turns of the auger's twist, 3 -> 24 lands over its length (count)
-  wear   the cutting head blunts (spurs and lead screw pull back) and the lands'
-         lower corners round off
+  wear   the cutting head blunts (spurs and lead screw pull back), the lands thin
+         and their lower corners wear back
   bite   the whole brace slides along its axis into the board, the bit sinking
-         from just the screw (bite 0) to 84 mm deep (bite 100); the bore follows
+         from just the screw (bite 0) to 74 mm deep (bite 100); the bore follows
 
 Device plan (paths = mutable outlines, 64 points each, within +-64 px of origin):
   path 0 bow rod · path 1 twist lands, left half · path 2 twist lands, right half
@@ -372,14 +372,12 @@ class Scene:
         _, ls, blunt, th = self.tip_dims()
         xe = self.X_E + self.dx
         x0, r0 = xe + 4.5, 4.6
-        out = []
-        for i in range(2):
-            t1 = (i + 0.45) / 2.6
-            out.append((x0 + ls * t1, r0 * (1 - t1) + blunt / 2 * t1 + th * (1 - t1)))
-            t2 = (i + 1) / 2.6
-            out.append((x0 + ls * t2 - 0.4, r0 * (1 - t2) + blunt / 2 * t2 + 0.2))
-        out.append((x0 + ls, blunt / 2))
-        return out
+        # one and a half threads, then the point (kept short: the head shares path 2 with the lands)
+        t1, t2, t3 = 0.2, 0.5, 0.72
+        return [(x0 + ls * t1, r0 * (1 - t1) + blunt / 2 * t1 + th),
+                (x0 + ls * t2, r0 * (1 - t2) + blunt / 2 * t2 - 0.1),
+                (x0 + ls * t3, r0 * (1 - t3) + blunt / 2 * t3 + th * 0.6),
+                (x0 + ls, blunt / 2)]
 
     def cutting_head(self):
         """Upper half of the head, from the twist's end round to the screw's point (x, z)."""
@@ -387,8 +385,7 @@ class Scene:
         R = self.R_TWIST
         ls, _, _, _ = self.tip_dims()
         rw = 1.6 * self.wear
-        pts = [(xe, R), (xe + ls - rw, R - 0.2 - 0.8 * self.wear), (xe + ls, R - 1.6 - rw), (xe + 1.8, R - 4.2),
-               (xe + 4.5, 5.6)]
+        pts = [(xe, R), (xe + ls, R - 1.0 - rw), (xe + 1.8, R - 4.2), (xe + 4.5, 5.6)]
         return pts + self.screw_profile()
 
     def twist(self):
@@ -417,7 +414,7 @@ class Scene:
             pt = cam((x, R * math.cos(ph), R * math.sin(ph)))
             # clamp under the top edge
             o = perp_of(pt, x)
-            if o > under - 1e-6:
+            if o > under - 1.2:          # near the top edge: treat as attached
                 return (pt[0] - up[0] * (o - under), pt[1] - up[1] * (o - under)), True
             return pt, False
 
@@ -484,6 +481,7 @@ class Scene:
             for poly in grp[::-1]:
                 pts += self.land_outline(poly, to_screen, extra)
             pts.append(top_pt(xa, under) if gi == 1 else top_pt(xa + 0.01, under))
+            pts = tidy(pts)
             name = f"twist{'AB'[gi]}"
             col = BRIGHT
             if self.style == "edgelit":
@@ -512,7 +510,7 @@ class Scene:
             seq = [poly[(i0 + j) % n] for j in range(n)]
             if seq[1][0] < seq[-1][0]:
                 seq = [seq[0]] + seq[1:][::-1]
-            seq = seq + [seq[0]]
+            # ends on the throat line; the comb closes up it to the top edge
         else:
             seq = poly[:]
         # sample the edges
@@ -666,6 +664,29 @@ class Scene:
         return self.s
 
 
+def tidy(pts):
+    """Device hygiene for the lands' outlines while they crawl: no repeated points and no
+    hairpin turns (a sliver land clipped at the throat or the head can make either)."""
+    out = []
+    for q in pts:
+        if all(math.dist(q, o) > 0.13 for o in out):
+            out.append(q)
+    changed = True
+    while changed and len(out) > 4:
+        changed = False
+        for i in range(len(out)):
+            a, b, c = out[i - 1], out[i], out[(i + 1) % len(out)]
+            v1 = (b[0] - a[0], b[1] - a[1]); v2 = (c[0] - b[0], c[1] - b[1])
+            l1, l2 = math.hypot(*v1), math.hypot(*v2)
+            if l1 < 1e-9 or l2 < 1e-9:
+                continue
+            cosang = (v1[0] * v2[0] + v1[1] * v2[1]) / (l1 * l2)
+            if cosang < -0.996:          # within ~5 deg of straight back
+                del out[i]; changed = True
+                break
+    return out
+
+
 def lit_edges(svg, name, poly, col, width, light=(-0.45, -0.89), thresh=0.3):
     """Edge-lit trial only: the runs of a closed outline whose outward normal faces the light."""
     area = sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(poly, poly[1:] + poly[:1]))
@@ -754,8 +775,34 @@ def main():
         svg = frame(DEFAULTS, 0.0, "edgelit")
         svg.write(out / "trial-edgelit.svg", "drill · edge-lit trial", header_values(DEFAULTS))
         render_png(out / "trial-edgelit.svg", out / "trial-edgelit.png")
+    make_sheets(out)
     if args.gif:
         make_gif(out)
+
+
+def make_sheets(out: Path):
+    """contact.png (rest, then each control at 0 / 50 / 100) and before-after.png, all at 1:1."""
+    from PIL import Image, ImageDraw
+    W, H, G, L = 480, 220, 8, 14
+    im = Image.new("RGB", (3 * W + 4 * G, 5 * (L + H + G) + G), (38, 38, 38))
+    d = ImageDraw.Draw(im)
+
+    def put(name, x, y):
+        d.text((x, y), name.replace("-", " "), fill=(200, 200, 200))
+        im.paste(Image.open(out / f"{name}.png").convert("RGB"), (x, y + L))
+    put("rest", G, G)
+    for r, ctl in enumerate(("ratio", "teeth", "wear", "bite")):
+        for k, v in enumerate((0, 50, 100)):
+            put(f"{ctl}-{v}", G + k * (W + G), G + (r + 1) * (L + H + G))
+    im.save(out / "contact.png")
+    before = out.parent / "passes" / "02-subject" / "v3" / "rest.png"
+    ba = Image.new("RGB", (2 * W + 3 * G, H + L + 2 * G), (38, 38, 38))
+    d = ImageDraw.Draw(ba)
+    d.text((G, G - 2), "before: pass 02 v3", fill=(200, 200, 200))
+    d.text((2 * G + W, G - 2), "after: refined rest", fill=(200, 200, 200))
+    ba.paste(Image.open(before).convert("RGB"), (G, G + L))
+    ba.paste(Image.open(out / "rest.png").convert("RGB"), (2 * G + W, G + L))
+    ba.save(out / "before-after.png")
 
 
 def make_gif(out: Path):

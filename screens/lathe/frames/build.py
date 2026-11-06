@@ -385,48 +385,125 @@ def draw_part(F, part, node=None, shown=True):
         F.ribbon(part[1], part[2], part[3], node=node, shown=shown)
 
 
-# wear: specks (bright grains) and short scratches across the lands between earlier turns
+# wear: specks (bright grains) and scratches on the lands between earlier turns, placed once in the
+# world and kept 3 px clear of every groove edge; bigger marks come first so the first half of the
+# knob already reads
+def _land_x(k, y, t_from_lip):
+    """Screen x across land k (between turn k's dark wall and turn k+1's lit lip) at world depth y."""
+    t = (y - Y0) / (Y1 - Y0)
+    left = gx(k) + lateral(k, t, 1.0) + HW
+    right = (gx(k + 1) + lateral(k + 1, t, 1.0) - HW) if k < DEFAULT_TURNS else rim_x(k)
+    return CAM((left + (right - left) * t_from_lip, y, 0.0))
+
+
+def _clear(pts, k, margin=3.2):
+    """Every point at least `margin` px inside land k on its own screen row."""
+    for x, y in pts:
+        lo, hi = Y0, Y1
+        for _ in range(40):
+            m = (lo + hi) / 2
+            if CAM((0, m, 0))[1] > y:
+                lo = m
+            else:
+                hi = m
+        left = _land_x(k, lo, 0.0)[0]
+        right = _land_x(k, lo, 1.0)[0]
+        if not (left + margin <= x <= right - margin) or y < WALL_SCREEN:
+            return False
+    return True
+
+
+def _row_y(screen_y):
+    lo, hi = Y0, Y1
+    for _ in range(40):
+        m = (lo + hi) / 2
+        if CAM((0, m, 0))[1] > screen_y:
+            lo = m
+        else:
+            hi = m
+    return lo
+
+
+def _scratch_ok(pts):
+    """A scratch may cross earlier turns, but stays off the newest groove's land and inside the cut area."""
+    for x, y in pts:
+        if y < WALL_SCREEN + 4 or y > Y_NEAR_SCREEN - 8:
+            return False
+        yw = _row_y(y)
+        t = (yw - Y0) / (Y1 - Y0)
+        x_min = CAM((gx(1) + lateral(1, t, 1.0) - HW - 0.012, yw, 0.0))[0]
+        x_max = CAM((rim_x(DEFAULT_TURNS) - 0.012, yw, 0.0))[0]
+        if not (x_min <= x <= x_max):
+            return False
+    return True
+
+
+def _skates():
+    """Long scratches where a stylus skated across the earlier turns, all running one way."""
+    out = []
+    for i, (cy, ang, L) in enumerate(((84, 27, 128), (112, 31, 118), (138, 24, 124), (98, 34, 96))):
+        for dx in [0.5 * j for j in range(0, 80)]:
+            for sgn in (1, -1):
+                cx = 268 + sgn * dx
+                pts = scratch(cx, cy, ang, L, 3 * i + 1)
+                if _scratch_ok(pts):
+                    out.append(("scratch", cx, cy, pts))
+                    break
+            else:
+                continue
+            break
+    return out
+
+
 def _wear_items():
+    import random
+    rng = random.Random(3)
+    skates = _skates()
     items = []
-    # (land index k = between turn k and k+1, across 0..1, depth 0..1, kind, angle)
-    spec = [
-        (1, 0.55, 0.18, "speck", 0), (2, 0.40, 0.55, "scratch", 35), (3, 0.45, 0.30, "speck", 0),
-        (1, 0.35, 0.70, "speck", 0), (2, 0.60, 0.12, "speck", 0), (1, 0.50, 0.44, "scratch", -40),
-        (3, 0.50, 0.68, "speck", 0), (2, 0.45, 0.82, "speck", 0), (3, 0.40, 0.08, "scratch", 50),
-        (1, 0.60, 0.92, "speck", 0), (2, 0.55, 0.36, "speck", 0), (3, 0.55, 0.50, "scratch", -30),
-        (1, 0.45, 0.06, "speck", 0), (2, 0.35, 0.68, "scratch", -55), (3, 0.45, 0.88, "speck", 0),
-        (1, 0.40, 0.58, "speck", 0),
-    ]
-    for k, a, d, kind, ang in spec:
-        lo = gx(k) + HW + 0.012
-        hi = (gx(k + 1) - HW - 0.012) if k < 3 else gx(3) + 0.62 * P - 0.014
-        y = Y0 + 0.04 + (Y1 - Y0 - 0.1) * d
-        x = lo + (hi - lo) * a
-        cx, cy = CAM((x, y, 0.0))
-        items.append((kind, cx, cy, ang))
-    return items
-
-
-WEAR = _wear_items()
+    plan = (["speck", "speck", "scratch"] * 8)[:22]
+    for n, kind in enumerate(plan):
+        for _ in range(4000):
+            k = (1, 2, 3)[(n + rng.randrange(3)) % 3]
+            y = Y0 + 0.02 + (Y1 - Y0) * rng.uniform(0.02, 0.66)
+            cx, cy = _land_x(k, y, rng.uniform(0.25, 0.75))
+            if kind == "speck":
+                pts = speck(cx, cy, n)
+            else:
+                pts = scratch(cx, cy, rng.uniform(55, 80) * rng.choice([-1, 1]), rng.uniform(11, 17), n)
+            if not _clear(pts, k):
+                continue
+            if any(math.dist((cx, cy), (o[1], o[2])) < 11 for o in items):
+                continue
+            if any(min(math.dist(p, q) for q in o[3]) < 5 for o in skates for p in pts):
+                continue
+            items.append((kind, cx, cy, pts))
+            break
+    # skates first, then the small marks, interleaved so each half of the knob does its share
+    order = []
+    for i in range(max(len(skates), len(items))):
+        if i < len(skates):
+            order.append(skates[i])
+        order += items[i * 5:(i + 1) * 5] if i < len(skates) else []
+    order += items[len(skates) * 5:]
+    return order
 
 
 def speck(cx, cy, seed):
-    r = 2.2 + 0.35 * (seed % 3)
+    r = 3.0 + 0.4 * (seed % 3)
     pts = []
-    for i in range(6):
-        a = 2 * math.pi * i / 6 + seed
-        rr = r * (0.8 + 0.25 * math.sin(3 * a + seed))
-        pts.append((cx + rr * math.cos(a), cy + 0.8 * rr * math.sin(a)))
+    for i in range(7):
+        a = 2 * math.pi * i / 7 + seed
+        rr = r * (0.8 + 0.22 * math.sin(3 * a + seed))
+        pts.append((cx + rr * math.cos(a), cy + 0.85 * rr * math.sin(a)))
     return pts
 
 
-def scratch(cx, cy, ang, seed):
-    L = 9 + 3 * (seed % 3)
+def scratch(cx, cy, ang, L, seed):
     a = math.radians(ang)
     ux, uy = math.cos(a), math.sin(a)
-    return [(cx - ux * L / 2 + 0.6 * uy * math.sin(i), cy - uy * L / 2 + 0.3 * math.cos(i)) if False else
-            (cx + ux * L * (i / 4 - 0.5), cy + uy * L * (i / 4 - 0.5) + 0.5 * math.sin(i * 1.3 + seed))
-            for i in range(5)]
+    n = max(9, min(30, int(L / 5)))
+    return [(cx + ux * L * (i / (n - 1) - 0.5) - uy * 0.8 * math.sin(i * 0.7 + seed),
+             cy + uy * L * (i / (n - 1) - 0.5) + ux * 0.8 * math.sin(i * 0.7 + seed)) for i in range(n)]
 
 
 def _emit_wall(F, wall):
@@ -435,6 +512,9 @@ def _emit_wall(F, wall):
     ys = [p[1] for p in wall]
     origin = (round((min(xs) + max(xs)) / 2, 1), round((min(ys) + max(ys)) / 2, 1))
     F._emit(wall, G6, stroke=G3, sw=HAIR, node=1, origin=origin, exact=2 * NPTS)
+
+
+WEAR = _wear_items()
 
 
 # ------------------------------------------------------------------ the frame
@@ -470,28 +550,28 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
         else:
             node += 1
 
-    # --- wear: specks and scratches on the lands (16 nodes)
+    # --- wear: specks and scratches on the lands (one node each)
     n_wear = int(math.floor(a["wear"] * len(WEAR) + 0.5))
-    for i, (kind, cx, cy, ang) in enumerate(WEAR):
+    for i, (kind, cx, cy, pts) in enumerate(WEAR):
         shown = i < n_wear
         if kind == "speck":
-            F.blob(speck(cx, cy, i), G2, node=node, shown=shown)
+            F.blob(pts, G2, node=node, shown=shown)
         else:
-            F.ribbon(scratch(cx, cy, ang, i), HAIR, G3, node=node, shown=shown)
+            F.ribbon(pts, HAIR, G3, node=node, shown=shown)
         node += 1
     F.nodes = node
 
     # --- the newest groove: rumble ghosts (nodes 2, 3) under its lit wall (node 1), lit lip (node 0) on top
     lip = run(0, "lip", ratio, Y0, Y1, n=NPTS, clip=False)
-    shake = 12.0 * a["rumble"] ** 0.6
+    shake = 13.0 * a["rumble"] ** 0.6
     lip_out = ribbon_outline(lip, SUBJ)
     xs = [p[0] for p in lip_out]
     ys = [p[1] for p in lip_out]
     lip_origin = (round((min(xs) + max(xs)) / 2, 1), round((min(ys) + max(ys)) / 2, 1))
-    for nd, s in ((2, -1), (3, 1)):
+    for nd, s, c in ((2, -2, G4), (3, -1, G3)):
         ghost_shown = a["rumble"] > 0
         org = (lip_origin[0] + s * shake, lip_origin[1])
-        F.ribbon([(x + s * shake, y) for x, y in lip], LINE, G5, node=nd, origin=org, shown=ghost_shown,
+        F.ribbon([(x + s * shake, y) for x, y in lip], 2.5, c, node=nd, origin=org, shown=ghost_shown,
                  exact=2 * NPTS)
     _emit_wall(F, wall_body(0, ratio, n=NPTS, clip=False))
     F.ribbon(lip, SUBJ, G0, node=0, origin=lip_origin, exact=2 * NPTS)

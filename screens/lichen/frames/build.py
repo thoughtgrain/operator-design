@@ -54,10 +54,10 @@ RH = math.sqrt(3) / 2
 # palette (grey only; header steps plus one darker face)
 G0, G1, G2, G3, G4, G5, G6, G7 = ("#000000", "#323232", "#4B4B4B", "#646464",
                                   "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD")
-GE = "#1E1E1E"                   # the stone's end face, in shadow
+
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2
 
-STONE_TOP, STONE_CUT, STONE_END = G2, G1, GE
+STONE_TOP, STONE_CUT, STONE_END = G2, G1, G1
 CRUST_TOP, CRUST_WALL = G5, G3
 BORN_TOP, BORN_WALL = G7, G5
 DEAD_EDGE, DEAD_HATCH, FLAKE_EDGE = G3, G3, G4
@@ -509,13 +509,14 @@ def tongue_outline(a, b, length):
 
 
 def flake_points(base, ang, h):
-    """Dead crust: the whole areola, shrunk a little as it dries, lifted on a
-    hinge along its back edge (front edge up, towards the viewer)."""
+    """Dead crust: the whole areola, shrunk a little as it dries, peeling up
+    off the stone on a hinge along its front edge, so its face turns to the
+    viewer as it lifts."""
     cx = sum(p[0] for p in base) / len(base)
     cy = sum(p[1] for p in base) / len(base)
     pts = [(cx + (x - cx) * 0.86, cy + (y - cy) * 0.86) for x, y in base]
-    hy = max(p[1] for p in pts)
-    return [(x, hy + (y - hy) * math.cos(ang), h - (y - hy) * math.sin(ang)) for x, y in pts]
+    hy = min(p[1] for p in pts)
+    return [(x, hy + (y - hy) * math.cos(ang), h + (y - hy) * math.sin(ang)) for x, y in pts]
 
 
 def scene(grow=DEF["grow"], decay=DEF["decay"], seed=DEF["seed"], scale="maj", tick=SNAP, phase=None):
@@ -530,7 +531,7 @@ def scene(grow=DEF["grow"], decay=DEF["decay"], seed=DEF["seed"], scale="maj", t
     live = {k for k, a in st.items() if a > 0}
     free = {k for k, a in st.items() if a == 0}
     sc = SCALES[scale]
-    ease = (lambda t: 1 - math.exp(-t / 0.22)) if phase is not None else (lambda t: 1.0)
+    ease = (lambda t: 1 - math.exp(-t / 0.05)) if phase is not None else (lambda t: 1.0)
     e = ease(phase or 0)
 
     # --- the stone block: solid faces by their light ---
@@ -683,9 +684,9 @@ def scene(grow=DEF["grow"], decay=DEF["decay"], seed=DEF["seed"], scale="maj", t
                                HAIR, G3)
         else:
             # dead crust: the areola dries and lifts off as a hatched flake, hinged at
-            # its back; the stone it sat on is left as a dark scar
+            # its front; the stone it sat on is left as a dark scar
             s.poly([P((x, y, 0)) for x, y in base], fill=G0, stroke=DEAD_EDGE, sw=HAIR)
-            ang_full = math.radians(12 + 66 * decay ** 0.8)
+            ang_full = math.radians(14 + 66 * decay)
             ang = ang_full * (e if (o, r) in newly_dead else 1)
             fp = [P(q) for q in flake_points(base, ang, 0.03)]
             s.poly(fp, fill=G0, stroke=FLAKE_EDGE, sw=LINE)
@@ -699,7 +700,8 @@ def scene(grow=DEF["grow"], decay=DEF["decay"], seed=DEF["seed"], scale="maj", t
         s.poly(sh, fill=G0)
         g = P((x, y, 0.36))
         rr = 0.105 * CAM.f / CAM.dist((x, y, 0.36))
-        s.disc(g[0], g[1], rr, fill=SPORE)
+        s.poly([(g[0] + rr * math.cos(2 * math.pi * k / 20), g[1] + rr * math.sin(2 * math.pi * k / 20))
+                for k in range(20)], fill=SPORE, stroke=G0, sw=HAIR)
     return s
 
 
@@ -707,7 +709,7 @@ def spore_cells():
     """Where the bar's spores will land: bare cells on the stone, spread out,
     fixed order so seed adds grains rather than moving them."""
     st = HIST[SNAP]
-    return [c for c in [(9, 4), (3, 5), (8, 2), (4, 3), (9, 5), (2, 4), (5, 5), (7, 4)]
+    return [c for c in [(9, 4), (3, 4), (7, 5), (8, 3), (3, 5), (8, 5), (7, 3), (8, 4)]
             if st[c] == 0]
 
 
@@ -763,7 +765,8 @@ def main():
                            "--definition", str(LICHEN / "definition.json")],
                           capture_output=True, text=True)
     print(lint.stdout.strip().splitlines()[-1] if lint.stdout.strip() else lint.stderr)
-    (HERE / "_lint.txt").write_text(lint.stdout + lint.stderr)
+    if "--verbose" in sys.argv:
+        print(lint.stdout)
 
     # scratch copies under the device naming, for perceptibility and the contact sheet
     scratch = HERE / "_scratch"
@@ -779,12 +782,17 @@ def main():
                           "--scores", ",".join(map(str, SCORES)), "--names", ",".join(CONTROLS)],
                          capture_output=True, text=True)
     print(per.stdout + per.stderr)
-    (HERE / "_perceptibility.txt").write_text(per.stdout + per.stderr)
 
     # contact sheet: rest, then one row per control (playing left out: not a deliverable)
     (scratch / "playing.svg").unlink()
     subprocess.run([sys.executable, str(REPO / "opxy/tools/contact_sheet.py"), str(scratch),
-                    "--out", str(scratch / "contact.svg"), "--png"], check=True, capture_output=True)
+                    "--out", str(scratch / "contact.svg")], check=True, capture_output=True)
+    sheet = (scratch / "contact.svg").read_text()
+    for i, name in enumerate(CONTROLS, 1):
+        for v in (0, 50, 100):
+            sheet = sheet.replace(f">c{i}-{v:03d}<", f">{name} {v}<")
+    (scratch / "contact.svg").write_text(sheet)
+    subprocess.run(["rsvg-convert", str(scratch / "contact.svg"), "-o", str(scratch / "contact.png")], check=True)
     shutil.copy(scratch / "contact.png", HERE / "contact.png")
 
     # before / after at 1:1

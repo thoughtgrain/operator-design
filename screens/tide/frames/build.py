@@ -125,7 +125,12 @@ def build_raft():
             y = host["y"] + (host["r"] + r) * gap * math.sin(ang)
             if any(math.hypot(x - b["x"], y - b["y"]) < (r + b["r"]) * 1.02 for b in allb):
                 continue
-            if not (-2.2 < x < 2.3 and -1.1 < y < 2.2):
+            if not (-1.1 < y < 2.2):
+                continue
+            # whole bubble on screen, with room to drift: nothing clips at the edges
+            ppu = CAM.f / CAM.depth((x, y, 0))
+            sx = CAM.p((x, y, 0))[0]
+            if sx - (r + 0.12) * ppu < 4 or sx + (r + 0.12) * ppu > W - 4:
                 continue
             # touch something, stay near the raft
             near = min(math.hypot(x - b["x"], y - b["y"]) - (r + b["r"]) for b in allb)
@@ -556,6 +561,14 @@ def raft_layout(c, thetas):
                         a[0] -= dx / d * push * wa; a[1] -= dy / d * push * wa
                         b[0] += dx / d * push * (1 - wa); b[1] += dy / d * push * (1 - wa)
                         moved = True
+            # keep every bubble whole on screen
+            for b in live:
+                p = pos[id(b)]
+                ppu = CAM.f / CAM.depth((p[0], p[1], 0))
+                rr = rad[id(b)]
+                lo = (4 - 240) / ppu + rr
+                hi = (W - 4 - 240) / ppu - rr
+                p[0] = min(hi, max(lo, p[0]))
             if not moved:
                 break
     return pos
@@ -571,13 +584,13 @@ def pose_bubble(b, c, layout, bob_px=0.0):
         mc = b["parts"]["centre"]
         nx = hc[0] + hdx + (mc[0] - hc[0]) * hs
         ny = hc[1] + hdy + (mc[1] - hc[1]) * hs
-        return (round(nx - mc[0]), round(ny - mc[1])), hs
+        return (nx - mc[0], ny - mc[1]), hs
     x, y = layout[id(b)]
     c0 = b["parts"]["centre"]
     c1 = CAM.p((x, y, 0.0))
     # (drift's small depth change would also rescale it by under 1 %: left out, it would only cost redraws)
     s = (salt_scale(b["k"], c["salt"]) if b["kind"] == "voiced" else 1.0)
-    return (round(c1[0] - c0[0]), round(c1[1] - c0[1] - bob_px)), round(s * 64) / 64
+    return (c1[0] - c0[0], c1[1] - c0[1] - bob_px), round(s * 64) / 64
 
 
 def node_state(c, sim=None):
@@ -595,7 +608,15 @@ def node_state(c, sim=None):
             st[("line", j)] = None
             continue
         w, d = used[j]
-        y = round(CAM.p((0, d, 0))[1])
+        yf = CAM.p((0, d, 0))[1]
+        y = round(yf)
+        if sim is not None and T < 1.0:
+            # fast swell: fronts step 2 px at a time (at 0.25 s they cross the body in a blur anyway)
+            mem = sim["snap"]
+            key = ("line", j, w)
+            py = mem.get(key)
+            y = py if py is not None and abs(yf - py) < 2 else round(yf)
+            mem[key] = y
         crest = 0
         if sim:
             near = math.exp(-((d - D_RAFT) / (0.45 * lam)) ** 2)
@@ -617,7 +638,21 @@ def node_state(c, sim=None):
             u = ((b["y"] - D_RAFT) / lam_ - rise_frac(T) + phase) % 1.0
             u = min(u, 1 - u)
             bob = 2.2 * max(0.0, min(1.0, (T - 0.5) / 1.5)) * sim["wave"] * math.cos(math.pi * u) ** 8
-        (dx, dy), s = pose_bubble(b, c, layout, round(bob))
+        (fx, fy), s = pose_bubble(b, c, layout, round(bob))
+        # whole pixels, with hysteresis while animating: a bubble only redraws when it has really moved
+        if sim is not None:
+            mem = sim["snap"]
+            px, py = mem.get(id(b), (round(fx), round(fy)))
+            if abs(fx - px) > 0.8:
+                px = round(fx)
+            if abs(fy - py) > 0.8 or round(bob) != sim["bobmem"].get(id(b), round(bob)):
+                py = round(fy)
+            if part == "dome":
+                mem[id(b)] = (px, py)
+                sim["bobmem"][id(b)] = round(bob)
+            dx, dy = px, py
+        else:
+            dx, dy = round(fx), round(fy)
         shade = 0
         if part == "edge":
             steps = sim["steps"][b["k"]] if sim else 0
@@ -632,6 +667,10 @@ def node_state(c, sim=None):
 
 # ---------------------------------------------------------------- SVG
 def path_d(pts):
+    # start just after the longest edge, so the closing edge is never a sliver (display.md)
+    n = len(pts)
+    i = max(range(n), key=lambda q: math.dist(pts[q - 1], pts[q]))
+    pts = pts[i:] + pts[:i]
     return "M " + " L ".join(f"{f2(x)} {f2(y)}" for x, y in pts) + " Z"
 
 
@@ -712,6 +751,7 @@ class Sim:
         self.rnd = random.Random(seed)
         self.t = 0.0
         self.lock = None      # the voice the fronts follow (oldest sounding)
+        self.snap, self.bobmem = {}, {}
 
     def amp(self, v, t):
         on, off = self.voices[v]
@@ -769,7 +809,8 @@ class Sim:
         if sounding and self.c["drift"] > 0:
             for b in BUBBLES:
                 self.theta[id(b)] += self.rnd.gauss(0, 0.25 * math.sqrt(dt))
-        return {"phase": self.phase, "wave": wave, "steps": steps, "theta": dict(self.theta), "sounding": bool(sounding)}
+        return {"phase": self.phase, "wave": wave, "steps": steps, "theta": dict(self.theta), "sounding": bool(sounding),
+                "snap": self.snap, "bobmem": self.bobmem}
 
 
 def redraw(c, voices, seconds, release=0.5):
@@ -828,6 +869,25 @@ def control_frames():
     return files
 
 
+def contact(out=HERE / "contact.png"):
+    """Rest, then each control at 0 / 50 / 100 (others at default), 1:1, labels outside the frames."""
+    from PIL import Image, ImageDraw, ImageFont
+    pad, lab = 12, 18
+    rows = [("rest (defaults)", ["rest"])] + [(n, [f"{n}-{v}" for v in (0, 50, 100)]) for n in ("swell", "depth", "salt", "drift")]
+    img = Image.new("L", (3 * W + 4 * pad, len(rows) * (H + lab + pad) + pad), 40)
+    draw = ImageDraw.Draw(img)
+    try:
+        font = ImageFont.truetype("DejaVuSans.ttf", 12)
+    except OSError:
+        font = ImageFont.load_default()
+    for r, (name, frames) in enumerate(rows):
+        for q, fname in enumerate(frames):
+            x, y = pad + q * (W + pad), pad + r * (H + lab + pad)
+            draw.text((x, y), fname if name != "rest (defaults)" else name, fill=210, font=font)
+            img.paste(Image.open(HERE / f"{fname}.png").convert("L"), (x, y + lab))
+    img.save(out)
+
+
 def motion(out_gif=HERE / "motion.gif", sheet=HERE / "motion-sheet.png", fps_out=20):
     from PIL import Image, ImageDraw, ImageFont
     c = dict(DEFAULTS)
@@ -871,16 +931,14 @@ def motion(out_gif=HERE / "motion.gif", sheet=HERE / "motion-sheet.png", fps_out
         draw.text((x, y), f"t = {times[j] - t_on:+.2f} s  ·  {label}", fill=210, font=font)
         img.paste(frames[j].convert("L"), (x, y + lab))
     img.save(sheet)
-    # note-response pair for perceptibility (scratch)
+    # the frame at the second crest, for the note-response check (scratch, beside the motion frames)
     crest = min(range(len(times)), key=lambda j: abs(times[j] - (t_on + T + peak)))
-    for f in tmp.iterdir():
-        if f.suffix == ".svg" and f.stem != f"f{pick[4] * 0 + int(times[crest] * sim.fps) - 1:05d}":
-            pass
     return tmp, times, crest, every, sim.fps
 
 
 def main():
     files = control_frames()
+    contact()
     print("\n".join(str(f) for f in files))
     if "--motion" in sys.argv:
         tmp, times, crest, every, fps = motion()

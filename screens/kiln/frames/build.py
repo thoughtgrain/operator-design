@@ -46,8 +46,8 @@ W, H = 480, 220
 
 G0, G1, G2, G3, G4, G5, G6, BK = ("#CDCDCD", "#AFAFAF", "#969696", "#7D7D7D",
                                   "#646464", "#4B4B4B", "#323232", "#000000")
-# Bowl weights are authored at fire 0 (scale 1); fire shrinks them to 0.86x,
-# so hairline 1.2 -> 1.03 and line 1.6 -> 1.38 stay inside craft.md's table.
+# Bowl weights are authored at fire 0 (scale 1); fire shrinks them to 0.92x,
+# so hairline 1.2 -> 1.1 and line 1.6 -> 1.47 stay inside craft.md's table.
 B_HAIR, B_LINE = 1.2, 1.6
 M_HAIR, M_LINE, SUBJ = 1.1, 1.5, 2.2
 FONT = 'font-family="UniversNextPro-Light"'
@@ -412,7 +412,7 @@ AZ_SPLIT = (76.0, 256.0)                      # rim halves split front/back (cam
 
 
 def fire_scale(fire):
-    return 1.0 - 0.14 * fire                  # firing shrinkage, 1.00 .. 0.86
+    return 1.0 - 0.08 * fire                  # firing shrinkage, 1.00 .. 0.92
 
 
 def lip_wall(fire):
@@ -591,9 +591,9 @@ def draw_mallet(F, strike, ang, head_colour=G0):
              for t in [math.pi * (0.62 + 0.76 * i / 15) for i in range(16)]]
         F.line(g, M_HAIR, G4)
         return c, CORE_R
-    # yarn ball: one node scaled about its centre; stroke authored 2.4 at scale 1 -> 1.25 at 0.52
+    # yarn ball: one node scaled about its centre; stroke authored 2.5 at scale 1 -> 1.0 at 0.4
     s = R / YARN_R
-    F.circle(c[0], c[1], R, fill=BK, stroke=head_colour, sw=2.4 * s)
+    F.circle(c[0], c[1], R, fill=BK, stroke=head_colour, sw=2.5 * s)
     # wraps: latitude bands about the rod's axis, front half only, unwound as hardness rises
     nwrap = 10
     shown = max(0, round(nwrap * (1 - strike) + 0.49)) if strike < 0.96 else 0

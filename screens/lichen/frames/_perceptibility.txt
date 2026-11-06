@@ -1,7 +1,0 @@
-control        score  need %  0→100 %  0→50 %  50→100 %  span
-grow               5    2.50     3.20    1.65      2.09   348  ok
-decay              4    1.60     4.03    2.85      2.54   110  ok
-seed               2    0.80     1.07    0.60      0.49   389  ok
-scale              3    1.20     1.45    1.44      1.36   190  ok
-note response      —    2.00     8.54       —         —   318  ok
-pass
