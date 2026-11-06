@@ -265,7 +265,12 @@ def run(k, side, ratio, y_from, y_to, n=None, clip=True):
         y = y_from + (y_to - y_from) * i / (n - 1)
         t = (y - Y0) / (Y1 - Y0)
         x = gx(k) + lateral(k, t, ratio)
-        q = CAM((x - HW, y, 0.0)) if side == "lip" else CAM((x, y, -DEPTH))
+        if side == "lip":
+            q = CAM((x - HW, y, 0.0))
+        elif side == "mid":
+            q = CAM((x - HW / 2, y, -DEPTH / 2))
+        else:
+            q = CAM((x, y, -DEPTH))
         if clip and not in_field(q):
             break
         pts.append(q)
@@ -315,6 +320,15 @@ def split(pts):
     if near and far:
         far = [near[-1]] + far
     return near, far
+
+
+def turn_parts(k):
+    """An earlier turn, cut at 1.00: its notch in the cut face, then its lit wall (lip, mid-wall, floor)."""
+    ln, lf = split(run(k, "lip", 1.0, Y0, Y1 + 0.5))
+    mn, _ = split(run(k, "mid", 1.0, Y0, Y1 + 0.5))
+    fn, ff = split(run(k, "floor", 1.0, Y0, Y1 + 0.5))
+    return [(section_piece(k - 1, k), LINE, G3), (ln, LINE, G3), (lf, LINE, G4),
+            (mn, HAIR, G5), (fn, HAIR, G4), (ff, HAIR, G5)]
 
 
 # wear: specks (bright grains) and short scratches across the lands between earlier turns
@@ -372,26 +386,16 @@ def build(cut=1 / 3, groove=0.0, wear=0.0, rumble=0.0) -> Frame:
     F.ribbon([CAM((-0.3, Y0, 0.0)), CAM((-HW, Y0, 0.0)), CAM((-0.003, Y0, -DEPTH)),
               CAM((0.003, Y0, -DEPTH)), CAM((HW, Y0, 0.0))], LINE, G3)
     for k in range(1, DEFAULT_TURNS + 1):
-        F.ribbon(section_piece(k - 1, k), LINE, G3)
-        ln, lf = split(run(k, "lip", 1.0, Y0, Y1 + 0.5))
-        fn, ff = split(run(k, "floor", 1.0, Y0, Y1 + 0.5))
-        F.ribbon(ln, LINE, G3)
-        F.ribbon(lf, LINE, G4)
-        F.ribbon(fn, HAIR, G4)
-        F.ribbon(ff, HAIR, G5)
+        for pts, w, c in turn_parts(k):
+            F.ribbon(pts, w, c)
 
     node = 4
     # --- groove: turns 4..7 appear as the cutter is further in (5 nodes each)
     for k in range(DEFAULT_TURNS + 1, MAX_TURNS + 1):
         shown = k <= turns
-        ln, lf = split(run(k, "lip", 1.0, Y0, Y1 + 0.5))
-        fn, ff = split(run(k, "floor", 1.0, Y0, Y1 + 0.5))
-        F.ribbon(section_piece(k - 1, k), LINE, G3, node=node, shown=shown)
-        F.ribbon(ln, LINE, G3, node=node + 1, shown=shown)
-        F.ribbon(lf, LINE, G4, node=node + 2, shown=shown)
-        F.ribbon(fn, HAIR, G4, node=node + 3, shown=shown)
-        F.ribbon(ff, HAIR, G5, node=node + 4, shown=shown)
-        node += 5
+        for pts, w, c in turn_parts(k):
+            F.ribbon(pts, w, c, node=node, shown=shown)
+            node += 1
     # --- groove: the rim bevel just outside the last turn (3 nodes per position; gone at 7)
     for n in range(DEFAULT_TURNS, MAX_TURNS):
         shown = n == turns

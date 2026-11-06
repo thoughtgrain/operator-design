@@ -212,9 +212,9 @@ class Scene:
     # brace and bit, along x (mm), before the bite offset
     NECK_END, RATCHET_START = 55.0, 250.0
     GRIP0, GRIP1 = 102.0, 204.0
-    X_TWIST0, X_E = 402.0, 626.0             # twist from the shank's throat to the cutting head
+    X_TWIST0, X_E = 386.0, 610.0             # twist from the shank's throat to the cutting head
     R_TWIST, R_CORE, R_SHANK = 15.0, 5.2, 5.6
-    BOARD_W, BOARD_H, BOARD_D = 110.0, 120.0, 44.0
+    BOARD_W, BOARD_H, BOARD_D = 100.0, 108.0, 44.0
     R_BORE = 17.0                            # a little over the spurs, so the bore wall clears the bit by ~1 px
 
     def __init__(self, c, theta=0.0, style="line"):
@@ -224,11 +224,11 @@ class Scene:
         self.wear = c["wear"]
         self.bite = c["bite"]
         self.T = 55 + 57 * self.ratio_n                       # the bow's throw (mm)
-        self.depth = -6 + 90 * self.bite                      # cutting head past the board's face
+        self.depth = -6 + 80 * self.bite                      # cutting head past the board's face
         self.F = self.X_E + 6                                 # board face, world x
         self.dx = self.F - self.X_E + self.depth - 6 + 6      # brace offset so x_e lands at F + depth
         self.dx = (self.F + self.depth) - self.X_E
-        self.cam = Ortho(self.YAW, self.ELEV, 0.648, 0, 116)
+        self.cam = Ortho(self.YAW, self.ELEV, 0.67, 0, 110)
         # place the scene: head pad's left edge at bite 0 sits ~9 px in from the left
         x_left = min(self.cam((0 + (self.F - 6) - self.X_E, 0, z))[0] for z in (-35, 35))
         self.cam.cx = 9 - x_left + 2
@@ -525,7 +525,7 @@ class Scene:
     def bit_static(self):
         R = self.R_TWIST
         # shank, from the jaws to the throat of the twist
-        prof = [(350, self.R_SHANK), (390, self.R_SHANK), (396, self.R_SHANK + 0.6), (self.X_TWIST0 + 1, self.R_CORE + 2.2)]
+        prof = [(350, self.R_SHANK), (self.X_TWIST0 - 9, self.R_SHANK), (self.X_TWIST0 - 4, self.R_SHANK + 0.6), (self.X_TWIST0 + 1, self.R_CORE + 2.2)]
         self.solid("shank", self.revolve(prof, n=16), edge=G[5])
         self.detail("shank.streak", self.streak(prof, inset=0, k=0.6), G[4])
         # the core, seen between the lands

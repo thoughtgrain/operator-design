@@ -421,7 +421,7 @@ def changed(a: Frame | None, b: Frame) -> tuple[int, int]:
 # ---------------------------------------------------------------- the scene
 
 RF, RW, LH, TF = 0.40, 0.29, 0.55, 0.06   # flange radius, winding radius, half winding length, flange thickness
-AMP = 0.68                                # amplitude of the laid cycle across the table (world)
+AMP = 0.56                                # amplitude of the laid cycle across the table (world)
 
 
 def camera() -> Camera:
@@ -433,7 +433,7 @@ def camera() -> Camera:
     p1 = cam.raw(c - v3(0, LH + TF, 0) + v3(0, 0, RF))
     cam.f = 52.0 / abs(p1[1] - p0[1])                 # near flange radius ~52 px tall
     cam.cx = 400 - cam.f * p0[0]
-    cam.cy = 130 + cam.f * p0[1]
+    cam.cy = 124 + cam.f * p0[1]
     return cam
 
 
