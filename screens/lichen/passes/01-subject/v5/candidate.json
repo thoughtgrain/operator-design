@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P2",
+  "drawing_language": "survey plan",
+  "subject": "A survey sheet in plan and profile: on the left the lattice surveyed as running-bond lots with the colony's boundary run as a traverse, on the right a levelled profile of the pitches its new growth played over the last bar.",
+  "controls": [
+    "grow: count. Stations on the profile (notes per bar) and new lots inside the traverse; at 0 the profile is one long hold, at 100 two stations every tick.",
+    "decay: shape. The traverse pulls in and hollow dead lots open inside it; at 100 the boundary is a ragged ring round a dead centre.",
+    "seed: count. Trig-point marks on bare lots where spores land, each starting a fresh run of stations on the profile away from the colony's pitches.",
+    "scale: position. The profile's levels re-space by the scale's semitones, and the root marks on the plan move to where each octave starts."
+  ],
+  "reference": "opxy/reference/README.md (stock OP-XY engine screens) beside library/meikyu-capture",
+  "risks": "Stretch, outside the player column. The case for it: this machine's rule is two-dimensional and its output is a line of pitches, two different shapes, and the profile shows why the melody wanders as the colony moves. Plainly, though, it fits weakly: two halves compete for the eye, the profile is a history list in disguise where categories.md asks a player to draw its rule, and the plan duplicates v4's lattice less beautifully. The trig-point triangle edges toward an icon. Better as a note-response idea than half the screen. Muted (mute is this machine's bypass): the traverse drops to mid grey and the profile stops at a flat hold."
+}

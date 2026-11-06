@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "pattern": "P5",
+  "drawing_language": "engineering schematic",
+  "subject": "An engineering elevation of the two canyon walls dimensioned across the gap, standing on a receding floor grid, with the tap train ticked off along a time strip at the bottom edge.",
+  "controls": [
+    "distance: scale; the wall pair scales about the floor centre from 0.7× to 1.3× (the gap and its dimension in metres widen), and the strip's ticks spread with it.",
+    "walls: count; the strip gains ticks, 1 to 12, one per reflection along the 1.3 s time line.",
+    "absorb: shape; the ticks' heights fall off faster along the strip, from an even comb to one tall first tick and stubs.",
+    "wind: position; the floor grid slides and skews sideways up to 30 px under the walls, and the ticks jitter off their even spacing."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": [
+    "Stretch: P5 isn't in the effect column. The exception is that an echo's output is a train of discrete events in time, which is exactly what P5's activity strip is for, and a canyon is a place (the field) with an object in it (the walls). The fit is partial: the strip carries two of the four controls, so it does more work than P5 means it to.",
+    "The strip is a meter of taps; with walls and absorb both on it, the screen splits into a picture (top) and a dashboard (bottom).",
+    "Wind on the floor grid moves the most pixels for the quietest control (score 2), which over-states it unless the slide is kept small.",
+    "Distance is scale ≤ 1.3×, under the 1.6× scale floor; it needs the strip's spacing as its second cue or more range.",
+    "The two walls are plain blocks; schematic outline is clean but reads as two pillars, not rock, without the dimension label."
+  ]
+}

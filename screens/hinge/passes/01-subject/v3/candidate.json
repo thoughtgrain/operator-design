@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P15",
+  "drawing_language": "hidden-line isometric",
+  "subject": "An isometric floor of square cells in hidden line, with the door's swing swept into it as a fan of raised cells: the rim where the leaf's edge travels lit, the two extremes it reached in grey, earlier passes as low rings.",
+  "controls": [
+    "hold: the fan's radius, 2.5 to 7.5 cells, because a longer slice is a longer leaf (count of raised cells, roughly 10 to 80).",
+    "creak: the lit rim breaks into runs of 2 to 4 with sunken cells between them, the stick-slip of a dry hinge (count of grey-layer cells along the rim).",
+    "swing: how far round the fan stays lit, 15 to 115 degrees each side of the closed line (count and position of rim cells).",
+    "mix: how high caught cells stand from the floor, 3 to 13 px (position of the raised tops)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "P15 is for sounds with no mechanism to draw, and hinge has one (a door), so the category fits but the pattern's own Gate 0 argues against it. At 1:1 the fan reads as an L-shaped wall of blocks rather than a swing; nothing says door without being told. Raised cells are three nodes each, so a big fan passes ~200 nodes with the floor. Hold and swing both change how many cells are lit; they differ only in radius against angle."
+}

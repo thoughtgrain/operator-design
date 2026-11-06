@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "pattern": "P13",
+  "drawing_language": "patent section",
+  "subject": "A mono-pitch roof cut in section like a patent figure, where each overlapping tile course is a pitch and a falling drop plays whichever course catches it, while the half-round gutter at the eave captures the run-off and its water level is how much of the last phrase gets replayed.",
+  "controls": [
+    "rate: how many falling streaks hang over the roof at once (count): two at the slowest, about twenty at 8 a beat.",
+    "roof: the roof's pitch angle (rotation of the rafter, tiles and ridge post about the eave, 6° to 46°): a flat roof spans no notes, a steep one 36 semitones, so the ridge climbs about 60 px.",
+    "gust: the slant of every streak (shape/angle, ±35° from vertical) and where along the slope the drops land, bunching them toward the eave or the ridge.",
+    "puddle: the water line in the gutter section rises (position, 0 to 12 px) and drips hang from its lip, one per repeated note (count as second cue)."
+  ],
+  "reference": "library/meikyu-capture/README.md (the machine's own rule drawn as a physical capture, with a wireframe ground and mid-grey labels)",
+  "risks": [
+    "The capture is literal (a tile catches a drop) but weak as a rule picture: what the player most needs, which notes the roof spans, is only implied by course positions; there's no pitch axis without adding one.",
+    "Roof as pitch angle moves the whole roof (rafter, tiles, posts): a big redraw on a turn, though zero at rest.",
+    "The gutter is small and in the far corner from the brightest tile; the puddle control's whole effect lives in about 20 × 20 px, which will struggle against a score of 4.",
+    "Patent hatching at 6 px on a slanted rafter is close to the 3 px floor once rendered; check at 1:1 on the device.",
+    "Muted state: streaks stop above the roof (held mid-air in grey)."
+  ]
+}

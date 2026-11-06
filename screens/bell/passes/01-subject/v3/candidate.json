@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P4",
+  "drawing_language": "star atlas",
+  "subject": "A star atlas of the water column: depth strata stacked as chart plates every 8 dB, receding down and right, with the bell plotted as a body on the plate at its depth, its lit phase the air pocket and its ephemeris track running down from the surface.",
+  "controls": [
+    "depth: the body moves down the stack from plate 0 to plate 48, 26 px right and 20 px down per 8 dB (position), and the plate below it brightens (shade as second cue).",
+    "air: the body's phase: the lit air cap above a flat waterline grows from 35 % to 90 % of the disc (shape of the lit part).",
+    "knee: the ephemeris track's approach, from a straight drop that stops dead at a hard knee to a long easing curve that settles onto the plate at 24 dB (shape of the track).",
+    "gain: the body's magnitude, radius 13 to 26 px, the way an atlas sizes a bright star (scale)."
+  ],
+  "reference": "library/meikyu-orrery (an atlas-drawn body with a terminator, labelled lightly) and library/theseus-tower (black bodies, grey outlines, a stack)",
+  "risks": "P4 is for things the sound moves through; here it's the threshold setting moving through depth, not the audio, so the stack is a scale, not a set of frames. Seven plates at 20 px steps overlap heavily: plates read as a stack at 1:1, but their tick borders are close to hatching. A disc with a flat waterline sits one step from a 'level indicator' icon; the atlas labels (plate depths, the body's name) and the ephemeris track are what keep it authored. Nothing shows the signal at all: it's a picture of the settings, which ux.md allows but which makes it the most 'diagram of knobs' of the five. Gain as magnitude is a metaphor only (a bell doesn't get louder by being bigger)."
+}

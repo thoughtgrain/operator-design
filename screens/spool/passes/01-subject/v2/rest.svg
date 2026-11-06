@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <!-- spool · subject pass 01 · v2 · P3 trace as subject · orthographic elevation -->
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wear</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wow</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">length</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0.32s</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">bias</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+  </g>
+  <path d="M 20 68.75 L 27.33 68.75 L 34.67 68.75 L 42 68.75 L 49.33 68.75 L 56.67 68.75 L 64 68.75 L 71.33 68.75 L 78.67 68.75 L 86 68.75 L 93.33 68.75 L 100.67 68.75 L 108 68.75 L 115.33 68.75 L 122.67 68.75 L 130 68.75 L 137.33 68.75 L 144.67 68.75 L 152 68.75 L 159.33 68.75 L 166.67 68.75 L 174 68.75 L 181.33 68.75 L 188.67 68.75 L 196 68.75 L 203.33 68.75 L 210.67 68.75 L 218 68.75 L 225.33 68.75 L 232.67 68.75 L 240 68.75 L 240 67.25 L 232.67 67.25 L 225.33 67.25 L 218 67.25 L 210.67 67.25 L 203.33 67.25 L 196 67.25 L 188.67 67.25 L 181.33 67.25 L 174 67.25 L 166.67 67.25 L 159.33 67.25 L 152 67.25 L 144.67 67.25 L 137.33 67.25 L 130 67.25 L 122.67 67.25 L 115.33 67.25 L 108 67.25 L 100.67 67.25 L 93.33 67.25 L 86 67.25 L 78.67 67.25 L 71.33 67.25 L 64 67.25 L 56.67 67.25 L 49.33 67.25 L 42 67.25 L 34.67 67.25 L 27.33 67.25 L 20 67.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 240 68.75 L 247.33 68.75 L 254.67 68.75 L 262 68.75 L 269.33 68.75 L 276.67 68.75 L 284 68.75 L 291.33 68.75 L 298.67 68.75 L 306 68.75 L 313.33 68.75 L 320.67 68.75 L 328 68.75 L 335.33 68.75 L 342.67 68.75 L 350 68.75 L 357.33 68.75 L 364.67 68.75 L 372 68.75 L 379.33 68.75 L 386.67 68.75 L 394 68.75 L 401.33 68.75 L 408.67 68.75 L 416 68.75 L 423.33 68.75 L 430.67 68.75 L 438 68.75 L 445.33 68.75 L 452.67 68.75 L 460 68.75 L 460 67.25 L 452.67 67.25 L 445.33 67.25 L 438 67.25 L 430.67 67.25 L 423.33 67.25 L 416 67.25 L 408.67 67.25 L 401.33 67.25 L 394 67.25 L 386.67 67.25 L 379.33 67.25 L 372 67.25 L 364.67 67.25 L 357.33 67.25 L 350 67.25 L 342.67 67.25 L 335.33 67.25 L 328 67.25 L 320.67 67.25 L 313.33 67.25 L 306 67.25 L 298.67 67.25 L 291.33 67.25 L 284 67.25 L 276.67 67.25 L 269.33 67.25 L 262 67.25 L 254.67 67.25 L 247.33 67.25 L 240 67.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 20 156.75 L 27.33 156.75 L 34.67 156.75 L 42 156.75 L 49.33 156.75 L 56.67 156.75 L 64 156.75 L 71.33 156.75 L 78.67 156.75 L 86 156.75 L 93.33 156.75 L 100.67 156.75 L 108 156.75 L 115.33 156.75 L 122.67 156.75 L 130 156.75 L 137.33 156.75 L 144.67 156.75 L 152 156.75 L 159.33 156.75 L 166.67 156.75 L 174 156.75 L 181.33 156.75 L 188.67 156.75 L 196 156.75 L 203.33 156.75 L 210.67 156.75 L 218 156.75 L 225.33 156.75 L 232.67 156.75 L 240 156.75 L 240 155.25 L 232.67 155.25 L 225.33 155.25 L 218 155.25 L 210.67 155.25 L 203.33 155.25 L 196 155.25 L 188.67 155.25 L 181.33 155.25 L 174 155.25 L 166.67 155.25 L 159.33 155.25 L 152 155.25 L 144.67 155.25 L 137.33 155.25 L 130 155.25 L 122.67 155.25 L 115.33 155.25 L 108 155.25 L 100.67 155.25 L 93.33 155.25 L 86 155.25 L 78.67 155.25 L 71.33 155.25 L 64 155.25 L 56.67 155.25 L 49.33 155.25 L 42 155.25 L 34.67 155.25 L 27.33 155.25 L 20 155.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 240 156.75 L 247.33 156.75 L 254.67 156.75 L 262 156.75 L 269.33 156.75 L 276.67 156.75 L 284 156.75 L 291.33 156.75 L 298.67 156.75 L 306 156.75 L 313.33 156.75 L 320.67 156.75 L 328 156.75 L 335.33 156.75 L 342.67 156.75 L 350 156.75 L 357.33 156.75 L 364.67 156.75 L 372 156.75 L 379.33 156.75 L 386.67 156.75 L 394 156.75 L 401.33 156.75 L 408.67 156.75 L 416 156.75 L 423.33 156.75 L 430.67 156.75 L 438 156.75 L 445.33 156.75 L 452.67 156.75 L 460 156.75 L 460 155.25 L 452.67 155.25 L 445.33 155.25 L 438 155.25 L 430.67 155.25 L 423.33 155.25 L 416 155.25 L 408.67 155.25 L 401.33 155.25 L 394 155.25 L 386.67 155.25 L 379.33 155.25 L 372 155.25 L 364.67 155.25 L 357.33 155.25 L 350 155.25 L 342.67 155.25 L 335.33 155.25 L 328 155.25 L 320.67 155.25 L 313.33 155.25 L 306 155.25 L 298.67 155.25 L 291.33 155.25 L 284 155.25 L 276.67 155.25 L 269.33 155.25 L 262 155.25 L 254.67 155.25 L 247.33 155.25 L 240 155.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 26 76.6 L 454 76.6 L 454 75.4 L 26 75.4 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 26 148.6 L 454 148.6 L 454 147.4 L 26 147.4 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 35.73 154.16 L 53.73 70.16 L 52.27 69.84 L 34.27 153.84 Z" fill="#969696" stroke="none"/>
+  <path d="M 310.73 154.16 L 328.73 70.16 L 327.27 69.84 L 309.27 153.84 Z" fill="#969696" stroke="none"/>
+  <path d="M 28.86 139.91 L 84.37 87.51 L 89.41 116.59 L 115.4 109.09 L 120.54 140.25 L 132.5 140.25 L 188.37 87.51 L 193.41 116.59 L 219.4 109.09 L 224.54 140.25 L 236.5 140.25 L 292.37 87.51 L 297.41 116.59 L 323.4 109.09 L 328.54 140.25 L 340.5 140.25 L 396.37 87.51 L 401.41 116.59 L 427.4 109.09 L 432.54 140.25 L 444 140.25 L 444 137.75 L 434.66 137.75 L 429.4 105.91 L 403.39 113.41 L 398.03 82.49 L 339.5 137.75 L 330.66 137.75 L 325.4 105.91 L 299.39 113.41 L 294.03 82.49 L 235.5 137.75 L 226.66 137.75 L 221.4 105.91 L 195.39 113.41 L 190.03 82.49 L 131.5 137.75 L 122.66 137.75 L 117.4 105.91 L 91.39 113.41 L 86.03 82.49 L 27.14 138.09 Z" fill="#CDCDCD" stroke="none"/>
+  <path d="M 43.4 162 L 43.4 191 L 44.6 191 L 44.6 162 Z" fill="#646464" stroke="none"/>
+  <path d="M 318.4 162 L 318.4 191 L 319.6 191 L 319.6 162 Z" fill="#646464" stroke="none"/>
+  <path d="M 44 186.6 L 319 186.6 L 319 185.4 L 44 185.4 Z" fill="#646464" stroke="none"/>
+  <path d="M 40.53 190.53 L 48.53 182.53 L 47.47 181.47 L 39.47 189.47 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 315.53 190.53 L 323.53 182.53 L 322.47 181.47 L 314.47 189.47 Z" fill="#7D7D7D" stroke="none"/>
+  <text transform="matrix(1 0 0 1 181.5 200)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px" text-anchor="middle">loop</text>
+  <text transform="matrix(1 0 0 1 460 52)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px" text-anchor="end">elevation</text>
+</svg>

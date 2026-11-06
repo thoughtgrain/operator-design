@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "hinge",
+  "name": "Hinge",
+  "parameters": [
+    {
+      "id": "hold",
+      "label": "Hold",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.02, "maximum": 2.0},
+      "display": "duration"
+    },
+    {
+      "id": "creak",
+      "label": "Creak",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "swing",
+      "label": "Swing",
+      "default": 0.5,
+      "mapping": {"kind": "exponential", "minimum": 0.5, "maximum": 20.0},
+      "display": "duration"
+    },
+    {
+      "id": "mix",
+      "label": "Mix",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Door": {"hold": 0.5, "creak": 0.0, "swing": 0.5, "mix": 0.5},
+    "Barn": {"hold": 0.85, "creak": 0.6, "swing": 0.8, "mix": 0.7}
+  },
+  "resources": {
+    "voiceBytes": 0,
+    "voiceAlignment": 4,
+    "voiceCapacity": 1,
+    "sharedBytes": 384000,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

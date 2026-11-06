@@ -1,0 +1,19 @@
+{
+  "variant": "v4",
+  "pattern": "P1",
+  "drawing_language": "survey plan",
+  "subject": "The chip's charge channel cut open lengthwise and drawn as a surveyor's long-section: a row of wells under their clock gates, each holding a pool of charge whose surfaces trace the note, over a datum with chainage in stages and a return leg beneath.",
+  "controls": [
+    "stages: the chainage compresses, more and narrower wells across the section, 8 at 0 to 24 at 100, the chainage figures rising to match (count of wells, with the gate row following).",
+    "leak: failing wells get a seep notch in their floor and their pool surfaces sink toward empty, breaking the note's line (shape of the bright pool-surface profile).",
+    "clock: the gate electrodes above the wells slip off their even pitch, and the walls of each well follow them, so the wells come out uneven in width (position of the gates and wells, up to ~12 px each, ≥ 24 px end to end).",
+    "feedback: the hydraulic grade line in the return leg rises from the invert at 0 to just under the datum at 100, the level the output is fed back in at (position, ~50 px)."
+  ],
+  "reference": "library/meikyu-capture/README.md (labelled wireframe ground, small mid-grey text that makes it read as authored)",
+  "risks": [
+    "The most literal of the five: it explains the device (a CCD potential-well diagram) more than the sound; leak and clock read clearly, stages and feedback are diagram furniture.",
+    "Sixteen pools each with a surface ribbon plus the profile and gates is detailed for the node budget; the profile and pool surfaces want to be one or two mutable outlines.",
+    "Survey labels (ch, figures, in, out, hgl, return) are many for 480 × 220; cut to what the player needs.",
+    "Pools show a notional test note frozen mid-chain; effect pages get no audio."
+  ]
+}

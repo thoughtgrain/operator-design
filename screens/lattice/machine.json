@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "synth",
+  "description": "A 2D waveguide plate: a metal sheet held at its edges, struck at one point and heard at another. Size sets the mesh, tension its stiffness, damp how fast it rings out, pickup where it's heard."
+}

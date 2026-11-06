@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <title>marble · subject pass 01 · v4 · P13 capture · orthographic elevation</title>
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">pegs</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">6</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">drop</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1/8</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">bounce</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">scale</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">major</text>
+  </g>
+  <path d="M 153 30 L 161 30 L 161 202 L 153 202 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.2"/>
+  <path d="M 154.854 42.354 L 159.854 37.354 L 159.146 36.646 L 154.146 41.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 47.354 L 159.854 42.354 L 159.146 41.646 L 154.146 46.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 52.354 L 159.854 47.354 L 159.146 46.646 L 154.146 51.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 57.354 L 159.854 52.354 L 159.146 51.646 L 154.146 56.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 62.354 L 159.854 57.354 L 159.146 56.646 L 154.146 61.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 67.354 L 159.854 62.354 L 159.146 61.646 L 154.146 66.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 72.354 L 159.854 67.354 L 159.146 66.646 L 154.146 71.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 77.354 L 159.854 72.354 L 159.146 71.646 L 154.146 76.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 82.354 L 159.854 77.354 L 159.146 76.646 L 154.146 81.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 87.354 L 159.854 82.354 L 159.146 81.646 L 154.146 86.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 92.354 L 159.854 87.354 L 159.146 86.646 L 154.146 91.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 97.354 L 159.854 92.354 L 159.146 91.646 L 154.146 96.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 102.354 L 159.854 97.354 L 159.146 96.646 L 154.146 101.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 107.354 L 159.854 102.354 L 159.146 101.646 L 154.146 106.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 112.354 L 159.854 107.354 L 159.146 106.646 L 154.146 111.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 117.354 L 159.854 112.354 L 159.146 111.646 L 154.146 116.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 122.354 L 159.854 117.354 L 159.146 116.646 L 154.146 121.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 127.354 L 159.854 122.354 L 159.146 121.646 L 154.146 126.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 132.354 L 159.854 127.354 L 159.146 126.646 L 154.146 131.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 137.354 L 159.854 132.354 L 159.146 131.646 L 154.146 136.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 142.354 L 159.854 137.354 L 159.146 136.646 L 154.146 141.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 147.354 L 159.854 142.354 L 159.146 141.646 L 154.146 146.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 152.354 L 159.854 147.354 L 159.146 146.646 L 154.146 151.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 157.354 L 159.854 152.354 L 159.146 151.646 L 154.146 156.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 162.354 L 159.854 157.354 L 159.146 156.646 L 154.146 161.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 167.354 L 159.854 162.354 L 159.146 161.646 L 154.146 166.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 172.354 L 159.854 167.354 L 159.146 166.646 L 154.146 171.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 177.354 L 159.854 172.354 L 159.146 171.646 L 154.146 176.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 182.354 L 159.854 177.354 L 159.146 176.646 L 154.146 181.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 187.354 L 159.854 182.354 L 159.146 181.646 L 154.146 186.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 192.354 L 159.854 187.354 L 159.146 186.646 L 154.146 191.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 154.854 197.354 L 159.854 192.354 L 159.146 191.646 L 154.146 196.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 319 30 L 327 30 L 327 202 L 319 202 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.2"/>
+  <path d="M 320.854 42.354 L 325.854 37.354 L 325.146 36.646 L 320.146 41.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 47.354 L 325.854 42.354 L 325.146 41.646 L 320.146 46.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 52.354 L 325.854 47.354 L 325.146 46.646 L 320.146 51.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 57.354 L 325.854 52.354 L 325.146 51.646 L 320.146 56.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 62.354 L 325.854 57.354 L 325.146 56.646 L 320.146 61.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 67.354 L 325.854 62.354 L 325.146 61.646 L 320.146 66.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 72.354 L 325.854 67.354 L 325.146 66.646 L 320.146 71.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 77.354 L 325.854 72.354 L 325.146 71.646 L 320.146 76.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 82.354 L 325.854 77.354 L 325.146 76.646 L 320.146 81.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 87.354 L 325.854 82.354 L 325.146 81.646 L 320.146 86.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 92.354 L 325.854 87.354 L 325.146 86.646 L 320.146 91.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 97.354 L 325.854 92.354 L 325.146 91.646 L 320.146 96.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 102.354 L 325.854 97.354 L 325.146 96.646 L 320.146 101.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 107.354 L 325.854 102.354 L 325.146 101.646 L 320.146 106.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 112.354 L 325.854 107.354 L 325.146 106.646 L 320.146 111.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 117.354 L 325.854 112.354 L 325.146 111.646 L 320.146 116.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 122.354 L 325.854 117.354 L 325.146 116.646 L 320.146 121.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 127.354 L 325.854 122.354 L 325.146 121.646 L 320.146 126.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 132.354 L 325.854 127.354 L 325.146 126.646 L 320.146 131.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 137.354 L 325.854 132.354 L 325.146 131.646 L 320.146 136.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 142.354 L 325.854 137.354 L 325.146 136.646 L 320.146 141.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 147.354 L 325.854 142.354 L 325.146 141.646 L 320.146 146.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 152.354 L 325.854 147.354 L 325.146 146.646 L 320.146 151.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 157.354 L 325.854 152.354 L 325.146 151.646 L 320.146 156.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 162.354 L 325.854 157.354 L 325.146 156.646 L 320.146 161.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 167.354 L 325.854 162.354 L 325.146 161.646 L 320.146 166.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 172.354 L 325.854 167.354 L 325.146 166.646 L 320.146 171.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 177.354 L 325.854 172.354 L 325.146 171.646 L 320.146 176.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 182.354 L 325.854 177.354 L 325.146 176.646 L 320.146 181.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 187.354 L 325.854 182.354 L 325.146 181.646 L 320.146 186.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 192.354 L 325.854 187.354 L 325.146 186.646 L 320.146 191.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 320.854 197.354 L 325.854 192.354 L 325.146 191.646 L 320.146 196.646 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 153 204.75 L 327 204.75 L 327 203.25 L 153 203.25 Z" fill="#7D7D7D" stroke="none"/>
+  <path d="M 194 26 L 286 26 L 248 42 L 248 46 L 232 46 L 232 42 Z" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+  <rect x="224" y="46" width="12" height="3" fill="#7D7D7D" stroke="none"/>
+  <rect x="244" y="46" width="12" height="3" fill="#7D7D7D" stroke="none"/>
+  <circle cx="240" cy="54" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="229" cy="68" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="251" cy="68" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="218" cy="82" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="240" cy="82" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="262" cy="82" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="207" cy="96" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="229" cy="96" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="251" cy="96" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="273" cy="96" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="196" cy="110" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="218" cy="110" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="240" cy="110" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="262" cy="110" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="284" cy="110" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="185" cy="124" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="207" cy="124" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="229" cy="124" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="251" cy="124" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="273" cy="124" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <circle cx="295" cy="124" r="2.5" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <rect x="162" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="184" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="206" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="228" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="250" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="272" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="294" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="316" y="142" width="2" height="56" fill="#7D7D7D" stroke="none"/>
+  <rect x="164" y="198" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 171 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">g</text>
+  <rect x="186" y="190" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 193 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">a</text>
+  <rect x="208" y="182" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 215 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">b</text>
+  <rect x="230" y="178" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 237 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">c</text>
+  <rect x="252" y="170" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 259 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">d</text>
+  <rect x="274" y="162" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 281 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">e</text>
+  <rect x="296" y="158" width="20" height="2" fill="#969696" stroke="none"/>
+  <text transform="matrix(1 0 0 1 303 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f</text>
+  <circle cx="191" cy="184.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="201" cy="184.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="213" cy="176.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="223" cy="176.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="213" cy="167.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="223" cy="167.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="235" cy="172.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="245" cy="172.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="235" cy="163.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="245" cy="163.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="235" cy="154.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="257" cy="164.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="267" cy="164.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="257" cy="155.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="267" cy="155.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="279" cy="156.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <circle cx="289" cy="156.5" r="4.5" fill="#000000" stroke="#CDCDCD" stroke-width="1.5"/>
+  <path d="M 338 198.5 L 348 198.5 L 348 197.5 L 338 197.5 Z" fill="#646464" stroke="none"/>
+  <path d="M 338 150.5 L 348 150.5 L 348 149.5 L 338 149.5 Z" fill="#646464" stroke="none"/>
+  <path d="M 343.5 198 L 343.5 150 L 342.5 150 L 342.5 198 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 352 178)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">1 oct</text>
+  <text transform="matrix(1 0 0 1 71 36)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">elev. a–a</text>
+</svg>

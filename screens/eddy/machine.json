@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A rotating speaker drowned in turbulence: spin sets the rotor, flutter adds eddies to its speed, depth sets the doppler."
+}

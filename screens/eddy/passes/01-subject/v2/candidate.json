@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P2",
+  "drawing_language": "typeset diagram",
+  "subject": "A typeset signal-path diagram on the left (input, rotor wheel, an eddy line feeding its speed, a dry/wet vane) beside the output trace of a steady tone whose cycles the doppler squeezes and stretches.",
+  "controls": [
+    "spin: the speed ticks set round the rotor wheel step from 3 to 24 (count), in column 1 under its label.",
+    "flutter: the eddy line feeding the rotor from below goes from a near-flat rule to a 16 px turbulent scrawl (shape), in column 1-2.",
+    "depth: the bright output trace's cycles bunch and spread around the grey dry tone, from identical at 0 to clearly frequency-modulated at 100 (shape, cycle ends move well over 16 px).",
+    "mix: the vane at the sum node turns 90 degrees from the dry contact to the wet one (rotation)."
+  ],
+  "reference": "opxy/reference/README.md",
+  "risks": "Two halves risk reading as a panel: the diagram has labels (in, rotor, dry, wet, eddies, out) and a vane that is close to a schematic switch symbol, which craft.md would call iconic. Spin as a tick count says 'faster' only by convention; the trace does not show rotor speed at all unless depth is up. The trace's 64-point budget over 220 px is coarse once flutter makes cycles irregular."
+}

@@ -1,0 +1,19 @@
+{
+  "variant": "v2",
+  "pattern": "P2",
+  "drawing_language": "patent section",
+  "subject": "A patent sheet in two figures: fig. 1 cuts the nave lengthwise with its pointed arcade and vault, fig. 2 plots the impulse it returns after the doors' gap.",
+  "controls": [
+    "nave: position (+ count) on fig. 1, the east wall and its half-dome move east about 64 px adding arches; it also stretches the tail of fig. 2 by 100 px as a second cue.",
+    "stone: shape on fig. 2; the treble envelope line drops near the floor on soft stone and rides the reflection peaks on hard stone (a quarter of the way into the tail it moves ~30 px).",
+    "choir: count on fig. 1; the sound arrow leaving the door fans out from one ray at 0 to fourteen scattered arrows at 100.",
+    "doors: position on fig. 2; the first reflection moves away from the bright direct impulse, 6 to 66 px, with a dimension line labelled 'door' over the gap."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": [
+    "Controls don't split by column: fig. 1 carries knobs 1 and 3, fig. 2 knobs 2 and 4, so hands and screen don't agree (P2's main advantage lost).",
+    "Fig. 2 is close to a textbook plot; with labels and two figures it can read as a document rather than one subject.",
+    "The reflection comb is a 64-point outline of 15 teeth; dense tails at 12 s get coarse, and treble line crossing the teeth can tangle.",
+    "The direct impulse is the brightest element, not the nave: the eye lands on fig. 2."
+  ]
+}

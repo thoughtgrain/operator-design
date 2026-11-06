@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A note player on aux track 12: a small flock flies over a two-octave pitch field and each bird plays the scale degree under it as it crosses into a new cell. Cohesion pulls the notes into a cluster, speed sets how often they come, scatter lets birds break off."
+}

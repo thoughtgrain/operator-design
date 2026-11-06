@@ -1,0 +1,206 @@
+{
+  "machine": "kiln",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: star atlas."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: oscilloscope trace."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "typeset diagram",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: typeset diagram. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The glazed floor of the bowl unrolled into one isometric field of square slab tiles, hidden-line, lit where the mallet's energy is still ringing.",
+      "controls": [
+        "strike: count — the lit patch round the strike point grows from a 3-cell run to ~40 cells (hard mallet reaches more modes), clumped in runs of 2–4.",
+        "glaze: count + shade — the share of tiles in the grey glazed layer rises from ~5 % to ~70 % in runs, and lit tiles under glaze dim one step; a damped field.",
+        "crack: position — cells along two or three crazing lines drop to hollow wireframe and slip down 4–10 px, so a fissure network opens across the field (none at 0).",
+        "fire: position — every slab's thickness grows from 2 to ~14 px (the faces translate, tops rise) as the body vitrifies, so the field reads thin and soft at 0, deep and hard at 100."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "P15 is for texture sounds and Gate 0 says a synth with a mechanism gets a drawing of the mechanism; kiln has one (a bowl), so this is the weakest fit of the five. The field isn't recognisably a bowl at 1:1; it reads as a glaze test tile at best. strike and glaze both act on counts of cell states, so glaze must keep its shade step and runs or the two blur. 112 cells x 2 nodes = 224 nodes: inside 256 at sdk 1.7 but no headroom, and a note flaring the patch must stay ≤ ~20 cells a frame. Close kin to toro-blocks' look; must stay a flat cell grid, not a height field, to be its own thing."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "drawing_language": "star atlas",
+      "subject": "The bowl cut through a–a as a bright section, with its ringing modes charted above it as a star chart along an ecliptic and the mallet plotted as a meteor trail falling onto the rim.",
+      "controls": [
+        "strike: rotation — the meteor trail pivots on its impact point at the rim, from a shallow glancing 15° at 0 to a steep 70° at 100, and lengthens with it.",
+        "glaze: position — the level of glaze pooled in the well (the meniscus line inside the section) rises from the foot to about half the wall, ~40 px.",
+        "crack: shape — a fissure opens in the right wall of the section (the band splits, gap up to 18 px), and each mode star splits into a double star whose companions part along the ecliptic.",
+        "fire: scale — the stars' magnitudes: upper-mode stars grow from barely plotted (1.5 px) to ~2× as the fired body rings brighter and longer, and the stars slide right as the modes stretch."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "Two languages could fight: a patent section and a star chart. The bowl must stay the subject (brightest, centred) and the chart its caption, or it reads as two pictures. crack does two things (fissure + double stars); keep the fissure primary. The meteor trail risks reading as a pointer/icon unless kept a tapering plotted trail with a radiant. The upper stars are 2 px at rest, under the 3–4 px part floor; fire 0 must hide rather than shrink below it. Labels n2–n7 must stay static."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "drawing_language": "engineering schematic",
+      "subject": "A modal-synthesis schematic: a mallet impulse driving a bank of four tuned resonators through a shared glaze dashpot into a summing junction, with the bowl's ringing output trace on the right.",
+      "controls": [
+        "strike: shape — the impulse in the mallet block narrows from a wide soft pulse (16 px) to a sharp spike (2 px) and grows taller; column 1, left zone.",
+        "glaze: position — the dashpot piston sinks ~40 px into its cylinder, the damper engaging every resonator; column 2, left zone.",
+        "crack: shape — the output trace's envelope breaks into beating lobes (amplitude dips up to 80 %) and its cycles go uneven; column 3, right zone.",
+        "fire: position — the mode ruler's ticks under the trace spread right as the modes stretch (top tick travels ~30 px), and the ratios printed in the resonator boxes follow."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": "Most at risk of reading as a dashboard: boxes, a slider-like dashpot and a ruler are panel furniture unless the schematic stays drawn in one hairline language with the trace the only bright thing. fire on a tick ruler is thin (1.5 px ticks) and may score under its floor; it may need the trace's cycle spacing too, which collides with crack on the trace's shape. The trace transient is noisy at 64 points: one mutable path can't hold this many cycles, so a real build shows fewer cycles or uses 2–3 paths. Text in the resonator boxes changes with fire, which needs text slots."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "drawing_language": "oscilloscope trace",
+      "subject": "The bowl's ring itself, big and bright on a scope graticule: channel 1 is the sum of modes decaying from the trigger, channel 2 below is the highest mode alone, and a cursor marks where it dies away.",
+      "controls": [
+        "strike: scale — channel 1's amplitude grows from ~1 division to ~3 (node scale 0.6 → 1.6 about the axis), harder mallet louder and brighter.",
+        "glaze: position — the −40 dB cursor slides left from near the right edge (~400 px) to a third of the way in (~170 px) as glaze damps the ring; the trace past it is drawn at 0.",
+        "crack: shape — channel 1's envelope breaks into beating lobes and its cycles go uneven, the doublets of a broken bowl.",
+        "fire: shape of channel 2 — the high mode's period shortens and its trace lasts longer, so the grey channel packs from ~8 to ~16 visible cycles."
+      ],
+      "reference": "opxy/reference/README.md",
+      "risks": "P3's own pitfall: it's an oscilloscope, which says nothing about ceramic; nothing on screen says bowl, glaze or crack except by inference. Channel 1 is 200+ points at rest; one mutable outline is 64 points, so the real trace shows ~5 cycles or spends 3–4 paths (the whole path budget). glaze's cursor plus a trace that stops is the clearest control here, but glaze and fire both change how long things last, which might confuse. The graticule is 20 hairlines; keep it at #323232 so the trace is the only bright thing."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "drawing_language": "typeset diagram",
+      "subject": "A textbook figure of the bowl in plan as the sun of an orrery, each ringing mode an orbit round it and its antinodes the planets that ride it.",
+      "controls": [
+        "strike: count — how many orbits are populated: a soft mallet lights only n = 2 (4 planets), a hard one fills out to n = 5 (28 planets), stepping in with an ease.",
+        "glaze: scale — the planets shrink to ~0.5× as glaze damps the modes, outer orbits first, until n = 5's are points.",
+        "crack: position — each planet splits into a doublet whose two halves part along the orbit (up to ~20 px), and the pairs slowly precess while notes ring: the beating of a broken bowl.",
+        "fire: scale — the orbits spread outward (outer orbit 1.0× → 1.25×) as the stiffer, vitrified body stretches its upper modes."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "Stretch outside the engine column. Why it might be the exception: a bowl's modes really are circular standing waves round the rim with 2n antinodes, and a cracked bowl's split doublets really do beat as their nodes travel round, so orbits and planets are the physics, not a stand-in for a cycle in time. Why it might not fit: P12's strength is a sequence running round a cycle and kiln has none; nothing orbits at rest or between notes, so 'orrery' becomes a static mode diagram, and the pattern's wiring (links, planets that flash when their step sounds) has nothing to do. glaze and fire both use scale (different parts, but close in feel). Honest verdict: it fits as a mode diagram drawn in orrery form, not as an orrery."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:20:54"
+  },
+  "selection": null
+}

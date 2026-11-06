@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "Multi-tap echo shaped by canyon walls: the distance sets the delay, walls set the tap count, rock absorbs highs, wind modulates."
+}

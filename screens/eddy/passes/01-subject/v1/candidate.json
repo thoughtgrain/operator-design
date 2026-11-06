@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P1",
+  "drawing_language": "oscilloscope trace",
+  "subject": "The horn chamber cut through in plan and drawn by a scope beam: the twin horn is one bright trace on a graticule, its phosphor trail fading behind each mouth.",
+  "controls": [
+    "spin: the phosphor trail behind each horn mouth lengthens from 20 to 280 degrees of arc (shape: sweep), so a fast rotor leaves nearly a full ring of afterglow.",
+    "flutter: the trail's radius breaks into irregular ripples, up to 12 % of the horn length (shape), so the eddies show as a trail that no longer follows a clean circle.",
+    "depth: the horn grows from 36 to 86 px from the hub (uniform scale, 2.4x), because a longer horn is a larger doppler swing.",
+    "mix: the number of ghost horns the beam leaves behind the bright one, 0 to 4 (count, stepped in with an ease), so dry is a lone horn and full wet a fan of afterimages."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": "A rest frame is a single still horn; the trail is the only thing that says 'spinning', and at spin 0 it is a stub. Ghost horns at 1 px #4B4B4B-#646464 are faint at 1:1 and the count channel needs doubling to clear its floor (0-4 does, 1-2 would not). The graticule must stay at #323232-#4B4B4B or it turns into a dashboard. Effects get no notes, so motion only answers turns unless the host passes an input level."
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P14",
+  "drawing_language": "typeset diagram",
+  "subject": "The colony's last four ticks woven as cloth in a textbook figure: one warp thread per scale degree in pitch order, a slab raised wherever that degree was alive, this tick at the front with new growth capped bright, so old crust stands as unbroken columns and the growing margin as rows that change.",
+  "controls": [
+    "grow: count. Capped slabs in the front row and new slabs between rows, 0 up to the two-per-tick ceiling, so the cloth fills out sideways.",
+    "decay: shape. The solid columns down the cloth break up: at 0 a slab runs all four rows, at 100 most last one row and the cloth goes ragged.",
+    "seed: count. Pins with a hollow bead stand at the front edge on the threads where spores will land, 0 to 8.",
+    "scale: position. The warp re-spaces by semitone (half steps close up), the octave rules under the cloth move, and the pentatonics drop to five threads an octave."
+  ],
+  "reference": "library/loom-pages",
+  "risks": "The loom flattens the lattice to pitch, so where the colony is and its dead centre are lost, and two cells of one degree weave as one slab. Back rows' flat tops are about 6 px at 1:1 and the right of the warp is empty at rest. The caption line is decoration. History of four ticks covers a quarter of a bar, so columns are short at fast clocks. Muted (mute is this machine's bypass): the front slabs drop to wireframe with no caps and the warp dims."
+}

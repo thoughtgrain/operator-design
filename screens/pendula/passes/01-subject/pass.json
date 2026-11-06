@@ -1,0 +1,211 @@
+{
+  "machine": "pendula",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P6",
+      "patternName": "Figures",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": "Hand-drawn figures kept failing for toro; prefer geometric subjects.",
+      "brief": "Subject built on P6 Figures; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Hand-drawn figures kept failing for toro; prefer geometric subjects."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P13",
+      "drawing_language": "typeset diagram",
+      "subject": "A textbook figure with every pendulum hung from a single pivot on nested swing arcs, where the plumb line is a gate that captures each bob as it crosses and that crossing is the note.",
+      "controls": [
+        "length: the radius of the whole nest of arcs (scale, 90 to 180 px), so longer pendulums hang visibly deeper from the pivot.",
+        "count: how many nested arcs and bobs hang from the pivot (count, 3 to 16), the inner arcs packing in towards the pivot.",
+        "swing: the angle the arcs open to and the bobs are held at, marked θ at the pivot (rotation, 10° to 45° either side).",
+        "scale: the polygon on the pitch-class clock in the lower left (shape), a pentagon for pent up to the full twelve-gon for chrom."
+      ],
+      "muted": "The gate (plumb line and wedge) drops to the ground grey and the bobs go hollow mid-grey; they still swing, nothing is captured.",
+      "reference": "library/meikyu-capture",
+      "risks": "Drawing every pendulum from one pivot is a diagram, not the apparatus; players who know the real row of pendulums may not recognise it. At 16 the inner bobs sit ~7 px apart along the ray and need a smaller bob. At rest every bob sits on one ray, so the drift only shows when playing (it opens into a spiral). The pitch-class clock is a corner figure, the P13 fallback for a control with no twin in the metaphor."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P14",
+      "drawing_language": "orthographic elevation",
+      "subject": "A front elevation of the row whose strings run on down as warp threads into a woven cloth, where every crossing of the last four beats is a slab on its thread and the drift shows as diagonals.",
+      "controls": [
+        "length: how far each bob hangs below the beam (position, 55 to 130 px for the longest), the bob line sloping as the real apparatus does.",
+        "count: how many strings and warp threads there are (count, 3 to 16).",
+        "swing: how high the bobs ride towards the viewer when held back, and how tall each woven slab is (position plus slab height, 4 to 12 px).",
+        "scale: the spacing of the threads, set by the scale's intervals so the cloth's gaps are the scale (shape: gaps of 1 to 3 semitones)."
+      ],
+      "muted": "The weaving stops: the newest row stays empty with a hairline across it and the cloth stops advancing; bobs go mid-grey.",
+      "reference": "library/loom-pages",
+      "risks": "Front-on, the swing goes towards the viewer, so swing only reads as the bobs lifting (~26 px at most); a side elevation would show it but splits the subject. Four rows is little history for a pendulum wave's slow pattern; rows are beats, not cycles. Slab rows are expensive (P14) at 16 threads."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "drawing_language": "survey plan",
+      "subject": "A survey plan seen from overhead in which the row lies along a dashed datum on a grid and a bright release board holds every bob on one line, ready to snake across it.",
+      "controls": [
+        "length: the span of every bob's lane across the datum, and so how far the board sits from it (position/scale, ~38 to 70 px).",
+        "count: how many lanes cross the datum (count, 3 to 16).",
+        "swing: the size of each bob's proportional symbol, how hard it will cross (scale, 3 to 7 px radius).",
+        "scale: which ticks stand tall on the two-octave strip along the bottom, with each pendulum's note marked above its tick (count and position in the strip)."
+      ],
+      "muted": "The release board comes back down onto the bobs wherever they are and the strip's marks go hollow: held, not playing.",
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "Seen from above the pendulum's length is invisible, so length borrows the lane span (which physically also grows with swing); swing is then a symbol size, a map convention rather than a physical part. The grid is ground decoration and costs nothing, but it is the most 'chart-like' of the five."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P12",
+      "drawing_language": "patent section",
+      "subject": "A patent sheet of conical pendulums on one spindle, each bob orbiting its own circle whose shadow on the section plane is its swing, so the bobs form an orrery and a crossing of that plane plays.",
+      "controls": [
+        "length: how far the cone of rods drops from the hub and how wide the orbits open with it (scale, 1.6x).",
+        "count: how many orbits and bobs ring the spindle (count, 3 to 16).",
+        "swing: the cone's half-angle: orbits widen and rise towards the hub as it opens (shape of the stack, 10° to 45°).",
+        "scale: which ticks on the base dial are long, one per scale degree of the octave (shape of the dial)."
+      ],
+      "muted": "The section plane line drops to ground grey and the bobs stop on their orbits, hollow.",
+      "reference": "library/meikyu-orrery",
+      "risks": "A conical pendulum is a different machine; its projection is the swing, but it asks the player to accept that. Nested ellipses at 16 get dense near the hub. Patent numerals are decoration unless they stay few. The base dial is the weak control, a ring of ticks."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P6",
+      "drawing_language": "hidden-line isometric",
+      "subject": "A swing set in hidden-line isometric with a block rider on every seat and chains of slowly different lengths, whose feet strike a tuned bar on the ground as each rider passes the bottom.",
+      "controls": [
+        "length: the chain lengths, riders hanging lower as it rises (position, ~30 px).",
+        "count: how many riders hang from the beam (count, 3 to 16).",
+        "swing: how far back the riders are held (rotation of each chain about the beam, 10° to 45°).",
+        "scale: the lengths of the tuned bars on the ground, longer for lower notes (shape)."
+      ],
+      "muted": "Riders sit still at the bottom, feet clear of the bars; the bars go ground grey.",
+      "reference": "library/theseus-tower",
+      "risks": "Stretch, and I don't think it earns the exception: the pendulum is already the performer, so a rider adds a character without adding a meaning, and figures invite idle animation and the drawing-quality trap toro hit. The only case for it is warmth: a row of swings reads instantly. A node can't tilt out of the screen's plane, so the swinging riders need pre-drawn poses per angle step, and 16 riders is a crowd."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:31:06"
+  },
+  "selection": null
+}

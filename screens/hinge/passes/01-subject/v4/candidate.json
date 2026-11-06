@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P1",
+  "drawing_language": "star atlas",
+  "subject": "The hinge cut in section at the pole of a half-planisphere graduated in degrees, its leaf standing on the meridian, and the swing plotted as an ephemeris: a track spiralling in from the leaf's tip, each turning point a star sized by how loud that pass is.",
+  "controls": [
+    "hold: the leaf's length and the radius where the track starts, 80 to 150 px (scale of the leaf, 1.9x).",
+    "creak: the track sticks and slips: smooth arcs become stepped runs where the angle holds while the radius falls, and the turning stars split into close pairs (shape of the track).",
+    "swing: how many turning points the track plots before it reaches the pole, 3 to 13 (count of stars and turns).",
+    "mix: the stars' magnitude, 0.6x to 1.4x of their size, as an atlas sizes stars by brightness (uniform scale of the star nodes, 2.3x)."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "Star atlas is a liberty for a section drawing: the hinge in section is small and the chart does the talking, so it can read as a dial or protractor. The track is long (one 64-point outline is coarse for 6+ turns; it needs two or three mutable outlines, re-keyed on hold, creak and swing turns). Inner turns crowd near the pole at high swing. The graduated rim is static art and must stay quieter than the leaf."
+}

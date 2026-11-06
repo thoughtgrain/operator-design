@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "kiln",
+  "name": "Kiln",
+  "parameters": [
+    {
+      "id": "strike",
+      "label": "Strike",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "glaze",
+      "label": "Glaze",
+      "default": 0.3,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "crack",
+      "label": "Crack",
+      "default": 0.0,
+      "mapping": {"kind": "power", "maximum": 1, "exponent": 1.6},
+      "display": "percent"
+    },
+    {
+      "id": "fire",
+      "label": "Fire",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 1.0, "maximum": 1.24},
+      "display": "ratio"
+    }
+  ],
+  "presets": {
+    "Bowl": {"strike": 0.5, "glaze": 0.3, "crack": 0.0, "fire": 0.5},
+    "Porcelain": {"strike": 0.65, "glaze": 0.1, "crack": 0.0, "fire": 0.9},
+    "Raku": {"strike": 0.75, "glaze": 0.55, "crack": 0.6, "fire": 0.2}
+  },
+  "resources": {
+    "voiceBytes": 256,
+    "voiceAlignment": 16,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  }
+}

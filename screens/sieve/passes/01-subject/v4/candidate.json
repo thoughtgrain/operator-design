@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P4",
+  "drawing_language": "hidden-line isometric",
+  "subject": "An exploded column of eight round test sieves receding up and to the right, coarsest at the back, with the tray at the current mesh lit and holding the kept harmonics as grains.",
+  "controls": [
+    "mesh: which tray is lit (position along the stack, 27 px per step, 190 px end to end) and so how fine the grains it holds.",
+    "shake: the whole stack slides along its diagonal on the shaker (position, up to 24 px) and grains spill from the lit tray onto the trays in front.",
+    "keep: the height of the heap of grains on the lit tray (shape, 4 → 18 px).",
+    "mix: the feed spout behind the stack swings from aimed into it at 100 % to 60° aside at 0 % (rotation)."
+  ],
+  "reference": "library/toro-blocks (hidden-line isometric, black-filled wireframes, solid only where it matters)",
+  "risks": "The literal sieve stack is the easiest read of all five but tells the least about the sound: grains on a tray say 'sieve' more than 'harmonics'. Eight trays is past the pattern's 5–6 cap; at 16 px vertical spacing they hold apart at 1:1 but only just. Keep as heap height is small travel for a score-4 control."
+}

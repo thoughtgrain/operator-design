@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A wavefolder for any track: the signal is folded back on itself like paper, with symmetry and a soft paper limit."
+}

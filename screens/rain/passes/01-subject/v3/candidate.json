@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "pattern": "P14",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The roof itself is the loom: its tile columns are warp threads, one per note of the span, each bar of rain weaves a new row of tiles at the eave while older bars climb back toward the ridge, and a tile a drop struck stands up as a slab, solid where the puddle repeated it and wire where it was new.",
+  "controls": [
+    "rate: how many raised slabs each row carries (count): one in a bar at the slowest, nearly every tile at 8 a beat.",
+    "roof: how many warp threads (tile columns) the roof is wide (count, the eave fascia and ridge lengthening with it as position): one column at 0 st, eight at 12, capped at sixteen with the header naming the real span.",
+    "gust: each older row's hits are shifted along the threads by the drift the wind gave them (position), so a gusty bar shears the slab pattern into a diagonal toward the ridge.",
+    "puddle: how many of a row's slabs are repeats of the row in front, drawn solid down the cloth (shade and count, solid vs wire): all wire behind the first row at 0, solid columns climbing to the ridge at 100."
+  ],
+  "reference": "library/loom-pages/README.md (steps as warp threads, passes as rows receding, solid = locked, wire = generated); library/toro-blocks/README.md for the hidden-line slab build",
+  "risks": [
+    "Rows of slabs on a tile grid read close to a step grid, the panel craft.md warns about; the sloping roof plane and the eave/ridge are what make it a roof and not a sequencer matrix.",
+    "Rain has no bar structure of its own; rows-as-bars imposes one. Drops between bar lines need a rule for which row they land in.",
+    "Count is budget-heavy: 16 columns × 4 rows × 3 faces is 192 nodes before labels.",
+    "Roof and rate are both counts (threads vs slabs); they are different parts, but perceptibility has to show the thread count change isn't mistaken for density.",
+    "Muted state: the front row stays empty and every slab goes wire."
+  ]
+}

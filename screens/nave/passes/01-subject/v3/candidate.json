@@ -1,0 +1,19 @@
+{
+  "variant": "v3",
+  "pattern": "P3",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The reverb's decay as a hidden-line waterfall: twelve frequency slices from bass in front to treble at the back, each a wedge falling away along time.",
+  "controls": [
+    "nave: shape; every slice's tail lengthens along the time axis, 80 px at 0.4 s to 260 px at 12 s.",
+    "stone: shape across depth; the treble slices at the back shorten against the bass, to about a fifth of the bass tail on soft stone and nearly equal on hard stone, so the surface's back edge swings.",
+    "choir: shape along the tops; low diffusion breaks each wedge into separate echo peaks with notches between, high diffusion fills it into a smooth slope.",
+    "doors: position; the whole surface slides away from the bright direct-sound bar at the time origin, 8 to 68 px."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": [
+    "Three controls are shape on the same surface (P3's pitfall); they act on different dimensions (length, back edge, top texture), but at 1:1 nave and stone can be confused.",
+    "Twelve slices are twelve outlines and only four mutable paths exist: slices must become stepped node strips or pre-drawn variants, which the sketch ignores.",
+    "It's a waterfall plot: the nave itself never appears, so the 'stone nave' character has to come from the header names alone.",
+    "Slice spacing is ~9 px on screen; the back third reads as hatching at 1:1."
+  ]
+}

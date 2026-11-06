@@ -1,0 +1,206 @@
+{
+  "machine": "crease",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: patent section."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: star atlas."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "patternName": "One-bit ink",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": true,
+      "caution": "Figurative; toro moved off it to P10.",
+      "brief": "Subject built on P9 One-bit ink; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Figurative; toro moved off it to P10."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "drawing_language": "patent section",
+      "subject": "The signal as a strip of paper folded back on itself into plies, drawn as a patent figure of the stack seen obliquely, with the folded wave inked on the top ply.",
+      "controls": [
+        "crease: plies are added to the stack, 2 at x1 (one fold) to 6 at x5 and over, the top ply rising 22 px with each, and the wave on it folds more times; count of plies (position of the top ply), shape of the top trace.",
+        "sym: alternate plies run long and short so the creases fall off-centre, the ends sliding up to 22 px either way; position of the crease ends.",
+        "paper: each crease in section goes from a sharp V to a round bend of half the ply gap; shape of the crease profiles.",
+        "mix: the trace on the top ply relaxes from the folded wave back to the plain sine it started as; shape of the trace, the only control that touches it alone at crease x1."
+      ],
+      "reference": "library/theseus-tower (stacked line drawing of a known object, black bodies behind grey outlines)",
+      "risks": "Crease and mix both reshape the one trace on the top ply, so mix needs its own second cue (the ply outlines dimming toward the dry state is the candidate) or it reads as a weaker crease. Count steps a ply at a time (x2, x3, x4, x5), so crease needs the new ply to ease in from under the stack or it's an on/off change per step; six plies at 22 px reach y 48 and fill the body's height. Opaque plies hide everything but their front edges, so the lower plies read as strips and the back creases are hidden. Patent numerals (10, 12, 14) are honest to the language but are three labels for one subject. Plies are parallelograms, so the oblique projection has to be computed (craft.md, Think in 3D), not nudged; this sketch does that, but the crease arcs are only approximately tangent."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "drawing_language": "hidden-line isometric",
+      "subject": "A hidden-line isometric field of slabs whose heights are the fold surface, the input swept across and its level rising front to back, so the creases run through the field as lit ridges.",
+      "controls": [
+        "crease: the back rows fold into more terraces, 1 ridge at x1 to 7 at x8, the front staying a gentle slope; shape (slab heights).",
+        "sym: the ridges slide sideways and the terraces go uneven, high on one side and low on the other; shape (heights) with position of the lit crest slabs.",
+        "paper: ridges go from knife-edge crests (one slab at the top) to broad rounded shoulders (three or four slabs near the top); shape (heights near the crests), crest count as second cue.",
+        "mix: the field relaxes from folded terraces toward a single plain ramp, with fewer hollow slabs; shape (heights), hollow/solid palette as second cue."
+      ],
+      "reference": "library/toro-blocks (P10 worked example: the model is the drawing)",
+      "risks": "It's toro's visual language on another machine: the brief says not to copy another machine's drawing, and an isometric slab field from the same pattern will look like a sibling, not a new screen. All four controls are shape-of-heights, so they're told apart only by where and how the heights change (back rows, side shift, crest width, overall ramp); paper is the weakest and will need its crest-count cue to clear the floor. 70 slabs x 3 nodes = 210 nodes before the header. Heights over the swept input are a transfer surface, which is truthful but static: notes on an effect have no key position to act on, so note response has to come from the track's level."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "drawing_language": "star atlas",
+      "subject": "The folded signal's harmonics charted as a band of sky across an atlas plate, one column of square cells per harmonic lit about the equator as far as it is strong, odd columns only while sym is centred.",
+      "controls": [
+        "crease: the band reaches further east, from harmonic 1 alone at x1 to bright cells past harmonic 15 at x8; count of lit columns.",
+        "sym: the dark even columns fill in as even harmonics appear, from stripes to a solid band; count in the alternate columns (pattern).",
+        "paper: the band's eastern half sinks from lit cells to the grey layer as soft folds roll the upper harmonics off; count moved between lit and grey layers.",
+        "mix: the band thins toward the equator, every column but the first losing rows as the wet signal drops; run length per column (rows lit)."
+      ],
+      "reference": "opxy/reference/README.md (dissolve, in detail: one uniform cell field)",
+      "risks": "Gate 0 and P15's own pitfall: a wavefolder isn't texture, it has a mechanism (the fold), and a cell-per-harmonic grid is a spectrum analyser, which is the dashboard-of-meters failure the subject gate rejects. The atlas language sits on it as a frame and tick labels rather than being in the cells; stars on a plate aren't square. Crease and paper both move the band's eastern edge (one adds, one dims), so paper must stay on the lit/grey swap or the two read as one control. Harmonic magnitudes need a DFT per control change on the device, cheap at 19 bins but not free."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "drawing_language": "engineering schematic",
+      "subject": "A folding press drawn in section as an engineering schematic: the paper web festooned over a fixed upper bank of rollers and under a lower bank that drives down between them as far as the signal is pushed past the edge.",
+      "controls": [
+        "crease: the lower roller bank drives down from 12 px to 120 px below the upper bank and the web's loops deepen with it, the depth dimension on the right following; position of the bank, shape of the web.",
+        "sym: the lower bank slides sideways up to 26 px either way so the loops lean and go uneven; position.",
+        "paper: every roller grows from a 4 px pin (a sharp crease) to a 14 px drum (a soft round bend) and the web's turns round with it; uniform scale of the rollers, shape of the web at the turns.",
+        "mix: the diverter blade at the infeed swings 50 degrees from sending the web into the press to dropping it on the straight dry path under the rail, the festooned web dimming as it goes; rotation."
+      ],
+      "reference": "library/theseus-tower (line drawing of a mechanism, one bright part, grey structure)",
+      "risks": "The press is a metaphor for folding, not the signal: the web's loops don't trace the output wave, so a player who knows wavefolders sees a machine, not a waveform. Crease mostly moves the lower bank and the web's depth, which is honest (more drive, deeper fold) but it doesn't add folds; the count of loops is fixed at three. The web is one ribbon of 31 centre points and every control re-keys it (it's the only mutable outline, so fine on budget, but every turn redraws it). The hatched rails and hangers are a lot of hairline structure; at 1:1 they risk competing with the web. The mix blade is small (22 px); at 0 the web needs a second drawn path along the dry route, which is a second mutable outline."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "drawing_language": "oscilloscope trace",
+      "subject": "A paper streamer folded into the shape of the output wave and inked as a one-bit print, front of the paper light dither and back dense, standing on an oscilloscope graticule where the trace would be.",
+      "controls": [
+        "crease: the streamer folds more times across the screen, 2 panels at x1 to 15 or more at x8, every fold a hard white edge; shape of the panel outlines, count of panels.",
+        "sym: the scope's trace-position marker on the left edge rides up and down by up to 35 px and the folds go uneven, tall panels on one side and short on the other; position of the marker, shape of the strip.",
+        "paper: the folds' corners go from knife creases to soft rolled edges, the short panels at each fold widening; shape at the fold lines.",
+        "mix: a plain grey sine (the dry signal) rises behind the streamer as mix drops, and the streamer flattens toward it; count/state of the dry trace (absent at 100, as toro's steam is absent at rest), shape of the strip."
+      ],
+      "reference": "opxy/reference/toro-ink-rest.jpg (P9 one-bit ink on the device)",
+      "risks": "Stretch, and it only half earns it. The exception: crease's subject is a material with two faces, and folding is what makes the back of the paper show, which the one-bit language can say with two dither densities better than greys can; one-bit print is also paper's own medium. Where it fails: P9's dither only lives in still artwork, and here the strip's panels change shape with every control, so on the device they'd be flat palette greys with a white outline, losing the look that justifies the pattern (only the sketch is dithered). The panels overlap where the strip doubles back, and painter's order by time isn't depth order, so some folds will draw over the wrong face. P9 wants a figure; a streamer is barely one, and the scope graticule is a second language competing with the print. Caution from the catalog stands: toro moved off P9 to P10."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.16,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:28:00"
+  },
+  "selection": null
+}

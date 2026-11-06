@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.7",
+  "kind": "effect",
+  "description": "A bucket-brigade delay with failing stages: a chain of charge buckets passes the signal along on each clock tick; some buckets leak, the clock wanders, and the output recirculates to the input."
+}

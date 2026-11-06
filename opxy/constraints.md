@@ -64,7 +64,7 @@ Grey is the default here, on purpose. The OP-XY's own screens are grey, and the 
 | `palette` | 1–16 | [display] |
 | Node scale | Uniform only, positive, ≤ 2 | [display] |
 | Node turn | Unit vector; `sweep(value, half)` up to ±1800 tenths of a degree | [display] |
-| Redraw | ~**20 changed nodes per frame** on average while notes sound, low peak, at every setting including the heaviest; **zero at rest**. open-xy's CPU profiling leaves graphics out, so this cost only shows on the device | [ux] |
+| Redraw | ~**20 changed nodes per frame** on average while notes sound (release tails included), low peak, at every setting including the heaviest; **zero at rest**. Rest starts when the last note's animation has finished, not at the note-off: motion can fade out with the note (`hold_ended` begins its release; on SDK 1.10 a synth can pace it from `amp`'s release), as long as it reaches a still frame and stops changing nodes. open-xy's CPU profiling leaves graphics out, so this cost only shows on the device | [ux] |
 | Path keys | Change a path's `key` only when its points change. A key that includes time redraws the whole path every frame. | [display], [ux] |
 | Moving fills | Expensive. Allowed where they earn it; check heavy ones on the device. | [ux] |
 
@@ -79,7 +79,7 @@ Grey is the default here, on purpose. The OP-XY's own screens are grey, and the 
 | Fills | Only elements authored with a fill ever fill; paint recolours a fill but never adds or removes one. A mutable outline authored `fill="none"` draws hollow; one authored with an explicit `#RRGGBB` fill stays filled, and may only have one when its geometry encloses area | [display] |
 | Subpaths | Every `path`, bound or not: one subpath, ≤ 64 points | [display] |
 | Touching parts | Parts that meet share one outline or the same pivot/transform | [display] |
-| Bound path shape | Exactly `M`, `points − 1` × `L`, `Z`; no fill; every point distinct | [display] |
+| Bound path shape | Exactly `M`, `points − 1` × `L`, `Z`; `fill="none"`, or an explicit `#RRGGBB` fill when the outline encloses area (Fills, above); every point distinct; every mutable outline in a frame has the same point count | [display] |
 | Bound transforms | `matrix(1 0 0 1 x y)` or none | [display] |
 | Mutable outline extent | Points within ±64 px of the node's origin (place the node, author points relative to it) | [display] |
 | Numbers | ≤ 4 fractional digits, no exponent notation | [display] |

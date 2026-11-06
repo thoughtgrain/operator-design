@@ -1,0 +1,206 @@
+{
+  "machine": "bellows",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: oscilloscope trace."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "survey plan",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: survey plan. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "drawing_language": "engineering schematic",
+      "subject": "The wind chest drawn as a schematic plenum of square cells, the air under pressure a lit mass rising from its floor, with the two reed ports on its lid.",
+      "controls": [
+        "press: how high the lit air stands in the plenum (count of lit rows, 1.5 to 6 of 6), the dimension line beside it following; position plus count.",
+        "reed: the surface of the lit mass, from long flat runs (stiff, closed reed) to short choppy steps (open, bright reed), and the two port tongues lift; shape of the run length.",
+        "leak: the seam on the right wall opens and grey cells bleed out of the mass through it and up the wall, 0 to about 14 cells; count in the grey layer.",
+        "choir: vertical beat bands sweep the mass, lit columns dimming to grey in 0 to 4 bands as reed b detunes from reed a; count of bands (pattern across columns), shade as second cue."
+      ],
+      "reference": "opxy/reference/README.md (dissolve, in detail)",
+      "risks": "Gate 0 fights it: P15 is for sounds that are texture, and bellows has a mechanism (it's air, but air in a box with reeds). The cells read as a level meter if press is the only thing that moves, which is a dashboard; choir as bands and leak as grey cells are both 'how much grey', so one of them must ride run length or position, as P15 warns. Hollow schematic squares plus solid cells is two looks on one grid; at 1:1 the hollow ones could read as a hatch. 96 cells is cheap on nodes but a press turn redraws a whole row of 16 at once."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "drawing_language": "oscilloscope trace",
+      "subject": "The bellows and its reed block cut open and plotted on a scope graticule, the pleats a triangle trace that closes as pressure rises and the reed tongue a bright stroke lifted over its slot.",
+      "controls": [
+        "press: the moving board slides left and the pleats close up, the bellows shortening from 250 to 140 px; position of the board, shape of the pleat traces.",
+        "reed: the bright tongue over plate a swings open from 6 to 32 px at its tip; rotation about its rivet.",
+        "leak: a dotted breath trace streams out between the lower pleats, 0 to about 16 dots and longer as it rises; count.",
+        "choir: the second tongue on plate b lifts out of unison and its rivet slides along the plate, 0 to 30 px; position, with a ghost beat-trace across ch2 while playing."
+      ],
+      "reference": "library/theseus-tower (line drawing of a known object, one part moves)",
+      "risks": "Two languages pulling: a section drawing wants solid cut faces and hatching, a scope wants one phosphor line on a graticule. The graticule is 11 x 5 hairlines across the body and could read as a dashboard grid behind the drawing; it may need to drop to corner ticks. The pleats are the brightest thing, not the reed that sings; at 1:1 the tongue is a 2 px stroke 90 px long, which is right but small. Press both moves a board and reshapes two traces, so its key changes on every press turn (two paths re-keyed)."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "drawing_language": "typeset diagram",
+      "subject": "A two-figure textbook plate: on the left a weighted wedge reservoir feeding reeds a and b through a wind trunk, on the right the output wave under its envelope, sagging mid-stroke and recovering.",
+      "controls": [
+        "press: the weight on the wedge's top board drops and the board closes from 26 to 8 degrees, while the trace on the right grows in height; rotation of the board (left), the trace's scale as second cue.",
+        "reed: the wave on the right goes from nearly a sine to a sharp pulse with its upper partials; shape of the trace, the two tongues lifting as a small echo on the left.",
+        "leak: breath leaves the wedge's open mouth as a short column of dots (0 to 12) and the envelope line goes rough; count on the left.",
+        "choir: the envelope over the trace pinches into beats, 0 to 4 waists across fig. 2; shape of the envelope line, separate from the trace."
+      ],
+      "reference": "library/toro-blocks (the model is the drawing: the trace is computed from the voice)",
+      "risks": "P2 splits the body, so the screen is two smaller pictures rather than one subject; the eye may not know which to read first. Press moves both the board and the trace height, which risks two parts on one control looking like two controls. The figure captions (fig. 1, fig. 2) are honest to a typeset plate but are two extra labels; at 10 px #7D7D7D they're legible but busy. A 200 px trace with five cycles is fine at 64 points; more cycles at higher pitch would not be."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "drawing_language": "orthographic elevation",
+      "subject": "The reed's wave drawn in elevation like a facade standing on a datum, its roofline held up by the wind line of the bellows, which sags mid-stroke and recovers.",
+      "controls": [
+        "press: the wind line rises from 30 to 100 px over the datum and the whole wave stands taller under it, the dimension at the right following; scale and position of the wind line.",
+        "reed: the wave's profile goes from rounded arches to tall narrow piers as upper partials come in; shape of the bright trace.",
+        "leak: a rough band of breath grows along the datum under the wave, 0 to 14 px tall; shape of a second path (the noise band).",
+        "choir: a grey second wave behind the first slides out of phase and its piers drift against the bright ones into 0 to 4 beat groups across the width; shape and position of the ghost path."
+      ],
+      "reference": "opxy/reference/README.md (wavetable: a single white trace is the sound)",
+      "risks": "P3's own warning: it can drift into 'oscilloscope', and an elevation only differs by its ground line, datum ticks and level mark. Three of four controls are shape on paths (trace, breath band, ghost), which is the four-path budget nearly used, and a held note can't re-key them each frame: note response must be node scale on the trace. Rectifying the wave above the datum is a drawing choice, not what the sound does; the shape is truthful, the baseline is not."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "drawing_language": "survey plan",
+      "subject": "A survey plan of the reed's cycle: one surveyed ring round the wind chest, with reeds a and b as two stations on it whose angle apart is the beat.",
+      "controls": [
+        "press: the ring's radius grows from 52 to 92 px (and with it the stations' distance from the chest); scale.",
+        "reed: the chainage ticks round the ring go from 12 to 36; count.",
+        "leak: the ring breaks into a dashed run on its lower side, 0 to 10 gaps, with short bearing lines escaping through them; count.",
+        "choir: station b leaves station a and travels round the ring, 0 to 150 degrees apart; rotation. While a note is held the two stations orbit at their two rates, so the gap opens and closes at the beat rate."
+      ],
+      "reference": "library/meikyu-orrery (P12 worked example)",
+      "risks": "Stretch, and only half earns it. The exception: choir is two reeds a few cents apart, and two bodies on one orbit at slightly different rates is literally what beating is, so the orbit is true for choir and, held, shows the beat at the beat rate. It doesn't fit the rest: press as ring radius, reed as tick count and leak as gaps are scenery bolted to the orrery, the failure P13 warns about (Dens and Crpt fit, Scal and Kit didn't). There's no cycle of items here, just two. A plan is flat by definition, so craft.md's 'think in 3D' doesn't apply, but it also loses the orrery's depth. Constant orbital motion while notes are held is a big redraw cost only if the ring itself moves; it doesn't."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:19:11"
+  },
+  "selection": null
+}

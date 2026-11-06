@@ -23,4 +23,6 @@ If the `operator-design` MCP server is connected (`.mcp.json`, or `python3 mcp/s
 - When a decision is the person's (which subject, which control gets the most travel, which of five variants, whether a training proposal lands), ask. Don't guess past the brief.
 - Every generative design pass is exactly five unique variants, each from its own direction (`opxy/protocol.md`, Iterations). Run them as five parallel `opxy-designer` agents when you can.
 - Know the machine's category (`opxy/categories.md`) before proposing subjects, and start from the patterns that fit it.
+- toro-blocks and theseus-tower are precedents: audited screens that work. Don't change the guidelines or the tools in a way that makes either fail; the test suite checks their frames, and the reviewer checks the prose.
+- Stock-look guidance is defaults, not law. Break one with a sentence saying why; keep room for ways of drawing that aren't on any list yet.
 - Never approve a training proposal. Approval is the person's, from `python3 mcp/train.py approve`.

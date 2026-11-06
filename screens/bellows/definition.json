@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "id": "bellows",
+  "name": "Bellows",
+  "parameters": [
+    {"id": "press", "label": "Press", "default": 0.5,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 1}, "display": "percent"},
+    {"id": "reed", "label": "Reed", "default": 0.4,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 1}, "display": "percent"},
+    {"id": "leak", "label": "Leak", "default": 0.0,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 1}, "display": "percent"},
+    {"id": "choir", "label": "Choir", "default": 0.0,
+     "mapping": {"kind": "power", "maximum": 0.4, "exponent": 2}, "display": "semitones"}
+  ],
+  "presets": {
+    "Plain": {"press": 0.5, "reed": 0.4, "leak": 0.0, "choir": 0.0},
+    "Musette": {"press": 0.65, "reed": 0.55, "leak": 0.15, "choir": 0.55},
+    "Harmonium": {"press": 0.35, "reed": 0.25, "leak": 0.35, "choir": 0.2}
+  },
+  "resources": {
+    "voiceBytes": 64,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 64,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P1",
+  "drawing_language": "star atlas",
+  "subject": "The bowl cut through a–a as a bright section, with its ringing modes charted above it as a star chart along an ecliptic and the mallet plotted as a meteor trail falling onto the rim.",
+  "controls": [
+    "strike: rotation — the meteor trail pivots on its impact point at the rim, from a shallow glancing 15° at 0 to a steep 70° at 100, and lengthens with it.",
+    "glaze: position — the level of glaze pooled in the well (the meniscus line inside the section) rises from the foot to about half the wall, ~40 px.",
+    "crack: shape — a fissure opens in the right wall of the section (the band splits, gap up to 18 px), and each mode star splits into a double star whose companions part along the ecliptic.",
+    "fire: scale — the stars' magnitudes: upper-mode stars grow from barely plotted (1.5 px) to ~2× as the fired body rings brighter and longer, and the stars slide right as the modes stretch."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "Two languages could fight: a patent section and a star chart. The bowl must stay the subject (brightest, centred) and the chart its caption, or it reads as two pictures. crack does two things (fissure + double stars); keep the fissure primary. The meteor trail risks reading as a pointer/icon unless kept a tapering plotted trail with a radiant. The upper stars are 2 px at rest, under the 3–4 px part floor; fire 0 must hide rather than shrink below it. Labels n2–n7 must stay static."
+}

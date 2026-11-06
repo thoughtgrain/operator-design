@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "beacon",
+  "name": "Beacon",
+  "parameters": [
+    {
+      "id": "pulse",
+      "label": "Pulse",
+      "default": 0.25,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "lens",
+      "label": "Lens",
+      "default": 0.7,
+      "mapping": {"kind": "power", "maximum": 0.995, "exponent": 0.5},
+      "display": "percent"
+    },
+    {
+      "id": "sweep",
+      "label": "Sweep",
+      "default": 0.2,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 12},
+      "display": "semitones"
+    },
+    {
+      "id": "fog",
+      "label": "Fog",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Clear": {"pulse": 0.25, "lens": 0.7, "sweep": 0.2, "fog": 0.0},
+    "Harbour": {"pulse": 0.45, "lens": 0.88, "sweep": 0.5, "fog": 0.6}
+  },
+  "resources": {
+    "voiceBytes": 12288,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 32,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P3",
+  "drawing_language": "engineering schematic",
+  "subject": "The wave itself, cut through the plate along the line from strike to pickup and drawn as a beam between two fixed supports, with a force arrow, a probe to the output terminal and a dimensioned span.",
+  "controls": [
+    "size: position, the supports move apart from a 120 px to a 380 px span and the dimension line follows, letting more half-waves fit.",
+    "tension: shape, the trace goes from a few broad bows to a stiffer, crinkled outline as upper modes stretch away.",
+    "damp: scale, the trace and its dashed envelope shrink from 44 px of swing to about 15 px.",
+    "pickup: position, the probe and its lead to the 'out' terminal slide along the span from the strike arrow toward the far support."
+  ],
+  "reference": "library/theseus-tower (clean primitives, one line weight system) beside a stock waveform engine screen",
+  "risks": "P3's own pitfall: it can drift into 'just an oscilloscope', and a 1D cut throws away the plate's second dimension, which is the whole idea of the machine. At rest the snapshot can sit nearly flat (the default looks calm, maybe too calm); damp as amplitude reads as 'level'. Schematic furniture (title block, chain line) is quiet but adds parts that no control owns."
+}

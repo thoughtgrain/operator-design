@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "patent section",
+  "subject": "A glass settling column cut open like a patent figure, its partial strata stacked from the bed up to a bright interface, a hinged stirring arm and suspended grains above.",
+  "controls": [
+    "settle: position; the bright interface between settled strata and suspension sits low for a fast settle and high for a slow one (about 100 px).",
+    "layers: count; one stratum line per partial from the bed up, to the interface (capped near 24 visible).",
+    "stir: rotation; the stirring arm swings on its pivot from hanging straight (0) to 40 degrees (100).",
+    "grain: scale; the suspended particles grow from 3 px to 6 px."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": [
+    "Stretch: P11 is for instruments people know by sight, and a settling column (Imhoff cone, elutriation tube) isn't one most players know; recognition is not free here, so the pattern's main reason doesn't hold. Honest verdict: it doesn't fit the pattern well; it survives as a section drawing (closer to P1) of the machine's own metaphor.",
+    "Layers counted as strata loses legibility past ~24 lines; strata hide above the interface at slow settle.",
+    "The arm rotating is a literal stir, but stir in the DSP lifts high partials; the arm angle doesn't show which partials rise.",
+    "Hatched walls are many small static paths; fine for budget but check hatch spacing (5 px) on device."
+  ],
+  "stretch": "Doesn't fit P11 honestly: silt has no instrument the player knows by sight. The column is the machine's own metaphor drawn as an instrument; keep it only if the owner wants a literal object."
+}

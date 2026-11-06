@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P4",
+  "drawing_language": "patent section",
+  "subject": "The signal as a strip of paper folded back on itself into plies, drawn as a patent figure of the stack seen obliquely, with the folded wave inked on the top ply.",
+  "controls": [
+    "crease: plies are added to the stack, 2 at x1 (one fold) to 6 at x5 and over, the top ply rising 22 px with each, and the wave on it folds more times; count of plies (position of the top ply), shape of the top trace.",
+    "sym: alternate plies run long and short so the creases fall off-centre, the ends sliding up to 22 px either way; position of the crease ends.",
+    "paper: each crease in section goes from a sharp V to a round bend of half the ply gap; shape of the crease profiles.",
+    "mix: the trace on the top ply relaxes from the folded wave back to the plain sine it started as; shape of the trace, the only control that touches it alone at crease x1."
+  ],
+  "reference": "library/theseus-tower (stacked line drawing of a known object, black bodies behind grey outlines)",
+  "risks": "Crease and mix both reshape the one trace on the top ply, so mix needs its own second cue (the ply outlines dimming toward the dry state is the candidate) or it reads as a weaker crease. Count steps a ply at a time (x2, x3, x4, x5), so crease needs the new ply to ease in from under the stack or it's an on/off change per step; six plies at 22 px reach y 48 and fill the body's height. Opaque plies hide everything but their front edges, so the lower plies read as strips and the back creases are hidden. Patent numerals (10, 12, 14) are honest to the language but are three labels for one subject. Plies are parallelograms, so the oblique projection has to be computed (craft.md, Think in 3D), not nudged; this sketch does that, but the crease arcs are only approximately tangent."
+}

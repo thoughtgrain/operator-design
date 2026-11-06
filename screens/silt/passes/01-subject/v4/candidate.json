@@ -1,0 +1,19 @@
+{
+  "variant": "v4",
+  "pattern": "P5",
+  "drawing_language": "survey plan",
+  "subject": "A survey plan of a settling basin: a bright silt plume spreading from the inlet over the faint contoured bed, with its deposit lens on the flow line and one chainage station per partial along the foot.",
+  "controls": [
+    "settle: scale; the plume grows from 0.7x to 1.3x along the flow line (slow-settling silt stays suspended and travels further).",
+    "layers: count; chainage stations along the bottom strip, one tick per partial, every fourth numbered.",
+    "stir: shape; the plume's edges lobe and billow (high partials lifted) from a smooth fan to a churned outline.",
+    "grain: position; the deposit lens slides upstream toward the inlet as grain coarsens (coarse grains drop out first), about 100 px."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": [
+    "The strip of stations is close to a 'strip of cells' at rest (craft: picture, not panel); it earns its place only because it is the partial count.",
+    "Contours under 1.5 px (hairline field, lint warns) may vanish on the panel; check on device.",
+    "The plume is a metaphor for the spectrum, not a plot of it: stir lobing doesn't literally show which partials lifted.",
+    "A blob outline can slide toward an organic or icon-like shape (an earlier draft read as a fish); keep it a fan."
+  ]
+}

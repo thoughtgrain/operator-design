@@ -1,0 +1,19 @@
+{
+  "variant": "v1",
+  "pattern": "P3",
+  "drawing_language": "survey plan",
+  "subject": "The output itself, traced bright along a chained survey baseline: each input pulse below the chain rings into a run of teeth one comb period apart, surveyed from a station whose bearing ray is the rotating light.",
+  "controls": [
+    "pulse: the grey input pulse train under the chain line widens its pulses, and the bright teeth above widen with them (shape of the input path; the output tooth width follows as a second cue).",
+    "lens: the number and height of teeth each pulse rings into (shape of the bright output trace): one lone spike per pulse at 0, a long even run that fills the gap to the next pulse at 100.",
+    "sweep: the bearing ray from station a swings up from the chain line, with its angle arc (rotation, 8 to 48 degrees), and the tooth spacing breathes along the chainage as a second cue.",
+    "fog: grey survey contours roll in over the plan from the right edge, one more line every ~15 % (count), and the teeth tips flatten as the trace is low-passed."
+  ],
+  "reference": "library/meikyu-capture/README.md (labelled wireframe ground, thin rails, mid-grey text that makes it read as authored)",
+  "risks": [
+    "P3's own pitfall: at a glance it reads as an oscilloscope; the survey furniture (chain, chainage figures, station, offsets) is what makes it a plan and it has to stay.",
+    "Two controls (pulse, lens) both touch the bright trace; the rule holds only because pulse's primary is the grey input path. Perceptibility must prove it.",
+    "Fog by contour count is empty at the default 0, so the rest frame never shows fog; a contour lines' layer fighting the trace at 100 is untested.",
+    "Teeth 18 px apart at lens 100 approach hatching density; keep the comb period on screen ≥ 12 px whatever the note."
+  ]
+}

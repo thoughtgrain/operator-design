@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P4",
+  "drawing_language": "survey plan",
+  "subject": "Survey sheets of each port's harbour stacked diagonally in the order the route calls at them, the front sheet the port the ferry is berthed at, its berth drawn as long as the dwell.",
+  "controls": [
+    "route: the order the sheets stack in, read from the port names on their edges (C4 E4 G4 C5 for up, reversed for down); position of each sheet in the stack.",
+    "ports: how many sheets are stacked, 2 to 8 (6 visible, the deepest two hidden behind the sixth with a count), so the stack grows up and to the right; count.",
+    "swell: the depth contours on the front sheet wander off their smooth lines and the ferry swings on its berth; shape of the contours.",
+    "dwell: the dashed berth on the pier lengthens from 16 px at 1/32 to 42 px at 1/2; shape of the berth."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "Stretch, and it mostly doesn't fit. P4 is a stack the sound scans through continuously; a player steps, so each note becomes a slide change that swaps the whole front sheet, the opposite of P4's cheap shade-only layers. The case for it: the ports are an ordered set like wavetable frames and the route is a scan order through them, so a stack is a literal picture of route x ports. But route then rides on text labels on the sheet edges, which is reading, not seeing, and swell and dwell sit on one small sheet. The front sheet's coast and contours are generic (every port is the same drawing), so nothing about C4 vs G4 is shown. Muted: the front sheet drops back into the stack's grey."
+}

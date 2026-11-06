@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A Galton board player on aux track 12: marbles drop through rows of pegs into bins pitched on a scale, and the pile they make is the distribution of notes sent to the target track."
+}

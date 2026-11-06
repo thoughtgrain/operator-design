@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P2",
+  "drawing_language": "orthographic elevation",
+  "subject": "Gear pair in front elevation on the left, with centre lines, pitch circle and datum, and the bent output wave it produces on the right, structure under encoders 1-2 and tone under 3-4.",
+  "controls": [
+    "ratio: the driver's rim grows against the wheel and its centre walks off left (position + scale of the driver); on the right the wave carries more humps per cycle as a side effect.",
+    "teeth: the wheel's tooth count steps 3 to 24 (shape of the wheel outline), and the tick row under the trace counts teeth passed per cycle (count, ratio x teeth).",
+    "wear: the trace's step corners round off and its kinks soften into a smooth bend; shape of the trace, the corners are where some point moves 16 px or more.",
+    "bite: the trace bends from a plain windowed sine at 0 into a hard staircase at 100; shape of the trace's amplitude between the steps."
+  ],
+  "reference": "opxy/reference/README.md",
+  "risks": "Wear and bite both act on the one trace path (shape on the same part), which the channel rule forbids; at subject stage the fix is to give wear a structural mark on the left too (tooth tips rounding on the wheel) and keep bite on the trace, but then teeth and wear share the wheel. Grey elevation on the left can read as a dashboard of two panels if the trace isn't clearly the brightest thing. The driver rim's teeth are only seen as an arc, which reads as a bracket at ratio near 1."
+}

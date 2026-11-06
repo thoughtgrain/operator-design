@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "pattern": "P14",
+  "drawing_language": "survey plan",
+  "subject": "A survey plan of the colony's recent passes, eight step stations across, each pass plotted as one traverse whose height on its row is the degree it played, the newest at the front and older ones stepping back and greying, so a phrase that has set shows as the same line repeated down the plan.",
+  "controls": [
+    "ants: count, the ant marks walking the newest traverse between its stations, 1 to 8, one per leg the ants are on; at 8 every leg of the front pass carries a body.",
+    "scent: shape, how alike the passes are: at 0 each older traverse wanders off the front one by up to three degrees per station (≥ 16 px), at 100 all rows lie as copies of the same line.",
+    "fade: count + shade, how many past passes are still plotted behind the front one, six at 0 to none at 100, each older row one grey step darker and on a finer line.",
+    "scale: shape + count, the degree ruler at the left margin and the height step per degree: pent quantises the traverses to 5 levels per octave with coarse steps, chrom to 12 with fine ones, so every row redraws finer or coarser."
+  ],
+  "reference": "library/loom-pages",
+  "muted": "Muted: the newest traverse and its stations drop to the oldest row's grey and the ants are hidden; the plotted history stays, so the player sees what will resume.",
+  "risks": "The plan is honest but cool: at 1:1 it reads close to a line chart with a history, and the 'picture, not panel' rule is the one it leans on hardest. Loom's own strength (slabs and depth) is given up for a flat plan, so depth-as-earlier is carried only by row position and grey steps. Eight stations assumes an eight-step phrase; the machine's phrases are whatever the trail makes, so the station count would come from the trail's length, and a long trail crowds the plan. Each row is one mutable outline and there are only 4 paths, so at most four rows can change shape; older rows have to be frozen copies."
+}

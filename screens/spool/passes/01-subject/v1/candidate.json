@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P2",
+  "drawing_language": "typeset diagram",
+  "subject": "A labelled diagram of the tape path on the left (loop, capstan, tension roller, record and play heads) with the cycle the play head reads drawn large on the right.",
+  "controls": [
+    "wear: the right-hand trace loses its corners and opens two dropout notches, with the cycle as written ghosted in #4B4B4B behind it (shape, one mutable trace).",
+    "wow: the flutter arm resting on the loop's top run swings about its pivot, 0 to 36 degrees (rotation).",
+    "length: the tension roller slides right and the loop stretches with it, 80 to 180 px between roller centres (position).",
+    "bias: the field lines fringing from the record-head gap into the tape grow from 0.55x to 1.45x (scale)."
+  ],
+  "reference": "library/meikyu-capture",
+  "risks": "Hands and screen disagree: P2 wants structure on knobs 1-2 and tone on 3-4, but spool's order puts wear (a trace control) first and length (a structure control) third, so the screen splits left/right while the controls interleave. The left diagram is small at 1:1 (rollers 34 px) and sparse beside the trace; rotating the wow arm lifts its roller off the tape, which is not what wow does physically, so a frames pass should find a truer motion (the arm pressing the run into a dip, say). Wear is the 5-score control but only moves the right half. A ~200 px trace is wider than one mutable outline can be (points within +-64 px of the node), so it needs 2 of the 4 paths."
+}

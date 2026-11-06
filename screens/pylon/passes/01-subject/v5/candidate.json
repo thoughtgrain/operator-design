@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P14",
+  "drawing_language": "oscilloscope trace",
+  "subject": "A scope screen weaving the wire's recent shapes into cloth: the newest displacement trace bright at the front, older ones receding row by row, warp threads through the nodes that held.",
+  "controls": [
+    "wind: shape — the front trace and every row behind it change loop count with the locked mode; warp threads follow the nodes.",
+    "span: position — the history recedes deeper (6 → 22 px per row), a long span ringing longer.",
+    "gust: shape (variance between rows) — rows stop agreeing on their loop count, so the warp columns break; at 0 every row shares its nodes.",
+    "hum: scale — the ch2 mains trace on the bottom division grows from flat to a 10 px sine."
+  ],
+  "reference": "library/loom-pages",
+  "risks": "Stretch, and mostly doesn't fit. P14 is for sequences and pylon has no steps; the only honest exception is gust, whose whole effect is change over time, and loom rows are one way to show variation in a still (steady wind = warp columns hold, gusts = rows wander). Against it: rows only advance while notes sound, so the rest frame is a memory; it reads as a waterfall/persistence scope, which is P3's 'says nothing new' pitfall; four rows plus the mains trace need five mutable outlines against a limit of 4 (hum would need pre-drawn variants)."
+}

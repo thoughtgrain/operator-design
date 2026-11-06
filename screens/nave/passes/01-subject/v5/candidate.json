@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "pattern": "P9",
+  "drawing_language": "engineering schematic",
+  "subject": "A one-bit church in side elevation, west tower, lancet-windowed nave and apse in hard white outline with dithered stone, annotated with schematic dimension and decay glyphs.",
+  "controls": [
+    "nave: shape (+ count); the nave wall and roof lengthen east about 150 px and lancet windows are added, one per bay, the apse riding at the end.",
+    "stone: tone + shape; the walls' dither level goes from sparse (soft, dark) to dense (hard, bright), and the decay glyph over the roof keeps its fine teeth longer on hard stone.",
+    "choir: count; a scatter of 4 px ink squares over the east end grows from 2 to 16.",
+    "doors: position; a dimension line from the west door to a first-reflection mark lengthens 14 to 84 px."
+  ],
+  "reference": "opxy/reference/toro-ink-rest.jpg",
+  "risks": [
+    "Stretch, and it only partly earns it: a church is recognisable by sight the way toro's bull was, and an effect page keeps one subject on screen so static dither is affordable; but nothing on the figure performs the sound, so the figure is a mascot and the controls end up on glyphs.",
+    "Dither can't change on the device (static art only), so stone's tone has to swap to flat greys; the sketch's dither is the look, not the build. Lint warns on ~1,700 2 px dither cells.",
+    "Mixing one-bit print with schematic callouts is two languages unless the glyphs are drawn in the same hard ink; the 'ring' squiggle and 'pre' dimension are close to icons.",
+    "Choir's ink squares mean nothing a player could guess; it's the weakest mapping of the five.",
+    "Figurative screens are where toro failed nine times (caution in pass.json)."
+  ]
+}

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <title>eddy v4 · P4 stack in depth · survey plan</title>
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none" stroke-width="0"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none" stroke-width="0"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none" stroke-width="0"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none" stroke-width="0"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none" stroke-width="0"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none" stroke-width="0"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none" stroke-width="0"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">spin</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0.82</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">flutter</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">depth</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">50</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">mix</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">100</text>
+  </g>
+  <g id="art">
+    <circle cx="310" cy="68" r="46" fill="#000000" stroke="#4B4B4B" stroke-width="1"/>
+    <path d="M 310.21 67.55 L 273.96 50.64 L 273.54 51.55 L 309.79 68.45 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+    <circle cx="273.75" cy="51.1" r="2.5" fill="#000000" stroke="#4B4B4B" stroke-width="1"/>
+    <circle cx="270" cy="86" r="46" fill="#000000" stroke="#4B4B4B" stroke-width="1"/>
+    <path d="M 269.71 85.59 L 236.95 108.53 L 237.52 109.35 L 270.29 86.41 Z" fill="#4B4B4B" stroke="none" stroke-width="0"/>
+    <circle cx="237.23" cy="108.94" r="2.5" fill="#000000" stroke="#4B4B4B" stroke-width="1"/>
+    <circle cx="230" cy="104" r="46" fill="#000000" stroke="#646464" stroke-width="1"/>
+    <path d="M 229.5 104.04 L 232.99 143.89 L 233.98 143.8 L 230.5 103.96 Z" fill="#646464" stroke="none" stroke-width="0"/>
+    <circle cx="233.49" cy="143.85" r="2.5" fill="#000000" stroke="#646464" stroke-width="1"/>
+    <circle cx="190" cy="122" r="46" fill="#000000" stroke="#646464" stroke-width="1"/>
+    <path d="M 189.79 122.45 L 226.04 139.36 L 226.46 138.45 L 190.21 121.55 Z" fill="#646464" stroke="none" stroke-width="0"/>
+    <circle cx="226.25" cy="138.9" r="2.5" fill="#000000" stroke="#646464" stroke-width="1"/>
+    <circle cx="150" cy="140" r="46" fill="#000000" stroke="#969696" stroke-width="1.5"/>
+    <path d="M 191 140.5 L 196 140.5 L 196 139.5 L 191 139.5 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 185.26 160.93 L 189.59 163.43 L 190.09 162.57 L 185.76 160.07 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 170.07 175.76 L 172.57 180.09 L 173.43 179.59 L 170.93 175.26 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 149.5 181 L 149.5 186 L 150.5 186 L 150.5 181 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 129.07 175.26 L 126.57 179.59 L 127.43 180.09 L 129.93 175.76 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 114.24 160.07 L 109.91 162.57 L 110.41 163.43 L 114.74 160.93 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 109 139.5 L 104 139.5 L 104 140.5 L 109 140.5 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 114.74 119.07 L 110.41 116.57 L 109.91 117.43 L 114.24 119.93 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 129.93 104.24 L 127.43 99.91 L 126.57 100.41 L 129.07 104.74 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 150.5 99 L 150.5 94 L 149.5 94 L 149.5 99 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 170.93 104.74 L 173.43 100.41 L 172.57 99.91 L 170.07 104.24 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 185.76 119.93 L 190.09 117.43 L 189.59 116.57 L 185.26 119.07 Z" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <path d="M 159.42 133.4 L 158.02 128.43 L 158.16 122.66 L 159.46 116.62 L 161.77 110.66 L 164.95 105.07 L 168.89 100.09 L 173.43 95.95 L 178.41 92.78 L 183.65 90.72 L 188.97 89.8 L 194.16 90.04 L 199.03 91.4 L 203.38 93.78 L 207.05 97.06 L 209.86 101.08 L 211.69 105.64 L 212.44 110.55 L 212.05 115.59 L 210.5 120.55 L 207.82 125.23 L 204.08 129.45 L 199.41 133.05 L 193.96 135.9 L 187.94 137.9 L 181.6 138.98 L 175.2 139.11 L 169.08 138.26 L 163.62 136.42 L 159.42 133.4 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1"/>
+    <path d="M 159.42 133.4 L 158.58 130.42 L 158.66 126.96 L 159.44 123.33 L 160.83 119.76 L 162.74 116.4 L 165.1 113.42 L 167.83 110.93 L 170.81 109.03 L 173.96 107.79 L 177.15 107.24 L 180.26 107.39 L 183.18 108.2 L 185.8 109.63 L 188 111.6 L 189.68 114.01 L 190.78 116.75 L 191.23 119.69 L 191 122.72 L 190.07 125.69 L 188.46 128.5 L 186.22 131.03 L 183.41 133.19 L 180.14 134.9 L 176.53 136.1 L 172.73 136.75 L 168.89 136.83 L 165.22 136.32 L 161.94 135.21 L 159.42 133.4 Z" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+    <path d="M 150.57 140.82 L 159.99 134.22 L 158.85 132.58 L 149.43 139.18 Z" fill="#CDCDCD" stroke="none" stroke-width="0"/>
+    <circle cx="150" cy="140" r="3" fill="#000000" stroke="#CDCDCD" stroke-width="2"/>
+    <text transform="matrix(1 0 0 1 106 204)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">rev 0</text>
+    <text transform="matrix(1 0 0 1 362 72)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">rev -4</text>
+    <text transform="matrix(1 0 0 1 380 160)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">brg 325</text>
+    <rect x="380" y="196" width="60" height="1" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <rect x="379.5" y="192" width="1" height="5" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <rect x="409.5" y="192" width="1" height="5" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <rect x="439.5" y="192" width="1" height="5" fill="#7D7D7D" stroke="none" stroke-width="0"/>
+    <text transform="matrix(1 0 0 1 380 210)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">0     1 m</text>
+  </g>
+</svg>

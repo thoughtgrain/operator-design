@@ -1,0 +1,206 @@
+{
+  "machine": "lattice",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: patent section."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: star atlas."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "drawing_language": "patent section",
+      "subject": "The plate seen face on as a square field of junction cells, each lit by how far it swings, clamped in a hatched section frame and keyed with patent numerals.",
+      "controls": [
+        "size: count, the field steps from 4 x 4 to 12 x 12 junction cells (16 to 144) and the clamp frame grows with it.",
+        "tension: shape of the lit pattern (palette swaps across the field), broad lobes at 0 breaking into a finer, stretched checker of nodal lines at 100.",
+        "damp: position, the felt band's inner line moves in from the clamp toward the centre and the cells under it go hollow.",
+        "pickup: position, the bright outlined pickup cell (numeral 14) walks from the strike point at 0 to the far corner at 100."
+      ],
+      "reference": "opxy/reference/README.md (dissolve, in detail; stock cell field) and library/toro-blocks",
+      "risks": "P15 is written for noise-like sounds with no mechanism, and this plate has one (Gate 0 pitfall in P15): the cell field is earned only because the waveguide mesh really is a grid of junctions. Tension and damp both act on cell values; damp is kept on geometry (felt line) so the two don't share 'how much grey'. 14 px cells are under P15's 20 px guidance (12 x 12 has to fit 192 px of body); 144 cells + frame fits 256 nodes but tension re-lights many cells per turn, so churn needs a cap. Patent numerals plus words duplicates the key; drop one at frames."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "drawing_language": "hidden-line isometric",
+      "subject": "A metal sheet bolted into a frame, cut away in isometric with its mesh lines bent into the standing wave, a striker rod over one point, a stylus at another and a felt damper hanging above the edge.",
+      "controls": [
+        "size: count and scale, the mesh goes from 4 to 12 lines a side and the plate and frame grow about 1.5x in footprint.",
+        "tension: shape, the sheet's surface (mesh polylines) goes from a slack single dome to a taut, finer, inharmonic ripple.",
+        "damp: position, the felt damper drops from 40 px above the plate at 0 onto its dashed footprint at 100.",
+        "pickup: position, the stylus pin slides across the sheet from beside the striker to the far corner."
+      ],
+      "reference": "library/theseus-tower (line drawing, black bodies with grey outlines, one projection)",
+      "risks": "The bent mesh is a 3D surface: with 12 x 12 lines it needs mutable outlines well past the 4-path limit, so surface shape must come from pre-drawn variants or translated segments; tension may have to collapse to a few stepped surfaces. The striker head and damper are small (10 px) and could read as icons at 1:1. Grid lines at size 12 come within ~9 px, fine, but hidden-line over self-occluding ripples isn't modelled yet."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "drawing_language": "star atlas",
+      "subject": "A chart of the plate as a star field, junctions plotted as stars by how hard they ring with a constellation line from strike to pickup, beside the light curve the pickup records after each strike.",
+      "controls": [
+        "size: count, the chart holds 4 x 4 to 12 x 12 stars and its neat-line ticks follow the mesh pitch.",
+        "tension: shape, the constellation line from strike to pickup sags in a slack arc at 0 and pulls straight at 100.",
+        "damp: shape, the light curve on the right runs long and beating at 0 and dies within its first tenth at 100.",
+        "pickup: position, the pickup star moves across the chart away from the strike, and the light curve's beating changes with it."
+      ],
+      "reference": "library/meikyu-orrery (atlas labelling and restraint) and opxy/reference/README.md (field-and-figure)",
+      "risks": "Two subjects in one frame: the chart and the curve compete, and P2 always asks which is the picture. Tension's sag is a metaphor (a constellation line has no tension), honest only as a reading aid; the plate's real tension change is in the curve's partial spacing. The light curve re-keys one 64-point path on damp and pickup and is coarse for high partials (near-reversal at sharp peaks). Stars at 3 px are at the legibility floor."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "drawing_language": "engineering schematic",
+      "subject": "The wave itself, cut through the plate along the line from strike to pickup and drawn as a beam between two fixed supports, with a force arrow, a probe to the output terminal and a dimensioned span.",
+      "controls": [
+        "size: position, the supports move apart from a 120 px to a 380 px span and the dimension line follows, letting more half-waves fit.",
+        "tension: shape, the trace goes from a few broad bows to a stiffer, crinkled outline as upper modes stretch away.",
+        "damp: scale, the trace and its dashed envelope shrink from 44 px of swing to about 15 px.",
+        "pickup: position, the probe and its lead to the 'out' terminal slide along the span from the strike arrow toward the far support."
+      ],
+      "reference": "library/theseus-tower (clean primitives, one line weight system) beside a stock waveform engine screen",
+      "risks": "P3's own pitfall: it can drift into 'just an oscilloscope', and a 1D cut throws away the plate's second dimension, which is the whole idea of the machine. At rest the snapshot can sit nearly flat (the default looks calm, maybe too calm); damp as amplitude reads as 'level'. Schematic furniture (title block, chain line) is quiet but adds parts that no control owns."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P12",
+      "drawing_language": "oscilloscope trace",
+      "subject": "Each plate mode as a body on its own orbit round the strike point, traced like an oscilloscope in x-y mode, with a phosphor trail behind each body as long as that mode rings.",
+      "controls": [
+        "size: count, 4 to 12 orbits come out, one per mode the mesh can carry.",
+        "tension: position, orbit radii follow mode frequency, evenly spaced at 0 and stretched apart toward the rim at 100 as the plate stiffens.",
+        "damp: shape, the phosphor trails shorten from nearly full circles at 0 to short ticks behind each body at 100.",
+        "pickup: scale, each body's size is that mode's strength at the pickup, so moving the pickup swells some bodies and shrinks others to nothing at a nodal line."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "Stretch, outside the engine column, and only half earned: a modal plate really is a set of independent oscillators each turning at its own rate, and an x-y scope does draw a sine pair as a circle, so the orrery is an honest picture of the modes. But concentric rings read as a target (craft.md), the sun does nothing (P13's complaint about P12), the plate's shape is gone entirely, and calm constant orbiting while playing costs a node per body every frame. Planets have no cycle a player can sequence, which is the reason P12 exists. My read: it doesn't fit; the strongest thing in it, trails as ring time, could move to another variant."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:20:31"
+  },
+  "selection": null
+}

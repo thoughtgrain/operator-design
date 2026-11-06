@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P5",
+  "drawing_language": "orthographic elevation",
+  "subject": "A wall in elevation laid in running bond, one stone per lattice cell, with the lichen as a single lobed patch spreading over it: margin lobes are new growth, the old centre cracks into hollow areolae, and a strip at the foot ticks off what each step grew.",
+  "controls": [
+    "grow: shape. The margin lobes push across neighbouring stones (the outline moves up to a stone, about 30 px, at 100) and the strip's ticks stand taller.",
+    "decay: count. Dead areolae crack open inside the patch, none at 0 to most of the centre at 100, leaving a ring of living crust.",
+    "seed: count. Spore dots on bare stones away from the patch, 0 to 8.",
+    "scale: position. The doubled perpend joints that mark the scale's half steps move along each course; the pentatonics have none."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "A grey body with a bright outline can read as a stain or a map, not a lichen, and the lobes are a texture on the contour rather than drawn lobes. The half-step joints are hairline doubles and won't clear scale's floor alone. The thallus is one mutable outline re-keyed each tick; a colony that splits needs a second. Running bond is exactly the hex lattice, but nothing on the wall says pitch without labels. Muted (mute is this machine's bypass): the patch fill drops to black, its outline to mid grey, and the strip empties."
+}

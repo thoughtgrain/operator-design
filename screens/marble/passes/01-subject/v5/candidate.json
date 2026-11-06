@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "pattern": "P3",
+  "drawing_language": "survey plan",
+  "subject": "One marble's fall surveyed as a traverse in plan: from the hopper station it runs leg by leg through columns of peg stations, bearing a station up or down at each, to its lot on a boundary line whose parcels are laid out by pitch.",
+  "controls": [
+    "pegs: the number of legs and station columns in the traverse (count, 1 to 12), the lattice opening wider to the east as rows are added.",
+    "drop: the pegs on the chain line along the bottom, one per drop in the bar (count, 1 to 32 between 0 and 1 bar).",
+    "bounce: a short rebound spur off the traverse's last station, out past the lot line and back (shape, its end moving 0 to 24 px), the survey's closing leg.",
+    "scale: the lot boundaries on the right slide to their pitches, 10 px a semitone (position), and the last leg bends to meet its lot."
+  ],
+  "reference": "opxy/reference/README.md (stock engine screens: one object, a ~2 px line for what matters, lots of black)",
+  "risks": [
+    "Stretch: P3 is an engine pattern for waveforms. The case for it is that a player's screen should draw the rule that picks notes in the same shape, and a marble's path IS that rule, a trace in the literal sense; the case against is that one path shows one outcome, not the distribution, which is the thing the machine is about.",
+    "At rest the drawing shows the last marble only, so the bell is invisible until many notes have passed; P3 asks the trace to be the subject, and here the subject is chance.",
+    "Scale moves lots by 10 px a semitone: the major-to-chromatic change shifts some lots by only 10 to 20 px, under the 24 px position floor.",
+    "Station triangles at 8 px are on the edge of reading as icons; they have to stay hairline, open, survey-plan marks.",
+    "Mute: the traverse goes to a dashed, unclosed line (a proposed, not surveyed, route); readable to a surveyor, maybe not to a player."
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "machine": "vapor",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "patternName": "Instrument stack",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P11 Instrument stack; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P15",
+      "drawing_language": "typeset diagram",
+      "subject": "A field of square cells laid over the vowel chart, where a bright clump of lit cells sits on the sung vowel and grey breath hangs round it.",
+      "controls": [
+        "vowel: position, the bright clump moves across the field to the vowel's place on the chart (front left, back right, close top, open bottom), up to ~300 px of travel from u to i.",
+        "breath: count, grey haze cells in runs of 2-3 gather round the clump, from none at 0 to ~28 cells at 100.",
+        "throat: count, the number of lit cells in the clump grows from 4 at 0.75 to ~16 at 1.50, a bigger tract making a bigger, lower mass.",
+        "glide: count, a trail of mid-grey cells runs from the closed u corner toward the clump, 0 cells at 5 ms to the full route (~10) at 2 s."
+      ],
+      "reference": "opxy/reference/README.md (Stock OP-XY engine screens: dissolve, in detail)",
+      "risks": "P15 is for sounds that are texture; vapor has a mechanism (pulse through a tube), so Gate 0 argues for drawing the mechanism instead, and the cell field earns its place only because breath really is noise. Typeset diagram wants the five vowel letters in the field, which P15's no-text rule forbids; I kept five 12 px letters as the chart and would defend them as the only labels. Breath and throat both change a count of cells; they differ by value (grey haze vs bright clump) and placement, which is close to a grey-only difference, so throat may need a second cue. A vowel move relights ~25 cells at once, over the ~20 changed nodes/frame guide during a turn. At rest the field is mostly empty dots, so it can read as a screensaver."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P1",
+      "drawing_language": "orthographic elevation",
+      "subject": "The throat drawn in elevation as a segmented acoustic tube from glottis to lips, its sections widening and narrowing into the shape of the vowel.",
+      "controls": [
+        "vowel: shape, the sixteen section radii re-profile the tube (one mutable outline): a pinch at the back and a flared mouth for a, a front constriction for i, a closed lip end for u; points move up to ~30 px.",
+        "breath: count, short turbulence streaks gather inside the tube just past the glottis, from none at 0 to ~20 at 100.",
+        "throat: scale, the whole tube grows uniformly about the glottis from 0.75 to 1.50 (2x) and the dimension line under it reads the length in cm.",
+        "glide: count, hairline ghost profiles between the closed u onset and the vowel step in behind the tube, from none at 5 ms to ~6 at 2 s."
+      ],
+      "reference": "library/theseus-tower (line drawing, primitives, one subject that every control touches)",
+      "risks": "Mutable outlines must stay within +/-64 px of the node, so the 240 px tube needs authoring at half size and a node scale of ~1.33 at default, which ties tube width to length (fine physically, a bigger throat). Glide's ghost profiles sit 2-4 px from the subject outline in places and start to read as hatching; they may need to step outward or show only the onset. Breath streaks are small and inside the tube, so breath (scored 4) is under-drawn here; it may need streaks out of the lips too. The dimension label is the only text that changes, and it would need a text slot."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P2",
+      "drawing_language": "survey plan",
+      "subject": "A survey split in two: the vowel quadrilateral plotted as a parcel with five stations and a traverse to the sung vowel on the left, and the voice's spectral profile drawn as a long section on the right.",
+      "controls": [
+        "vowel: position and shape, the bright station moves between the five plotted vowels on the plan (~150 px) and the formant peaks of the profile walk along the frequency datum.",
+        "breath: position, the ground line of aspiration noise under the profile rises from the datum at 0 to ~40 px up at 100, filling the valleys between formants.",
+        "throat: scale, the whole plan grows about its low-formant corner from 0.75 to 1.50 as a longer tube lowers every formant, and the profile's peaks shift left with it.",
+        "glide: count, chainage ticks along the traverse from the u onset station to the vowel, 0 at 5 ms to ~14 at 2 s."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one bright figure, quiet ground, labelled at 10 px)",
+      "risks": "Two halves split the eye: the profile is the brightest element, but the moving station competes, and with knobs 1-2 driving both halves the P2 column match (structure on 1-2, tone on 3-4) doesn't hold: vowel and breath land right, throat and glide land left. Vowel and throat both move the profile's peaks, so the profile must leave throat's effect to the plan's scale and treat its own shift as secondary. Survey symbols (triangles, a ringed station) risk looking like icons; they must stay hairline and small. Labels (stations, axes, 'plan', 'section') are many for one screen."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P3",
+      "drawing_language": "patent section",
+      "subject": "The pressure wave at the lips drawn as a patent figure, four glottal periods ringing with the vowel, the early ones still gliding out of a closed u, and the aspiration noise traced beneath with numbered leaders.",
+      "controls": [
+        "vowel: shape, the ringing inside each bright period changes, slow single swings for u and o, a fast double ring for e and i, peaks moving up to ~30 px.",
+        "breath: shape, the lower aspiration trace swells from a flat line at 0 to bursts of +/-20 px at every glottal opening at 100.",
+        "throat: scale, the main trace grows uniformly about its left end from 0.75 to 1.50, so each ring is longer and the swing taller, as a bigger tract rings lower and louder.",
+        "glide: count, how many of the four periods are grey ghosts still moving from u into the vowel, 0 at 5 ms to all but the last at 2 s."
+      ],
+      "reference": "opxy/reference/README.md (Stock OP-XY engine screens: wavetable, one waveform drawn large)",
+      "risks": "P3's own pitfall: it drifts toward 'oscilloscope'; the patent numerals and the ghosted onset are what keep it a drawing, and the numerals (10/12/14/16) mean nothing to a player without the legend a patent has. A four-period trace is ~240 points, so as a bound subject it needs four mutable outlines, the whole path budget; each period becomes one path and the ghost/solid change is a re-key. Glide is shown as a count of four, under the 12-item floor; it needs the ghost periods to move (shape) as well as change grey to pass perceptibility. Throat scale grows the trace upward toward the header at 1.50; the axis must sit lower."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "hidden-line isometric",
+      "subject": "Five vowel resonators stacked into a tower on a narrow throat neck, like the short pipes of a vox humana organ stop, with the sung vowel's chamber standing out solid and breath rising off the top in rings.",
+      "controls": [
+        "vowel: shade and position, the sung chamber fills dark with a bright edge while the others stay hidden-line; moving from u (base) to i (top) walks the solid chamber ~90 px up the tower.",
+        "breath: count, rings rise off the top chamber in the same projection, 0 at 0 to ~10 at 100.",
+        "throat: position, the neck between the glottal boot and the chambers lengthens from ~26 px at 0.75 to ~52 px at 1.50, lifting the whole stack.",
+        "glide: count and shade, the chambers between u and the sung vowel light their edges one by one, the route the onset glides along, none at 5 ms to all of them at 2 s."
+      ],
+      "reference": "library/theseus-tower (P11 Instrument stack, hidden-line tiers)",
+      "risks": "Stretch, and plainly a poor fit. P11 works when the player already knows the instrument by sight and the note picks the part; here nobody recognises a vowel resonator stack (the vox humana is real but obscure), and the vowel knob, not the note, picks the chamber, so the tower is an invented diagram dressed as an instrument. The exception case would be that vowel really is a selection among a few named resonances, but vapor's vowel is a continuum and the stack can only show nine enum steps as five tiers. It also sits close to theseus's tower in silhouette, which risks reading as a copy of another machine's drawing. Glide on a five-tier count is under the 12-item floor."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:20:26"
+  },
+  "selection": null
+}

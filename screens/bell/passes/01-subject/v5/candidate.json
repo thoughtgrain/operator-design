@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P6",
+  "drawing_language": "oscilloscope trace",
+  "subject": "A diver traced in one scope beam, crouched on the stage under a diving bell drawn on the second channel, his helmet in the air pocket, the water line pressing down from the rim and air escaping as dots past the bell's lip.",
+  "controls": [
+    "depth: the bell and its stage are lowered on the cable, crown 54 to 112 px (position of channel 2 and the diver with it).",
+    "air: the water line inside the bell drops as the air pocket grows, and the dots of escaping air thin from 14 to 2 as the bell holds its air longer (count).",
+    "knee: the diver's knees bend from locked straight (hard knee) to a deep crouch (soft knee), 15 to 75 degrees at the knee joint (rotation of the shins and thighs).",
+    "gain: the whole trace, bell and diver, scales about the stage, x1 to x2 (scale)."
+  ],
+  "reference": "opxy/reference/README.md (field-and-figure: a single bright figure over a quiet ground)",
+  "risks": "Stretch, and it doesn't really fit. A compressor has no performer; the only figure the metaphor offers is the bell's occupant, and a diver doesn't do anything a compressor does. Knee as the diver's crouch is a pun on the word, not the sound. The exception would be that a diving bell is person-scale, so a figure gives the screen a size and a body under pressure; that's mood, not mapping. At 1:1 the stick figure reads as clip art, exactly the failure the P6 caution names (toro's bulls), and the scope language makes it look like a vector-display toy. Recommend dropping it unless the owner wants a mascot."
+}

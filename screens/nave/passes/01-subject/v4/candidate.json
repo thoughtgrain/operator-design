@@ -1,0 +1,19 @@
+{
+  "variant": "v4",
+  "pattern": "P4",
+  "drawing_language": "star atlas",
+  "subject": "An atlas of echoes: five charts stacked in depth from the first reflections to the late tail, each plotting its echoes as stars by magnitude, lit from the west door's source star.",
+  "controls": [
+    "nave: position; the charts recede further apart, the back chart travelling about 60 px up and to the right, so a long nave is a deep stack.",
+    "stone: scale; star magnitudes fall from chart to chart, steeply on soft stone (back charts nearly empty) and hardly at all on hard stone.",
+    "choir: count; each chart plots 4 bright stars at 0 (discrete echoes) up to 26 fainter ones at 100 (a diffuse wash).",
+    "doors: position; the whole stack moves away from the source star along a dashed trail, 18 to 98 px."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": [
+    "The stack reads as cards or windows before it reads as time; the 'first' and 'V' labels carry a lot.",
+    "Stars on back charts only show in the thin uncovered strip, so stone's change lives mostly in that strip and in small dots (lint warns on dots under 3 px).",
+    "Choir changes count and star size together; star size is stone's channel too, so the two blur on the front chart.",
+    "Star atlas is a borrowed language for a building; nothing says 'stone nave' except the source labelled 'door'."
+  ]
+}

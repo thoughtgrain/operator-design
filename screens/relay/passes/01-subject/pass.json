@@ -1,0 +1,231 @@
+{
+  "machine": "relay",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: oscilloscope trace."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: survey plan."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "patternName": "Instrument stack",
+      "drawingLanguage": "patent section",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P11 Instrument stack; drawing language: patent section. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "drawing_language": "oscilloscope trace",
+      "subject": "Every trip the test note makes round the chain is one oscilloscope sweep, and the sweeps stack back into depth, the newest bright in front and each recirculation a dimmer screen behind it.",
+      "controls": [
+        "stages: the echo burst slides along every sweep's time axis from just after the dry mark (10 ms) to the far end (1 s), log time, all screens together (position, ~200 px).",
+        "leak: the front trace's burst sags and goes to staircase: the leaky buckets' held samples show as flat steps and its peaks droop, the back screens inheriting it (shape of the bright front trace).",
+        "clock: the screens behind shear sideways by uneven amounts, so successive passes stop lining up, the way a wandering clock smears each recirculation's arrival (position of the back layers, up to ~24 px each).",
+        "feedback: how many screens the stack holds, one at 0 up to six at 100, each further back dimmer and lower (count of layers, with shade as the second cue)."
+      ],
+      "reference": "library/loom-pages/README.md (depth means earlier; repeats as rows behind a pulse)",
+      "risks": [
+        "P3's oscilloscope pitfall applies to every layer: it can read as a stock scope view; the stacked screens are what make it this machine.",
+        "stages and clock are both position; they move different parts (the burst within every screen vs the screens themselves), but perceptibility has to prove the player can tell them apart.",
+        "At the default (leak 0, clock 0) the stack is pristine; the machine's failing character only shows when the player turns it up.",
+        "An effect page gets no audio, so the bursts are a notional test note, not what is playing."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "drawing_language": "typeset diagram",
+      "subject": "The bucket chain coiled into a printed spiral figure: one radial bar per bucket, its length the charge it holds, each turn of the coil one more pass of recirculation winding inward.",
+      "controls": [
+        "stages: how many bucket bars stand on each turn, 24 at 0 to 72 at 100, so the coil goes from coarse comb to dense fringe (count).",
+        "leak: a fixed seeded set of failing buckets loses its charge and their bars sink to stubs, more of them and lower as leak rises, so the note's lump on each turn gets gaps (shape: bar lengths).",
+        "clock: the bars lose their even angular spacing and bunch and spread around the coil, and the note's lump drifts round a little further on each inner turn instead of lining up radially (rotation of bars about the centre, up to ~30°).",
+        "feedback: how many turns the coil winds before the lump dies away, one at 0 to four at 100, inner turns shorter-barred and dimmer (count of turns)."
+      ],
+      "reference": "library/toro-blocks/README.md (P10: the field's geometry is the signal model)",
+      "risks": [
+        "Inner turns crowd: at 72 bars on the fourth turn bars sit ~2.4 px apart, under the 3 px hatching floor; cap stages' count on inner turns or cap turns at 3.",
+        "~190 bar nodes at default stages and four turns; clock moves every bar, far past ~20 changed nodes per frame while it turns.",
+        "Typeset labels (in, out, pass numerals, caption) must stay off moving bars; the numerals at nine o'clock collide when clock bunches bars there.",
+        "Spiral plus ticks risks reading as a dial or a record, an icon; the figure caption and numerals are what keep it a diagram."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "drawing_language": "orthographic elevation",
+      "subject": "A wall of bucket compartments seen face on, the chain running back and forth along its rows, each compartment's held charge drawn as how full and how bright it stands.",
+      "controls": [
+        "stages: how far apart the recirculated runs sit along the wall, from runs almost touching their note at 10 ms to one echo per two rows at 1 s (field statistic: spacing of lit runs, a position channel).",
+        "leak: a growing seeded share of compartments drain to empty, black where the standing bias charge was, and runs passing them lose cells (count of the grey layer).",
+        "clock: runs smear and break up, 3-cell runs stretching to ragged 6-cell runs with a cell missing, because a wandering clock spreads each packet over more buckets (run length).",
+        "feedback: how many lit runs follow each note before the wall goes back to bias, one at 0 to the whole wall lit at 100 (density of lit cells)."
+      ],
+      "reference": "opxy/reference/README.md (dissolve, in detail: one cell size, a few values, clumps as grain)",
+      "risks": [
+        "Gate 0 tension: a BBD has a mechanism (v4 draws it), and P15 is for sounds that are texture; this wall argues the chain's state is the texture, which the owner may not buy.",
+        "A grid of level-filled compartments can read as a meter bank, the dashboard the protocol rejects; the elevation reading (fill from the floor, bias always there) has to carry it.",
+        "216 cell nodes; feedback and clock churn far more than ~20 cells a frame while turning, and the wall shows a notional test phrase since effect pages get no audio.",
+        "stages as spacing of runs is a weak statistic at the long end (one echo every two rows); check it clears the position floor."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "drawing_language": "survey plan",
+      "subject": "The chip's charge channel cut open lengthwise and drawn as a surveyor's long-section: a row of wells under their clock gates, each holding a pool of charge whose surfaces trace the note, over a datum with chainage in stages and a return leg beneath.",
+      "controls": [
+        "stages: the chainage compresses, more and narrower wells across the section, 8 at 0 to 24 at 100, the chainage figures rising to match (count of wells, with the gate row following).",
+        "leak: failing wells get a seep notch in their floor and their pool surfaces sink toward empty, breaking the note's line (shape of the bright pool-surface profile).",
+        "clock: the gate electrodes above the wells slip off their even pitch, and the walls of each well follow them, so the wells come out uneven in width (position of the gates and wells, up to ~12 px each, ≥ 24 px end to end).",
+        "feedback: the hydraulic grade line in the return leg rises from the invert at 0 to just under the datum at 100, the level the output is fed back in at (position, ~50 px)."
+      ],
+      "reference": "library/meikyu-capture/README.md (labelled wireframe ground, small mid-grey text that makes it read as authored)",
+      "risks": [
+        "The most literal of the five: it explains the device (a CCD potential-well diagram) more than the sound; leak and clock read clearly, stages and feedback are diagram furniture.",
+        "Sixteen pools each with a surface ribbon plus the profile and gates is detailed for the node budget; the profile and pool surfaces want to be one or two mutable outlines.",
+        "Survey labels (ch, figures, in, out, hgl, return) are many for 480 × 220; cut to what the player needs.",
+        "Pools show a notional test note frozen mid-chain; effect pages get no audio."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "patent section",
+      "subject": "The name taken literally, as a patent drawing of a cascade of tipping buckets hung from a sloped frame, each one pouring its charge into the next, the note's bucket tipped and bright, with a riser carrying the overflow back to the top.",
+      "controls": [
+        "stages: how many buckets hang in the cascade, 4 at 0 to 10 at 100, closer together as they multiply (count).",
+        "leak: holes open in a seeded set of buckets, with drops falling from them, and their water levels sink (count of drops, with level as a second cue).",
+        "clock: the buckets that should hang level tilt by uneven amounts, some early to tip and some late, up to ±20° (rotation about each axle).",
+        "feedback: the water column in the return riser climbs from the basin to the top bucket's inlet (position, ~160 px)."
+      ],
+      "reference": "library/theseus-tower/README.md (P11: known object from clean primitives, line drawing, only what plays moves)",
+      "risks": [
+        "Stretch, and honestly a weak one: P11 earns its place when the machine plays an instrument people know by sight, and nobody plays buckets. The exception argument is only that the bucket brigade is named after one, so recognition is free; the picture is a metaphor, not the mechanism or the sound.",
+        "Buckets on hangers flirt with clip-art; it has to stay a patent section (cut walls, numerals, leaders) or it becomes an icon row.",
+        "stages as count is coarse (4..10 buckets for 100..10000 stages): the drawing can't show the delay time it controls, only more or fewer steps.",
+        "Water in tipped buckets is a mutable outline per bucket; clock moving every bucket redraws all of them while it turns."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:30:02"
+  },
+  "selection": null
+}

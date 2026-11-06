@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "marble",
+  "name": "Marble",
+  "parameters": [
+    {
+      "id": "pegs",
+      "label": "Pegs",
+      "default": 0.4545,
+      "mapping": {"kind": "enum", "labels": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]},
+      "display": "enum"
+    },
+    {
+      "id": "drop",
+      "label": "Drop",
+      "default": 0.5,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "division"
+    },
+    {
+      "id": "bounce",
+      "label": "Bounce",
+      "default": 0.0,
+      "mapping": {"kind": "linear", "minimum": 0, "maximum": 1},
+      "display": "percent"
+    },
+    {
+      "id": "scale",
+      "label": "Scale",
+      "default": 0.0,
+      "mapping": {"kind": "enum", "labels": ["major", "minor", "pent", "blues", "whole", "chrom"]},
+      "display": "enum"
+    }
+  ],
+  "presets": {
+    "Plinko": {"pegs": 0.4545, "drop": 0.5, "bounce": 0.0, "scale": 0.0},
+    "Cascade": {"pegs": 1.0, "drop": 0.75, "bounce": 0.35, "scale": 0.4}
+  },
+  "resources": {
+    "voiceBytes": 64,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "trackControl": {"stateBytes": 64, "stateAlignment": 4, "unique": true, "aux": [12], "savedBytes": 16},
+    "display": {
+      "stateBytes": 128,
+      "stateAlignment": 4,
+      "paths": 2,
+      "points": 64,
+      "nodes": 96,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

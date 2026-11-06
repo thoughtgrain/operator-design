@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "pattern": "P3",
+  "drawing_language": "typeset diagram",
+  "subject": "One bright spectrum line, set like a textbook figure on a log-frequency axis, crisp and jagged inside the focal band and smoothed to a soft hump outside it.",
+  "controls": [
+    "focus: position. The focal span (a 1.5 px bracket on the axis) and the dense, jagged stretch of the line slide together along the axis, 100 Hz to 8 kHz, about 290 px; the line re-keys where it's sharp.",
+    "tilt: rotation. The whole line turns about its point at the focus, ±18° (36° over the range; a little more than the true ±6 dB/oct slope so it clears the 30° floor).",
+    "blur: shape. Outside the band the line is smoothed by a wider kernel: at 0 the partials stand as sharp peaks right across, at 100 the line outside the band is a soft hump with no peaks.",
+    "mix: position. A dark hairline ghost of the dry, untouched spectrum sits under the bright line; mix drops it from on the line (0) to 34 px below (100), so the gap is how far the result has left the input."
+  ],
+  "reference": "opxy/reference/README.md (stock engine screens: the wavetable engine's single waveform) beside library/toro-blocks/contact.png for weight",
+  "risks": [
+    "Easy to read as an analyser: the line is a fixed test spectrum (an effect page gets no audio), so it shows what the settings do, not what's playing. That has to be obvious or it reads as broken.",
+    "Tilt as rotation is slightly exaggerated (±18° for ±6 dB/oct) to clear the 30° floor; a 400 px line turned 18° pokes towards the header at the ends, so the pivot height and the turn need checking on the contact sheet.",
+    "Mix is the weakest channel: a ghost dropping away is a convention, not the sound. At the default (mix 100) the ghost is permanently 34 px down and adds clutter.",
+    "Budget: sharp-in-band needs dense points, so the line is three mutable outlines (left, band, right) of 31 centre points each; focus re-keys all three. Four paths is the cap."
+  ],
+  "stretch": null
+}

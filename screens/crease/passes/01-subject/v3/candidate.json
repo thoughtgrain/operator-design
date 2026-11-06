@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P15",
+  "drawing_language": "star atlas",
+  "subject": "The folded signal's harmonics charted as a band of sky across an atlas plate, one column of square cells per harmonic lit about the equator as far as it is strong, odd columns only while sym is centred.",
+  "controls": [
+    "crease: the band reaches further east, from harmonic 1 alone at x1 to bright cells past harmonic 15 at x8; count of lit columns.",
+    "sym: the dark even columns fill in as even harmonics appear, from stripes to a solid band; count in the alternate columns (pattern).",
+    "paper: the band's eastern half sinks from lit cells to the grey layer as soft folds roll the upper harmonics off; count moved between lit and grey layers.",
+    "mix: the band thins toward the equator, every column but the first losing rows as the wet signal drops; run length per column (rows lit)."
+  ],
+  "reference": "opxy/reference/README.md (dissolve, in detail: one uniform cell field)",
+  "risks": "Gate 0 and P15's own pitfall: a wavefolder isn't texture, it has a mechanism (the fold), and a cell-per-harmonic grid is a spectrum analyser, which is the dashboard-of-meters failure the subject gate rejects. The atlas language sits on it as a frame and tick labels rather than being in the cells; stars on a plate aren't square. Crease and paper both move the band's eastern edge (one adds, one dims), so paper must stay on the lit/grey swap or the two read as one control. Harmonic magnitudes need a DFT per control change on the device, cheap at 19 bins but not free."
+}

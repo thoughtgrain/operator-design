@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "pattern": "P13",
+  "drawing_language": "orthographic elevation",
+  "subject": "The Galton board itself in front elevation, hopper and gate over a triangle of pegs, with each bin a pipe cut to its note's length so its floor sits at its pitch, and the pile of marbles caught in the bins is what plays.",
+  "controls": [
+    "pegs: the number of peg rows in the triangle and bins under it (count, 1 to 12 rows), the pile spreading wider and lower as rows are added.",
+    "drop: the hopper gate's two plates slide apart (position, closed slit at 1/1 to a wide throat at 1/32).",
+    "bounce: a rebound dimension line rises above the pile tops, how high a marble kicks back before it settles (position, 0 to 24 px), with a ghost marble at its height.",
+    "scale: the bin floors step to their pitches, deeper for lower notes (position, 4 px a semitone), so major shows its half steps as short risers and chromatic is an even staircase."
+  ],
+  "reference": "library/meikyu-capture/README.md (find the rule, draw the physical thing with the same shape; wireframe ground, bright captured bodies)",
+  "risks": [
+    "It's the literal machine: no translation for the player to learn, but also no surprise; it lives or dies on the drawing quality of the elevation (hatching, dimensions).",
+    "Bounce has no part of its own in a board; the rebound dimension is a drafting device bolted onto the drawing (P13's 'not every control has a twin' pitfall).",
+    "Twelve rows of pegs in the same height need a 7 px row pitch: pegs 5 px across with 2 px between, near hatching density.",
+    "Pipe floors only span 4 px a semitone, so chromatic versus major moves each floor by 4 to 8 px, under the 24 px floor; the staircase reads, the change between scales may not.",
+    "Mute: the gate shuts (plates meet) and the pile greys; a closed gate is a strong physical cue."
+  ]
+}

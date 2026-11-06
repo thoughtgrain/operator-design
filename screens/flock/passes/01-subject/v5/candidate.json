@@ -1,0 +1,19 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "orthographic elevation",
+  "subject": "Birds on telegraph wires drawn in front elevation: two poles carry one wire per scale degree, every perched bird sounds its wire, and birds in the air are hopping between wires.",
+  "controls": [
+    "cohere: how closely the birds bunch along the span and onto neighbouring wires (position: spacing from ~56 px to ~10 px between birds).",
+    "speed: how many birds are off their wires mid-hop at once, each with its dashed hop path (count: none at 0.25 to five of eight at 4.00).",
+    "scatter: birds that perch far out on the span and on distant wires, away from the bunch (position, up to the full span).",
+    "scale: the number of wires strung between the poles (count: 11 to 25), octave wires labelled at the left pole."
+  ],
+  "reference": "library/theseus-tower/README.md (known object from clean primitives, line drawing, only the struck part moves)",
+  "risks": [
+    "Stretch: P11 is for drum kits, an instrument people know by sight. A player has no instrument. The exception argument is that birds on a wire is already a picture everyone reads as notes on a staff, so the wires work as the 'instrument' and each wire has its own place; that's an analogy, not the pattern's reason, and it may simply not fit.",
+    "Bird silhouettes are the icon trap craft.md warns about; the line has to stay a drafted elevation (one outline, hairline wires, no cartoon eyes) or it becomes clip-art.",
+    "chrom strings 25 wires 5 px apart: under the 6 px stack spacing in accessibility.md. Chrom would need a two-octave fold or a smaller range.",
+    "The poles and insulators are static scenery that does nothing for the sound."
+  ]
+}

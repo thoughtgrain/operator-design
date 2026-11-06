@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.2",
+  "kind": "synth",
+  "description": "Additive partials that settle like sediment: each note stirs the high partials up, and they sink back at the settling rate."
+}

@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "id": "vapor",
+  "name": "Vapor",
+  "parameters": [
+    {
+      "id": "vowel",
+      "label": "Vowel",
+      "default": 0.5,
+      "mapping": {
+        "kind": "enum",
+        "labels": ["u", "uo", "o", "oa", "a", "ae", "e", "ei", "i"]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "breath",
+      "label": "Breath",
+      "default": 0.25,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "throat",
+      "label": "Throat",
+      "default": 0.3333,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0.75,
+        "maximum": 1.5
+      },
+      "display": "ratio"
+    },
+    {
+      "id": "glide",
+      "label": "Glide",
+      "default": 0.4147,
+      "mapping": {
+        "kind": "exponential",
+        "minimum": 0.005,
+        "maximum": 2.0
+      },
+      "display": "duration"
+    }
+  ],
+  "presets": {
+    "Hush": {
+      "vowel": 0.5,
+      "breath": 0.25,
+      "throat": 0.3333,
+      "glide": 0.4147
+    },
+    "Choirboy": {
+      "vowel": 0.875,
+      "breath": 0.4,
+      "throat": 0.1,
+      "glide": 0.55
+    },
+    "Cavern": {
+      "vowel": 0.25,
+      "breath": 0.7,
+      "throat": 0.9,
+      "glide": 0.8
+    }
+  },
+  "resources": {
+    "voiceBytes": 128,
+    "voiceAlignment": 8,
+    "voiceCapacity": 8,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 24,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P15",
+  "drawing_language": "hidden-line isometric",
+  "subject": "The glazed floor of the bowl unrolled into one isometric field of square slab tiles, hidden-line, lit where the mallet's energy is still ringing.",
+  "controls": [
+    "strike: count — the lit patch round the strike point grows from a 3-cell run to ~40 cells (hard mallet reaches more modes), clumped in runs of 2–4.",
+    "glaze: count + shade — the share of tiles in the grey glazed layer rises from ~5 % to ~70 % in runs, and lit tiles under glaze dim one step; a damped field.",
+    "crack: position — cells along two or three crazing lines drop to hollow wireframe and slip down 4–10 px, so a fissure network opens across the field (none at 0).",
+    "fire: position — every slab's thickness grows from 2 to ~14 px (the faces translate, tops rise) as the body vitrifies, so the field reads thin and soft at 0, deep and hard at 100."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "P15 is for texture sounds and Gate 0 says a synth with a mechanism gets a drawing of the mechanism; kiln has one (a bowl), so this is the weakest fit of the five. The field isn't recognisably a bowl at 1:1; it reads as a glaze test tile at best. strike and glaze both act on counts of cell states, so glaze must keep its shade step and runs or the two blur. 112 cells x 2 nodes = 224 nodes: inside 256 at sdk 1.7 but no headroom, and a note flaring the patch must stay ≤ ~20 cells a frame. Close kin to toro-blocks' look; must stay a flat cell grid, not a height field, to be its own thing."
+}

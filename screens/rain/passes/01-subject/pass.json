@@ -1,0 +1,237 @@
+{
+  "machine": "rain",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: survey plan."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: patent section."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: star atlas."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "patternName": "One-bit ink",
+      "drawingLanguage": "engineering schematic",
+      "stretch": true,
+      "caution": "Figurative; toro moved off it to P10.",
+      "brief": "Subject built on P9 One-bit ink; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Figurative; toro moved off it to P10."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P12",
+      "drawing_language": "survey plan",
+      "subject": "A round pavilion roof surveyed from directly above: its tile courses are concentric orbits round the ridge finial, one course per note of the span, and each drop that lands sits on its course like a planet, with the gutter as the outermost orbit where the puddle's held notes circle.",
+      "controls": [
+        "rate: how many drop marks sit on the courses from the last bar (count): one or two at 0.25 a beat, about thirty at 8 a beat, newest brightest and older ones fading to hollow rings.",
+        "roof: how many concentric course rings the plan holds between finial and eave (count, plus ring spacing as position): one ring at 0 st, eight at 12, twenty-two at 36 crowding toward the 3 px floor.",
+        "gust: every drop mark slides round its orbit in the wind's direction (rotation about the finial, up to ±90° at full gust), with a bearing arc outside the gutter showing which way and how far.",
+        "puddle: beads collect on the gutter orbit, one per repeated note, joined by a link drawn along the gutter in the direction they replay (count): none at 0, a near-full ring at 100."
+      ],
+      "reference": "library/meikyu-orrery/README.md (concentric orbits round a body, built in 3D and projected; here the projection is straight down)",
+      "risks": [
+        "A plan view throws away the depth that makes meikyu's orrery read as a solar system; at 1:1 it can read as a target, which craft.md names as an icon to avoid. The hips and survey labels are what stop it, and they're hairlines.",
+        "Rings are 10 px apart at 12 st but 3 px at 36 st; the roof control has to cap the drawn rings (one per scale octave degree, not per semitone) or it turns to hatching.",
+        "Gust and puddle are both empty at their defaults (0 and 0), so the rest frame shows neither; gust's rotation of the drops only reads once there are drops.",
+        "Orbits suggest a cycle, but rain isn't periodic; only puddle (the replay loop) is truly a cycle. The metaphor fits one control in four.",
+        "Muted state: the drops would have to go hollow and the finial dark; not yet drawn."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P13",
+      "drawing_language": "patent section",
+      "subject": "A mono-pitch roof cut in section like a patent figure, where each overlapping tile course is a pitch and a falling drop plays whichever course catches it, while the half-round gutter at the eave captures the run-off and its water level is how much of the last phrase gets replayed.",
+      "controls": [
+        "rate: how many falling streaks hang over the roof at once (count): two at the slowest, about twenty at 8 a beat.",
+        "roof: the roof's pitch angle (rotation of the rafter, tiles and ridge post about the eave, 6° to 46°): a flat roof spans no notes, a steep one 36 semitones, so the ridge climbs about 60 px.",
+        "gust: the slant of every streak (shape/angle, ±35° from vertical) and where along the slope the drops land, bunching them toward the eave or the ridge.",
+        "puddle: the water line in the gutter section rises (position, 0 to 12 px) and drips hang from its lip, one per repeated note (count as second cue)."
+      ],
+      "reference": "library/meikyu-capture/README.md (the machine's own rule drawn as a physical capture, with a wireframe ground and mid-grey labels)",
+      "risks": [
+        "The capture is literal (a tile catches a drop) but weak as a rule picture: what the player most needs, which notes the roof spans, is only implied by course positions; there's no pitch axis without adding one.",
+        "Roof as pitch angle moves the whole roof (rafter, tiles, posts): a big redraw on a turn, though zero at rest.",
+        "The gutter is small and in the far corner from the brightest tile; the puddle control's whole effect lives in about 20 × 20 px, which will struggle against a score of 4.",
+        "Patent hatching at 6 px on a slanted rafter is close to the 3 px floor once rendered; check at 1:1 on the device.",
+        "Muted state: streaks stop above the roof (held mid-air in grey)."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P14",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The roof itself is the loom: its tile columns are warp threads, one per note of the span, each bar of rain weaves a new row of tiles at the eave while older bars climb back toward the ridge, and a tile a drop struck stands up as a slab, solid where the puddle repeated it and wire where it was new.",
+      "controls": [
+        "rate: how many raised slabs each row carries (count): one in a bar at the slowest, nearly every tile at 8 a beat.",
+        "roof: how many warp threads (tile columns) the roof is wide (count, the eave fascia and ridge lengthening with it as position): one column at 0 st, eight at 12, capped at sixteen with the header naming the real span.",
+        "gust: each older row's hits are shifted along the threads by the drift the wind gave them (position), so a gusty bar shears the slab pattern into a diagonal toward the ridge.",
+        "puddle: how many of a row's slabs are repeats of the row in front, drawn solid down the cloth (shade and count, solid vs wire): all wire behind the first row at 0, solid columns climbing to the ridge at 100."
+      ],
+      "reference": "library/loom-pages/README.md (steps as warp threads, passes as rows receding, solid = locked, wire = generated); library/toro-blocks/README.md for the hidden-line slab build",
+      "risks": [
+        "Rows of slabs on a tile grid read close to a step grid, the panel craft.md warns about; the sloping roof plane and the eave/ridge are what make it a roof and not a sequencer matrix.",
+        "Rain has no bar structure of its own; rows-as-bars imposes one. Drops between bar lines need a rule for which row they land in.",
+        "Count is budget-heavy: 16 columns × 4 rows × 3 faces is 192 nodes before labels.",
+        "Roof and rate are both counts (threads vs slabs); they are different parts, but perceptibility has to show the thread count change isn't mistaken for density.",
+        "Muted state: the front row stays empty and every slab goes wire."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P5",
+      "drawing_language": "star atlas",
+      "subject": "A star chart of the rain as a meteor shower: on a faint conic graticule the roof is a constellation, its tile courses plotted as stars up both slopes to the ridge, each drop a short trail traced back to a radiant the gust slides along the sky, with the puddle as an open cluster below the eave and the last sixteen beats ticked along the bottom strip.",
+      "controls": [
+        "rate: how many meteor trails are plotted at once (count, 1 to ~24), each ending at the tile star it rang, with ticks filling the strip as second cue.",
+        "roof: the constellation's ridge star rises and more course stars appear up the slopes (shape, ridge moves ~50 px; count as second cue): a flat line of one star at 0 st, a steep gable at 36.",
+        "gust: the radiant slides along the top of the chart (position, ±150 px) and every trail swings to point back at it, so drops come in from the side the wind blows from.",
+        "puddle: stars gather inside the dotted cluster ring below the left eave, one per repeated note, and the cluster ring widens (count, then scale)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one bright figure on a low-grey field, activity strip along the bottom)",
+      "risks": [
+        "The gable constellation is the house icon's outline in dots; it has to stay a constellation (broken lines short of each star, magnitudes, the name tegula) or it reads as clip-art.",
+        "Meteors fall away from a radiant, rain falls down: the picture asks the player to read drops as trails pointing up toward their source. Clever, maybe too clever.",
+        "Stars at 2–3 px on the upper courses sit at the small-part floor; the lint flags the cluster dots (1.8 px) and they'd need to grow.",
+        "The strip and the cluster are both secondary furniture in low greys at the bottom; together with the graticule labels the edges get busy.",
+        "Muted state: trails go out and the figure drops to the field's grey."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "drawing_language": "engineering schematic",
+      "subject": "Stretch: a gable roof in hard one-bit ink, its tile courses printed as alternating dither bands under a 2 px bright outline, wired like an engineering schematic to labelled terminals for the rain streaks above it, the wind strokes beside it and the puddle plane at the downpipe foot.",
+      "controls": [
+        "rate: how many flat rain-streak glyphs hang above the roof (count, 2 to ~20); the dither can't move, so the streaks are flat greys.",
+        "roof: the gable's pitch (shape: the ridge point rises from 20 to 90 px above the eaves), with the dithered course bands redrawn as static art per span step.",
+        "gust: the wind glyph's strokes lengthen to one side and every streak leans with them (shape, ±30°).",
+        "puddle: the flat puddle plane at the downpipe widens and lightens (scale 1× to 2×, two grey steps)."
+      ],
+      "reference": "opxy/reference/toro-ink-rest.jpg (one-bit ink: 2 px outlines, ordered dither, a glyph per control)",
+      "risks": [
+        "Doesn't fit, plainly. P9 is a hero figure for an engine; a player's screen should show the rule that picks notes, and a house with rain on it shows the setting, not the rule. Nothing on it says which tile is which pitch or what the puddle replays.",
+        "The exception case would be that rain is the one player whose rule is a picture people already know by sight (water on a roof); that holds for the concept but not the controls: the gable at 1:1 is the house icon.",
+        "Dither only lives in still art, but roof (the most visible control) changes the dithered planes: each span step would need its own pre-drawn dither set, or the bands go flat and the language is lost.",
+        "One-bit ink and schematic pull against each other: the terminals and labels read as a legend panel next to a picture (craft.md, Picture not panel).",
+        "The lint flags ~970 2 × 2 dither cells as under the small-part floor; that's the pattern's nature (toro-ink) but a warning wall.",
+        "Muted state: the outline drops to mid grey, the only element allowed to be brightest."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.14,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.14,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:28:23"
+  },
+  "selection": null
+}

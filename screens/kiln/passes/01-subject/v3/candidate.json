@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P2",
+  "drawing_language": "engineering schematic",
+  "subject": "A modal-synthesis schematic: a mallet impulse driving a bank of four tuned resonators through a shared glaze dashpot into a summing junction, with the bowl's ringing output trace on the right.",
+  "controls": [
+    "strike: shape — the impulse in the mallet block narrows from a wide soft pulse (16 px) to a sharp spike (2 px) and grows taller; column 1, left zone.",
+    "glaze: position — the dashpot piston sinks ~40 px into its cylinder, the damper engaging every resonator; column 2, left zone.",
+    "crack: shape — the output trace's envelope breaks into beating lobes (amplitude dips up to 80 %) and its cycles go uneven; column 3, right zone.",
+    "fire: position — the mode ruler's ticks under the trace spread right as the modes stretch (top tick travels ~30 px), and the ratios printed in the resonator boxes follow."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": "Most at risk of reading as a dashboard: boxes, a slider-like dashpot and a ruler are panel furniture unless the schematic stays drawn in one hairline language with the trace the only bright thing. fire on a tick ruler is thin (1.5 px ticks) and may score under its floor; it may need the trace's cycle spacing too, which collides with crack on the trace's shape. The trace transient is noisy at 64 points: one mutable path can't hold this many cycles, so a real build shows fewer cycles or uses 2–3 paths. Text in the resonator boxes changes with fire, which needs text slots."
+}

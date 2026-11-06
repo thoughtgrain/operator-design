@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<g id="preview_canvas">
+<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+</g>
+<g id="preview_header">
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">swell</text>
+<text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">2.0s</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">depth</text>
+<text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0.5s</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">salt</text>
+<text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">drift</text>
+<text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+</g>
+<path d="M 16 30.5 L 464 30.5 L 464 29.5 L 16 29.5 Z" fill="#646464" stroke="none"/>
+<path d="M 16 200.5 L 464 200.5 L 464 199.5 L 16 199.5 Z" fill="#646464" stroke="none"/>
+<text transform="matrix(1 0 0 1 26 49.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f1</text>
+<rect x="84.95" y="38.95" width="14.1" height="14.1" fill="#969696" stroke="none"/>
+<rect x="109.25" y="39.75" width="12.49" height="12.49" fill="#969696" stroke="none"/>
+<rect x="133.44" y="40.44" width="11.12" height="11.12" fill="#969696" stroke="none"/>
+<rect x="157.53" y="41.03" width="9.95" height="9.95" fill="#646464" stroke="none"/>
+<rect x="181.53" y="41.53" width="8.94" height="8.94" fill="#646464" stroke="none"/>
+<rect x="205.46" y="41.96" width="8.08" height="8.08" fill="#646464" stroke="none"/>
+<rect x="229.33" y="42.33" width="7.35" height="7.35" fill="#646464" stroke="none"/>
+<rect x="253.14" y="42.64" width="6.72" height="6.72" fill="#CDCDCD" stroke="none"/>
+<rect x="272.73" y="38.73" width="14.54" height="14.54" fill="#CDCDCD" stroke="none"/>
+<rect x="297.06" y="39.56" width="12.87" height="12.87" fill="#969696" stroke="none"/>
+<rect x="321.28" y="40.28" width="11.45" height="11.45" fill="#969696" stroke="none"/>
+<rect x="345.39" y="40.89" width="10.22" height="10.22" fill="#646464" stroke="none"/>
+<rect x="369.41" y="41.41" width="9.18" height="9.18" fill="#646464" stroke="none"/>
+<rect x="393.36" y="41.86" width="8.29" height="8.29" fill="#646464" stroke="none"/>
+<rect x="417.24" y="42.24" width="7.52" height="7.52" fill="#646464" stroke="none"/>
+<rect x="441.07" y="42.57" width="6.87" height="6.87" fill="#646464" stroke="none"/>
+<text transform="matrix(1 0 0 1 26 68.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f2</text>
+<rect x="85.31" y="58.31" width="13.39" height="13.39" fill="#969696" stroke="none"/>
+<rect x="109.86" y="59.36" width="11.28" height="11.28" fill="#969696" stroke="none"/>
+<rect x="134.2" y="60.2" width="9.6" height="9.6" fill="#646464" stroke="none"/>
+<rect x="158.37" y="60.87" width="8.26" height="8.26" fill="#646464" stroke="none"/>
+<rect x="182.4" y="61.4" width="7.2" height="7.2" fill="#646464" stroke="none"/>
+<rect x="206.33" y="61.83" width="6.35" height="6.35" fill="#646464" stroke="none"/>
+<rect x="230.17" y="62.17" width="5.67" height="5.67" fill="#646464" stroke="none"/>
+<rect x="254.5" y="63" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="273.24" y="58.24" width="13.53" height="13.53" fill="#CDCDCD" stroke="none"/>
+<rect x="297.8" y="59.3" width="11.39" height="11.39" fill="#969696" stroke="none"/>
+<rect x="322.15" y="60.15" width="9.69" height="9.69" fill="#646464" stroke="none"/>
+<rect x="346.33" y="60.83" width="8.33" height="8.33" fill="#646464" stroke="none"/>
+<rect x="370.37" y="61.37" width="7.25" height="7.25" fill="#646464" stroke="none"/>
+<rect x="394.3" y="61.8" width="6.39" height="6.39" fill="#646464" stroke="none"/>
+<rect x="418.15" y="62.15" width="5.7" height="5.7" fill="#646464" stroke="none"/>
+<rect x="442.5" y="63" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 26 87.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f3</text>
+<rect x="85.65" y="77.65" width="12.7" height="12.7" fill="#969696" stroke="none"/>
+<rect x="110.39" y="78.89" width="10.21" height="10.21" fill="#646464" stroke="none"/>
+<rect x="134.82" y="79.82" width="8.36" height="8.36" fill="#646464" stroke="none"/>
+<rect x="159.01" y="80.51" width="6.98" height="6.98" fill="#646464" stroke="none"/>
+<rect x="183.02" y="81.02" width="5.96" height="5.96" fill="#646464" stroke="none"/>
+<rect x="207.5" y="82" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="231" y="82" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="254.5" y="82" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="273.63" y="77.63" width="12.75" height="12.75" fill="#CDCDCD" stroke="none"/>
+<rect x="298.38" y="78.88" width="10.24" height="10.24" fill="#646464" stroke="none"/>
+<rect x="322.81" y="79.81" width="8.38" height="8.38" fill="#646464" stroke="none"/>
+<rect x="347" y="80.5" width="7" height="7" fill="#646464" stroke="none"/>
+<rect x="371.01" y="81.01" width="5.97" height="5.97" fill="#646464" stroke="none"/>
+<rect x="395.5" y="82" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="419" y="82" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="442.5" y="82" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 26 106.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f4</text>
+<rect x="85.98" y="96.98" width="12.04" height="12.04" fill="#969696" stroke="none"/>
+<rect x="110.87" y="98.37" width="9.26" height="9.26" fill="#646464" stroke="none"/>
+<rect x="135.33" y="99.33" width="7.34" height="7.34" fill="#646464" stroke="none"/>
+<rect x="159.5" y="100" width="6.01" height="6.01" fill="#646464" stroke="none"/>
+<rect x="184" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="207.5" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="231" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="254.5" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="273.97" y="96.97" width="12.06" height="12.06" fill="#CDCDCD" stroke="none"/>
+<rect x="298.86" y="98.36" width="9.27" height="9.27" fill="#646464" stroke="none"/>
+<rect x="323.33" y="99.33" width="7.35" height="7.35" fill="#646464" stroke="none"/>
+<rect x="347.5" y="100" width="6.01" height="6.01" fill="#646464" stroke="none"/>
+<rect x="372" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="395.5" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="419" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="442.5" y="101" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 26 125.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f5</text>
+<rect x="86.3" y="116.3" width="11.41" height="11.41" fill="#969696" stroke="none"/>
+<rect x="111.29" y="117.79" width="8.43" height="8.43" fill="#646464" stroke="none"/>
+<rect x="135.75" y="118.75" width="6.5" height="6.5" fill="#646464" stroke="none"/>
+<rect x="160.5" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="184" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="207.5" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="231" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="254.5" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="274.3" y="116.3" width="11.41" height="11.41" fill="#CDCDCD" stroke="none"/>
+<rect x="299.29" y="117.79" width="8.43" height="8.43" fill="#646464" stroke="none"/>
+<rect x="323.75" y="118.75" width="6.51" height="6.51" fill="#646464" stroke="none"/>
+<rect x="348.5" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="372" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="395.5" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="419" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="442.5" y="120" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 26 144.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f6</text>
+<rect x="86.61" y="135.61" width="10.79" height="10.79" fill="#646464" stroke="none"/>
+<rect x="111.66" y="137.16" width="7.69" height="7.69" fill="#646464" stroke="none"/>
+<rect x="136.09" y="138.09" width="5.82" height="5.82" fill="#646464" stroke="none"/>
+<rect x="160.5" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="184" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="207.5" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="231" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="254.5" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="274.61" y="135.61" width="10.79" height="10.79" fill="#CDCDCD" stroke="none"/>
+<rect x="299.66" y="137.16" width="7.69" height="7.69" fill="#646464" stroke="none"/>
+<rect x="324.09" y="138.09" width="5.82" height="5.82" fill="#646464" stroke="none"/>
+<rect x="348.5" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="372" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="395.5" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="419" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="442.5" y="139" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 26 163.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f7</text>
+<rect x="86.9" y="154.9" width="10.19" height="10.19" fill="#646464" stroke="none"/>
+<rect x="111.98" y="156.48" width="7.03" height="7.03" fill="#646464" stroke="none"/>
+<rect x="137" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="160.5" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="184" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="207.5" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="231" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="254.5" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="274.9" y="154.9" width="10.19" height="10.19" fill="#CDCDCD" stroke="none"/>
+<rect x="299.98" y="156.48" width="7.03" height="7.03" fill="#646464" stroke="none"/>
+<rect x="325" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="348.5" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="372" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="395.5" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="419" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="442.5" y="158" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 26 182.5)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">f8</text>
+<rect x="87.2" y="174.2" width="9.61" height="9.61" fill="#646464" stroke="none"/>
+<rect x="112.27" y="175.77" width="6.46" height="6.46" fill="#646464" stroke="none"/>
+<rect x="137" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="160.5" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="184" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="207.5" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="231" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="254.5" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="275.2" y="174.2" width="9.61" height="9.61" fill="#CDCDCD" stroke="none"/>
+<rect x="300.27" y="175.77" width="6.46" height="6.46" fill="#646464" stroke="none"/>
+<rect x="325" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="348.5" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="372" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="395.5" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="419" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<rect x="442.5" y="177" width="4" height="4" fill="#000000" stroke="#4B4B4B" stroke-width="1.5"/>
+<text transform="matrix(1 0 0 1 86 213)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">0</text>
+<text transform="matrix(1 0 0 1 270 213)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">2 s</text>
+<text transform="matrix(1 0 0 1 434.5 213)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">4 s</text>
+</svg>

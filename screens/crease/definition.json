@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "crease",
+  "name": "Crease",
+  "parameters": [
+    {"id": "crease", "label": "Crease", "default": 0.3333,
+     "mapping": {"kind": "exponential", "minimum": 1, "maximum": 8}, "display": "ratio"},
+    {"id": "sym", "label": "Sym", "default": 0.5,
+     "mapping": {"kind": "linear", "minimum": -1, "maximum": 1}, "display": "bipolar"},
+    {"id": "paper", "label": "Paper", "default": 0.4,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 1}, "display": "percent"},
+    {"id": "mix", "label": "Mix", "default": 1.0,
+     "mapping": {"kind": "linear", "minimum": 0, "maximum": 1}, "display": "percent"}
+  ],
+  "presets": {
+    "Plain": {"crease": 0.3333, "sym": 0.5, "paper": 0.4, "mix": 1.0},
+    "Origami": {"crease": 0.78, "sym": 0.62, "paper": 0.12, "mix": 1.0},
+    "Tissue": {"crease": 0.55, "sym": 0.5, "paper": 0.85, "mix": 0.6}
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 64,
+      "texts": 0,
+      "palette": 6
+    }
+  }
+}

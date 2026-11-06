@@ -103,7 +103,7 @@ Rules:
 - Travel scales with the score and clears the channel floors in `constraints.md` → Perceptible change (≥ 24 px, ≥ 30°, ≥ 1.6×, ≥ 12 items, shape ≥ 16 px). A score-1 control still has to read at arm's length.
 - No control is only an on/off change in the drawing.
 
-Then the budget: declare `paths`, `points`, `nodes`, `texts`, `palette` (this fills the `resources.display` placeholder from 1A; re-run `lint_definition.py` after), and estimate changed nodes per frame at rest (must be 0), playing at defaults, and playing at the heaviest setting (target ~20 average).
+Then the budget: declare `paths`, `points`, `nodes`, `texts`, `palette` (this fills the `resources.display` placeholder from 1A; re-run `lint_definition.py` after), and estimate changed nodes per frame at rest (must be 0, once any release fade has finished), playing at defaults, and playing at the heaviest setting (target ~20 average).
 
 **Gate:** budget fits `constraints.md`, rest cost is 0, heaviest playing estimate ≤ ~20 average with a stated peak.
 
@@ -117,7 +117,7 @@ Start with a frames pass: five `rest.svg` variants of the chosen subject, each f
 
 Authoring rules for frames (they're meant to become `panel.svg.fragment`, so I author them that way from the start):
 
-- Bound parts get device IDs (`<id>_node_<i>`), mutable outlines are `M L… Z` with no fill and distinct points.
+- Bound parts get device IDs (`<id>_node_<i>`), mutable outlines are `M L… Z` with distinct points, all at the frame's one point count, and either `fill="none"` or an explicit `#RRGGBB` fill when the outline encloses area (`constraints.md`, Fills).
 - Every leaf has explicit `fill`, `stroke`, `stroke-width`. No group styles, no gradients, filters, masks, `<use>`, CSS.
 - Lines are closed ribbons, not strokes traced back.
 - Text uses `font-family="UniversNextPro-Light"`. Previews will fall back to another font locally, so I treat rendered widths as approximate.
@@ -156,7 +156,7 @@ Layout: `screens/<id>/passes/<nn>-<kind>/v1…v5/` plus `pass.json` (directions,
 
 Write `motion.md`: for each trigger (turn per control, note on, held, hold ended, page press) what moves, from what to what, over how long, and the reduced-motion end state. Use the vocabulary at the end of `patterns.md`.
 
-**Gate:** nothing moves at rest; every ease settles in 0.15–0.2 s; held-note motion lasts as long as notes are held; reduced motion and track change jump to the end state.
+**Gate:** nothing moves at rest; every ease settles in 0.15–0.2 s; held-note motion lasts as long as notes are held, and may then fade out with the note's release before it settles to still; reduced motion and track change jump to the end state.
 
 ### Video preview (optional, ask)
 

@@ -1,0 +1,206 @@
+{
+  "machine": "bell",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: patent section."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: star atlas."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P6",
+      "patternName": "Figures",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": true,
+      "caution": "Hand-drawn figures kept failing for toro; prefer geometric subjects.",
+      "brief": "Subject built on P6 Figures; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Hand-drawn figures kept failing for toro; prefer geometric subjects."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P2",
+      "drawing_language": "patent section",
+      "subject": "A patent plate in two figures: the bell in section hanging on its cable under the surface line, water risen inside it to the air pocket, beside the reference passage's output trace pressed down from its grey input.",
+      "controls": [
+        "depth: the bell is lowered on its cable, crown 58 to 130 px below the surface (position), and the threshold dashes in fig. 2 close in on the trace as its crests are pressed lower (shape).",
+        "air: the waterline inside the bell drops as the air pocket grows from 35 % to 90 % of the bell (position of the waterline), and in fig. 2 the trace's recovery tail after each hit stretches (shape, same path as depth, so the waterline is the primary).",
+        "knee: the bell's shoulders go from a hard corner to a full round crown, shoulder radius 4 to about 30 px (shape of the wall in section).",
+        "gain: fig. 2's output trace scales about its centre line, x1 to x16 clipped at the frame of the figure (scale)."
+      ],
+      "reference": "opxy/reference/README.md (field-and-figure: one bright subject, quiet ground) and library/theseus-tower (line drawing, outlines over black bodies)",
+      "risks": "P2 splits the body into two half-size pictures, and the bright trace, not the bell, is where the eye lands; the bell is secondary in its own screen. Depth and air both reshape the fig. 2 trace, so their primaries must be the bell's position and the waterline or two knobs read as one. Gain has no part in fig. 1 (a bell has no makeup), so fig. 1 is three controls and fig. 2 is the fourth plus echoes. The trace is the model on a fixed four-hit passage, not the live signal: an effect page gets the slots, not the audio. Patent numerals (10, 12) and fig. captions are four labels; legible at 10 px #7D7D7D but they add up."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P3",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The output envelope of a fixed four-hit passage extruded into a wall in hidden-line isometric, standing on a makeup plinth with its crests pressed down through a water plane, the unpressed input wall standing grey behind it.",
+      "controls": [
+        "depth: the water plane drops down the wall from 0 to -48 dB (position, about 62 world px), and every crest that crosses it is pressed flatter (shape of the bright front face).",
+        "air: the slope of the wall after each crest, from a sheer drop back to the input at 20 ms to a long ramp that never recovers between hits at 2 s (shape; the primary for the front face).",
+        "knee: two dashed planes open either side of the water plane, 0 to 24 dB apart (position of the band edges), the crests rounding into it.",
+        "gain: the plinth under the wall grows from 0 to 24 dB tall and carries the wall and its water plane up with it (position of the whole wall)."
+      ],
+      "reference": "library/toro-blocks (hidden-line isometric, black bodies, mid-grey edges, one bright edge)",
+      "risks": "P3's own pitfall: an extruded envelope is still an oscilloscope with a camera on it, and nothing in it is a bell except the water plane. Depth and air both reshape the bright front face, which breaks one-channel-per-part unless depth's primary is the plane's position and the crest change is read as consequence. The wall's height is only about 50 px at 1:1 to keep the far corner of the plane out of the header; a taller crest pushes the scene into y 0-20. The front face is one 60-point outline re-keyed on depth, air and knee turns, fine at rest but it's the whole path budget. Like every variant, it's the model on a fixed passage: no live audio on an effect page."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P4",
+      "drawing_language": "star atlas",
+      "subject": "A star atlas of the water column: depth strata stacked as chart plates every 8 dB, receding down and right, with the bell plotted as a body on the plate at its depth, its lit phase the air pocket and its ephemeris track running down from the surface.",
+      "controls": [
+        "depth: the body moves down the stack from plate 0 to plate 48, 26 px right and 20 px down per 8 dB (position), and the plate below it brightens (shade as second cue).",
+        "air: the body's phase: the lit air cap above a flat waterline grows from 35 % to 90 % of the disc (shape of the lit part).",
+        "knee: the ephemeris track's approach, from a straight drop that stops dead at a hard knee to a long easing curve that settles onto the plate at 24 dB (shape of the track).",
+        "gain: the body's magnitude, radius 13 to 26 px, the way an atlas sizes a bright star (scale)."
+      ],
+      "reference": "library/meikyu-orrery (an atlas-drawn body with a terminator, labelled lightly) and library/theseus-tower (black bodies, grey outlines, a stack)",
+      "risks": "P4 is for things the sound moves through; here it's the threshold setting moving through depth, not the audio, so the stack is a scale, not a set of frames. Seven plates at 20 px steps overlap heavily: plates read as a stack at 1:1, but their tick borders are close to hatching. A disc with a flat waterline sits one step from a 'level indicator' icon; the atlas labels (plate depths, the body's name) and the ephemeris track are what keep it authored. Nothing shows the signal at all: it's a picture of the settings, which ux.md allows but which makes it the most 'diagram of knobs' of the five. Gain as magnitude is a metaphor only (a bell doesn't get louder by being bigger)."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P10",
+      "drawing_language": "engineering schematic",
+      "subject": "A field of identical air columns in engineering elevation, one per input level from -42 to 0 dB, each standing as tall as the bell lets that level out, so the row of crowns is the compressor's transfer curve built from parts, with a second dashed crown in each showing where it still sits 50 ms after the level falls.",
+      "controls": [
+        "depth: the threshold line slides left across the field from x about 420 at 0 dB to past its left edge at -48 dB (position), and every column right of it is pressed down and its crown turns bright (shape of the field, shade as second cue).",
+        "air: the dashed second crowns inside the pressed columns sink lower as the air refills more slowly, about 0 to 30 px below the crown (position of 22 marks).",
+        "knee: the dashed tolerance band either side of the threshold opens from 0 to about 200 px wide, and the crowns inside it round from a sharp corner to a smooth bend (position of the band edges).",
+        "gain: the datum the whole field stands on rises 0 to 60 px with the makeup, dimensioned at the left (position of the field)."
+      ],
+      "reference": "library/toro-blocks (P10: a field of identical parts whose heights come from the machine's own model)",
+      "risks": "It's the transfer curve drawn as bars, which is one step from a level meter or a bar chart, the dashboard the protocol rejects; the schematic furniture (datum, dimensions, tolerance band) is what argues against that, and it may not be enough at 1:1. The dashed second crowns are 9 px marks inside 11 px columns and barely read at 1:1; air needs a stronger channel. 22 columns x 2 nodes is 44 nodes, cheap, but a depth turn redraws most of them at once. At gain x16 the tallest crowns reach y 25, right under the header; the scale needs a ceiling. Static: the field is the curve, so nothing in it reacts to the audio (there's no audio on an effect page anyway)."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P6",
+      "drawing_language": "oscilloscope trace",
+      "subject": "A diver traced in one scope beam, crouched on the stage under a diving bell drawn on the second channel, his helmet in the air pocket, the water line pressing down from the rim and air escaping as dots past the bell's lip.",
+      "controls": [
+        "depth: the bell and its stage are lowered on the cable, crown 54 to 112 px (position of channel 2 and the diver with it).",
+        "air: the water line inside the bell drops as the air pocket grows, and the dots of escaping air thin from 14 to 2 as the bell holds its air longer (count).",
+        "knee: the diver's knees bend from locked straight (hard knee) to a deep crouch (soft knee), 15 to 75 degrees at the knee joint (rotation of the shins and thighs).",
+        "gain: the whole trace, bell and diver, scales about the stage, x1 to x2 (scale)."
+      ],
+      "reference": "opxy/reference/README.md (field-and-figure: a single bright figure over a quiet ground)",
+      "risks": "Stretch, and it doesn't really fit. A compressor has no performer; the only figure the metaphor offers is the bell's occupant, and a diver doesn't do anything a compressor does. Knee as the diver's crouch is a pun on the word, not the sound. The exception would be that a diving bell is person-scale, so a figure gives the screen a size and a body under pressure; that's mood, not mapping. At 1:1 the stick figure reads as clip art, exactly the failure the P6 caution names (toro's bulls), and the scope language makes it look like a vector-display toy. Recommend dropping it unless the owner wants a mascot."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.2,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.17,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.16,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:31:07"
+  },
+  "selection": null
+}

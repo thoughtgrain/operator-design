@@ -1,0 +1,297 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+<g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>
+<g id="preview_header">
+<rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+<rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+<rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+<rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+<rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+<rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+<rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+<rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+<text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">wind</text>
+<text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">4.0</text>
+<text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">span</text>
+<text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">120</text>
+<text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">gust</text>
+<text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+<text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">hum</text>
+<text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">0</text>
+</g>
+<path id="pylon_palette_0" d="M 700 300 L 704 300 L 704 304 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="2"/>
+<path id="pylon_palette_1" d="M 710 300 L 714 300 L 714 304 Z" fill="#969696" stroke="#969696" stroke-width="2"/>
+<path id="pylon_palette_2" d="M 720 300 L 724 300 L 724 304 Z" fill="#7D7D7D" stroke="#7D7D7D" stroke-width="2"/>
+<path id="pylon_palette_3" d="M 730 300 L 734 300 L 734 304 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+<path d="M 152 104 L 112 134 L 112 84 L 152 54 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path d="M 152.22 58.55 L 148.22 56.55 L 147.78 57.45 L 151.78 59.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 63.55 L 144.22 59.55 L 143.78 60.45 L 151.78 64.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 68.55 L 140.22 62.55 L 139.78 63.45 L 151.78 69.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 73.55 L 136.22 65.55 L 135.78 66.45 L 151.78 74.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 78.55 L 132.22 68.55 L 131.78 69.45 L 151.78 79.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 83.55 L 128.22 71.55 L 127.78 72.45 L 151.78 84.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 88.55 L 124.22 74.55 L 123.78 75.45 L 151.78 89.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 93.55 L 120.22 77.55 L 119.78 78.45 L 151.78 94.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 98.55 L 116.22 80.55 L 115.78 81.45 L 151.78 99.45 Z" fill="#646464" stroke="none"/>
+<path d="M 152.22 103.55 L 112.22 83.55 L 111.78 84.45 L 151.78 104.45 Z" fill="#646464" stroke="none"/>
+<path d="M 148.22 106.55 L 112.22 88.55 L 111.78 89.45 L 147.78 107.45 Z" fill="#646464" stroke="none"/>
+<path d="M 144.22 109.55 L 112.22 93.55 L 111.78 94.45 L 143.78 110.45 Z" fill="#646464" stroke="none"/>
+<path d="M 140.22 112.55 L 112.22 98.55 L 111.78 99.45 L 139.78 113.45 Z" fill="#646464" stroke="none"/>
+<path d="M 136.22 115.55 L 112.22 103.55 L 111.78 104.45 L 135.78 116.45 Z" fill="#646464" stroke="none"/>
+<path d="M 132.22 118.55 L 112.22 108.55 L 111.78 109.45 L 131.78 119.45 Z" fill="#646464" stroke="none"/>
+<path d="M 128.22 121.55 L 112.22 113.55 L 111.78 114.45 L 127.78 122.45 Z" fill="#646464" stroke="none"/>
+<path d="M 124.22 124.55 L 112.22 118.55 L 111.78 119.45 L 123.78 125.45 Z" fill="#646464" stroke="none"/>
+<path d="M 120.22 127.55 L 112.22 123.55 L 111.78 124.45 L 119.78 128.45 Z" fill="#646464" stroke="none"/>
+<path d="M 116.22 130.55 L 112.22 128.55 L 111.78 129.45 L 115.78 131.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345 164 L 305 194 L 305 144 L 345 114 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path d="M 345.22 118.55 L 341.22 116.55 L 340.78 117.45 L 344.78 119.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 123.55 L 337.22 119.55 L 336.78 120.45 L 344.78 124.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 128.55 L 333.22 122.55 L 332.78 123.45 L 344.78 129.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 133.55 L 329.22 125.55 L 328.78 126.45 L 344.78 134.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 138.55 L 325.22 128.55 L 324.78 129.45 L 344.78 139.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 143.55 L 321.22 131.55 L 320.78 132.45 L 344.78 144.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 148.55 L 317.22 134.55 L 316.78 135.45 L 344.78 149.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 153.55 L 313.22 137.55 L 312.78 138.45 L 344.78 154.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 158.55 L 309.22 140.55 L 308.78 141.45 L 344.78 159.45 Z" fill="#646464" stroke="none"/>
+<path d="M 345.22 163.55 L 305.22 143.55 L 304.78 144.45 L 344.78 164.45 Z" fill="#646464" stroke="none"/>
+<path d="M 341.22 166.55 L 305.22 148.55 L 304.78 149.45 L 340.78 167.45 Z" fill="#646464" stroke="none"/>
+<path d="M 337.22 169.55 L 305.22 153.55 L 304.78 154.45 L 336.78 170.45 Z" fill="#646464" stroke="none"/>
+<path d="M 333.22 172.55 L 305.22 158.55 L 304.78 159.45 L 332.78 173.45 Z" fill="#646464" stroke="none"/>
+<path d="M 329.22 175.55 L 305.22 163.55 L 304.78 164.45 L 328.78 176.45 Z" fill="#646464" stroke="none"/>
+<path d="M 325.22 178.55 L 305.22 168.55 L 304.78 169.45 L 324.78 179.45 Z" fill="#646464" stroke="none"/>
+<path d="M 321.22 181.55 L 305.22 173.55 L 304.78 174.45 L 320.78 182.45 Z" fill="#646464" stroke="none"/>
+<path d="M 317.22 184.55 L 305.22 178.55 L 304.78 179.45 L 316.78 185.45 Z" fill="#646464" stroke="none"/>
+<path d="M 313.22 187.55 L 305.22 183.55 L 304.78 184.45 L 312.78 188.45 Z" fill="#646464" stroke="none"/>
+<path d="M 309.22 190.55 L 305.22 188.55 L 304.78 189.45 L 308.78 191.45 Z" fill="#646464" stroke="none"/>
+<path id="pylon_node_0" d="M 142 81 L 155 85 L 155 91 L 142 87 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_1" d="M 163 79 L 155 85 L 155 91 L 163 85 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_2" d="M 150 75 L 163 79 L 155 85 L 142 81 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_3" d="M 155 68 L 168 72 L 168 78 L 155 74 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_4" d="M 176 66 L 168 72 L 168 78 L 176 72 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_5" d="M 163 62 L 176 66 L 168 72 L 155 68 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_6" d="M 134 95 L 147 99 L 147 105 L 134 101 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_7" d="M 155 93 L 147 99 L 147 105 L 155 99 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_8" d="M 142 89 L 155 93 L 147 99 L 134 95 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_9" d="M 168 66 L 181 70 L 181 76 L 168 72 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_10" d="M 189 64 L 181 70 L 181 76 L 189 70 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_11" d="M 176 60 L 189 64 L 181 70 L 168 66 Z" fill="#CDCDCD" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_12" d="M 147 94 L 160 98 L 160 104 L 147 100 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_13" d="M 168 92 L 160 98 L 160 104 L 168 98 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_14" d="M 155 88 L 168 92 L 160 98 L 147 94 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_15" d="M 126 96 L 139 100 L 139 106 L 126 102 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_16" d="M 147 94 L 139 100 L 139 106 L 147 100 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_17" d="M 134 90 L 147 94 L 139 100 L 126 96 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_18" d="M 181 77 L 194 81 L 194 87 L 181 83 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_19" d="M 202 75 L 194 81 L 194 87 L 202 81 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_20" d="M 189 71 L 202 75 L 194 81 L 181 77 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_21" d="M 160 96 L 173 100 L 173 106 L 160 102 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_22" d="M 181 94 L 173 100 L 173 106 L 181 100 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_23" d="M 168 90 L 181 94 L 173 100 L 160 96 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_24" d="M 139 86 L 152 90 L 152 96 L 139 92 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_25" d="M 160 84 L 152 90 L 152 96 L 160 90 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_26" d="M 147 80 L 160 84 L 152 90 L 139 86 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_27" d="M 194 98 L 207 102 L 207 108 L 194 104 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_28" d="M 215 96 L 207 102 L 207 108 L 215 102 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_29" d="M 202 92 L 215 96 L 207 102 L 194 98 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_30" d="M 118 104 L 131 108 L 131 114 L 118 110 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_31" d="M 139 102 L 131 108 L 131 114 L 139 108 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_32" d="M 126 98 L 139 102 L 131 108 L 118 104 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_33" d="M 173 101 L 186 105 L 186 111 L 173 107 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_34" d="M 194 99 L 186 105 L 186 111 L 194 105 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_35" d="M 181 95 L 194 99 L 186 105 L 173 101 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_36" d="M 152 87 L 165 91 L 165 97 L 152 93 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_37" d="M 173 85 L 165 91 L 165 97 L 173 91 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_38" d="M 160 81 L 173 85 L 165 91 L 152 87 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_39" d="M 207 103 L 220 107 L 220 113 L 207 109 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_40" d="M 228 101 L 220 107 L 220 113 L 228 107 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_41" d="M 215 97 L 228 101 L 220 107 L 207 103 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_42" d="M 131 97 L 144 101 L 144 107 L 131 103 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_43" d="M 152 95 L 144 101 L 144 107 L 152 101 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_44" d="M 139 91 L 152 95 L 144 101 L 131 97 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_45" d="M 186 108 L 199 112 L 199 118 L 186 114 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_46" d="M 207 106 L 199 112 L 199 118 L 207 112 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_47" d="M 194 102 L 207 106 L 199 112 L 186 108 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_48" d="M 110 113 L 123 117 L 123 123 L 110 119 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_49" d="M 131 111 L 123 117 L 123 123 L 131 117 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_50" d="M 118 107 L 131 111 L 123 117 L 110 113 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_51" d="M 165 98 L 178 102 L 178 108 L 165 104 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_52" d="M 186 96 L 178 102 L 178 108 L 186 102 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_53" d="M 173 92 L 186 96 L 178 102 L 165 98 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_54" d="M 220 94 L 233 98 L 233 104 L 220 100 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_55" d="M 241 92 L 233 98 L 233 104 L 241 98 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_56" d="M 228 88 L 241 92 L 233 98 L 220 94 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_57" d="M 144 95 L 157 99 L 157 105 L 144 101 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_58" d="M 165 93 L 157 99 L 157 105 L 165 99 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_59" d="M 152 89 L 165 93 L 157 99 L 144 95 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_60" d="M 199 117 L 212 121 L 212 127 L 199 123 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_61" d="M 220 115 L 212 121 L 212 127 L 220 121 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_62" d="M 207 111 L 220 115 L 212 121 L 199 117 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_63" d="M 123 112 L 136 116 L 136 122 L 123 118 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_64" d="M 144 110 L 136 116 L 136 122 L 144 116 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_65" d="M 131 106 L 144 110 L 136 116 L 123 112 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_66" d="M 178 116 L 191 120 L 191 126 L 178 122 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_67" d="M 199 114 L 191 120 L 191 126 L 199 120 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_68" d="M 186 110 L 199 114 L 191 120 L 178 116 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_69" d="M 233 95 L 246 99 L 246 105 L 233 101 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_70" d="M 254 93 L 246 99 L 246 105 L 254 99 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_71" d="M 241 89 L 254 93 L 246 99 L 233 95 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_72" d="M 157 102 L 170 106 L 170 112 L 157 108 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_73" d="M 178 100 L 170 106 L 170 112 L 178 106 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_74" d="M 165 96 L 178 100 L 170 106 L 157 102 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_75" d="M 212 117 L 225 121 L 225 127 L 212 123 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_76" d="M 233 115 L 225 121 L 225 127 L 233 121 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_77" d="M 220 111 L 233 115 L 225 121 L 212 117 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_78" d="M 136 116 L 149 120 L 149 126 L 136 122 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_79" d="M 157 114 L 149 120 L 149 126 L 157 120 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_80" d="M 144 110 L 157 114 L 149 120 L 136 116 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_81" d="M 191 113 L 204 117 L 204 123 L 191 119 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_82" d="M 212 111 L 204 117 L 204 123 L 212 117 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_83" d="M 199 107 L 212 111 L 204 117 L 191 113 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_84" d="M 246 105 L 259 109 L 259 115 L 246 111 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_85" d="M 267 103 L 259 109 L 259 115 L 267 109 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_86" d="M 254 99 L 267 103 L 259 109 L 246 105 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_87" d="M 170 115 L 183 119 L 183 125 L 170 121 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_88" d="M 191 113 L 183 119 L 183 125 L 191 119 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_89" d="M 178 109 L 191 113 L 183 119 L 170 115 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_90" d="M 225 118 L 238 122 L 238 128 L 225 124 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_91" d="M 246 116 L 238 122 L 238 128 L 246 122 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_92" d="M 233 112 L 246 116 L 238 122 L 225 118 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_93" d="M 149 125 L 162 129 L 162 135 L 149 131 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_94" d="M 170 123 L 162 129 L 162 135 L 170 129 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_95" d="M 157 119 L 170 123 L 162 129 L 149 125 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_96" d="M 204 108 L 217 112 L 217 118 L 204 114 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_97" d="M 225 106 L 217 112 L 217 118 L 225 112 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_98" d="M 212 102 L 225 106 L 217 112 L 204 108 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_99" d="M 259 121 L 272 125 L 272 131 L 259 127 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_100" d="M 280 119 L 272 125 L 272 131 L 280 125 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_101" d="M 267 115 L 280 119 L 272 125 L 259 121 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_102" d="M 183 128 L 196 132 L 196 138 L 183 134 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_103" d="M 204 126 L 196 132 L 196 138 L 204 132 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_104" d="M 191 122 L 204 126 L 196 132 L 183 128 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_105" d="M 238 122 L 251 126 L 251 132 L 238 128 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_106" d="M 259 120 L 251 126 L 251 132 L 259 126 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_107" d="M 246 116 L 259 120 L 251 126 L 238 122 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_108" d="M 162 127 L 175 131 L 175 137 L 162 133 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_109" d="M 183 125 L 175 131 L 175 137 L 183 131 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_110" d="M 170 121 L 183 125 L 175 131 L 162 127 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_111" d="M 217 111 L 230 115 L 230 121 L 217 117 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_112" d="M 238 109 L 230 115 L 230 121 L 238 115 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_113" d="M 225 105 L 238 109 L 230 115 L 217 111 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_114" d="M 272 126 L 285 130 L 285 136 L 272 132 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_115" d="M 293 124 L 285 130 L 285 136 L 293 130 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_116" d="M 280 120 L 293 124 L 285 130 L 272 126 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_117" d="M 196 120 L 209 124 L 209 130 L 196 126 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_118" d="M 217 118 L 209 124 L 209 130 L 217 124 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_119" d="M 204 114 L 217 118 L 209 124 L 196 120 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_120" d="M 251 129 L 264 133 L 264 139 L 251 135 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_121" d="M 272 127 L 264 133 L 264 139 L 272 133 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_122" d="M 259 123 L 272 127 L 264 133 L 251 129 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_123" d="M 175 126 L 188 130 L 188 136 L 175 132 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_124" d="M 196 124 L 188 130 L 188 136 L 196 130 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_125" d="M 183 120 L 196 124 L 188 130 L 175 126 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_126" d="M 230 123 L 243 127 L 243 133 L 230 129 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_127" d="M 251 121 L 243 127 L 243 133 L 251 127 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_128" d="M 238 117 L 251 121 L 243 127 L 230 123 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_129" d="M 285 121 L 298 125 L 298 131 L 285 127 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_130" d="M 306 119 L 298 125 L 298 131 L 306 125 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_131" d="M 293 115 L 306 119 L 298 125 L 285 121 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_132" d="M 209 117 L 222 121 L 222 127 L 209 123 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_133" d="M 230 115 L 222 121 L 222 127 L 230 121 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_134" d="M 217 111 L 230 115 L 222 121 L 209 117 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_135" d="M 264 137 L 277 141 L 277 147 L 264 143 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_136" d="M 285 135 L 277 141 L 277 147 L 285 141 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_137" d="M 272 131 L 285 135 L 277 141 L 264 137 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_138" d="M 188 128 L 201 132 L 201 138 L 188 134 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_139" d="M 209 126 L 201 132 L 201 138 L 209 132 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_140" d="M 196 122 L 209 126 L 201 132 L 188 128 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_141" d="M 243 138 L 256 142 L 256 148 L 243 144 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_142" d="M 264 136 L 256 142 L 256 148 L 264 142 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_143" d="M 251 132 L 264 136 L 256 142 L 243 138 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_144" d="M 298 123 L 311 127 L 311 133 L 298 129 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_145" d="M 319 121 L 311 127 L 311 133 L 319 127 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_146" d="M 306 117 L 319 121 L 311 127 L 298 123 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_147" d="M 222 123 L 235 127 L 235 133 L 222 129 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_148" d="M 243 121 L 235 127 L 235 133 L 243 127 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_149" d="M 230 117 L 243 121 L 235 127 L 222 123 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_150" d="M 277 139 L 290 143 L 290 149 L 277 145 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_151" d="M 298 137 L 290 143 L 290 149 L 298 143 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_152" d="M 285 133 L 298 137 L 290 143 L 277 139 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_153" d="M 201 136 L 214 140 L 214 146 L 201 142 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_154" d="M 222 134 L 214 140 L 214 146 L 222 140 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_155" d="M 209 130 L 222 134 L 214 140 L 201 136 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_156" d="M 256 135 L 269 139 L 269 145 L 256 141 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_157" d="M 277 133 L 269 139 L 269 145 L 277 139 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_158" d="M 264 129 L 277 133 L 269 139 L 256 135 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_159" d="M 311 131 L 324 135 L 324 141 L 311 137 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_160" d="M 332 129 L 324 135 L 324 141 L 332 135 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_161" d="M 319 125 L 332 129 L 324 135 L 311 131 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_162" d="M 235 135 L 248 139 L 248 145 L 235 141 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_163" d="M 256 133 L 248 139 L 248 145 L 256 139 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_164" d="M 243 129 L 256 133 L 248 139 L 235 135 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_165" d="M 290 141 L 303 145 L 303 151 L 290 147 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_166" d="M 311 139 L 303 145 L 303 151 L 311 145 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_167" d="M 298 135 L 311 139 L 303 145 L 290 141 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_168" d="M 214 147 L 227 151 L 227 157 L 214 153 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_169" d="M 235 145 L 227 151 L 227 157 L 235 151 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_170" d="M 222 141 L 235 145 L 227 151 L 214 147 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_171" d="M 269 133 L 282 137 L 282 143 L 269 139 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_172" d="M 290 131 L 282 137 L 282 143 L 290 137 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_173" d="M 277 127 L 290 131 L 282 137 L 269 133 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_174" d="M 324 143 L 337 147 L 337 153 L 324 149 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_175" d="M 345 141 L 337 147 L 337 153 L 345 147 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_176" d="M 332 137 L 345 141 L 337 147 L 324 143 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_177" d="M 248 148 L 261 152 L 261 158 L 248 154 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_178" d="M 269 146 L 261 152 L 261 158 L 269 152 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_179" d="M 256 142 L 269 146 L 261 152 L 248 148 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_180" d="M 303 145 L 316 149 L 316 155 L 303 151 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_181" d="M 324 143 L 316 149 L 316 155 L 324 149 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_182" d="M 311 139 L 324 143 L 316 149 L 303 145 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_183" d="M 227 147 L 240 151 L 240 157 L 227 153 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_184" d="M 248 145 L 240 151 L 240 157 L 248 151 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_185" d="M 235 141 L 248 145 L 240 151 L 227 147 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_186" d="M 282 136 L 295 140 L 295 146 L 282 142 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_187" d="M 303 134 L 295 140 L 295 146 L 303 140 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_188" d="M 290 130 L 303 134 L 295 140 L 282 136 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_189" d="M 261 141 L 274 145 L 274 151 L 261 147 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_190" d="M 282 139 L 274 145 L 274 151 L 282 145 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_191" d="M 269 135 L 282 139 L 274 145 L 261 141 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_192" d="M 316 152 L 329 156 L 329 162 L 316 158 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_193" d="M 337 150 L 329 156 L 329 162 L 337 156 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_194" d="M 324 146 L 337 150 L 329 156 L 316 152 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_195" d="M 240 146 L 253 150 L 253 156 L 240 152 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_196" d="M 261 144 L 253 150 L 253 156 L 261 150 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_197" d="M 248 140 L 261 144 L 253 150 L 240 146 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_198" d="M 295 144 L 308 148 L 308 154 L 295 150 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_199" d="M 316 142 L 308 148 L 308 154 L 316 148 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_200" d="M 303 138 L 316 142 L 308 148 L 295 144 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_201" d="M 274 140 L 287 144 L 287 150 L 274 146 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_202" d="M 295 138 L 287 144 L 287 150 L 295 144 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_203" d="M 282 134 L 295 138 L 287 144 L 274 140 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_204" d="M 253 150 L 266 154 L 266 160 L 253 156 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_205" d="M 274 148 L 266 154 L 266 160 L 274 154 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_206" d="M 261 144 L 274 148 L 266 154 L 253 150 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_207" d="M 308 156 L 321 160 L 321 166 L 308 162 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_208" d="M 329 154 L 321 160 L 321 166 L 329 160 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_209" d="M 316 150 L 329 154 L 321 160 L 308 156 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_210" d="M 287 146 L 300 150 L 300 156 L 287 152 Z" fill="#323232" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_211" d="M 308 144 L 300 150 L 300 156 L 308 150 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_212" d="M 295 140 L 308 144 L 300 150 L 287 146 Z" fill="#7D7D7D" stroke="#969696" stroke-width="1.1"/>
+<path id="pylon_node_213" d="M 266 156 L 279 160 L 279 166 L 266 162 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_214" d="M 287 154 L 279 160 L 279 166 L 287 160 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_215" d="M 274 150 L 287 154 L 279 160 L 266 156 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_216" d="M 300 160 L 313 164 L 313 170 L 300 166 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_217" d="M 321 158 L 313 164 L 313 170 L 321 164 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_218" d="M 308 154 L 321 158 L 313 164 L 300 160 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_219" d="M 279 163 L 292 167 L 292 173 L 279 169 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_220" d="M 300 161 L 292 167 L 292 173 L 300 167 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_221" d="M 287 157 L 300 161 L 292 167 L 279 163 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_222" d="M 292 170 L 305 174 L 305 180 L 292 176 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_223" d="M 313 168 L 305 174 L 305 180 L 313 174 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<path id="pylon_node_224" d="M 300 164 L 313 168 L 305 174 L 292 170 Z" fill="#000000" stroke="#7D7D7D" stroke-width="1.1"/>
+<text transform="matrix(1 0 0 1 36 52)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">10</text>
+<path d="M 49.83 56.52 L 111.83 76.52 L 112.17 75.48 L 50.17 55.48 Z" fill="#7D7D7D" stroke="none"/>
+<text transform="matrix(1 0 0 1 408 80)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">12</text>
+<path d="M 403.75 81.51 L 329.75 119.51 L 330.25 120.49 L 404.25 82.49 Z" fill="#7D7D7D" stroke="none"/>
+<text transform="matrix(1 0 0 1 66 190)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">14</text>
+<path d="M 82.39 186.39 L 128.39 140.39 L 127.61 139.61 L 81.61 185.61 Z" fill="#7D7D7D" stroke="none"/>
+<text transform="matrix(1 0 0 1 420 200)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">fig. 1</text>
+</svg>

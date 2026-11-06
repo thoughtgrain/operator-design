@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P12",
+  "drawing_language": "patent section",
+  "subject": "The rotary cabinet cut open as a patent section: one shaft carries the horn and the drum rotor on two orbits like a two-planet orrery, with louvred walls and reference numerals on leaders.",
+  "controls": [
+    "spin: phantom positions of the horn mouth trail along its orbit, from 1 to 13 (count), the stroboscopic way a patent drawing shows a part in motion.",
+    "flutter: the drum's orbit loses its circle, rippling by up to 14 % of its radius (shape).",
+    "depth: the horn's orbit radius grows from 60 to 120 px about the shaft (uniform scale, 2x), since radius is what makes the doppler.",
+    "mix: the louvres in both walls open from 10 to 70 degrees (rotation), letting the rotor's sound into the room."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "Stretch: P12 is a player/sequencer pattern, an orbit standing for a cycle of items. The exception is that a rotary speaker is a literal orrery: two bodies circling one shaft at two rates, so the orbits are the mechanism, not a metaphor, and nothing has to stand for steps. What doesn't fit: P12's life is constant calm orbiting, and an effect page has no notes and must be still at rest, so the 'planets' never travel unless a knob turns; the orbit is then just a drawing of the cabinet. The cabinet outline, hatched base and numerals push the frame toward 40 % black territory; louvres at 1:1 are 6 px slats and read as zigzags."
+}

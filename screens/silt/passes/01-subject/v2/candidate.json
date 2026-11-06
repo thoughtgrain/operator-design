@@ -1,0 +1,19 @@
+{
+  "variant": "v2",
+  "pattern": "P3",
+  "drawing_language": "typeset diagram",
+  "subject": "The stirred wave printed big as a textbook figure, its component partials drawn small beneath it hanging in a band that sinks toward a stippled silt bed.",
+  "controls": [
+    "settle: position; the band of component curves hangs high under the wave at long settle and drops onto the stipple bed at short settle (about 26 px).",
+    "layers: count; one printed component curve per partial is added under the wave (capped at eight visible, labelled k2 to kN).",
+    "stir: shape; the main wave (the one bright mutable outline) gains high-partial ripple and steeper edges.",
+    "grain: scale; the stipple dots of the bed grow from fine silt (3 px) to coarse sand (6 px)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": [
+    "The component band reads as water hatching at 1:1; spacing is exactly at the 7 px limit and amplitude only 2 px.",
+    "Layers has to cap at eight curves, so 16..64 differ only in the label; count floor (12 items) fails above 8.",
+    "Grain on the bed is small and low-grey; scale 2x of 3 px dots may still under-read for a score-3 control.",
+    "Settle shown as a position is a snapshot of a time; it explains 'how far they've sunk', not the rate."
+  ]
+}

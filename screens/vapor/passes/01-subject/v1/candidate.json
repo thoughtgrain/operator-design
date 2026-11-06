@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P15",
+  "drawing_language": "typeset diagram",
+  "subject": "A field of square cells laid over the vowel chart, where a bright clump of lit cells sits on the sung vowel and grey breath hangs round it.",
+  "controls": [
+    "vowel: position, the bright clump moves across the field to the vowel's place on the chart (front left, back right, close top, open bottom), up to ~300 px of travel from u to i.",
+    "breath: count, grey haze cells in runs of 2-3 gather round the clump, from none at 0 to ~28 cells at 100.",
+    "throat: count, the number of lit cells in the clump grows from 4 at 0.75 to ~16 at 1.50, a bigger tract making a bigger, lower mass.",
+    "glide: count, a trail of mid-grey cells runs from the closed u corner toward the clump, 0 cells at 5 ms to the full route (~10) at 2 s."
+  ],
+  "reference": "opxy/reference/README.md (Stock OP-XY engine screens: dissolve, in detail)",
+  "risks": "P15 is for sounds that are texture; vapor has a mechanism (pulse through a tube), so Gate 0 argues for drawing the mechanism instead, and the cell field earns its place only because breath really is noise. Typeset diagram wants the five vowel letters in the field, which P15's no-text rule forbids; I kept five 12 px letters as the chart and would defend them as the only labels. Breath and throat both change a count of cells; they differ by value (grey haze vs bright clump) and placement, which is close to a grey-only difference, so throat may need a second cue. A vowel move relights ~25 cells at once, over the ~20 changed nodes/frame guide during a turn. At rest the field is mostly empty dots, so it can read as a screensaver."
+}

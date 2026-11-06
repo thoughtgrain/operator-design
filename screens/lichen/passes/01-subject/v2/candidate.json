@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P13",
+  "drawing_language": "oscilloscope trace",
+  "subject": "A lichen thallus captured on a scope screen: the lattice is the graticule, the colony's growth front is one bright closed trace taking in every cell it crosses, and the dead centre glows inside it as a dimmer afterimage.",
+  "controls": [
+    "grow: shape. The front trace's reach past the living cells swells, hugging them at 0 and bulging most of a cell beyond the margin at 100 (16 px or more at its lobes).",
+    "decay: shape. The inner afterglow trace round the dead centre opens out toward the front, so the living band between the two traces thins from a solid patch at 0 to a narrow ring at 100.",
+    "seed: count. Spores show as hollow spots on bare graticule away from the colony, 0 to 8.",
+    "scale: position. The small root labels on the graticule jump to where each octave's root sits (every 7th or 5th degree); between seven-note modes only half-step markers would move."
+  ],
+  "reference": "library/meikyu-capture",
+  "risks": "Two nested closed traces can read as a contour map or a target. The capture idea is weaker than meikyu's: the front follows the colony rather than deciding what plays. A colony that splits needs more traces than the 4-path limit comfortably allows (front and centre per patch). Each trace re-keys on every tick's growth (a whole-path redraw per tick, not per frame). Scale only has labels to move, the weakest channel on the page. Muted (mute is this machine's bypass): the front trace drops to afterglow grey and the growth spots go hollow; the graticule stays."
+}

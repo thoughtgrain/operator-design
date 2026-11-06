@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "pattern": "P6",
+  "drawing_language": "hidden-line isometric",
+  "subject": "A swing set in hidden-line isometric with a block rider on every seat and chains of slowly different lengths, whose feet strike a tuned bar on the ground as each rider passes the bottom.",
+  "controls": [
+    "length: the chain lengths, riders hanging lower as it rises (position, ~30 px).",
+    "count: how many riders hang from the beam (count, 3 to 16).",
+    "swing: how far back the riders are held (rotation of each chain about the beam, 10° to 45°).",
+    "scale: the lengths of the tuned bars on the ground, longer for lower notes (shape)."
+  ],
+  "muted": "Riders sit still at the bottom, feet clear of the bars; the bars go ground grey.",
+  "reference": "library/theseus-tower",
+  "risks": "Stretch, and I don't think it earns the exception: the pendulum is already the performer, so a rider adds a character without adding a meaning, and figures invite idle animation and the drawing-quality trap toro hit. The only case for it is warmth: a row of swings reads instantly. A node can't tilt out of the screen's plane, so the swinging riders need pre-drawn poses per angle step, and 16 riders is a crowd."
+}

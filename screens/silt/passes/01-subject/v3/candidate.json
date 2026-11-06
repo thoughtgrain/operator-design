@@ -1,0 +1,19 @@
+{
+  "variant": "v3",
+  "pattern": "P4",
+  "drawing_language": "orthographic elevation",
+  "subject": "Octave bands of partials as flat plates in elevation, stepping back from the fundamental on the ground line, the upper plates lifted off their dashed settled positions.",
+  "controls": [
+    "settle: position along the stack; the bright plate (the settle front, the band still falling) moves from the front plate at 0.1 s to the back plate at 10 s.",
+    "layers: count; one plate per octave band (k1, k2, k3-4, k5-8 ...), from 2 plates at 2 partials to 7 plates at 64.",
+    "stir: position; plates lift vertically off their dashed settled lines, more the further back (higher) they are, up to ~46 px for the top band.",
+    "grain: shape; the bright plate's top edge goes from a fine serration to coarse teeth."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": [
+    "Settle and stir both use position, on different parts and axes (bright marker along the stack vs vertical lift); a reviewer may call it a shared channel.",
+    "Count by octave grows slowly (2 to 7 plates), under the 12-item floor though it is more than doubling.",
+    "Plates read as shelves or a bar chart at 1:1; the elevation conventions (ground hatch, hidden settled lines, dimension ticks) carry the language and must stay crisp.",
+    "Grain only shapes one plate; a score-3 control on a 230 px edge with 1.5-5 px teeth is borderline."
+  ]
+}

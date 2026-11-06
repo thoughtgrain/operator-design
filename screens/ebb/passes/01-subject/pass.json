@@ -1,0 +1,206 @@
+{
+  "machine": "ebb",
+  "category": "player",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: survey plan."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "patternName": "Field and figure",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P5 Field and figure; drawing language: patent section."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P12",
+      "patternName": "Orrery",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P12 Orrery; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "star atlas",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: star atlas. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P13",
+      "drawing_language": "orthographic elevation",
+      "subject": "A stepped sea wall seen in elevation, one tread per scale degree rising with pitch, where the water level is the capture line and the highest tread it covers is the note that plays.",
+      "controls": [
+        "tide: the painted hw and lw marks and their range dimension spread apart up the wall face, from one line at 0 st to 144 px apart at 36 st, and the water's travel between them with it (position of the marks).",
+        "period: the swell on the water surface stretches from a tight chop (about 8 px wavelength at 1 s) to one long gentle wave across the pool at 32 s (shape of the surface line).",
+        "foam: spray marks spring up the wall face where the water meets it, none at 0 % to a cloud of about 24 at 100 %, grouped at the turn (count).",
+        "scale: the staircase re-cuts itself: tread heights follow the scale's intervals, so pentatonic gives fewer, taller risers and hirajoshi a lopsided run of short and tall ones (shape of the wall profile)."
+      ],
+      "reference": "library/meikyu-capture",
+      "risks": "Capture's strength is that the threshold is the player's choice; here the water's height is the tide, which the player sets only in range, so the capture line moves on its own while playing (that's the point, but it means the subject animates with the clock, a slow continuous redraw). The wall profile is up to 46 points and reshapes on every scale change, and the water polygon is a second mutable outline that follows the level every frame it moves: 2 of 4 paths, re-keyed on level change, so throttle level updates to whole semitones. 22 risers at 17 px are fine for the seven-note scales; pentatonic and hirajoshi give 16, so the wall's width changes with scale unless tread width is fitted. Muted: the water drains to datum and the captured block goes hollow grey, a change in position, not shade alone. It is the most literal of the five; it may read as a bar chart from across a room."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P14",
+      "drawing_language": "survey plan",
+      "subject": "A surveyed sheet of the last four rows of tide, woven as weft threads across sixteen chainage lines, each note a slab sounded on its line and the newest row bright at the front.",
+      "controls": [
+        "tide: every row's weft swings further from its dashed mean-water contour, from flat rows at 0 st to arcs spanning 36 px of the 40 px row at 36 st (shape of the rows).",
+        "period: the weft's waves tighten or relax across the rows: at 1 s each row holds four crests, at 8 s each row is one half arc, at 32 s each row is an almost straight slope (shape, across all rows).",
+        "foam: hollow grace slabs appear beside the solid ones near each crest and trough, scattered differently in every row, so the cloth shows what changed pass to pass (count, and the loom's solid vs hollow role).",
+        "scale: the scale bar in the sheet's corner re-divides into alternating blocks at the scale's degrees, and the slabs snap to its steps so the weft turns from smooth to terraced (shape of the corner bar, second cue in the rows)."
+      ],
+      "reference": "library/loom-pages",
+      "risks": "Loom's power is history that varies; with foam at 0 every row is the same tide, so at defaults it shows no history worth reading, only a periodic wave. Flat on a plan, it loses P14's depth cue (rows recede in 3D) and leans toward a grid of dashes: dashboard-of-meters risk at 1:1. 64 slabs plus 4 weft outlines (all 4 paths) is fine for nodes, but each step shifts every row back (a whole-sheet redraw per eighth note), far over ~20 nodes a frame; it needs a scroll-only-on-bar rule or a playhead instead. The corner scale bar is a legend, the kind of thing P13 permits but craft calls panel. Muted: the newest row's slabs go hollow and the weft stops being added (rows stop moving)."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P5",
+      "drawing_language": "patent section",
+      "subject": "Fig. 1, a float cut in section riding a receding sea, its graduated spar sliding past a fixed index arm on a pile, with the notes it has read ticked along a strip below.",
+      "controls": [
+        "tide: the two stop collars (16) on the pile spread apart from touching at 0 st to 108 px at 36 st, and the float rides between them when playing (position).",
+        "period: the swell lines of the receding sea lengthen from a tight chop to long rollers, front wavelength 9 px at 1 s to 288 px at 32 s (shape of the field, re-keyed only on turns).",
+        "foam: spray strokes break off the hull at the waterline, none to about 20, thrown highest at the turns (count).",
+        "scale: the spar's graduations re-space to the scale's degrees, octave ticks long, so pentatonic reads as sparse wide marks and lydian as dense ones (position of the ticks)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "A patent drawing carries reference numerals and leaders that are decoration once you know the parts; they must stay few and static. The receding field is ten full-width lines of about 220 points each: as static art it is free, but period reshapes all of them, which needs four 64-point mutable outlines at most, so the field has to drop to four lines on the device or period moves something smaller. The spar's major-scale ticks sit 3 px apart at semitone steps, on the hatching floor. Muted: a lock bar drops across the spar at the index, a shape cue, and the float sits on its lower stop."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P12",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The moon on its orbit drawing the sea out into a bright spheroid round a dashed, hidden earth, with the twelve pitch classes as beads on a ring between them.",
+      "controls": [
+        "tide: the water spheroid stretches toward the moon, from a sphere just over the earth at 0 st to a long lemon 2.2x its width at 36 st (shape of the brightest outline).",
+        "period: the moon's orbit widens, Kepler-style, from 80 to 124 units of radius as the period runs 1 s to 32 s, carrying the moon outward (scale of the orbit, position of the moon).",
+        "foam: spray marks fly off both tips of the bulge, none to about 16, densest at the tip facing the moon (count).",
+        "scale: the beads on the pitch-class ring fill for the scale's notes and empty for the rest, 5 to 7 of 12 filled, so each scale is a distinct pattern round the ring (count and shade on fixed parts)."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "Real tides have two bulges per lunar day; a spheroid points both ends, so one player period is half a moon orbit, which a physicist would notice and a player won't. The moon turns once per period on a long period it barely moves; it needs to be stepped. Scale lives on fill state of 12 beads; maj and min differ by two or three beads, which is close to shade-only and must also change the ring (e.g. scale notes sit on the ring, others step in). Orbits as concentric ellipses invite the Saturn/target-ring look craft warns about; the hidden earth helps. The spheroid silhouette is a mutable outline re-keyed on tide turns and as the moon moves (its axis turns), so throttle it. Muted: the moon goes hollow and the spheroid relaxes to a sphere."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P10",
+      "drawing_language": "star atlas",
+      "subject": "A star chart of the last sixteen seconds where every scale degree at every moment is a star sized by how near the tide passes it, so the notes rise and set along a sinuous ecliptic toward the brightest star, now.",
+      "controls": [
+        "tide: the ecliptic band's swing between declinations widens from a flat line of stars at the mean at 0 st to the full +0 to +36 chart at 36 st (shape of the field).",
+        "period: the band's wavelength across right ascension stretches from 16 crests in the window at 1 s to half a crest at 32 s (shape of the field, along the other axis).",
+        "foam: faint stars scatter off the band at its crests and troughs, none to about 30, like a cluster round each turning point (count).",
+        "scale: the rows of stars re-space to the scale's degrees, so pentatonic draws five widely spaced rows per octave and hirajoshi five unevenly spaced ones (position of the rows)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "Stretch outside the player column. The case for the exception: ebb's rule is a continuous function of time (a sine quantised to a scale), so like an engine's signal it can be computed into a field of identical parts, and each control does to the field what it does to the notes. The honest case against: what results is a scatter plot of pitch over time, a piano roll with star dots; P10's charm is that the field is the sound's shape, and here the shape is just the melody, which any sequencer page already shows. It reads as a graph at 1:1, not as an atlas, despite the graticule and labels. Budget: 40 columns x 22 degrees is 880 cells, past 512 nodes, so only the ~3 nearest degrees per column can be nodes (120), placed per column; the chart scrolls every column step, far over ~20 nodes a frame. Muted: the band stops scrolling and the now star goes hollow."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:31:24"
+  },
+  "selection": null
+}

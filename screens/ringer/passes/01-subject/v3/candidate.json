@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "pattern": "P14",
+  "drawing_language": "star atlas",
+  "subject": "The method as a star chart: changes are the parallels of a conic projection, woven in at the bottom and sliding back, places are its meridians, every blow a star sized by its bell, and the treble's path through the changes drawn as the bright constellation line.",
+  "controls": [
+    "bells: count, meridians on the chart, 4 to 12, and the stars on every parallel with them; the fan of meridians widens to the neatline.",
+    "method: shape, the constellation line (one mutable outline) bends to the treble's path under the method: an even zig-zag for hunt, dodges for bob, long stretches for Cambridge; bell 2's hairline follows as a fainter figure.",
+    "pace: count, how many changes the chart holds over a fixed six bars: 2 parallels at 0.5 a beat, 8 at the default 2 (6 bells), capped at 12 from about 3 a beat, the parallels closing up as they are added.",
+    "stroke: position, every handstroke parallel stands back from its backstroke partner by up to one parallel's spacing, so the changes pair up as whole pulls with open bands of sky between them."
+  ],
+  "reference": "library/loom-pages/README.md",
+  "risks": [
+    "It is the blue line, the ringer's own method diagram: instant for ringers, but close to a grid of data; the atlas furniture (neatline, graduations, sized stars, labels) is what keeps it a chart and must stay.",
+    "Sliding the chart back one parallel per change moves every star (up to 12 x 12 = 144 nodes) at once, far over ~20 changed nodes a frame; it needs a fixed chart with a moving 'now' parallel that wraps, or few rows.",
+    "Pace (count of parallels) and stroke (spacing of alternate parallels) both act on parallel position; stroke must stay a pairing, not a spacing, to be its own channel.",
+    "At 12 bells meridians are ~30 px apart and fine; at 12 parallels the spacing drops to ~10 px and the small stars near touch.",
+    "Mute: the chart stops weaving and the constellation drops to mid grey; not drawn here."
+  ]
+}

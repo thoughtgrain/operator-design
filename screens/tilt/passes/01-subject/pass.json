@@ -1,0 +1,236 @@
+{
+  "machine": "tilt",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P13",
+      "patternName": "Capture",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P13 Capture; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P3",
+      "drawing_language": "typeset diagram",
+      "subject": "One bright spectrum line, set like a textbook figure on a log-frequency axis, crisp and jagged inside the focal band and smoothed to a soft hump outside it.",
+      "controls": [
+        "focus: position. The focal span (a 1.5 px bracket on the axis) and the dense, jagged stretch of the line slide together along the axis, 100 Hz to 8 kHz, about 290 px; the line re-keys where it's sharp.",
+        "tilt: rotation. The whole line turns about its point at the focus, ±18° (36° over the range; a little more than the true ±6 dB/oct slope so it clears the 30° floor).",
+        "blur: shape. Outside the band the line is smoothed by a wider kernel: at 0 the partials stand as sharp peaks right across, at 100 the line outside the band is a soft hump with no peaks.",
+        "mix: position. A dark hairline ghost of the dry, untouched spectrum sits under the bright line; mix drops it from on the line (0) to 34 px below (100), so the gap is how far the result has left the input."
+      ],
+      "reference": "opxy/reference/README.md (stock engine screens: the wavetable engine's single waveform) beside library/toro-blocks/contact.png for weight",
+      "risks": [
+        "Easy to read as an analyser: the line is a fixed test spectrum (an effect page gets no audio), so it shows what the settings do, not what's playing. That has to be obvious or it reads as broken.",
+        "Tilt as rotation is slightly exaggerated (±18° for ±6 dB/oct) to clear the 30° floor; a 400 px line turned 18° pokes towards the header at the ends, so the pivot height and the turn need checking on the contact sheet.",
+        "Mix is the weakest channel: a ghost dropping away is a convention, not the sound. At the default (mix 100) the ghost is permanently 34 px down and adds clutter.",
+        "Budget: sharp-in-band needs dense points, so the line is three mutable outlines (left, band, right) of 31 centre points each; focus re-keys all three. Four paths is the cap."
+      ],
+      "stretch": null
+    },
+    {
+      "variant": "v2",
+      "pattern": "P4",
+      "drawing_language": "orthographic elevation",
+      "subject": "Six octave bands stood up as cards in an oblique elevation, low at the front, high at the back; the card at the focus is drawn crisp and bright and the cards either side go soft with an echoed outline.",
+      "controls": [
+        "focus: shade and position. The crisp bright outline and its detailed wave top step from card to card along the stack (front card at 100 Hz, back card at 8 kHz); five card steps, about 180 px of travel.",
+        "tilt: scale. Each card's height scales with its band's gain, so the stack's silhouette tilts: at −6 dB/oct the front cards stand tall and the back ones sink, at +6 the reverse (heights 0.6× to 1.6×).",
+        "blur: position. Every out-of-focus card's top contour is echoed by a dark hairline lifted above it, and its own wave flattens; blur lifts the echo from 3 px to 24 px and irons the wave out.",
+        "mix: position. The spacing of the stack: at 0 the six cards collapse onto one plane (dry: no depth, nothing separated), at 100 they spread to 36 px apart diagonally."
+      ],
+      "reference": "library/toro-blocks/contact.png (depth, hidden-line black fills) and opxy/reference/README.md (DPRO-WAVE-style stack via patterns.md P4)",
+      "risks": [
+        "Front cards hide most of the cards behind; only their tops and right edges show, so the focal card's detail is only visible in a strip ~36 px wide when it isn't the front card.",
+        "The echoed contours of six cards cross each other and read as a nest of wavy lines on the left at blur 40 %; at blur 100 it may turn into hatching.",
+        "Focus steps in six cards while the control has twenty positions; between octaves the bright card can't move, so focus needs a second cue (the crisp detail sliding across the card) or it reads as stepped.",
+        "Six stacked cards is at the 5–6 cap from P4."
+      ],
+      "stretch": null
+    },
+    {
+      "variant": "v3",
+      "pattern": "P10",
+      "drawing_language": "survey plan",
+      "subject": "A surveyed plot of square markers laid out frequency by time, where a vertical strip at the focus is surveyed sharp (bright solid markers, crisp hits) and the rest of the ground is smeared into even, hollow, mid-size markers.",
+      "controls": [
+        "focus: position. The two strip boundary lines (1.5 px, past the neat line) and the solid bright markers between them slide across the plan, 100 Hz to 8 kHz, about 330 px.",
+        "tilt: scale. Marker size ramps across the plan from low to high frequency: at −6 the low side swells and the high side shrinks to 4 px, +6 the reverse (each marker 4–14 px).",
+        "blur: scale over time. Outside the strip each column's markers even out down the time axis: at 0 every column has the strip's crisp pattern (big at the three hits, tiny between), at 100 every row is the same mid size, the hits smeared away.",
+        "mix: count. A seeded scatter of markers outside the strip swaps between the dry look (the crisp pattern) and the wet look (smeared); mix sets how many have swapped, 0 to all 160."
+      ],
+      "reference": "library/toro-blocks/contact.png (P10: a field computed from the signal model) beside opxy/reference/field-and-figure.jpg (neat ground, one figure)",
+      "risks": [
+        "At 1:1 it reads as a matrix of LEDs or graph paper: a regular grid of identical squares is close to the 'dashboard of meters' the subject gate rejects.",
+        "Tilt and blur both change marker size (one across frequency, one down time); two controls on the scale channel of the same parts breaks the one-channel-per-control rule unless blur moves to shape (stretching markers into streaks along time) instead.",
+        "Size differences inside the haze are small at the default; the field looks uniform outside the strip, which is right for the sound but dull.",
+        "192 markers is fine for the node budget, but tilt and blur each resize nearly all of them: a turn redraws ~160 nodes, well past ~20 per frame while easing."
+      ],
+      "stretch": null
+    },
+    {
+      "variant": "v4",
+      "pattern": "P15",
+      "drawing_language": "patent section",
+      "subject": "The sound's texture cut through like a patent section, a block of square cells frequency by time in which the focal band stays as crisp solid cells on the hits and everything outside is cross-hatched cut material smeared into long runs.",
+      "controls": [
+        "focus: position. The column pair that stays solid (bright, hits only) moves across the block, 100 Hz to 8 kHz, about 400 px; the hatching closes behind it.",
+        "tilt: count. The density of hatched cells ramps across the block: at −6 the low side fills and the high side empties, at +6 the reverse; about 40 cells change sides over the range.",
+        "blur: run length. Outside the band, hatched cells join into longer vertical runs (time smeared): at 0 they're single cells on the hit rows like the band, at 100 they run most of the block's height.",
+        "mix: count, second look. A seeded scatter of out-of-band cells keeps the dry look (a solid mid-grey cell on the hit rows, no hatching) instead of the cut look; mix 0 is all dry, 100 all hatched."
+      ],
+      "reference": "opxy/reference/README.md (stock dissolve engine, the cell-field approach) beside library/theseus-tower/contact.png (line-drawing restraint)",
+      "risks": [
+        "Hatching is static art (hundreds of 1 px ribbons) and can't be swapped by palette, so each cell needs a pre-hatched variant to show or hide: two nodes per cell, 320 nodes, needs sdk 1.8 and is heavy.",
+        "P15 is for noise-like sounds; tilt processes whatever is sent to it, so this only fits by saying the drawing is the effect's texture, not the source. Gate 0 has to be argued.",
+        "Hatched regions at 5 px pitch look like 'disabled' stipple from desktop UIs; a patent reader sees cut material, a player may see greyed-out.",
+        "Tilt and mix are both counts on the same cells; they differ by which look (hatched vs dry solid) and where (gradient vs scatter), which may not be enough to tell them apart."
+      ],
+      "stretch": null
+    },
+    {
+      "variant": "v5",
+      "pattern": "P13",
+      "drawing_language": "hidden-line isometric",
+      "subject": "A tilt-shift miniature: the spectrum built as a row of thin fins on a model base, with an upright glass plane of focus standing across it that captures the fins inside its depth of field as solid and leaves the rest hollow and doubled.",
+      "controls": [
+        "focus: position. The plane of focus and its two depth-of-field lines on the base slide along the row, 100 Hz to 8 kHz, about 260 px of screen travel; fins entering it turn solid, fins leaving it go hollow.",
+        "tilt: shape. The base tips: fin heights ramp along the row about the plane of focus, so at −6 the near end towers and the far end sinks to stubs, at +6 the reverse (each fin 8–56 px).",
+        "blur: position. Each fin outside the depth of field casts a hollow ghost of itself set back into the base; blur pushes the ghost from 0 to ~14 px back, further for fins further from focus.",
+        "mix: position. No twin in the optics; a plain scale along the base's front edge (octave ticks, a 1.5 px bar) fills from 0 to the full length."
+      ],
+      "reference": "library/meikyu-capture/README.md (P13: the machine's rule drawn as a physical thing) beside library/toro-blocks/contact.png (hidden-line boxes)",
+      "stretch": "Why this machine might be the exception: P13 asks for the machine's own rule drawn as a physical thing with the same shape, and tilt's rule is literally an optical one (a plane of focus that keeps a band sharp and lets the rest go soft). The capture is the depth of field: what's inside it is sharp. Where it doesn't fit: P13 is a player/function pattern built on items being let through to play; here nothing is let through, only sharpened, and two of the four controls (tilt, mix) have no twin in the optics, so half the screen is scenery.",
+      "risks": [
+        "Honest verdict on the stretch: it fits for focus and blur, and doesn't for tilt (a sloped base is a stand-in) or mix (a ruler in the corner, which P13 itself warns looks bolted on).",
+        "Twenty-two fins in a row read as a bookshelf or dominoes before they read as a spectrum; the glass plane is the only cue that this is about focus.",
+        "The camera is dimetric (24°/30°), not true isometric, to fit 300 px of row into a 200 px body; a strict 30° row would need ~170 px of drop.",
+        "Close to toro's hidden-line block field in look; the composition (one row, one plane) has to keep it from reading as a copy."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.17,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:31:31"
+  },
+  "selection": null
+}

@@ -1,0 +1,206 @@
+{
+  "machine": "lathe",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "typeset diagram",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: typeset diagram."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "orthographic elevation",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: orthographic elevation."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: survey plan."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: patent section."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "patternName": "Instrument stack",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P11 Instrument stack; drawing language: hidden-line isometric. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "drawing_language": "typeset diagram",
+      "subject": "The cutting stylus caught mid-cut in a textbook cross-section of the lacquer blank, its V sunk into the coat and a swarf thread coiling off behind it.",
+      "controls": [
+        "cut: shape (node 0, the groove under the stylus) - the V deepens from ~7 to ~22 px and its point bottoms out into a flat floor as the cutter saturates (1.4 to ~9 px flat); the stylus (node 1) rides down with it.",
+        "groove: position - the blank slides under the fixed stylus: the rim bevel runs out to the left and the uncut inner lacquer's break line comes in from the right (~160-170 px), so more cut grooves trail the stylus.",
+        "wear: count - chips and rounded lips appear on the grooves already cut, left of the stylus (0 to ~14 marks); none at 0.",
+        "rumble: shape - the platter line under the blank rises into a slow wave (0 to +-10 px); flat at 0."
+      ],
+      "reference": "opxy/reference/README.md (MNMD MD KIT section drawings, linked) and library/theseus-tower for line weight",
+      "risks": "Header-wide section (x 160-460) leaves a lot of thin horizontal lines; the lacquer hatching is close to the 3 px floor (5 px spacing, hairline) and could smear on the panel. Rumble's platter line is 420 px long, so as a mutable outline it needs four 64-point runs or it has to be re-thought as a few translated segments. wear's chips are small (3-4 px) and only appear on the 3-4 cut grooves at groove 0. Effects get no note input, so nothing answers playing: the drawing only moves when a knob turns."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "drawing_language": "orthographic elevation",
+      "subject": "The lathe drawn side-on as an engineering elevation on the left, with the groove wall as it plays back traced on the right.",
+      "controls": [
+        "cut: shape - the played trace's amplitude grows and its peaks flatten into plateaus as the cutter saturates (nodes 3-4).",
+        "groove: position - the cutter head (node 0) travels along the cantilevered rail from the rim toward the spindle, 56 px, and the radius dimension under the plinth lengthens with it.",
+        "wear: count - crackle ticks appear above the trace, 0 to 16, a click per tick; none at 0.",
+        "rumble: shape - the trace's grey centre line (nodes 1-2) bends into a slow 1.2-cycle wave, 0 to +-12 px; flat at 0."
+      ],
+      "reference": "opxy/reference/README.md (MNMD FM STAT / VO-6 split layout, linked)",
+      "risks": "Two places to look; the left elevation only carries groove, so knobs 1, 3 and 4 all act on the right half and P7's column split doesn't hold. The elevation's plinth, rail and column are boxes and could tip into a 'panel' look. Two languages in one frame (elevation, trace) must share weights. The trace is 200 px, so cut needs two mutable paths and rumble two more: all four paths spent. No note input on an effect, so the trace never scrolls; it is a picture of one turn, not a scope."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "drawing_language": "survey plan",
+      "subject": "A sector of the record side seen from above as a survey plan, the groove being cut drawn bright across it among the grey earlier turns, with chainage marks.",
+      "controls": [
+        "cut: shape - the bright groove's lateral swing grows (about 3 to 9 px) and its crests square off as the cutter saturates (nodes 0-2).",
+        "groove: position - the label's edge, an arc below the groove, rises from off-frame to just under the cut (~60 px) as the cut moves inward.",
+        "wear: count - spot marks (pits, dust) are plotted along the lands and grooves, 0 to ~20; none at 0.",
+        "rumble: position - the set of earlier turns slides off-centre against the bright groove (0 to 24 px), an eccentric, wandering side; concentric at 0."
+      ],
+      "reference": "opxy/reference/README.md (stock 'wavetable': one bright trace on black)",
+      "risks": "P3's own pitfall: it could read as a wiggly line rather than a record unless the curvature and earlier turns stay. The bright groove spans 370 px, so cut uses three of the four mutable paths. groove's label arc is off-frame at the default (0), so the rest frame doesn't show where groove is; it only reads once turned. rumble moves five static arcs as one group: five nodes but a whole-width change. Grid crosses must stay faint or they read as icons."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "drawing_language": "patent section",
+      "subject": "Five section slices taken across the side from rim to label, stacked diagonally like a patent figure, the slice under the stylus lit and the inner ones carrying shorter waves.",
+      "controls": [
+        "cut: shape - the lit slice's grooved top edge (nodes 0-1) swells and flattens at its crests.",
+        "groove: position + shade - which slice is lit steps from the front (rim, 10) to the back (label, 18), easing through the grey between; the lit outline and edge move with it (~140 px diagonal travel).",
+        "wear: count - nicks are struck into the lit slice's hatched face and edge, 0 to ~12; none at 0.",
+        "rumble: position - the five slices ride a slow vertical wave, up to +-10 px each, so the stack goes out of line; aligned at 0."
+      ],
+      "reference": "opxy/reference/README.md (MNMD DPRO-WAVE stack, linked)",
+      "risks": "groove steps between five slices, so between them it must ease (shade fade plus moving the lit edge) or it reads as on/off. Hatching at 4 px is near the 3 px floor and covers five faces: it's static, but it could smear on the panel. The physics is a little abstract: the player has to know that inner grooves carry shorter waves. Reference numerals (10-18) are patent convention and mean nothing to a player; they're decoration in the language."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The lathe itself, assembled in hidden-line isometric: plinth, platter and lacquer, the rail behind and the cutter head hanging over the disc on its arm.",
+      "controls": [
+        "cut: scale - the swarf thread coiling from the stylus up to the suction tube grows from ~0.7x to 2x (node 2).",
+        "groove: position - the carriage, arm and head slide along the rail from the rim toward the spindle (~34 px on screen) and the cut band of turns widens behind it.",
+        "wear: count - dust specks settle on the lacquer, 0 to 14; none at 0.",
+        "rumble: rotation - the lacquer's top outline turns in plane about the spindle, up to ~30 deg, so the disc reads as wobbling on a worn bearing; still at 0."
+      ],
+      "reference": "library/theseus-tower (hidden-line instrument, line weights)",
+      "risks": "Stretch, and it mostly doesn't fit: P11 works because the instrument's parts are what the note selects (theseus' tiers); here no note selects anything and an effect gets no note input, so the 'stack' is just a portrait of the machine. The exception case is recognition: a lathe reads as a turntable at a glance, so the player knows which part is the head, the disc and the plinth without a legend. Against it: the drawing is about the machine, not the sound; cut's swarf coil is tiny at rest (under ~10 px) and hard to see; rumble's in-plane rotation of an ellipse is a fake tilt that may look like the disc sliding off the platter, and 30 deg is a lot; risk of reading as a stock-style product drawing next to TE's own objects."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:31:00"
+  },
+  "selection": null
+}

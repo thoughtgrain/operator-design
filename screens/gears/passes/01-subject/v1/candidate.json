@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P14",
+  "drawing_language": "engineering schematic",
+  "subject": "The last four revolutions of wheel A woven as cloth in schematic projection, one warp thread per tooth and one row per revolution, with a slab raised at the height of its note wherever a mesh sounded and wheel B's index tooth drawn as a centre line stepping across the rows, so the 3:2 repeat shows as cloth that comes round again every third row.",
+  "controls": [
+    "ratio: wheel B's index centre line changes its stride across the rows (a straight column down the cloth at 1:1, a zigzag every half row at 3:2, one vertex in three rows at 3:1), and the row where the cloth starts repeating moves forward or back (position of the index line's vertices).",
+    "teeth: the number of warp threads and slabs across a fixed-width cloth goes from 3 to 16, the thread pitch closing from about 70 to 16 px (count).",
+    "mesh: slabs whose teeth are too short to reach sink flat onto their threads in Euclidean order, so every row loses raised slabs evenly from 100 % down to bare threads at 0 (count of raised slabs, eased height).",
+    "scale: every slab re-steps its height to the new scale's degree while the rhythm stays put (shape: the profile of the slab tops)."
+  ],
+  "reference": "library/loom-pages/README.md",
+  "risks": "Slabs cost three nodes each: 4 rows x 16 threads x 3 = 192 nodes plus the drive, inside 256 but tight, and weaving a row moves every slab back at once, far over ~20 a frame, so the shift has to be stepped or rows moved as flat tops. Teeth and mesh are both counts (threads vs raised slabs), so mesh's sunk slabs must read as rests (no slab, a knot on the thread), not as low notes. Gears are deterministic, so the cloth never wanders: Loom's point (locked vs generated) collapses into 'it repeats', which is true but thin. The index centre line is a 1.2 px dash-dot over busy slabs and is the weakest read at 1:1. The drive circles at the left are a second, small picture. Muted: the front row stops weaving and drops to wire (no bright tops) and the drive's pitch circles break."
+}

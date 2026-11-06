@@ -1,0 +1,206 @@
+{
+  "machine": "hinge",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: survey plan."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: patent section."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: star atlas."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "patternName": "Instrument stack",
+      "drawingLanguage": "engineering schematic",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P11 Instrument stack; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P4",
+      "drawing_language": "survey plan",
+      "subject": "A survey plan of the doorway drawn once per swing, the plans stacked level above level up the hinge pin, the newest swing bright at the front and each older, wider swing a grey plan behind it.",
+      "controls": [
+        "hold: the leaf's length in every plan (50 to 130 px) and the scale bar under it, because the slice is the leaf (scale of each layer).",
+        "creak: each plan's swing arc breaks from a smooth curve into stick-slip steps, more and deeper steps as it rises (shape of the arcs).",
+        "swing: how much each swing keeps of the last one: at 0 the front plans collapse almost shut behind a wide oldest swing, at 100 every level swings nearly as wide (rotation of the layer leaves, over 40 degrees on the front leaf).",
+        "mix: how far the levels stand apart up the pin, 16 to 32 px each, so the stack of past swings spreads out of the front plan as more of it is heard (position of the back layers, over 60 px at the oldest)."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg",
+      "risks": "Five overlapping sectors with black fills read as a stack, but the back plans are mostly hidden and their dashed arcs get clipped into fragments at 1:1. The plan oblique (plans squashed to 0.42) is a liberty a survey plan doesn't usually take. Swing and mix both change the stack's silhouette; swing must stay on angle and mix on spacing or they blur together. P4's cap of 5 layers means swing can't be a count."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P10",
+      "drawing_language": "patent section",
+      "subject": "FIG. 1, a section through a louvred door leaf between its hatched stiles: every slat turns on its own pin to the caught slice's level, and each row below is a later, quieter pass played the other way.",
+      "controls": [
+        "hold: how many cycles of the caught sound run across a row of slats, from half a cycle (20 ms) to three and a half (2 s) (rotation pattern across the field).",
+        "creak: the slat angles snap to coarse stick-slip steps, from smooth at 0 to 40-degree steps at 100, so rows go from a wave to a staircase (rotation, quantised).",
+        "swing: how much angle the later rows keep: at 0 the second and third rows lie nearly flat, at 100 they tilt as far as the first (rotation, row envelope, over 40 degrees in row 3).",
+        "mix: the slats' length, 10 px stubs when dry to 34 px when wet, so the leaf goes from shut pins to open louvres (uniform scale per slat, 3.4x)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "66 slats plus pins is about 70 nodes; rotation is pure turn, so a control turn re-poses every slat (66 changed nodes in one frame on a hold or creak turn, far over ~20 average; fine as a one-off ease, but say so). Rows of short marks can read as hatching or tally marks at 1:1, especially row 3. Hold and creak both act on the same rotation; creak's staircase must look different from hold's cycle count. The hinge itself is only a small knuckle at the edge: the door is implied by the louvres, not drawn."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P15",
+      "drawing_language": "hidden-line isometric",
+      "subject": "An isometric floor of square cells in hidden line, with the door's swing swept into it as a fan of raised cells: the rim where the leaf's edge travels lit, the two extremes it reached in grey, earlier passes as low rings.",
+      "controls": [
+        "hold: the fan's radius, 2.5 to 7.5 cells, because a longer slice is a longer leaf (count of raised cells, roughly 10 to 80).",
+        "creak: the lit rim breaks into runs of 2 to 4 with sunken cells between them, the stick-slip of a dry hinge (count of grey-layer cells along the rim).",
+        "swing: how far round the fan stays lit, 15 to 115 degrees each side of the closed line (count and position of rim cells).",
+        "mix: how high caught cells stand from the floor, 3 to 13 px (position of the raised tops)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "P15 is for sounds with no mechanism to draw, and hinge has one (a door), so the category fits but the pattern's own Gate 0 argues against it. At 1:1 the fan reads as an L-shaped wall of blocks rather than a swing; nothing says door without being told. Raised cells are three nodes each, so a big fan passes ~200 nodes with the floor. Hold and swing both change how many cells are lit; they differ only in radius against angle."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P1",
+      "drawing_language": "star atlas",
+      "subject": "The hinge cut in section at the pole of a half-planisphere graduated in degrees, its leaf standing on the meridian, and the swing plotted as an ephemeris: a track spiralling in from the leaf's tip, each turning point a star sized by how loud that pass is.",
+      "controls": [
+        "hold: the leaf's length and the radius where the track starts, 80 to 150 px (scale of the leaf, 1.9x).",
+        "creak: the track sticks and slips: smooth arcs become stepped runs where the angle holds while the radius falls, and the turning stars split into close pairs (shape of the track).",
+        "swing: how many turning points the track plots before it reaches the pole, 3 to 13 (count of stars and turns).",
+        "mix: the stars' magnitude, 0.6x to 1.4x of their size, as an atlas sizes stars by brightness (uniform scale of the star nodes, 2.3x)."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "Star atlas is a liberty for a section drawing: the hinge in section is small and the chart does the talking, so it can read as a dial or protractor. The track is long (one 64-point outline is coarse for 6+ turns; it needs two or three mutable outlines, re-keyed on hold, creak and swing turns). Inner turns crowd near the pole at high swing. The graduated rim is static art and must stay quieter than the leaf."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P11",
+      "drawing_language": "engineering schematic",
+      "subject": "A door in elevation as an engineering schematic, its parts stacked on the hinge axis: three knuckled hinges on a dash-dot centreline, a closer and folding arm on the head, a ledged plank leaf standing ajar, with callout balloons and a dimension under the leaf.",
+      "controls": [
+        "hold: how many boards make up the leaf, 3 to 12, and the dimension under it reads the slice (count).",
+        "creak: the three hinges' knuckles pull apart along the pin, 1 to 7 px between each, so each barrel lengthens by 24 px (position).",
+        "swing: the closer arm's angle at its pivot, 40 to 100 degrees, as a closer's valve sets how slowly a door comes to rest (rotation).",
+        "mix: how far the door stands ajar, 10 to 70 degrees: the leaf's seen width narrows and the gap at the latch side opens by ~60 px (position of the free edge)."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": "Stretch, and only a partial fit. P11 is for an instrument the sound is played on and whose parts the player picks between (a kit); a door is recognised by sight just as freely, and its parts do each own one control (hinges creak, the closer sets the swing, the leaf is the slice), which is why it's worth trying. But nothing is selected and nothing is struck, so P11's channel fit (only the struck part moves) doesn't apply; this is really P1 in schematic dress. Mix as how far ajar is a strong reading of wet, but the leaf narrowing also thins the boards, so hold's count gets harder to read at high mix. The hinges and closer are small (8 px barrels, a 42 px closer) next to the bright leaf."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:30:20"
+  },
+  "selection": null
+}

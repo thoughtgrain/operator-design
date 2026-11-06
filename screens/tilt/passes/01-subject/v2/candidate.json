@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "pattern": "P4",
+  "drawing_language": "orthographic elevation",
+  "subject": "Six octave bands stood up as cards in an oblique elevation, low at the front, high at the back; the card at the focus is drawn crisp and bright and the cards either side go soft with an echoed outline.",
+  "controls": [
+    "focus: shade and position. The crisp bright outline and its detailed wave top step from card to card along the stack (front card at 100 Hz, back card at 8 kHz); five card steps, about 180 px of travel.",
+    "tilt: scale. Each card's height scales with its band's gain, so the stack's silhouette tilts: at −6 dB/oct the front cards stand tall and the back ones sink, at +6 the reverse (heights 0.6× to 1.6×).",
+    "blur: position. Every out-of-focus card's top contour is echoed by a dark hairline lifted above it, and its own wave flattens; blur lifts the echo from 3 px to 24 px and irons the wave out.",
+    "mix: position. The spacing of the stack: at 0 the six cards collapse onto one plane (dry: no depth, nothing separated), at 100 they spread to 36 px apart diagonally."
+  ],
+  "reference": "library/toro-blocks/contact.png (depth, hidden-line black fills) and opxy/reference/README.md (DPRO-WAVE-style stack via patterns.md P4)",
+  "risks": [
+    "Front cards hide most of the cards behind; only their tops and right edges show, so the focal card's detail is only visible in a strip ~36 px wide when it isn't the front card.",
+    "The echoed contours of six cards cross each other and read as a nest of wavy lines on the left at blur 40 %; at blur 100 it may turn into hatching.",
+    "Focus steps in six cards while the control has twenty positions; between octaves the bright card can't move, so focus needs a second cue (the crisp detail sliding across the card) or it reads as stepped.",
+    "Six stacked cards is at the 5–6 cap from P4."
+  ],
+  "stretch": null
+}

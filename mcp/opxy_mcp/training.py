@@ -415,7 +415,13 @@ def _gate_content(rec, sb: Sandbox, add) -> None:
         old_tok = json.loads((ROOT / "opxy/tokens.json").read_text(encoding="utf-8"))
         add("token changes come with a constraints.md change", "opxy/constraints.md" in touched)
         add("token changes bump source.ref", tok.get("source", {}).get("ref") != old_tok.get("source", {}).get("ref"))
-        _regression(root, add)
+    _regression(root, add)
+    precedents = [k for k, v in cat.get("library", {}).items() if v.get("precedent")]
+    if precedents and rec["kind"] in ("new_pattern", "improve_doc", "constraint_change"):
+        said = " ".join([rec.get("rationale", ""), rec.get("summary", "")])
+        missing = [k for k in precedents if k not in said]
+        add("the rationale says how the precedent screens fare", not missing,
+            "name " + ", ".join(missing) + " and whether they still meet the guidelines under this change", level="warn")
 
     # links and colour in changed markdown
     for f in sorted(t for t in touched if t.endswith(".md")):
@@ -450,7 +456,7 @@ def _regression(root: Path, add) -> None:
         reg = meta.get("regression")
         if not reg:
             continue
-        frames = ROOT / "library" / entry / reg["frames"]
+        frames = ROOT / reg["frames"] if "/" in reg["frames"] else ROOT / "library" / entry / reg["frames"]
         two = bool(reg.get("twoPage"))
         hb = reg.get("headerBottom")
         try:
@@ -467,7 +473,7 @@ def _regression(root: Path, add) -> None:
                 worse.append(f"{entry}: now under the floor on {', '.join(newly)}")
         except ToolError as exc:
             add(f"library regression ran for {entry}", False, str(exc), level="warn")
-    add("no library entry gets worse under the new tokens", not worse,
+    add("no library entry gets worse under this change", not worse,
         "; ".join(worse) + (" (re-audit these, or note the re-audit in the proposal)" if worse else ""))
 
 

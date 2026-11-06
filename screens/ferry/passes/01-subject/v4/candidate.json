@@ -1,0 +1,14 @@
+{
+  "variant": "v4",
+  "pattern": "P14",
+  "drawing_language": "orthographic elevation",
+  "subject": "The timetable woven as cloth and drawn in flat elevation: one band per voyage stacked from the newest at the foot to three older ones above, a slab on each warp thread raised to the pitch of the port it played, so locked stops form straight columns and swell shows as slabs pushed late.",
+  "controls": [
+    "route: the skyline each band's slabs make, a stair up, a stair down, a peak, a zigzag or a scatter; shape across every row.",
+    "ports: how many distinct slab heights the skyline uses before it repeats, 2 to 8, so the stair gets longer and finer; count of levels.",
+    "swell: slabs slip right off their threads by a different amount in every band, breaking the straight columns that a calm sea weaves; position, and the only control that makes rows differ.",
+    "dwell: how many warp threads fit one bar, 32 at 1/32 down to 2 at 1/2, so threads and slabs spread apart and grow wider; count of threads."
+  ],
+  "reference": "library/loom-pages",
+  "risks": "At swell 0 every band is identical, so the rest frame is four copies of one skyline: honest, but repetitive, and it says 'history' only once swell is up. At dwell 1/32 there are 32 threads 12.6 px apart with slabs 7.6 px wide, dense but above the hatching floor; slab count is 3 x 32 + front row, far over the node budget, so short dwells need flat-top slabs or fewer rows shown. There is no ferry in the drawing, only its timetable; the subject sentence carries the ferry, the picture doesn't. Muted: the front band stops weaving and its datum goes dashed."
+}

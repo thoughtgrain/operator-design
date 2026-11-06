@@ -1,0 +1,19 @@
+{
+  "variant": "v2",
+  "pattern": "P10",
+  "drawing_language": "typeset diagram",
+  "subject": "The bucket chain coiled into a printed spiral figure: one radial bar per bucket, its length the charge it holds, each turn of the coil one more pass of recirculation winding inward.",
+  "controls": [
+    "stages: how many bucket bars stand on each turn, 24 at 0 to 72 at 100, so the coil goes from coarse comb to dense fringe (count).",
+    "leak: a fixed seeded set of failing buckets loses its charge and their bars sink to stubs, more of them and lower as leak rises, so the note's lump on each turn gets gaps (shape: bar lengths).",
+    "clock: the bars lose their even angular spacing and bunch and spread around the coil, and the note's lump drifts round a little further on each inner turn instead of lining up radially (rotation of bars about the centre, up to ~30°).",
+    "feedback: how many turns the coil winds before the lump dies away, one at 0 to four at 100, inner turns shorter-barred and dimmer (count of turns)."
+  ],
+  "reference": "library/toro-blocks/README.md (P10: the field's geometry is the signal model)",
+  "risks": [
+    "Inner turns crowd: at 72 bars on the fourth turn bars sit ~2.4 px apart, under the 3 px hatching floor; cap stages' count on inner turns or cap turns at 3.",
+    "~190 bar nodes at default stages and four turns; clock moves every bar, far past ~20 changed nodes per frame while it turns.",
+    "Typeset labels (in, out, pass numerals, caption) must stay off moving bars; the numerals at nine o'clock collide when clock bunches bars there.",
+    "Spiral plus ticks risks reading as a dial or a record, an icon; the figure caption and numerals are what keep it a diagram."
+  ]
+}

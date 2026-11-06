@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">
+  <g id="preview_canvas">
+    <rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>
+  </g>
+  <g id="preview_header">
+    <rect x="0" y="0" width="60" height="20" fill="#000000" stroke="none"/>
+    <rect x="60" y="0" width="60" height="20" fill="#323232" stroke="none"/>
+    <rect x="120" y="0" width="60" height="20" fill="#4B4B4B" stroke="none"/>
+    <rect x="180" y="0" width="60" height="20" fill="#646464" stroke="none"/>
+    <rect x="240" y="0" width="60" height="20" fill="#7D7D7D" stroke="none"/>
+    <rect x="300" y="0" width="60" height="20" fill="#969696" stroke="none"/>
+    <rect x="360" y="0" width="60" height="20" fill="#AFAFAF" stroke="none"/>
+    <rect x="420" y="0" width="60" height="20" fill="#CDCDCD" stroke="none"/>
+    <text transform="matrix(1 0 0 1 5 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">grow</text>
+    <text transform="matrix(1 0 0 1 65 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">35</text>
+    <text transform="matrix(1 0 0 1 125 10)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="10px">decay</text>
+    <text transform="matrix(1 0 0 1 185 17.44)" fill="#CBCBCB" stroke="none" font-family="UniversNextPro-Light" font-size="20px">20</text>
+    <text transform="matrix(1 0 0 1 245 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">seed</text>
+    <text transform="matrix(1 0 0 1 305 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">1</text>
+    <text transform="matrix(1 0 0 1 365 10)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="10px">scale</text>
+    <text transform="matrix(1 0 0 1 425 17.44)" fill="#000000" stroke="none" font-family="UniversNextPro-Light" font-size="20px">maj</text>
+  </g>
+  <path d="M 74.22 95.8 L 33.54 188.8 L 34.46 189.2 L 75.14 96.2 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 94.34 95.82 L 58.33 188.82 L 59.27 189.18 L 95.28 96.18 Z" fill="#323232" stroke="none"/>
+  <path d="M 114.47 95.84 L 83.13 188.84 L 84.07 189.16 L 115.41 96.16 Z" fill="#323232" stroke="none"/>
+  <path d="M 124.53 95.85 L 95.52 188.85 L 96.48 189.15 L 125.48 96.15 Z" fill="#323232" stroke="none"/>
+  <path d="M 144.65 95.87 L 120.32 188.87 L 121.28 189.13 L 145.62 96.13 Z" fill="#323232" stroke="none"/>
+  <path d="M 164.77 95.9 L 145.11 188.9 L 146.09 189.1 L 165.75 96.1 Z" fill="#323232" stroke="none"/>
+  <path d="M 184.9 95.92 L 169.91 188.92 L 170.89 189.08 L 185.89 96.08 Z" fill="#323232" stroke="none"/>
+  <path d="M 194.96 95.93 L 182.3 188.93 L 183.3 189.07 L 195.95 96.07 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 215.09 95.96 L 207.1 188.96 L 208.1 189.04 L 216.08 96.04 Z" fill="#323232" stroke="none"/>
+  <path d="M 235.22 95.98 L 231.9 188.98 L 232.9 189.02 L 236.21 96.02 Z" fill="#323232" stroke="none"/>
+  <path d="M 245.28 95.99 L 244.3 188.99 L 245.3 189.01 L 246.28 96.01 Z" fill="#323232" stroke="none"/>
+  <path d="M 265.41 96.02 L 269.1 189.02 L 270.1 188.98 L 266.41 95.98 Z" fill="#323232" stroke="none"/>
+  <path d="M 285.54 96.04 L 293.9 189.04 L 294.9 188.96 L 286.54 95.96 Z" fill="#323232" stroke="none"/>
+  <path d="M 305.67 96.07 L 318.7 189.07 L 319.7 188.93 L 306.66 95.93 Z" fill="#323232" stroke="none"/>
+  <path d="M 315.74 96.08 L 331.11 189.08 L 332.09 188.92 L 316.72 95.92 Z" fill="#4B4B4B" stroke="none"/>
+  <path d="M 335.87 96.11 L 355.91 189.11 L 356.89 188.89 L 336.85 95.89 Z" fill="#323232" stroke="none"/>
+  <path d="M 356.01 96.13 L 380.72 189.13 L 381.68 188.87 L 356.97 95.87 Z" fill="#323232" stroke="none"/>
+  <path d="M 366.07 96.14 L 393.12 189.14 L 394.08 188.86 L 367.03 95.86 Z" fill="#323232" stroke="none"/>
+  <path d="M 386.21 96.16 L 417.93 189.16 L 418.87 188.84 L 387.16 95.84 Z" fill="#323232" stroke="none"/>
+  <path d="M 406.35 96.18 L 442.73 189.18 L 443.67 188.82 L 407.28 95.82 Z" fill="#323232" stroke="none"/>
+  <path d="M 161.61 102 L 168.92 102 L 171.35 97.13 L 164.05 97.13 Z" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path d="M 181.74 102 L 189.04 102 L 191.48 97.13 L 184.17 97.13 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 191.8 102 L 199.11 102 L 201.54 97.13 L 194.24 97.13 Z" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path d="M 211.93 102 L 219.24 102 L 221.67 97.13 L 214.37 97.13 Z" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path d="M 232.06 102 L 239.37 102 L 241.8 97.13 L 234.5 97.13 Z" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path d="M 242.13 102 L 249.43 102 L 251.87 97.13 L 244.56 97.13 Z" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path d="M 262.26 102 L 269.56 102 L 272 97.13 L 264.69 97.13 Z" fill="#323232" stroke="#646464" stroke-width="1"/>
+  <path d="M 302.51 102 L 309.82 102 L 312.25 97.13 L 304.95 97.13 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 134.29 126 L 142.08 126 L 144.67 120.81 L 136.88 120.81 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1"/>
+  <path d="M 155.75 126 L 163.54 126 L 166.14 120.81 L 158.35 120.81 Z" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path d="M 177.21 126 L 185 126 L 187.6 120.81 L 179.81 120.81 Z" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path d="M 187.95 126 L 195.73 126 L 198.33 120.81 L 190.54 120.81 Z" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path d="M 209.41 126 L 217.2 126 L 219.8 120.81 L 212.01 120.81 Z" fill="#4B4B4B" stroke="#969696" stroke-width="1"/>
+  <path d="M 230.87 126 L 238.66 126 L 241.26 120.81 L 233.47 120.81 Z" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path d="M 241.6 126 L 249.39 126 L 251.99 120.81 L 244.2 120.81 Z" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path d="M 306 126 L 313.79 126 L 316.38 120.81 L 308.59 120.81 Z" fill="#4B4B4B" stroke="#646464" stroke-width="1"/>
+  <path d="M 125.89 154 L 134.25 154 L 137.03 148.43 L 128.68 148.43 Z" fill="#646464" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 148.91 154 L 157.27 154 L 160.05 148.43 L 151.7 148.43 Z" fill="#646464" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 171.93 154 L 180.29 154 L 183.07 148.43 L 174.72 148.43 Z" fill="#646464" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 183.44 154 L 191.8 154 L 194.58 148.43 L 186.23 148.43 Z" fill="#646464" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 206.47 154 L 214.82 154 L 217.6 148.43 L 209.25 148.43 Z" fill="#646464" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 229.49 154 L 237.84 154 L 240.62 148.43 L 232.27 148.43 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 241 154 L 249.35 154 L 252.13 148.43 L 243.78 148.43 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 310.06 154 L 318.41 154 L 321.2 148.43 L 312.84 148.43 Z" fill="#646464" stroke="#7D7D7D" stroke-width="1"/>
+  <path d="M 116.3 186 L 125.3 186 L 125.3 174 L 116.3 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 116.3 174 L 125.3 174 L 128.3 168 L 119.3 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 141.1 186 L 150.1 186 L 150.1 174 L 141.1 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 141.1 174 L 150.1 174 L 153.1 168 L 144.1 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 178.3 186 L 187.3 186 L 187.3 174 L 178.3 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 178.3 174 L 187.3 174 L 190.3 168 L 181.3 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 203.1 186 L 212.1 186 L 212.1 174 L 203.1 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 203.1 174 L 212.1 174 L 215.1 168 L 206.1 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 227.9 186 L 236.9 186 L 236.9 174 L 227.9 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 227.9 174 L 236.9 174 L 239.9 168 L 230.9 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 240.3 186 L 249.3 186 L 249.3 174 L 240.3 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 240.3 174 L 249.3 174 L 252.3 168 L 243.3 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 265.1 186 L 274.1 186 L 274.1 174 L 265.1 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 265.1 174 L 274.1 174 L 277.1 168 L 268.1 168 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="1"/>
+  <path d="M 289.9 186 L 298.9 186 L 298.9 174 L 289.9 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 289.9 174 L 298.9 174 L 301.9 168 L 292.9 168 Z" fill="#CDCDCD" stroke="#CDCDCD" stroke-width="1"/>
+  <path d="M 314.7 186 L 323.7 186 L 323.7 174 L 314.7 174 Z" fill="#323232" stroke="#969696" stroke-width="1"/>
+  <path d="M 314.7 174 L 323.7 174 L 326.7 168 L 317.7 168 Z" fill="#646464" stroke="#969696" stroke-width="1"/>
+  <path d="M 380.6 189 L 380.6 197 L 381.8 197 L 381.8 189 Z" fill="#969696" stroke="none"/>
+  <circle cx="381.2" cy="200" r="2.6" fill="#000000" stroke="#969696" stroke-width="1.2"/>
+  <text transform="matrix(1 0 0 1 8 184)" fill="#969696" stroke="none" font-family="UniversNextPro-Light" font-size="10px">t</text>
+  <text transform="matrix(1 0 0 1 8 152)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">t-1</text>
+  <text transform="matrix(1 0 0 1 8 124)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">t-2</text>
+  <text transform="matrix(1 0 0 1 8 100)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">t-3</text>
+  <path d="M 30 206.5 L 174.4 206.5 L 174.4 205.5 L 30 205.5 Z" fill="#646464" stroke="none"/>
+  <path d="M 29.5 201 L 29.5 206.5 L 30.5 206.5 L 30.5 201 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 99.2 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">1</text>
+  <path d="M 178.8 206.5 L 323.2 206.5 L 323.2 205.5 L 178.8 205.5 Z" fill="#646464" stroke="none"/>
+  <path d="M 178.3 201 L 178.3 206.5 L 179.3 206.5 L 179.3 201 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 248 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">2</text>
+  <path d="M 327.6 206.5 L 447.2 206.5 L 447.2 205.5 L 327.6 205.5 Z" fill="#646464" stroke="none"/>
+  <path d="M 327.1 201 L 327.1 206.5 L 328.1 206.5 L 328.1 201 Z" fill="#646464" stroke="none"/>
+  <text transform="matrix(1 0 0 1 384.4 216)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">3</text>
+  <text transform="matrix(1 0 0 1 8 36)" fill="#7D7D7D" stroke="none" font-family="UniversNextPro-Light" font-size="10px">fig. 1  growth by tick</text>
+</svg>

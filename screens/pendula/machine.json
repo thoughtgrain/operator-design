@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A pendulum wave on aux track 12: pendulums of slowly different lengths each play a note on the target track as they cross the centre, drifting in and out of phase. Length sets the longest pendulum's swing, count how many hang, swing how wide (and so how hard) they swing, scale which notes they play."
+}

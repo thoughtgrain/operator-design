@@ -1,0 +1,14 @@
+{
+  "variant": "v1",
+  "pattern": "P1",
+  "drawing_language": "typeset diagram",
+  "subject": "The toothed wheel itself, drawn as a labelled textbook figure: a big driver rim turning it from the left, a follower lever whose tip rides in its teeth on the right.",
+  "controls": [
+    "ratio: the driver's rim changes size against the fixed wheel (its pitch radius is ratio x the wheel's), sliding its centre and hub off left as the ratio climbs; scale and position of the driver.",
+    "teeth: the wheel's outline gains teeth, 3 chunky lugs at 0 to 24 fine ones at 100; shape of the wheel (one mutable outline).",
+    "wear: the follower's tip blunts from a sharp point to a round worn nub, its point pulling back about 16 px of outline; shape of the follower tip (a mutable outline).",
+    "bite: the follower swings in about its pivot, its tip going from clear of the tips to deep in the roots; rotation of the follower (about 30 deg)."
+  ],
+  "reference": "library/theseus-tower/README.md",
+  "risks": "Wear wants to live on the wheel's teeth (that's where it acts in the DSP), but teeth already owns the wheel's shape, so wear is pushed onto the follower; a player may read a blunt stylus as a different control from 'the teeth wore'. The driver at ratio 8 is a near-straight rack off screen left and at 0.5 is smaller than the wheel: both ends need the arc clipped and checked at 1:1. Typeset labels a/b/c are decoration unless a caption line says what they are."
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P13",
+  "drawing_language": "typeset diagram",
+  "subject": "A bay in plan like a textbook figure: piers along the shore spaced by the interval between chord tones, each pier head inside a dashed capture ring the ferry must enter and wait in before it plays, and numbered legs of the route arcing across the water.",
+  "controls": [
+    "route: the numbered legs redraw between piers in the new order, so up is a run of short hops with one long return, cross is a fan of wide arcs, tramp is a tangle; shape of the legs.",
+    "ports: how many piers stand on the shore, 2 to 8, spaced by pitch so a new octave stretches the chord across the bay; count of piers and position of each.",
+    "swell: each leg's line roughens into a wave whose height grows with swell, the ferry visibly pushed off its course; shape of the legs.",
+    "dwell: the radius of every capture ring, 9 px at 1/32 to 31 px at 1/2, the ring being the time the ferry is held before it plays; scale of the rings."
+  ],
+  "reference": "library/meikyu-capture",
+  "risks": "The rings overlap at 8 ports with dwell above about 1/4 (a minor third puts piers 36 px apart, rings reach 62 px wide); cap ring radius by pier spacing or accept the overlap. Leg numbers and pier names are static text but change with route and ports, so on the device they are text slots (up to 9), not artwork. A capture ring scaled by dwell reads as 'how long', which is a stretch of P13's 'what's inside plays'; the honest twin is that the ferry only plays once inside. Muted: legs go dashed and the ferry hull hollow."
+}

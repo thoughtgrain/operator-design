@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P10",
+  "drawing_language": "typeset diagram",
+  "subject": "A Hinton chart set like a textbook figure: eight resonator rows across four seconds, each square sized by how loudly that resonator rings, so the swells show as bright columns that fade to the right.",
+  "controls": [
+    "swell: the bright onset columns move closer together or further apart along the time axis, from every column (0.25 s) to only one in the window (8 s) (position/count).",
+    "depth: squares stay large for longer after each onset, from one column of decay to a full row of large squares (scale of the cells, i.e. shape of the field).",
+    "salt: the row spacing stretches unevenly downward as partials go inharmonic, so f5..f8 spread apart while f1 stays put (position of rows).",
+    "drift: each row slides its squares a few pixels left or right of the column grid, so the onset columns go ragged (position per row, different axis to salt)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "It is the most legible of the five but the least about a rock pool: no water, no rock, only the model. Row labels f1..f8 and the time axis are static text that the guidelines allow but which push it toward a chart. 128 squares is fine for nodes, but swell moves every column at once, so a swell turn redraws far over 20 nodes (turns only, never at rest). Hinton charts are a known form; it must not drift into a meter grid."
+}

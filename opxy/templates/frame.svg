@@ -16,7 +16,8 @@
     Authoring rules (constraints.md):
       - every leaf has explicit fill, stroke, stroke-width; no group styles
       - bound ids: <prefix>_node_<i>, <prefix>_text_<i>, <prefix>_palette_<i>
-      - mutable outlines: exactly M, L..., Z, fill="none", distinct points
+      - mutable outlines: exactly M, L..., Z, distinct points, one point count for all;
+        fill="none", or an explicit #RRGGBB fill when the outline encloses area
       - lines are thin closed ribbons, never strokes traced out and back
       - grey only, no red; at most 4 fractional digits, no exponents
   -->

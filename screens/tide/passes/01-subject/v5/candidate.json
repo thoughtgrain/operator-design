@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P13",
+  "drawing_language": "patent section",
+  "subject": "A patent section through the shore: the swell rolling in from the left, the rock rim it overtops, and the pool behind it drilled with three chambers of different depth, each ringing at its own pitch.",
+  "controls": [
+    "swell: the incoming crests spread apart or bunch up along the sea, and the nearest one stands taller against the rim (position).",
+    "depth: the chamber floors drop, lengthening each chamber from shallow cups to deep shafts (shape of the rock outline).",
+    "salt: crystal facets appear along the chamber walls, a few to a dozen (count).",
+    "drift: the pool's water surface tilts and its patent water marks slide, as the pool sloshes off tune (shape/position of the surface)."
+  ],
+  "reference": "library/meikyu-capture",
+  "risks": "Stretch outside the engine column. The exception is partial: tide's sound is a capture rule (only the noise that reaches the pool, and only at its tuned frequencies, survives), so the rim-as-threshold is honest. But P13's power in meikyu was that every visual change is a decision the player is making about what gets in; here swell is a period, not a threshold, so the rim does nothing a control moves. Honestly it is a P1 section drawing wearing P13's argument. The hatching is static but dense (7 px), and the numerals are decoration unless they stay few."
+}

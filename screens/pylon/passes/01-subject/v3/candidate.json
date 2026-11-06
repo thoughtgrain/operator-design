@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P1",
+  "drawing_language": "star atlas",
+  "subject": "The span between two pylon heads plotted on a sky chart, its wire a chain of standing-wave loops hung on a catenary across the graticule, with meteors for gusts and an ephemeris band for the hum.",
+  "controls": [
+    "wind: shape — the wire's single mutable outline divides into more loops as the locked mode rises (1 loop at 0.5 m/s, capped near 12 at the top, where loops would drop under ~12 px), each crest marked with a star.",
+    "span: position — the two pylon stars slide apart (140 → 360 px) and the catenary sags deeper between them.",
+    "gust: count — meteor trails streak in from a fixed radiant upwind, 0 to 12, each a short plotted trail pointing back to it.",
+    "hum: position — a hairline ephemeris band opens under the wire, 6 → 30 px below it; folded onto the wire at 0."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "It's an elevation against the sky more than a section: P1 says cut the object open, and the atlas language draws it from outside. The loop chain is the one bright subject and reads well, but stars on the antinodes and pylon heads are close in grey to it. Meteors for gust are the obvious atlas move and could read as decoration rather than air. Background field stars must stay static and few, or they become idle noise."
+}

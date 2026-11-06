@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P5",
+  "drawing_language": "patent section",
+  "subject": "Fig. 1, a float cut in section riding a receding sea, its graduated spar sliding past a fixed index arm on a pile, with the notes it has read ticked along a strip below.",
+  "controls": [
+    "tide: the two stop collars (16) on the pile spread apart from touching at 0 st to 108 px at 36 st, and the float rides between them when playing (position).",
+    "period: the swell lines of the receding sea lengthen from a tight chop to long rollers, front wavelength 9 px at 1 s to 288 px at 32 s (shape of the field, re-keyed only on turns).",
+    "foam: spray strokes break off the hull at the waterline, none to about 20, thrown highest at the turns (count).",
+    "scale: the spar's graduations re-space to the scale's degrees, octave ticks long, so pentatonic reads as sparse wide marks and lydian as dense ones (position of the ticks)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg",
+  "risks": "A patent drawing carries reference numerals and leaders that are decoration once you know the parts; they must stay few and static. The receding field is ten full-width lines of about 220 points each: as static art it is free, but period reshapes all of them, which needs four 64-point mutable outlines at most, so the field has to drop to four lines on the device or period moves something smaller. The spar's major-scale ticks sit 3 px apart at semitone steps, on the hatching floor. Muted: a lock bar drops across the spar at the index, a shape cue, and the float sits on its lower stop."
+}

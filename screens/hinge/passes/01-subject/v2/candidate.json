@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P10",
+  "drawing_language": "patent section",
+  "subject": "FIG. 1, a section through a louvred door leaf between its hatched stiles: every slat turns on its own pin to the caught slice's level, and each row below is a later, quieter pass played the other way.",
+  "controls": [
+    "hold: how many cycles of the caught sound run across a row of slats, from half a cycle (20 ms) to three and a half (2 s) (rotation pattern across the field).",
+    "creak: the slat angles snap to coarse stick-slip steps, from smooth at 0 to 40-degree steps at 100, so rows go from a wave to a staircase (rotation, quantised).",
+    "swing: how much angle the later rows keep: at 0 the second and third rows lie nearly flat, at 100 they tilt as far as the first (rotation, row envelope, over 40 degrees in row 3).",
+    "mix: the slats' length, 10 px stubs when dry to 34 px when wet, so the leaf goes from shut pins to open louvres (uniform scale per slat, 3.4x)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "66 slats plus pins is about 70 nodes; rotation is pure turn, so a control turn re-poses every slat (66 changed nodes in one frame on a hold or creak turn, far over ~20 average; fine as a one-off ease, but say so). Rows of short marks can read as hatching or tally marks at 1:1, especially row 3. Hold and creak both act on the same rotation; creak's staircase must look different from hold's cycle count. The hinge itself is only a small knuckle at the edge: the door is implied by the louvres, not drawn."
+}

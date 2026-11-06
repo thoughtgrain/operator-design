@@ -1,0 +1,232 @@
+{
+  "machine": "nave",
+  "category": "effect",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "survey plan",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: survey plan."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: patent section."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "patternName": "Trace as subject",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P3 Trace as subject; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "patternName": "Stack in depth",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P4 Stack in depth; drawing language: star atlas."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "patternName": "One-bit ink",
+      "drawingLanguage": "engineering schematic",
+      "stretch": true,
+      "caution": "Figurative; toro moved off it to P10.",
+      "brief": "Subject built on P9 One-bit ink; drawing language: engineering schematic. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit. Caution: Figurative; toro moved off it to P10."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P1",
+      "drawing_language": "survey plan",
+      "subject": "The church measured in plan, cut at sill height: west porch, aisled nave, choir stalls and a round apse, with one sound ray bouncing wall to wall from the door.",
+      "controls": [
+        "nave: position (+ count); the apse slides east about 170 px and arcade bays (piers and bay numbers) are added behind it, from 3 bays at 0.4 s to 10 at 12 s.",
+        "stone: count; the ray from the west door survives more wall-to-wall bounces before it ends, 2 legs on soft stone to 14 on hard, folding back at the apse when it runs out of nave.",
+        "choir: position; the choir screen walks west along the axis about 90 px, so the stall rows (fine hairlines along both walls) lengthen into the nave.",
+        "doors: position; the west porch lengthens about 70 px, pushing the door leaves and their swing arcs away from the nave."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": [
+        "Three of four controls are position; they move different parts in different directions (apse east, screen west, porch west), but the player still has to learn which is which.",
+        "The ray is a picture of an acoustic idea, not the DSP: stone sets high-frequency survival, and a single ray doesn't say 'treble'.",
+        "Choir stalls are hairline rows 5 px apart: right at the hatching limit, and choir (score 2) is the quietest-looking change.",
+        "A plan has no height, so the vault, which is what a listener imagines in a nave, is absent."
+      ]
+    },
+    {
+      "variant": "v2",
+      "pattern": "P2",
+      "drawing_language": "patent section",
+      "subject": "A patent sheet in two figures: fig. 1 cuts the nave lengthwise with its pointed arcade and vault, fig. 2 plots the impulse it returns after the doors' gap.",
+      "controls": [
+        "nave: position (+ count) on fig. 1, the east wall and its half-dome move east about 64 px adding arches; it also stretches the tail of fig. 2 by 100 px as a second cue.",
+        "stone: shape on fig. 2; the treble envelope line drops near the floor on soft stone and rides the reflection peaks on hard stone (a quarter of the way into the tail it moves ~30 px).",
+        "choir: count on fig. 1; the sound arrow leaving the door fans out from one ray at 0 to fourteen scattered arrows at 100.",
+        "doors: position on fig. 2; the first reflection moves away from the bright direct impulse, 6 to 66 px, with a dimension line labelled 'door' over the gap."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": [
+        "Controls don't split by column: fig. 1 carries knobs 1 and 3, fig. 2 knobs 2 and 4, so hands and screen don't agree (P2's main advantage lost).",
+        "Fig. 2 is close to a textbook plot; with labels and two figures it can read as a document rather than one subject.",
+        "The reflection comb is a 64-point outline of 15 teeth; dense tails at 12 s get coarse, and treble line crossing the teeth can tangle.",
+        "The direct impulse is the brightest element, not the nave: the eye lands on fig. 2."
+      ]
+    },
+    {
+      "variant": "v3",
+      "pattern": "P3",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The reverb's decay as a hidden-line waterfall: twelve frequency slices from bass in front to treble at the back, each a wedge falling away along time.",
+      "controls": [
+        "nave: shape; every slice's tail lengthens along the time axis, 80 px at 0.4 s to 260 px at 12 s.",
+        "stone: shape across depth; the treble slices at the back shorten against the bass, to about a fifth of the bass tail on soft stone and nearly equal on hard stone, so the surface's back edge swings.",
+        "choir: shape along the tops; low diffusion breaks each wedge into separate echo peaks with notches between, high diffusion fills it into a smooth slope.",
+        "doors: position; the whole surface slides away from the bright direct-sound bar at the time origin, 8 to 68 px."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": [
+        "Three controls are shape on the same surface (P3's pitfall); they act on different dimensions (length, back edge, top texture), but at 1:1 nave and stone can be confused.",
+        "Twelve slices are twelve outlines and only four mutable paths exist: slices must become stepped node strips or pre-drawn variants, which the sketch ignores.",
+        "It's a waterfall plot: the nave itself never appears, so the 'stone nave' character has to come from the header names alone.",
+        "Slice spacing is ~9 px on screen; the back third reads as hatching at 1:1."
+      ]
+    },
+    {
+      "variant": "v4",
+      "pattern": "P4",
+      "drawing_language": "star atlas",
+      "subject": "An atlas of echoes: five charts stacked in depth from the first reflections to the late tail, each plotting its echoes as stars by magnitude, lit from the west door's source star.",
+      "controls": [
+        "nave: position; the charts recede further apart, the back chart travelling about 60 px up and to the right, so a long nave is a deep stack.",
+        "stone: scale; star magnitudes fall from chart to chart, steeply on soft stone (back charts nearly empty) and hardly at all on hard stone.",
+        "choir: count; each chart plots 4 bright stars at 0 (discrete echoes) up to 26 fainter ones at 100 (a diffuse wash).",
+        "doors: position; the whole stack moves away from the source star along a dashed trail, 18 to 98 px."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": [
+        "The stack reads as cards or windows before it reads as time; the 'first' and 'V' labels carry a lot.",
+        "Stars on back charts only show in the thin uncovered strip, so stone's change lives mostly in that strip and in small dots (lint warns on dots under 3 px).",
+        "Choir changes count and star size together; star size is stone's channel too, so the two blur on the front chart.",
+        "Star atlas is a borrowed language for a building; nothing says 'stone nave' except the source labelled 'door'."
+      ]
+    },
+    {
+      "variant": "v5",
+      "pattern": "P9",
+      "drawing_language": "engineering schematic",
+      "subject": "A one-bit church in side elevation, west tower, lancet-windowed nave and apse in hard white outline with dithered stone, annotated with schematic dimension and decay glyphs.",
+      "controls": [
+        "nave: shape (+ count); the nave wall and roof lengthen east about 150 px and lancet windows are added, one per bay, the apse riding at the end.",
+        "stone: tone + shape; the walls' dither level goes from sparse (soft, dark) to dense (hard, bright), and the decay glyph over the roof keeps its fine teeth longer on hard stone.",
+        "choir: count; a scatter of 4 px ink squares over the east end grows from 2 to 16.",
+        "doors: position; a dimension line from the west door to a first-reflection mark lengthens 14 to 84 px."
+      ],
+      "reference": "opxy/reference/toro-ink-rest.jpg",
+      "risks": [
+        "Stretch, and it only partly earns it: a church is recognisable by sight the way toro's bull was, and an effect page keeps one subject on screen so static dither is affordable; but nothing on the figure performs the sound, so the figure is a mascot and the controls end up on glyphs.",
+        "Dither can't change on the device (static art only), so stone's tone has to swap to flat greys; the sketch's dither is the look, not the build. Lint warns on ~1,700 2 px dither cells.",
+        "Mixing one-bit print with schematic callouts is two languages unless the glyphs are drawn in the same hard ink; the 'ring' squiggle and 'pre' dimension are close to icons.",
+        "Choir's ink squares mean nothing a player could guess; it's the weakest mapping of the five.",
+        "Figurative screens are where toro failed nine times (caution in pass.json)."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:29:05"
+  },
+  "selection": null
+}

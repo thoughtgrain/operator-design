@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P3",
+  "drawing_language": "survey plan",
+  "subject": "A sector of the record side seen from above as a survey plan, the groove being cut drawn bright across it among the grey earlier turns, with chainage marks.",
+  "controls": [
+    "cut: shape - the bright groove's lateral swing grows (about 3 to 9 px) and its crests square off as the cutter saturates (nodes 0-2).",
+    "groove: position - the label's edge, an arc below the groove, rises from off-frame to just under the cut (~60 px) as the cut moves inward.",
+    "wear: count - spot marks (pits, dust) are plotted along the lands and grooves, 0 to ~20; none at 0.",
+    "rumble: position - the set of earlier turns slides off-centre against the bright groove (0 to 24 px), an eccentric, wandering side; concentric at 0."
+  ],
+  "reference": "opxy/reference/README.md (stock 'wavetable': one bright trace on black)",
+  "risks": "P3's own pitfall: it could read as a wiggly line rather than a record unless the curvature and earlier turns stay. The bright groove spans 370 px, so cut uses three of the four mutable paths. groove's label arc is off-frame at the default (0), so the rest frame doesn't show where groove is; it only reads once turned. rumble moves five static arcs as one group: five nodes but a whole-width change. Grid crosses must stay faint or they read as icons."
+}

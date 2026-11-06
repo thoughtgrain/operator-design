@@ -1,0 +1,401 @@
+{
+  "id": "2026-11-05-level-columns",
+  "kind": "new_pattern",
+  "title": "Level columns",
+  "summary": "Adds P17 Level columns (draft): for an effect, or the odd engine or player, whose four controls are amounts of one kind, four whole-height columns in encoder-order greys, each with its own title and value at the top, a level bar, and hatching when a parameter switches it off; taken from the stock mixer's form. Plus a craft.md note and a P8 bullet.",
+  "rationale": "Asked for by the guidelines' owner on 2026-11-05, with a screenshot of the stock OP-XY mixer page as the reference (kept out of the repo; the pattern takes the approach, not the artwork): tall columns stepping from dark to light, a bar at each level, and diagonal hatching on a column that's switched off, for effect pages and the odd engine or player page. The owner chose: one column per encoder, four at most; a parameter's state drives the hatching; the page takes the whole screen; the grey ramp in encoder order stays. The encoder order of the ramp is as the owner reports stock uses. Covering the header would lose its values, which open-xy's ux.md asks for and catalog review checks, so each column carries its own title and value as the machine's own header text; that keeps the owner's whole-screen choice and open-xy's rule. Grounded in open-xy staging: one subpath per path and hide/park (display.md, Artwork), the effect shift row (SDK 1.7), track-control display words and mute as bypass (SDK 1.9), and the perceptibility floors. Precedents: toro-blocks and theseus-tower keep the stock header and a single drawing; nothing here changes a rule they rely on.",
+  "evidence": [
+    "opxy/patterns.md",
+    "opxy/craft.md",
+    "opxy/categories.md",
+    "opxy/constraints.md",
+    "opxy/tokens.json",
+    "training/proposals/2026-11-05-level-columns/mock-columns.svg",
+    "training/proposals/2026-11-05-level-columns/mock-columns.png",
+    "training/proposals/2026-11-05-level-columns/mock_columns.py",
+    "training/proposals/2026-11-05-level-columns/mock-columns-off.svg",
+    "training/proposals/2026-11-05-level-columns/mock-columns-off.png",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/display.md#artwork",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/ux.md#controls",
+    "https://github.com/etcetc000/open-xy/blob/staging/docs/api.md"
+  ],
+  "categories": [
+    "engine",
+    "effect",
+    "player"
+  ],
+  "changes": [
+    {
+      "op": "insert_section",
+      "file": "opxy/patterns.md",
+      "before": "## P8 · Headers",
+      "content": "## P17 · Level columns\n\n**The idea.** A draft pattern: no audited screen uses it yet. It's a page that is its four controls, drawn the way the stock mixer draws its tracks: four tall columns across the whole screen, one per encoder, left to right, each with a bar at its level and its own title and value at the top. The columns step from dark to light in encoder order, the order the owner reports stock uses for its encoder dots, so the ramp ties each column to its encoder. When a parameter switches a column off, the column carries diagonal hatching and its bar stays where it was. It's for effects, and the odd engine or player, whose four controls are parallel amounts of the same kind: four taps, four bands, four sends, four voices. `training/proposals/2026-11-05-level-columns/mock-columns.png` shows a four-tap delay with taps 1 and 3 switched off, and `mock-columns-off.png` every column hatched.\n\n**Why it works.** When the controls really are four of the same thing, the picture is their levels side by side, and the OP-XY already has a way to draw that: the mixer. Taking its form, not its artwork, makes the page read at once as \"four levels, and this one's off\", and it looks like the OP-XY made it because the OP-XY makes pages like it. Each column is 120 px, the stock header's column width, and its top 20 px carries its title and value at the stock template's own positions, so the header's row of titles and values is still there, each in its own column's grey. Hatching says \"off\" by form rather than shade alone, and its strips clear 3:1 on every column, so it survives grayscale. It also keeps the setting visible, so switching a column back on brings back what was there.\n\n**When it's there.** My default is to use it when all of the machine's controls are amounts of the same kind and there are at most four of them; there's no room for a second page. Controls that do different jobs want a drawing (P1–P3); columns for unlike controls make a panel. A screen can break the default with a sentence saying why.\n\n**Build it.**\n\n- **The whole screen.** Four columns, 120 px each, edge to edge over y 0–220. Covering y 0–20 hides the stock header (`display.md`, Artwork), so each column draws its own title (10 px) and value (20 px) in its top 20 px with text slots, eight in all (SDK 1.3), at the stock template's positions: title at (5 + 120*i*, 10), value at (65 + 120*i*, 17.44). That's the machine's own header text, which `ux.md` (Controls: real units in the header) asks for and catalog review checks: amounts are 0 to 100 without a percent sign, other values in real units, about five characters, measured in the device font. The text follows the stock header's rule: `#CBCBCB` on the two dark columns, black on the two light ones, which gives 7.9, 5.4, 5.1 and 9.6:1, all over `accessibility.md`'s 4.5:1.\n- **The ramp.** `#323232`, `#4B4B4B`, `#7D7D7D`, `#AFAFAF`, encoder 1 to 4, chosen so every column's text clears 4.5:1. Position tells the columns apart; the ramp only ties each one to its encoder, and no column means anything by its grey alone.\n- **The level.** One node per column: a bar 12 px tall, inset 4 px each side, `#CDCDCD` on the two dark columns and black on the two light ones (the same rule), so it contrasts with its own ground. At 0 its top sits at y 206 and at 100 at y 24, under the text band: 182 px of travel. A page without the stock header is measured over the whole screen (`perceptibility.py --header-bottom 0`, a body of 105,600 px, so 2.5 % is 2,640 px). A 112 × 12 bar sweeping its range on a column that's on changes about 2,690 px, 2.55 %, which passes score 5; a 10 px bar caps a control at score 4. On a light column that's off, the black bar crosses black strips and changes only about 2.3 %, but an off column's level isn't heard, so its control is exempt while it's off.\n- **Off is hatching.** The device wants one subpath per path (`display.md`, Artwork), so the hatching can't be one node. Each column that can switch off gets its hatching as static artwork below the text band (y 20 down, so the title and value never sit on strips), one path per diagonal strip running bottom-left to top-right: 1.5 px wide, 10 px apart along x (about 7 px apart square to the strips, leaving a gap of about 5.6 px in the column's own grey, clear of the ~3 px floor for hatching). Its grey follows the same light-on-dark rule and clears `accessibility.md`'s 3:1 for meaningful non-text parts on every column: `#7D7D7D` on the darkest (3.1:1), `#AFAFAF` on the second (4.0:1), black on the two light ones (5.1 and 9.6:1). The bar can share the strips' grey on a light column, and on the second column the `#CDCDCD` bar is close to its `#AFAFAF` strips (1.4:1); on those it's told apart by form, a solid 12 px band across 1.5 px diagonals. That's 31 strips a column. Over it sits a cover node, a rectangle in the column's own grey from y 20 down. Switching off slides the cover down out of the column with the usual 0.15–0.2 s ease (`ux.md`, Screens: parts ease, no control is only an on/off change), then parks it; switching on slides it back, and reduced motion jumps. That's one node per column while it moves, and nothing at rest. The level bar comes after both in the SVG, so it stays on top. A 120 × 200 moving fill is the kind `ux.md` calls expensive, and how the device handles 31 strips a column at launch and redraws the ones a cover reveals are both pending a device check.\n- **What switches it.** A parameter's state, never the level reaching 0: 0 is a level, not \"off\". On an effect it's the Shift row, an on/off enum per column (`shift`, SDK 1.7) chosen with Shift + that column's encoder, and the shift row holds only those enums, since the page has nowhere to caption anything else. While Shift is held, each column's title and value slots show its switch and its state (`display.md` expects a page that draws its own header to show the Shift controls while `shift` is 1). On a track-control player it's the machine's own state, which the control packs into one of its four `Overlay::display` words (`from_control`), and mute: mute is its bypass and has to show (`ux.md`, Aux tracks), so the control passes `muted` the same way and a muted track hatches all four columns. An engine has no Shift row (Shift + turn is fine steps there) and no second page, so an engine's columns are levels only and never hatch.\n\n**Pitfalls.**\n\n- **Not a mixer.** It takes the form for four controls of one kind. Track numbers, meters and a selected-column marker are the stock mixer's furniture for its own job; they don't come along.\n- **The black space goes, on purpose.** The columns fill the screen, so `craft.md`'s 40 % black default doesn't hold: the page is the controls. That's the reason nothing else goes on it.\n- **One brightest mark per column, on purpose.** The `#CDCDCD` bars on the two dark columns are the lightest marks on the page, and the light columns' bars are black, their strongest contrast. That breaks `craft.md`'s one brightest element on purpose: the four levels are the subject together, so each column's bar is its own strongest mark. Keep everything on a column to its text, its bar and its hatching, never another grey.\n- **Still at rest.** The columns answer turns, not notes. An effect has no notes to answer, and a player's notes belong to the track it plays.\n- **Leaving draft.** It stops being a draft when an audited library screen uses it and its card says what the columns added."
+    },
+    {
+      "op": "set_json",
+      "file": "opxy/catalog.json",
+      "pointer": "/patterns/P17",
+      "value": {
+        "name": "Level columns",
+        "role": "subject",
+        "categories": [
+          "engine",
+          "effect",
+          "player"
+        ],
+        "caution": "Draft pattern: no audited screen uses it yet. Only when the controls are amounts of one kind, at most four; each column carries its own title and value."
+      }
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/categories.md",
+      "find": "| P15 Cell field | ● | | ● | ● | | | |\n",
+      "replace": "| P15 Cell field | ● | | ● | ● | | | |\n| P17 Level columns (draft) | ● | | | ● | ● | | |\n"
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/patterns.md",
+      "find": "- **Own header.** Only when the header itself needs to show something stock can't.",
+      "replace": "- **Level columns.** P17 gives the whole screen to four columns, each drawing its own title and value at its top with text slots, the header's own column width, so the values stay.\n- **Own header.** Only when the header itself needs to show something stock can't."
+    },
+    {
+      "op": "replace_text",
+      "file": "opxy/craft.md",
+      "find": "\n## Composition\n",
+      "replace": "\nOne stock-look page trades the drawing for the controls on purpose, because the OP-XY itself draws that job that way: P17's level columns, for four controls of one kind. The levels are the one picture every control changes; the page takes the whole screen, carries its own titles and values, and stays still at rest.\n\n## Composition\n"
+    }
+  ],
+  "changesHash": "5d1c881f3d30e4dc",
+  "state": "awaiting_approval",
+  "iteration": 5,
+  "draftedBy": "claude-drafter@claude-code",
+  "created": "2026-11-05T23:08:12",
+  "audit": {
+    "verdict": "pass",
+    "findings": [],
+    "by": "opxy-auditor@claude-code",
+    "at": "2026-11-05T23:41:29",
+    "changesHash": "5d1c881f3d30e4dc"
+  },
+  "review": {
+    "verdict": "pass",
+    "findings": [],
+    "by": "opxy-reviewer@claude-code",
+    "at": "2026-11-05T23:41:29",
+    "changesHash": "5d1c881f3d30e4dc"
+  },
+  "gate": {
+    "pass": true,
+    "checks": [
+      {
+        "check": "audit passed on these exact changes",
+        "ok": true,
+        "level": "error",
+        "detail": "audit: pass by opxy-auditor@claude-code"
+      },
+      {
+        "check": "review passed on these exact changes",
+        "ok": true,
+        "level": "error",
+        "detail": "review: pass by opxy-reviewer@claude-code"
+      },
+      {
+        "check": "drafter, auditor and reviewer are different agents",
+        "ok": true,
+        "level": "error",
+        "detail": "claude-drafter@claude-code / opxy-auditor@claude-code / opxy-reviewer@claude-code"
+      },
+      {
+        "check": "every op is valid and editable",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "applies cleanly to the current docs",
+        "ok": true,
+        "level": "error",
+        "detail": "opxy/patterns.md, opxy/catalog.json, opxy/categories.md, opxy/craft.md"
+      },
+      {
+        "check": "tokens.json and catalog.json are valid JSON",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "every pattern and library category exists",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "design passes stay at five variants",
+        "ok": true,
+        "level": "error",
+        "detail": "perPass = 5"
+      },
+      {
+        "check": "pattern numbers are unique",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "every pattern in patterns.md has a catalog.json row and vice versa",
+        "ok": true,
+        "level": "error",
+        "detail": "doc only: [], catalog only: []"
+      },
+      {
+        "check": "a new pattern is added",
+        "ok": true,
+        "level": "error",
+        "detail": "no new '## P<n> · Name' heading"
+      },
+      {
+        "check": "P17 has the house structure",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "P17 is in the categories.md table",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "P17 names the categories it fits",
+        "ok": true,
+        "level": "error",
+        "detail": "engine, effect, player"
+      },
+      {
+        "check": "no library entry gets worse under this change",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "the rationale says how the precedent screens fare",
+        "ok": true,
+        "level": "warn",
+        "detail": "name  and whether they still meet the guidelines under this change"
+      },
+      {
+        "check": "links resolve in opxy/categories.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/categories.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "links resolve in opxy/craft.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/craft.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "links resolve in opxy/patterns.md",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      },
+      {
+        "check": "no colour introduced in opxy/patterns.md (grey only; red is stock)",
+        "ok": true,
+        "level": "error",
+        "detail": ""
+      }
+    ],
+    "at": "2026-11-05T23:41:41",
+    "changesHash": "5d1c881f3d30e4dc"
+  },
+  "approval": null,
+  "history": [
+    {
+      "at": "2026-11-05T23:08:12",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "proposed"
+    },
+    {
+      "at": "2026-11-05T23:08:12",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T23:17:34",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 8
+    },
+    {
+      "at": "2026-11-05T23:17:34",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "note",
+      "note": "Reviewed iteration 1 in parallel with the audit: changes_requested, 6 findings. Folded into iteration 2.",
+      "findings": [
+        "1. Fix the perceptibility claim in 'The level'. A 112 × 10 bar swept 0→100 changes ~2,240 px. That is ~2.1 % of the full 480 × 220 body (2.5 % = 2,640 px), so it misses the score-5 floor rather than clearing it. With the tool's default --header-bottom (38, or 20) the bar's top position (mock y 12–22) mostly falls in the ignored band, so it measures worse still (~1.2 %). Make the bar at least 12 px tall (2,688 px, 2.55 %), or 14 px for margin (~3,136 px, ~3 %), recompute the sentence, and add to Build it that a P17 page runs perceptibility.py with --header-bottom 0 because it has no header.",
+        "2. Make P17 stand on its own without the unlanded P18 proposal. Cite the stock tile pages' encoder dots directly instead of '(P18)'. Cut the craft.md paragraph down to P17's own exception (P18's proposal can add its half if it lands), or else declare the dependency explicitly so both land or neither does.",
+        "3. Make the bar's travel agree across text and mock. Either state the real rest and full positions (the mock puts 0 at y 208–218, 2 px off the bottom, and 100 at y 12) or regenerate the mock to match 'bottom edge' and 'top'. Fix the mock_columns.py docstring ('100 at the top') to match too.",
+        "4. Say which way 'two grey steps from the column' goes: lighter on #323232, darker on the other three, as the mock does. Then check at 1:1 that #646464 strips on #323232 (~2.2:1) still read as hatching. If they don't, use three steps on that column. The mock only shows the #969696 column hatched, so the darkest case is untested.",
+        "5. Reconcile categories. 'What switches it' names a track-control function, but P17's catalog and categories.md entries list engine, effect and player only. Either drop 'or function' or add the function column with a reason.",
+        "6. In 'Off is hatching', note that the cover node is a 120 × 220 moving fill (constraints.md: moving fills are expensive, check on the device). It moves only on a switch, never at rest, but the handoff should mark that redraw as a pending device check."
+      ]
+    },
+    {
+      "at": "2026-11-05T23:18:10",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Iteration 2. Bar 12 px, measured with --header-bottom 0 (2.55 %, passes score 5); a 10 px bar caps at score 4 (audit 1, review 1). Values kept: each 120 px column draws its own title and value at its top (8 text slots, the stock header's text rule), which meets ux.md's real units in the header instead of trading them (audit 3; the owner chose the whole screen, and this keeps it). Shift held shows each column's switch and state in those slots; the shift row holds only the per-column enums (audit 3). The cover slides out with the 0.15-0.2 s ease and parks, reduced motion jumps; moving fill and strip count pending a device check (audit 2, 7; review 6). Engines' columns never hatch (audit 4). No P18 references; the craft.md note is P17's own (audit 5, review 2). Mute packed into a display word; 'function' dropped (audit 6, review 5). Hatch spacing stated square to the strips, 33 strips; direction of the two grey steps stated, and the mock now shows the darkest column hatched (audit 7, review 4). Bar travel stated to match the mock (review 3). 'Draft pattern' at the top; row spacing fixed (audit 8)."
+    },
+    {
+      "at": "2026-11-05T23:18:10",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T23:26:14",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 6
+    },
+    {
+      "at": "2026-11-05T23:26:14",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "note",
+      "note": "Reviewed iteration 2 in parallel with the audit: changes_requested, 4 findings (text contrast, hatch contrast, hatching out of the text band, strip direction and gap wording). Folded into iteration 3.",
+      "findings": [
+        "1. Column-2 text misses the text floor. #CBCBCB on #646464 is about 3.7:1 (accessibility.md calls this the stock header's weakest spot and asks for a check before putting your own small text on #4B4B4B-#7D7D7D). The checklist asks 4.5:1, and the value is read during play. Either change the ramp so every column's text clears 4.5:1 with the stock onDark/onLight greys (for example #CBCBCB on #4B4B4B is about 5.3:1, black on #7D7D7D about 5.1:1), or say plainly that P17 keeps the stock trade-off on purpose and why. Then give the actual ratios for all four columns.",
+        "2. Hatching misses the 3:1 non-text floor, and the 'survives low contrast' claim overstates it. Two palette steps give about 2.2:1 (#646464 on #323232 and #323232 on #646464), about 2.0:1 (#646464 on #969696) and about 1.9:1 (#969696 on #CDCDCD). Choose strip greys that clear 3:1 on each column (for example #7D7D7D on #323232 is about 3.2:1, #646464 on #CDCDCD about 3.7:1, #323232 on #969696 about 4.4:1), checking that the bar still reads on top. Or state the departure with a reason and soften the 'Why it works' sentence. Regenerate the mock to match.",
+        "3. Keep the hatching and its cover below the text band (for example from y 44 down) so the 10 px title and 20 px value never sit on strips. As a bonus, this reduces the strip count and shrinks the moving fill that's pending a device check. Update the strip count and the mock.",
+        "4. In 'Off is hatching', say which way the strips run (bottom-left to top-right, as mock_columns.py draws them) so every P17 screen hatches the same way. Also replace 'a black gap of about 5.6 px' with 'a gap of about 5.6 px in the column's own grey'."
+      ]
+    },
+    {
+      "at": "2026-11-05T23:27:42",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Iteration 3. Amounts without a percent sign (audit 1). Title and value at the stock template's positions in each column's top 20 px, and the text says so (audit 2). Ramp #323232/#4B4B4B/#7D7D7D/#AFAFAF so text clears 4.5:1 everywhere (7.9/5.4/5.1/9.6), bars follow the same light-on-dark rule (audit 3, review 1). Hatching below the text band, strip greys clearing 3:1 on every column (3.1/4.0/5.1/9.6), bar told apart from strips by form; every column shown hatched in mock-columns-off (audit 4, review 2, 3). Strip direction stated; gap is the column's grey (audit 5, review 4). Mock comment matches taps 1 and 3 (audit 6). Earlier: Iteration 2. Bar 12 px, measured with --header-bottom 0 (2.55 %, passes score 5); a 10 px bar caps at score 4 (audit 1, review 1). Values kept: each 120 px column draws its own title and value at its top (8 text slots, the stock header's text rule), which meets ux.md's real units in the header instead of trading them (audit 3; the owner chose the whole screen, and this keeps it). Shift held shows each column's switch and state in those slots; the shift row holds only the per-column enums (audit 3). The cover slides out with the 0.15-0.2 s ease and parks, reduced motion jumps; moving fill and strip count pending a device check (audit 2, 7; review 6). Engines' columns never hatch (audit 4). No P18 references; the craft.md note is P17's own (audit 5, review 2). Mute packed into a display word; 'function' dropped (audit 6, review 5). Hatch spacing stated square to the strips, 33 strips; direction of the two grey steps stated, and the mock now shows the darkest column hatched (audit 7, review 4). Bar travel stated to match the mock (review 3). 'Draft pattern' at the top; row spacing fixed (audit 8)."
+    },
+    {
+      "at": "2026-11-05T23:27:42",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T23:27:54",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "note",
+      "note": "Iteration 3 correction before audit: strip count is 31 a column (counted from mock-columns-off.svg), not 30."
+    },
+    {
+      "at": "2026-11-05T23:36:13",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "changes_requested",
+      "findings": 3
+    },
+    {
+      "at": "2026-11-05T23:36:13",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "note",
+      "note": "Reviewed iteration 3 in parallel with the audit: changes_requested, 1 finding (the brightest-ground pitfall is stale for the new ramp). Folded into iteration 4.",
+      "findings": [
+        "1. Rewrite the 'The brightest thing is ground' pitfall in P17: it says #CDCDCD is the fourth column's ground, but iteration 3's ramp ends at #AFAFAF (see the Ramp bullet and mock-columns.png), and the stock header's #CDCDCD top step makes it easy for a designer to repaint column 4 from that line. Say what is actually brightest: the #CDCDCD level bars on the two dark columns, while the light columns' bars are black, the strongest contrast on their own ground. Add one sentence explaining why the page breaks craft.md's one-brightest-element rule (four parallel levels are the subject together, and each bar is its column's strongest contrast). Keep the instruction that nothing else on a column gets another grey beyond its text, bar and hatching."
+      ]
+    },
+    {
+      "at": "2026-11-05T23:36:13",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Iteration 4. The brightest-mark pitfall rewritten for the new ramp, with one sentence on why each column's bar is its own strongest mark (audit 1, review 1). The 2.55 % is stated for a column that's on; an off light column's bar changes about 2.3 % and is exempt while off; column 2's bar vs strips (1.4:1) is told apart by form too (audit 2). The mock comment follows --all-off (audit 3). Earlier: Iteration 3. Amounts without a percent sign (audit 1). Title and value at the stock template's positions in each column's top 20 px, and the text says so (audit 2). Ramp #323232/#4B4B4B/#7D7D7D/#AFAFAF so text clears 4.5:1 everywhere (7.9/5.4/5.1/9.6), bars follow the same light-on-dark rule (audit 3, review 1). Hatching below the text band, strip greys clearing 3:1 on every column (3.1/4.0/5.1/9.6), bar told apart from strips by form; every column shown hatched in mock-columns-off (audit 4, review 2, 3). Strip direction stated; gap is the column's grey (audit 5, review 4). Mock comment matches taps 1 and 3 (audit 6). Earlier: Iteration 2. Bar 12 px, measured with --header-bottom 0 (2.55 %, passes score 5); a 10 px bar caps at score 4 (audit 1, review 1). Values kept: each 120 px column draws its own title and value at its top (8 text slots, the stock header's text rule), which meets ux.md's real units in the header instead of trading them (audit 3; the owner chose the whole screen, and this keeps it). Shift held shows each column's switch and state in those slots; the shift row holds only the per-column enums (audit 3). The cover slides out with the 0.15-0.2 s ease and parks, reduced motion jumps; moving fill and strip count pending a device check (audit 2, 7; review 6). Engines' columns never hatch (audit 4). No P18 references; the craft.md note is P17's own (audit 5, review 2). Mute packed into a display word; 'function' dropped (audit 6, review 5). Hatch spacing stated square to the strips, 33 strips; direction of the two grey steps stated, and the mock now shows the darkest column hatched (audit 7, review 4). Bar travel stated to match the mock (review 3). 'Draft pattern' at the top; row spacing fixed (audit 8)."
+    },
+    {
+      "at": "2026-11-05T23:36:13",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T23:40:03",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T23:40:03",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T23:40:03",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "note",
+      "note": "Pulled back from gate by the drafter: iteration 4 says 30 strips a column, but the mock draws 31 (a regression from the iteration 3 correction). Iteration 5 fixes only that number."
+    },
+    {
+      "at": "2026-11-05T23:40:03",
+      "stage": "draft",
+      "by": "claude-drafter@claude-code",
+      "event": "revised",
+      "note": "Iteration 5. Strip count corrected to 31 a column, as the mock draws (it regressed to 30 in iteration 4). Earlier: Iteration 4. The brightest-mark pitfall rewritten for the new ramp, with one sentence on why each column's bar is its own strongest mark (audit 1, review 1). The 2.55 % is stated for a column that's on; an off light column's bar changes about 2.3 % and is exempt while off; column 2's bar vs strips (1.4:1) is told apart by form too (audit 2). The mock comment follows --all-off (audit 3). Earlier: Iteration 3. Amounts without a percent sign (audit 1). Title and value at the stock template's positions in each column's top 20 px, and the text says so (audit 2). Ramp #323232/#4B4B4B/#7D7D7D/#AFAFAF so text clears 4.5:1 everywhere (7.9/5.4/5.1/9.6), bars follow the same light-on-dark rule (audit 3, review 1). Hatching below the text band, strip greys clearing 3:1 on every column (3.1/4.0/5.1/9.6), bar told apart from strips by form; every column shown hatched in mock-columns-off (audit 4, review 2, 3). Strip direction stated; gap is the column's grey (audit 5, review 4). Mock comment matches taps 1 and 3 (audit 6). Earlier: Iteration 2. Bar 12 px, measured with --header-bottom 0 (2.55 %, passes score 5); a 10 px bar caps at score 4 (audit 1, review 1). Values kept: each 120 px column draws its own title and value at its top (8 text slots, the stock header's text rule), which meets ux.md's real units in the header instead of trading them (audit 3; the owner chose the whole screen, and this keeps it). Shift held shows each column's switch and state in those slots; the shift row holds only the per-column enums (audit 3). The cover slides out with the 0.15-0.2 s ease and parks, reduced motion jumps; moving fill and strip count pending a device check (audit 2, 7; review 6). Engines' columns never hatch (audit 4). No P18 references; the craft.md note is P17's own (audit 5, review 2). Mute packed into a display word; 'function' dropped (audit 6, review 5). Hatch spacing stated square to the strips, 33 strips; direction of the two grey steps stated, and the mock now shows the darkest column hatched (audit 7, review 4). Bar travel stated to match the mock (review 3). 'Draft pattern' at the top; row spacing fixed (audit 8)."
+    },
+    {
+      "at": "2026-11-05T23:40:03",
+      "stage": "audit",
+      "by": "operator-design",
+      "event": "submitted"
+    },
+    {
+      "at": "2026-11-05T23:41:29",
+      "stage": "audit",
+      "by": "opxy-auditor@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T23:41:29",
+      "stage": "review",
+      "by": "opxy-reviewer@claude-code",
+      "event": "pass",
+      "findings": 0
+    },
+    {
+      "at": "2026-11-05T23:41:41",
+      "stage": "gate",
+      "by": "operator-design gate",
+      "event": "pass",
+      "failed": []
+    }
+  ]
+}

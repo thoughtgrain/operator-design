@@ -22,7 +22,7 @@ REAL = Path(__file__).resolve().parents[2]
 TMP = Path(tempfile.mkdtemp(prefix="opxy-mcp-test-"))
 COPY = TMP / "repo"
 for item in ("mcp", "opxy", "library", "training", "AGENTS.md", ".claude", ".codex", "screens/toro/frames",
-             "screens/toro/definition.json", "screens/toro/machine.json"):
+             "screens/toro/definition.json", "screens/toro/machine.json", "screens/toro/blocks/frames"):
     src = REAL / item
     if src.is_dir():
         shutil.copytree(src, COPY / item, ignore=shutil.ignore_patterns("*.mp4", "*.wav", "__pycache__", "tests"))
@@ -280,7 +280,7 @@ class TestTraining(unittest.TestCase):
         failed = {c["check"] for c in training.gate(pid)["checks"] if not c["ok"] and c["level"] == "error"}
         self.assertIn("token changes come with a constraints.md change", failed)
         self.assertIn("token changes bump source.ref", failed)
-        self.assertIn("no library entry gets worse under the new tokens", failed)
+        self.assertIn("no library entry gets worse under this change", failed)
 
     def test_brief_carries_the_whole_diff(self):
         big = PATTERN + "\n\n" + "\n".join(f"- Detail line {i} that makes this proposal long." for i in range(400))
@@ -460,6 +460,41 @@ class TestOpenXYSync(unittest.TestCase):
         self.assertTrue(r["pass"])
         self.assertIn("'test', '--machine'", r["output"])
         self.assertIn("--no-cpu", r["output"])
+
+
+@unittest.skipUnless(HAS_RSVG, "rsvg-convert not installed")
+class TestPrecedents(unittest.TestCase):
+    """toro-blocks and theseus-tower are audited screens that work. Any change to the tools, tokens or catalog that
+    makes either fail is wrong until someone re-audits them and says why."""
+
+    def test_precedents_still_pass(self):
+        cat = json.loads((ROOT / "opxy/catalog.json").read_text(encoding="utf-8"))
+        precedents = {k: v for k, v in cat["library"].items() if v.get("precedent")}
+        self.assertEqual(set(precedents), {"toro-blocks", "theseus-tower"})
+        for name, meta in precedents.items():
+            reg = meta["regression"]
+            frames = ROOT / reg["frames"] if "/" in reg["frames"] else ROOT / "library" / name / reg["frames"]
+            _, lint = call("lint_frames", {"paths": str(frames), "two_page": reg.get("twoPage", False)})
+            self.assertEqual(lint["errors"], 0, f"{name} no longer lints clean: {lint['byRule'][:3]}")
+            _, p = call("check_perceptibility", {"frames_dir": str(frames), "scores": reg["scores"], "names": reg["names"],
+                                                 "two_page": reg.get("twoPage", False)})
+            self.assertTrue(p["pass"], f"{name} is now under the floor on {p['under']}")
+
+
+class TestGreyByDefault(unittest.TestCase):
+    def test_every_frame_in_the_repo_is_grey(self):
+        """Colour is an override set per harness; nothing checked in may use it unless a machine's brief records one."""
+        import re as _re
+        found = {}
+        for f in list(REAL.glob("**/*.svg")) + list(REAL.glob("**/*.svg.fragment")):
+            if ".git" in f.parts:
+                continue
+            text = f.read_text(encoding="utf-8", errors="ignore")
+            hues = sorted({h for h in _re.findall(r"#([0-9A-Fa-f]{6})\b", text)
+                           if len({h[0:2].lower(), h[2:4].lower(), h[4:6].lower()}) > 1})
+            if hues:
+                found[str(f.relative_to(REAL))] = hues
+        self.assertEqual(found, {}, "colour without the override")
 
 
 def tearDownModule():

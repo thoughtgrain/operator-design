@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A lichen player on aux track 12: a colony grows across a lattice of scale degrees and registers, spreading into neighbouring cells and dying back from its old centre; every cell it newly grows into plays on another track. Its own track stays silent."
+}

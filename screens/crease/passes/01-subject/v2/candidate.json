@@ -1,0 +1,14 @@
+{
+  "variant": "v2",
+  "pattern": "P10",
+  "drawing_language": "hidden-line isometric",
+  "subject": "A hidden-line isometric field of slabs whose heights are the fold surface, the input swept across and its level rising front to back, so the creases run through the field as lit ridges.",
+  "controls": [
+    "crease: the back rows fold into more terraces, 1 ridge at x1 to 7 at x8, the front staying a gentle slope; shape (slab heights).",
+    "sym: the ridges slide sideways and the terraces go uneven, high on one side and low on the other; shape (heights) with position of the lit crest slabs.",
+    "paper: ridges go from knife-edge crests (one slab at the top) to broad rounded shoulders (three or four slabs near the top); shape (heights near the crests), crest count as second cue.",
+    "mix: the field relaxes from folded terraces toward a single plain ramp, with fewer hollow slabs; shape (heights), hollow/solid palette as second cue."
+  ],
+  "reference": "library/toro-blocks (P10 worked example: the model is the drawing)",
+  "risks": "It's toro's visual language on another machine: the brief says not to copy another machine's drawing, and an isometric slab field from the same pattern will look like a sibling, not a new screen. All four controls are shape-of-heights, so they're told apart only by where and how the heights change (back rows, side shift, crest width, overall ramp); paper is the weakest and will need its crest-count cue to clear the floor. 70 slabs x 3 nodes = 210 nodes before the header. Heights over the swept input are a transfer surface, which is truthful but static: notes on an effect have no key position to act on, so note response has to come from the track's level."
+}

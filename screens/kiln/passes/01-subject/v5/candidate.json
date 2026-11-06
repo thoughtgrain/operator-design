@@ -1,0 +1,14 @@
+{
+  "variant": "v5",
+  "pattern": "P12",
+  "drawing_language": "typeset diagram",
+  "subject": "A textbook figure of the bowl in plan as the sun of an orrery, each ringing mode an orbit round it and its antinodes the planets that ride it.",
+  "controls": [
+    "strike: count — how many orbits are populated: a soft mallet lights only n = 2 (4 planets), a hard one fills out to n = 5 (28 planets), stepping in with an ease.",
+    "glaze: scale — the planets shrink to ~0.5× as glaze damps the modes, outer orbits first, until n = 5's are points.",
+    "crack: position — each planet splits into a doublet whose two halves part along the orbit (up to ~20 px), and the pairs slowly precess while notes ring: the beating of a broken bowl.",
+    "fire: scale — the orbits spread outward (outer orbit 1.0× → 1.25×) as the stiffer, vitrified body stretches its upper modes."
+  ],
+  "reference": "library/meikyu-orrery",
+  "risks": "Stretch outside the engine column. Why it might be the exception: a bowl's modes really are circular standing waves round the rim with 2n antinodes, and a cracked bowl's split doublets really do beat as their nodes travel round, so orbits and planets are the physics, not a stand-in for a cycle in time. Why it might not fit: P12's strength is a sequence running round a cycle and kiln has none; nothing orbits at rest or between notes, so 'orrery' becomes a static mode diagram, and the pattern's wiring (links, planets that flash when their step sounds) has nothing to do. glaze and fire both use scale (different parts, but close in feel). Honest verdict: it fits as a mode diagram drawn in orrery form, not as an orrery."
+}

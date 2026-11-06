@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "id": "tilt",
+  "name": "Tilt",
+  "parameters": [
+    {
+      "id": "focus",
+      "label": "focus",
+      "default": 0.5263,
+      "mapping": {
+        "kind": "enum",
+        "labels": ["100", "125", "160", "200", "250", "315", "400", "500", "630", "800",
+                   "1k", "1.2k", "1.6k", "2k", "2.5k", "3.2k", "4k", "5k", "6.3k", "8k"]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "tilt",
+      "label": "tilt",
+      "default": 0.5,
+      "mapping": {
+        "kind": "linear",
+        "minimum": -6,
+        "maximum": 6
+      },
+      "display": "bipolar"
+    },
+    {
+      "id": "blur",
+      "label": "blur",
+      "default": 0.4,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "mix",
+      "label": "mix",
+      "default": 1.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Miniature": {
+      "focus": 0.5263,
+      "tilt": 0.5,
+      "blur": 0.4,
+      "mix": 1.0
+    },
+    "Haze": {
+      "focus": 0.3684,
+      "tilt": 0.3333,
+      "blur": 0.85,
+      "mix": 0.7
+    }
+  },
+  "resources": {
+    "display": {
+      "stateBytes": 64,
+      "stateAlignment": 4,
+      "paths": 1,
+      "points": 64,
+      "nodes": 64,
+      "texts": 0,
+      "palette": 8
+    }
+  }
+}

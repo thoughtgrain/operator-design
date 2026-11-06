@@ -1,0 +1,206 @@
+{
+  "machine": "pylon",
+  "category": "engine",
+  "kind": "subject",
+  "number": 1,
+  "state": "ready_for_pick",
+  "created": "2026-11-05T23:13:30",
+  "focus": null,
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "pattern": "P10",
+      "patternName": "Voice field",
+      "drawingLanguage": "patent section",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P10 Voice field; drawing language: patent section."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P15",
+      "patternName": "Cell field",
+      "drawingLanguage": "hidden-line isometric",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P15 Cell field; drawing language: hidden-line isometric."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P1",
+      "patternName": "Section drawing",
+      "drawingLanguage": "star atlas",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P1 Section drawing; drawing language: star atlas."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P2",
+      "patternName": "Diagram + trace",
+      "drawingLanguage": "engineering schematic",
+      "stretch": false,
+      "caution": null,
+      "brief": "Subject built on P2 Diagram + trace; drawing language: engineering schematic."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P14",
+      "patternName": "Loom",
+      "drawingLanguage": "oscilloscope trace",
+      "stretch": true,
+      "caution": null,
+      "brief": "Subject built on P14 Loom; drawing language: oscilloscope trace. This pattern is outside the category's column: say why this machine is the exception, or say plainly it doesn't fit."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "pattern": "P10",
+      "drawing_language": "patent section",
+      "subject": "A field of floating slabs, one row per conductor along the span, whose heights are the standing wave the wind locks into each wire, drawn as a patent figure between two cross-arms cut in hatched section.",
+      "controls": [
+        "wind: shape (heights) — the locked mode number climbs from one broad hump at 0.5 m/s to fine loops at 20 m/s, so the crests multiply along every row.",
+        "span: count — the field grows from 10 to 18 slabs along the line while the cross-arms move apart, and the same wind sings a higher mode on a longer span.",
+        "gust: shape (row offset) — neighbouring modes join the lock and each row drifts out of step with the next, so the crests stop lining up across the conductors.",
+        "hum: shape (texture) — a fine alternating mains ripple lifts every other slab by up to 8 px, an even comb under the wind's loops; none at 0."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "Closest to toro's voice field in build (it's the same pattern), so it has to earn its difference in the drawing: hatched section plates and patent numerals, hidden-line slabs, no solid grey faces. At span 100 it's 90 slabs × 3 nodes = 270 nodes, over 256, so it needs sdk 1.8 or a row fewer. Wind, gust and hum all act on heights; hum's comb has to stay visibly a texture rather than another wave, or it reads as a second wind. Crest highlight is several cells, so the 'one brightest element' is a set, not a single part."
+    },
+    {
+      "variant": "v2",
+      "pattern": "P15",
+      "drawing_language": "hidden-line isometric",
+      "subject": "The wind's wake behind the wire as a flat isometric grid of cells, each raised cell a shed vortex roll, laid out downwind of one bright conductor on two short masts.",
+      "controls": [
+        "wind: count — how many vortex rolls still stand downwind, from 2 at 0.5 m/s to 7 at 20 m/s (each roll a run of raised cells).",
+        "span: run length — the spanwise correlation: rolls go from broken runs of 2 cells to continuous runs of 8 along the wire.",
+        "gust: churn — cells are knocked off the street's lattice by 1–2 cells downwind or upwind, so the even rows break into a ragged wake.",
+        "hum: grey layer — a regular mains lattice of grey (unraised) cells fills in under the wake, 0 to ~40 cells."
+      ],
+      "reference": "opxy/reference/README.md (stock dissolve, cell field)",
+      "risks": "P15 is meant for sounds with no mechanism; pylon has one (a vibrating wire), so Gate 0's 'draw the mechanism' argues against it. The wake is real physics (Kármán street, spanwise correlation), which is why it's worth a try. It shows the wind, not the singing: the wire's modes never appear, so the note itself has nothing obvious to act on beyond a flare near the wire. Isometric cells are rhombi, not the pattern's square cells. Grid of ~104 cells plus raised faces is ~180 nodes."
+    },
+    {
+      "variant": "v3",
+      "pattern": "P1",
+      "drawing_language": "star atlas",
+      "subject": "The span between two pylon heads plotted on a sky chart, its wire a chain of standing-wave loops hung on a catenary across the graticule, with meteors for gusts and an ephemeris band for the hum.",
+      "controls": [
+        "wind: shape — the wire's single mutable outline divides into more loops as the locked mode rises (1 loop at 0.5 m/s, capped near 12 at the top, where loops would drop under ~12 px), each crest marked with a star.",
+        "span: position — the two pylon stars slide apart (140 → 360 px) and the catenary sags deeper between them.",
+        "gust: count — meteor trails streak in from a fixed radiant upwind, 0 to 12, each a short plotted trail pointing back to it.",
+        "hum: position — a hairline ephemeris band opens under the wire, 6 → 30 px below it; folded onto the wire at 0."
+      ],
+      "reference": "library/meikyu-orrery",
+      "risks": "It's an elevation against the sky more than a section: P1 says cut the object open, and the atlas language draws it from outside. The loop chain is the one bright subject and reads well, but stars on the antinodes and pylon heads are close in grey to it. Meteors for gust are the obvious atlas move and could read as decoration rather than air. Background field stars must stay static and few, or they become idle noise."
+    },
+    {
+      "variant": "v4",
+      "pattern": "P2",
+      "drawing_language": "engineering schematic",
+      "subject": "A circuit diagram of the harp: a shedding source tapping a ladder of tuned wire modes on the left, summed with a mains line into the output trace on the right.",
+      "controls": [
+        "wind: position — the source's tap slides along the ladder bus to the mode it locks, and that rung lights.",
+        "span: count — the ladder holds 4 rungs on a short span and 12 on a long one, packed closer as they multiply.",
+        "gust: shape — the output trace's envelope breaks into uneven swells as neighbouring modes cut in.",
+        "hum: scale — the mains trace under the sum node grows from a flat line to a 14 px sine."
+      ],
+      "reference": "opxy/reference/README.md (MNMD FM STAT-style diagram + trace, linked there)",
+      "risks": "The most literal and the most explanatory, so it's closest to a dashboard: a ladder and a waveform could be any synth. Controls fall cleanly into the encoder columns (structure on 1–2, trace on 3–4). LC symbols at 10 px rungs are near the 3 px detail floor at 12 rungs. The output trace is a P3-style oscilloscope trace and risks 'says nothing new'. No physical pylon on screen."
+    },
+    {
+      "variant": "v5",
+      "pattern": "P14",
+      "drawing_language": "oscilloscope trace",
+      "subject": "A scope screen weaving the wire's recent shapes into cloth: the newest displacement trace bright at the front, older ones receding row by row, warp threads through the nodes that held.",
+      "controls": [
+        "wind: shape — the front trace and every row behind it change loop count with the locked mode; warp threads follow the nodes.",
+        "span: position — the history recedes deeper (6 → 22 px per row), a long span ringing longer.",
+        "gust: shape (variance between rows) — rows stop agreeing on their loop count, so the warp columns break; at 0 every row shares its nodes.",
+        "hum: scale — the ch2 mains trace on the bottom division grows from flat to a 10 px sine."
+      ],
+      "reference": "library/loom-pages",
+      "risks": "Stretch, and mostly doesn't fit. P14 is for sequences and pylon has no steps; the only honest exception is gust, whose whole effect is change over time, and loom rows are one way to show variation in a still (steady wind = warp columns hold, gusts = rows wander). Against it: rows only advance while notes sound, so the rest frame is a memory; it reads as a waterfall/persistence scope, which is P3's 'says nothing new' pitfall; four rows plus the mains trace need five mutable outlines against a limit of 4 (hum would need pre-drawn variants)."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "samePattern": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-05T23:20:54"
+  },
+  "selection": null
+}

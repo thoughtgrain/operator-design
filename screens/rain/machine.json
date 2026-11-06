@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.9",
+  "kind": "synth",
+  "description": "A rain player on aux track 12: drops fall on a roof of pitched tiles at a rate, gusts push them across the tiles, puddles repeat the last notes. It plays another track; its own track stays silent."
+}

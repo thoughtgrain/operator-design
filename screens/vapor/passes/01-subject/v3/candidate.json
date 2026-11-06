@@ -1,0 +1,14 @@
+{
+  "variant": "v3",
+  "pattern": "P2",
+  "drawing_language": "survey plan",
+  "subject": "A survey split in two: the vowel quadrilateral plotted as a parcel with five stations and a traverse to the sung vowel on the left, and the voice's spectral profile drawn as a long section on the right.",
+  "controls": [
+    "vowel: position and shape, the bright station moves between the five plotted vowels on the plan (~150 px) and the formant peaks of the profile walk along the frequency datum.",
+    "breath: position, the ground line of aspiration noise under the profile rises from the datum at 0 to ~40 px up at 100, filling the valleys between formants.",
+    "throat: scale, the whole plan grows about its low-formant corner from 0.75 to 1.50 as a longer tube lowers every formant, and the profile's peaks shift left with it.",
+    "glide: count, chainage ticks along the traverse from the u onset station to the vowel, 0 at 5 ms to ~14 at 2 s."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one bright figure, quiet ground, labelled at 10 px)",
+  "risks": "Two halves split the eye: the profile is the brightest element, but the moving station competes, and with knobs 1-2 driving both halves the P2 column match (structure on 1-2, tone on 3-4) doesn't hold: vowel and breath land right, throat and glide land left. Vowel and throat both move the profile's peaks, so the profile must leave throat's effect to the plan's scale and treat its own shift as secondary. Survey symbols (triangles, a ringed station) risk looking like icons; they must stay hairline and small. Labels (stations, axes, 'plan', 'section') are many for one screen."
+}

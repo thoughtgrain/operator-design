@@ -1,0 +1,16 @@
+{
+  "variant": "v5",
+  "pattern": "P11",
+  "drawing_language": "hidden-line isometric",
+  "subject": "A glass-sided formicarium on a plinth in hidden-line isometric, one chamber dug for every degree, the octaves as galleries winding back and forth up the slab, and the reinforced trail as the bright tunnel the ants keep using.",
+  "controls": [
+    "ants: count, ants in the tunnels, 1 to 8, each walking the live trail; the ones not on the trail sit in the nest chamber at the top.",
+    "scent: scale + shape, tunnel bore: the live trail's tunnels widen from a hairline at 0 to a full 2.4 px bore with chambers rimmed bright at 100, while unused tunnels stay hairline.",
+    "fade: count, old tunnels left dashed and collapsing: at 0 every tunnel ever dug stays open (up to ten dashed runs), at 100 only the live trail's tunnels are left.",
+    "scale: count + position, chambers per gallery: 5 at pent to 12 at chrom, sliding closer along each gallery so the slab stays the same size."
+  ],
+  "reference": "library/theseus-tower",
+  "muted": "Muted: the ants are drawn still in the chambers and the live tunnel drops to the collapsed-tunnel grey; the slab stays.",
+  "stretch": "P11 sits outside the player column. The case for an exception: an ant farm is the one picture of this machine people know by sight, the way theseus' drum kit is, and P11's rule (every part the sound can select has its own place) holds, one chamber per degree. The case against, said plainly: in theseus the instrument is what sounds; here the formicarium is a container, the notes come from another track, and the rule that picks notes (scent and fade on edges) is told by the tunnels, which would be just as true on any of the other four subjects. I think it's a weak stretch: recognition is free, but recognition of the wrong thing.",
+  "risks": "Outside the category's column (see stretch). At 1:1 the octave-one gallery's tunnels bunch along the isometric diagonal and the trail reads as a tangle; galleries that wind back and forth help but don't cure it. The slab takes a third of the screen as a frame that never changes. Close to theseus' hidden-line look (black-filled parts, grey edges, a plinth); the shapes are its own, but the family resemblance is strong. A chamber per degree at chrom is 25 chambers on a 184 px gallery, 14 px apart, close to the touching limit."
+}
