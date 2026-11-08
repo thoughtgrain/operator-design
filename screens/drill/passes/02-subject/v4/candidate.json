@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "The eggbeater drill in three-quarter view as a working mechanism: crank and turned grip on the face wheel, lugs on its face driving a bright pinion on the spindle, from the wooden head handle to the chuck and bit.",
+  "controls": [
+    "ratio: the pinion shrinks against the wheel, about 1.6x to 0.8x its rest size (uniform scale of the pinion node).",
+    "teeth: lugs on the wheel's face, 3 to 24 (count, each a small solid block with its side walls).",
+    "wear: the lugs' outer edges taper and round, crisp square blocks at 0 to worn wedges at 100 (shape of the lug faces).",
+    "bite: the bit stands further out of the chuck, 34 to 84 world units (position of the bit node)."
+  ],
+  "reference": "library/theseus-tower/README.md (detailed line art of a modelled object, hidden-line by painter's order)",
+  "risks": "Most parts at once: the node count is the highest of the five and lug side walls double the count at teeth 24. Bite as bit length is the weakest link to the sound ('follower depth'); a crank-turn alternative (rotation about the wheel's axle, ≥ 30°) is available if the owner prefers. The pinion at ratio 0.50 scaled 1.6x pushes past the lug ring and nears the spindle head; check extremes. The diagonal of the spindle across the wheel makes a busy centre where crank arm, hub and spindle cross."
+}

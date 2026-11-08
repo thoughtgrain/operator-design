@@ -16,7 +16,9 @@ SUPPORTED = ("2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05")
 INSTRUCTIONS = (
     "operator-design: the protocol, tools and library for designing OP-XY machine screens (open-xy SDK). "
     "Start with opxy_guide(doc='protocol') and opxy_guide(doc='categories'). Every generative design pass is exactly five "
-    "unique variants (design_pass_start → five designer briefs → design_pass_submit → the person picks). Judge frames at 1:1 "
+    "unique variants (design_pass_start → five designer briefs → design_pass_submit → the person picks). A variant is a drawn "
+    "480 × 220 frame, not a proposal: when asked to design, draw all five and show them; don't stop at five written ideas or "
+    "ask which to draw. Judge frames at 1:1 "
     "with render_frame. Grey is the default; colour only when this harness's config sets OPXY_COLOUR=allow (check "
     "colour_policy), and red never. Video previews are asked about after the motion spec and rendered by you, not the server; engine "
     "audio in them is a simulation (engine code on a computer), never a device recording. Training mode (training_*) changes the guidelines through draft → audit → review → gate → the "

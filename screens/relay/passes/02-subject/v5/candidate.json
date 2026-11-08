@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "The ring stains a bucket brigade leaves on a plank floor: a row of wet rings where each bucket stood, later passes set down over the first, fainter and more broken, and the freshest ring, where the note is now, the bright one.",
+  "controls": [
+    "stages: how many rings make the row, 5 at 10 ms to 15 at 1 s, closer together as they multiply (count).",
+    "leak: drip trails of small spots run from a seeded set of rings toward the next, where those buckets leaked on their way along (count of drip spots).",
+    "clock: the rings lose their even spacing and step off the line, as if the buckets were set down in a hurry (position of each ring, up to ~40% of the pitch).",
+    "feedback: how many rings are set down over each first ring, offset and broken, one at 0 to five or six at the top, each fainter and more broken than the last (count of overlapping rings)."
+  ],
+  "reference": "opxy/craft.md (detailed line art: the floor modelled in 3D, seams and joints in hairline, >= 3 px apart); opxy/reference/README.md",
+  "risks": [
+    "Rings with an inner tide-mark can drift toward a target or a coffee-cup icon; the overlapping offset rings and the plank floor keep them stains.",
+    "The plank floor fills the frame; it's hairline and dark, but it's the busiest ground of the five and must not compete with the rings on the device.",
+    "At 15 rings with feedback high, overlapping rings crowd into a chain-link pattern (seen at the extremes).",
+    "The trace is a still record, so a note answers by a ring brightening and a new one being set down; motion is the design's to prove later."
+  ]
+}

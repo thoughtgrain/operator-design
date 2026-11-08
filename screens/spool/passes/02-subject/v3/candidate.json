@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "A wooden spool of thread standing on end, a black silhouette on black with its right-hand edges caught by a light from behind, the loose end hanging over the bottom flange and curling on the ground.",
+  "controls": [
+    "wear: the lit edge of the winding breaks up into short broken lengths with frayed ends lifting off it, 0 to 14 breaks, and the loose end frays at its tip (count of breaks along the bright edge).",
+    "wow: the loose end swings from where it leaves the winding, as the spool turns out of true, 0 to 34 degrees (rotation of the tail node about its exit point).",
+    "length: how full the spool is: the wound mass grows out from the barrel toward the flange rims, its lit edge moving 26 px (position of the winding's edge, scale of its outline).",
+    "bias: tension in the loose end: under-biased it hangs straight and taut to a short curl; over-biased it drops slack into a wide loose loop on the ground (shape of the tail outline)."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": "Edge-lit means most edges are dim (#323232-#4B4B4B) and only the right-hand ones bright; on the real panel the dim side may vanish and the spool read as a bracket, so the dark outline grey needs a device check. It's the most literal of the five and the plainest: one object, little happening at rest. The winding's bright edge and the tail are both #CDCDCD; they're one thread, but a reviewer may count two brightest elements. Wow and bias both act on the tail (rotation vs. shape); they're different channels on one part, which can blur which knob did what."
+}

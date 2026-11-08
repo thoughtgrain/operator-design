@@ -1,0 +1,11 @@
+{
+  "variant": "v2",
+  "subject": "Looking steeply down through the water at the bell below: a black cut-out in a hatched field, its hidden waterline dashed through the shell and its rim drawn in the ring mode it sounds with.",
+  "controls": [
+    "depth: the bell sinks away from the camera, so it shrinks and drops toward the bottom of the field (size from distance, about 1.7x, plus position).",
+    "air: the dashed waterline ring, seen through the shell, slides up or down the bell and widens or narrows with it (position + shape).",
+    "knee: the crown's flat top shrinks into a rounded shoulder, so the top hoops close in and the outline rounds (shape).",
+    "gain: the rim's oval ring mode about the round rim grows from barely off-round to a strong four-node flex (shape, about 20 px at the extremes); it's the brightest line."
+  ],
+  "risks": "Seen from above, the air pocket is inside an opaque shell, so the waterline is a hidden-line convention the player must learn. The hatched field is all water texture; with the bell small at full depth, the subject could become a dark hole in a grey pattern. Ring-mode oval is a physical picture of ringing but static at rest; it must not move while idle."
+}

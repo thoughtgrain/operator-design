@@ -1,0 +1,278 @@
+{
+  "machine": "ringer",
+  "category": "player",
+  "kind": "subject",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Five new, unique iterations.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ringer is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: detailed line art. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "hidden-line 3D",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ringer is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: hidden-line 3D. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "bold closed outlines",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ringer is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: bold closed outlines. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "the material the sound acts on, seen close",
+      "drawingLanguage": "cutaway section",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ringer is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: cutaway section. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "one scene where this happens, with one subject in it",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ringer is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: exploded view. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "The sallies at eye height in the ringing chamber, drawn close and cropped by the frame: each striped woollen grip hangs at the height its bell has reached, so the change reads as a wave of sallies and the lowest is the one being pulled now.",
+      "controls": [
+        "bells: count, sallies hang across the frame from 4 to 12, the pitch between ropes closing up and the grips scaling down together so twelve still read as grips, not bars.",
+        "method: position, every sally rises or drops to the height of its bell's place in the current change (first place lowest and bright, last place highest); a swap is two neighbouring sallies trading heights.",
+        "pace: position (spread), the whole wave flattens as the bells are rung lower and faster: the gap between the lowest and highest sally goes from about 105 px at 0.5 a beat to about 40 px at 8 (about 65 px at the default).",
+        "stroke: position, on handstroke changes the leading sally is held up off the bottom of the wave by up to one place's step (about 26 px at 100 %), the pause before the pull."
+      ],
+      "reference": "library/theseus-tower/README.md (the instrument as the subject, detailed line art, one part lit)",
+      "risks": [
+        "Method and pace both act on sally height (order versus spread); they must stay visibly different: method re-deals heights, pace only scales the wave. Stroke is a third vertical move on one sally, so it leans on being only the bright one.",
+        "The tufted helical stripes are hairlines about 8 px apart inside a 30 px grip; at twelve bells the grips shrink to about 17 px and the stripes must drop to every other one to stay 3 px apart.",
+        "Ropes are cut by both frame edges by design; nothing says 'ceiling' or 'tail end', which is the point, but a viewer who doesn't know a sally may read capsules.",
+        "Mute: the ropes are let go and every sally drops to one level, still, with the bright weight gone; distinct by position, not shade. Not drawn here."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "The ring itself, literally: hidden-line bronze bells hung along one side of the frame, standing in the order they strike in this change, the nearest striking now and the row running back into the tower.",
+      "controls": [
+        "bells: count, bells are hung along the beam from 4 to 12, each new bell larger (lower in the scale) and the beam lengthening into the distance.",
+        "method: position, each bell moves along the beam to its place in the current change; a change is neighbouring bells trading places, a hunting bell walking front to back and back again.",
+        "pace: position (spacing), the distance between bells along the beam is the time between blows: spread out at 0.5 a beat, packed close (bells nearly touching) at 8.",
+        "stroke: position, on handstroke changes the whole row steps back along the beam by up to one bay, leaving an empty hatched bay in front: the open lead drawn as a space."
+      ],
+      "reference": "library/toro-blocks/README.md (a modelled 3D field, black-filled hidden-line solids, one camera)",
+      "risks": [
+        "Bells sliding along a beam isn't how a tower works (bells hang still and swing); the beam is a stage for the order, a stretch a ringer may notice.",
+        "Order is read by size along the row; at twelve bells the far end shrinks under 10 px in perspective, so the back of a long row is hard to read.",
+        "Pace (spacing) and stroke (offset of the row) both slide bells along the beam; stroke must lead with the hatched empty bay, not the move.",
+        "Each bell is pre-projected per depth slot: moving a bell along the beam changes its size, so method swaps need pre-drawn sizes per slot or a scale per node (allowed, uniform).",
+        "Mute: the bells are stood (the bright weight leaves the front bell and the row stops), shown by the front bell's outline dropping to the others' weight. Weak; needs a stronger cue."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "bold closed outlines",
+      "subject": "The wheels of the ring face on, each with its rope wound from the garter hole round the rim and falling to the sally, every wheel turned to how far through its pull its bell is in this change, the one about to strike drawn bright.",
+      "controls": [
+        "bells: count, wheels across the frame from 4 to 12, smaller as they're added so the row always fills the frame head.",
+        "method: rotation, each wheel turns to its bell's place in the current change (first place wound furthest, garter hole low on the right; last place barely started), the rope's wrap round the rim lengthening and shortening with it.",
+        "pace: position, every sally rides up its rope as the ropes are taken in to ring lower and faster, about 26 px from 0.5 to 8 a beat.",
+        "stroke: position, the sliders under the frame head run out to the right by up to 14 px as the handstroke gap opens, the stays meeting them later."
+      ],
+      "reference": "opxy/reference/ (stock drum machine: bold, closed, double-outline instruments)",
+      "risks": [
+        "The busiest of the five: six wheels, spokes, stays, wraps and sallies; at twelve bells each wheel is about 15 px in radius and the spokes and garter holes go under the 3 px floor.",
+        "Method as each wheel's rotation is the physical truth, but it echoes pass 01's v2 (bells turned to their swing); here the turn is in the screen plane, so it's one node per wheel, not pre-drawn variants.",
+        "Stroke's slider travel (14 px) is under the 24 px position floor and the sliders are small; it needs the stays to rest against them, or a larger runner.",
+        "Bold closed wheels with spokes can read as bicycle or cart wheels if the ropes and sallies are missed.",
+        "Mute: the ring is stood, every wheel turned to the balance with its stay on the slider, all wheels at one angle; honest and distinct by rotation."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "The bronze cut through: the ring hung in a two-tier frame and sectioned on its centre plane, the cut walls showing thin waist and thick sound bow, each clapper standing off its strike point by how far its bell is from striking in this change.",
+      "controls": [
+        "bells: count, sectioned bells in the two tiers from 4 to 12 (2 + 2 up to 6 + 6), smaller as the tiers fill, the sills lengthening.",
+        "method: rotation, each clapper swings about its crown staple: the bell striking now has its ball on the sound bow (bright), the others hang progressively further off it toward plumb.",
+        "pace: rotation (spread), the clappers' stand-off range narrows as the pace rises, from about 34 to 17 degrees (24 at the default), so the whole row of clappers closes toward the bow.",
+        "stroke: rotation, on handstroke changes the leading clapper is held back off the bow by up to 12 degrees before it strikes."
+      ],
+      "reference": "opxy/patterns.md P1 (section drawing) for the cut, not its look; library/theseus-tower for one lit part",
+      "risks": [
+        "Cut bronze is hatched, which craft.md reserves for semi-opaque or inactive regions; in a section the hatch means cut material, so every bell is hatched and the lit one is told by weight and brightness, not by hatch. Needs a sentence or a solid cut fill instead.",
+        "Method, pace and stroke all act through the clappers' angle (order, range, one bell's hold-back); three controls in one channel is the weakest mapping of the five.",
+        "Clapper swing on a 50 to 60 px flight moves the ball about 20-25 px for the full range; small bells at twelve get under the rotation floor.",
+        "Two tiers of mouth-down bells can read as a rack of bell icons if the hatch and wall thickness don't show at 1:1.",
+        "Mute: every clapper hangs plumb, the bright ball gone; distinct by rotation."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "The tower pulled apart along its axis: the bell-chamber floor with the ring on it lifted clear of the ringing-chamber floor, the ropes falling between, and on the ringing floor one bright line threading the rope feet in the order they strike.",
+      "controls": [
+        "bells: count, bells on the upper floor, ropes between and rope feet round the ringing circle from 4 to 12, spaced evenly round it.",
+        "method: shape, the threading line (one mutable outline, up to 12 points) joins the rope feet in the current change's order and closes back to the first; each change re-threads it, rounds is a plain ring, a method a star.",
+        "pace: position, every sally rides up its rope as the ropes are taken in, about 1.6 storeys' worth of the gap (about 30 px) from 0.5 to 8 a beat.",
+        "stroke: position, the explode gap between the two floors opens by up to three units (about 35 px) as the handstroke gap grows: the gap drawn as a gap."
+      ],
+      "reference": "library/toro-blocks/README.md (slabs and hidden-line solids through one camera)",
+      "risks": [
+        "The threading line is a diagram laid on the scene; it could drift toward a sequencer's star polygon if the tower around it gets thinner. The tower must stay the scene.",
+        "Upper-floor bells are about 20-30 px and the far ones tuck behind the near ones; at twelve bells they crowd on the slab.",
+        "The scene is small in the frame (the box has to fit both floors and the gap); the method line is about 100 px across.",
+        "Stroke as explode distance is a metaphor; ringers won't read a tower pulling apart as a handstroke lead without being told.",
+        "Mute: the threading line drops to hairline and the sallies settle on the floor; position plus weight."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.19,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.18,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.14,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.15,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:29:56"
+  },
+  "selection": {
+    "variant": "v2",
+    "reason": "Owner: v2 straight on, keeping its current detail.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:37:44",
+    "angle": "the object in the machine's name, drawn literally and well",
+    "pattern": "none",
+    "drawing_language": "hidden-line 3D",
+    "subject": "The ring itself, literally: hidden-line bronze bells hung along one side of the frame, standing in the order they strike in this change, the nearest striking now and the row running back into the tower.",
+    "controls": [
+      "bells: count, bells are hung along the beam from 4 to 12, each new bell larger (lower in the scale) and the beam lengthening into the distance.",
+      "method: position, each bell moves along the beam to its place in the current change; a change is neighbouring bells trading places, a hunting bell walking front to back and back again.",
+      "pace: position (spacing), the distance between bells along the beam is the time between blows: spread out at 0.5 a beat, packed close (bells nearly touching) at 8.",
+      "stroke: position, on handstroke changes the whole row steps back along the beam by up to one bay, leaving an empty hatched bay in front: the open lead drawn as a space."
+    ],
+    "reference": "library/toro-blocks/README.md (a modelled 3D field, black-filled hidden-line solids, one camera)",
+    "risks": [
+      "Bells sliding along a beam isn't how a tower works (bells hang still and swing); the beam is a stage for the order, a stretch a ringer may notice.",
+      "Order is read by size along the row; at twelve bells the far end shrinks under 10 px in perspective, so the back of a long row is hard to read.",
+      "Pace (spacing) and stroke (offset of the row) both slide bells along the beam; stroke must lead with the hatched empty bay, not the move.",
+      "Each bell is pre-projected per depth slot: moving a bell along the beam changes its size, so method swaps need pre-drawn sizes per slot or a scale per node (allowed, uniform).",
+      "Mute: the bells are stood (the bright weight leaves the front bell and the row stops), shown by the front bell's outline dropping to the others' weight. Weak; needs a stronger cue."
+    ]
+  }
+}

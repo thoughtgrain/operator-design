@@ -1,0 +1,21 @@
+{
+  "variant": "v1",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "The verge of the roof seen side on at large scale: a black mass whose tile noses climb out of the top-right corner, lit only along the edges that face the sky, where each lit nose is a course that can play and the one a drop just hit is the bright one.",
+  "controls": [
+    "rate: how many rain streaks hang in the open sky above the verge (count, about 6 at 1.0 a beat to about 24 at 8), each falling toward the course it will land on.",
+    "roof: how many tile noses carry a rim light (count, with exposure as shape): at 0 st one lit nose, at 36 st twenty-two smaller ones; noses past the span stay as dim hairlines running off the frame.",
+    "gust: the streaks lean (rotation, ±30° from vertical) and the landings walk up or down the lit noses, so a strong gust reads as a run of crowns climbing or descending the edge.",
+    "puddle: the half-round gutter at the eave fills (water hatched in 45° hairlines inside its profile, rising 0 to full) and beads of light hang from its lip, one per note held in memory."
+  ],
+  "reference": "library/theseus-tower (dark bodies behind grey outlines, only the struck part lights); craft.md, One drawing language",
+  "risks": [
+    "Silhouette against a black sky: the roof mass only exists through its rim and the barge-board hairline, so the black body is invisible as a shape; it has to be read from the edge alone.",
+    "At 36 st the 22 noses get ~20 px apart, still clear of the 3 px floor but much busier than at rest; the camera can't scale up without losing the eave.",
+    "The gutter (puddle's whole channel) is a 20 px corner far from the struck course; puddle scores 3 and may struggle for area unless the beads are generous.",
+    "The barge-board hairline running to the right edge can read as a separate diagonal line at 1:1.",
+    "Muted: every rim drops to hairline G2 and the streaks stop where they are (the roof goes dark, nothing lands)."
+  ]
+}

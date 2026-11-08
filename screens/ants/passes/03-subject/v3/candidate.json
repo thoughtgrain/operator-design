@@ -1,0 +1,16 @@
+{
+  "variant": "v3",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "A ford of stepping stones across a stream, one row per step and one stone per degree, where the crossing everyone takes is worn smooth and dished while the stones nobody uses are mossed over.",
+  "controls": [
+    "ants: count, stones on the worn route that are still wet from a crossing (a short sheen on the near lip), 1 to 8.",
+    "scent: shape, how deep the polished dish is on the route stones and how bare their tops are, from barely worn to a deep tread.",
+    "fade: shape, how far the moss (hatching) has grown back over the old route's bare patches, none at 0 to closed over at 100.",
+    "scale: count, stones per row: 5 at pent, 7 for the modes, 12 at chrom, smaller and closer across the stream."
+  ],
+  "reference": "library/theseus-tower (detailed line art, black bodies over grey outlines)",
+  "muted": "Muted: the lead stone's bright rim drops to the route grey and the wet sheens go.",
+  "risks": "Thirty stones each with flank lines, ripples and hatched moss is far over budget and close to busy at 1:1; the hatched tops can read as biscuits. The route is told by bare against hatched more than by line weight, and reading rows as steps needs the frame to cross from bank to bank, so the crossing's order is only implied. Twelve stones a row at chrom will crowd."
+}

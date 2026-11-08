@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "The bowl taken apart along its axis into four thrown ring courses and its foot, spaced the way its modes are, with the mallet lifted off along its line of strike.",
+  "controls": [
+    "strike: rotation — the exploded mallet turns on its line of strike, from lying back (soft) to pointing steeply at the top course (hard), ~40°.",
+    "glaze: position — hatched glaze climbs the inside of the courses from the foot up, course by course, so heavy glaze hatches the whole stack.",
+    "crack: shape — each course above the floor opens a split, a gap widening up to ~14 px, so every ring reads as two halves, like the modes splitting into doublets.",
+    "fire: position — the gaps between courses stretch more the higher they are (stack top moves ~30 px), the upper modes pulling apart as the body stiffens."
+  ],
+  "reference": "library/toro-blocks (a model of the engine drawn as hidden-line solids)",
+  "risks": "An exploded stack of rings can read as a lampshade or a spring rather than a bowl; the top course must keep the bowl's rim and the foot its foot. Glaze climbing by course is a count in disguise; it has to ease within a course. Stretch on fire is the same channel as nothing else here, but only ~30 px of travel."
+}

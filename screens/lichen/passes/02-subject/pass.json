@@ -1,0 +1,243 @@
+{
+  "machine": "lichen",
+  "category": "player",
+  "kind": "subject",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Five new, unique iterations.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "cutaway section",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what lichen is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: cutaway section. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what lichen is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: exploded view. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what lichen is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: single-weight contour. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what lichen is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: hatched mass. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what lichen is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: edge-lit silhouette. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "A block of stone carrying the colony as crust, cut open along the start row: the cut face is a section through the crust (its thickness is each cell's age, cortex and rhizines inside) and behind the cut the rest of the colony stands as rounded areolae.",
+      "controls": [
+        "grow: shape. Thin tongues of crust push out from the margin over bare stone, from nothing at 0 to most of a cell (about 30 px) at 100.",
+        "decay: rotation. Each dead areola is a hatched remnant with one flake hinged at its back edge; decay tips the flakes up off the stone, 12 degrees at 0 to about 85 at 100, and more of the centre dies.",
+        "seed: count. Spores hang above the bare stone with a dashed fall line to where each will land, 0 to 8.",
+        "scale: position. Where two neighbouring cells sit a half step apart, the stone between them is cracked: a V-shaped crack down the cut face and a double hairline joint across the top. The cracks move with each mode; the pentatonics have none."
+      ],
+      "reference": "library/theseus-tower (hidden-line solids, inner detail at hairline); opxy/reference/field-and-figure.jpg",
+      "risks": "The cut only shows one row in section, so most of the colony is read from the plates behind it; the crack joints on the top face are small at 1:1 and scale's floor needs the cut-face cracks to carry it. Areola prisms sit close to toro-blocks' cubes in silhouette, though they are low rounded plates on a cut block, not a stack. Flakes are pre-drawn variants (a tilt out of the plane can't be a node turn). Muted: the block stays, every crust edge drops to G3 and the born plates lose their bright edge; spores hide."
+    },
+    {
+      "variant": "v2",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "The colony taken apart into what it is made of, floated in an exploded stack over the bare scale lattice: the stone plate with raised half-step seams at the bottom, the dead centre as a thin hatched sheet, the living crust as one cracked sheet with holes where it died, and this tick's two births lifted clear on their assembly axes.",
+      "controls": [
+        "grow: position. The two cells just born lift out of the living sheet along their dashed axes, a little at 0 to about 40 px higher at 100.",
+        "decay: shape. The hatched dead sheet grows and the holes in the living sheet above it open to match.",
+        "seed: count. Spores wait at the top of the stack, each with a dashed line down to its cell, 0 to 8.",
+        "scale: position. On the stone plate the edge between two cells a half step apart stands up as a short raised ridge; the ridges move with the mode, and the pentatonics have none."
+      ],
+      "reference": "library/theseus-tower (a stack of parts, only what plays moves); exploded assembly drawings",
+      "risks": "The plate is 72 tiles of hairline and carries a lot of line for a part that only scale changes; the live sheet sits over the dead one, so their overlap needs the camera kept where it is. A hole's far wall can read as a stray cylinder. Lifting births reads well for grow but it also answers every note, so the note response and grow share the lift: grow sets how far, a note sets which. Muted: the stack closes (layers drop back together onto the plate) and nothing is bright."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "Only the trail the colony has left on the stone, one line weight throughout: every birth since the first spore is a line from parent to child, worn through where that cell has died, jogged where it stepped a half step, and the two lines grown this tick are the bright ones.",
+      "controls": [
+        "grow: shape. A probe reaches from each living margin cell towards the free cell furthest from the start, a few px at 0 to about 20 px at 100.",
+        "decay: shape. Lines into dead cells are dashed and their gaps open with decay, so at 100 the old centre of the trail is mostly worn away.",
+        "seed: count. Small rings mark where spores will land, each with a dashed fall above it, 0 to 8.",
+        "scale: shape. A link that moved a half step has a small jog in it; a wider step is a plain bow. Each mode moves the jogs; the pentatonics have none."
+      ],
+      "reference": "opxy/reference/toro-ink-rest.jpg (one line language, black ground)",
+      "risks": "At rest it's sparse (about 20 lines) and doesn't say lichen or lattice without the motion; the shape of the trail is the colony's history, not its body, so where the colony is alive has to be read from brightness. The jogs are 9 px features and may sit near scale's floor. A long run grows a dense trail that needs a history limit (the last N births) for the node budget. Muted: every line drops to G3 and the bright births go out."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "One stretch of the colony's margin at large scale, the rest implied past the frame's edges: the living crust as cracked black areolae, the dead centre as a hatched mass behind it, the cell just taken drawn bright, lobes pushing out over the bare stone joints.",
+      "controls": [
+        "grow: shape. Lobes of crust push from each living margin cell into its free neighbours, from a nub at 0 to about 45 px at 100.",
+        "decay: count. The hatched dead mass spreads through the old crust, none at 0 to most of the window at 100.",
+        "seed: count. Spores lie on the bare stone right of the margin, 0 to 8.",
+        "scale: shape. The lattice is stretched by the scale: each cell is as wide as its step to the next degree, so half steps are narrow cells and the stone joints shift with each mode."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg; craft.md hatching",
+      "risks": "Large cells mean the whole lattice is never seen, so where the colony is overall is lost; the window has to follow the newest growth, which is a camera move on every birth (expensive, and it fights the calm). Hatching over a third of the window is a lot of nodes. The stretched lattice is honest but can read as random paving. Muted: the bright cell drops to G4 and the lobes withdraw."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "The lichen itself, a leafy thallus lying on stone drawn as a black silhouette lit along the edges that face the light, its lobes reaching out from the living margin, its old centre crumbling to hatched dead crust, fruiting cups on the cells a half step below their neighbour.",
+      "controls": [
+        "grow: shape. The margin lobes lengthen and branch, from a short fringe at 0 to about 22 px longer at 100.",
+        "decay: shape. The hatched dead centre spreads outward through the thallus, nothing at 0 to a crumbling ring at 100.",
+        "seed: count. Spores lie on the stone round the thallus, 0 to 8.",
+        "scale: position. The fruiting cups (apothecia) sit on living cells whose next degree up is a half step; each mode moves them, the pentatonics have none."
+      ],
+      "reference": "library/theseus-tower (black bodies, edge light marks what's active)",
+      "risks": "An edge-lit black shape on a black screen depends on the rim; the unlit side disappears, so the thallus can read smaller than it is. Pass 01's v4 was also a literal lichen patch; this one differs in being lobed, unfilled and lit, but the owner may see it as the same idea. The outline is a mutable path that re-keys on every birth and its lit runs need several paths, which presses the four-path limit. Muted: the rim light goes out to a G3 hairline all round."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.14,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.22,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.14,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.23,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:28:13"
+  },
+  "selection": {
+    "variant": "v1",
+    "reason": "Owner likes v1; clean it up a bit, with more solid shapes.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:38:14",
+    "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+    "pattern": "none",
+    "drawing_language": "cutaway section",
+    "subject": "A block of stone carrying the colony as crust, cut open along the start row: the cut face is a section through the crust (its thickness is each cell's age, cortex and rhizines inside) and behind the cut the rest of the colony stands as rounded areolae.",
+    "controls": [
+      "grow: shape. Thin tongues of crust push out from the margin over bare stone, from nothing at 0 to most of a cell (about 30 px) at 100.",
+      "decay: rotation. Each dead areola is a hatched remnant with one flake hinged at its back edge; decay tips the flakes up off the stone, 12 degrees at 0 to about 85 at 100, and more of the centre dies.",
+      "seed: count. Spores hang above the bare stone with a dashed fall line to where each will land, 0 to 8.",
+      "scale: position. Where two neighbouring cells sit a half step apart, the stone between them is cracked: a V-shaped crack down the cut face and a double hairline joint across the top. The cracks move with each mode; the pentatonics have none."
+    ],
+    "reference": "library/theseus-tower (hidden-line solids, inner detail at hairline); opxy/reference/field-and-figure.jpg",
+    "risks": "The cut only shows one row in section, so most of the colony is read from the plates behind it; the crack joints on the top face are small at 1:1 and scale's floor needs the cut-face cracks to carry it. Areola prisms sit close to toro-blocks' cubes in silhouette, though they are low rounded plates on a cut block, not a stack. Flakes are pre-drawn variants (a tilt out of the plane can't be a node turn). Muted: the block stays, every crust edge drops to G3 and the born plates lose their bright edge; spores hide."
+  }
+}

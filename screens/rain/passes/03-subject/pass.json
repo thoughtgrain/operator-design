@@ -1,0 +1,254 @@
+{
+  "machine": "rain",
+  "category": "player",
+  "kind": "subject",
+  "number": 3,
+  "state": "ready_for_pick",
+  "created": "2026-11-06T12:34:04",
+  "focus": "Owner's idea: raindrops on a window, the whole screen is the window; you see rain run down the glass and collect into drops that then fall. Five variants of that.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "bold closed outlines",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what rain is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: bold closed outlines. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "cutaway section",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what rain is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: cutaway section. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what rain is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: exploded view. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what rain is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: single-weight contour. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what rain is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: hatched mass. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "bold closed outlines",
+      "subject": "The window face on and wide, where the subject is the wiped trails that heavy beads leave as they let go and run down through the beaded band, each a closed lane with the small beads it dropped strung inside it.",
+      "controls": [
+        "rate: how many beads cling in the landing band (count, about 40 at 0.25 a beat to the band packed at 8), and how often a new bold outline appears in it.",
+        "roof: the height of the landing band on the glass (position/extent, a single line of beads at 0 st to most of the pane at 36 st); a bead's height is its note, so a wide roof scatters them up and down.",
+        "gust: landings arrive on a slant (a short hairline streak before each drop) and every trail leans and drifts left or right as it runs (shape, about ±40 px of sideways travel over a run at ±100).",
+        "puddle: how big a bead grows before it lets go (scale of the heavy beads, double-outlined), so how many beads each run sweeps up and replays as it passes them; at 0 beads let go after two or three drops and trails are thin, at 100 they gather long and leave wide lanes."
+      ],
+      "reference": "library/theseus-tower (black bodies behind grey outlines, only what plays lights); craft.md, Detail follows how often the subject changes (bold closed shapes for parts that keep arriving)",
+      "risks": [
+        "Rows of small round outlines can read as bubbles or a dotted chart rather than water; the beads need their sag (heavier at the bottom) to stay readable at 1:1.",
+        "Trails are the subject, but at rest the brightest element is the newest bead (a small ring); the newest trail is only a step brighter, so the eye may not land on the trace first.",
+        "Old trails have to go somewhere: the sketch keeps the last four; on the device they need a rule (fresh landings re-bead them, or they fade one step per new run).",
+        "A growing trail outline is a mutable path re-keyed each frame while a run moves: one of the four paths per concurrent run, so at most two runs at once.",
+        "Muted: landings stop, beads keep their outlines but drop to hairline G2 and no run moves; the glass goes still and dim."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "A real wet pane seen at an angle and cut through at its right edge, so the glass shows its thickness as a hatched section and the heavy bead sitting on the cut shows its meniscus in profile, holding as much water as the puddle lets it.",
+      "controls": [
+        "rate: how many drops strike the face of the pane (count of foreshortened beads, sparse at 0.25 a beat to crowded at 8).",
+        "roof: how tall the wet band is on the glass (position/extent along the pane's height): every bead sits at its note's height, so 0 st is one line of beads and 36 st wets most of the pane.",
+        "gust: the incoming drops' streaks slant and the runs on the face drift sideways along the pane (shape, the trails bend toward or away from the cut).",
+        "puddle: the bead on the cut swells (scale of its profile and meniscus, about 1.5x from 0 to 100) because a fuller glass holds more before it lets go; when it does go, its run sweeps the face and replays what it took in."
+      ],
+      "reference": "opxy/reference patent-section language as used in craft.md (hatching for cut material); library/theseus-tower for black-over-outline bodies",
+      "risks": [
+        "The section is a narrow strip at the right edge: at 1:1 it can read as a post or a pipe rather than the glass's thickness, and the pane's other edges aren't drawn, so the angle is carried only by the foreshortened beads.",
+        "The subject (the bead on the cut) sits at the edge, not where the eye lands first; the bead field in the middle competes with it.",
+        "Gust's sideways push runs mostly along the camera's depth axis, so it's foreshortened; it needs checking at ±100 that it clears the 24 px floor.",
+        "Muted: no drops strike, the profile bead drops from G7 to G4 and the hatched section stays as the only clear structure."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "The heaviest bead on the glass with the drops it gathered pulled back off the pane along the line the rain came in on, each drop floating over the spot where it landed (its height is its note) with a hairline back to that spot and the slide it made down into the bead.",
+      "controls": [
+        "rate: how many plain beads cling on the glass around the assembly (count), the drops that haven't gathered yet.",
+        "roof: how far apart the exploded drops' landing spots are in height (position, the parts fan from one line at 0 st to a tall spread at 36 st), so the span reads as the fan's height.",
+        "gust: the explosion axis tilts left or right (rotation of every leader, about ±30°), because the parts are pulled back along the direction the wind brought them in.",
+        "puddle: how many drops the heavy bead holds (count of exploded parts, 3 at 0 to 12 at 100, and the bead's size with them); each new drop enters on the right, bright, and the oldest leaves."
+      ],
+      "reference": "exploded-view drawing convention (parts offset along one axis with leader lines); library/toro-blocks (one camera, hidden-line bodies)",
+      "risks": [
+        "Leaders plus slide lines plus contact rings can read as a node graph or a molecule rather than drops; the leaders need to stay parallel and the slides quiet.",
+        "Floating flattened spheres risk reading as balloons on strings; they're drawn as real falling drops (pressed flat on the leading face), not as the teardrop icon.",
+        "The assembly only shows the puddle's memory; the beads around it are history and don't connect to it, so the screen has two stories.",
+        "Every note shifts all the parts one slot (n nodes move), so at puddle 100 a note moves 12 parts: peak cost grows with puddle.",
+        "Muted: the parts sink back to their contact rings (exploded distance eases to 0) and the bead goes G4: assembled and still."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "One heavy bead seen close and about to let go, its surface drawn as level contours that sag toward its heavy lower edge, with neighbouring beads and an old wiped trail cut by the frame's edges so the pane is only implied.",
+      "controls": [
+        "rate: how many small beads land around the heavy one (count, a few at 0.25 a beat to a crowd at 8), each a single-weight outline.",
+        "roof: how far up and down the glass the small landings scatter around the heavy bead (position spread, one row at 0 st to the full height at 36 st).",
+        "gust: the arriving streaks slant and the heavy bead's sag leans left or right (shape: its lowest contour shifts ±16 px), so the run it starts will go sideways.",
+        "puddle: the heavy bead's size before it goes (scale, radius about 1.5x from 0 to 100, with more contours); a full puddle is a big, slow-growing bead that sweeps everything below it when it runs."
+      ],
+      "reference": "contour line art (topographic level lines on a modelled dome); library/theseus-tower for one subject that stays and carries detail",
+      "risks": [
+        "Nested contours on a dome can read as a target (craft.md: no nested bands); the strong downward sag and the oblique camera are what keep it a drop, and they must survive every setting.",
+        "After the bead lets go the subject has left the frame: the screen is an empty lane until a new heavy bead gathers, which can read as broken.",
+        "Single weight means hierarchy is carried by grey alone (G7 bead, G5 contours, G4 neighbours); that's three steps but close to the grey-only-difference limit.",
+        "A heavy run moving with 7 contour nodes plus its lane is ~8 changed nodes a frame, fine, but the lane is a re-keyed path while it moves.",
+        "Muted: the bead's contours drop to G3 with only its outline left at G4; nothing lands, nothing lets go."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "Rain on the glass, literally and close: every bead and every run a mass of water drawn in 45° hatching because water is see-through, its lower rim lit where the meniscus catches the light, the newest drop's rim the brightest.",
+      "controls": [
+        "rate: how many hatched drops hang on the glass (count, a handful at 0.25 a beat to a crowded band at 8).",
+        "roof: the height of the wet band (position/extent), a drop's height being its note; at 0 st the drops sit in one line and merge quickly into heavy ones.",
+        "gust: landings slant (streak before each drop) and the runs lean and drift sideways (shape of the hatched lanes, ±40 px over a run).",
+        "puddle: how heavy a drop grows before it lets go (scale of the biggest hatched masses), and so how wide and long its hatched lane is and how many drops it sweeps up and replays."
+      ],
+      "reference": "craft.md, Semi-opaque areas are hatched, not tinted (the stock filter page's hatched band); library/theseus-tower for one lit element",
+      "risks": [
+        "Hatched round masses can read as striped balls or a pattern swatch at 1:1 if they get small; drops under ~6 px are drawn as plain outlines instead.",
+        "Moving hatched masses are expensive: every hatch line is a node, so a running drop costs ~12 changed nodes a frame on average and peaks near 45; on the device the run head would need fewer, coarser lines.",
+        "It sits near v1 in layout (a band of drops and trails below); the difference is scale and language, which the owner may see as the same window.",
+        "Muted: the rims drop to G3, the hatching stays (water is still there) and nothing moves."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.14,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T12:52:48"
+  },
+  "selection": null
+}

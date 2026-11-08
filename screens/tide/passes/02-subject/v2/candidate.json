@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "The tide itself running up a shore: the latest swash's lacy edge as the one bright line, the sea's swell lines beyond it, broken strand marks of earlier swashes, and a rock ledge of eight hollows the water has just filled.",
+  "controls": [
+    "swell: the swell lines out on the sea spread apart or crowd together toward the shore (position).",
+    "depth: the strand marks of earlier swashes stay on the beach longer, one at 50 ms up to six at 5 s (count).",
+    "salt: the eight hollows' sizes spread from a harmonic series to a stretched one, the small ones shrinking hard (scale per hollow).",
+    "drift: the hollows slide off their places on the ledge, each its own way, up to about 24 px (position per hollow)."
+  ],
+  "reference": "opxy/reference/ (stock contour pages: one weight, value carries hierarchy)",
+  "risks": "Single weight leaves value alone to set the hierarchy, so the frame is busy with many grey lines of equal width; the sea lines crowd the swash on the right. The ledge with hollows is small and reads as a pasted blob at 1:1. The swash edge is ~160 points (three paths) if it should move on notes."
+}

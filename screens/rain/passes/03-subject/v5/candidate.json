@@ -1,0 +1,20 @@
+{
+  "variant": "v5",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "Rain on the glass, literally and close: every bead and every run a mass of water drawn in 45° hatching because water is see-through, its lower rim lit where the meniscus catches the light, the newest drop's rim the brightest.",
+  "controls": [
+    "rate: how many hatched drops hang on the glass (count, a handful at 0.25 a beat to a crowded band at 8).",
+    "roof: the height of the wet band (position/extent), a drop's height being its note; at 0 st the drops sit in one line and merge quickly into heavy ones.",
+    "gust: landings slant (streak before each drop) and the runs lean and drift sideways (shape of the hatched lanes, ±40 px over a run).",
+    "puddle: how heavy a drop grows before it lets go (scale of the biggest hatched masses), and so how wide and long its hatched lane is and how many drops it sweeps up and replays."
+  ],
+  "reference": "craft.md, Semi-opaque areas are hatched, not tinted (the stock filter page's hatched band); library/theseus-tower for one lit element",
+  "risks": [
+    "Hatched round masses can read as striped balls or a pattern swatch at 1:1 if they get small; drops under ~6 px are drawn as plain outlines instead.",
+    "Moving hatched masses are expensive: every hatch line is a node, so a running drop costs ~12 changed nodes a frame on average and peaks near 45; on the device the run head would need fewer, coarser lines.",
+    "It sits near v1 in layout (a band of drops and trails below); the difference is scale and language, which the owner may see as the same window.",
+    "Muted: the rims drop to G3, the hatching stays (water is still there) and nothing moves."
+  ]
+}

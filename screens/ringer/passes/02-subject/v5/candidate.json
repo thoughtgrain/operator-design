@@ -1,0 +1,21 @@
+{
+  "variant": "v5",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "The tower pulled apart along its axis: the bell-chamber floor with the ring on it lifted clear of the ringing-chamber floor, the ropes falling between, and on the ringing floor one bright line threading the rope feet in the order they strike.",
+  "controls": [
+    "bells: count, bells on the upper floor, ropes between and rope feet round the ringing circle from 4 to 12, spaced evenly round it.",
+    "method: shape, the threading line (one mutable outline, up to 12 points) joins the rope feet in the current change's order and closes back to the first; each change re-threads it, rounds is a plain ring, a method a star.",
+    "pace: position, every sally rides up its rope as the ropes are taken in, about 1.6 storeys' worth of the gap (about 30 px) from 0.5 to 8 a beat.",
+    "stroke: position, the explode gap between the two floors opens by up to three units (about 35 px) as the handstroke gap grows: the gap drawn as a gap."
+  ],
+  "reference": "library/toro-blocks/README.md (slabs and hidden-line solids through one camera)",
+  "risks": [
+    "The threading line is a diagram laid on the scene; it could drift toward a sequencer's star polygon if the tower around it gets thinner. The tower must stay the scene.",
+    "Upper-floor bells are about 20-30 px and the far ones tuck behind the near ones; at twelve bells they crowd on the slab.",
+    "The scene is small in the frame (the box has to fit both floors and the gap); the method line is about 100 px across.",
+    "Stroke as explode distance is a metaphor; ringers won't read a tower pulling apart as a handstroke lead without being told.",
+    "Mute: the threading line drops to hairline and the sallies settle on the floor; position plus weight."
+  ]
+}

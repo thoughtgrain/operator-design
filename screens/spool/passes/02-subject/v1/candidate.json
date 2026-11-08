@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "A spool lying on a table, seen low from the front, paying out a trail of thread behind it that lies in the written cycle's shape, repeat after repeat, receding to the far edge.",
+  "controls": [
+    "wear: the trail wears with age, the oldest (far) repeats losing their corners first and opening frayed gaps where the oxide would thin, the newest staying crisp (shape of the trail outline, re-keyed when wear changes).",
+    "wow: the spool's heading swings as it rolls, so the free run between the trail's end and the winding pulls round with it, 0 to 36 degrees (rotation of the spool node about its contact point).",
+    "length: the wavelength of one repeat laid on the table, so a longer loop lays fewer, longer repeats, 6 down to 3 across the frame (count of repeats, with their spacing).",
+    "bias: tension in the free run: under-biased it's pulled straight and taut and the spool sits 24 px nearer the trail; over-biased it sags into a slack loop (position of the spool, with the free run reshaped)."
+  ],
+  "reference": "library/theseus-tower",
+  "risks": "Single weight breaks craft.md's three-weight table on purpose: the language is one 1.5 px contour, with brightness (#CDCDCD thread, #7D7D7D spool) doing the separating; say so if picked. The zigzag trail could read as a chart or a lightning scribble rather than thread if it loses its perspective; it only reads as thread laid on a table because it recedes. Wear acting on the far (small) repeats puts the 5-score control on the least prominent part; it needs to reach the nearest repeat at high wear to clear the 2.5 % floor. The trail is ~5 repeats of 6 points but runs to several mutable outlines once frayed (gaps split it), so the budget is tight on 4 paths. Wow as a spool rotation fakes a 3D turn with a screen-plane turn; it holds only while the camera stays low and the swing is modest."
+}

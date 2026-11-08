@@ -1,0 +1,253 @@
+{
+  "machine": "lathe",
+  "category": "effect",
+  "kind": "subject",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Five new unique variations; include a lathe profile view (the workpiece's profile turning on the lathe).",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what lathe is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: single-weight contour. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what lathe is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: hatched mass. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the material the sound acts on, seen close",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what lathe is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: edge-lit silhouette. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "one scene where this happens, with one subject in it",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what lathe is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: detailed line art. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "hidden-line 3D",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what lathe is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: hidden-line 3D. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "A turning lathe in profile, the workpiece spinning between chuck and tailstock centre, its turned profile the cut signal and the tool at the shoulder where raw stock becomes waveform.",
+      "controls": [
+        "cut: shape (node 0, the turned profile) - the profile's swings deepen and their crests flatten into lands as the cutter is driven, 8.5 px swing at 1.00 to ~14 px with flat tops at 4.00.",
+        "groove: position (node 1, tool and cross-slide) - the cross-slide feeds the tool in toward the axis by 24 px, and the turned radius follows it down (rim = full diameter, label = a thin spindle).",
+        "wear: count (hairline chatter marks) - short hairline ticks appear across the turned surface, 0 to ~16, none at 0.",
+        "rumble: rotation (node 2, the workpiece and its centre line) - the work runs out, turning in the screen plane about the chuck by up to +-4 deg with a hatched envelope of the swept outline; still at 0."
+      ],
+      "reference": "library/theseus-tower (the instrument drawn as itself, outlines over black); opxy/craft.md single-language rule",
+      "risks": "Single-weight contour: every machine part is one Line-weight outline; the turned profile is the only heavier line and the centre line and chip the only hairlines, so the three weights survive. This is a metal/wood lathe, a pun on the machine's name rather than the record lathe the DSP models; the owner asked for it. rumble's in-plane turn is under the 30 deg rotation floor (the tail end moves ~28 px, so it may pass as position). cut and groove both reshape the profile's path, but groove's primary channel is the tool's position. The profile is one mutable outline of 62 points, close to the 64 limit."
+    },
+    {
+      "variant": "v2",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "The record lathe's cutter head riding its lead screw side-on, every body a hatched mass, the bright stylus hanging from its pivot into the lacquer it is cutting.",
+      "controls": [
+        "cut: rotation (node 0, the stylus about its pivot) - the stylus swings from a still rest to +-30 deg excursion as drive rises, and at the top of the range it presses against the stop pads in the head's window (saturation drawn as hitting the stops).",
+        "groove: position (carriage, column, head and nozzle as one group) - the whole head runs along the screw from the rim (left) toward the label step (right), ~190 px, and the cut turns behind it lengthen.",
+        "wear: count - small chips appear on the lacquer behind the stylus among the earlier turns, 0 to ~14, none at 0.",
+        "rumble: shape (the lacquer coat's top edge) - the coat and core slab heave into a slow wave under the head, +-6 px; flat at 0."
+      ],
+      "reference": "opxy/craft.md (hatching: 45 deg hairlines over black, >= 3 px clear); patent section lining as the language's source",
+      "risks": "Hatched masses are a lot of 45 deg texture at 1:1 (spacing 4.5 px, 3.5 px clear); on the panel the hatching may shimmer as the carriage moves, so the moving group may need its hatching pre-drawn per node. The stylus is a filled bright body (the one solid bright mass). groove moves ~6 nodes as a group. The coat notches (earlier turns) sit close to the 3 px floor."
+    },
+    {
+      "variant": "v3",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "The lacquer coat under the microscope at grazing light, grooves running away from the eye with only their lips catching the light, the newest groove the bright one and the cut face of the coat a notched silhouette at the bottom.",
+      "controls": [
+        "cut: shape (node 0, the bright groove's lit lip) - its swing widens and the crests flatten as the cutter saturates; the V notch it makes in the near face deepens with it.",
+        "groove: position (the whole field) - the field slides sideways: the rim's bevel leaves at the right and more turns come in from the left, ~90 px at the near edge.",
+        "wear: count - specks and short scratches catch the light on the lands between grooves, 0 to ~16, none at 0.",
+        "rumble: rotation (the field about its near centre) - the surface tilts slowly in the screen plane, up to +-3 deg, as the platter heaves; still at 0."
+      ],
+      "reference": "opxy/reference (MNMD wireframe outlines over black); opxy/craft.md, Think in 3D (one camera, spacing in the world)",
+      "risks": "Lines converging upward can read as a retro perspective grid if pushed; the camera looks down so there's no horizon, and each lip stops before it comes within 3 px of its neighbour. groove as a whole-field slide is many lines moving at once (one node per lip, ~25 nodes), expensive on a turn. rumble's rotation is under the 30 deg floor. The bright lip is 44 points split in two ribbons; as one mutable outline it must drop to <= 31 points per side."
+    },
+    {
+      "variant": "v4",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "The freshly cut disc playing back on a platter seen close and low, its grooves hairline rings, the tonearm swung in and the one bright arc the groove being read.",
+      "controls": [
+        "cut: shape (node 0, the bright arc of the groove being read) - the arc swings into a modulated ring as drive rises, its crests flattening; a plain arc at low cut.",
+        "groove: rotation (the tonearm about its pivot) - the arm swings in from the rim to the last groove before the label, ~35 deg, and the bright arc moves with the stylus.",
+        "wear: count - dust specks and short scratch arcs appear across the cut band, 0 to ~16, none at 0.",
+        "rumble: position (disc and platter as one group) - the disc rides up and down on its spindle by up to 8 px with a slow wander; still at 0."
+      ],
+      "reference": "library/theseus-tower (a modelled object in perspective, hidden-line, outlines over black)",
+      "risks": "The playback deck shows the second half of the machine (wear and rumble live there), so the lathe itself is off stage: it may read as a turntable machine rather than a cutting lathe. The tonearm is small at 1:1 (headshell ~10 px); it needs a closer camera on the device. Hairline rings are drawn as stroked closed outlines (1.0 px), which lint warns about; as ribbons they cost more nodes. Moving the disc for rumble is a big redraw."
+    },
+    {
+      "variant": "v5",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "A specimen block of lacquer on aluminium with one length of modulated groove cut along its top, modelled in hidden-line 3D, its end face sectioned so the V of the groove shows.",
+      "controls": [
+        "cut: shape (node 0, the groove's lit far lip, with its near lip and floor) - the groove widens and sinks and its swings flatten at the crests, half-width 0.25 to 0.37 world (~6 px).",
+        "groove: shape on the time axis, carried as position of the block's swing pattern - the same swings pack shorter along the block (inner turns run slower under the stylus), wavelength 1.0 to 0.55 of the rest frame.",
+        "wear: count - chips knocked out of the lips, small notches along both edges, 0 to ~14, none at 0.",
+        "rumble: position (the whole block) - the block heaves up and down on its bed by up to 10 px with a slow wander, a hatched ghost of its base showing where it rests; still at 0."
+      ],
+      "reference": "library/toro-blocks (hidden-line 3D blocks over black); opxy/craft.md, Think in 3D",
+      "risks": "cut and groove both change the groove's outline; groove's change is along the length (wavelength), cut's across (width, depth, crest), but both re-key the same paths, so the one-channel rule is bent and must be shown to read on the contact sheet. The cut needs ~cut 1.6 before the widening clears the 16 px shape floor. The block and its three grooves cost ~4 mutable paths (lips, floor), the full budget."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.12,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:23:29"
+  },
+  "selection": {
+    "variant": "v3",
+    "reason": "Owner likes v3.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:29:59",
+    "angle": "the material the sound acts on, seen close",
+    "pattern": "none",
+    "drawing_language": "edge-lit silhouette",
+    "subject": "The lacquer coat under the microscope at grazing light, grooves running away from the eye with only their lips catching the light, the newest groove the bright one and the cut face of the coat a notched silhouette at the bottom.",
+    "controls": [
+      "cut: shape (node 0, the bright groove's lit lip) - its swing widens and the crests flatten as the cutter saturates; the V notch it makes in the near face deepens with it.",
+      "groove: position (the whole field) - the field slides sideways: the rim's bevel leaves at the right and more turns come in from the left, ~90 px at the near edge.",
+      "wear: count - specks and short scratches catch the light on the lands between grooves, 0 to ~16, none at 0.",
+      "rumble: rotation (the field about its near centre) - the surface tilts slowly in the screen plane, up to +-3 deg, as the platter heaves; still at 0."
+    ],
+    "reference": "opxy/reference (MNMD wireframe outlines over black); opxy/craft.md, Think in 3D (one camera, spacing in the world)",
+    "risks": "Lines converging upward can read as a retro perspective grid if pushed; the camera looks down so there's no horizon, and each lip stops before it comes within 3 px of its neighbour. groove as a whole-field slide is many lines moving at once (one node per lip, ~25 nodes), expensive on a turn. rumble's rotation is under the 30 deg floor. The bright lip is 44 points split in two ribbons; as one mutable outline it must drop to <= 31 points per side."
+  }
+}

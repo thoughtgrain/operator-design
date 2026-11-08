@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "A block of stone carrying the colony as crust, cut open along the start row: the cut face is a section through the crust (its thickness is each cell's age, cortex and rhizines inside) and behind the cut the rest of the colony stands as rounded areolae.",
+  "controls": [
+    "grow: shape. Thin tongues of crust push out from the margin over bare stone, from nothing at 0 to most of a cell (about 30 px) at 100.",
+    "decay: rotation. Each dead areola is a hatched remnant with one flake hinged at its back edge; decay tips the flakes up off the stone, 12 degrees at 0 to about 85 at 100, and more of the centre dies.",
+    "seed: count. Spores hang above the bare stone with a dashed fall line to where each will land, 0 to 8.",
+    "scale: position. Where two neighbouring cells sit a half step apart, the stone between them is cracked: a V-shaped crack down the cut face and a double hairline joint across the top. The cracks move with each mode; the pentatonics have none."
+  ],
+  "reference": "library/theseus-tower (hidden-line solids, inner detail at hairline); opxy/reference/field-and-figure.jpg",
+  "risks": "The cut only shows one row in section, so most of the colony is read from the plates behind it; the crack joints on the top face are small at 1:1 and scale's floor needs the cut-face cracks to carry it. Areola prisms sit close to toro-blocks' cubes in silhouette, though they are low rounded plates on a cut block, not a stack. Flakes are pre-drawn variants (a tilt out of the plane can't be a node turn). Muted: the block stays, every crust edge drops to G3 and the born plates lose their bright edge; spores hide."
+}

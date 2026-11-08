@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "bold closed outlines",
+  "subject": "The pitch field is a reed bed tuned as a pan pipe, every reed cut open down its front to show the node that stops its air column, and the flock skims the mouths so the bird over a reed blows it.",
+  "controls": [
+    "cohere: the flock's spread over the reed mouths (position, birds drawn toward the flock's centre, from about 300 px across at 0 to 2-3 neighbouring reeds at 100).",
+    "speed: each bird's wing sweep and bank (shape, wings swept back and the body tilted further into the dive as speed rises, some wingtip point moving at least 16 px), so fast birds read as stooping across the mouths.",
+    "scatter: strays leave the flock and drop toward reeds far from the cluster (position, up to about 150 px off the flock's centre), so stray notes come from far reeds.",
+    "scale: how many reeds stand in the bed (count, 11 for pent up to 25 for chr), each cut to show its node at the depth of its pitch, the column halving every octave."
+  ],
+  "reference": "opxy/reference/ and library/theseus-tower (an instrument drawn as itself in closed outlines with its own detail; here the reed's node is the detail)",
+  "risks": [
+    "chr is 25 reeds in about 360 px: about 15 px apart, so reeds drop to a radius of 4-5 px and the cutaway window (back-wall hairlines, node ring) may need to lose its hairlines to stay 3 px apart.",
+    "Eleven tall open tubes are a lot of repeated outline; the reeds stay at mid greys so the birds and the playing reed read first, but the body is busier than toro or theseus at rest.",
+    "Muted: every reed mouth is capped with a lid line (the bed stops sounding) and the birds glide with folded wings; the caps are the cue, not a dimmer grey.",
+    "The flock is relaxed apart in the sketch so outlines don't touch; on the device, birds that overlap at high cohere need painter order and black fills to stay legible."
+  ]
+}

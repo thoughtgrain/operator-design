@@ -1,0 +1,283 @@
+{
+  "machine": "relay",
+  "category": "effect",
+  "kind": "subject",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "More iterations: five new, unique variations.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the material the sound acts on, seen close",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what relay is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: exploded view. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "one scene where this happens, with one subject in it",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what relay is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: single-weight contour. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what relay is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: hatched mass. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what relay is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: edge-lit silhouette. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what relay is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: detailed line art. Patterns that have worked for effect machines (P1, P2, P3, P4, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "The charge the chain holds, seen close: a stretch of the chain's buckets drawn as thin capacitor plates pulled apart along their line, each as tall as the charge it holds, with the test note riding down the row and each recirculation a smaller copy further on.",
+      "controls": [
+        "stages: how many plates lie between one pass of the note and the next, 5 at 10 ms to 30 at 1 s, so the repeats slide along the row and off its far end (position of the repeat groups, ~60 to 400+ px).",
+        "leak: a seeded share of plates come out short, and the charge each has lost stands above it as a hatched ghost of the plate's full height (shape of the plate heights, hatching as the second cue).",
+        "clock: the plates drift off their even pitch, bunching and spreading along the axis like an exploded view drawn by an unsteady hand (position of each plate, up to ~40% of the pitch).",
+        "feedback: how many groups of plates carry a copy of the note and how tall each is, one group at 0 to five or six at the top (count of repeat groups, height as the second cue)."
+      ],
+      "reference": "opxy/craft.md (Think in 3D: modelled shapes as detailed line art, hidden-line over a black fill); library/toro-blocks (a row of modelled solids whose heights are the signal)",
+      "risks": [
+        "At 1:1 the plates can read as a row of dominoes or glass panes; the exploded-view axis, the source block and the electrode insets are what make them plates.",
+        "stages and clock both move plates along the row; stages moves whole repeat groups, clock jitters every plate, so perceptibility has to prove they read apart.",
+        "Thirty plates of three faces each is ~120 nodes before hatching; leak's hatched ghosts add more, and clock moves every plate while it turns.",
+        "The row is a notional window on the chain with the note and its echoes in it at once; an effect page gets no audio."
+      ]
+    },
+    {
+      "variant": "v2",
+      "angle": "one scene where this happens, with one subject in it",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "A telegraph line running away over open ground, the old relay that handed a signal on from station to station: the poles are the stages and the note is a lit span of the top wire, its recirculations dimmer spans further down the line.",
+      "controls": [
+        "stages: how many poles stand between the viewer and the horizon, 7 at 10 ms to 20 at 1 s, the spans shortening as they multiply (count of poles and spans).",
+        "leak: in a seeded set of spans the top wire has come loose from its insulator and hangs in a deep sag, so the pulse's path droops there (shape of the wire, up to ~20 px of sag per span).",
+        "clock: the poles lean by uneven amounts and stand at uneven spacing, so the wire's rhythm down the line goes ragged (rotation of each pole, up to ~9°, with position as the second cue).",
+        "feedback: how many spans further down the line carry a dimmer copy of the lit pulse, one at 0 to five or six at the top (count of lit spans)."
+      ],
+      "reference": "opxy/craft.md (One drawing language: every element drawn in it; Think in 3D: space things in the world, not on the screen)",
+      "risks": [
+        "The pulse is a 2 px span on a long scene; at 1:1 it's the one bright thing but small, and the note response (rest to playing) has to clear 2% of the body.",
+        "Single-weight contour asks for one line; the frame keeps three (scene 1.5, pulse 2, distance in hairline), so the language is bent to the house rule.",
+        "Far poles crowd toward the vanishing point at 20 stages; anything under 3 px is dropped, so the count's top end is partly invisible.",
+        "It's a metaphor (telegraph relay) rather than the chip; it reads as 'a signal handed along stages' but not as a bucket-brigade specifically."
+      ]
+    },
+    {
+      "variant": "v3",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "A long cradle of hanging steel balls: a blow knocked into one end is handed ball to ball down the row and out the far end, then swings back in, so each ball is a stage and the swing that returns is the recirculation.",
+      "controls": [
+        "stages: how many balls hang in the frame, 7 at 10 ms to 18 at 1 s, smaller as they multiply so the row keeps its length (count).",
+        "leak: a seeded set of balls take a dent, a flat on the lit side, and stop touching their neighbours, so the blow is lost there (shape of the dented balls, with the gap they leave).",
+        "clock: the balls hang on uneven strings and at uneven gaps, so the row goes from a straight touching line to a ragged one (position of each ball, up to ~1.6 units of drop).",
+        "feedback: how far the input ball swings back up as the output returns, from a small nudge at 0 to almost as high as the outgoing ball at 100 (rotation of the input ball's strings, 6° to 40°)."
+      ],
+      "reference": "library/theseus-tower (a known object from clean primitives, line drawing, only what plays moves); opxy/craft.md (hatching for shadowed mass, 45°, >= 3 px apart)",
+      "risks": [
+        "A Newton's cradle is a well-known desk toy and can read as an icon of momentum, not of a delay; the swing arcs and the returning input ball have to carry the recirculation.",
+        "Hatched shadow sides on every ball are many short hairlines; at 18 balls they approach the node budget and the 3 px floor on small balls.",
+        "Strings from both rails to every ball are hairlines that fan and cross; at high clock they tangle (seen at the extremes).",
+        "The two swung balls are a frozen moment; the screen still shows a notional test note, not what's playing."
+      ]
+    },
+    {
+      "variant": "v4",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "An eight-pin bucket-brigade chip with the top of its moulding cut away, showing the die on its lead frame and the chain itself as a meander of stages folded across the silicon, the test note a lit stretch of it and a return trace carrying it round again.",
+      "controls": [
+        "stages: how many folds the meander makes across the die, 3 at 10 ms to 9 at 1 s, the chain getting longer inside the same silicon (count of folds).",
+        "leak: a seeded set of stages break out of the meander as gaps, each with a small hatched patch where the charge escapes into the substrate (count of gaps, hatching as the second cue).",
+        "clock: the folds lose their even pitch and bunch and spread across the die (position of each fold, up to ~35% of the pitch).",
+        "feedback: how many lit stretches are travelling round the meander and its return trace, one at 0 to five or six at the top, each further one dimmer (count of lit stretches)."
+      ],
+      "reference": "opxy/craft.md (Think in 3D: hidden-line solids over black fills; Value and fill: hatching for the cut faces); library/theseus-tower (a known object, line drawing, light only on what plays)",
+      "risks": [
+        "The subject is the chip, not the sound: it explains the device, and the meander that every control acts on is about a quarter of the frame at 1:1.",
+        "Edge-lit silhouette leaves most edges dark grey; on the real screen the #323232 outlines may vanish and the package may read as fragments.",
+        "Meander folds sit ~10 px apart at 9 folds and the folds are close to the 3 px floor where clock bunches them.",
+        "Lit stretches on one meander for several passes is a notional picture (the chain holds one copy at a time); the screen shows a test note, not what's playing."
+      ]
+    },
+    {
+      "variant": "v5",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "The ring stains a bucket brigade leaves on a plank floor: a row of wet rings where each bucket stood, later passes set down over the first, fainter and more broken, and the freshest ring, where the note is now, the bright one.",
+      "controls": [
+        "stages: how many rings make the row, 5 at 10 ms to 15 at 1 s, closer together as they multiply (count).",
+        "leak: drip trails of small spots run from a seeded set of rings toward the next, where those buckets leaked on their way along (count of drip spots).",
+        "clock: the rings lose their even spacing and step off the line, as if the buckets were set down in a hurry (position of each ring, up to ~40% of the pitch).",
+        "feedback: how many rings are set down over each first ring, offset and broken, one at 0 to five or six at the top, each fainter and more broken than the last (count of overlapping rings)."
+      ],
+      "reference": "opxy/craft.md (detailed line art: the floor modelled in 3D, seams and joints in hairline, >= 3 px apart); opxy/reference/README.md",
+      "risks": [
+        "Rings with an inner tide-mark can drift toward a target or a coffee-cup icon; the overlapping offset rings and the plank floor keep them stains.",
+        "The plank floor fills the frame; it's hairline and dark, but it's the busiest ground of the five and must not compete with the rings on the device.",
+        "At 15 rings with feedback high, overlapping rings crowd into a chain-link pattern (seen at the extremes).",
+        "The trace is a still record, so a note answers by a ring brightening and a new one being set down; motion is the design's to prove later."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.0,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:27:55"
+  },
+  "selection": {
+    "variant": "v3",
+    "reason": "Owner likes v3; needs cleanup and readability tweaks.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:33:06",
+    "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+    "pattern": "none",
+    "drawing_language": "hatched mass",
+    "subject": "A long cradle of hanging steel balls: a blow knocked into one end is handed ball to ball down the row and out the far end, then swings back in, so each ball is a stage and the swing that returns is the recirculation.",
+    "controls": [
+      "stages: how many balls hang in the frame, 7 at 10 ms to 18 at 1 s, smaller as they multiply so the row keeps its length (count).",
+      "leak: a seeded set of balls take a dent, a flat on the lit side, and stop touching their neighbours, so the blow is lost there (shape of the dented balls, with the gap they leave).",
+      "clock: the balls hang on uneven strings and at uneven gaps, so the row goes from a straight touching line to a ragged one (position of each ball, up to ~1.6 units of drop).",
+      "feedback: how far the input ball swings back up as the output returns, from a small nudge at 0 to almost as high as the outgoing ball at 100 (rotation of the input ball's strings, 6° to 40°)."
+    ],
+    "reference": "library/theseus-tower (a known object from clean primitives, line drawing, only what plays moves); opxy/craft.md (hatching for shadowed mass, 45°, >= 3 px apart)",
+    "risks": [
+      "A Newton's cradle is a well-known desk toy and can read as an icon of momentum, not of a delay; the swing arcs and the returning input ball have to carry the recirculation.",
+      "Hatched shadow sides on every ball are many short hairlines; at 18 balls they approach the node budget and the 3 px floor on small balls.",
+      "Strings from both rails to every ball are hairlines that fan and cross; at high clock they tangle (seen at the extremes).",
+      "The two swung balls are a frozen moment; the screen still shows a notional test note, not what's playing."
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "A long cradle of hanging steel balls: a blow knocked into one end is handed ball to ball down the row and out the far end, then swings back in, so each ball is a stage and the swing that returns is the recirculation.",
+  "controls": [
+    "stages: how many balls hang in the frame, 7 at 10 ms to 18 at 1 s, smaller as they multiply so the row keeps its length (count).",
+    "leak: a seeded set of balls take a dent, a flat on the lit side, and stop touching their neighbours, so the blow is lost there (shape of the dented balls, with the gap they leave).",
+    "clock: the balls hang on uneven strings and at uneven gaps, so the row goes from a straight touching line to a ragged one (position of each ball, up to ~1.6 units of drop).",
+    "feedback: how far the input ball swings back up as the output returns, from a small nudge at 0 to almost as high as the outgoing ball at 100 (rotation of the input ball's strings, 6° to 40°)."
+  ],
+  "reference": "library/theseus-tower (a known object from clean primitives, line drawing, only what plays moves); opxy/craft.md (hatching for shadowed mass, 45°, >= 3 px apart)",
+  "risks": [
+    "A Newton's cradle is a well-known desk toy and can read as an icon of momentum, not of a delay; the swing arcs and the returning input ball have to carry the recirculation.",
+    "Hatched shadow sides on every ball are many short hairlines; at 18 balls they approach the node budget and the 3 px floor on small balls.",
+    "Strings from both rails to every ball are hairlines that fan and cross; at high clock they tangle (seen at the extremes).",
+    "The two swung balls are a frozen moment; the screen still shows a notional test note, not what's playing."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "A yarn-wound mallet held poised over the rim of a thrown bowl, both modelled and drawn as hidden-line line art, the mallet head the brightest thing.",
+  "controls": [
+    "strike: rotation — the mallet swings back about the wrist, from 10° above the strike line at 0 to 50° at 100 (40° of travel), so a harder strike is a bigger backswing; on a note it swings down to the rim and back.",
+    "glaze: position — the glaze line inside the bowl rises from the floor to near the lip (~40 px on screen), with the glazed interior hatched below it.",
+    "crack: shape — a hairline crack runs down the front wall from the rim, lengthening and forking (0 to ~40 px) as crack rises; none at 0.",
+    "fire: shape — the wall profile tightens and the lip thins and flares a little as the body vitrifies, so the throwing rings and rim ellipse draw stiffer and wider (~16 px at the rim)."
+  ],
+  "reference": "library/theseus-tower (hidden-line line art of the instrument itself, light on use)",
+  "risks": "Strike is mallet hardness, not force; a backswing reads as force. A swap of head (felt to bare core) is truer but a weaker channel. Glaze and fire both change the bowl, keep fire on the rim outline and glaze on the interior hatching. The mallet must not touch the bowl through strike's range except at the hit."
+}

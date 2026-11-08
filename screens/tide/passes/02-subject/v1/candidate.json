@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "One tuned hollow of the pool, large and running off the frame's bottom edge, exploded: its body of water lifted out on the cup's axis, the inlet stone drawn out of the lip's notch, and the swell's tongue entering from the left edge along the same line.",
+  "controls": [
+    "swell: the crest lines across the swell's tongue at the left edge spread apart or crowd together, about eight across it at 0.25 s and two at 8 s (position).",
+    "depth: the cup's floor drops, its far-wall meridians lengthening from a shallow saucer to a deep basin (shape of the cup, floor moves over 30 px).",
+    "salt: the standing-wave crests across the lifted water go from evenly spaced to stretched toward the rim (position of the crest lines).",
+    "drift: the lifted water slides off the cup's axis, out of register with the hollow it came from, up to about 30 px (position of the lens node)."
+  ],
+  "reference": "library/theseus-tower (hidden-line parts over black fills, one bright rim)",
+  "risks": "An exploded view of a cup and a disc can read as a product drawing rather than a rock pool; the rock is carried only by the notch stone and the shelf edge. Depth reshapes the cup's meridians (one mutable outline or pre-drawn steps). The lens lifted above the cup looks like a lid; a note's answer (the lens rippling, the crests brightening) needs designing so it reads as water."
+}

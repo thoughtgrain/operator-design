@@ -1,0 +1,16 @@
+{
+  "variant": "v3",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "A leaf held against low light, black with its margin and veins edge-lit, one side vein per degree, and the glistening trail the colony has worn across it as the loop it keeps walking.",
+  "controls": [
+    "ants: count, edge-lit ant silhouettes on the trail, 1 to 8, spaced round the loop.",
+    "scent: shape, the trail: at 0 it frays into several faint wandering threads across the leaf, at 100 it is one tight bright loop through the phrase's veins (points move ≥ 16 px).",
+    "fade: count, the dashed dull traces of trails no longer walked: two at 0–30, none at 100, each shortening from its old end.",
+    "scale: count + position, side veins per side: 5 (pent) to 12 (chrom), sliding closer along the midrib; lower side octave one, upper side octave two."
+  ],
+  "reference": "opxy/reference (atlas-style line on black); library/toro-blocks for hairline edges on black bodies",
+  "muted": "Muted: the trail dims to the vein grey and the ants stop; the leaf stays lit at its edge.",
+  "risks": "The leaf is beautiful but arbitrary: nothing about ants requires it, and veins as degrees is a mapping the player has to be told. The loop crosses itself (the phrase revisits a degree), which at 1:1 reads as a zigzag in the middle. Edge-lit silhouettes need the ants to sit on something lit; on black leaf they read only by their hairline edge."
+}

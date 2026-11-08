@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "An eight-pin bucket-brigade chip with the top of its moulding cut away, showing the die on its lead frame and the chain itself as a meander of stages folded across the silicon, the test note a lit stretch of it and a return trace carrying it round again.",
+  "controls": [
+    "stages: how many folds the meander makes across the die, 3 at 10 ms to 9 at 1 s, the chain getting longer inside the same silicon (count of folds).",
+    "leak: a seeded set of stages break out of the meander as gaps, each with a small hatched patch where the charge escapes into the substrate (count of gaps, hatching as the second cue).",
+    "clock: the folds lose their even pitch and bunch and spread across the die (position of each fold, up to ~35% of the pitch).",
+    "feedback: how many lit stretches are travelling round the meander and its return trace, one at 0 to five or six at the top, each further one dimmer (count of lit stretches)."
+  ],
+  "reference": "opxy/craft.md (Think in 3D: hidden-line solids over black fills; Value and fill: hatching for the cut faces); library/theseus-tower (a known object, line drawing, light only on what plays)",
+  "risks": [
+    "The subject is the chip, not the sound: it explains the device, and the meander that every control acts on is about a quarter of the frame at 1:1.",
+    "Edge-lit silhouette leaves most edges dark grey; on the real screen the #323232 outlines may vanish and the package may read as fragments.",
+    "Meander folds sit ~10 px apart at 9 folds and the folds are close to the 3 px floor where clock bunches them.",
+    "Lit stretches on one meander for several passes is a notional picture (the chain holds one copy at a time); the screen shows a test note, not what's playing."
+  ]
+}

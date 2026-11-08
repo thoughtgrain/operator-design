@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette",
+  "subject": "A carpenter's brace lying level across the screen, head pad, swept crank, grip, ratchet and chuck as black silhouettes lit along their top edges, its auger bit sunk into a board shown in section.",
+  "controls": [
+    "ratio: the brace's sweep deepens, the crank's throw 32 to 72 px (position of the grip and the two bends).",
+    "teeth: flute grooves along the auger's twist, 3 to 24 over its cutting length (count of hairline grooves).",
+    "wear: the screw point and spurs blunt from a sharp lead into a stub, the point pulling back about 8 px (shape of the bit's tip).",
+    "bite: the board slides onto the bit, sinking it 14 to 84 px into the wood (position of the board node, the bore follows)."
+  ],
+  "reference": "library/theseus-tower/README.md (the instrument as the subject, its own details instead of labels)",
+  "risks": "A long thin object makes the body mostly empty: calm, but the brace is small (rod 7 px) and the lit edges carry everything. The lit edge is one bright element made of several ribbons; light direction must stay fixed as parts move or the rim light jumps. Teeth grooves at 24 are about 4.5 px apart, close to the 3 px floor. Ratio moving the crank changes the rod's outline (two bends), so it's a shape change on device rather than a single translation."
+}

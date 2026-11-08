@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "A stone lighthouse standing on its stepped base at the horizon, drawn as detailed line art from one low camera, coursed masonry, door, windows, corbelled gallery, railing, helical glazing and domed lantern, throwing a hatched beam out to sea.",
+  "controls": [
+    "pulse: the lamp inside the lantern widens behind the glazing bars, 3 px to 13 px (scale of the one bright mass).",
+    "lens: the beam's cone closes from a wide hatched fan (18 degrees each side) to a near-parallel shaft (2 degrees), so its far end narrows by over 100 px (shape of the beam outline).",
+    "sweep: the beam turns toward the viewer about the lantern, 0 to 55 degrees, so in perspective it rises and shortens across the sky (rotation of the beam node about the lamp).",
+    "fog: a hatched bank rises from the sea over the base and up the tower, up to 120 px (position of the bank's top edge; nothing at the default 0)."
+  ],
+  "reference": "library/theseus-tower (a stacked object drawn as line art with real details, one lit part); craft.md, Think in 3D",
+  "risks": [
+    "The most literal of the five: a lighthouse silhouette is close to a postcard or icon if the detail is lost; it depends on the masonry, gallery and glazing reading at 1:1.",
+    "The tower is narrow (about 60 px wide) next to a wide frame; the lantern details are 2-4 px apart, at the legibility floor.",
+    "Pulse is a small bright mass inside a small lantern; its 3-13 px travel may fall short of the perceptibility floor for a score-3 control without a second cue.",
+    "Fog over the tower hatches across masonry lines; the tower stays readable at 60 % in the sanity check but may go grey at 100."
+  ]
+}

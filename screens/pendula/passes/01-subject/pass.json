@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -207,5 +207,22 @@
     "problems": [],
     "checked": "2026-11-05T23:31:06"
   },
-  "selection": null
+  "selection": {
+    "variant": "v4",
+    "reason": "v4 is great; needs cleanup.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59",
+    "pattern": "P12",
+    "drawing_language": "patent section",
+    "subject": "A patent sheet of conical pendulums on one spindle, each bob orbiting its own circle whose shadow on the section plane is its swing, so the bobs form an orrery and a crossing of that plane plays.",
+    "controls": [
+      "length: how far the cone of rods drops from the hub and how wide the orbits open with it (scale, 1.6x).",
+      "count: how many orbits and bobs ring the spindle (count, 3 to 16).",
+      "swing: the cone's half-angle: orbits widen and rise towards the hub as it opens (shape of the stack, 10° to 45°).",
+      "scale: which ticks on the base dial are long, one per scale degree of the octave (shape of the dial)."
+    ],
+    "muted": "The section plane line drops to ground grey and the bobs stop on their orbits, hollow.",
+    "reference": "library/meikyu-orrery",
+    "risks": "A conical pendulum is a different machine; its projection is the swing, but it asks the player to accept that. Nested ellipses at 16 get dense near the hub. Patent numerals are decoration unless they stay few. The base dial is the weak control, a ring of ticks."
+  }
 }

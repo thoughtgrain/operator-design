@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "A laminated block of plywood cut away through the middle of a bored hole, close: plies stacked up its faces, the bore's far wall scored by the bit, its conical floor, and the cut edge of the bore as the one bright line.",
+  "controls": [
+    "ratio: the bit's helical score marks on the bore wall wind tighter, pitch 68 to 4 world units (shape of the score lines).",
+    "teeth: the plies the block is laid up from, two per tooth, 6 to 48 glue lines over its height (count of hairlines on the cut face and the side).",
+    "wear: the bore's top rim goes from a clean circle to torn fibres, up to 5 px of tear (shape of the top face's hole edge).",
+    "bite: the bore deepens from a shallow dish to most of the block's height, 26 to 116 units (position of the floor and the cut edge)."
+  ],
+  "reference": "library/toro-blocks/README.md (hidden-line solids, black fills, mid-grey edges)",
+  "risks": "It's a still life of a hole: the drill itself never appears, so the name rests on the bore and the cone the lips cut. Teeth as ply count saturates (needs a cap near 24 plies to keep lines ≥ 3 px apart). Score lines are faint hairlines and may not clear ratio's perceptibility floor at 1:1; give them a Line weight or more of them. Bite moving the floor rewrites the front face's outline (shape) as well as the cut edge."
+}

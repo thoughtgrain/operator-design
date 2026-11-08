@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "A telegraph line running away over open ground, the old relay that handed a signal on from station to station: the poles are the stages and the note is a lit span of the top wire, its recirculations dimmer spans further down the line.",
+  "controls": [
+    "stages: how many poles stand between the viewer and the horizon, 7 at 10 ms to 20 at 1 s, the spans shortening as they multiply (count of poles and spans).",
+    "leak: in a seeded set of spans the top wire has come loose from its insulator and hangs in a deep sag, so the pulse's path droops there (shape of the wire, up to ~20 px of sag per span).",
+    "clock: the poles lean by uneven amounts and stand at uneven spacing, so the wire's rhythm down the line goes ragged (rotation of each pole, up to ~9°, with position as the second cue).",
+    "feedback: how many spans further down the line carry a dimmer copy of the lit pulse, one at 0 to five or six at the top (count of lit spans)."
+  ],
+  "reference": "opxy/craft.md (One drawing language: every element drawn in it; Think in 3D: space things in the world, not on the screen)",
+  "risks": [
+    "The pulse is a 2 px span on a long scene; at 1:1 it's the one bright thing but small, and the note response (rest to playing) has to clear 2% of the body.",
+    "Single-weight contour asks for one line; the frame keeps three (scene 1.5, pulse 2, distance in hairline), so the language is bent to the house rule.",
+    "Far poles crowd toward the vanishing point at 20 stages; anything under 3 px is dropped, so the count's top end is partly invisible.",
+    "It's a metaphor (telegraph relay) rather than the chip; it reads as 'a signal handed along stages' but not as a bucket-brigade specifically."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "A specimen block of lacquer on aluminium with one length of modulated groove cut along its top, modelled in hidden-line 3D, its end face sectioned so the V of the groove shows.",
+  "controls": [
+    "cut: shape (node 0, the groove's lit far lip, with its near lip and floor) - the groove widens and sinks and its swings flatten at the crests, half-width 0.25 to 0.37 world (~6 px).",
+    "groove: shape on the time axis, carried as position of the block's swing pattern - the same swings pack shorter along the block (inner turns run slower under the stylus), wavelength 1.0 to 0.55 of the rest frame.",
+    "wear: count - chips knocked out of the lips, small notches along both edges, 0 to ~14, none at 0.",
+    "rumble: position (the whole block) - the block heaves up and down on its bed by up to 10 px with a slow wander, a hatched ghost of its base showing where it rests; still at 0."
+  ],
+  "reference": "library/toro-blocks (hidden-line 3D blocks over black); opxy/craft.md, Think in 3D",
+  "risks": "cut and groove both change the groove's outline; groove's change is along the length (wavelength), cut's across (width, depth, crest), but both re-key the same paths, so the one-channel rule is bent and must be shown to read on the contact sheet. The cut needs ~cut 1.6 before the widening clears the 16 px shape floor. The block and its three grooves cost ~4 mutable paths (lips, floor), the full budget."
+}

@@ -1,0 +1,21 @@
+{
+  "variant": "v2",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "Rain itself: the last bar's drops falling through still air, each drawn as a real drop (round on top, flattened underneath the bigger it is) with a strobe ghost where it was a moment ago, where a drop's size is its note and the one that just played is bright.",
+  "controls": [
+    "rate: how many drops are in the air (count, about 7 at 1.0 a beat up to about 28 at 8, each one a note of the last bar).",
+    "roof: the spread of drop sizes (shape/scale per drop): at 0 st every drop is the same size, one note; at 36 st they range from a pin-head to a big flattened drop, so the size range is the pitch range.",
+    "gust: the fall slants (each drop and its ghost offset sideways along the wind, ±35°), and the drops sort themselves big-to-small along the gust's direction, so a run reads as a graded slope of sizes.",
+    "puddle: drops that are replays appear as hatched copies of earlier drops (45° hairlines inside a hairline outline, there but not new), from none at 0 to most of the air at 100."
+  ],
+  "reference": "library/theseus-tower (an object drawn as itself, detail inside a calm outline, one lit part)",
+  "risks": [
+    "Free-floating circles can read as bubbles or bells if the strobe ghosts are lost; the ghost is what says 'falling', so it can't be dropped for budget.",
+    "Each drop is ~4 nodes (outline, ghost, equator, crescent); 28 drops at rate 8 is over 100 nodes and many redraws per beat: will need a pool and a cap.",
+    "Size is both pitch and (slightly) depth: the camera puts drops nearly in one plane so perspective can't fake a pitch; keep depth range small.",
+    "Nothing roof-like remains: the 'roof' label maps to size spread, which must be learned from turning it.",
+    "Muted: drops freeze mid-air and their outlines drop to G3 hairline; no ghosts."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "variant": "v4",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "bold closed outlines",
+  "subject": "Clay pantiles seen close as the rain lands on them: eight courses of broad pans and tall rolls rising away from the viewer, each course's lapped edge one bold line over black, where the tile a drop just struck has the bright edge and a broken crown.",
+  "controls": [
+    "rate: how many falling teardrops and crowns are on the tiles at once (count, about 3 at 1.0 a beat to about 16 at 8).",
+    "roof: how many courses rise up the slope (count, 1 at 0 st to 22 at 36 st, shallower exposure as they multiply), the far ones thinning to hairlines as they recede.",
+    "gust: the drops slant and their crowns throw to one side (rotation ±35°), and successive strikes step across the courses toward the ridge or the eave.",
+    "puddle: water stands in the pans of the nearest courses (45° hairline hatching clipped to each pan, its level rising from dry at 0 to brimming at 100)."
+  ],
+  "reference": "library/toro-blocks (a field drawn in perspective from one camera, solid near, quieter far); craft.md, Detail follows how often the subject changes",
+  "risks": [
+    "Eight full-width bands cover the body: it's the least black of the five (~81 % black at 1:1) and the busiest; the lowest courses must stay calm.",
+    "Close-up perspective makes far courses ~6 px tall: at 36 st (22 courses) the far half becomes a hatch of lines under 3 px apart and has to fade out.",
+    "Pantile rolls carried up the slope as hairlines can read as a grid or a corrugated sheet if they get brighter.",
+    "Splash crowns are small (~10 px); the struck tile's bright edge does most of the note response.",
+    "Muted: every edge drops to Line weight G3, no drops; the struck edge goes back to grey."
+  ]
+}

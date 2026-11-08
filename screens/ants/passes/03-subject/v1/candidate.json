@@ -1,0 +1,16 @@
+{
+  "variant": "v1",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hatched mass",
+  "subject": "A hand-held marble board whose rocker gates are pushed toward each side a marble takes and sprung back to centre, so the route the marbles keep taking wears into one bright groove through the cascade.",
+  "controls": [
+    "ants: count, marbles rolling down the worn groove, 1 to 8, spaced along the route from the entry to the outlets.",
+    "scent: rotation, how far the gates on the worn route are thrown across the branch not taken, from a slight lean (about 11°) at 0 to hard over (about 33°) at 100.",
+    "fade: count, how many older routes still show hatched residue in their channels, several at 0 down to none at 100 (the springs win).",
+    "scale: count, columns of gates and outlets on the board: 5 outlets at pent, 7 for the modes, 12 at chrom, the diamonds narrowing to fit."
+  ],
+  "reference": "library/toro-blocks (solid against hollow as a state); opxy/craft.md (hatching for what's there but not active)",
+  "muted": "Muted: the groove drops from the brightest grey to the gate grey and the marbles stop where they are.",
+  "risks": "A Galton-style board reads as chance first; only the thrown gates and the one bright groove say 'reinforced'. It shows which outlet the colony prefers, not the phrase's order. At chrom (11 columns) the diamonds get small and the gates crowd; the board's hatching is a lot of lines (cost and calm), and the route's residue hatch is close in look to the board's own."
+}

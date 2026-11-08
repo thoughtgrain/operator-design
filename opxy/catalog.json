@@ -286,7 +286,7 @@
     }
   },
   "iterations": {
-    "$comment": "Every generative design pass produces exactly perPass variants, each from its own direction. Frame variants must differ pairwise by at least minPairwiseBodyDiffPct of body pixels (same pixel step as perceptibility); subject variants must differ in at least two of pattern, drawing language and subject wording (word overlap under maxSubjectOverlap).",
+    "$comment": "Every generative design pass produces exactly perPass variants, each from its own direction. A subject direction is an angle on the machine's own idea × a way of drawing; patterns are offered as inspiration, never assigned. Frame variants must differ pairwise by at least minPairwiseBodyDiffPct of body pixels (same pixel step as perceptibility); subject variants must differ in at least two of angle, drawing language and subject wording (word overlap under maxSubjectOverlap).",
     "perPass": 5,
     "passKinds": [
       "subject",
@@ -296,14 +296,14 @@
     "minPairwiseBodyDiffPct": 4.0,
     "maxSubjectOverlap": 0.6,
     "drawingLanguages": [
-      "patent section",
-      "hidden-line isometric",
-      "star atlas",
-      "engineering schematic",
-      "oscilloscope trace",
-      "typeset diagram",
-      "orthographic elevation",
-      "survey plan"
+      "detailed line art",
+      "hidden-line 3D",
+      "bold closed outlines",
+      "cutaway section",
+      "exploded view",
+      "single-weight contour",
+      "hatched mass",
+      "edge-lit silhouette"
     ],
     "frameAxes": {
       "composition": [
@@ -327,6 +327,16 @@
         "negative space carries the subject",
         "density gradient carries the subject"
       ]
-    }
+    },
+    "ideaAngles": [
+      "the object in the machine's name, drawn literally and well",
+      "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "the material the sound acts on, seen close",
+      "one scene where this happens, with one subject in it",
+      "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "a cutaway of the object at work, so the inside explains it",
+      "the mark or trace the process leaves behind",
+      "one detail at large scale, the rest implied by the frame's edge"
+    ]
   }
 }

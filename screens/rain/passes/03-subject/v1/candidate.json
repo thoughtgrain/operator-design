@@ -1,0 +1,21 @@
+{
+  "variant": "v1",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "bold closed outlines",
+  "subject": "The window face on and wide, where the subject is the wiped trails that heavy beads leave as they let go and run down through the beaded band, each a closed lane with the small beads it dropped strung inside it.",
+  "controls": [
+    "rate: how many beads cling in the landing band (count, about 40 at 0.25 a beat to the band packed at 8), and how often a new bold outline appears in it.",
+    "roof: the height of the landing band on the glass (position/extent, a single line of beads at 0 st to most of the pane at 36 st); a bead's height is its note, so a wide roof scatters them up and down.",
+    "gust: landings arrive on a slant (a short hairline streak before each drop) and every trail leans and drifts left or right as it runs (shape, about ±40 px of sideways travel over a run at ±100).",
+    "puddle: how big a bead grows before it lets go (scale of the heavy beads, double-outlined), so how many beads each run sweeps up and replays as it passes them; at 0 beads let go after two or three drops and trails are thin, at 100 they gather long and leave wide lanes."
+  ],
+  "reference": "library/theseus-tower (black bodies behind grey outlines, only what plays lights); craft.md, Detail follows how often the subject changes (bold closed shapes for parts that keep arriving)",
+  "risks": [
+    "Rows of small round outlines can read as bubbles or a dotted chart rather than water; the beads need their sag (heavier at the bottom) to stay readable at 1:1.",
+    "Trails are the subject, but at rest the brightest element is the newest bead (a small ring); the newest trail is only a step brighter, so the eye may not land on the trace first.",
+    "Old trails have to go somewhere: the sketch keeps the last four; on the device they need a rule (fresh landings re-bead them, or they fade one step per new run).",
+    "A growing trail outline is a mutable path re-keyed each frame while a run moves: one of the four paths per concurrent run, so at most two runs at once.",
+    "Muted: landings stop, beads keep their outlines but drop to hairline G2 and no run moves; the glass goes still and dim."
+  ]
+}

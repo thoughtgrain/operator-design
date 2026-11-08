@@ -82,13 +82,13 @@ Why: open-xy's ux.md asks that a control be seen as much as heard (Principles, a
 
 ## Phase 3 · Subject
 
-Write five candidate subjects, each in one sentence, each tied to a pattern from `patterns.md` that fits the machine's category (`categories.md`). This is a design pass, so it follows the iteration rule below: five variants, five different directions. For each, sketch in words what every control does to it. Pick one and say why.
+Design five candidate subjects and draw each one: a 480 × 220 rest frame at 1:1 (`vN/rest.svg`) with a one-sentence subject beside it. Five written ideas aren't a pass; the person picks from drawings. Each comes from its own angle on the machine's idea: the object in its name, the mechanism, the material, a scene, a cutaway. The patterns that fit the category (`categories.md`, `patterns.md`) can inspire a candidate, but none is required and none is copied: if the five could belong to any machine, they're wrong. This is a design pass, so it follows the iteration rule below: five variants, five different directions. For each, also say in words what every control does to it. Show the five drawings side by side and let the person pick.
 
 This is where I stop and ask if the person hasn't already chosen. The subject is the biggest creative decision and the hardest to change later.
 
-Name the drawing language too (`craft.md`: an atlas, a patent section, a schematic) and one or two references it should sit beside.
+Name the way of drawing too (detailed line art, hidden-line 3D, a cutaway, an exploded view, bold closed outlines) and one or two references it should sit beside. No text in the drawing (`craft.md`, Text).
 
-**Gate:** five unique candidates recorded; one chosen subject, one pattern, one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
+**Gate:** five unique candidates drawn and recorded (each a linted rest frame with no text in the drawing); one chosen subject, its angle (and a pattern only if one inspired it), one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
 
 ## Phase 4 · Map and budget
 
@@ -143,12 +143,14 @@ Every pass that generates design (the subjects in phase 3, the rest-frame varian
 
 How uniqueness is judged (numbers in `catalog.json` → `iterations`):
 
-- **Directions first.** Each variant is assigned its own direction before anything is drawn: a pattern × drawing-language pair (subject pass), or a composition / camera / line-language brief (frames and revision passes). `design_pass_start` hands these out; by hand, write them down before starting.
-- **Subjects** must differ pairwise in at least two of: pattern, drawing language, subject wording (word overlap under 0.6).
+- **Directions first.** Each variant is assigned its own direction before anything is drawn: an angle on the machine's own idea × a way of drawing (subject pass; fitting patterns are listed as inspiration, never assigned), or a composition / camera / line-language brief (frames and revision passes). `design_pass_start` hands these out; by hand, write them down before starting.
+- **Subjects** must differ pairwise in at least two of: angle, drawing language, subject wording (word overlap under 0.6).
 - **Frames** must differ pairwise by at least 4% of body pixels at 1:1 (same pixel step as `perceptibility.py`), and each one must lint with zero errors.
 - **The pick is the person's.** Reviewers can rank the five; choosing stays with the owner, as with every subject decision.
 
-A pass with fewer than five variants, or with two that fail the uniqueness check, doesn't close. Revise the weakest duplicate into a new direction; never drop to four.
+A pass with fewer than five variants, or with two that fail the uniqueness check, doesn't close. Revise the weakest duplicate into a new direction; never drop to four. If the person wants none of the five, `design_pass_reject` records why and closes the pass, and the next pass takes that reason as its focus.
+
+Cleaning up a picked variant (removing a label, fixing a clip, tidying spacing) isn't a generative pass: it edits the pick and doesn't need five.
 
 Layout: `screens/<id>/passes/<nn>-<kind>/v1…v5/` plus `pass.json` (directions, uniqueness results, the pick and why).
 

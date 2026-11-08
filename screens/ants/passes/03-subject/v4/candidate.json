@@ -1,0 +1,16 @@
+{
+  "variant": "v4",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "One iron mooring ring at large scale with ropes running off the frame to the rest of the lattice, the way the colony keeps using laid up thick and taut, the ways it leaves hanging slack and frayed through.",
+  "controls": [
+    "ants: count, strands laid into the taut rope (its lay lines and its girth), 1 to 8.",
+    "scent: shape, how slack the unused ropes hang, all taut alike at 0 to deep sags at 100.",
+    "fade: position, where the slack ropes have frayed through, the break running from the frame edge at 0 back toward the ring at 100, hatched beyond it.",
+    "scale: count, ropes hitched to the ring: 5 at pent, 7 for the modes, 12 at chrom."
+  ],
+  "reference": "library/theseus-tower (hidden-line 3D, one camera); opxy/craft.md (Think in 3D)",
+  "muted": "Muted: the taut rope's edges drop from the brightest grey to the rope grey; nothing else moves.",
+  "risks": "A ring with ropes is a mooring or a lifebuoy before it is a colony; the metaphor (more strands, more trail) needs saying once. It shows one junction's state, not the phrase. Thin ropes are only ~5 px, so their hatched ghosts barely read, and slack curves are mutable outlines (4-path limit) if they move."
+}

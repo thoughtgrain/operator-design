@@ -305,6 +305,7 @@ class FrameLinter:
             self.check_simple_shape(el, tag, where, bound, abs_offset)
         elif tag == "text":
             self.check_text(el, where, bound)
+            self.check_text_place(el, where, abs_offset)
 
         if bound:
             kind = bound["kind"]
@@ -497,6 +498,21 @@ class FrameLinter:
                      f"reaches y={y0:.1f}, inside the header (0–{self.header_bottom}); this covers stock header content. Pass --own-header if intended")
 
     # -- text ---------------------------------------------------------------
+    def check_text_place(self, el: ET.Element, where: str, offset) -> None:
+        """Text and numbers belong in the header. A label, caption, scale or value drawn into the picture is flagged."""
+        if offset is None or self.own_header:
+            return  # rotated or scaled text, or a machine that draws its own header: judged by eye
+        try:
+            y = offset[1] + float(el.get("y") or 0)
+        except ValueError:
+            return
+        if y > self.header_bottom + 0.5:
+            content = "".join(el.itertext()).strip()
+            self.add("warn", where, "text-in-drawing",
+                     f"text {content[:16]!r} sits in the drawing (baseline y={y:.1f}, header ends at {self.header_bottom}). "
+                     "Names and values go in the header; the picture carries no labels, numbers, captions or scales "
+                     "(craft.md, Text). Keep it only with a sentence saying why")
+
     def check_text(self, el: ET.Element, where: str, bound) -> None:
         ty = self.t["type"]
         family = el.get("font-family")

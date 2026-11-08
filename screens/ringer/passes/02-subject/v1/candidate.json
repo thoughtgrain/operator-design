@@ -1,0 +1,20 @@
+{
+  "variant": "v1",
+  "angle": "one detail at large scale, the rest implied by the frame's edge",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "The sallies at eye height in the ringing chamber, drawn close and cropped by the frame: each striped woollen grip hangs at the height its bell has reached, so the change reads as a wave of sallies and the lowest is the one being pulled now.",
+  "controls": [
+    "bells: count, sallies hang across the frame from 4 to 12, the pitch between ropes closing up and the grips scaling down together so twelve still read as grips, not bars.",
+    "method: position, every sally rises or drops to the height of its bell's place in the current change (first place lowest and bright, last place highest); a swap is two neighbouring sallies trading heights.",
+    "pace: position (spread), the whole wave flattens as the bells are rung lower and faster: the gap between the lowest and highest sally goes from about 105 px at 0.5 a beat to about 40 px at 8 (about 65 px at the default).",
+    "stroke: position, on handstroke changes the leading sally is held up off the bottom of the wave by up to one place's step (about 26 px at 100 %), the pause before the pull."
+  ],
+  "reference": "library/theseus-tower/README.md (the instrument as the subject, detailed line art, one part lit)",
+  "risks": [
+    "Method and pace both act on sally height (order versus spread); they must stay visibly different: method re-deals heights, pace only scales the wave. Stroke is a third vertical move on one sally, so it leans on being only the bright one.",
+    "The tufted helical stripes are hairlines about 8 px apart inside a 30 px grip; at twelve bells the grips shrink to about 17 px and the stripes must drop to every other one to stay 3 px apart.",
+    "Ropes are cut by both frame edges by design; nothing says 'ceiling' or 'tail end', which is the point, but a viewer who doesn't know a sally may read capsules.",
+    "Mute: the ropes are let go and every sally drops to one level, still, with the bright weight gone; distinct by position, not shade. Not drawn here."
+  ]
+}

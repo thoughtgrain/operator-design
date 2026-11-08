@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "The ringing bowl cut through its axis and drawn in one line weight: the bright cut wall, the interior's height contours, a glaze pool, and the felt mallet just off the lip.",
+  "controls": [
+    "strike: position — the mallet head stands off the cut lip by 28 px at 0, closing to 4 px at 100; a note brings it in to the lip and the contours ripple.",
+    "glaze: position — the pooled glaze's contour rises up the interior contours (from the floor to about two thirds up), the pool hatched in the same weight.",
+    "crack: count — crazing lines cross the cut wall and the interior contours, from none to ~14 as crack rises.",
+    "fire: shape — the cut wall thins (wall from 0.075 to 0.045 of the radius) and the lip sharpens as the body vitrifies; the section's outline moves ~6–16 px."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg; patent cutaway of a vessel",
+  "risks": "Single weight leaves no Subject weight for the cut face; brightness alone has to make it the subject. Hatching in the line weight is heavier than the hairline rule; check it doesn't go grey at 1:1. Fire's wall-thinning travel is small; may need the lip shape to carry it. Close in spirit to pass 01's section, but a 3D cutaway, not a flat a–a section with a chart."
+}

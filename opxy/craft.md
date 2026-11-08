@@ -4,7 +4,7 @@ The rules in `constraints.md` and the perceptibility floors make a screen work. 
 
 ## One drawing language
 
-Pick the language before drawing anything, from the subject's own world: a star atlas, a patent section, an engineering schematic, an oscilloscope, a typeset diagram. Then draw every element in it.
+Pick the language before drawing anything, from the subject's own world: detailed line art of the object, a hidden-line 3D model, a cutaway, an exploded view, bold closed outlines, a patent section. Then draw every element in it. A language is how things are drawn, not what's written on them: an atlas or a survey brings its look, never its labels (Text, below).
 
 - Name the language in the brief, with one or two references (`opxy/reference/`, `library/`).
 - Every new element is drawn the way that language would draw it. A moon in an atlas is an outline with a terminator on an ephemeris track, not a flat grey disc. A meteor shower is plotted trails tracing back to a radiant, not a fan of wedges.
@@ -27,6 +27,7 @@ A part that's scaled for motion is authored so its stroke stays inside this tabl
 - One brightest element (`#CDCDCD`): the subject, or the thing a note just hit.
 - Secondary marks in the mid greys, ground at `#323232`–`#4B4B4B`.
 - Outlines first. Fills only as dark bodies behind bright outlines (MNMD's operator circles, the Moon's earthshine) or as the subject's single bright mass.
+- **A state isn't a grey fill.** Grey by default doesn't mean every on/off or active/idle difference becomes a shape filled a step lighter. Rows of mid-grey discs and blocks are what a colour UI looks like with the colour taken out, and they look muddy on the device. I show a state the way a line drawing would: a heavier or brighter stroke, a part that moves or appears, hatching for something that's there but not active (below). A solid fill is for something that really is a solid body, and the bright one stays the one brightest element.
 - No nested bands of contrasting grey. They read as a target.
 - **Semi-opaque areas are hatched, not tinted.** Where a region would be see-through (a range that's off or out of reach, a ghost of where something will be, the part of a curve that's cut away), I fill it with diagonal hairlines instead of a translucent grey, the way the stock filter page hatches the band its cutoff removes. The lines run at 45°, in a mid grey over black, at least 3 px apart at 1:1 (`constraints.md`, Hatching), clipped to the region's outline. Hatching keeps the ground black between the lines, so it reads as "there but not active" without a muddy mid-tone, and it stays legible on the real screen where a 30 % grey would just look like a dimmer solid.
 - Solid and wireframe can share a figure when they mean something different (toro: quiet parts hollow, loud parts solid; meikyu's planets: a step that plays fills in). Keep wireframes hidden-line, with a black fill so they still hide what's behind them, and keep the edge a mid grey so a solid part stays the brightest thing.
@@ -54,7 +55,9 @@ Use the stock header, flush with the top of the screen (y 0–20). Reserve the t
 
 ## Text
 
-Small device-font text is part of the language when the subject has it: an atlas labels its stars and its page, a schematic labels its parts. Use it at 10 px in a mid grey, sparingly, and only on things that don't move (text slots go to the header). Labels make a screen look authored. An unlabelled atlas looks like a screensaver.
+Text and numbers belong in the header. The drawing carries no labels, values, captions, scale numbers, axis ticks with figures, "fig. 1", "plan" or letters at points. The header already names every control and shows its value, so a number in the picture says the same thing twice, and labels turn a picture back into a panel. If a part needs telling apart from another (two channels, an input and an output), I draw the difference: a small mark, a shape, a position, subtle iconography in the drawing's own line language, never letters.
+
+`lint_frame.py` flags text below the header (`text-in-drawing`). It's a stock-look default, so it can be broken, but only with a sentence saying why; stock does it on a page where the picture is a measuring scale the person sets, like the filter page's frequency axis.
 
 ## Motion
 
@@ -80,6 +83,8 @@ Before phase 7, put the screen's rest frame next to one reference from `opxy/ref
 - Do the line weights match the table, at every zoom?
 - Is there exactly one brightest element?
 - Does anything look like an icon?
+- Is there any text or number outside the header? Any state shown as a shape filled a grey step lighter?
+- Could this screen belong to a different machine? If so, the subject isn't this machine's yet.
 - Would this sit comfortably in the same set as the reference?
 
 Any "no" goes back to phase 5. The gates can't catch this; only looking can.

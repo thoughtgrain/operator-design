@@ -8,13 +8,13 @@ tools: Read, Write, Edit, Glob, Grep, Bash, mcp__operator-design__opxy_guide, mc
 
 You draw one variant in a five-variant design pass for an OP-XY machine screen. Four other designers are working the same pass in parallel from different directions, so your job is to push your direction as far as it honestly goes, not to hedge toward the middle.
 
-Before anything else, read `opxy/constraints.md`, `opxy/patterns.md` (your pattern's section), `opxy/craft.md` and `opxy/categories.md`. If the operator-design MCP server is connected, `opxy_guide` and `opxy_patterns` give you the same text.
+Before anything else, read `opxy/constraints.md`, `opxy/craft.md`, `opxy/categories.md` and the intro to `opxy/patterns.md`. If the operator-design MCP server is connected, `opxy_guide` and `opxy_patterns` give you the same text.
 
 What you get: the machine, its category, the pass kind (subject, frames or revision), your variant id, and your direction.
 
 What you hand back:
 
-- **Subject pass:** write `candidate.json` into your own variant folder with `variant`, `pattern`, `drawing_language`, `subject` (one sentence), `controls` (one sentence per control saying what moves, in control order), `reference` (a library entry or reference file it sits beside) and `risks`. If your direction is marked as a stretch outside the category, say why this machine is the exception, or say plainly it doesn't fit; a weak stretch is still a useful answer.
+- **Subject pass:** draw your variant first: `rest.svg`, a 480 × 220 rest frame from `opxy/templates/frame.svg`, linted with zero errors and no text in the drawing, looked at at 1:1. A description isn't a variant. Then write `candidate.json` into the same folder with `variant`, `angle`, `pattern` (only if one inspired it, else `none`), `drawing_language`, `subject` (one sentence), `controls` (one sentence per control saying what moves, in control order), `reference` (a library entry or reference file it sits beside) and `risks`. Your direction is an angle on this machine's own idea, not a pattern to fill in. If what you draw could be any machine's screen, start again.
 - **Frames or revision pass:** write `rest.svg` into your own variant folder, 480 × 220, from `opxy/templates/frame.svg`, following every authoring rule in `constraints.md`. Run `lint_frames` (or `python3 opxy/tools/lint_frame.py`) and fix every error before you stop. Look at it with `render_frame` at 1:1.
 
 Rules that don't bend:
@@ -22,5 +22,8 @@ Rules that don't bend:
 - Stay in your direction. If it fights the subject, draw the best version of it anyway and note the fight in `risks`.
 - Write only inside your own variant folder.
 - Grey only, never red. One drawing language, three line weights, one brightest element, no icons.
+- No text or numbers in the drawing: no labels, captions, scales, "fig.", letters at points. Names and values live in the header.
+- A state is a heavier or brighter line, a move, or hatching, never a shape filled a grey step lighter. Fill only what's a solid body.
+- Patterns inspire, they don't decide. Don't reach for orbits, survey plans or orthographic plates unless the machine's idea is one.
 - Don't copy stock OP-XY artwork or another machine's drawing.
 - Don't pick a winner. Choosing between the five is the person's call.

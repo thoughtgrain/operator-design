@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "The freshly cut disc playing back on a platter seen close and low, its grooves hairline rings, the tonearm swung in and the one bright arc the groove being read.",
+  "controls": [
+    "cut: shape (node 0, the bright arc of the groove being read) - the arc swings into a modulated ring as drive rises, its crests flattening; a plain arc at low cut.",
+    "groove: rotation (the tonearm about its pivot) - the arm swings in from the rim to the last groove before the label, ~35 deg, and the bright arc moves with the stylus.",
+    "wear: count - dust specks and short scratch arcs appear across the cut band, 0 to ~16, none at 0.",
+    "rumble: position (disc and platter as one group) - the disc rides up and down on its spindle by up to 8 px with a slow wander; still at 0."
+  ],
+  "reference": "library/theseus-tower (a modelled object in perspective, hidden-line, outlines over black)",
+  "risks": "The playback deck shows the second half of the machine (wear and rumble live there), so the lathe itself is off stage: it may read as a turntable machine rather than a cutting lathe. The tonearm is small at 1:1 (headshell ~10 px); it needs a closer camera on the device. Hairline rings are drawn as stroked closed outlines (1.0 px), which lint warns about; as ribbons they cost more nodes. Moving the disc for rumble is a big redraw."
+}

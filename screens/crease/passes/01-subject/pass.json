@@ -3,7 +3,7 @@
   "category": "effect",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -202,5 +202,21 @@
     "problems": [],
     "checked": "2026-11-05T23:28:00"
   },
-  "selection": null
+  "selection": {
+    "variant": "v5",
+    "reason": "Owner likes v5 (cleaned); v4 kept as a reference visual.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:32:19",
+    "pattern": "P9",
+    "drawing_language": "oscilloscope trace",
+    "subject": "A paper streamer folded into the shape of the output wave and inked as a one-bit print, front of the paper light dither and back dense, standing on an oscilloscope graticule where the trace would be.",
+    "controls": [
+      "crease: the streamer folds more times across the screen, 2 panels at x1 to 15 or more at x8, every fold a hard white edge; shape of the panel outlines, count of panels.",
+      "sym: the scope's trace-position marker on the left edge rides up and down by up to 35 px and the folds go uneven, tall panels on one side and short on the other; position of the marker, shape of the strip.",
+      "paper: the folds' corners go from knife creases to soft rolled edges, the short panels at each fold widening; shape at the fold lines.",
+      "mix: a plain grey sine (the dry signal) rises behind the streamer as mix drops, and the streamer flattens toward it; count/state of the dry trace (absent at 100, as toro's steam is absent at rest), shape of the strip."
+    ],
+    "reference": "opxy/reference/toro-ink-rest.jpg (P9 one-bit ink on the device)",
+    "risks": "Stretch, and it only half earns it. The exception: crease's subject is a material with two faces, and folding is what makes the back of the paper show, which the one-bit language can say with two dither densities better than greys can; one-bit print is also paper's own medium. Where it fails: P9's dither only lives in still artwork, and here the strip's panels change shape with every control, so on the device they'd be flat palette greys with a white outline, losing the look that justifies the pattern (only the sketch is dithered). The panels overlap where the strip doubles back, and painter's order by time isn't depth order, so some folds will draw over the wrong face. P9 wants a figure; a streamer is barely one, and the scope graticule is a second language competing with the print. Caution from the catalog stands: toro moved off P9 to P10."
+  }
 }

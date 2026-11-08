@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "exploded view",
+  "subject": "An exploded view of the gear pair with follower B lifted straight up off its arbor and washer, so the faces of both wheels show the grooves the run has scored on them: one short groove per mesh behind the tooth that played, at a radius set by the note it played.",
+  "controls": [
+    "ratio: wheel B grows or shrinks with the ratio and its grooves redistribute (two per tooth at 3:2, one per tooth at 1:1, three per A tooth at 3:1), the arbor and washer below sliding to stay under it (scale of B, plus count of grooves per tooth).",
+    "teeth: wheel A redraws with 3 to 16 teeth and the cycle lengthens, so the number of grooves on both faces goes from a handful to dozens (count).",
+    "mesh: teeth that slip score nothing, so their grooves drop off the faces in Euclidean order, evenly round both wheels, down to clean faces at 0 (count).",
+    "scale: every groove slides inward or outward to its note's new radius, the rhythm untouched, so the faces' rings of grooves re-step (position, radial)."
+  ],
+  "reference": "library/toro-blocks/README.md",
+  "risks": "Grooves are short 1.5 px arcs; on A's small web they're 3-4 px apart radially for neighbouring semitones, close to the floor, and on a foreshortened face (this camera is about 35 degrees up) the radial spread compresses by half, so A's grooves are the weakest read. At 16 teeth and 3:1 the cycle is 48 steps: 48 grooves on each wheel, 96 nodes, inside 256 but they'd need to be placed nodes, not path points. The exploded lift hides A's arbor and makes the meshing a matter of the dashed assembly line, so 'meshing' reads as 'goes here' rather than 'turning together'. The note answer: the newest groove brightens (the one brightest element) and the wheels turn a tooth. Muted: B lifts further and the newest groove goes out."
+}

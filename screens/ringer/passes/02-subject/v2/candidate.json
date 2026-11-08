@@ -1,0 +1,21 @@
+{
+  "variant": "v2",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "The ring itself, literally: hidden-line bronze bells hung along one side of the frame, standing in the order they strike in this change, the nearest striking now and the row running back into the tower.",
+  "controls": [
+    "bells: count, bells are hung along the beam from 4 to 12, each new bell larger (lower in the scale) and the beam lengthening into the distance.",
+    "method: position, each bell moves along the beam to its place in the current change; a change is neighbouring bells trading places, a hunting bell walking front to back and back again.",
+    "pace: position (spacing), the distance between bells along the beam is the time between blows: spread out at 0.5 a beat, packed close (bells nearly touching) at 8.",
+    "stroke: position, on handstroke changes the whole row steps back along the beam by up to one bay, leaving an empty hatched bay in front: the open lead drawn as a space."
+  ],
+  "reference": "library/toro-blocks/README.md (a modelled 3D field, black-filled hidden-line solids, one camera)",
+  "risks": [
+    "Bells sliding along a beam isn't how a tower works (bells hang still and swing); the beam is a stage for the order, a stretch a ringer may notice.",
+    "Order is read by size along the row; at twelve bells the far end shrinks under 10 px in perspective, so the back of a long row is hard to read.",
+    "Pace (spacing) and stroke (offset of the row) both slide bells along the beam; stroke must lead with the hatched empty bay, not the move.",
+    "Each bell is pre-projected per depth slot: moving a bell along the beam changes its size, so method swaps need pre-drawn sizes per slot or a scale per node (allowed, uniform).",
+    "Mute: the bells are stood (the bright weight leaves the front bell and the row stops), shown by the front bell's outline dropping to the others' weight. Weak; needs a stronger cue."
+  ]
+}

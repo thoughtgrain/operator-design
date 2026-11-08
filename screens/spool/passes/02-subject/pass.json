@@ -1,0 +1,268 @@
+{
+  "machine": "spool",
+  "category": "engine",
+  "kind": "subject",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Draw a spool: thread or yarn wound on a spool, somehow. Five new variations of that.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: single-weight contour. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: hatched mass. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: edge-lit silhouette. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: detailed line art. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the material the sound acts on, seen close",
+      "drawingLanguage": "hidden-line 3D",
+      "inspiration": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P9",
+        "P10",
+        "P15"
+      ],
+      "brief": "Start from what spool is and does, not from a pattern. Your angle: the material the sound acts on, seen close. Way of drawing: hidden-line 3D. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "A spool lying on a table, seen low from the front, paying out a trail of thread behind it that lies in the written cycle's shape, repeat after repeat, receding to the far edge.",
+      "controls": [
+        "wear: the trail wears with age, the oldest (far) repeats losing their corners first and opening frayed gaps where the oxide would thin, the newest staying crisp (shape of the trail outline, re-keyed when wear changes).",
+        "wow: the spool's heading swings as it rolls, so the free run between the trail's end and the winding pulls round with it, 0 to 36 degrees (rotation of the spool node about its contact point).",
+        "length: the wavelength of one repeat laid on the table, so a longer loop lays fewer, longer repeats, 6 down to 3 across the frame (count of repeats, with their spacing).",
+        "bias: tension in the free run: under-biased it's pulled straight and taut and the spool sits 24 px nearer the trail; over-biased it sags into a slack loop (position of the spool, with the free run reshaped)."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": "Single weight breaks craft.md's three-weight table on purpose: the language is one 1.5 px contour, with brightness (#CDCDCD thread, #7D7D7D spool) doing the separating; say so if picked. The zigzag trail could read as a chart or a lightning scribble rather than thread if it loses its perspective; it only reads as thread laid on a table because it recedes. Wear acting on the far (small) repeats puts the 5-score control on the least prominent part; it needs to reach the nearest repeat at high wear to clear the 2.5 % floor. The trail is ~5 repeats of 6 points but runs to several mutable outlines once frayed (gaps split it), so the budget is tight on 4 paths. Wow as a spool rotation fakes a 3D turn with a screen-plane turn; it holds only while the camera stays low and the swing is modest."
+    },
+    {
+      "variant": "v2",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "The lip of one big spool so close that the frame cuts it off: the top flange's rim across the top, the wound mass below it drawn as a hatched mass of turns, and one bright thread peeling off under the rim and out of the frame.",
+      "controls": [
+        "wear: loose fibre loops lift off the wound surface along the turns, 0 to 16 standing loops, and the hatching thins where they leave (count of fibre loops).",
+        "wow: the free thread swings about the point where it leaves the winding, as the spool runs untrue, 0 to 32 degrees (rotation of the thread node).",
+        "length: how much thread is wound: the face of the wound mass moves out toward the flange rim or back toward the barrel, 30 px of travel at its silhouette (position of the wall and its hatching).",
+        "bias: how tightly the turns lie: under-biased the turns pack close (4 px apart), over-biased they lie loose (7 px apart) and the free thread sags further (count of hatch lines)."
+      ],
+      "reference": "opxy/reference/ (field-and-figure for the one-object crop), library/theseus-tower",
+      "risks": "Hatching here is the thread's own turns, not the semi-opaque convention in craft.md, so the reader has to take the 45-degree-ish hairlines as wound thread; at defaults that's helped by the single bright strand leaving the mass. Bias changes the hatch count, which re-keys the whole hatch (dozens of ribbons) on every turn of the knob; the device version needs the hatch as a few mutable outlines or placed nodes, not 40 static ribbons. The crop hides the whole spool, so nothing at rest says 'spool' except the flange rim and bore; if the rim reads as a lampshade the subject fails. The flange's bore sits near the top edge and competes a little with the thread."
+    },
+    {
+      "variant": "v3",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "A wooden spool of thread standing on end, a black silhouette on black with its right-hand edges caught by a light from behind, the loose end hanging over the bottom flange and curling on the ground.",
+      "controls": [
+        "wear: the lit edge of the winding breaks up into short broken lengths with frayed ends lifting off it, 0 to 14 breaks, and the loose end frays at its tip (count of breaks along the bright edge).",
+        "wow: the loose end swings from where it leaves the winding, as the spool turns out of true, 0 to 34 degrees (rotation of the tail node about its exit point).",
+        "length: how full the spool is: the wound mass grows out from the barrel toward the flange rims, its lit edge moving 26 px (position of the winding's edge, scale of its outline).",
+        "bias: tension in the loose end: under-biased it hangs straight and taut to a short curl; over-biased it drops slack into a wide loose loop on the ground (shape of the tail outline)."
+      ],
+      "reference": "library/theseus-tower",
+      "risks": "Edge-lit means most edges are dim (#323232-#4B4B4B) and only the right-hand ones bright; on the real panel the dim side may vanish and the spool read as a bracket, so the dark outline grey needs a device check. It's the most literal of the five and the plainest: one object, little happening at rest. The winding's bright edge and the tail are both #CDCDCD; they're one thread, but a reviewer may count two brightest elements. Wow and bias both act on the tail (rotation vs. shape); they're different channels on one part, which can blur which knob did what."
+    },
+    {
+      "variant": "v4",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "A hand bobbin winder on its base plate: two bearing posts, the spindle and its crank, a bobbin filling with thread, and the thread coming in from the left through a pair of tension discs on a sprung stud.",
+      "controls": [
+        "wear: loose turns and fibre ends stand off the bobbin's winding between the flanges, 0 to 14 of them, and the incoming thread goes from smooth to frayed (count).",
+        "wow: the crank's handle swings round the spindle, an uneven stroke drawn as the crank's resting angle, 0 to 40 degrees (rotation of the crank arm and handle about the spindle axis).",
+        "length: how full the bobbin is: the wound mass grows from the hub toward the flange rims, 24 px at its top edge (position of the winding outline and its turns).",
+        "bias: the tension nut screws along its stud: under-biased it's run in and the spring is short, over-biased it's backed off and the spring opens out, 26 px of travel (position of the nut, with the spring's turns spacing out)."
+      ],
+      "reference": "opxy/reference/ field-and-figure, library/theseus-tower",
+      "risks": "It's the busiest of the five: base, posts, spindle, crank, stud, discs, spring and bobbin. It stays legible at 1:1 because the parts are separate, but it's dense for the 40 % black floor (92 % black measured at rest) and costly in nodes. The crank's angle as wow is a stand-in: a hand crank's angle isn't what wow means, it just reads as 'the stroke'. The tension discs and nut are small (under 30 px), so bias's travel is short in absolute terms; it needs the full 26 px. The thread enters from off-frame top left, near the header line."
+    },
+    {
+      "variant": "v5",
+      "angle": "the material the sound acts on, seen close",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "A spool on its side seen close, with a quarter of its winding cut away toward the camera so the thread shows in section: every turn a small bright round cut, layer on layer on the barrel, between two whole flanges.",
+      "controls": [
+        "wear: the outer layers' sections go from round and bright to flattened and hatched (worn thin, there but not sounding), from the outside in, 0 to all layers (count of worn sections).",
+        "wow: the barrel sits off-centre in the winding, so the layers crowd one cut face and thin on the other, an eccentric reel, 0 to 24 px offset (position of the barrel and bore).",
+        "length: the number of layers wound on the barrel, 3 to 9: a longer loop is more thread (count of section rows, with the outer surface moving out).",
+        "bias: how the turns pack: under-biased they're pressed tight into a hexagonal stack, over-biased they lie loose in square rows with gaps between them (position of the sections within each row)."
+      ],
+      "reference": "library/toro-blocks",
+      "risks": "Each section is its own small outline: ~330 at rest (326 counted), far beyond the 512-node limit's spirit and the ~20-changed-nodes redraw budget when wear or bias touches them; the device version needs whole rows as one mutable outline each (≤ 64 points per row) and fewer, larger sections. The sections are ~8 px across and touching, so at 1:1 the cut face reads as a mesh before it reads as thread; it may need a closer crop or larger thread. Hidden lines come from a depth buffer in the generator; on the device it's static artwork plus moved rows. Some facet edges break into sub-3 px fragments (lint legibility warnings)."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:27:07"
+  },
+  "selection": {
+    "variant": "v1",
+    "reason": "Owner likes v1; it should run off the side, not the top edge, and the spool rolling should be part of its animation.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:26:31",
+    "angle": "the mark or trace the process leaves behind",
+    "pattern": "none",
+    "drawing_language": "single-weight contour",
+    "subject": "A spool lying on a table, seen low from the front, paying out a trail of thread behind it that lies in the written cycle's shape, repeat after repeat, receding to the far edge.",
+    "controls": [
+      "wear: the trail wears with age, the oldest (far) repeats losing their corners first and opening frayed gaps where the oxide would thin, the newest staying crisp (shape of the trail outline, re-keyed when wear changes).",
+      "wow: the spool's heading swings as it rolls, so the free run between the trail's end and the winding pulls round with it, 0 to 36 degrees (rotation of the spool node about its contact point).",
+      "length: the wavelength of one repeat laid on the table, so a longer loop lays fewer, longer repeats, 6 down to 3 across the frame (count of repeats, with their spacing).",
+      "bias: tension in the free run: under-biased it's pulled straight and taut and the spool sits 24 px nearer the trail; over-biased it sags into a slack loop (position of the spool, with the free run reshaped)."
+    ],
+    "reference": "library/theseus-tower",
+    "risks": "Single weight breaks craft.md's three-weight table on purpose: the language is one 1.5 px contour, with brightness (#CDCDCD thread, #7D7D7D spool) doing the separating; say so if picked. The zigzag trail could read as a chart or a lightning scribble rather than thread if it loses its perspective; it only reads as thread laid on a table because it recedes. Wear acting on the far (small) repeats puts the 5-score control on the least prominent part; it needs to reach the nearest repeat at high wear to clear the 2.5 % floor. The trail is ~5 repeats of 6 points but runs to several mutable outlines once frayed (gaps split it), so the budget is tight on 4 paths. Wow as a spool rotation fakes a 3D turn with a screen-plane turn; it holds only while the camera stays low and the swing is modest."
+  }
+}

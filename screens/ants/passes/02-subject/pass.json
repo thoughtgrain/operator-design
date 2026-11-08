@@ -1,0 +1,236 @@
+{
+  "machine": "ants",
+  "category": "player",
+  "kind": "subject",
+  "number": 2,
+  "state": "rejected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Five new, unique ones. v1 is kept aside for the sequencer idea.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ants is and does, not from a pattern. Your angle: the machine's own rule as a physical thing: what turning each knob would do to a real object. Way of drawing: single-weight contour. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ants is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: hatched mass. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ants is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: edge-lit silhouette. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "detailed line art",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ants is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: detailed line art. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "hidden-line 3D",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what ants is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: hidden-line 3D. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "the machine's own rule as a physical thing: what turning each knob would do to a real object",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "The colony walking a glockenspiel, one bar per degree, so the loop the ants keep treading across the bars is the phrase they play.",
+      "controls": [
+        "ants: count, contour ants walking the bright loop over the bars, 1 to 8, spaced evenly round it; each new one eases in at the lowest bar.",
+        "scent: shape, the loop itself: at 0 it frays into a loose scribble that wanders over many bars, at 100 it pulls into one tight oval over the few bars the phrase uses (outer points move well over 16 px).",
+        "fade: count, the dashed old routes still lying across the bars: two at 0 and default, none by 100, each one thinning out from its far end as it goes.",
+        "scale: count + position, the bars themselves: 11 at pent (two octaves) up to 25 at chrom, bars narrowing and sliding closer so the instrument keeps its width, the rails following."
+      ],
+      "reference": "library/theseus-tower (an instrument drawn as itself, line on black)",
+      "muted": "Muted: the loop drops from the bright weight to the rail grey and the ants stop where they are; the bars stay, so the instrument reads as resting.",
+      "risks": "A glockenspiel is a picture of any melodic machine; only the ants and the loop make it this one, so it lives or dies on the ants reading at 26 px. The loop is a smooth oval, so which bars actually sound (landings, not crossings) isn't drawn; a note flash on the struck bar has to carry that. At chrom 25 bars are ~12 px wide with 6 px gaps, close to crowding. Single weight means the trail stands out by brightness alone (it's drawn 0.5 px heavier as the one exception)."
+    },
+    {
+      "variant": "v2",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "One ant at large scale in side elevation, its gaster cut open to show the gland and duct laying the scent trail behind it, its antennae reading the trail, followers walking the trail it leaves.",
+      "controls": [
+        "ants: count, the small ants following in file on the trail behind the big one, 0 to 7 (1 to 8 with it), each easing in from the left edge.",
+        "scent: rotation, the flagellum of the near antenna pivots at its elbow from raised and searching (about −35°) at 0 to pressed down onto the ground trail (about +70°) at 100, over 100°.",
+        "fade: position, where the deposited trail dies: the bright fresh stretch runs back from the sting, then a hatched evaporating stretch, whose far end moves from the left edge at 0 to just behind the ant at 100 (over 100 px).",
+        "scale: count + position, the stone slabs under the ground line, one per degree: 11 at pent to 25 at chrom."
+      ],
+      "reference": "opxy/craft.md (Semi-opaque areas are hatched) and library/theseus-tower for black bodies with grey edges",
+      "muted": "Muted: the duct and the fresh trail drop to the hatch grey and the antennae lift off the ground; the ant stays.",
+      "risks": "It explains the rule (deposit, sense, evaporate) better than it shows the phrase: the trail is a straight line along the ground, so the repeating melody isn't visible; the ant is the subject but the bright element is the trail. Hatched masses on head and thorax plus a hatched cut wall is a lot of hatching; at 1:1 it holds, but on the device it may read grey. The followers are 30 px and only just read as ants. The scale slabs along the bottom are close to a strip of cells."
+    },
+    {
+      "variant": "v3",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "A leaf held against low light, black with its margin and veins edge-lit, one side vein per degree, and the glistening trail the colony has worn across it as the loop it keeps walking.",
+      "controls": [
+        "ants: count, edge-lit ant silhouettes on the trail, 1 to 8, spaced round the loop.",
+        "scent: shape, the trail: at 0 it frays into several faint wandering threads across the leaf, at 100 it is one tight bright loop through the phrase's veins (points move ≥ 16 px).",
+        "fade: count, the dashed dull traces of trails no longer walked: two at 0–30, none at 100, each shortening from its old end.",
+        "scale: count + position, side veins per side: 5 (pent) to 12 (chrom), sliding closer along the midrib; lower side octave one, upper side octave two."
+      ],
+      "reference": "opxy/reference (atlas-style line on black); library/toro-blocks for hairline edges on black bodies",
+      "muted": "Muted: the trail dims to the vein grey and the ants stop; the leaf stays lit at its edge.",
+      "risks": "The leaf is beautiful but arbitrary: nothing about ants requires it, and veins as degrees is a mapping the player has to be told. The loop crosses itself (the phrase revisits a degree), which at 1:1 reads as a zigzag in the middle. Edge-lit silhouettes need the ants to sit on something lit; on black leaf they read only by their hairline edge."
+    },
+    {
+      "variant": "v4",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "detailed line art",
+      "subject": "One fork of the lattice at large scale: a twig junction where a step can go to any degree of the octave, one branch per degree, a scout ant on the knot turning onto the scented branch and the rest of the lattice past the frame's edge.",
+      "controls": [
+        "ants: count, ants already out along the scented branch, 0 to 7 behind the scout, the farthest ones leaving the frame.",
+        "scent: rotation, the scout's heading on the knot swings from between branches at 0 to square onto the scented branch at 100 (about 70°).",
+        "fade: position, how far the old scent (hatched band) still reaches up the unused branches: to the frame edge at 0, shrinking back to the knot by 100.",
+        "scale: count + rotation, branches out of the knot: 5 at pent, 7 for the modes, 12 at chrom, fanning closer together."
+      ],
+      "reference": "opxy/craft.md (3D shapes as detailed line art) and library/theseus-tower",
+      "muted": "Muted: the scented branch's bright line drops to the hatch grey and the scout stops mid-turn.",
+      "risks": "Shows one decision, not the phrase: what the colony plays over time isn't drawn, only which way it goes next, so the player sees the rule more than the result. Branches per degree of the octave is a simplification of the real lattice (step and third neighbours). At chrom twelve branches crowd into a fan near the knot. Twigs could pass for roads at a glance; the bark fissures carry the reading."
+    },
+    {
+      "variant": "v5",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "hidden-line 3D",
+      "subject": "Ants drawn literally: a few hidden-line 3D ants, modelled from ellipsoids with segmented gasters and jointed legs, walking the bright trail between low degree stones in two rows, under one camera.",
+      "controls": [
+        "ants: count, modelled ants on the trail, 1 to 8, nearer ones larger, each easing in from the nest end of the loop.",
+        "scent: position, how closely the ants keep to the trail: at 0 they straggle up to a stone's width off it at random headings, at 100 they walk nose to tail on it (≥ 24 px).",
+        "fade: count, the dashed old routes between stones: two at 0–30, none at 100.",
+        "scale: count + position, the stones per row: 5 at pent to 12 at chrom per octave, closing up along each row."
+      ],
+      "reference": "library/theseus-tower (hidden-line black bodies, grey edges)",
+      "muted": "Muted: the trail drops to the stone grey and the ants stand still.",
+      "risks": "The ants need pre-drawn variants per heading (a node can't turn out of the screen plane), so 8 ants × several headings is the costliest of the five. At 1:1 the far ants overlap stones and the legs read busy; three weights and hidden-line keep it legible but it's the most cluttered frame. Close in look to theseus' black-with-grey-edge family. The near row runs off both sides of the frame."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.16,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.03,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.05,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:26:14"
+  },
+  "selection": null,
+  "rejection": {
+    "reason": "Too literal: drawn ants and ant scenes. Five unique, less literal versions; the lead shortlists two.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:48:16"
+  }
+}

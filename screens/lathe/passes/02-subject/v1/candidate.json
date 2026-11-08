@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "A turning lathe in profile, the workpiece spinning between chuck and tailstock centre, its turned profile the cut signal and the tool at the shoulder where raw stock becomes waveform.",
+  "controls": [
+    "cut: shape (node 0, the turned profile) - the profile's swings deepen and their crests flatten into lands as the cutter is driven, 8.5 px swing at 1.00 to ~14 px with flat tops at 4.00.",
+    "groove: position (node 1, tool and cross-slide) - the cross-slide feeds the tool in toward the axis by 24 px, and the turned radius follows it down (rim = full diameter, label = a thin spindle).",
+    "wear: count (hairline chatter marks) - short hairline ticks appear across the turned surface, 0 to ~16, none at 0.",
+    "rumble: rotation (node 2, the workpiece and its centre line) - the work runs out, turning in the screen plane about the chuck by up to +-4 deg with a hatched envelope of the swept outline; still at 0."
+  ],
+  "reference": "library/theseus-tower (the instrument drawn as itself, outlines over black); opxy/craft.md single-language rule",
+  "risks": "Single-weight contour: every machine part is one Line-weight outline; the turned profile is the only heavier line and the centre line and chip the only hairlines, so the three weights survive. This is a metal/wood lathe, a pun on the machine's name rather than the record lathe the DSP models; the owner asked for it. rumble's in-plane turn is under the 30 deg rotation floor (the tail end moves ~28 px, so it may pass as position). cut and groove both reshape the profile's path, but groove's primary channel is the tool's position. The profile is one mutable outline of 62 points, close to the 64 limit."
+}

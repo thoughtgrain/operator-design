@@ -1,0 +1,20 @@
+{
+  "variant": "v2",
+  "angle": "the mark or trace the process leaves behind",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "A block of snow-covered ploughed field cut open in section, one furrow per scale degree, with the wing prints the flock pressed into the snow each time a bird touched down in a furrow.",
+  "controls": [
+    "cohere: how many furrows the prints spread across (position, the line of prints pulled from most of the block's width at 0 into two or three neighbouring furrows at 100).",
+    "speed: how far apart the touch-downs are along the track running back into the field (position and count, more and closer prints at 4.00, a few far-spaced ones at 0.25).",
+    "scatter: stray prints pressed into furrows far from the line (position, up to the block's far ends), one per stray note.",
+    "scale: how many furrows the section shows (count, 11 ridges in the cut profile for pent, 25 for chr), the receding crest lines following."
+  ],
+  "reference": "library/toro-blocks (a modelled block in perspective, hidden-line, hatched where it's cut); patent-style section hatching for the cut soil",
+  "risks": [
+    "Section hatching on the cut soil and the shaded end face is the section convention for a cut solid, not 'inactive'; it uses the same 45-degree hairlines 4 px apart, so it reads as material, but a reviewer may want the end face plain.",
+    "Prints at the back of the block are foreshortened to about half height and crowd; at high speed the track needs a cap (about 8 prints visible) or the far ones merge.",
+    "History is drawn (old prints stay): it must not become a bar history, so prints fade out by being covered (hatched over with fresh snow) rather than stacking up, and only the newest is bright.",
+    "Muted: fresh snow falls over the field: every print is hatched over and the newest loses its bright outline; nothing new is pressed while muted."
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "machine": "bell",
+  "category": "effect",
+  "kind": "revision",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.",
+  "subject": {
+    "variant": "v1",
+    "reason": "Refine pick 1, with variations focused on the bell shape and its interaction; drop the signal visualization.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59",
+    "pattern": "P2",
+    "drawing_language": "patent section",
+    "subject": "A patent plate in two figures: the bell in section hanging on its cable under the surface line, water risen inside it to the air pocket, beside the reference passage's output trace pressed down from its grey input.",
+    "controls": [
+      "depth: the bell is lowered on its cable, crown 58 to 130 px below the surface (position), and the threshold dashes in fig. 2 close in on the trace as its crests are pressed lower (shape).",
+      "air: the waterline inside the bell drops as the air pocket grows from 35 % to 90 % of the bell (position of the waterline), and in fig. 2 the trace's recovery tail after each hit stretches (shape, same path as depth, so the waterline is the primary).",
+      "knee: the bell's shoulders go from a hard corner to a full round crown, shoulder radius 4 to about 30 px (shape of the wall in section).",
+      "gain: fig. 2's output trace scales about its centre line, x1 to x16 clipped at the frame of the figure (scale)."
+    ],
+    "reference": "opxy/reference/README.md (field-and-figure: one bright subject, quiet ground) and library/theseus-tower (line drawing, outlines over black bodies)",
+    "risks": "P2 splits the body into two half-size pictures, and the bright trace, not the bell, is where the eye lands; the bell is secondary in its own screen. Depth and air both reshape the fig. 2 trace, so their primaries must be the bell's position and the waterline or two knobs read as one. Gain has no part in fig. 1 (a bell has no makeup), so fig. 1 is three controls and fig. 2 is the fourth plus echoes. The trace is the model on a fixed four-hit passage, not the live signal: an effect page gets the slots, not the audio. Patent numerals (10, 12) and fig. captions are four labels; legible at 10 px #7D7D7D but they add up."
+  },
+  "directions": [
+    {
+      "variant": "v1",
+      "composition": "centred hero",
+      "camera": "front elevation",
+      "emphasis": "brightest element at the sound source",
+      "brief": "centred hero; front elevation; brightest element at the sound source. Focus of this pass: Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.."
+    },
+    {
+      "variant": "v2",
+      "composition": "low horizon",
+      "camera": "top-down plan",
+      "emphasis": "negative space carries the subject",
+      "brief": "low horizon; top-down plan; negative space carries the subject. Focus of this pass: Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.."
+    },
+    {
+      "variant": "v3",
+      "composition": "column-affine (P7)",
+      "camera": "section cut",
+      "emphasis": "brightest element where the note lands",
+      "brief": "column-affine (P7); section cut; brightest element where the note lands. Focus of this pass: Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.."
+    },
+    {
+      "variant": "v4",
+      "composition": "off-axis diagonal",
+      "camera": "three-quarter isometric",
+      "emphasis": "density gradient carries the subject",
+      "brief": "off-axis diagonal; three-quarter isometric; density gradient carries the subject. Focus of this pass: Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.."
+    },
+    {
+      "variant": "v5",
+      "composition": "full-bleed field",
+      "camera": "low angle",
+      "emphasis": "brightest element on the most-played control's part",
+      "brief": "full-bleed field; low angle; brightest element on the most-played control's part. Focus of this pass: Refine v1: the bell's own shape and how each control changes it; no signal or waveform visualization; no text in the drawing.."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "frame": "screens/bell/passes/02-revision/v1/rest.svg"
+    },
+    {
+      "variant": "v2",
+      "frame": "screens/bell/passes/02-revision/v2/rest.svg"
+    },
+    {
+      "variant": "v3",
+      "frame": "screens/bell/passes/02-revision/v3/rest.svg"
+    },
+    {
+      "variant": "v4",
+      "frame": "screens/bell/passes/02-revision/v4/rest.svg"
+    },
+    {
+      "variant": "v5",
+      "frame": "screens/bell/passes/02-revision/v5/rest.svg"
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "bodyDiffPct": 15.92,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "bodyDiffPct": 9.24,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "bodyDiffPct": 15.96,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "bodyDiffPct": 20.3,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "bodyDiffPct": 17.21,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "bodyDiffPct": 18.15,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "bodyDiffPct": 24.41,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "bodyDiffPct": 17.31,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "bodyDiffPct": 21.45,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "bodyDiffPct": 24.44,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:22:25"
+  },
+  "selection": {
+    "variant": "v5",
+    "reason": "Owner likes v5; remove the hatched background and think about simple environmental grounding.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:31:45",
+    "frame": "screens/bell/passes/02-revision/v5/rest.svg"
+  }
+}

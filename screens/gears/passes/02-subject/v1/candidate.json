@@ -1,0 +1,15 @@
+{
+  "variant": "v1",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "A small gearbox with its front wall and lid cut away, the cut casing hatched in section, where driver A and follower B stand meshed on their shafts and B carries a twelve-hole index plate pinned at the scale's degrees.",
+  "controls": [
+    "ratio: wheel B's diameter and tooth count grow with the ratio (a twin of A at 1:1, three times A at 3:1), its shaft and bearing boss sliding right along the back wall to stay in mesh, inside a casing whose right wall moves with it (scale of B, with position).",
+    "teeth: wheel A's outline redraws with 3 to 16 teeth and B follows by the ratio, the module fixed so the pair grows and shrinks inside the box (shape).",
+    "mesh: wheel B slides back along its shaft as mesh falls, its face stepping off A's, and the teeth that no longer overlap (Euclidean order) lose their front-face edge, so at 0 B sits clear behind A (position, about 30 px of axial travel on screen).",
+    "scale: the pins in B's index plate move to the new scale's seven of twelve holes, the empty holes left as hairline rings (position/count of pins)."
+  ],
+  "reference": "library/theseus-tower/README.md",
+  "risks": "Busiest of the five: casing, bosses, two shafts, two wheels and the plate all carry lines, so the meshing tooth (the brightest edge) has to win against a lot of mid grey at 1:1. Index pins are about 7 px across, at the floor; seen from this camera the plate's holes foreshortening to ovals, and degree 0 needs a mark of its own (a longer slot) to read as the start of the scale without any text. Ratio at 3:1 makes B three times A: the box has to scale with it or B runs into the lid line; budget for the casing is static, but B's outline at 48 teeth is past one 64-point path, so B's teeth would be split across paths or coarsened. Mesh's axial slide is a 3D move and the device can't tilt a node, so B's slid positions are pre-drawn variants or a translation along the projected axis (it's straight, so translation is honest). Muted: B slides fully back off A, the meshing edge goes out."
+}

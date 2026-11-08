@@ -1,0 +1,15 @@
+{
+  "variant": "v3",
+  "angle": "one scene where this happens, with one subject in it",
+  "pattern": "none",
+  "drawing_language": "cutaway section",
+  "subject": "The kiln opened after the firing, cut away in section: brick walls and a sprung arch round one bowl on its shelf, a pyrometric cone bent beside it and a tapping rod ringing the bowl through the spy hole.",
+  "controls": [
+    "strike: position — the tapping rod draws back from the rim through the spy hole, 36 px off at 0 to 6 px at 100; a note taps it in.",
+    "glaze: position — the glaze line on the bowl's outside creeps down from just under the rim to near the foot, the glazed band hatched above it.",
+    "crack: shape — a dunting crack runs across the bowl's front from the rim, lengthening and stepping as crack rises; none at 0.",
+    "fire: rotation — the pyrometric cone bends over, from nearly upright (10°) at 0 to flat on its pad (90°) at 100, the potter's own gauge of how hot the firing went."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg; a kiln builder's section",
+  "risks": "The kiln is a frame round the subject; brickwork must stay quiet (darkest grey hairlines) so the bowl stays the one bright thing. The bowl is small (~125 px) and the cone smaller (~35 px), so crack's line and the cone need checking at 1:1. Striking a bowl inside a kiln is a stretch of the scene (potters ring fresh pots by hand at unloading)."
+}

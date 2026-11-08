@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "Vapour itself: a ring of breath rising through cold air, modelled as a torus with its rolling flow drawn in hidden-line hairlines, a smaller oo ring following below.",
+  "controls": [
+    "vowel: shape, the ring's plan follows the lips it left: small and round for u, wide for a, flattened and spread for i, the rim travelling about 30 px.",
+    "breath: count, wisps peel off the ring's top and trail back, 2 at 0 to 14 at 100.",
+    "throat: shape, the ring's core thickens from 14 to 34 units as the throat lengthens, a fatter, slower roll for a lower voice.",
+    "glide: position, the small hatched oo ring the note opened from rises up the wake behind the main ring, about 60 px over the range."
+  ],
+  "reference": "library/theseus-tower (hidden-line 3D detail over black fills, one bright silhouette); opxy/craft.md, Think in 3D",
+  "risks": "A torus can read as a doughnut, a tyre or a lampshade rather than a vapour ring; the wake and the second ring carry the reading. Vowel (plan) and throat (core) both change the ring's size, in different directions, which may blur at a glance. Poloidal hairlines bunch under 3 px near the ring's sides, and the projected sections are many nodes."
+}

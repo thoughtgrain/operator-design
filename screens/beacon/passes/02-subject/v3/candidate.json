@@ -1,0 +1,20 @@
+{
+  "variant": "v3",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "The turning gear in hidden-line 3D: a four-panel flashing lens on a float in its mercury trough, on a cast pedestal, driven by a weight clock with its great wheel, pinion, fly and cable, the lamp flashing through the panel that faces you.",
+  "controls": [
+    "pulse: the flash in the facing panel's bullseye widens, 2.5 px to 10.5 px (scale of the one bright mass).",
+    "lens: the bullseye rings in each panel's belt step from 2 to 8 and the reflecting prisms above and below from 1 to 4 (count of hairlines on the glass).",
+    "sweep: the carriage turns, 18 to 90 degrees, its panels sliding round and the rack teeth travelling, while the great wheel on the clock turns three times as far (rotation: the wheel is a true in-plane turn, the lens box is redrawn variants).",
+    "fog: mist rises up the glass of each visible panel as hatching clipped to the panel, from its foot to its top (position of the hatched band's top; nothing at the default 0)."
+  ],
+  "reference": "library/toro-blocks (hidden-line 3D with black fills that hide what's behind); craft.md, Think in 3D",
+  "risks": [
+    "Rings on a panel are concentric circles, close to the 'target rings' craft warns about; the prism bars above and below cut them to a belt so they read as a Fresnel panel, but this should be checked by eye.",
+    "Sweep turns a 3D box, which the device can't tilt: every panel position is a pre-drawn variant (many nodes), only the clock wheel is a cheap true turn.",
+    "Two objects (lens carriage and clock) split the eye; the clock is kept smaller and dimmer, but it is still a second thing.",
+    "The fly on the clock reads as a small flag at 1:1; it may need redrawing or dropping."
+  ]
+}

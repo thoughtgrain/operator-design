@@ -1,0 +1,20 @@
+{
+  "variant": "v4",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "P5",
+  "drawing_language": "bold closed outlines",
+  "subject": "The sea seen from the waterline at night, rows of wave crests as bold closed outlines that hide the ones behind, a glitter path of lit crest edges running toward you beneath a small lighthouse on its rock, whose hatched beam swings across the sky.",
+  "controls": [
+    "pulse: each glint on the lit crests lengthens, from a short dash to a long run along the crest, 0.4 to 2.4 world units (shape of the glint ribbons).",
+    "lens: the beam tightens (16 to 2 degrees) and the glitter path reaches further toward you, from the far rows to the nearest (position of the path's near end, about 100 px of travel, with the beam's shape as the second cue).",
+    "sweep: the beam swings from lying along the horizon to coming toward you, 14 to 64 degrees, so it rises and widens over the upper left (rotation of the beam about the lantern).",
+    "fog: a hatched bank rises over the horizon and swallows the rock and the light (position of the bank's top edge; nothing at the default 0)."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one small bright figure over a quiet field); library/toro-blocks for many closed shapes that hide one another",
+  "risks": [
+    "The sea of crests is the busiest body of the five (about 80 % black): it can read as texture rather than a picture, and it competes with the small lighthouse.",
+    "The lighthouse is small (about 40 px tall); the subject is the light on the water rather than the tower.",
+    "At sweep 100 with fog up the beam's hatching and the fog's hatching cross into a crosshatch; the fog needs to sit behind the beam or stop below it.",
+    "Lens drives two things (beam width and glitter reach); acceptable as one idea, focus, but the perceptibility check must show the reach clearly."
+  ]
+}

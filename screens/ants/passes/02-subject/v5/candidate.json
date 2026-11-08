@@ -1,0 +1,16 @@
+{
+  "variant": "v5",
+  "angle": "the object in the machine's name, drawn literally and well",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "Ants drawn literally: a few hidden-line 3D ants, modelled from ellipsoids with segmented gasters and jointed legs, walking the bright trail between low degree stones in two rows, under one camera.",
+  "controls": [
+    "ants: count, modelled ants on the trail, 1 to 8, nearer ones larger, each easing in from the nest end of the loop.",
+    "scent: position, how closely the ants keep to the trail: at 0 they straggle up to a stone's width off it at random headings, at 100 they walk nose to tail on it (≥ 24 px).",
+    "fade: count, the dashed old routes between stones: two at 0–30, none at 100.",
+    "scale: count + position, the stones per row: 5 at pent to 12 at chrom per octave, closing up along each row."
+  ],
+  "reference": "library/theseus-tower (hidden-line black bodies, grey edges)",
+  "muted": "Muted: the trail drops to the stone grey and the ants stand still.",
+  "risks": "The ants need pre-drawn variants per heading (a node can't turn out of the screen plane), so 8 ants × several headings is the costliest of the five. At 1:1 the far ants overlap stones and the legs read busy; three weights and hidden-line keep it legible but it's the most cluttered frame. Close in look to theseus' black-with-grey-edge family. The near row runs off both sides of the frame."
+}

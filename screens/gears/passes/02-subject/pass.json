@@ -1,0 +1,243 @@
+{
+  "machine": "gears",
+  "category": "player",
+  "kind": "subject",
+  "number": 2,
+  "state": "selected",
+  "created": "2026-11-06T08:11:59",
+  "focus": "More literal, focused on the gears themselves. Five new variations.",
+  "subject": null,
+  "directions": [
+    {
+      "variant": "v1",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "drawingLanguage": "cutaway section",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what gears is and does, not from a pattern. Your angle: a cutaway of the object at work, so the inside explains it. Way of drawing: cutaway section. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v2",
+      "angle": "the mark or trace the process leaves behind",
+      "drawingLanguage": "exploded view",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what gears is and does, not from a pattern. Your angle: the mark or trace the process leaves behind. Way of drawing: exploded view. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v3",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "drawingLanguage": "single-weight contour",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what gears is and does, not from a pattern. Your angle: one detail at large scale, the rest implied by the frame's edge. Way of drawing: single-weight contour. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v4",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "drawingLanguage": "hatched mass",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what gears is and does, not from a pattern. Your angle: the object in the machine's name, drawn literally and well. Way of drawing: hatched mass. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    },
+    {
+      "variant": "v5",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "drawingLanguage": "edge-lit silhouette",
+      "inspiration": [
+        "P5",
+        "P12",
+        "P13",
+        "P14"
+      ],
+      "brief": "Start from what gears is and does, not from a pattern. Your angle: the mechanism that makes it happen: the moving parts, the thing in the hand. Way of drawing: edge-lit silhouette. Patterns that have worked for player machines (P5, P12, P13, P14) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "a cutaway of the object at work, so the inside explains it",
+      "pattern": "none",
+      "drawing_language": "cutaway section",
+      "subject": "A small gearbox with its front wall and lid cut away, the cut casing hatched in section, where driver A and follower B stand meshed on their shafts and B carries a twelve-hole index plate pinned at the scale's degrees.",
+      "controls": [
+        "ratio: wheel B's diameter and tooth count grow with the ratio (a twin of A at 1:1, three times A at 3:1), its shaft and bearing boss sliding right along the back wall to stay in mesh, inside a casing whose right wall moves with it (scale of B, with position).",
+        "teeth: wheel A's outline redraws with 3 to 16 teeth and B follows by the ratio, the module fixed so the pair grows and shrinks inside the box (shape).",
+        "mesh: wheel B slides back along its shaft as mesh falls, its face stepping off A's, and the teeth that no longer overlap (Euclidean order) lose their front-face edge, so at 0 B sits clear behind A (position, about 30 px of axial travel on screen).",
+        "scale: the pins in B's index plate move to the new scale's seven of twelve holes, the empty holes left as hairline rings (position/count of pins)."
+      ],
+      "reference": "library/theseus-tower/README.md",
+      "risks": "Busiest of the five: casing, bosses, two shafts, two wheels and the plate all carry lines, so the meshing tooth (the brightest edge) has to win against a lot of mid grey at 1:1. Index pins are about 7 px across, at the floor; seen from this camera the plate's holes foreshortening to ovals, and degree 0 needs a mark of its own (a longer slot) to read as the start of the scale without any text. Ratio at 3:1 makes B three times A: the box has to scale with it or B runs into the lid line; budget for the casing is static, but B's outline at 48 teeth is past one 64-point path, so B's teeth would be split across paths or coarsened. Mesh's axial slide is a 3D move and the device can't tilt a node, so B's slid positions are pre-drawn variants or a translation along the projected axis (it's straight, so translation is honest). Muted: B slides fully back off A, the meshing edge goes out."
+    },
+    {
+      "variant": "v2",
+      "angle": "the mark or trace the process leaves behind",
+      "pattern": "none",
+      "drawing_language": "exploded view",
+      "subject": "An exploded view of the gear pair with follower B lifted straight up off its arbor and washer, so the faces of both wheels show the grooves the run has scored on them: one short groove per mesh behind the tooth that played, at a radius set by the note it played.",
+      "controls": [
+        "ratio: wheel B grows or shrinks with the ratio and its grooves redistribute (two per tooth at 3:2, one per tooth at 1:1, three per A tooth at 3:1), the arbor and washer below sliding to stay under it (scale of B, plus count of grooves per tooth).",
+        "teeth: wheel A redraws with 3 to 16 teeth and the cycle lengthens, so the number of grooves on both faces goes from a handful to dozens (count).",
+        "mesh: teeth that slip score nothing, so their grooves drop off the faces in Euclidean order, evenly round both wheels, down to clean faces at 0 (count).",
+        "scale: every groove slides inward or outward to its note's new radius, the rhythm untouched, so the faces' rings of grooves re-step (position, radial)."
+      ],
+      "reference": "library/toro-blocks/README.md",
+      "risks": "Grooves are short 1.5 px arcs; on A's small web they're 3-4 px apart radially for neighbouring semitones, close to the floor, and on a foreshortened face (this camera is about 35 degrees up) the radial spread compresses by half, so A's grooves are the weakest read. At 16 teeth and 3:1 the cycle is 48 steps: 48 grooves on each wheel, 96 nodes, inside 256 but they'd need to be placed nodes, not path points. The exploded lift hides A's arbor and makes the meshing a matter of the dashed assembly line, so 'meshing' reads as 'goes here' rather than 'turning together'. The note answer: the newest groove brightens (the one brightest element) and the wheels turn a tooth. Muted: B lifts further and the newest groove goes out."
+    },
+    {
+      "variant": "v3",
+      "angle": "one detail at large scale, the rest implied by the frame's edge",
+      "pattern": "none",
+      "drawing_language": "single-weight contour",
+      "subject": "The point where the two wheels meet, drawn large in one weight of line: wheel A rising from the bottom edge, wheel B coming down from beyond the top, one of B's involute teeth sitting in A's gap at the pitch point, and A's rim notched at the scale's degrees.",
+      "controls": [
+        "ratio: B's rim flattens as the ratio rises (the same curve as A's at 1:1, nearly straight at 3:1) because its centre moves further off the top of the frame (shape: the curvature of B's arc).",
+        "teeth: with A's diameter fixed, fewer teeth are bigger teeth, so 3 to 16 teeth run from three huge teeth to a fine row, both wheels re-cut with the same module (shape and count).",
+        "mesh: teeth that don't engage are cut back to the root circle in Euclidean order, a flat land where a tooth was, round A and through the visible arc of B (shape).",
+        "scale: the notches on A's inner rim move to the new scale's seven of twelve positions, degree 0 straight up under the pitch point (position)."
+      ],
+      "reference": "library/theseus-tower/README.md (line art held to one subject); opxy/craft.md, Line weights",
+      "risks": "Simplest drawing and the calmest, but the frame shows only part of each wheel: B's centre is above the screen, so its tooth count and the ratio read from curvature and spacing, not from a whole wheel; at 1:1 and 3:2 the curvature difference is modest. The notched ring at A's rim sits mostly in view (A's centre is about 30 px above the bottom edge), so nine of twelve positions show; at 16 teeth the rim moves and the notches with it. Single weight means the brightest element is only a brighter colour on B's contact tooth, not a heavier line. Involute flanks are 16 points a tooth, so B's visible teeth fit in four 64-point paths only if the off-screen teeth are dropped. Muted: B lifts up and out of A's gap, the contact tooth goes grey."
+    },
+    {
+      "variant": "v4",
+      "angle": "the object in the machine's name, drawn literally and well",
+      "pattern": "none",
+      "drawing_language": "hatched mass",
+      "subject": "Two thick spur wheels on a low camera, meshed and lit from the upper left, their shaded flanks hatched in hairlines and their top faces left black, with B's web drilled through at the scale's seven of twelve positions.",
+      "controls": [
+        "ratio: B grows from A's twin at 1:1 to three times A at 3:1, its centre sliding back and right to stay in mesh (scale of B, with position).",
+        "teeth: A redraws with 3 to 16 teeth and B follows by the ratio, the faces and hatched flanks re-cut (shape).",
+        "mesh: teeth that don't engage are milled down to half the face width, their top faces stepping down so they visibly pass under the other wheel's teeth, in Euclidean order (shape: tooth height along the axis).",
+        "scale: B's drilled holes move to the new scale's positions; undrilled positions keep a small spot-face ring (position/count of holes)."
+      ],
+      "reference": "library/toro-blocks/README.md",
+      "risks": "The most literal and the most like a stock illustration of 'gears'; the hatching has to stay at 3.2 px spacing on flanks only a few px wide, so some flanks carry two or three lines and the hatch must be re-cut whenever a wheel turns (a moving fill, expensive); on the device the hatching would be static per tooth and the wheels turn by whole teeth. Holes at the scale's degrees sit on B's face, so their positions (not their count) carry the scale; seven drilled to five punched is the difference between scales of seven and five notes (pent shows two more blanks). The brightest edge is B's tooth in A's gap; it sits behind A's teeth and could be lost when A grows. Muted: B lifts off along its axis, its bright tooth goes out."
+    },
+    {
+      "variant": "v5",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette",
+      "subject": "The hand-cranked gear pair close up as black masses lit only along their upper-left edges, a crank arm and handle on driver A turning spoked follower B, whose twelve spokes stand for the semitones and catch the light at the scale's degrees.",
+      "controls": [
+        "ratio: B grows with the ratio, running off the right edge at 3:1, and turns slower against the crank (scale of B, with position).",
+        "teeth: A redraws with 3 to 16 teeth under the crank, B following by the ratio (shape).",
+        "mesh: teeth that slip lose their rim light and go dark against the black, in Euclidean order round both wheels (line brightness, with the tooth's tip pulled in to the root so it isn't only a shade change).",
+        "scale: B's spokes at the new scale's degrees catch the light (a 1.5 px rim), the others stay a dark hairline (which spokes are lit, by position round the wheel)."
+      ],
+      "reference": "library/theseus-tower/README.md",
+      "risks": "Silhouettes rely on rim light, so anything on the shadow side (lower right of every part) is a near-black hairline and the lower half of B is quiet by design; at 1:1 B's shadowed teeth almost vanish. Scale on spokes is the weakest mapping: a spoke per semitone is a convention, not mechanics, and a spoke's lit edge depends on its angle to the light, so as B turns, spokes on the shadow side lose their light whether they're in the scale or not; the spokes would need to be lit by membership, not by angle. The crank and handle are the brightest thing and answer every note (the handle advances a tooth's turn), which is right for 'the thing in the hand' but puts the brightest element on a part no control moves. Muted: the handle drops its light and the crank stops."
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.02,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.04,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.13,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-06T08:24:01"
+  },
+  "selection": {
+    "variant": "v4",
+    "reason": "Owner: v4 is the best option.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:35:29",
+    "angle": "the object in the machine's name, drawn literally and well",
+    "pattern": "none",
+    "drawing_language": "hatched mass",
+    "subject": "Two thick spur wheels on a low camera, meshed and lit from the upper left, their shaded flanks hatched in hairlines and their top faces left black, with B's web drilled through at the scale's seven of twelve positions.",
+    "controls": [
+      "ratio: B grows from A's twin at 1:1 to three times A at 3:1, its centre sliding back and right to stay in mesh (scale of B, with position).",
+      "teeth: A redraws with 3 to 16 teeth and B follows by the ratio, the faces and hatched flanks re-cut (shape).",
+      "mesh: teeth that don't engage are milled down to half the face width, their top faces stepping down so they visibly pass under the other wheel's teeth, in Euclidean order (shape: tooth height along the axis).",
+      "scale: B's drilled holes move to the new scale's positions; undrilled positions keep a small spot-face ring (position/count of holes)."
+    ],
+    "reference": "library/toro-blocks/README.md",
+    "risks": "The most literal and the most like a stock illustration of 'gears'; the hatching has to stay at 3.2 px spacing on flanks only a few px wide, so some flanks carry two or three lines and the hatch must be re-cut whenever a wheel turns (a moving fill, expensive); on the device the hatching would be static per tooth and the wheels turn by whole teeth. Holes at the scale's degrees sit on B's face, so their positions (not their count) carry the scale; seven drilled to five punched is the difference between scales of seven and five notes (pent shows two more blanks). The brightest edge is B's tooth in A's gap; it sits behind A's teeth and could be lost when A grows. Muted: B lifts off along its axis, its bright tooth goes out."
+  }
+}

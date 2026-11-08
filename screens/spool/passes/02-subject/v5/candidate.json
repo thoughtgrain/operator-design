@@ -1,0 +1,15 @@
+{
+  "variant": "v5",
+  "angle": "the material the sound acts on, seen close",
+  "pattern": "none",
+  "drawing_language": "hidden-line 3D",
+  "subject": "A spool on its side seen close, with a quarter of its winding cut away toward the camera so the thread shows in section: every turn a small bright round cut, layer on layer on the barrel, between two whole flanges.",
+  "controls": [
+    "wear: the outer layers' sections go from round and bright to flattened and hatched (worn thin, there but not sounding), from the outside in, 0 to all layers (count of worn sections).",
+    "wow: the barrel sits off-centre in the winding, so the layers crowd one cut face and thin on the other, an eccentric reel, 0 to 24 px offset (position of the barrel and bore).",
+    "length: the number of layers wound on the barrel, 3 to 9: a longer loop is more thread (count of section rows, with the outer surface moving out).",
+    "bias: how the turns pack: under-biased they're pressed tight into a hexagonal stack, over-biased they lie loose in square rows with gaps between them (position of the sections within each row)."
+  ],
+  "reference": "library/toro-blocks",
+  "risks": "Each section is its own small outline: ~330 at rest (326 counted), far beyond the 512-node limit's spirit and the ~20-changed-nodes redraw budget when wear or bias touches them; the device version needs whole rows as one mutable outline each (≤ 64 points per row) and fewer, larger sections. The sections are ~8 px across and touching, so at 1:1 the cut face reads as a mesh before it reads as thread; it may need a closer crop or larger thread. Hidden lines come from a depth buffer in the generator; on the device it's static artwork plus moved rows. Some facet edges break into sub-3 px fragments (lint legibility warnings)."
+}

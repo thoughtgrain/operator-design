@@ -1,0 +1,15 @@
+{
+  "variant": "v4",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "detailed line art",
+  "subject": "A hand bobbin winder on its base plate: two bearing posts, the spindle and its crank, a bobbin filling with thread, and the thread coming in from the left through a pair of tension discs on a sprung stud.",
+  "controls": [
+    "wear: loose turns and fibre ends stand off the bobbin's winding between the flanges, 0 to 14 of them, and the incoming thread goes from smooth to frayed (count).",
+    "wow: the crank's handle swings round the spindle, an uneven stroke drawn as the crank's resting angle, 0 to 40 degrees (rotation of the crank arm and handle about the spindle axis).",
+    "length: how full the bobbin is: the wound mass grows from the hub toward the flange rims, 24 px at its top edge (position of the winding outline and its turns).",
+    "bias: the tension nut screws along its stud: under-biased it's run in and the spring is short, over-biased it's backed off and the spring opens out, 26 px of travel (position of the nut, with the spring's turns spacing out)."
+  ],
+  "reference": "opxy/reference/ field-and-figure, library/theseus-tower",
+  "risks": "It's the busiest of the five: base, posts, spindle, crank, stud, discs, spring and bobbin. It stays legible at 1:1 because the parts are separate, but it's dense for the 40 % black floor (92 % black measured at rest) and costly in nodes. The crank's angle as wow is a stand-in: a hand crank's angle isn't what wow means, it just reads as 'the stroke'. The tension discs and nut are small (under 30 px), so bias's travel is short in absolute terms; it needs the full 26 px. The thread enters from off-frame top left, near the header line."
+}

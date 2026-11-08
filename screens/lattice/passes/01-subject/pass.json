@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-05T23:13:30",
   "focus": null,
   "subject": null,
@@ -202,5 +202,21 @@
     "problems": [],
     "checked": "2026-11-05T23:20:31"
   },
-  "selection": null
+  "selection": {
+    "variant": "v2",
+    "reason": "Pick 1 is good; add it.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T08:11:59",
+    "pattern": "P1",
+    "drawing_language": "hidden-line isometric",
+    "subject": "A metal sheet bolted into a frame, cut away in isometric with its mesh lines bent into the standing wave, a striker rod over one point, a stylus at another and a felt damper hanging above the edge.",
+    "controls": [
+      "size: count and scale, the mesh goes from 4 to 12 lines a side and the plate and frame grow about 1.5x in footprint.",
+      "tension: shape, the sheet's surface (mesh polylines) goes from a slack single dome to a taut, finer, inharmonic ripple.",
+      "damp: position, the felt damper drops from 40 px above the plate at 0 onto its dashed footprint at 100.",
+      "pickup: position, the stylus pin slides across the sheet from beside the striker to the far corner."
+    ],
+    "reference": "library/theseus-tower (line drawing, black bodies with grey outlines, one projection)",
+    "risks": "The bent mesh is a 3D surface: with 12 x 12 lines it needs mutable outlines well past the 4-path limit, so surface shape must come from pre-drawn variants or translated segments; tension may have to collapse to a few stepped surfaces. The striker head and damper are small (10 px) and could read as icons at 1:1. Grid lines at size 12 come within ~9 px, fine, but hidden-line over self-occluding ripples isn't modelled yet."
+  }
 }

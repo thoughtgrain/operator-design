@@ -1,0 +1,15 @@
+{
+  "variant": "v2",
+  "angle": "a cutaway of the object at work, so the inside explains it",
+  "pattern": "none",
+  "drawing_language": "single-weight contour",
+  "subject": "A singer's head cut down the middle mid-note: the tongue's bright dome shaping the vowel under the palate, the larynx low in the throat and breath rising through the airway.",
+  "controls": [
+    "vowel: shape, the tongue's bright dome moves from high at the back (u) through low and flat (a) to high at the front (i), its crest travelling about 30 px while the jaw and lips follow.",
+    "breath: count, short dashes of air along the airway from the trachea through the folds to the lips, 4 at 0 to 24 at 100.",
+    "throat: position, the larynx (thyroid outline and the vocal folds across the airway) slides 30 px down the throat as the tract lengthens.",
+    "glide: shape, a hatched sweep between the tongue and the oo tongue each note opens from, none at 5 ms and the whole sweep back to u at 2 s."
+  ],
+  "reference": "library/theseus-tower (line discipline, one bright subject over quiet structure)",
+  "risks": "A sagittal head section is the phonetics textbook figure, so it can tip into diagram; it has to stay a drawing with no labels. Single weight leaves hierarchy to grey, apart from the tongue's 2 px line. At vowel a the glide hatch is a thin band. Anatomy can read clinical rather than musical."
+}
