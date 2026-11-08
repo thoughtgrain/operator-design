@@ -82,13 +82,13 @@ Why: open-xy's ux.md asks that a control be seen as much as heard (Principles, a
 
 ## Phase 3 · Subject
 
-Write five candidate subjects, each in one sentence, each from its own angle on the machine's idea: the object in its name, the mechanism, the material, a scene, a cutaway. The patterns that fit the category (`categories.md`, `patterns.md`) can inspire a candidate, but none is required and none is copied: if the five could belong to any machine, they're wrong. This is a design pass, so it follows the iteration rule below: five variants, five different directions. For each, sketch in words what every control does to it. Pick one and say why.
+Design five candidate subjects and draw each one: a 480 × 220 rest frame at 1:1 (`vN/rest.svg`) with a one-sentence subject beside it. Five written ideas aren't a pass; the person picks from drawings. Each comes from its own angle on the machine's idea: the object in its name, the mechanism, the material, a scene, a cutaway. The patterns that fit the category (`categories.md`, `patterns.md`) can inspire a candidate, but none is required and none is copied: if the five could belong to any machine, they're wrong. This is a design pass, so it follows the iteration rule below: five variants, five different directions. For each, also say in words what every control does to it. Show the five drawings side by side and let the person pick.
 
 This is where I stop and ask if the person hasn't already chosen. The subject is the biggest creative decision and the hardest to change later.
 
 Name the way of drawing too (detailed line art, hidden-line 3D, a cutaway, an exploded view, bold closed outlines) and one or two references it should sit beside. No text in the drawing (`craft.md`, Text).
 
-**Gate:** five unique candidates recorded; one chosen subject, its angle (and a pattern only if one inspired it), one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
+**Gate:** five unique candidates drawn and recorded (each a linted rest frame with no text in the drawing); one chosen subject, its angle (and a pattern only if one inspired it), one drawing language with a reference, and a sentence per control saying what moves. Reject any candidate where a control has nothing to move, or where the screen reads as a dashboard of meters.
 
 ## Phase 4 · Map and budget
 

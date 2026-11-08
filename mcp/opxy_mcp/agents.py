@@ -135,8 +135,10 @@ def designer_brief(record: dict, direction: dict, pdir: Path) -> dict:
     r = role("design")
     out_dir = rel(pdir / direction["variant"])
     if record["kind"] == "subject":
-        task = (f"Write {out_dir}/candidate.json with keys variant, angle, drawing_language, subject, controls "
-                f"(list, one sentence per control in order), reference, risks, and pattern only if one inspired it (else \"none\").")
+        task = (f"Draw this variant: {out_dir}/rest.svg, a 480 × 220 rest frame from opxy/templates/frame.svg with the stock "
+                f"header kept, linted with zero errors and looked at at 1:1. Then write {out_dir}/candidate.json with keys "
+                f"variant, angle, drawing_language, subject, controls (list, one sentence per control in order), reference, "
+                f"risks, and pattern only if one inspired it (else \"none\"). A description without a drawing isn't a variant.")
         reply = "Reply with the candidate as one ```json block."
     else:
         subj = record.get("subject") or {}

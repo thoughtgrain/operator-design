@@ -158,6 +158,19 @@ SUBJECTS = [
 ]
 
 
+# Five clearly different, lint-clean drawings (theseus-tower frames, two-page header) stand in for drawn variants.
+DRAWN = ["c1-000.svg", "c1-050.svg", "c2-000.svg", "c2-050.svg", "c2-100.svg"]
+
+
+def draw_variants(pass_rel: str) -> None:
+    for i, name in enumerate(DRAWN, 1):
+        shutil.copy(ROOT / "library/theseus-tower/frames" / name, ROOT / pass_rel / f"v{i}" / "rest.svg")
+
+
+def submit_subjects(variants=SUBJECTS):
+    return call("design_pass_submit", {"machine_id": "passtest", "variants": variants, "two_page": True})
+
+
 class TestPasses(unittest.TestCase):
     def setUp(self):
         shutil.rmtree(ROOT / "screens/passtest", ignore_errors=True)
@@ -171,24 +184,36 @@ class TestPasses(unittest.TestCase):
         self.assertEqual(len(pairs), 5)
         self.assertEqual(len(s["agentBriefs"]), 5)
 
+    def test_subject_variants_must_be_drawn(self):
+        _, s = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        self.assertIn("drawn", s["fanOut"])
+        _, r = submit_subjects()
+        self.assertEqual(r["state"], "needs_revision")
+        self.assertTrue(any("missing" in p and "rest.svg" in p for p in r["problems"]), r["problems"])
+        draw_variants(s["pass"])
+        _, r = submit_subjects()
+        self.assertEqual(r["state"], "ready_for_pick", r["problems"])
+
     def test_subject_uniqueness_and_pick(self):
-        call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        _, s = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        draw_variants(s["pass"])
         err, text = call("design_pass_submit", {"machine_id": "passtest", "variants": SUBJECTS[:4]})
         self.assertTrue(err and "exactly 5" in text)
         dup = [dict(v) for v in SUBJECTS]
         dup[1] = {**SUBJECTS[0], "variant": "v2", "subject": SUBJECTS[0]["subject"] + " shape"}
-        _, r = call("design_pass_submit", {"machine_id": "passtest", "variants": dup})
+        _, r = submit_subjects(dup)
         self.assertEqual(r["state"], "needs_revision")
         err, _ = call("design_pass_select", {"machine_id": "passtest", "variant": "v1", "reason": "r", "chosen_by": "me"})
         self.assertTrue(err)
-        _, r = call("design_pass_submit", {"machine_id": "passtest", "variants": SUBJECTS})
+        _, r = submit_subjects()
         self.assertEqual(r["state"], "ready_for_pick")
         _, r = call("design_pass_select", {"machine_id": "passtest", "variant": "v3", "reason": "r", "chosen_by": "me"})
         self.assertEqual(r["selected"], "v3")
 
     def test_reject_closes_a_pass(self):
-        call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
-        call("design_pass_submit", {"machine_id": "passtest", "variants": SUBJECTS})
+        _, s = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        draw_variants(s["pass"])
+        submit_subjects()
         err, _ = call("design_pass_reject", {"machine_id": "passtest", "reason": "none fit", "chosen_by": "me"})
         self.assertFalse(err)
         err, text = call("design_pass_start", {"machine_id": "passtest", "kind": "frames"})
@@ -215,22 +240,22 @@ class TestPasses(unittest.TestCase):
 
     @unittest.skipUnless(HAS_RSVG, "rsvg-convert not installed")
     def test_frame_uniqueness(self):
-        call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
-        call("design_pass_submit", {"machine_id": "passtest", "variants": SUBJECTS})
+        _, s0 = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        draw_variants(s0["pass"])
+        submit_subjects()
         call("design_pass_select", {"machine_id": "passtest", "variant": "v1", "reason": "r", "chosen_by": "me"})
         _, s = call("design_pass_start", {"machine_id": "passtest", "kind": "frames"})
         self.assertEqual(len({d["composition"] for d in s["directions"]}), 5)
         self.assertEqual(len({d["camera"] for d in s["directions"]}), 5)
         p = ROOT / s["pass"]
         lib = ROOT / "library/theseus-tower/frames"
-        srcs = [lib / "rest.svg", lib / "c1-100.svg", ROOT / "screens/toro/frames/rest.svg",
-                ROOT / "screens/toro/frames/c2-100.svg", ROOT / "opxy/templates/frame.svg"]
+        srcs = [lib / "rest.svg", lib / "c1-000.svg", lib / "c3-100.svg", lib / "c7-100.svg", lib / "c2-100.svg"]
         for i, src in enumerate(srcs, 1):
             shutil.copy(src, p / f"v{i}" / "rest.svg")
         _, r = call("design_pass_submit", {"machine_id": "passtest", "two_page": True})
-        self.assertEqual(r["state"], "needs_revision")  # toro rest and c2-100 are near-identical
-        self.assertTrue(any("v3 and v4" in x for x in r["problems"]))
-        shutil.copy(lib / "c3-000.svg", p / "v4" / "rest.svg")
+        self.assertEqual(r["state"], "needs_revision")  # c3-100 and c7-100 differ on ~2.4% of the body
+        self.assertTrue(any("v3 and v4" in x for x in r["problems"]), r["problems"])
+        shutil.copy(lib / "c2-000.svg", p / "v4" / "rest.svg")
         _, r = call("design_pass_submit", {"machine_id": "passtest", "two_page": True})
         bad = [x for x in r["pairs"] if not x["ok"]]
         self.assertEqual(r["state"] == "ready_for_pick", not bad)

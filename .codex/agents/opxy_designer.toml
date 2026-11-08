@@ -10,7 +10,7 @@ What you get: the machine, its category, the pass kind (subject, frames or revis
 
 What you hand back:
 
-- **Subject pass:** write `candidate.json` into your own variant folder with `variant`, `angle`, `pattern` (only if one inspired it, else `none`), `drawing_language`, `subject` (one sentence), `controls` (one sentence per control saying what moves, in control order), `reference` (a library entry or reference file it sits beside) and `risks`. Your direction is an angle on this machine's own idea, not a pattern to fill in. If what you draw could be any machine's screen, start again.
+- **Subject pass:** draw your variant first: `rest.svg`, a 480 × 220 rest frame from `opxy/templates/frame.svg`, linted with zero errors and no text in the drawing, looked at at 1:1. A description isn't a variant. Then write `candidate.json` into the same folder with `variant`, `angle`, `pattern` (only if one inspired it, else `none`), `drawing_language`, `subject` (one sentence), `controls` (one sentence per control saying what moves, in control order), `reference` (a library entry or reference file it sits beside) and `risks`. Your direction is an angle on this machine's own idea, not a pattern to fill in. If what you draw could be any machine's screen, start again.
 - **Frames or revision pass:** write `rest.svg` into your own variant folder, 480 × 220, from `opxy/templates/frame.svg`, following every authoring rule in `constraints.md`. Run `lint_frames` (or `python3 opxy/tools/lint_frame.py`) and fix every error before you stop. Look at it with `render_frame` at 1:1.
 
 Rules that don't bend:

@@ -117,8 +117,11 @@ def design_pass_start(machine_id: str, kind: str, category: str | None = None, f
     write_json(pdir / "pass.json", record)
     briefs = [agents.designer_brief(record, v, pdir) for v in directions]
     result = {"pass": rel(pdir), "kind": kind, "category": cat, "directions": directions,
-              "fanOut": "Run five designer agents in parallel, one per direction (Claude Code: the opxy-designer subagent; "
-                        "Codex: opxy_designer). Each writes only into its own v<N>/ folder. Then call design_pass_submit.",
+              "fanOut": "Now design: run five designer agents in parallel, one per direction (Claude Code: the opxy-designer "
+                        "subagent; Codex: opxy_designer), or work through the five yourself. Each variant is drawn, not "
+                        "proposed: a 480 × 220 rest.svg in its own v<N>/ folder (plus candidate.json for a subject pass), "
+                        "linted at 1:1. Don't stop to show the directions or ask which to draw; draw all five, then call "
+                        "design_pass_submit and show the person the five drawings side by side.",
               "agentBriefs": briefs}
     if run:
         result["endpointRuns"] = agents.run_designers(record, pdir, briefs)
@@ -151,6 +154,42 @@ def _latest_open(d: Path, pass_name: str | None) -> Path:
     if not passes:
         raise ToolError("no passes yet; run design_pass_start")
     return passes[-1]
+
+
+def _check_drawn(pdir: Path, ids: list[str], two_page: bool, definition: str | None, pairs: list[dict], s: dict,
+                 subject: bool) -> list[str]:
+    """Every variant in a pass is a drawn 480 × 220 frame, not a description: rest.svg must exist, lint without
+    errors, carry no text below the header, and differ from the others on enough of the body."""
+    problems: list[str] = []
+    frames = [pdir / i / "rest.svg" for i in ids]
+    missing = [f for f in frames if not f.exists()]
+    for f in missing:
+        problems.append(f"{f.parent.name}: missing {rel(f)}" + (" (a subject variant is drawn, not just described: draw "
+                                                                 "its rest frame at 1:1 from opxy/templates/frame.svg)" if subject else ""))
+    if missing:
+        return problems
+    from .screens import lint_frames
+    lum = {}
+    for f in frames:
+        lint = lint_frames([str(f)], definition=definition, two_page=two_page)
+        if lint["errors"]:
+            problems.append(f"{f.parent.name}: {lint['errors']} lint error(s); first: {lint['byRule'][0]['example']}")
+        text = sum(g["count"] for g in lint["byRule"] if g["rule"] == "text-in-drawing")
+        if text:
+            problems.append(f"{f.parent.name}: {text} text element(s) in the drawing; names and values live in the header")
+        try:
+            lum[f.parent.name] = runner.luminance(f)
+        except Exception as exc:  # no renderer: the pixel check is skipped, the rest still holds
+            pairs.append({"note": f"pixel check skipped: {exc}"})
+            return problems
+    top = 38 if two_page else 20
+    for a, b in itertools.combinations(sorted(lum), 2):
+        pct = runner.body_diff_pct(lum[a], lum[b], top)
+        ok = pct >= s["minPairwiseBodyDiffPct"]
+        pairs.append({"pair": f"{a}–{b}", "bodyDiffPct": round(pct, 2), "ok": ok})
+        if not ok:
+            problems.append(f"{a} and {b} differ on only {pct:.2f}% of the body (need ≥ {s['minPairwiseBodyDiffPct']}%)")
+    return problems
 
 
 def design_pass_submit(machine_id: str, variants: list[dict] | None = None, pass_name: str | None = None,
@@ -194,32 +233,16 @@ def design_pass_submit(machine_id: str, variants: list[dict] | None = None, pass
                           "subjectOverlap": round(ov, 2), "ok": ok})
             if not ok:
                 problems.append(f"{a['variant']} and {b['variant']} are too alike (need to differ in two of angle, language, subject)")
+        problems += _check_drawn(pdir, [v["variant"] for v in variants], two_page, definition, pairs, s, subject=True)
         for v in variants:
             (pdir / v["variant"]).mkdir(exist_ok=True)
             write_json(pdir / v["variant"] / "candidate.json", v)
+            if (pdir / v["variant"] / "rest.svg").exists():
+                v["frame"] = rel(pdir / v["variant"] / "rest.svg")
         rec["variants"] = variants
     else:
-        frames = []
-        for x in rec["directions"]:
-            f = pdir / x["variant"] / "rest.svg"
-            if not f.exists():
-                problems.append(f"{x['variant']}: missing {rel(f)}")
-            frames.append(f)
-        if not problems:
-            from .screens import lint_frames
-            lum = {}
-            for f in frames:
-                lint = lint_frames([str(f)], definition=definition, two_page=two_page)
-                if lint["errors"]:
-                    problems.append(f"{f.parent.name}: {lint['errors']} lint error(s); first: {lint['byRule'][0]['example']}")
-                lum[f.parent.name] = runner.luminance(f)
-            top = 38 if two_page else 20
-            for a, b in itertools.combinations(sorted(lum), 2):
-                pct = runner.body_diff_pct(lum[a], lum[b], top)
-                ok = pct >= s["minPairwiseBodyDiffPct"]
-                pairs.append({"pair": f"{a}–{b}", "bodyDiffPct": round(pct, 2), "ok": ok})
-                if not ok:
-                    problems.append(f"{a} and {b} differ on only {pct:.2f}% of the body (need ≥ {s['minPairwiseBodyDiffPct']}%)")
+        frames = [pdir / x["variant"] / "rest.svg" for x in rec["directions"]]
+        problems += _check_drawn(pdir, [x["variant"] for x in rec["directions"]], two_page, definition, pairs, s, subject=False)
         rec["variants"] = [{"variant": f.parent.name, "frame": rel(f)} for f in frames if f.exists()]
         if variants:  # optional notes per variant
             notes = {v.get("variant"): v for v in variants}
