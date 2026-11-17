@@ -394,7 +394,11 @@ def poll(timeout: float = 120) -> dict:
     return {"events": events, "url": _running.url(),
             "next": ("Nothing yet. Poll again if you're waiting for the person." if not events else
                      "Act on these in order. A pick or rejection is already recorded in pass.json; read it back to the "
-                     "person in one line and follow its next step. A message is the person's note: answer it.")}
+                     "person in one line and follow its next step. A message is the person's note: answer it. When a "
+                     "rejection or a note calls for new work, open a new pass with design_pass_start (the reason or note, "
+                     "and its verb, as focus) and fan out: one opxy-designer agent per direction, all five started at "
+                     "once, each drawing only into its own v<N>/. Never draw the five yourself in sequence. Each variant "
+                     "shows up on the person's board as its frame lands; submit when all five are in.")}
 
 
 def close_bench() -> dict:
