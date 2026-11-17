@@ -1,0 +1,90 @@
+{
+  "machine": "iris",
+  "category": "engine",
+  "kind": "revision",
+  "number": 3,
+  "state": "ready_for_pick",
+  "created": "2026-11-17T17:10:13",
+  "focus": "Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.",
+  "subject": {
+    "variant": "v3",
+    "reason": "Calmest and most OP-XY: the whole bow centred with black all round, and the cycle density rising inward keeps four nested arcs from reading as a target.",
+    "chosenBy": "owner",
+    "at": "2026-11-17T15:12:47",
+    "frame": "screens/iris/passes/02-frames/v3/rest.svg"
+  },
+  "directions": [
+    {
+      "variant": "v1",
+      "composition": "column-affine (P7)",
+      "camera": "top-down plan",
+      "emphasis": "brightest element on the most-played control's part",
+      "brief": "column-affine (P7); top-down plan; brightest element on the most-played control's part. Focus of this pass: Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.."
+    },
+    {
+      "variant": "v2",
+      "composition": "off-axis diagonal",
+      "camera": "section cut",
+      "emphasis": "brightest element at the sound source",
+      "brief": "off-axis diagonal; section cut; brightest element at the sound source. Focus of this pass: Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.."
+    },
+    {
+      "variant": "v3",
+      "composition": "full-bleed field",
+      "camera": "three-quarter isometric",
+      "emphasis": "negative space carries the subject",
+      "brief": "full-bleed field; three-quarter isometric; negative space carries the subject. Focus of this pass: Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.."
+    },
+    {
+      "variant": "v4",
+      "composition": "centred hero",
+      "camera": "low angle",
+      "emphasis": "brightest element where the note lands",
+      "brief": "centred hero; low angle; brightest element where the note lands. Focus of this pass: Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.."
+    },
+    {
+      "variant": "v5",
+      "composition": "low horizon",
+      "camera": "front elevation",
+      "emphasis": "density gradient carries the subject",
+      "brief": "low horizon; front elevation; density gradient carries the subject. Focus of this pass: Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "frame": "screens/iris/passes/03-revision/v1/rest.svg",
+      "ring_response": "slide: blended rings slide onto the bright line by their mix weight (move only)"
+    },
+    {
+      "variant": "v2",
+      "frame": "screens/iris/passes/03-revision/v2/rest.svg",
+      "ring_response": "swell: blended rings at full wave height, others shrink to a ripple (three pre-drawn heights)"
+    },
+    {
+      "variant": "v3",
+      "frame": "screens/iris/passes/03-revision/v3/rest.svg",
+      "ring_response": "slide + swell"
+    },
+    {
+      "variant": "v4",
+      "frame": "screens/iris/passes/03-revision/v4/rest.svg",
+      "ring_response": "weight: blended rings heavier and brighter, others hairlines (three pre-drawn widths)"
+    },
+    {
+      "variant": "v5",
+      "frame": "screens/iris/passes/03-revision/v5/rest.svg",
+      "ring_response": "gather: every ring with a share of the blend lands on the bright line; rings out of it are pushed away"
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "note": "pixel check skipped: rsvg-convert not found (librsvg); install it to render SVG frames, or pass PNG captures"
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-17T17:11:33"
+  },
+  "selection": null
+}
