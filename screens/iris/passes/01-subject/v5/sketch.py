@@ -29,8 +29,8 @@ GROUND = "#323232"
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2
 
 # ---- camera --------------------------------------------------------------
-TARGET = (150.0, 45.0, 10.0)
-DIST, AZ, EL = 620.0, math.radians(-17), math.radians(27)
+TARGET = (165.0, 60.0, 20.0)
+DIST, AZ, EL = 1300.0, math.radians(-14), math.radians(31)
 CAM = (TARGET[0] + DIST * math.cos(EL) * math.sin(AZ),
        TARGET[1] - DIST * math.cos(EL) * math.cos(AZ),
        TARGET[2] + DIST * math.sin(EL))
@@ -50,7 +50,7 @@ RIGHT = _norm(_cross(FWD, (0, 0, 1)))
 UP = _cross(RIGHT, FWD)
 FOCAL = 1.0
 # screen fit (pixels per unit of the image plane, and where the target lands)
-K, CX, CY = 640.0, 236.0, 128.0
+K, CX, CY = 1480.0, 246.0, 128.0
 
 
 def proj(p):
@@ -139,8 +139,8 @@ entry = ((apex[0] + bl[0]) / 2, (apex[1] + bl[1]) / 2)
 exitp = ((apex[0] + br[0]) / 2, (apex[1] + br[1]) / 2)
 
 BASE_DEV = math.radians(9)
-ANG = [BASE_DEV + math.radians(6.5) * i for i in range(4)]   # sine .. saw
-XC = 300.0                                                     # slit plane
+ANG = [BASE_DEV + math.radians(7.5) * i for i in range(4)]   # sine .. saw
+XC = 290.0                                                     # slit plane
 BENCH_Y = (-70.0, 190.0)
 
 
@@ -154,7 +154,7 @@ SPACING = (ray_y(3, XC) - ray_y(0, XC)) / 3
 slit_c = ray_y(0, XC) + P["morph"] * 3 * SPACING
 slit_h = SPACING * (0.5 + 2.6 * P["overlap"])
 JAW = 46.0
-JAW_Z = 74.0
+JAW_Z = 58.0
 JAW_T = 5.0
 
 
@@ -175,8 +175,8 @@ def wave(i, ph):
     return 1 - 2 * f  # saw
 
 
-AMP = 6.0
-LAM0 = 30.0
+AMP = 7.0
+LAM0 = 38.0
 
 
 def ray_points(i, x0, x1):
@@ -227,7 +227,7 @@ els.append('<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="no
 X0, X1 = -400.0, 900.0
 poly([(X0, BENCH_Y[0], 0), (X1, BENCH_Y[0], 0), (X1, BENCH_Y[0], -16), (X0, BENCH_Y[0], -16)],
      "#000000", 0.01, fill="#000000", close=True)
-for yy in (-30.0, 20.0, 75.0, 135.0):
+for yy in (-20.0, 150.0):
     poly([(X0, yy, 0), (X1, yy, 0)], GROUND, HAIR)
 poly([(X0, BENCH_Y[0], -16), (X1, BENCH_Y[0], -16)], G5, HAIR)
 poly([(X0, BENCH_Y[0], 0), (X1, BENCH_Y[0], 0)], G4, LINE)

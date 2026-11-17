@@ -1,6 +1,6 @@
 # Iris · screen brief
 
-Iris is named for the goddess of the rainbow, and for the coloured ring in the eye. The person asked for a new engine that morphs and overlaps four waveforms, with a rainbow as the starting idea for the screen.
+Iris is named for the goddess of the rainbow, and for the coloured ring in the eye. The person asked for a new engine that morphs and overlaps four waveforms, with a rainbow as the starting idea for the screen, in grey.
 
 ## 0 · Screen or stock page?
 
@@ -14,7 +14,7 @@ Iris is named for the goddess of the rainbow, and for the coloured ring in the e
 | Machine id | `iris` |
 | Kind | synth |
 | Category | engine |
-| Colour | grey (default). This harness's MCP config doesn't set `OPXY_COLOUR=allow`, so the rainbow is a rainbow by its form (nested bands), not its hues. A coloured version is the person's call, made in the harness config; even then the red band stays out, because red belongs to stock's recording and parameter locks. |
+| Colour | grey, confirmed by the owner (2026-11-17: "we don't want color"). The rainbow is a rainbow by its form (bands, arcs, order), never its hues, so no grayscale variant or colour role table is needed. |
 | Sounds like | A single oscillator voice that scans from a pure sine through triangle and square to a bright saw. Open Overlap and the neighbouring waves sound together; add Spread and the four detune apart into a slow, shimmering chorus. |
 | Controls | 6 (two pages, `"press": "page"`) |
 | Control source | new (the DSP is written for this machine: `operators-xy/machines/iris/engine.cpp`) |
