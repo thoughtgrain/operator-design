@@ -93,7 +93,9 @@ def preview_brief(machine_id: str, audio: str = "ask", shows: list[str] | None =
         "score": score or "your choice; write it down in the notes file so the video can be rebuilt",
         "storyboard": storyboard,
         "frames": {"dir": rel(frames_dir), "controls": controls,
-                   "fromMotion": rel(motion), "rule": "draw in-between frames from the same generator as the stills; never hand-patch"},
+                   "fromMotion": rel(motion), "rule": "draw in-between frames from the same generator as the stills; never hand-patch",
+                   "rasterise": "SVG to PNG with the renderer python3 opxy/tools/raster.py prints (opxy-raster if built, "
+                                "else rsvg-convert); don't hard-code rsvg-convert"},
         "video": {"size": "480 × 220 (1:1). A 960 × 440 copy is fine for sharing if scaled nearest-neighbour, never smoothed",
                   "fps": 30, "codec": "H.264, yuv420p, -preset veryfast (ffmpeg -crf 18)",
                   "background": "#000000", "header": "the stock header as drawn in the frames' preview_* groups"},

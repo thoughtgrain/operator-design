@@ -8,7 +8,9 @@ It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM 
 
 ## Set up the MCP server
 
-Everything runs on Python 3.10+ with no packages to install. The one outside tool is `rsvg-convert`, which renders frames to PNG so agents can look at them (macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`).
+The full walkthrough (install, each harness, every setting, the bench and MIDI) is in [`docs/setup.md`](docs/setup.md). The short version follows.
+
+Everything runs on Python 3.10+ with no packages to install. Rendering frames to PNG, so agents can look at them and the uniqueness check can measure them, needs one renderer: either build the Rust one in `crates/opxy-raster` (`cargo build --release`; no system libraries, the same pixels everywhere) or install `rsvg-convert` (macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`). Rust is optional; the tools use whichever they find.
 
 Clone the repo first, then pick your client. Every setup command merges into your existing config (other servers stay put), saves the old file as `.bak`, and takes `--dry-run` if you want to see what it'll write first.
 
@@ -55,9 +57,11 @@ ollmcp -j ~/.config/ollmcp/mcp-servers/operator-design.json -m qwen3:8b
 python3 mcp/setup.py print
 ```
 
-**Optional settings.** Two flags work with any of the commands above:
+**Optional settings.** These flags work with any of the commands above:
 
 - `--colour` lets that client design in colour. Grey is the default because it's the OP-XY's own look; colour is an override you set per client, here, and an agent can't switch it on. Red stays off-limits either way.
+- `--pick-preview after-pick` saves tokens: the five variants of a pass come without knob sweeps, and the knobs (and MIDI) arrive with the picked variant's frames instead. The default, `sweep`, lets you play all five before you pick. `--sweep-steps 5` draws each control at five positions instead of three.
+- `--shift-stack` shows Shift as open-xy's stacked header rows instead of swapping the header's four slots.
 - `--sdk ../open-xy` points the server at a local checkout of [open-xy](https://github.com/etcetc000/open-xy), so it can run open-xy's own `sdk.py test` on a finished machine.
 
 **Check it worked.** This lists what's in place for each client; a missing client is fine if you don't use it.
@@ -89,6 +93,48 @@ What happens, in order:
 7. **Review and handoff.** A review checklist with evidence, then `handoff.md` for whoever writes `display.cpp`. Anything only a real device can prove stays marked pending.
 
 If a review sends something back, the fix is another pass of five, never a quick patch to one frame.
+
+### Pick on the bench, and play the screen
+
+> Open the bench for `beacon`.
+
+The agent starts a local page and gives you its URL (or run `python3 opxy/tools/bench.py beacon` yourself). There you see the pass's five variants at 1:1, side by side or flipped in place, through a device-pixel or arm's-length lens if you want; you pick one, or turn the pass down, with your name and a reason, and the agent hears about it. In **Play**, the machine's controls are knobs: drag them, use the arrow keys, or plug in a MIDI controller (Chrome or Edge) and turn real ones, with notes from it holding the screen's note state. Machines with a `bench.py` draw every knob position live from their own generator. During a pass, each of the five variants comes with a short knob sweep, so a knob turned on your controller moves all five cards on the board at once and you choose with the interaction in hand, not just the still. If you'd rather save that work until after the pick, set `OPXY_PICK_PREVIEW=after-pick` (or ask for it on one pass); the knobs and MIDI then stay hidden until there are frames to move. The full tour is in [`mcp/README.md`](mcp/README.md#the-bench), and MIDI binding (auto-bind, learn, relative encoders, the OP-XY as its own controller) is in [`docs/setup.md`](docs/setup.md#5-midi).
+
+#### What it looks like
+
+The bench screenshots are all one real pass: `gears`, a player whose subject is two meshed spur wheels, on its five-variant frames pass with knob sweeps. Frames are at 1:1 (the screenshots are at 2× pixel density, so they stay sharp on a high-DPI screen).
+
+![Board: gears' five frame variants at 1:1, each with its direction, pairwise difference, sweep, lint result and Pick button](docs/images/bench-board.png)
+
+**Board.** Five directions on one subject: low horizon, column-affine, off-axis diagonal, full-bleed plan, section cut. Under each card are its direction, how far it differs from each of the others (Δ, share of the body), its knob sweep, its lint count, and the risks its designer named. **Pick vN…** records your choice with your name and a reason; **None of these…** turns the pass down.
+
+![The five variants at rest](docs/images/bench-sweep-rest.png)
+![The same five with Ratio turned to 3:1: every card redraws](docs/images/bench-sweep-ratio.png)
+
+**One knob, five answers.** The row at rest, then after one turn of **Ratio** to 3:1. Every card follows the same knob, so a MIDI controller shows all five designs answering the same twist at once.
+
+![Play: variant v4 with Teeth turned to 16, four knobs, and the v1–v5 switch](docs/images/bench-play.png)
+
+**Play.** The definition's controls as knobs (mouse, arrow keys or MIDI), a held note, and `1`–`5` to swap variants without losing the knob positions. Here v4 with **Teeth** at 16.
+
+![Cycle through the device lens: v3 rasterised at 480 × 220 and shown pixel for pixel](docs/images/bench-cycle.png)
+
+**Cycle, device lens.** One variant at a time in the same spot, rasterised at the panel's real resolution, which takes away a high-DPI screen's flattery.
+
+#### Generated frames
+
+Contact sheets the tools wrote (`python3 opxy/tools/contact_sheet.py <folder> --out sheet.svg --png`): rest, playing, and each control at 0, 50 and 100 with the others at default.
+
+![gears v4's knob sweep as a contact sheet](docs/images/gears-v4-sweep.png)
+
+*`gears` v4: the sweep `design_pass_submit` drew from the variant's `bench.py` before the pick.*
+
+| | |
+| --- | --- |
+| ![toro blocks contact sheet](docs/images/toro-blocks-sweep.png) | ![silt contact sheet](screens/silt/frames/contact.png) |
+| `toro`: the blocks drawing, eight controls across two header pages | `silt`: grains settling in a bowl |
+| ![spool contact sheet](screens/spool/frames/contact.png) | ![lichen contact sheet](screens/lichen/frames/contact.png) |
+| `spool`: a loop of tape read pass after pass as it wears | `lichen`: a colony spreading across a lattice of scale degrees |
 
 ### Audit a screen
 
@@ -151,6 +197,7 @@ operators/
 │   ├── templates/                 ← brief and starter frame
 │   ├── tools/                     ← frame linter and contact-sheet builder (stdlib Python)
 │   └── reference/                 ← annotated reference screens
+├── crates/opxy-raster/            ← optional Rust renderer for frames (resvg); the tools fall back to rsvg-convert
 ├── screens/                       ← work in progress, one folder per machine
 └── library/                       ← audited screens that met the guidelines, kept as references
 ```

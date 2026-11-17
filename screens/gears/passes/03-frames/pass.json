@@ -1,0 +1,217 @@
+{
+  "machine": "gears",
+  "category": "player",
+  "kind": "frames",
+  "number": 3,
+  "state": "ready_for_pick",
+  "created": "2026-11-17T15:08:07",
+  "focus": null,
+  "subject": {
+    "variant": "v4",
+    "reason": "Owner: v4 is the best option.",
+    "chosenBy": "Brian Hinton",
+    "at": "2026-11-06T12:35:29",
+    "angle": "the object in the machine's name, drawn literally and well",
+    "pattern": "none",
+    "drawing_language": "hatched mass",
+    "subject": "Two thick spur wheels on a low camera, meshed and lit from the upper left, their shaded flanks hatched in hairlines and their top faces left black, with B's web drilled through at the scale's seven of twelve positions.",
+    "controls": [
+      "ratio: B grows from A's twin at 1:1 to three times A at 3:1, its centre sliding back and right to stay in mesh (scale of B, with position).",
+      "teeth: A redraws with 3 to 16 teeth and B follows by the ratio, the faces and hatched flanks re-cut (shape).",
+      "mesh: teeth that don't engage are milled down to half the face width, their top faces stepping down so they visibly pass under the other wheel's teeth, in Euclidean order (shape: tooth height along the axis).",
+      "scale: B's drilled holes move to the new scale's positions; undrilled positions keep a small spot-face ring (position/count of holes)."
+    ],
+    "reference": "library/toro-blocks/README.md",
+    "risks": "The most literal and the most like a stock illustration of 'gears'; the hatching has to stay at 3.2 px spacing on flanks only a few px wide, so some flanks carry two or three lines and the hatch must be re-cut whenever a wheel turns (a moving fill, expensive); on the device the hatching would be static per tooth and the wheels turn by whole teeth. Holes at the scale's degrees sit on B's face, so their positions (not their count) carry the scale; seven drilled to five punched is the difference between scales of seven and five notes (pent shows two more blanks). The brightest edge is B's tooth in A's gap; it sits behind A's teeth and could be lost when A grows. Muted: B lifts off along its axis, its bright tooth goes out."
+  },
+  "directions": [
+    {
+      "variant": "v1",
+      "composition": "low horizon",
+      "camera": "three-quarter isometric",
+      "emphasis": "brightest element where the note lands",
+      "brief": "low horizon; three-quarter isometric; brightest element where the note lands."
+    },
+    {
+      "variant": "v2",
+      "composition": "column-affine (P7)",
+      "camera": "low angle",
+      "emphasis": "density gradient carries the subject",
+      "brief": "column-affine (P7); low angle; density gradient carries the subject."
+    },
+    {
+      "variant": "v3",
+      "composition": "off-axis diagonal",
+      "camera": "front elevation",
+      "emphasis": "brightest element on the most-played control's part",
+      "brief": "off-axis diagonal; front elevation; brightest element on the most-played control's part."
+    },
+    {
+      "variant": "v4",
+      "composition": "full-bleed field",
+      "camera": "top-down plan",
+      "emphasis": "brightest element at the sound source",
+      "brief": "full-bleed field; top-down plan; brightest element at the sound source."
+    },
+    {
+      "variant": "v5",
+      "composition": "centred hero",
+      "camera": "section cut",
+      "emphasis": "negative space carries the subject",
+      "brief": "centred hero; section cut; negative space carries the subject."
+    }
+  ],
+  "variants": [
+    {
+      "variant": "v1",
+      "frame": "screens/gears/passes/03-frames/v1/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "At 16 teeth or 3:1 the note's bright pinch at the mesh gets small and faint at 1:1.",
+        "Ratios that don't divide the tooth count round B's teeth, so the drawn ratio is approximate."
+      ]
+    },
+    {
+      "variant": "v2",
+      "frame": "screens/gears/passes/03-frames/v2/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "Column affinity breaks at the ratio ends: B's drilled web leaves the scale column at 1:1 and 3:1.",
+        "Playing reads only through hatch density (subtle at 1:1); teeth 3 is degenerate."
+      ]
+    },
+    {
+      "variant": "v3",
+      "frame": "screens/gears/passes/03-frames/v3/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "While playing, A's bright tooth edges draw over B's face where they overlap (not strict hidden-line).",
+        "Teeth 3 gives star-like wheels; 3:1 with 16 teeth adds small-part legibility warnings."
+      ]
+    },
+    {
+      "variant": "v4",
+      "frame": "screens/gears/passes/03-frames/v4/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "Mesh mills only A, and from straight above a milled tooth shows only by weight and shadow: quiet at 50%.",
+        "Playing is mostly a quarter-tooth turn; teeth 3 draws three- and four-lobed stars."
+      ]
+    },
+    {
+      "variant": "v5",
+      "frame": "screens/gears/passes/03-frames/v5/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "The section cut hides half the scale ring: maj looks like mix, min like dor.",
+        "3:1 pushes the pair off centre, against 'centred hero'; teeth 3 only just reads as gears."
+      ]
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "bodyDiffPct": 20.49,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "bodyDiffPct": 17.56,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "bodyDiffPct": 20.72,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "bodyDiffPct": 16.16,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "bodyDiffPct": 19.87,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "bodyDiffPct": 22.65,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "bodyDiffPct": 18.27,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "bodyDiffPct": 20.52,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "bodyDiffPct": 16.3,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "bodyDiffPct": 19.28,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-17T17:08:58"
+  },
+  "selection": null,
+  "preview": {
+    "mode": "sweep",
+    "steps": [
+      0,
+      50,
+      100
+    ],
+    "set": "default"
+  }
+}

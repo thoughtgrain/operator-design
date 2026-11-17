@@ -4,7 +4,7 @@
 open-xy's ux.md (Before you submit) asks for a contact sheet of every control at 0, 50 and 100, judged at
 1:1. This lays frames out as one row per control (c<N>-000/050/100), with
 rest and playing frames on the first row, each at exactly 480 x 220, labelled
-underneath. Output is SVG; if rsvg-convert is installed, a PNG at 1:1 too.
+underneath. Output is SVG; if a renderer is found (raster.py), a PNG at 1:1 too.
 
 Usage:
     python3 opxy/tools/contact_sheet.py FRAMES_DIR --out contact.svg [--png]
@@ -15,11 +15,13 @@ from __future__ import annotations
 
 import argparse
 import re
-import shutil
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import raster  # noqa: E402  (beside this file)
 
 W, H = 480, 220
 GAP, LABEL = 16, 18
@@ -96,7 +98,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Tile 480 × 220 frames into a 1:1 contact sheet.")
     ap.add_argument("frames", type=Path, help="directory of frame SVGs")
     ap.add_argument("--out", type=Path, required=True, help="output SVG path")
-    ap.add_argument("--png", action="store_true", help="also render a 1:1 PNG (needs rsvg-convert)")
+    ap.add_argument("--png", action="store_true", help="also render a 1:1 PNG (needs opxy-raster or rsvg-convert)")
     args = ap.parse_args(argv)
     try:
         rows = collect(args.frames)
@@ -108,9 +110,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(f"wrote {args.out} ({sum(len(r) for r in rows)} frames, {len(rows)} rows)")
     if args.png:
-        tool = shutil.which("rsvg-convert")
+        tool = raster.find()
         if not tool:
-            print("contact_sheet: rsvg-convert not found; skipped PNG", file=sys.stderr)
+            print(f"contact_sheet: {raster.HINT}; skipped PNG", file=sys.stderr)
             return 0
         png = args.out.with_suffix(".png")
         result = subprocess.run([tool, "-o", str(png), str(args.out)], capture_output=True, text=True)

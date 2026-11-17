@@ -127,6 +127,27 @@ def shift_policy() -> dict:
                       "Shift titles and values in place of its own (don't pass the row to page_header, which would stack it)"]}
 
 
+PREVIEW_MODES = ("sweep", "after-pick")
+PREVIEW_OFF = ("after-pick", "after", "off", "wait", "later", "0", "false", "no")
+
+
+def pick_preview(override: str | None = None) -> dict:
+    """Whether a pass's five variants come with knob sweeps the person can play before they pick.
+
+    sweep (default): each designer also writes bench.py, and design_pass_submit draws c<N>-000/050/100 + playing
+    from it, so the knobs (and MIDI) move every variant on the bench. after-pick: no sweeps; the knobs arrive with the
+    picked variant's frame set. That saves the generator work on four variants that won't be picked.
+    OPXY_PICK_PREVIEW sets the default in the harness's MCP config; a pass can override it at design_pass_start,
+    because this is a cost choice, not part of the OP-XY's look. OPXY_PICK_PREVIEW_STEPS=5 draws 0/25/50/75/100."""
+    raw = (override if override is not None else os.environ.get("OPXY_PICK_PREVIEW", "")).strip().lower()
+    mode = "after-pick" if raw in PREVIEW_OFF else "sweep"
+    five = os.environ.get("OPXY_PICK_PREVIEW_STEPS", "").strip() == "5"
+    steps = [0, 25, 50, 75, 100] if five else [0, 50, 100]
+    src = "this pass" if override is not None else ("OPXY_PICK_PREVIEW in this harness's MCP config"
+                                                    if os.environ.get("OPXY_PICK_PREVIEW") else "default")
+    return {"mode": mode, "steps": steps if mode == "sweep" else [], "set": src}
+
+
 def catalog() -> dict:
     return load_json(OPXY / "catalog.json")
 

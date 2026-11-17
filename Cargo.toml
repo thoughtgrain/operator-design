@@ -1,0 +1,11 @@
+# Optional native tools. Nothing in the protocol needs Rust: the Python tools fall back to rsvg-convert.
+# `cargo build --release` puts opxy-raster in target/release/, where runner.py finds it.
+[workspace]
+resolver = "2"
+members = ["crates/opxy-raster"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

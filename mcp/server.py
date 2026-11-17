@@ -13,6 +13,7 @@ Environment:
     OPXY_AGENT_API_KEY    bearer token, if the endpoint needs one
     OPXY_APPROVERS        comma-separated names allowed to approve training proposals over MCP (off by default)
     OPXY_COLOUR           allow: this harness may design in colour (grey is the default; red is always refused)
+    OPXY_PICK_PREVIEW     sweep (default): variants ship knob sweeps before the pick; after-pick: only once one is picked
     OPXY_SHIFT_HEADER     stack: Shift shows open-xy's stacked header rows (default replace: Shift swaps the header's four slots)
     OPXY_SDK              path to a local open-xy checkout, for sdk_test
 """
@@ -37,7 +38,11 @@ def check() -> int:
     print("  " + ", ".join(names))
     g = guide("protocol")
     print(f"protocol: {len(g['outline'])} sections")
-    print(f"rsvg-convert: {rsvg() or 'missing (render_frame, contact PNGs and perceptibility on SVG need it)'}")
+    print(f"renderer: {rsvg() or 'missing: build opxy-raster (cargo build --release) or install rsvg-convert; render_frame, contact PNGs, perceptibility on SVG and the pass pixel check need one'}")
+    from opxy_mcp.paths import colour_policy, pick_preview, shift_policy
+    pv = pick_preview()
+    print(f"colour: {colour_policy()['mode']} · shift header: {shift_policy()['mode']} · "
+          f"pick preview: {pv['mode']}" + (f" ({'/'.join(map(str, pv['steps']))})" if pv["steps"] else "") + f", from {pv['set']}")
     return 0
 
 

@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 from . import agents, runner
-from .paths import ToolError, catalog, load_json, machine_dir, rel, resolve, write_json
+from .paths import PREVIEW_MODES, ToolError, catalog, load_json, machine_dir, pick_preview, rel, resolve, write_json
 
 STOP = set("a an the of and or to in on at by for with as is its it this that into from each every one their them "
            "be are was were than then so which who what where when how per".split())
@@ -83,8 +83,10 @@ def frame_directions(machine_id: str, pass_kind: str, focus: str | None) -> list
 
 
 def design_pass_start(machine_id: str, kind: str, category: str | None = None, focus: str | None = None,
-                      exclude_patterns: list[str] | None = None, run: bool = False) -> dict:
+                      exclude_patterns: list[str] | None = None, run: bool = False, preview: str | None = None) -> dict:
     s = _settings()
+    if preview is not None and preview not in PREVIEW_MODES:
+        raise ToolError(f"preview is one of: {', '.join(PREVIEW_MODES)}")
     if kind not in s["passKinds"]:
         raise ToolError(f"kind is one of: {', '.join(s['passKinds'])}")
     d = machine_dir(machine_id)
@@ -113,14 +115,18 @@ def design_pass_start(machine_id: str, kind: str, category: str | None = None, f
         chosen_subject = prior[-1].get("selection") if prior else None
     record = {"machine": machine_id, "category": cat, "kind": kind, "number": num, "state": "open",
               "created": dt.datetime.now().isoformat(timespec="seconds"), "focus": focus,
-              "subject": chosen_subject, "directions": directions, "variants": [], "uniqueness": None, "selection": None}
+              "subject": chosen_subject, "directions": directions, "variants": [], "uniqueness": None, "selection": None,
+              "preview": _preview_record(preview)}
     write_json(pdir / "pass.json", record)
     briefs = [agents.designer_brief(record, v, pdir) for v in directions]
-    result = {"pass": rel(pdir), "kind": kind, "category": cat, "directions": directions,
+    result = {"pass": rel(pdir), "kind": kind, "category": cat, "directions": directions, "preview": record["preview"],
               "fanOut": "Now design: run five designer agents in parallel, one per direction (Claude Code: the opxy-designer "
                         "subagent; Codex: opxy_designer), or work through the five yourself. Each variant is drawn, not "
                         "proposed: a 480 × 220 rest.svg in its own v<N>/ folder (plus candidate.json for a subject pass), "
-                        "linted at 1:1. Don't stop to show the directions or ask which to draw; draw all five, then call "
+                        "linted at 1:1"
+                        + (", plus a bench.py beside it that draws any knob position (submit turns it into the sweep the "
+                           "person plays before picking)" if record["preview"]["mode"] == "sweep" else "")
+                        + ". Don't stop to show the directions or ask which to draw; draw all five, then call "
                         "design_pass_submit and show the person the five drawings side by side.",
               "agentBriefs": briefs}
     if run:
@@ -154,6 +160,63 @@ def _latest_open(d: Path, pass_name: str | None) -> Path:
     if not passes:
         raise ToolError("no passes yet; run design_pass_start")
     return passes[-1]
+
+
+def _preview_record(override: str | None = None) -> dict:
+    p = pick_preview(override)
+    return {"mode": p["mode"], "steps": p["steps"], "set": p["set"]}
+
+
+def _definition(d: Path, given: str | None) -> Path | None:
+    if given:
+        return resolve(given)
+    f = d / "definition.json"
+    return f if f.is_file() else None
+
+
+def _sweeps(pdir: Path, ids: list[str], preview: dict, definition: Path | None, two_page: bool,
+            notes: list[dict]) -> tuple[list[str], dict[str, dict]]:
+    """Draw each variant's knob sweep from its bench.py and lint every frame of it.
+
+    With previews on, a variant without a working sweep isn't ready: the person would turn a knob on the bench and
+    watch four variants move and one sit still, which reads as a broken design, not a deferred one."""
+    problems: list[str] = []
+    done: dict[str, dict] = {}
+    if preview.get("mode") != "sweep":
+        return problems, done
+    if not definition or not definition.is_file():
+        notes.append({"note": "knob sweeps skipped: no definition.json yet, so there are no controls to sweep"})
+        return problems, done
+    try:
+        if not (load_json(definition).get("parameters") or []):
+            notes.append({"note": "knob sweeps skipped: definition.json has no parameters yet"})
+            return problems, done
+    except ToolError as exc:
+        problems.append(f"knob sweeps: {exc}")
+        return problems, done
+    from .screens import lint_frames
+    steps = ",".join(str(s) for s in preview.get("steps") or [0, 50, 100])
+    for vid in ids:
+        vdir = pdir / vid
+        if not (vdir / "bench.py").is_file():
+            problems.append(f"{vid}: no bench.py, so the knobs have nothing to play for this variant (write "
+                            f"frame(values, notes) -> svg beside rest.svg, or start the pass with preview='after-pick')")
+            continue
+        code, r = runner.run_json("sweep", [str(vdir), "--definition", str(definition), "--steps", steps])
+        if code or r.get("error"):
+            problems.append(f"{vid}: bench.py failed: {r.get('error', f'exit {code}')}")
+            continue
+        frames = sorted(vdir.glob("c*-*.svg")) + [vdir / "playing.svg"]
+        lint = lint_frames([str(f) for f in frames], two_page=two_page)
+        if lint["errors"]:
+            problems.append(f"{vid}: {lint['errors']} lint error(s) in its knob sweep; first: {lint['byRule'][0]['example']}")
+        text = sum(g["count"] for g in lint["byRule"] if g["rule"] == "text-in-drawing")
+        if text:
+            problems.append(f"{vid}: {text} text element(s) in its knob sweep; names and values live in the header")
+        done[vid] = {"frames": len(frames), "steps": r["steps"], "warnings": r["warnings"]}
+        for w in r["warnings"]:
+            notes.append({"note": f"{vid}: {w}"})
+    return problems, done
 
 
 def _check_drawn(pdir: Path, ids: list[str], two_page: bool, definition: str | None, pairs: list[dict], s: dict,
@@ -203,6 +266,8 @@ def design_pass_submit(machine_id: str, variants: list[dict] | None = None, pass
     pdir = pj.parent
     problems: list[str] = []
     pairs: list[dict] = []
+    # passes opened before previews existed take this harness's current setting, and keep it from then on
+    preview = rec.setdefault("preview", _preview_record())
 
     if rec["kind"] == "subject":
         if not variants:  # designers may have written candidate.json into their own folders
@@ -233,17 +298,25 @@ def design_pass_submit(machine_id: str, variants: list[dict] | None = None, pass
                           "subjectOverlap": round(ov, 2), "ok": ok})
             if not ok:
                 problems.append(f"{a['variant']} and {b['variant']} are too alike (need to differ in two of angle, language, subject)")
+        sp, swept = _sweeps(pdir, [v["variant"] for v in variants], preview, _definition(d, definition), two_page, pairs)
+        problems += sp
         problems += _check_drawn(pdir, [v["variant"] for v in variants], two_page, definition, pairs, s, subject=True)
         for v in variants:
             (pdir / v["variant"]).mkdir(exist_ok=True)
             write_json(pdir / v["variant"] / "candidate.json", v)
             if (pdir / v["variant"] / "rest.svg").exists():
                 v["frame"] = rel(pdir / v["variant"] / "rest.svg")
+            if v["variant"] in swept:
+                v["preview"] = swept[v["variant"]]
         rec["variants"] = variants
     else:
         frames = [pdir / x["variant"] / "rest.svg" for x in rec["directions"]]
+        sp, swept = _sweeps(pdir, [x["variant"] for x in rec["directions"]], preview, _definition(d, definition), two_page, pairs)
+        problems += sp
         problems += _check_drawn(pdir, [x["variant"] for x in rec["directions"]], two_page, definition, pairs, s, subject=False)
-        rec["variants"] = [{"variant": f.parent.name, "frame": rel(f)} for f in frames if f.exists()]
+        rec["variants"] = [{"variant": f.parent.name, "frame": rel(f), **({"preview": swept[f.parent.name]}
+                                                                          if f.parent.name in swept else {})}
+                           for f in frames if f.exists()]
         if variants:  # optional notes per variant
             notes = {v.get("variant"): v for v in variants}
             for v in rec["variants"]:
@@ -256,7 +329,9 @@ def design_pass_submit(machine_id: str, variants: list[dict] | None = None, pass
     return {"pass": rel(pdir), "state": rec["state"], "problems": problems, "pairs": pairs,
             "next": ("Revise the weakest duplicate into a new direction and submit again; never drop below five."
                      if problems else
-                     "Show the five to the person side by side at 1:1 (contact_sheet on the pass folder for frames) and ask them to pick. Then design_pass_select.")}
+                     "Show the five to the person side by side at 1:1 (contact_sheet on the pass folder for frames) and ask them to pick. Then design_pass_select."
+                     + (" Each variant has a knob sweep: the bench (bench_open) lets them turn the knobs, or play MIDI, "
+                        "on all five before choosing." if preview.get("mode") == "sweep" else ""))}
 
 
 def design_pass_select(machine_id: str, variant: str, reason: str, chosen_by: str, pass_name: str | None = None,

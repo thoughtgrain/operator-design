@@ -55,6 +55,10 @@ def env_for(args, local: str | None = None) -> dict:
         env["OPXY_COLOUR"] = "allow"
     if getattr(args, "shift_stack", False):
         env["OPXY_SHIFT_HEADER"] = "stack"
+    if getattr(args, "pick_preview", None):
+        env["OPXY_PICK_PREVIEW"] = args.pick_preview
+    if getattr(args, "sweep_steps", None):
+        env["OPXY_PICK_PREVIEW_STEPS"] = str(args.sweep_steps)
     if getattr(args, "sdk", None):
         env["OPXY_SDK"] = str(Path(args.sdk).expanduser().resolve())
     return env
@@ -188,7 +192,10 @@ def check(args) -> int:
     line(sys.version_info >= (3, 10), f"Python {platform.python_version()} ({args.python})")
     res = subprocess.run([args.python, str(SERVER), "--check"], capture_output=True, text=True, timeout=60)
     line(res.returncode == 0, "server starts: " + (res.stdout.splitlines()[0] if res.stdout else res.stderr.strip()[:200]))
-    line(shutil.which("rsvg-convert") is not None, "rsvg-convert (frames render to PNG; needed for render_frame and perceptibility)")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "opxy" / "tools"))
+    import raster  # noqa: E402  (opxy/tools/raster.py)
+    found = raster.find()
+    line(found is not None, f"renderer: {raster.name(found)} (frames render to PNG; opxy-raster via cargo build --release, or rsvg-convert)")
     line((ROOT / ".mcp.json").exists(), ".mcp.json (Claude Code picks the server up when it opens this repo)")
     for r in roles_mod.roles().values():
         line((ROOT / ".claude/agents" / f"{r['name']}.md").exists(), f".claude/agents/{r['name']}.md")
@@ -215,6 +222,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="allow colour in this harness (grey is the default; red stays reserved)")
     ap.add_argument("--shift-stack", action="store_true",
                     help="show Shift as open-xy's stacked header rows in this harness (default: Shift replaces the header's four slots)")
+    ap.add_argument("--pick-preview", choices=["sweep", "after-pick"],
+                    help="knob sweeps on every variant before the pick (sweep, the default) or only after it (after-pick: fewer tokens)")
+    ap.add_argument("--sweep-steps", type=int, choices=[3, 5], help="steps per control in a knob sweep (default 3: 0/50/100)")
     ap.add_argument("--sdk", help="path to a local open-xy checkout, for the sdk_test tool")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)

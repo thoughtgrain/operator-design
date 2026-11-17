@@ -13,4 +13,6 @@ screens/<machine-id>/
 └── handoff.md    phase 8
 ```
 
+Optional: `bench.py`, a `frame(values, notes)` function that draws any knob position with the machine's own generator, so the bench's knobs play the screen live (`mcp/README.md`, The bench). The bench also appends what the person did at it to `passes/<nn>/events.jsonl`. Inside a pass, each `v<N>/` can carry the same `bench.py` plus the knob sweep `design_pass_submit` draws from it (`c<N>-000/050/100.svg`, `playing.svg`), so the person can play every variant before picking.
+
 A folder is done when `handoff.md` exists and every non-device item in `review.md` is answered. Device items stay marked pending until there are photos.
