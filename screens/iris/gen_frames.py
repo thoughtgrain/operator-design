@@ -203,7 +203,7 @@ def cycle_line(kind, r, phi0, dphi, t0, skew):
     return dedupe(line)
 
 
-def main(out, held=False, travel=0.0):
+def main(out, held=False, travel=0.0, shift_held=False):
     w, c = weights(P["morph"], P["overlap"])
     wmax = max(w)
     body = []
@@ -281,17 +281,18 @@ def main(out, held=False, travel=0.0):
     hz = [(CX - 200, hy - HAIR_W / 2), (CX + 200, hy - HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX - 200, hy + HAIR_W / 2)]
     mask = [(CX - 200, hy + HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX + 200, 220), (CX - 200, 220)]
     ground = [
-        f'<path id="iris_node_{nid}" transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(mask, CX, hy)}" fill="#000000" stroke="none"/>',
-        f'<path id="iris_node_{nid + 1}" transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(hz, CX, hy)}" fill="{HORIZON}" stroke="none"/>',
+        # static art, not nodes (as on the device: a bound black mask would take its palette entry's paint)
+        f'<path transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(mask, CX, hy)}" fill="#000000" stroke="none"/>',
+        f'<path transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(hz, CX, hy)}" fill="{HORIZON}" stroke="none"/>',
     ]
 
-    palette = [MIX_REST, MIX_HELD, GREYS[1], GREYS[2], GREYS[3], HORIZON]
+    palette = [MIX_REST, MIX_HELD, GREYS[0], GREYS[2], GREYS[3]]
     pal = [f'<path id="iris_palette_{k}" d="M {700 + 10 * k} 300 L {704 + 10 * k} 300 L {704 + 10 * k} 304 Z" '
            f'fill="{col}" stroke="{col}" stroke-width="2"/>' for k, col in enumerate(palette)]
 
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
            '<g id="preview_canvas"><rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/></g>',
-           header(),
+           header(shift_held),
            *pal,
            *band_nodes, *ground, *mix_nodes,
            '</svg>']
@@ -304,22 +305,25 @@ def pct(v):
     return f"{round(v * 100)}%"
 
 
-def header():
-    titles = [("morph", pct(P["morph"])), ("overlap", pct(P["overlap"])), ("spread", pct(P["spread"])), ("tone", pct(P["tone"]))]
-    alts = [("skew", pct(P["skew"])), ("phase", pct(P["phase"])), ("", ""), ("", "")]
+def header(shift=False):
+    """The stock single-row header. While Shift is held its four slots show the Shift row instead (skew, phase, and
+    nothing under encoders 3 and 4): Shift replaces the header's contents, it never adds a row."""
+    if shift:
+        slots = [("skew", pct(P["skew"])), ("phase", pct(P["phase"])), ("", ""), ("", "")]
+    else:
+        slots = [("morph", pct(P["morph"])), ("overlap", pct(P["overlap"])), ("spread", pct(P["spread"])), ("tone", pct(P["tone"]))]
     g = ['<g id="preview_header">',
-         '<rect x="0" y="0" width="480" height="38" fill="#000000" stroke="none"/>']
+         '<rect x="0" y="0" width="480" height="20" fill="#000000" stroke="none"/>']
     steps = ["#000000", "#323232", "#4B4B4B", "#646464", "#7D7D7D", "#969696", "#AFAFAF", "#CDCDCD"]
     for i, col in enumerate(steps):
         g.append(f'<rect x="{60 * i}" y="0" width="60" height="20" fill="{col}" stroke="none"/>')
-    for i, ((t, v), (at, av)) in enumerate(zip(titles, alts)):
+    for i, (t, v) in enumerate(slots):
+        if not t:
+            continue
         ink = "#CBCBCB" if i < 2 else "#000000"
         x = 120 * i
         g.append(f'<text transform="matrix(1 0 0 1 {x + 5} 10)" fill="{ink}" stroke="none" font-family="UniversNextPro-Light" font-size="10px">{t}</text>')
         g.append(f'<text transform="matrix(1 0 0 1 {x + 65} 17.44)" fill="{ink}" stroke="none" font-family="UniversNextPro-Light" font-size="20px">{v}</text>')
-        if at:
-            g.append(f'<text transform="matrix(1 0 0 1 {x + 5} 33)" fill="#5A5A5A" stroke="none" font-family="UniversNextPro-Light" font-size="10px">{at}</text>')
-            g.append(f'<text transform="matrix(1 0 0 1 {x + 65} 33)" fill="#707070" stroke="none" font-family="UniversNextPro-Light" font-size="13px">{av}</text>')
     g.append("</g>")
     return "\n".join(g)
 
@@ -330,10 +334,11 @@ def frame_set():
     P.clear(); P.update(DEFAULTS)
     main(os.path.join(d, "rest.svg"))
     main(os.path.join(d, "playing.svg"), held=True, travel=0.4)
+    main(os.path.join(d, "shift.svg"), shift_held=True)                 # Shift held at the defaults: only the header changes
     for n, k in enumerate(CONTROLS, 1):
         for v in (0.0, 0.5, 1.0):
             P.clear(); P.update(DEFAULTS); P[k] = v
-            main(os.path.join(d, f"c{n}-{int(v * 100):03d}.svg"))
+            main(os.path.join(d, f"c{n}-{int(v * 100):03d}.svg"), shift_held=k in ("skew", "phase"))   # turned with Shift held
     P.clear(); P.update(DEFAULTS)
 
 
@@ -341,16 +346,18 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         frame_set()
         sys.exit(0)
-    out, held, travel = os.path.join(HERE, "frames", "out.svg"), False, 0.0
+    out, held, travel, shift = os.path.join(HERE, "frames", "out.svg"), False, 0.0, False
     for a in sys.argv[1:]:
         if "=" in a:
             k, v = a.split("=")
             if k == "held":
                 held = v == "1"
+            elif k == "shift":
+                shift = v == "1"
             elif k == "travel":
                 travel = float(v)
             else:
                 P[k] = float(v)
         else:
             out = a
-    main(out, held, travel)
+    main(out, held, travel, shift_held=shift)

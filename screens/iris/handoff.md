@@ -1,15 +1,17 @@
 # Iris · handoff
 
+**2026-11-17:** skew and phase moved from a second page to the Shift row, and the second header row is gone (brief, Revision).
+
 This is for whoever writes `display.cpp` in `operators-xy/machines/iris/`. With this file and `frames/`, you shouldn't need the brief. The geometry comes from `gen_frames.py`, so `gen_panel.py` should share its constants rather than retype them.
 
 ## Display block
 
 ```json
 "display": {"stateBytes": 60, "stateAlignment": 4,
-            "paths": 4, "points": 64, "nodes": 140, "texts": 16, "palette": 5}
+            "paths": 4, "points": 64, "nodes": 140, "texts": 8, "palette": 5}
 ```
 
-`sdk` 1.7 in `machine.json` (two pages with 16 header texts). Implemented: `operators-xy/machines/iris/display.cpp`, `display.h`, `gen_panel.py` (writes `panel.svg.fragment` and `nodes.h`).
+`sdk` 1.13 in `machine.json` (the synth Shift row). Implemented: `operators-xy/machines/iris/display.cpp`, `display.h`, `gen_panel.py` (writes `panel.svg.fragment` and `nodes.h`).
 
 ## The model, in one paragraph
 
@@ -20,7 +22,7 @@ The bow is a family of circles about one centre on the horizon, at (240, 204). B
 | node | part | driven by | channel |
 | --- | --- | --- | --- |
 | 0–3 | the mix line, a quarter of the half-turn each: a closed ribbon round 32 centreline points (64 points) | morph, overlap, spread, tone, skew, phase, `travel` | path rewrite: the four outlines share one key |
-| 4–11 | the two-page header bar (`page_header.hpp`, first node 4) | page, slots | stock |
+| 4–11 | the header bar, one row (`page_header.hpp`, first node 4) | slots; Shift swaps the texts | stock |
 | 12–75 | raw band cycles: band b, cycle k → 12 + 16b + k | overlap (radius), spread (scale 0.82–1.18 and angular step), phase (angle offset), tone (shown when the band isn't cut) | translate + turn + uniform scale; palette by weight |
 | 76–139 | rounded band cycles, the same layout from 76 | tone (shown when the band is cut) | same |
 | — | ground mask (black) and horizon (1.2 px, `#4B4B4B`) | — | static art, authored after the bands; not nodes, because a bound black mask would take its palette entry's paint |
@@ -47,7 +49,7 @@ The band level is `round(3 · wᵢ / max w)` mapped 0, 1 → entry 2, 2 → 3, 3
 
 ## Texts
 
-0–15 belong to the SDK's two-page header. Titles `morph overlap spread tone` / `skew phase`, values from `header_amount` as percent.
+0–7 belong to the single-row header: titles 0–3, values 4–7. Normally `morph overlap spread tone`. While `shift_row(in).held`, pass `skew phase` and two blanks with the Shift row's values in their place (don't pass the row to `page_header`, which would stack it). Values come from `header_amount`, as percent.
 
 ## DisplayState
 
@@ -66,6 +68,7 @@ See `motion.md`. Knob eases use τ ≈ 0.05 s. A held note eases `speed` to 0.8 
 ## Open device checks
 
 - `rotation()`'s sign (above), `in.held_notes` as the held-note count, and `Point` coordinates in Q10 px: all three are read from how toro and theseus use the API, not from the SDK headers, which aren't in this repo.
+- The Shift row: the `synth_shift` field's shape, `shift_row(in).values[]` as Q31 words, `page_header` called with a single row of slots, and the engine reading the Shift values as `p[4]` and `p[5]`. All four follow `constraints.md`'s notes on SDK 1.13, not the SDK headers.
 
 - Redraw cost of 4 × 64-point outline rewrites every frame while held. If it's too heavy, rewrite every second frame.
 - Caption widths in Univers Next Pro Light (estimate ≤ 51 px against 53).

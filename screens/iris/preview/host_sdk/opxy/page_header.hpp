@@ -15,7 +15,7 @@ struct Turn { i32 c, s; };
 inline i32 sine(i32 tenths) { return (i32)lround(1024.0 * std::sin(tenths * M_PI / 1800.0)); }
 inline Turn rotation(i32 tenths) { return Turn{ sine(tenths + 900), sine(tenths) }; }
 inline i32 clamp(i32 v, i32 lo, i32 hi) { return v < lo ? lo : v > hi ? hi : v; }
-struct Input { i32 slots[8]; i32 elapsed; u32 note_serial; u32 held_notes; u32 reduced_motion; };
+struct Input { i32 slots[8]; i32 elapsed; u32 note_serial; u32 held_notes; u32 reduced_motion; u32 shift_held; i32 shift_values[8]; };
 template <int P, int PTS, int N, int T, int PAL> struct Frame {
     enum { point_count = PTS };
     struct Path { Point points[PTS > 0 ? PTS : 1]; u32 key; } paths[P > 0 ? P : 1];

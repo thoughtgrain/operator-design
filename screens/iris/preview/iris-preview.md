@@ -21,14 +21,14 @@ Rebuild with `python3 make_preview.py`. It needs g++, node with Playwright, ffmp
 | 1.5–4.5 | four held notes (0.55 s each) | a triangle with a little sine and square; the bright line brightens and travels along the arc while each note is held |
 | 4.5–5.1 | hold ended | the release tail; the line slows and settles |
 | 5.1–17.9 | morph, overlap, spread, tone, each turned default → 0 → 100 → default over 3.2 s while an A minor pentatonic phrase plays (0.32 s notes every 0.4 s) | sine → saw; one band → all four; still → beating; dark → open |
-| 17.9–18.6 | page press: page 2 (skew and phase move to the top row) | silence |
-| 18.6–25.0 | skew, then phase, turned the same way | the wave leans and the square pulses; the overlapped bands hollow |
-| 25.0–25.7 | page press back to page 1 | — |
+| 17.9–18.6 | Shift held: the header's slots show skew and phase, encoders 3 and 4 blank | silence |
+| 18.6–25.0 | skew, then phase, turned the same way with Shift held | the wave leans and the square pulses; the overlapped bands hollow |
+| 25.0–25.7 | Shift released: the page's header comes back | — |
 | 25.7–27.2 | rest | the last release, then silence; the screen is still |
 
 ## Watched at 1:1
 
 - **Rest:** still, as required, with 0 mix rewrites after the first frame.
 - **Each control:** visibly reshapes the bow while it turns and stops when it stops. Nothing alternates bright and dark faster than the notes, and the notes are at most 2.5 a second.
-- **Page press:** in this preview it's a swap of the header's rows. On the device, `page_header.hpp` animates the press over 0.15 s, which this stand-in doesn't draw.
+- **Shift:** only the header's texts change; nothing below the header moves.
 - **Still pending a device:** how it looks and redraws on the real screen. Someone needs to film the device.

@@ -57,10 +57,10 @@ def build_score():
         return knobs
     for c in range(4):
         seg(3.2, turn(c), 1, True, step=c * 2)
-    seg(0.7, still, 2, False)                                       # page press: page 2
+    seg(0.7, still, 2, False)                                       # Shift held: the header shows skew and phase
     for c in (4, 5):
-        seg(3.2, turn(c), 2, True, step=c * 2)
-    seg(0.7, still, 1, False)                                       # page press back
+        seg(3.2, turn(c), 2, True, step=c * 2)                      # turned with Shift held
+    seg(0.7, still, 1, False)                                       # Shift released: the page's header comes back
     seg(1.5, still, 1, False)                                       # rest again
     return segs, notes, t
 
@@ -78,19 +78,17 @@ def at(segs, t):
 
 
 def header(vals, page):
+    """One row. page 2 here means Shift held: the four slots show the Shift row (skew, phase, nothing, nothing)."""
     steps = ['#000000', '#323232', '#4B4B4B', '#646464', '#7D7D7D', '#969696', '#AFAFAF', '#CDCDCD']
-    rows = [[0, 1, 2, 3], [4, 5, None, None]] if page == 1 else [[4, 5, 2, 3], [0, 1, None, None]]
+    rows = [[0, 1, 2, 3]] if page == 1 else [[4, 5, None, None]]
     pct = lambda v: f'{round(v * 100)}%'
-    g = ['<rect x="0" y="0" width="480" height="38" fill="#000000"/>']
+    g = ['<rect x="0" y="0" width="480" height="20" fill="#000000"/>']
     g += [f'<rect x="{60 * i}" y="0" width="60" height="20" fill="{c}"/>' for i, c in enumerate(steps)]
     for i, k in enumerate(rows[0]):
+        if k is None: continue
         ink = '#CBCBCB' if i < 2 else '#000000'
         g.append(f'<text x="{120 * i + 5}" y="10" fill="{ink}" font-family="UniversNextPro-Light, Univers, Helvetica, Arial" font-size="10px">{NAMES[k]}</text>')
         g.append(f'<text x="{120 * i + 65}" y="17.44" fill="{ink}" font-family="UniversNextPro-Light, Univers, Helvetica, Arial" font-size="20px">{pct(vals[k])}</text>')
-    for i, k in enumerate(rows[1]):
-        if k is None: continue
-        g.append(f'<text x="{120 * i + 5}" y="33" fill="#5A5A5A" font-family="UniversNextPro-Light, Univers, Helvetica, Arial" font-size="10px">{NAMES[k]}</text>')
-        g.append(f'<text x="{120 * i + 65}" y="33" fill="#707070" font-family="UniversNextPro-Light, Univers, Helvetica, Arial" font-size="13px">{pct(vals[k])}</text>')
     return '\n'.join(g)
 
 
@@ -108,7 +106,7 @@ def main():
         v, page = at(segs, t)
         held = any(a <= t < b for a, b, _ in notes)
         knob_rows.append((v, page))
-        rows.append(' '.join(f'{x:.5f}' for x in v) + f' {1 if held else 0}')
+        rows.append(' '.join(f'{x:.5f}' for x in v) + f' {1 if held else 0} {1 if page == 2 else 0}')
     dump = subprocess.run([str(exe)], input='\n'.join(rows) + '\n', capture_output=True, text=True, check=True).stdout.splitlines()
 
     frag = (MACHINE / 'panel.svg.fragment').read_text()

@@ -171,7 +171,8 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
     r = Review()
     top = ({"schema", "id", "name", "parameters", "presets", "resources"} | ({"press"} if "press" in defn else set())
            | ({"shift"} if kind == "effect" and "shift" in defn else set())
-           | ({"hidePages"} if "hidePages" in defn else set()))
+           | ({"hidePages"} if "hidePages" in defn else set())
+           | ({"synth_shift"} if kind == "synth" and "synth_shift" in defn else set()))
     r.require(set(defn) == top, "definition", "fields",
               f"fields must be exactly {sorted(top)} (unknown {sorted(set(defn) - top)}, missing {sorted(top - set(defn))})")
     r.require(defn.get("schema") == 1, "definition", "schema", "schema must be 1")
@@ -260,6 +261,34 @@ def review(defn: dict, kind: str, sdk: tuple[int, ...] | None) -> Review:
             r.require(combos <= 1_048_576, "shift", "shift", f"shift choices together make {combos} combinations; at most 1,048,576")
         if sdk is not None:
             r.require(sdk >= (1, 7), "shift", "sdk", "a shift row needs sdk 1.7+")
+
+    # synth Shift row (sdk 1.13): 1..8 controls, entry i under page i // 4's encoder i % 4, turned with Shift held.
+    # Structure as constraints.md records it; the field shape mirrors a parameter's. Verify against open-xy api.md.
+    if kind == "synth" and "synth_shift" in defn:
+        row = defn["synth_shift"]
+        if r.require(isinstance(row, list) and 1 <= len(row) <= 8, "synth_shift", "synth_shift", "synth Shift row: 1..8 controls"):
+            pages = 2 if "press" in defn else 1
+            r.require(len(row) <= 4 * pages, "synth_shift", "synth_shift",
+                      f"{len(row)} Shift controls but only {pages} page(s) of encoders to put them under")
+            for i, sp in enumerate(row):
+                where = f"synth_shift[{i}]" + (f" {sp.get('id')}" if isinstance(sp, dict) else "")
+                if not r.require(isinstance(sp, dict), where, "synth_shift", "Shift control must be an object"):
+                    continue
+                want = {"id", "label", "default", "mapping", "display"}
+                r.require(set(sp) == want, where, "fields",
+                          f"needs exactly {sorted(want)} (unknown {sorted(set(sp) - want)}, missing {sorted(want - set(sp))})")
+                sid = sp.get("id")
+                if r.require(isinstance(sid, str) and bool(IDENT.match(sid)), where, "id", "Shift control id must be an identifier"):
+                    r.require(sid not in ids, where, "id", "duplicate id (Shift controls share the parameters' id space)")
+                    ids.append(sid)
+                r.require(isinstance(sp.get("label"), str) and bool(LABEL.match(sp.get("label", ""))), where, "label",
+                          "label: at most eight letters, digits or spaces")
+                d = sp.get("default")
+                r.require(is_number(d) and 0 <= d <= 1, where, "default", "default must be a number in [0, 1]")
+                r.require(sp.get("display") in DISPLAY_FORMATS, where, "display", f"display must be one of {DISPLAY_FORMATS}")
+                check_mapping(r, where, sp)
+        if sdk is not None:
+            r.require(sdk >= (1, 13), "synth_shift", "sdk", "a synth Shift row needs sdk 1.13+")
 
     # hidden stock pages (sdk 1.9)
     if "hidePages" in defn:

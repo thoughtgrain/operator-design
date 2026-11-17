@@ -16,7 +16,7 @@ Iris is named for the goddess of the rainbow, and for the coloured ring in the e
 | Category | engine |
 | Colour | grey, confirmed by the owner (2026-11-17: "we don't want color"). The rainbow is a rainbow by its form (bands, arcs, order), never its hues, so no grayscale variant or colour role table is needed. |
 | Sounds like | A single oscillator voice that scans from a pure sine through triangle and square to a bright saw. Open Overlap and the neighbouring waves sound together; add Spread and the four detune apart into a slow, shimmering chorus. |
-| Controls | 6 (two pages, `"press": "page"`) |
+| Controls | 6: four on the page (stock single-row header) and two on the Shift row (`synth_shift`, SDK 1.13). Changed 2026-11-17 at the owner's request: there's no second header; holding Shift replaces the header's contents with skew and phase |
 | Control source | new (the DSP is written for this machine: `operators-xy/machines/iris/engine.cpp`) |
 
 ### 1A · Port map
@@ -29,14 +29,14 @@ No source to port from, so this is the control inventory of the DSP I wrote. Int
 | overlap | width of the window: 0 = a straight crossfade between the two nearest bands, 1 = all four sound, the far ones at a quarter weight | page 1, encoder 2 | overlap | linear 0..1 | percent | 0.25 | keep | weights are renormalised every block so the level holds |
 | spread | detunes the four bands from each other, outer bands ±50 cents at 100 % | page 1, encoder 3 | spread | linear 0..1 | percent | 0 | keep | colouring, so it defaults off |
 | tone | 2-pole low-pass that follows the note, 0.5 to 7.5 octaves above the fundamental, fixed Butterworth damping | page 1, encoder 4 | tone | linear 0..1 | percent | 0.7 | keep | key-tracked so it means "how many harmonics get through" at every pitch (my first fixed-frequency version went silent on high notes at 0); no resonance: the waves are the sound, the filter only tames them |
-| skew | one breakpoint for the three shaped bands: phase-distorts the sine, leans the triangle toward a ramp, narrows the square to a pulse (50 % → 5 %); each band's resulting DC is subtracted exactly | page 2, encoder 1 (alt of morph) | skew | linear 0..1 | percent | 0 | keep | the saw has no breakpoint and stays a saw |
-| phase | offsets each band's phase from the one before it, up to an eighth of a cycle each (quarter steps cancelled four equal bands' fundamental outright, −11 dB) | page 2, encoder 2 (alt of overlap) | phase | linear 0..1 | percent | 0 | keep | silent with Overlap closed on one band; with bands overlapping it cancels and reinforces harmonics |
+| skew | one breakpoint for the three shaped bands: phase-distorts the sine, leans the triangle toward a ramp, narrows the square to a pulse (50 % → 5 %); each band's resulting DC is subtracted exactly | Shift row, encoder 1 | skew | linear 0..1 | percent | 0 | keep | the saw has no breakpoint and stays a saw |
+| phase | offsets each band's phase from the one before it, up to an eighth of a cycle each (quarter steps cancelled four equal bands' fundamental outright, −11 dB) | Shift row, encoder 2 | phase | linear 0..1 | percent | 0 | keep | silent with Overlap closed on one band; with bands overlapping it cancels and reinforces harmonics |
 
 Dropped on purpose: velocity (the XY applies it after the engine), an envelope and LFO (stock modules cover both), resonance (a resonant peak would fight Morph for what "brighter" means).
 
 ### 1B · Definition review
 
-`python3 opxy/tools/lint_definition.py screens/iris/definition.json` → 0 errors, 0 warnings, one note (two pages without 16 text slots: fine with the stock header; revisit in phase 4 if the screen draws its own header).
+`python3 opxy/tools/lint_definition.py screens/iris/definition.json` → 0 errors, 0 warnings. The linter didn't know SDK 1.13's synth Shift row (`constraints.md` documents it, the tool predated it), so I taught it the structure: 1–8 controls shaped like parameters, ids shared with the parameters, sdk ≥ 1.13, no more than four per page of encoders. The repo's tests still pass. **The field's exact shape is pending a check against open-xy `api.md`**, which isn't in this session.
 
 | check | verdict | reason |
 | --- | --- | --- |
@@ -44,7 +44,7 @@ Dropped on purpose: velocity (the XY applies it after the engine), an envelope a
 | Header values in real units, ≤ ~5 chars | pass, with a note | all `percent` (≤ "100%", 4 chars). Spread could read in cents, but no display format shows cents; percent of the ±50 c maximum is the honest fallback |
 | Defaults plainest useful; presets sound good (by ear) | pass / **pending device** | default is a clean triangle with a touch of its neighbours; presets by ear on hardware pending |
 | Engine page holds only the sound's own parameters | pass | no envelope, LFO or mod amount |
-| Page 1 holds what's played most | pass | morph, overlap, spread, tone; skew and phase are set-and-leave |
+| The page holds what's played most | pass | morph, overlap, spread, tone; skew and phase are set-and-leave, so they live on the Shift row |
 | Port parity | n/a | new machine |
 | Saved sounds compatible | n/a | unreleased |
 | `id` final | pass, until published | `iris`; it can still change before the first release |
@@ -62,7 +62,7 @@ Dropped on purpose: velocity (the XY applies it after the engine), an envelope a
 
 Width estimate: characters × 0.64 × 20. Measured in Univers Next Pro Light: **pending device**.
 
-Page 1 (played most): morph, overlap, spread, tone · Page 2: skew (under morph), phase (under overlap) · Repeated controls: none.
+The page: morph, overlap, spread, tone · Shift row: skew (Shift + encoder 1), phase (Shift + encoder 2); encoders 3 and 4 have nothing on the row and their header slots go blank while Shift is held · Repeated controls: none. (First drafted as two pages with `"press": "page"`; the owner asked for the second header to go.)
 
 ## 2 · Listen and rank
 
@@ -132,10 +132,10 @@ Note response: while notes are held, the mix line travels along the arc (its pha
 
 ```json
 "display": {"stateBytes": 60, "stateAlignment": 4,
-            "paths": 4, "points": 64, "nodes": 140, "texts": 16, "palette": 5}
+            "paths": 4, "points": 64, "nodes": 140, "texts": 8, "palette": 5}
 ```
 
-Nodes: 0–3 the mix outlines (mutable outlines are always the first nodes), 4–11 the two-page header bar, then 4 bands × 16 raw cycle nodes and 4 × 16 rounded ones (64 + 64; 16 covers the densest band at full spread, the rest park hidden): 140. The ground mask and the horizon are static art, not nodes: they never move, and a bound black mask would take its palette entry's paint. Palette: the mix (rest, held) and three band greys, 5 entries. stateBytes 60 (`sizeof(DisplayState)`: the header's 20, six eased controls, travel, speed, the path key, a flag). Texts: the 16 `page_header.hpp` takes for two pages. Palette: the mix (lit, held), three band greys by mix weight, the horizon grey, black.
+Nodes: 0–3 the mix outlines (mutable outlines are always the first nodes), 4–11 the header bar, then 4 bands × 16 raw cycle nodes and 4 × 16 rounded ones (64 + 64; 16 covers the densest band at full spread, the rest park hidden): 140. The ground mask and the horizon are static art, not nodes: they never move, and a bound black mask would take its palette entry's paint. Palette: the mix (rest, held) and three band greys, 5 entries. stateBytes 60 (`sizeof(DisplayState)`: the header's 20, six eased controls, travel, speed, the path key, a flag). Texts: 8, the single-row header's four titles and four values; Shift swaps what they say. Palette: the mix (lit, held), three band greys by mix weight, the horizon grey, black.
 
 | case | changed nodes / frame |
 | --- | --- |
@@ -175,3 +175,16 @@ The set is generated by `gen_frames.py` (from v3's generator, with the fixes in 
 - After that, the device output differs from the frames by 0.2–1 % of the body for most controls (antialiasing at the edges), 2–3.4 % at Overlap 100 and Spread 50–100 (the device scales whole cycles, so a band pulled to a larger radius or stretched by Spread gets slightly taller waves and a slightly heavier line, up to about 1.35× and ~2 px in the worst corner), and 3.8 % on `playing` (a different moment of the same motion).
 - `perceptibility.py` on the device renders: **pass**. Morph 10.20, overlap 7.69, spread 9.37, tone 3.96, skew 2.44, phase 7.31, note response 2.59.
 - At rest the mix outlines are written once and never again; while held they rewrite every frame.
+
+## Revision · 2026-11-17 · Shift row instead of a second page
+
+The owner asked to remove the second header and show skew and phase on Shift, replacing the top header. So:
+
+- `definition.json`: four `parameters` (morph, overlap, spread, tone), `synth_shift` [skew, phase], no `press`, `sdk` 1.13, `texts` 8.
+- The header is the stock single row (y 0–20). While Shift is held its four slots show skew and phase, and slots 3 and 4 go blank; release puts the page back. Nothing below the header moves (`frames/shift.svg` against `rest.svg`: 1,218 header pixels differ, 0 in the body).
+- `c5-*` and `c6-*` are drawn with Shift held, because that's how those two controls are turned.
+- Frames: `lint_frame.py frames/*.svg --definition definition.json` (no `--two-page` now) → 21 frames, 0 errors, 0 warnings. `perceptibility.py` → pass, numbers unchanged (the drawing didn't change).
+- Device code: `display.cpp` reads the Shift row through `synth_shift.hpp`; on the host it still passes perceptibility.
+- Engine: unchanged. It reads skew and phase as `p[4]` and `p[5]`, after the four page parameters, in definition order. **Pending a check against the SDK**: that a synth's Shift-row values reach `render()` after its page parameters.
+
+This change didn't need a five-variant pass. It changes the header's layout, not the drawing.

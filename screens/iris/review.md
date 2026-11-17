@@ -21,7 +21,7 @@ One thing I watched: at 1:1 the square band can read as battlements at the crown
 ## Tools
 
 - `lint_definition.py definition.json`: 0 errors, 0 warnings.
-- `lint_frame.py frames/*.svg --two-page --definition definition.json`: 20 frames, 0 errors, 0 warnings (this includes mutable outlines within ±64 px of their origin).
+- `lint_frame.py frames/*.svg --definition definition.json`: 21 frames (with `shift.svg`), 0 errors, 0 warnings (this includes mutable outlines within ±64 px of their origin).
 - `perceptibility.py --scores 5,4,4,4,3,2`: **pass** on the design frames (table in `brief.md` §5) and on `display()`'s own output run on the host (§5, Frames against the device code). Frames were rendered at 1:1 with Playwright, because rsvg-convert isn't installed here.
 
 ## Accessibility checklist (opxy/accessibility.md)
@@ -42,7 +42,7 @@ One thing I watched: at 1:1 the square band can read as battlements at the crown
 
 ## Before you submit (open-xy ux.md)
 
-- [x] Page 1 holds what's played most (morph, overlap, spread, tone)
+- [x] The page holds what's played most (morph, overlap, spread, tone); skew and phase are on the Shift row, and Shift replaces the header's contents rather than adding a row (`frames/shift.svg`)
 - [x] Defaults are the plainest useful sound (triangle, a little of its neighbours, no spread). Presets by ear: **pending device**
 - [x] Controls are named for what rises clockwise
 - [x] The engine page holds only the sound's own parameters
