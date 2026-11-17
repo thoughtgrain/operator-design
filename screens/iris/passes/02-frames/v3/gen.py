@@ -206,23 +206,23 @@ def main(out, held=False):
         dphi = -math.pi / n
         shift = P["phase"] * i / 8.0
         grey = GREYS[int(round(3 * w[i] / wmax))]
-        k = 0
-        while k < math.ceil(n) - 1e-9:
-            phi0 = math.pi + dphi * (k - shift)
-            span = dphi
-            if k + 1 > n:                       # partial last cycle at spread
-                span = dphi * (n - k)
-            mid = phi0 + span / 2
+        # whole cycles only; phase slides the chain along the arc and the
+        # cycles that pass a foot go under the ground mask (parked when wholly
+        # below it), so the chain wraps instead of leaving a gap
+        frac = shift - math.floor(shift)
+        for k in range(-1, int(math.ceil(n)) + 1):
+            phi0 = math.pi + dphi * (k + frac)
+            phi1 = phi0 + dphi
+            if phi0 <= 0 or phi1 >= math.pi:
+                continue                        # wholly below the horizon
+            mid = phi0 + dphi / 2
             ox, oy = polar(r, mid)
-            line = cycle_line(kind, r, phi0, span, START[kind], P["skew"])
-            if span != dphi:
-                line = line[: max(2, int(len(line) * (n - k)))]
+            line = cycle_line(kind, r, phi0, dphi, START[kind], P["skew"])
             poly = ribbon(line, BAND_W / 2)
             band_nodes.append(
                 f'<path id="iris_node_{nid}" transform="matrix(1 0 0 1 {fmt(ox)} {fmt(oy)})" '
                 f'd="{d_of(poly, ox, oy)}" fill="{grey}" stroke="none"/>')
             nid += 1
-            k += 1
 
     # the mix: four quarter outlines, 32 centreline points each
     r_mix = lerp_band(RADII, c)
@@ -258,7 +258,7 @@ def main(out, held=False):
     # horizon (hairline ribbon) and the ground mask below it
     hy = CY + 0.6
     hz = [(CX - 200, hy - HAIR_W / 2), (CX + 200, hy - HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX - 200, hy + HAIR_W / 2)]
-    mask = [(CX - 200, hy + HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX + 200, 214), (CX - 200, 214)]
+    mask = [(CX - 200, hy + HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX + 200, 220), (CX - 200, 220)]
     ground = [
         f'<path id="iris_node_{nid}" transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(mask, CX, hy)}" fill="#000000" stroke="none"/>',
         f'<path id="iris_node_{nid + 1}" transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(hz, CX, hy)}" fill="{HORIZON}" stroke="none"/>',

@@ -143,8 +143,8 @@ CORNERS = {"sine": [], "tri": [0.25, 0.75], "square": [0.5, 1.0], "saw": [0.5]}
 
 def cycle_ts(kind):
     s = SEAM[kind]
-    ts = [s + k / 28 for k in range(29)]
-    eps = 0.012
+    ts = [s + k / 24 for k in range(25)]
+    eps = 0.03
     for c in CORNERS[kind]:
         for cc in (c, c + 1):
             if s < cc < s + 1:
