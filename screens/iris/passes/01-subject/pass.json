@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-17T06:22:50",
   "focus": null,
   "subject": null,
@@ -295,5 +295,25 @@
     "problems": [],
     "checked": "2026-11-17T06:36:21"
   },
-  "selection": null
+  "selection": {
+    "variant": "v2",
+    "reason": "The owner asked for a rainbow; it reads at once at 1:1, every control has its own part (band lit, radii, cycle count, wave shape), and the subject is the machine name.",
+    "chosenBy": "owner",
+    "at": "2026-11-17T13:22:32",
+    "angle": "the object in the machine's name, drawn literally and well: Iris's rainbow, a real primary bow standing on the horizon",
+    "pattern": "none",
+    "drawing_language": "single-weight contour: every line a 1.5 px closed ribbon, projected from one 3D model (four light cones round the anti-solar point, sun 13 degrees up, one pinhole camera at the horizon); state is carried by brightness and by the lines' own shape and spacing, never fills",
+    "subject": "A rainbow of four bands over a horizon line, each band one of the voice's waveforms bent along its cone of light (sine outermost where the longest wavelength sits, saw innermost, so the bow orders plain to bright the way the spectrum does), with the band morph sits on lit.",
+    "controls": [
+      "morph moves the light inward across the bands, sine on the outer arc to saw on the inner, lighting the one under the window (#CDCDCD) and setting the others' greys by their mix weight.",
+      "overlap pulls the neighbouring bands' cone angles toward the lit band, so at 0 the four arcs stand apart and at 100 they crowd onto one radius and their waves cross.",
+      "spread gives each band its own cycle count round the bow, so the four waves that line up radially at 0 drift out of step along the arc and beat against each other.",
+      "tone low-passes the drawn waves themselves, from smooth near-sine humps at 0 to sharp square corners and saw edges at 100.",
+      "skew moves the breakpoint in the three shaped bands, so the square narrows to a pulse, the triangle leans into a ramp and the sine bunches up, while the saw arc stays as it is.",
+      "phase slides each band's wave along the arc relative to the band outside it, so the crests that line up at 0 stagger into a diagonal shear across the bow."
+    ],
+    "reference": "library/theseus-tower (a single projected 3D subject in line, mid-grey contours with one bright element) and screens/toro/frames for the two-page header band",
+    "risks": "Target-ring look: four nested arcs is a target's skeleton, and here only the waveforms, the black between the lines and the open horizon keep it from reading as one. At overlap 0 with tone low, the bands are four smooth concentric curves and that risk is at its worst. Perspective is real, so the bow's feet stretch the waves and the sine's feet splay out past the inner bands. With sine outermost the lit band moves inward and gets shorter as morph rises, so saw's arc is about two thirds the length of sine's. That's honest to the optics but means a brighter sound draws a smaller line. The saw at rest is at ground grey (#4B4B4B) and is faint at 1:1. Five or six static paths per band split into pieces of 31 points or fewer, so the art is about 30 static paths. Making the waves mutable needs one 64-point outline per band at most (paths 4), so the device version has to resample each band to 32 centreline points, which is coarse for 11 cycles. Cycle count or shape may have to drop, and that's pending a device check. At the default window, sine and square bleed in equally (both #646464, weight 0.39) and saw is out (ground grey). How much a neighbour bleeds in is only a step or two of grey, so overlap's radial pull has to carry it, not shade alone.",
+    "frame": "screens/iris/passes/01-subject/v2/rest.svg"
+  }
 }
