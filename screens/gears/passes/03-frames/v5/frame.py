@@ -388,7 +388,7 @@ def draw():
         bore = boreA if cx == cA else boreB
         ya, yb = OY + 12, OY - S * (top * COSP + bore * SINP) + 1      # up through the bore only
         y = ya
-        long_, gap, short = 9.0, 3.0, 2.5
+        long_, gap, short = 9.0, 3.0, 3.5
         on = 0
         pattern = [long_, gap, short, gap]
         while y > yb:
