@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "frames",
   "number": 2,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-17T15:06:00",
   "focus": null,
   "subject": {
@@ -95,5 +95,11 @@
     "problems": [],
     "checked": "2026-11-17T15:12:08"
   },
-  "selection": null
+  "selection": {
+    "variant": "v3",
+    "reason": "Calmest and most OP-XY: the whole bow centred with black all round, and the cycle density rising inward keeps four nested arcs from reading as a target.",
+    "chosenBy": "owner",
+    "at": "2026-11-17T15:12:47",
+    "frame": "screens/iris/passes/02-frames/v3/rest.svg"
+  }
 }

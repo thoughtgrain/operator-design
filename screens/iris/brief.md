@@ -122,18 +122,20 @@ The bow is a true semicircle: the sun on the horizon behind the viewer (a sunset
 | 1 | morph | 5 | position + shape | mix line (nodes 0–3) | radius from the outer (sine) band to the inner (saw), 3 band spacings (≥ 36 px), shape sine → saw | the bright line walks inward across the bow and sharpens from a smooth swell to a ramp |
 | 2 | overlap | 4 | position | grey band chains | neighbours' radii pulled toward the bright line, up to 80 % of the way; the mix line takes their shapes in | the bow tightens round the bright line; at 100 the four bands crowd it and their waves cross |
 | 3 | spread | 4 | scale + shape | band cycle nodes; mix line | band i's cycle length × (1 + 0.12 (i − 1.5)) (scale 0.82–1.18 at the outer bands); the mix line's amplitude beats along the arc | the bands' crests fall out of radial line, and the bright line swells and thins round the bow |
-| 4 | tone | 4 | shape | mix line | from almost a sine (fundamental only, smaller) to every harmonic the mix has | the bright line's corners round off and it shrinks as Tone closes |
+| 4 | tone | 4 | shape (two parts) | mix line; band chains (raw ↔ rounded) | the mix's drawn bandwidth from 1.4 to 11 harmonics; the band cut sweeps outward: saw rounded below 65 %, square below 45 %, triangle below 20 %, the sine never | the bright line's corners round off, and band by band from the inside the teeth melt into smooth humps |
 | 5 | skew | 3 | shape | mix line | breakpoint 50 % → 5 % on the sine, triangle and square parts of the mix | the bright line leans; on the square it narrows to spikes |
 | 6 | phase | 2 | position | band cycle nodes; mix line | band i slides i/8 of a cycle along its arc (the saw, 3/8) | the bands' crests shear into a diagonal; the bright line hollows where bands overlap |
+
+Tone needed its second part. The first frames passed every number but one: Tone scored 0.94 % against a 1.6 % floor. On the default triangle mix there's almost nothing above the fundamental for a low-pass to take, and a line at about 10 points per cycle can't draw past the 5th harmonic anyway. So the drawn bandwidth is fitted to what the line resolves (0.5–3.5 octaves, written in `gen_frames.py`), and the bands carry the rest. They run from plain (outside) to bright (inside), so a low-pass is drawn as what it does to that order: the inner bands lose their corners first. The cut bands drop one grey step and switch to a pre-drawn rounded chain. The first try (darkening cut bands with no change of shape) passed at 2.28 % but the three Tone frames still looked alike on the contact sheet, so I replaced it with the change of shape.
 
 Note response: while notes are held, the mix line travels along the arc (its phase advances, a rewrite of the 4 outlines per frame) and steps up from `#AFAFAF` to `#CDCDCD`. On hold ended it settles in 0.15–0.2 s and stops. At rest nothing moves.
 
 ```json
 "display": {"stateBytes": 48, "stateAlignment": 4,
-            "paths": 4, "points": 64, "nodes": 72, "texts": 16, "palette": 6}
+            "paths": 4, "points": 64, "nodes": 144, "texts": 16, "palette": 6}
 ```
 
-Nodes: 4 mix outlines, 64 band cycle nodes (4 bands × 16, enough for the shortest cycles at full spread; the rest park hidden), the horizon, a black ground mask that hides cycles sliding below it, and spares. Texts: the 16 `page_header.hpp` takes for two pages. Palette: the mix (lit, held), three band greys by mix weight, the horizon grey, black.
+Nodes: 0–3 the mix outlines (mutable outlines are always the first nodes), 4–11 the two-page header bar, then 4 bands × 16 raw cycle nodes and 4 × 16 rounded ones (64 + 64; 16 covers the densest band at full spread, the rest park hidden), the black ground mask and the horizon: 142, declared 144. Texts: the 16 `page_header.hpp` takes for two pages. Palette: the mix (lit, held), three band greys by mix weight, the horizon grey, black.
 
 | case | changed nodes / frame |
 | --- | --- |
@@ -142,3 +144,25 @@ Nodes: 4 mix outlines, 64 band cycle nodes (4 bands × 16, enough for the shorte
 | playing, heaviest (spread 100: the mix beats, so its outlines change every frame anyway) | avg 4 · peak 4. Turning a knob moves up to 64 band nodes, but only during the turn. |
 
 The redraw risk is the outline rewrite, not the count: 4 × 64 points every frame while held. It's **pending device**; if it's too heavy, the travel can step every second frame.
+
+## 5 · Frames
+
+Frames pass 02 (`passes/02-frames/`): five rest-frame variants of the rainbow from `frame_directions` (off-axis low, full-bleed elevation, centred hero with a density gradient, low-horizon section, three-quarter column-affine), each drawn by its own `opxy-designer` agent to section 4's structure. All five lint clean; every pair differs by 9.3–11.9 % of body pixels at 1:1 (floor 4 %). **v3, the centred bow, picked by the owner on 2026-11-17**: the calmest of the five, with black all round, and the cycle count rising inward (11, 13, 14, 16) so the wavelength on screen halves from the sine band to the saw band, the way a real bow's wavelengths order. That density is what stops four nested arcs reading as a target.
+
+The set is generated by `gen_frames.py` (from v3's generator, with the fixes in section 4) into `frames/`: rest, playing, and c1–c6 at 000/050/100.
+
+- `lint_frame.py frames/*.svg --two-page --definition definition.json`: 0 errors, 0 warnings, 20 frames.
+- `perceptibility.py` (scores 5, 4, 4, 4, 3, 2), from Playwright 1:1 renders because rsvg-convert isn't installed here:
+
+| control | need % | 0→100 % | 0→50 % | 50→100 % | span | |
+| --- | --- | --- | --- | --- | --- | --- |
+| morph | 2.50 | 10.22 | 10.89 | 10.54 | 321 | ok |
+| overlap | 1.60 | 7.73 | 8.12 | 6.58 | 319 | ok |
+| spread | 1.60 | 8.94 | 8.13 | 8.03 | 316 | ok |
+| tone | 1.60 | 3.90 | 2.24 | 1.77 | 290 | ok |
+| skew | 1.20 | 4.80 | 3.76 | 3.61 | 290 | ok |
+| phase | 0.80 | 7.18 | 5.36 | 6.20 | 290 | ok |
+| note response | 2.00 | 3.23 | | | 292 | ok |
+
+- Band greys start at `#646464` (3.55:1), not `#4B4B4B`: a band out of the mix is still one of the four inputs, so it's a meaningful part and needs ≥ 3:1 (`accessibility.md`). It also fixed the faint saw band every frame designer flagged.
+- Contact sheet: `contact.svg` / `contact.png`. Looked at 1:1: every control's three frames read differently (Tone only after the change described in section 4).
