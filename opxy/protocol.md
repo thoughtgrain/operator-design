@@ -10,7 +10,7 @@ screens/<machine-id>/
 ├── definition.json   ← phase 1A draft, when the machine has no XY definition yet
 ├── passes/           ← every design pass: <nn>-<kind>/v1…v5 + pass.json (five unique variants)
 ├── frames/           ← phase 5: rest.svg, playing.svg, c<N>-000.svg, c<N>-050.svg, c<N>-100.svg
-├── contact.svg       ← phase 5: tools/contact_sheet.py output (+ contact.png if rsvg-convert exists)
+├── contact.svg       ← phase 5: tools/contact_sheet.py output (+ contact.png if a renderer exists: opxy-raster or rsvg-convert)
 ├── motion.md         ← phase 6
 ├── review.md         ← phase 7
 └── handoff.md        ← phase 8

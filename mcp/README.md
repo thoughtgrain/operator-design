@@ -74,7 +74,12 @@ Check what's in place any time:
 python3 mcp/setup.py check
 ```
 
-`rsvg-convert` (librsvg) is the one outside tool: rendering frames to PNG needs it, which `render_frame`, contact-sheet PNGs and perceptibility on SVG frames all use. macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`.
+Rendering frames to PNG (`render_frame`, contact-sheet PNGs, perceptibility on SVG frames, the pass pixel check) needs one renderer, found by `opxy/tools/raster.py` in this order:
+
+1. `opxy-raster`, the Rust renderer in `crates/opxy-raster` (resvg: no system libraries, the same pixels on every platform). `cargo build --release` from the repo root puts it in `target/release/`, where the tools find it. `OPXY_RASTER` points at another copy.
+2. `rsvg-convert` (librsvg): macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`.
+
+Both take the same flags, so nothing else cares which one it got. Without either, `design_pass_submit` records `pixel check skipped` instead of measuring, so build or install one.
 
 ## Configuration
 
@@ -100,6 +105,7 @@ Set these in the client's `env` block for the server (the setup flags write them
 | Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `colour_policy`, `shift_policy`, `opxy_tokens`, `opxy_library` | guide, search, patterns, colour_policy |
 | Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run`, `preview_brief`, `sdk_test` | status, lint_frames, perceptibility, render, preview |
 | Design passes | `design_pass_start`, `design_pass_submit`, `design_pass_select`, `design_pass_reject`, `design_pass_get` | start, submit, select or reject |
+| Bench | `bench_open`, `bench_poll`, `bench_close` | (not in compact; run `opxy/tools/bench.py` instead) |
 | Training | `training_propose`, `training_revise`, `training_list`, `training_get`, `training_advance`, `training_record`, `training_gate`, `training_approve`, `training_reject`, `training_roles` | propose, get, advance, record |
 
 Prompts (slash commands in clients that show them): `design-screen`, `audit-screen`, `propose-improvement`, `run-training-queue`. Resources: `opxy://doc/<name>`, `opxy://catalog`, `opxy://tokens`, `opxy://library/<entry>`, `opxy://proposal/<id>`.
@@ -129,6 +135,29 @@ Every generative pass (the subject candidates, the rest-frame variants, any revi
 
 The numbers live in `opxy/catalog.json` → `iterations`, and the training gate refuses any proposal that changes `perPass` from five.
 
+## The bench
+
+`bench_open` starts a local page (127.0.0.1, port 8470 or the next free one) for the moment of choosing. It's the same server as `python3 opxy/tools/bench.py [machine]` from a terminal.
+
+- **Board.** The pass's five variants side by side, each at 480 × 220 CSS px, never scaled: on a narrow window the frame scrolls in its well instead. Under each: its direction, subject, what each control does, the designer's named risks, the pairwise uniqueness results and its lint count.
+- **Cycle.** One variant at a time in the same spot, flipped with `1`–`5` or the arrows; hold `Space` to flick back to the one before. Flipping in place shows what side by side hides.
+- **Play.** The machine's controls as knobs, turned with the mouse, the keyboard or a MIDI controller (Web MIDI: Chrome or Edge), and a held note from the keyboard, the page or any MIDI note. With `screens/<id>/bench.py` every knob position is drawn live by the machine's own generator, eased the way the device eases. Without it the knobs snap to the drawn 0 / 50 / 100 keyframes and nothing is blended.
+- **Lenses** on every frame: *vector* (the browser's SVG), *device* (rasterised at 480 × 220 and shown pixel for pixel, which takes away a high-DPI screen's flattery), *arm's length* (downsampled and softened), and a *value map* that keeps only the brightest grey. A meter under each frame gives body black against `craft.md`'s 40 % floor.
+
+The person picks or turns a pass down on the page, with their name and a reason; the server records it through `design_pass_select` / `design_pass_reject`, the same gate an agent's call goes through, and appends it to `passes/<nn>/events.jsonl`. They can also send a note with an optional direction (`quieter`, `bolder`, `distill`, `deepen`, `steady`). `bench_poll` hands all of that to the agent. Every request carries a session token (in the URL the bench prints, then a cookie), POSTs must be same-origin, frames are served only from `screens/` through `<img>` with a CSP that stops SVG scripts, and the page says plainly that it's a preview, not the device.
+
+### Live frames: `screens/<id>/bench.py`
+
+A machine opts into live knobs with one function beside its generator:
+
+```python
+def frame(values: dict[str, float], notes: float) -> str:
+    """values: every control by its definition id, 0..1. notes: 0 (none held) .. 1 (held, fully lit).
+    Returns one 480 × 220 SVG frame, from the same code that draws the stills."""
+```
+
+It runs in its own process (`opxy_mcp/bench/worker.py`), so a slow or broken generator can't take the bench down, and it restarts by itself when any `.py` beside it or in `frames/` changes: edit the generator and the page redraws. `screens/beacon/bench.py` and `screens/toro/bench.py` are examples.
+
 ## Layout
 
 ```
@@ -143,6 +172,7 @@ mcp/
 │   ├── knowledge.py     docs, sections, search, patterns, categories, library
 │   ├── screens.py       scaffolding, status, checks, render, audit_run
 │   ├── passes.py        five-variant design passes and the uniqueness checks
+│   ├── bench/           the bench: server, events, live-frame workers, and the page (static/)
 │   ├── training.py      proposals, ops, the gate, approval
 │   ├── agents.py        roles, briefs, the OpenAI-compatible runner
 │   ├── runner.py        calls opxy/tools/*.py main() in-process with --json
@@ -159,3 +189,4 @@ The server never reimplements a check. `runner.py` calls each tool's own `main()
 - Training ops can only touch the guidelines (docs, tokens, catalog, skills, agent roles), never code.
 - Nothing in training mode lands without a person's approval, and the generated subagents never get the approve tool.
 - stdout carries only protocol messages; tools' own output is captured, and logs go to stderr.
+- The bench binds 127.0.0.1, needs its session token on every request, refuses cross-origin POSTs, and serves only `.svg` and `.png` from `screens/`.

@@ -1,6 +1,6 @@
 # Choice revisions: a localhost bench for the five variants
 
-Status: investigation, nothing built yet. Branch `choice-revisions`.
+Status: phases 1 and 2 built, plus MIDI knobs from phase 3 (see [What got built](#what-got-built)). Branch `choice-revisions`.
 
 I'm looking at how to give the person a real place to look at a pass's five variants and pick one, the way [impeccable](https://github.com/pbakaus/impeccable)'s live mode gives a web designer a place to cycle through variants in the browser. I'm borrowing workflow ideas, not code or assets: impeccable is a web tool built around HTML, CSS, fonts and colour, and almost none of that survives contact with a 480 × 220 grey screen. What does survive is the shape of the loop (browser ↔ local server ↔ agent), the discipline around variants, and a few ways of generating ideas that aren't the obvious ones.
 
@@ -145,7 +145,7 @@ impeccable lets a variant expose a few coarse knobs. Here the knobs already exis
 
 ## Proposed file layout
 
-Nothing here exists yet; these are the paths I'd create.
+The plan as first written. What actually landed is in [What got built](#what-got-built); `header.py` was dropped, since every frame already carries its own stock header.
 
 ```
 mcp/opxy_mcp/bench/
@@ -175,11 +175,31 @@ Docs that would change: `mcp/README.md` (the bench and its tools), the root `REA
 3. **Controls view and overlays.** Scrubbing drawn frames, Shift header, lint and value-map overlays.
 4. **Training proposals** for the rut, the stock-look lock, family labels and the steering verbs, each through draft → audit → review → gate → the person's approval.
 
-## Open questions
+## Decisions
 
-These are the person's calls, and they change what gets built:
+The person left these to me. What I chose and why:
 
-1. **Rust scope.** The renderer only (my recommendation), or the bench server and renderer as one Rust binary from the start?
-2. **Who writes the pick.** Should the bench hand the pick to the agent to record (my recommendation), or write `pass.json` itself so the record never passes through a conversation?
-3. **Control scrubbing.** Drawn keyframes only, or let a pass's generator script produce in-between frames on request?
-4. **Ideas into the guidelines.** Which of the rut, the stock-look lock, family labels and steering verbs should go to training mode, and in what order?
+1. **Rust scope: the renderer only.** `crates/opxy-raster` is a small resvg CLI that takes the same flags as `rsvg-convert`, so `runner.py`, `perceptibility.py` and `contact_sheet.py` use it without knowing which one they got (`opxy/tools/raster.py` finds it). The bench server stays stdlib Python: it's a few hundred lines, it lives inside the MCP process, and a second implementation of anything the tests pin would only drift.
+2. **The bench records the pick itself.** I'd first said the agent should record it. What changed my mind: the server calls the very same `design_pass_select` / `design_pass_reject`, so every gate still applies, the name and reason come straight from the person instead of being retyped from chat, and it works from a terminal with no agent polling at all. The agent still hears about it through `bench_poll`, and `events.jsonl` keeps the trail beside the pass.
+3. **Knobs: drawn keyframes by default, live frames when the machine opts in.** Without a generator the knob snaps to the nearest drawn 0 / 50 / 100 frame, and the dial shows a dashed tick where the drawn frame is. Blending two frames would show a grey ghost no frame contains. With `screens/<id>/bench.py` (one `frame(values, notes)` function) every position is drawn by the machine's own code, eased over the motion tokens' 0.15–0.2 s, with the note envelope rising and falling. beacon and toro have one.
+4. **Guideline ideas wait for training mode.** The rut, the stock-look lock and family labels aren't filed yet. The steering verbs exist only as an optional tag on a note the person sends the agent from the bench; they don't change any doc.
+
+## What got built
+
+| Piece | Where | Notes |
+| --- | --- | --- |
+| Renderer | `crates/opxy-raster/`, `Cargo.toml`, `opxy/tools/raster.py` | resvg 0.45, sans fallback for the licensed device face; `cargo test` covers its flags |
+| Golden images | `mcp/tests/golden/` | toro-blocks and theseus-tower rest frames; the test compares the body (not the header, whose fallback font differs by machine) with perceptibility's own measure |
+| Bench server | `mcp/opxy_mcp/bench/` | `server.py` (routes, token, CSP), `model.py` (machines, passes, frame sets, both frame-naming schemes), `events.py` (SSE, agent queue, journal), `generator.py` + `worker.py` (live frames in a separate process, restarted on code changes) |
+| Bench page | `mcp/opxy_mcp/bench/static/` | board, cycle, play; vector / device / arm's-length lenses; value map; body-black meter; Web MIDI with auto-bind, learn and relative encoders |
+| Entry points | MCP `bench_open`, `bench_poll`, `bench_close`; `opxy/tools/bench.py` | the bench tools stay out of the compact profile (16-tool cap for small local models) |
+| Tests | `mcp/tests/test_server.py` → `TestBench`, `TestRenderer` | token and confinement, a pick refused before the pass is ready and accepted after, notes, keyframe naming, live generator and its error path |
+
+With `opxy-raster` built, the six tests that used to skip for want of `rsvg-convert` now run, including both precedents. All 48 pass.
+
+## Not built yet
+
+- **Shift in Play.** A toggle that swaps the header to the Shift controls needs frames drawn with Shift held; no screen has those yet.
+- **Lint findings drawn on the frame.** The board shows lint counts with the rules on hover; pinning each finding to its coordinates needs the linter to report positions.
+- **Training proposals** for the rut, the stock-look lock and family labels.
+- **A `bench.py` for the other machines.** Each generator has its own shape (`draw(c, …)`, `frame(v, playing)`, `frame_for(…)`), so each adapter is a few lines written against it.

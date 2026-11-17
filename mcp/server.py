@@ -37,7 +37,7 @@ def check() -> int:
     print("  " + ", ".join(names))
     g = guide("protocol")
     print(f"protocol: {len(g['outline'])} sections")
-    print(f"rsvg-convert: {rsvg() or 'missing (render_frame, contact PNGs and perceptibility on SVG need it)'}")
+    print(f"renderer: {rsvg() or 'missing: build opxy-raster (cargo build --release) or install rsvg-convert; render_frame, contact PNGs, perceptibility on SVG and the pass pixel check need one'}")
     return 0
 
 

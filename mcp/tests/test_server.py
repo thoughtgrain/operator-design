@@ -36,7 +36,13 @@ sys.path.insert(0, str(COPY / "mcp"))
 from opxy_mcp import passes, rpc, tools, training  # noqa: E402
 from opxy_mcp.paths import ROOT, ToolError  # noqa: E402
 
-HAS_RSVG = shutil.which("rsvg-convert") is not None
+sys.path.insert(0, str(REAL / "opxy/tools"))
+import raster  # noqa: E402
+
+RENDERER = raster.find()  # opxy-raster from the real repo's target/, or rsvg-convert
+if RENDERER:
+    os.environ.setdefault("OPXY_RASTER", RENDERER)  # the copy has no target/ of its own
+HAS_RSVG = RENDERER is not None
 SERVER = COPY / "mcp/server.py"
 
 
@@ -135,7 +141,7 @@ class TestKnowledge(unittest.TestCase):
         self.assertEqual(s["results"][0]["section"], "P10 · Voice field")
 
 
-@unittest.skipUnless(HAS_RSVG, "rsvg-convert not installed")
+@unittest.skipUnless(HAS_RSVG, "no SVG renderer (opxy-raster or rsvg-convert)")
 class TestChecks(unittest.TestCase):
     def test_lint_matches_cli(self):
         frames = sorted((ROOT / "library/theseus-tower/frames").glob("*.svg"))
@@ -247,7 +253,7 @@ class TestPasses(unittest.TestCase):
         err, text = call("design_pass_start", {"machine_id": "passtest", "kind": "frames"})
         self.assertTrue(err and "subject pass" in text)
 
-    @unittest.skipUnless(HAS_RSVG, "rsvg-convert not installed")
+    @unittest.skipUnless(HAS_RSVG, "no SVG renderer (opxy-raster or rsvg-convert)")
     def test_frame_uniqueness(self):
         _, s0 = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
         draw_variants(s0["pass"])
@@ -286,6 +292,104 @@ PATTERN_OPS = [
     {"op": "replace_text", "file": "opxy/categories.md", "find": "| P15 Cell field | ● | | ● | ● | | | |\n",
      "replace": "| P15 Cell field | ● | | ● | ● | | | |\n| P16 Cable field | ● | | | | | | |\n"},
 ]
+
+
+class TestBench(unittest.TestCase):
+    """The bench page's server: the token, what it serves, picks through the same gate, and live frames."""
+
+    @classmethod
+    def setUpClass(cls):
+        from opxy_mcp.bench import Bench
+        cls.bench = Bench(port=8571).start()
+        cls.base = f"http://127.0.0.1:{cls.bench.port}"
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.bench.stop()
+
+    def req(self, path, body=None, token=True, headers=None):
+        import urllib.error
+        import urllib.request
+        h = {"X-Bench-Token": self.bench.token} if token else {}
+        h.update(headers or {})
+        data = None
+        if body is not None:
+            data = json.dumps(body).encode()
+            h["Content-Type"] = "application/json"
+        r = urllib.request.Request(self.base + path, data=data, headers=h, method="POST" if data else "GET")
+        try:
+            with urllib.request.urlopen(r, timeout=30) as res:
+                return res.status, res.read(), res.headers
+        except urllib.error.HTTPError as exc:
+            return exc.code, exc.read(), exc.headers
+
+    def setUp(self):
+        shutil.rmtree(ROOT / "screens/passtest", ignore_errors=True)
+        call("screen_init", {"machine_id": "passtest", "category": "engine"})
+
+    def test_token_and_confinement(self):
+        self.assertEqual(self.req("/api/machines", token=False)[0], 403)
+        self.assertEqual(self.req("/api/health", token=False)[0], 200)
+        self.assertEqual(self.req("/file/opxy/tokens.json")[0], 404)
+        self.assertEqual(self.req("/file/screens/../AGENTS.md")[0], 404)
+        status, body, headers = self.req("/file/screens/toro/frames/rest.svg")
+        self.assertEqual(status, 200)
+        self.assertIn("default-src 'none'", headers["Content-Security-Policy"])
+        self.assertIn(b"sans-serif", body)  # served with a grotesk fallback for the licensed device face
+        self.assertEqual(self.req("/api/message", {"machine": "toro", "text": "x"},
+                                  headers={"Origin": "http://elsewhere.example"})[0], 403)
+
+    def test_pick_goes_through_the_gate_and_reaches_the_agent(self):
+        _, s = call("design_pass_start", {"machine_id": "passtest", "kind": "subject"})
+        draw_variants(s["pass"])
+        name = Path(s["pass"]).name
+        body = {"machine": "passtest", "pass": name, "variant": "v2", "reason": "the cleanest mechanism", "chosenBy": "Tester"}
+        status, text, _ = self.req("/api/pick", body)
+        self.assertEqual(status, 400, "a pick before five unique variants are submitted must be refused")
+        self.assertIn(b"needs five unique variants", text)
+        submit_subjects()
+        self.assertEqual(self.req("/api/pick", {**body, "reason": " "})[0], 400)
+        status, _, _ = self.req("/api/pick", body)
+        self.assertEqual(status, 200)
+        rec = json.loads((ROOT / s["pass"] / "pass.json").read_text(encoding="utf-8"))
+        self.assertEqual((rec["state"], rec["selection"]["chosenBy"]), ("selected", "Tester"))
+        events = self.bench.hub.wait(1)
+        self.assertEqual([e["type"] for e in events], ["pick"])
+        journal = (ROOT / s["pass"] / "events.jsonl").read_text(encoding="utf-8")
+        self.assertIn('"variant": "v2"', journal)
+        view = json.loads(self.req(f"/api/pass/passtest/{name}")[1])
+        self.assertEqual((view["selection"]["variant"], view["pickable"]), ("v2", False))
+
+    def test_notes_take_known_verbs_only(self):
+        self.assertEqual(self.req("/api/message", {"machine": "passtest", "text": "more", "verb": "louder"})[0], 400)
+        self.assertEqual(self.req("/api/message", {"machine": "passtest", "text": "less sky", "verb": "quieter"})[0], 200)
+        self.assertEqual(self.bench.hub.wait(1)[0]["verb"], "quieter")
+
+    def test_keyframes_by_both_names(self):
+        view = json.loads(self.req("/api/machine/toro")[1])
+        frames = next(s for s in view["frameSets"] if s["id"] == "frames")["keyframes"]
+        self.assertEqual(sorted(frames["controls"]["1"]), ["0", "100", "50"])
+        self.assertTrue(frames["rest"].endswith("rest.svg"))
+
+    def test_live_generator(self):
+        (ROOT / "screens/passtest/definition.json").write_text(json.dumps(
+            {"parameters": [{"id": "size", "label": "Size", "default": 0.5}]}), encoding="utf-8")
+        (ROOT / "screens/passtest/bench.py").write_text(
+            "def frame(values, notes):\n"
+            "    r = 10 + 80 * values['size']\n"
+            "    return f'<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"480\" height=\"220\">"
+            "<circle cx=\"240\" cy=\"120\" r=\"{r:.1f}\" fill=\"none\" stroke=\"#CDCDCD\" stroke-width=\"2\"/></svg>'\n",
+            encoding="utf-8")
+        status, svg, _ = self.req("/gen/passtest.svg?v=1&n=0")
+        self.assertEqual(status, 200)
+        self.assertIn(b'r="90.0"', svg)
+        self.assertEqual(self.req("/gen/passtest.svg?v=1,2&n=0")[0], 400)
+        (ROOT / "screens/passtest/bench.py").write_text("def frame(values, notes):\n    raise ValueError('nope')\n",
+                                                         encoding="utf-8")
+        os.utime(ROOT / "screens/passtest/bench.py", (1, 1))  # a changed mtime restarts the worker
+        status, text, _ = self.req("/gen/passtest.svg?v=0.2&n=0")
+        self.assertEqual(status, 400)
+        self.assertIn(b"nope", text)
 
 
 class TestTraining(unittest.TestCase):
@@ -330,7 +434,7 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(g["state"], "draft")
         self.assertTrue(any(c["check"] == "design passes stay at five variants" and not c["ok"] for c in g["checks"]))
 
-    @unittest.skipUnless(HAS_RSVG, "rsvg-convert not installed")
+    @unittest.skipUnless(HAS_RSVG, "no SVG renderer (opxy-raster or rsvg-convert)")
     def test_gate_tokens_need_constraints_and_regression(self):
         pid = self._through_review([{"op": "set_json", "file": "opxy/tokens.json", "pointer": "/perceptibility/minSpanPx", "value": 500}],
                                    kind="constraint_change")
@@ -519,7 +623,7 @@ class TestOpenXYSync(unittest.TestCase):
         self.assertIn("--no-cpu", r["output"])
 
 
-@unittest.skipUnless(HAS_RSVG, "rsvg-convert not installed")
+@unittest.skipUnless(HAS_RSVG, "no SVG renderer (opxy-raster or rsvg-convert)")
 class TestPrecedents(unittest.TestCase):
     """toro-blocks and theseus-tower are audited screens that work. Any change to the tools, tokens or catalog that
     makes either fail is wrong until someone re-audits them and says why."""
@@ -536,6 +640,29 @@ class TestPrecedents(unittest.TestCase):
             _, p = call("check_perceptibility", {"frames_dir": str(frames), "scores": reg["scores"], "names": reg["names"],
                                                  "two_page": reg.get("twoPage", False)})
             self.assertTrue(p["pass"], f"{name} is now under the floor on {p['under']}")
+
+
+@unittest.skipUnless(raster.name(RENDERER) == "opxy-raster", "opxy-raster not built (cargo build --release)")
+class TestRenderer(unittest.TestCase):
+    """opxy-raster draws the precedents' rest frames the way it did when the goldens were made. The body is compared
+    with perceptibility's own measure, and the header is left out, because header text falls back to whichever sans
+    the machine has installed. Regenerate a golden only on purpose:
+        target/release/opxy-raster -w 480 -h 220 -b black -o mcp/tests/golden/<name>-rest.png <frames>/rest.svg"""
+
+    FRAMES = {"toro-blocks": "screens/toro/blocks/frames/rest.svg", "theseus-tower": "library/theseus-tower/frames/rest.svg"}
+
+    def test_precedent_goldens(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("percept_golden", REAL / "opxy/tools/perceptibility.py")
+        percept = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(percept)
+        step = json.loads((REAL / "opxy/tokens.json").read_text(encoding="utf-8"))["perceptibility"]["pixelStep"]
+        for name, frame in self.FRAMES.items():
+            with tempfile.TemporaryDirectory() as tmp:
+                now = percept.render(REAL / frame, Path(tmp), RENDERER)
+            golden = percept.decode_png((Path(__file__).parent / "golden" / f"{name}-rest.png").read_bytes())
+            area, _ = percept.diff(now, golden, 38, step)
+            self.assertLess(area, 0.5, f"{name}: {area:.2f}% of the body renders differently from the golden")
 
 
 class TestGreyByDefault(unittest.TestCase):

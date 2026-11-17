@@ -188,7 +188,10 @@ def check(args) -> int:
     line(sys.version_info >= (3, 10), f"Python {platform.python_version()} ({args.python})")
     res = subprocess.run([args.python, str(SERVER), "--check"], capture_output=True, text=True, timeout=60)
     line(res.returncode == 0, "server starts: " + (res.stdout.splitlines()[0] if res.stdout else res.stderr.strip()[:200]))
-    line(shutil.which("rsvg-convert") is not None, "rsvg-convert (frames render to PNG; needed for render_frame and perceptibility)")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "opxy" / "tools"))
+    import raster  # noqa: E402  (opxy/tools/raster.py)
+    found = raster.find()
+    line(found is not None, f"renderer: {raster.name(found)} (frames render to PNG; opxy-raster via cargo build --release, or rsvg-convert)")
     line((ROOT / ".mcp.json").exists(), ".mcp.json (Claude Code picks the server up when it opens this repo)")
     for r in roles_mod.roles().values():
         line((ROOT / ".claude/agents" / f"{r['name']}.md").exists(), f".claude/agents/{r['name']}.md")

@@ -9,7 +9,6 @@ import contextlib
 import importlib.util
 import io
 import json
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -61,20 +60,21 @@ def run_json(name: str, argv: list[str]) -> tuple[int, dict]:
 
 
 def rsvg() -> str | None:
-    return shutil.which("rsvg-convert")
+    """The SVG renderer: opxy-raster (Rust, crates/) if built, else rsvg-convert. Same flags either way."""
+    return tool_module("raster").find()
 
 
 def render_png(svg: Path, scale: int = 1) -> bytes:
     """An SVG frame at 1:1 (or 2×) on black, as PNG bytes."""
     tool = rsvg()
     if not tool:
-        raise ToolError("rsvg-convert isn't installed (librsvg). macOS: brew install librsvg · Debian/Ubuntu: apt install librsvg2-bin")
+        raise ToolError(tool_module("raster").HINT)
     with tempfile.TemporaryDirectory() as tmp:
         png = Path(tmp) / "frame.png"
         res = subprocess.run([tool, "-w", str(480 * scale), "-h", str(220 * scale), "-b", "black", "-o", str(png), str(svg)],
                              capture_output=True, text=True, timeout=60)
         if res.returncode != 0:
-            raise ToolError(f"rsvg-convert failed on {svg.name}: {res.stderr.strip()}")
+            raise ToolError(f"{Path(tool).stem} failed on {svg.name}: {res.stderr.strip()}")
         return png.read_bytes()
 
 

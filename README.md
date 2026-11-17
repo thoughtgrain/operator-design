@@ -8,7 +8,7 @@ It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM 
 
 ## Set up the MCP server
 
-Everything runs on Python 3.10+ with no packages to install. The one outside tool is `rsvg-convert`, which renders frames to PNG so agents can look at them (macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`).
+Everything runs on Python 3.10+ with no packages to install. Rendering frames to PNG, so agents can look at them and the uniqueness check can measure them, needs one renderer: either build the Rust one in `crates/opxy-raster` (`cargo build --release`; no system libraries, the same pixels everywhere) or install `rsvg-convert` (macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`). Rust is optional; the tools use whichever they find.
 
 Clone the repo first, then pick your client. Every setup command merges into your existing config (other servers stay put), saves the old file as `.bak`, and takes `--dry-run` if you want to see what it'll write first.
 
@@ -90,6 +90,12 @@ What happens, in order:
 
 If a review sends something back, the fix is another pass of five, never a quick patch to one frame.
 
+### Pick on the bench, and play the screen
+
+> Open the bench for `beacon`.
+
+The agent starts a local page and gives you its URL (or run `python3 opxy/tools/bench.py beacon` yourself). There you see the pass's five variants at 1:1, side by side or flipped in place, through a device-pixel or arm's-length lens if you want; you pick one, or turn the pass down, with your name and a reason, and the agent hears about it. In **Play**, the machine's controls are knobs: drag them, use the arrow keys, or plug in a MIDI controller (Chrome or Edge) and turn real ones, with notes from it holding the screen's note state. Machines with a `bench.py` draw every knob position live from their own generator. The full tour is in [`mcp/README.md`](mcp/README.md#the-bench).
+
 ### Audit a screen
 
 > This is my screen for `theseus`, frames are in this folder. Does it meet the guidelines?
@@ -151,6 +157,7 @@ operators/
 │   ├── templates/                 ← brief and starter frame
 │   ├── tools/                     ← frame linter and contact-sheet builder (stdlib Python)
 │   └── reference/                 ← annotated reference screens
+├── crates/opxy-raster/            ← optional Rust renderer for frames (resvg); the tools fall back to rsvg-convert
 ├── screens/                       ← work in progress, one folder per machine
 └── library/                       ← audited screens that met the guidelines, kept as references
 ```

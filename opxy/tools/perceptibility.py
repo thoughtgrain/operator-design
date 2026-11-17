@@ -6,27 +6,29 @@ changes between them, plus the rest → playing pair for the note response. A pi
 when its brightness moves by at least one stock grey step (~25/255), so a faint dimming doesn't count.
 Thresholds come from tokens.json `perceptibility` and scale with each control's audible score (1–5).
 
-Frames are SVG (rendered with rsvg-convert) or PNG captures of the screen at 480×220 or 960×440,
+Frames are SVG (rendered with opxy-raster or rsvg-convert) or PNG captures of the screen at 480×220 or 960×440,
 named c<N>-000 / -050 / -100 and optionally rest / playing.
 
 Usage:
     python3 opxy/tools/perceptibility.py FRAMES_DIR --scores 4,5,5,3,3,2,3,2
         [--names spread,fold,...] [--header-bottom 38] [--tokens PATH] [--json]
 
-SVG frames need rsvg-convert. Exit codes: 0 all pass, 1 a control or the note response is under its floor,
+SVG frames need a renderer (opxy-raster or rsvg-convert; see raster.py). Exit codes: 0 all pass, 1 a control or the note response is under its floor,
 2 usage, missing tool or unreadable frame.
 """
 from __future__ import annotations
 
 import argparse
 import json
-import shutil
 import struct
 import subprocess
 import sys
 import tempfile
 import zlib
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import raster  # noqa: E402  (beside this file)
 
 DEFAULT_TOKENS = Path(__file__).resolve().parent.parent / "tokens.json"
 W, H = 480, 220
@@ -109,12 +111,12 @@ def render(frame: Path, out_dir: Path, tool: str | None) -> list[list[int]]:
             return downsample2(decode_png(data))
         raise PerceptError(f"{frame} is {size[0]}×{size[1]}; captures must be 480×220 or 960×440 (crop to the screen)")
     if not tool:
-        raise PerceptError("rsvg-convert not found (librsvg); install it to render SVG frames, or pass PNG captures")
+        raise PerceptError("no SVG renderer (opxy-raster or rsvg-convert); build or install one, or pass PNG captures")
     png = out_dir / (frame.stem + ".png")
     res = subprocess.run([tool, "-w", str(W), "-h", str(H), "-b", "black", "-o", str(png), str(frame)],
                          capture_output=True, text=True)
     if res.returncode != 0:
-        raise PerceptError(f"rsvg-convert failed on {frame}: {res.stderr.strip()}")
+        raise PerceptError(f"{Path(tool).stem} failed on {frame}: {res.stderr.strip()}")
     return decode_png(png.read_bytes())
 
 
@@ -158,7 +160,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"perceptibility: {exc}", file=sys.stderr)
         return 2
     names = args.names.split(",") if args.names else [f"c{i + 1}" for i in range(len(scores))]
-    tool = shutil.which("rsvg-convert")
+    tool = raster.find()
 
     step, span_min, half = tokens["pixelStep"], tokens["minSpanPx"], tokens["halfStepShare"]
     results, failed = [], False

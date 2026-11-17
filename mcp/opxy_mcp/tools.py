@@ -11,7 +11,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Callable
 
-from . import knowledge, passes, preview, screens, sdk, training
+from . import bench, knowledge, passes, preview, screens, sdk, training
 from .agents import roles
 from .paths import colour_policy, shift_policy
 
@@ -176,6 +176,17 @@ TOOLS: list[Tool] = [
          _p(machine_id=STR, reason=STR, chosen_by=STR, pass_name=STR),
          lambda a: passes.design_pass_reject(a["machine_id"], a["reason"], a["chosen_by"], a.get("pass_name")),
          ["machine_id", "reason", "chosen_by"], read_only=False, short="Turn down all five variants of a pass."),
+    Tool("bench_open", "Open the bench: a local web page (127.0.0.1) where the person sees a pass's five variants at 1:1 "
+         "side by side or flipped in place, through vector, device-pixel and arm's-length lenses, and plays a screen with "
+         "knobs (mouse, keyboard or a MIDI controller) and held notes. They pick or turn a pass down there, with their name "
+         "and reason, recorded through design_pass_select. Give them the URL, then wait with bench_poll.",
+         _p(machine_id=STR, pass_name=STR, port=INT),
+         lambda a: bench.open_bench(a.get("machine_id"), a.get("pass_name"), a.get("port", 8470)),
+         read_only=False),
+    Tool("bench_poll", "Wait for what the person does at the bench: a pick, a rejection, or a note (with an optional "
+         "direction: quieter, bolder, distill, deepen, steady). Blocks up to timeout seconds (default 120, max 600).",
+         _p(timeout=INT), lambda a: bench.poll(a.get("timeout", 120))),
+    Tool("bench_close", "Stop the bench server.", {}, lambda a: bench.close_bench(), read_only=False),
     Tool("design_pass_get", "Read a pass record: directions, variants, uniqueness results and the pick.",
          _p(machine_id=STR, pass_name=STR), lambda a: passes.design_pass_get(a["machine_id"], a.get("pass_name")), ["machine_id"]),
     # training ───────────────────────────────────────────────────────────────

@@ -43,7 +43,7 @@ python3 opxy/tools/perceptibility.py screens/<id>/frames --scores 4,5,5,3 --name
 python3 opxy/tools/contact_sheet.py screens/<id>/frames --out screens/<id>/contact.svg --png
 ```
 
-Tools are stdlib Python 3.10+. `--png` uses `rsvg-convert` if it's installed. The device font (Univers Next Pro Light) is licensed, so local previews render text in a fallback; caption widths stay "pending device" until measured in the real font.
+Tools are stdlib Python 3.10+. Rendering to PNG uses the Rust `opxy-raster` if it's built, else `rsvg-convert` (`python3 opxy/tools/raster.py` says which). `python3 opxy/tools/bench.py <id>` opens the bench: the five variants at 1:1 and knobs (MIDI too) to play the screen. The device font (Univers Next Pro Light) is licensed, so local previews render text in a fallback; caption widths stay "pending device" until measured in the real font.
 
 ## What the linter can't tell you
 

@@ -6,3 +6,4 @@ screens/theseus/audio/render
 screens/toro/audio/render
 .codex/config.toml
 *.bak
+target/

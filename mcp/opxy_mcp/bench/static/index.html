@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OP-XY Bench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/static/bench.css">
+<script type="module" src="/static/bench.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the frames</a>
+
+<header class="strip">
+  <div class="mark" aria-hidden="true"><span>op-xy</span> bench</div>
+
+  <div class="pickers">
+    <label class="field"><span>machine</span>
+      <select id="machine" aria-label="Machine"></select>
+    </label>
+    <label class="field"><span>pass</span>
+      <select id="pass" aria-label="Design pass"></select>
+    </label>
+  </div>
+
+  <nav class="views" role="tablist" aria-label="View">
+    <button role="tab" id="tab-board" aria-controls="view-board" data-view="board">Board <kbd>B</kbd></button>
+    <button role="tab" id="tab-cycle" aria-controls="view-cycle" data-view="cycle">Cycle <kbd>C</kbd></button>
+    <button role="tab" id="tab-play" aria-controls="view-play" data-view="play">Play <kbd>K</kbd></button>
+  </nav>
+
+  <div class="lens" role="group" aria-label="How frames are drawn">
+    <div class="seg" role="radiogroup" aria-label="Render">
+      <button role="radio" data-mode="vector" title="The browser draws the SVG. Sharper than the device on a high-DPI screen.">Vector</button>
+      <button role="radio" data-mode="device" title="Rasterised at 480 × 220, then shown pixel for pixel: what the panel can actually show.">Device <kbd>D</kbd></button>
+      <button role="radio" data-mode="arm" title="Downsampled and softened: what still reads from arm's length.">Arm's length <kbd>A</kbd></button>
+    </div>
+    <button class="toggle" id="valuemap" aria-pressed="false" title="Keep only the brightest grey: there should be one brightest element.">Value map <kbd>V</kbd></button>
+  </div>
+
+  <button class="midi" id="midi" aria-describedby="midi-status">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><circle cx="6" cy="9" r="1.1"/><circle cx="14" cy="9" r="1.1"/><circle cx="7.6" cy="13" r="1.1"/><circle cx="12.4" cy="13" r="1.1"/><circle cx="10" cy="6.4" r="1.1"/></svg>
+    <span id="midi-status">MIDI off</span>
+  </button>
+</header>
+
+<main id="main" tabindex="-1">
+  <section class="passline" id="passline" aria-live="polite"></section>
+
+  <section id="view-board" role="tabpanel" aria-labelledby="tab-board" class="view">
+    <ol class="board" id="board"></ol>
+  </section>
+
+  <section id="view-cycle" role="tabpanel" aria-labelledby="tab-cycle" class="view" hidden>
+    <div class="cycle">
+      <ol class="rail" id="rail" aria-label="Variants"></ol>
+      <div class="stage">
+        <div class="frame-well" id="cycle-well"></div>
+        <p class="hint">Keys <kbd>1</kbd>–<kbd>5</kbd> or <kbd>←</kbd><kbd>→</kbd> flip in place. Hold <kbd>Space</kbd> to flick back to the one before.</p>
+        <div class="readout" id="cycle-readout"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-play" role="tabpanel" aria-labelledby="tab-play" class="view" hidden>
+    <div class="play">
+      <div class="play-head">
+        <label class="field"><span>frames</span><select id="frameset" aria-label="Frame set"></select></label>
+        <p class="source" id="play-source"></p>
+      </div>
+      <div class="frame-well" id="play-well"></div>
+      <div class="deck" id="deck" aria-label="Controls"></div>
+      <div class="keys-row">
+        <button class="hold" id="hold" aria-pressed="false">Hold a note <kbd>Space</kbd></button>
+        <p class="note-state" id="note-state" aria-live="polite">no notes</p>
+        <button class="quiet" id="defaults">Back to defaults <kbd>0</kbd></button>
+      </div>
+      <details class="midi-help">
+        <summary>MIDI: how the knobs bind</summary>
+        <p>Connect MIDI (top right) in Chrome or Edge, then turn a knob on your controller. The first knobs you turn bind to the controls in order; to choose, press <em>learn</em> under a control and turn the knob you want. Notes from any channel hold the screen's note state. Bindings are remembered per machine in this browser.</p>
+        <p>The OP-XY itself works as the controller over USB if its encoders send CC on your setup; endless encoders that send relative steps want <em>rel</em> switched on for their binding.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><strong>Preview, not device.</strong> Nothing here ticks a device check. Frames are judged at 1:1; this page never scales them.</p>
+  <p id="renderer"></p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="decide" aria-labelledby="decide-title">
+  <form method="dialog" id="decide-form">
+    <h2 id="decide-title"></h2>
+    <p class="decide-what" id="decide-what"></p>
+    <label class="field block"><span>Your name</span><input id="decide-name" autocomplete="name" required></label>
+    <label class="field block"><span id="decide-reason-label">Why this one</span><textarea id="decide-reason" rows="3" required></textarea></label>
+    <p class="decide-note">This is recorded in <code>pass.json</code> as yours, with the same check an agent's pick goes through.</p>
+    <p class="decide-error" id="decide-error" role="alert"></p>
+    <div class="decide-actions">
+      <button value="cancel" class="quiet" formnovalidate>Cancel</button>
+      <button value="ok" id="decide-ok">Record it</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="note" aria-labelledby="note-title">
+  <form method="dialog" id="note-form">
+    <h2 id="note-title">Send a note to the agent</h2>
+    <fieldset class="verbs">
+      <legend>Direction for the next pass (optional)</legend>
+      <div id="verbs"></div>
+    </fieldset>
+    <label class="field block"><span>Note</span><textarea id="note-text" rows="4" required placeholder="v3's subject, but quieter: less in the sky."></textarea></label>
+    <p class="decide-error" id="note-error" role="alert"></p>
+    <div class="decide-actions">
+      <button value="cancel" class="quiet" formnovalidate>Cancel</button>
+      <button value="ok">Send</button>
+    </div>
+  </form>
+</dialog>
+</body>
+</html>
