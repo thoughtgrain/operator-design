@@ -103,3 +103,42 @@ Angle: the object in the name. Pattern: none. Language: single-weight contour, e
 | phase | each band's wave slides along the arc against the band outside it, so aligned crests shear into a diagonal (up to an eighth of a cycle per band, matching the engine) |
 
 Carried into the frames pass from v2's risks: the target-ring look when waves are smooth (overlap 0, tone low), the saw band faint at rest, the lit band getting shorter as morph rises, and a device question: each band's wave at up to 64 points per mutable outline, four outlines in all.
+
+## 4 · Map and budget
+
+### The structural decision
+
+v2 draws every band as a long wave ribbon, and that doesn't fit the device. A ribbon of N centreline points is a 2N-point outline, the device reshapes at most 4 outlines of at most 64 points each, and one band at 11 cycles needs a few hundred points. Four live bands are out of reach, so I split the drawing by what it shows:
+
+- **The four bands are the components, drawn in grey as fixed shapes.** Each band is a chain of one-cycle nodes, one node per wave cycle, authored once per band at its own size and placed along its arc by `display()` with a translation and a turn. Moving the band (overlap), stretching its cycles (spread) or sliding it along the arc (phase) is a move, a turn and a uniform scale, never a reshape.
+- **The one bright line is the mix**: the actual output wave, the window-weighted sum of the four bands, run through Tone's filter, riding at the radius Morph sets. It's drawn with the four mutable outlines, a quarter of the arc each (32 centreline points per outline, so about 10 per cycle). Every control that changes the sound's shape (morph, overlap, tone, skew, phase, and spread's beating along the arc) changes this line for real, because it's computed from the same maths as the engine.
+
+That makes the picture honest in a way v2 wasn't: the grey bands are what goes in and the bright line is what comes out. Morph slides the bright line inward across the bow from the sine band to the saw band, and its shape follows.
+
+The bow is a true semicircle: the sun on the horizon behind the viewer (a sunset bow, the tallest a rainbow gets), seen by a camera looking straight at the anti-solar point. It's still one 3D model through one camera (`craft.md`), and the circular arcs let display() place cycles by angle with no perspective stretch to fake. v2's 13° sun splayed the feet; this fixes that and the device cost together.
+
+| # | control | score | channel | part (node) | travel 0 → 100 | what the player sees |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | morph | 5 | position + shape | mix line (nodes 0–3) | radius from the outer (sine) band to the inner (saw), 3 band spacings (≥ 36 px), shape sine → saw | the bright line walks inward across the bow and sharpens from a smooth swell to a ramp |
+| 2 | overlap | 4 | position | grey band chains | neighbours' radii pulled toward the bright line, up to 80 % of the way; the mix line takes their shapes in | the bow tightens round the bright line; at 100 the four bands crowd it and their waves cross |
+| 3 | spread | 4 | scale + shape | band cycle nodes; mix line | band i's cycle length × (1 + 0.12 (i − 1.5)) (scale 0.82–1.18 at the outer bands); the mix line's amplitude beats along the arc | the bands' crests fall out of radial line, and the bright line swells and thins round the bow |
+| 4 | tone | 4 | shape | mix line | from almost a sine (fundamental only, smaller) to every harmonic the mix has | the bright line's corners round off and it shrinks as Tone closes |
+| 5 | skew | 3 | shape | mix line | breakpoint 50 % → 5 % on the sine, triangle and square parts of the mix | the bright line leans; on the square it narrows to spikes |
+| 6 | phase | 2 | position | band cycle nodes; mix line | band i slides i/8 of a cycle along its arc (the saw, 3/8) | the bands' crests shear into a diagonal; the bright line hollows where bands overlap |
+
+Note response: while notes are held, the mix line travels along the arc (its phase advances, a rewrite of the 4 outlines per frame) and steps up from `#AFAFAF` to `#CDCDCD`. On hold ended it settles in 0.15–0.2 s and stops. At rest nothing moves.
+
+```json
+"display": {"stateBytes": 48, "stateAlignment": 4,
+            "paths": 4, "points": 64, "nodes": 72, "texts": 16, "palette": 6}
+```
+
+Nodes: 4 mix outlines, 64 band cycle nodes (4 bands × 16, enough for the shortest cycles at full spread; the rest park hidden), the horizon, a black ground mask that hides cycles sliding below it, and spares. Texts: the 16 `page_header.hpp` takes for two pages. Palette: the mix (lit, held), three band greys by mix weight, the horizon grey, black.
+
+| case | changed nodes / frame |
+| --- | --- |
+| at rest | 0 |
+| playing, defaults | 4 (the mix outlines) |
+| playing, heaviest (spread 100: the mix beats, so its outlines change every frame anyway) | avg 4 · peak 4. Turning a knob moves up to 64 band nodes, but only during the turn. |
+
+The redraw risk is the outline rewrite, not the count: 4 × 64 points every frame while held. It's **pending device**; if it's too heavy, the travel can step every second frame.
