@@ -1,0 +1,25 @@
+{
+  "variant": "v1",
+  "angle": "One detail at large scale, the rest implied by the frame's edge: the assembled part's mixed wave fills the lower left and runs off the left and bottom edges, while its four laminations recede up and to the right, each one smaller and more hidden than the last, with the saw only a sliver.",
+  "pattern": "none",
+  "drawing_language": "Exploded view in hidden-line 3D. Every part is a sheet whose top edge is cut to one period of its wave, flat below, black-filled so nearer sheets hide farther ones. The sheets sit on one locating pin, drawn as a chain centre line, and are pulled apart along it. Everything is modelled in world space and projected through one perspective camera. Weights are 1.0 for the pin, seams and sheet edges, 1.5 for the block edges, the neighbouring bands and the sleeve, 2 for the lit band and 2.5 for the mix, which is the only element at #CDCDCD.",
+  "subject": "Iris taken apart: the mixed wave is the profile of a block built from four laminations (sine, triangle, square and saw, in order of harmonic content), and those laminations have been slid off the block along a pin so you can see what the mix is made of.",
+  "controls": [
+    "morph: a sleeve on the locating pin (the mixing window) slides from the sine sheet to the saw sheet, the sheet under its centre takes the heavy 2 px line, and the block's profile at the front reshapes from sine to saw.",
+    "overlap: the sleeve lengthens along the pin from one sheet's width to covering all four, the sheets it covers step up from a 1.2 px line to 1.5 px, and the front profile takes in their shapes.",
+    "spread: the four sheets fan apart, each turning about the locating pin in its own plane by a different amount, so the stack loses its register the way detuned bands drift out of phase.",
+    "tone: the front profile's corners round off and its higher detail smooths away as tone closes, so the mix flattens towards a sine-like hump while the laminations behind keep their sharp shapes.",
+    "skew: each sheet's cut edge is recut around its breakpoint, so the sine sharpens to one side, the triangle leans into a ramp and the square narrows to a pulse, while the saw sheet doesn't change.",
+    "phase: each sheet slides sideways along its own face by one more step than the sheet in front of it, so the stack's wave edges stagger out of line, and the front profile changes only where the sleeve covers more than one sheet."
+  ],
+  "reference": "opxy/craft.md, Think in 3D (meikyu's orrery: model, then project through one camera). The hidden-line sheets with black fill sit beside screens/silt/frames/rest.svg, a two-page-header engine screen drawn in ribbon line art.",
+  "risks": [
+    "The mix is largest only through perspective. With the camera off to the right, the block's period is foreshortened and drawn at about the same scale as the sine sheet, so the 'one detail at large scale' is the brightness and weight of the mix more than its size. A closer camera shows the block nearly edge-on (I tried it, and the mix stopped reading).",
+    "Hidden-line occlusion is the price of the exploded view: at rest only the sine sheet shows its whole period. The triangle shows most of its period, the square its back half, and the saw a corner. This is intended (the frame and the nearer parts imply the rest), but skew on the square and saw reads mostly from the visible part.",
+    "The block's top surface carries four seam lines about 4 to 5 px apart. Near the block's right end they converge to about 3 px and could merge into a grey patch on the device. They could also read as speed lines rather than layers.",
+    "The sleeve is small (about 20 px across at its far end). Morph's position travel along the pin is about 90 px, but the brief scores morph 5, so the sheet's weight change and the reshaping front profile have to carry part of it.",
+    "At 100% spread the far sheets swing their corners up towards y 38, and the turn needs clamping so they stay below the two-page header.",
+    "Cost: the mix profile, the four sheet profiles and the sleeve all change shape, which is more than the 4 mutable outlines allowed. On the device most of it becomes pre-drawn variants. Sheet turn (spread) and slide (phase) are cheap node turns and moves, the sleeve is a move plus a scale, and the front profile is the one mutable outline that has to be rewritten.",
+    "The right fifth of the frame and the bottom right stay empty. The composition leans left because the stack recedes up and to the right."
+  ]
+}

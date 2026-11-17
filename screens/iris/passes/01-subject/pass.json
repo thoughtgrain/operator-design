@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "subject",
   "number": 1,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-17T06:22:50",
   "focus": null,
   "subject": null,
@@ -94,7 +94,206 @@
       "brief": "Start from what iris is and does, not from a pattern. Your angle: one scene where this happens, with one subject in it. Way of drawing: detailed line art. Patterns that have worked for engine machines (P1, P2, P3, P4, P5, P6, P9, P10, P15) may inspire you, but don't copy their look: no orbits, surveys or orthographic plates unless this machine's idea is one."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "angle": "One detail at large scale, the rest implied by the frame's edge: the assembled part's mixed wave fills the lower left and runs off the left and bottom edges, while its four laminations recede up and to the right, each one smaller and more hidden than the last, with the saw only a sliver.",
+      "pattern": "none",
+      "drawing_language": "Exploded view in hidden-line 3D. Every part is a sheet whose top edge is cut to one period of its wave, flat below, black-filled so nearer sheets hide farther ones. The sheets sit on one locating pin, drawn as a chain centre line, and are pulled apart along it. Everything is modelled in world space and projected through one perspective camera. Weights are 1.0 for the pin, seams and sheet edges, 1.5 for the block edges, the neighbouring bands and the sleeve, 2 for the lit band and 2.5 for the mix, which is the only element at #CDCDCD.",
+      "subject": "Iris taken apart: the mixed wave is the profile of a block built from four laminations (sine, triangle, square and saw, in order of harmonic content), and those laminations have been slid off the block along a pin so you can see what the mix is made of.",
+      "controls": [
+        "morph: a sleeve on the locating pin (the mixing window) slides from the sine sheet to the saw sheet, the sheet under its centre takes the heavy 2 px line, and the block's profile at the front reshapes from sine to saw.",
+        "overlap: the sleeve lengthens along the pin from one sheet's width to covering all four, the sheets it covers step up from a 1.2 px line to 1.5 px, and the front profile takes in their shapes.",
+        "spread: the four sheets fan apart, each turning about the locating pin in its own plane by a different amount, so the stack loses its register the way detuned bands drift out of phase.",
+        "tone: the front profile's corners round off and its higher detail smooths away as tone closes, so the mix flattens towards a sine-like hump while the laminations behind keep their sharp shapes.",
+        "skew: each sheet's cut edge is recut around its breakpoint, so the sine sharpens to one side, the triangle leans into a ramp and the square narrows to a pulse, while the saw sheet doesn't change.",
+        "phase: each sheet slides sideways along its own face by one more step than the sheet in front of it, so the stack's wave edges stagger out of line, and the front profile changes only where the sleeve covers more than one sheet."
+      ],
+      "reference": "opxy/craft.md, Think in 3D (meikyu's orrery: model, then project through one camera). The hidden-line sheets with black fill sit beside screens/silt/frames/rest.svg, a two-page-header engine screen drawn in ribbon line art.",
+      "risks": [
+        "The mix is largest only through perspective. With the camera off to the right, the block's period is foreshortened and drawn at about the same scale as the sine sheet, so the 'one detail at large scale' is the brightness and weight of the mix more than its size. A closer camera shows the block nearly edge-on (I tried it, and the mix stopped reading).",
+        "Hidden-line occlusion is the price of the exploded view: at rest only the sine sheet shows its whole period. The triangle shows most of its period, the square its back half, and the saw a corner. This is intended (the frame and the nearer parts imply the rest), but skew on the square and saw reads mostly from the visible part.",
+        "The block's top surface carries four seam lines about 4 to 5 px apart. Near the block's right end they converge to about 3 px and could merge into a grey patch on the device. They could also read as speed lines rather than layers.",
+        "The sleeve is small (about 20 px across at its far end). Morph's position travel along the pin is about 90 px, but the brief scores morph 5, so the sheet's weight change and the reshaping front profile have to carry part of it.",
+        "At 100% spread the far sheets swing their corners up towards y 38, and the turn needs clamping so they stay below the two-page header.",
+        "Cost: the mix profile, the four sheet profiles and the sleeve all change shape, which is more than the 4 mutable outlines allowed. On the device most of it becomes pre-drawn variants. Sheet turn (spread) and slide (phase) are cheap node turns and moves, the sleeve is a move plus a scale, and the front profile is the one mutable outline that has to be rewritten.",
+        "The right fifth of the frame and the bottom right stay empty. The composition leans left because the stack recedes up and to the right."
+      ],
+      "frame": "screens/iris/passes/01-subject/v1/rest.svg"
+    },
+    {
+      "variant": "v2",
+      "angle": "the object in the machine's name, drawn literally and well: Iris's rainbow, a real primary bow standing on the horizon",
+      "pattern": "none",
+      "drawing_language": "single-weight contour: every line a 1.5 px closed ribbon, projected from one 3D model (four light cones round the anti-solar point, sun 13 degrees up, one pinhole camera at the horizon); state is carried by brightness and by the lines' own shape and spacing, never fills",
+      "subject": "A rainbow of four bands over a horizon line, each band one of the voice's waveforms bent along its cone of light (sine outermost where the longest wavelength sits, saw innermost, so the bow orders plain to bright the way the spectrum does), with the band morph sits on lit.",
+      "controls": [
+        "morph moves the light inward across the bands, sine on the outer arc to saw on the inner, lighting the one under the window (#CDCDCD) and setting the others' greys by their mix weight.",
+        "overlap pulls the neighbouring bands' cone angles toward the lit band, so at 0 the four arcs stand apart and at 100 they crowd onto one radius and their waves cross.",
+        "spread gives each band its own cycle count round the bow, so the four waves that line up radially at 0 drift out of step along the arc and beat against each other.",
+        "tone low-passes the drawn waves themselves, from smooth near-sine humps at 0 to sharp square corners and saw edges at 100.",
+        "skew moves the breakpoint in the three shaped bands, so the square narrows to a pulse, the triangle leans into a ramp and the sine bunches up, while the saw arc stays as it is.",
+        "phase slides each band's wave along the arc relative to the band outside it, so the crests that line up at 0 stagger into a diagonal shear across the bow."
+      ],
+      "reference": "library/theseus-tower (a single projected 3D subject in line, mid-grey contours with one bright element) and screens/toro/frames for the two-page header band",
+      "risks": "Target-ring look: four nested arcs is a target's skeleton, and here only the waveforms, the black between the lines and the open horizon keep it from reading as one. At overlap 0 with tone low, the bands are four smooth concentric curves and that risk is at its worst. Perspective is real, so the bow's feet stretch the waves and the sine's feet splay out past the inner bands. With sine outermost the lit band moves inward and gets shorter as morph rises, so saw's arc is about two thirds the length of sine's. That's honest to the optics but means a brighter sound draws a smaller line. The saw at rest is at ground grey (#4B4B4B) and is faint at 1:1. Five or six static paths per band split into pieces of 31 points or fewer, so the art is about 30 static paths. Making the waves mutable needs one 64-point outline per band at most (paths 4), so the device version has to resample each band to 32 centreline points, which is coarse for 11 cycles. Cycle count or shape may have to drop, and that's pending a device check. At the default window, sine and square bleed in equally (both #646464, weight 0.39) and saw is out (ground grey). How much a neighbour bleeds in is only a step or two of grey, so overlap's radial pull has to carry it, not shade alone.",
+      "frame": "screens/iris/passes/01-subject/v2/rest.svg"
+    },
+    {
+      "variant": "v3",
+      "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+      "pattern": "none",
+      "drawing_language": "hatched mass: a bench mechanism modelled in 3D and seen through one orthographic camera (65 degrees down), solid bodies as black masses hatched at 45 degrees in mid grey (fixed housing one diagonal, moving carriage and blades the other), outlines at 1.5 px, engraved tracks as 1.5 px grooves, only what shows through the aperture at #CDCDCD",
+      "subject": "An iris diaphragm fixed over a sliding plate engraved with four waveform tracks (sine farthest, saw nearest), riding on two rails, where what shows through the aperture is what sounds.",
+      "controls": [
+        "Morph slides the plate carriage along its rails (72 px of travel, away from you towards saw), so a different track sits under the aperture.",
+        "Overlap opens the nine hatched blades, the aperture growing from a slit over one track to an opening that takes in all four.",
+        "Spread changes each track's engraved wavelength, the outer tracks pulling apart from the inner ones so their crests no longer line up down the plate.",
+        "Tone turns the focus lever on the housing ring through 240 degrees and rounds the corners of every engraved wave as it closes.",
+        "Skew moves the breakpoint in each track's cycle: the sine leans, the triangle tips towards a ramp, the square narrows to a pulse, the saw stays put.",
+        "Phase slides the four tracks sideways against each other, each a further quarter cycle up to three quarters for the saw."
+      ],
+      "reference": "library/toro-blocks (hidden-line 3D body over black, mid-grey edges, one bright part)",
+      "risks": [
+        "The bright subject is small at rest (overlap 25% leaves a ~50 px aperture), so the eye lands on the right thing but the drawing's mass is the grey housing.",
+        "Spread, skew and phase all reshape the same four tracks (wavelength, cycle form, sideways offset); distinct on the contact sheet, but they share the tracks as their object.",
+        "Tone's lever is a small part on a ring; its rounding of the waves is honest but subtle, so perceptibility for tone (score 4) may lean on the lever's 240-degree sweep alone.",
+        "Device cost: the aperture is a clip (bright tracks inside, dim outside) that the device doesn't do; it needs the bright run pre-cut per morph/overlap state or rebuilt in display(), and the hatching is many static nodes against the 512 budget.",
+        "Four tracks plus a bright run exceed the 4 mutable outlines if every track reshapes live; tracks may need to be pre-drawn variants or translated nodes.",
+        "At overlap 0 the aperture is a ~22 px opening, only just above the legibility floor for a waveform."
+      ],
+      "frame": "screens/iris/passes/01-subject/v3/rest.svg"
+    },
+    {
+      "variant": "v4",
+      "angle": "the material the sound acts on, seen close: one water surface that the four waveforms cross as four wave trains",
+      "pattern": "none",
+      "drawing_language": "edge-lit silhouette: a 3D heightfield sliced into rows of constant depth and projected through one low camera, each row a black mass with a dark hairline rim, the crest tops that nothing nearer hides lit as short grey lips (brighter the taller and nearer), and the front row's whole edge the one brightest line",
+      "subject": "A low, close view across a water surface where four wave trains, one per waveform (sine, triangle, square, saw), arrive from four directions and cross, the crests catching a light along their edges.",
+      "controls": [
+        "morph moves the mixing window across the four trains, so the dominant swell changes direction and crest shape as it turns: long smooth head-on rows (sine), peaked diagonal ridges (triangle), flat-topped plateaus (square), long ramps that break off in cliffs (saw).",
+        "overlap lets the other trains into the surface, so clean parallel ridges break into a crossing, choppy lattice where crests meet and stack.",
+        "spread pulls the trains' wavelengths apart, so the crossing pattern drifts into a moire of tall chop and flat calm patches that beat across the surface.",
+        "tone sets how many harmonics each train keeps, so crests go from soft rounded swells at 0 to sharp knife-edged lips at 100, with more and narrower lit edges.",
+        "skew moves each shaped train's breakpoint, so sine and triangle crests lean over into ramps and the square's plateaus narrow to thin spikes; the saw train doesn't change.",
+        "phase slides each train against the one before, so where they overlap the tall crossing peaks move and fill or hollow out; with one train sounding the surface stays as it is."
+      ],
+      "reference": "opxy/reference/field-and-figure.jpg (one subject filling the body, quiet ground); library/theseus-tower for a modelled 3D form drawn in grey line under the two-page header",
+      "risks": [
+        "Sliced heightfields are close to the familiar 'ridgeline' or terrain-plot look; without the lit lips and the four-direction crossing it could read as a landscape or any synth's waveform plot rather than this machine's four trains.",
+        "Which train is which is told only by direction and crest shape; at overlap 100% the four merge and no single waveform is legible, which is honest to the sound but harder to read.",
+        "Every control rewrites the whole surface: 12 row masses of up to 62 points plus ~30 lip ribbons are all static artwork in the sketch. On the device this needs either pre-drawn variants or a handful of mutable outlines (max 4 paths x 64 points), so the row count would have to shrink a lot, which is the main fight with the direction.",
+        "Phase only shows with overlap open; at the default (one train plus a touch of its neighbours) it moves very little and may fail the perceptibility floor.",
+        "The sine train comes head-on and at morph 0 the surface is a calm, almost flat swell with few lit lips: correct, but the quietest frame of the set.",
+        "The note response isn't designed yet; the natural one is the surface swelling (row amplitude) and the lips brightening while notes are held."
+      ],
+      "frame": "screens/iris/passes/01-subject/v4/rest.svg"
+    },
+    {
+      "variant": "v5",
+      "angle": "one scene where this happens, with one subject in it: Newton's bench, where one beam goes into a prism and comes out as four rays, and an adjustable slit further down the bench picks which rays go on",
+      "pattern": "none",
+      "drawing_language": "detailed line art of an optical bench, modelled in 3D and projected through one camera: outer edges at Line weight, inner edges at Hairline, black bodies so the prism, table, slit jaws and carriage hide what's behind them. The four rays are drawn as their own waves (sine, triangle, square, saw) travelling along the bench. The ray the slit centres on is the one bright element, at Subject weight.",
+      "subject": "One beam at one pitch goes into a glass prism and leaves as four rays, one per waveform, fanned out by harmonic content, and an adjustable slit across the fan lets through the band morph sits on and the neighbours overlap reaches.",
+      "controls": [
+        "morph: the slit's carriage slides along its rail across the fan, sine ray to saw ray, and the ray it centres on becomes the bright Subject-weight wave that carries on past the jaws.",
+        "overlap: the two jaws open apart on the carriage, so neighbouring rays also pass the slit and carry on (mid grey, Line weight), and rays outside it stop dead at the plate.",
+        "spread: each ray's crest spacing pulls apart from the others (outer rays shorter and longer), so the four waves stop lining up crest for crest and visibly drift against each other down the bench.",
+        "tone: the waves' sharp corners round off as tone closes, the saw's and square's most, so the high rays lose their fine edges first; at 70 % they're only just softened.",
+        "skew: every ray except the saw changes shape at its breakpoint: the sine bunches up into a leaning crest, the triangle leans over into a ramp, and the square's high step narrows to a thin pulse.",
+        "phase: each ray's wave slides along its path by up to a quarter cycle from the ray before it, so crests that left the prism in step come out staggered."
+      ],
+      "reference": "library/theseus-tower (rest.svg): a 3D scene drawn as hidden-line detailed line art with black bodies and grey outlines, with one lit part as the brightest element",
+      "risks": [
+        "Morph moves the carriage along a rail that runs into the bench, so its travel is diagonal on screen. At morph 100 the far jaw's top reaches about y 18, inside the two-page header, and at overlap 100 the near jaw runs off the bottom-right corner. The frames pass needs shorter jaws, a lower camera or a clamped travel. The rest frame is clear of the header.",
+        "Spread, tone and skew are all shape changes to the same four waves (wavelength, corner rounding, breakpoint). They're different kinds of shape change, but on the device each one re-keys up to four long ray paths, and tone at its default is a subtle change. Tone may need a second channel, such as how far the high rays reach past the slit, to clear its perceptibility floor.",
+        "Phase is honest to the DSP but small: a quarter-cycle slide per ray of a wave about 12 px long at the slit is about 3 px per ray. It'll likely need its own travel, such as making the stagger read where the passing rays land.",
+        "Cost: 61 static paths, and each ray is a 300 px wave split into 60-point runs. For the device, each ray that changes needs to be one to three mutable outlines, but open-xy allows only 4 mutable paths, so the waves would have to be pre-drawn variants or nodes moved along the ray. It isn't cheap, and the animation that answers a note isn't designed yet (suggested: the incoming beam and the lit ray brighten, and the lit wave scrolls by translating its node).",
+        "The lines are open strokes and the hairlines are 1 px, which gives lint warnings (closed-ribbon, legibility) but no errors. They need to become closed ribbons when the drawing becomes a panel fragment.",
+        "Near the prism the four waves start nearly on top of each other. An amplitude ramp keeps them as straight converging lines for the first ~70 units, which is a drawing liberty rather than physics.",
+        "The rainbow is only implied (a prism splitting light, with no colour and no arc), so the owner's rainbow request is answered by the idea of dispersion, not by its look."
+      ],
+      "frame": "screens/iris/passes/01-subject/v5/rest.svg"
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.16,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.06,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.09,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.11,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.08,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.1,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "sameAngle": false,
+        "sameLanguage": false,
+        "subjectOverlap": 0.07,
+        "ok": true
+      },
+      {
+        "note": "pixel check skipped: rsvg-convert not found (librsvg); install it to render SVG frames, or pass PNG captures"
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-17T06:36:21"
+  },
   "selection": null
 }
