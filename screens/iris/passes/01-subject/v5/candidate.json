@@ -1,0 +1,25 @@
+{
+  "variant": "v5",
+  "angle": "one scene where this happens, with one subject in it: Newton's bench, where one beam goes into a prism and comes out as four rays, and an adjustable slit further down the bench picks which rays go on",
+  "pattern": "none",
+  "drawing_language": "detailed line art of an optical bench, modelled in 3D and projected through one camera: outer edges at Line weight, inner edges at Hairline, black bodies so the prism, table, slit jaws and carriage hide what's behind them. The four rays are drawn as their own waves (sine, triangle, square, saw) travelling along the bench. The ray the slit centres on is the one bright element, at Subject weight.",
+  "subject": "One beam at one pitch goes into a glass prism and leaves as four rays, one per waveform, fanned out by harmonic content, and an adjustable slit across the fan lets through the band morph sits on and the neighbours overlap reaches.",
+  "controls": [
+    "morph: the slit's carriage slides along its rail across the fan, sine ray to saw ray, and the ray it centres on becomes the bright Subject-weight wave that carries on past the jaws.",
+    "overlap: the two jaws open apart on the carriage, so neighbouring rays also pass the slit and carry on (mid grey, Line weight), and rays outside it stop dead at the plate.",
+    "spread: each ray's crest spacing pulls apart from the others (outer rays shorter and longer), so the four waves stop lining up crest for crest and visibly drift against each other down the bench.",
+    "tone: the waves' sharp corners round off as tone closes, the saw's and square's most, so the high rays lose their fine edges first; at 70 % they're only just softened.",
+    "skew: every ray except the saw changes shape at its breakpoint: the sine bunches up into a leaning crest, the triangle leans over into a ramp, and the square's high step narrows to a thin pulse.",
+    "phase: each ray's wave slides along its path by up to a quarter cycle from the ray before it, so crests that left the prism in step come out staggered."
+  ],
+  "reference": "library/theseus-tower (rest.svg): a 3D scene drawn as hidden-line detailed line art with black bodies and grey outlines, with one lit part as the brightest element",
+  "risks": [
+    "Morph moves the carriage along a rail that runs into the bench, so its travel is diagonal on screen. At morph 100 the far jaw's top reaches about y 18, inside the two-page header, and at overlap 100 the near jaw runs off the bottom-right corner. The frames pass needs shorter jaws, a lower camera or a clamped travel. The rest frame is clear of the header.",
+    "Spread, tone and skew are all shape changes to the same four waves (wavelength, corner rounding, breakpoint). They're different kinds of shape change, but on the device each one re-keys up to four long ray paths, and tone at its default is a subtle change. Tone may need a second channel, such as how far the high rays reach past the slit, to clear its perceptibility floor.",
+    "Phase is honest to the DSP but small: a quarter-cycle slide per ray of a wave about 12 px long at the slit is about 3 px per ray. It'll likely need its own travel, such as making the stagger read where the passing rays land.",
+    "Cost: 61 static paths, and each ray is a 300 px wave split into 60-point runs. For the device, each ray that changes needs to be one to three mutable outlines, but open-xy allows only 4 mutable paths, so the waves would have to be pre-drawn variants or nodes moved along the ray. It isn't cheap, and the animation that answers a note isn't designed yet (suggested: the incoming beam and the lit ray brighten, and the lit wave scrolls by translating its node).",
+    "The lines are open strokes and the hairlines are 1 px, which gives lint warnings (closed-ribbon, legibility) but no errors. They need to become closed ribbons when the drawing becomes a panel fragment.",
+    "Near the prism the four waves start nearly on top of each other. An amplitude ramp keeps them as straight converging lines for the first ~70 units, which is a drawing liberty rather than physics.",
+    "The rainbow is only implied (a prism splitting light, with no colour and no arc), so the owner's rainbow request is answered by the idea of dispersion, not by its look."
+  ]
+}
