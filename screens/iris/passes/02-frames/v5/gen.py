@@ -33,7 +33,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 P = dict(morph=0.3333, overlap=0.25, spread=0.0, tone=0.7, skew=0.0, phase=0.0)
 
 W, H = 480, 220
-YAW, PITCH = math.radians(11.0), math.radians(60.0)
+YAW, PITCH = math.radians(10.0), math.radians(56.0)
 CA, SA = math.cos(YAW), math.sin(YAW)
 CB, SB = math.cos(PITCH), math.sin(PITCH)
 
