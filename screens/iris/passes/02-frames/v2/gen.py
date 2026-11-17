@@ -151,6 +151,7 @@ def cycle_ts(kind):
                 if kind == "tri":
                     ts.append(cc)
                 else:                    # a jump: two points a hair apart
+                    ts = [t for t in ts if abs(t - cc) > 1.5 * eps]
                     ts += [cc - eps, cc + eps]
     ts = sorted(set(round(t, 5) for t in ts))
     out = []
