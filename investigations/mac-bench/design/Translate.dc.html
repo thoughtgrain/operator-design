@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Frames: concept to drawing</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#F2EEEC}a:hover{color:#FFFFFF}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; overflow: hidden; border-radius: 14px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); background: #161616; color: #F2EEEC; font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif; font-size: 13px; line-height: 1.35">
+
+<section aria-label="What to make" style="flex: none; width: 412px; box-sizing: border-box; margin: 8px 0 8px 8px; padding: 0 14px; background: #2B2321; border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); overflow: hidden; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; height: 52px; flex: none; padding: 0 4px">
+<span aria-hidden="true" style="display: flex; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5F57"></span><span style="width: 12px; height: 12px; border-radius: 50%; background: #FEBC2E"></span><span style="width: 12px; height: 12px; border-radius: 50%; background: #28C840"></span></span>
+<button type="button" aria-label="Hide the sidebar" style="margin-left: auto; width: 32px; height: 28px; padding: 0; background: transparent; color: #B5ADA9; border: 0; border-radius: 6px; cursor: pointer"><svg width="16" height="16" aria-hidden="true" style="display: block; margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 1.4px"><rect x="1.5" y="3" width="13" height="10" rx="2.5"></rect><path d="M6 3v10"></path></svg></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="padding: 0 6px; font-size: 11px; font-weight: 600; color: #B5ADA9">Approved Concept</div>
+<div style="background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+<svg width="144" height="66" role="img" aria-label="The approved concept: opening arcs, a generated picture" style="display: block; flex: none; background: #000000; border-radius: 6px"><g style="transform: scale(0.3)">
+<path d="{{conceptD}}" fill="none" stroke="#AFAFAF" style="stroke-width: 5px"></path>
+<rect x="0" y="0" width="60" height="20" fill="#000000"></rect><rect x="60" y="0" width="60" height="20" fill="#323232"></rect><rect x="120" y="0" width="60" height="20" fill="#4B4B4B"></rect><rect x="180" y="0" width="60" height="20" fill="#646464"></rect><rect x="240" y="0" width="60" height="20" fill="#7D7D7D"></rect><rect x="300" y="0" width="60" height="20" fill="#969696"></rect><rect x="360" y="0" width="60" height="20" fill="#AFAFAF"></rect><rect x="420" y="0" width="60" height="20" fill="#CDCDCD"></rect>
+</g></svg>
+<dl style="margin: 0; display: grid; grid-template-columns: 64px minmax(0, 1fr); row-gap: 4px; column-gap: 10px">
+<dt style="color: #B5ADA9">Subject</dt><dd style="margin: 0">Five arcs fanning open from the bottom centre.</dd>
+<dt style="color: #B5ADA9">Brightest</dt><dd style="margin: 0">The outermost arc.</dd>
+<dt style="color: #B5ADA9">Keep</dt><dd style="margin: 0">Even spacing, the opening on the right.</dd>
+<dt style="color: #B5ADA9">Drop</dt><dd style="margin: 0">The soft glow around each line.</dd>
+</dl>
+</div>
+<div style="padding: 0 6px; font-size: 11px; color: #B5ADA9">Read once by the vision model. Positions come from the tracer.</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="padding: 0 6px; font-size: 11px; font-weight: 600; color: #B5ADA9">Steps</div>
+<ol style="margin: 0; padding: 0 12px; list-style: none; background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 8px">
+<sc-for list="{{stages}}" as="s" hint-placeholder-count="6">
+<li style="display: flex; align-items: center; gap: 10px; min-height: 32px; border-bottom: {{s.rule}}">
+<span style="width: 12px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11px; color: #B5ADA9">{{s.n}}</span>
+<span>{{s.name}}</span>
+<span style="margin-left: auto; font-size: 11px; color: #B5ADA9">{{s.kind}}</span>
+</li>
+</sc-for>
+</ol>
+<div style="padding: 0 6px; font-size: 11px; color: #B5ADA9">Cheapest check first. A frame goes back to the model twice at most, then stops and asks you.</div>
+</div>
+
+<div style="margin: auto -14px 0; padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; background: #211A18; border-top: 1px solid rgba(0,0,0,0.6)">
+<div style="position: relative">
+<select aria-label="Drawing model" style="appearance: none; -webkit-appearance: none; width: 100%; height: 28px; padding: 0 28px 0 10px; font: 500 13px -apple-system, system-ui, sans-serif; background: #4A413E; color: #F2EEEC; border: 0; border-radius: 7px">
+<option>Small code model · on this Mac</option>
+<option>A connected model</option>
+</select>
+<svg width="16" height="16" aria-hidden="true" style="position: absolute; right: 6px; top: 6px; pointer-events: none; fill: none; stroke: #F2EEEC; stroke-width: 1.5px"><path d="M5 6.5l3-3 3 3M5 9.5l3 3 3-3"></path></svg>
+</div>
+<div style="font-size: 12px; color: #B5ADA9">Draws the body only. The header is stamped from the definition and never generated.</div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 12px"><span aria-hidden="true" style="width: 9px; height: 9px; border-radius: 50%; background: #30D158"></span><span>Ready · in memory</span><span style="margin-left: auto; color: #B5ADA9">about 1 GB</span></div>
+<button type="button" style="height: 36px; font: 600 13px -apple-system, system-ui, sans-serif; background: #E6E6E6; color: #1A1A1A; border: 0; border-radius: 9px; cursor: pointer">Draw five frames</button>
+</div>
+</section>
+
+<section aria-label="Result" style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 10px; height: 52px; flex: none; padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,0.07)">
+<nav aria-label="Stage" style="display: flex; padding: 2px; background: rgba(255,255,255,0.07); border-radius: 8px">
+<a href="Main.dc.html" style="height: 24px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; text-decoration: none">Concept</a>
+<a href="Translate.dc.html" aria-current="step" style="height: 24px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; background: #5A5A5A; color: #FFFFFF; text-decoration: none; font-weight: 500">Frames</a>
+<a href="Play.dc.html" style="height: 24px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; text-decoration: none">Play</a>
+</nav>
+<div style="margin: 0 auto; display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px; background: rgba(255,255,255,0.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); border-radius: 999px; font-size: 12px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: {{pillDot}}"></span>{{pill}}</div>
+<div style="display: flex; padding: 2px; background: rgba(255,255,255,0.07); border-radius: 999px">
+<button type="button" aria-label="Show in Finder" style="width: 34px; height: 28px; padding: 0; background: transparent; color: #F2EEEC; border: 0; border-radius: 999px; cursor: pointer"><svg width="16" height="16" aria-hidden="true" style="display: block; margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 1.4px"><path d="M1.5 4.5h4.5l1.5 1.5h7v7h-13z"></path></svg></button>
+<button type="button" aria-label="Turn this pass down" style="width: 34px; height: 28px; padding: 0; background: transparent; color: #F2EEEC; border: 0; border-radius: 999px; cursor: pointer"><svg width="16" height="16" aria-hidden="true" style="display: block; margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 1.4px"><path d="M2.5 4.5h11M6 4.5V3h4v1.5M4 4.5l.6 9h6.8l.6-9"></path></svg></button>
+</div>
+<a href="Play.dc.html" style="height: 28px; display: flex; align-items: center; padding: 0 14px; font-weight: 600; background: #E6E6E6; color: #1A1A1A; border-radius: 999px; text-decoration: none">{{pickLabel}}</a>
+</div>
+
+<div style="flex: 1; min-height: 0; position: relative; display: flex; align-items: center; justify-content: center">
+<svg width="480" height="220" role="img" aria-label="{{alt}}" style="display: block; flex: none; box-shadow: 0 0 0 1px rgba(255,255,255,0.08)">
+<rect x="0" y="0" width="480" height="220" fill="#000000"></rect>
+<path d="{{d}}" fill="none" stroke="#CDCDCD" style="{{line}}"></path>
+<rect x="0" y="0" width="60" height="20" fill="#000000"></rect><rect x="60" y="0" width="60" height="20" fill="#323232"></rect><rect x="120" y="0" width="60" height="20" fill="#4B4B4B"></rect><rect x="180" y="0" width="60" height="20" fill="#646464"></rect><rect x="240" y="0" width="60" height="20" fill="#7D7D7D"></rect><rect x="300" y="0" width="60" height="20" fill="#969696"></rect><rect x="360" y="0" width="60" height="20" fill="#AFAFAF"></rect><rect x="420" y="0" width="60" height="20" fill="#CDCDCD"></rect>
+<text x="5" y="10" fill="#CBCBCB" style="font: 300 10px system-ui, sans-serif">rate</text><text x="65" y="17.4" fill="#CBCBCB" style="font: 300 20px system-ui, sans-serif">0.5</text>
+<text x="125" y="10" fill="#CBCBCB" style="font: 300 10px system-ui, sans-serif">depth</text><text x="185" y="17.4" fill="#CBCBCB" style="font: 300 20px system-ui, sans-serif">12</text>
+<text x="245" y="10" fill="#000000" style="font: 300 10px system-ui, sans-serif">tone</text><text x="305" y="17.4" fill="#000000" style="font: 300 20px system-ui, sans-serif">lp</text>
+<text x="365" y="10" fill="#000000" style="font: 300 10px system-ui, sans-serif">mix</text><text x="425" y="17.4" fill="#000000" style="font: 300 20px system-ui, sans-serif">40</text>
+</svg>
+<div style="position: absolute; right: 12px; bottom: 10px; height: 26px; display: flex; align-items: center; padding: 0 12px; background: rgba(255,255,255,0.07); border-radius: 999px; font-size: 12px">Actual size · 100%</div>
+</div>
+
+<div style="flex: none; margin: 0 12px; padding: 10px 12px; background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 10px; display: flex; flex-direction: column; gap: 8px">
+<div><span style="font-weight: 600">{{title}}.</span> {{story}}</div>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="k" hint-placeholder-count="3">
+<li style="font-size: 11px; border-radius: 5px; padding: 2px 7px; {{k.tag}}">{{k.text}}</li>
+</sc-for>
+</ul>
+</div>
+
+<div style="flex: none; margin-top: 12px; padding: 10px 14px 12px; background: #1E1E1E; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: baseline; gap: 6px"><span style="font-weight: 600">Frames</span><span style="font-size: 11px; color: #B5ADA9">5</span></div>
+<div style="display: flex; gap: 8px; padding: 3px">
+<sc-for list="{{thumbs}}" as="t" hint-placeholder-count="5">
+<div style="flex: none; display: flex; flex-direction: column; gap: 4px">
+<button type="button" aria-pressed="{{t.pressed}}" aria-label="{{t.label}}" onClick="{{t.pick}}" style="width: 144px; height: 66px; padding: 0; border: 0; background: #000000; border-radius: 6px; overflow: hidden; outline: {{t.ring}}; outline-offset: 1px; cursor: pointer">
+<svg width="144" height="66" aria-hidden="true" style="display: block"><g style="transform: scale(0.3)">
+<path d="{{t.d}}" fill="none" stroke="#CDCDCD" style="stroke-width: 4px"></path>
+<rect x="0" y="0" width="60" height="20" fill="#000000"></rect><rect x="60" y="0" width="60" height="20" fill="#323232"></rect><rect x="120" y="0" width="60" height="20" fill="#4B4B4B"></rect><rect x="180" y="0" width="60" height="20" fill="#646464"></rect><rect x="240" y="0" width="60" height="20" fill="#7D7D7D"></rect><rect x="300" y="0" width="60" height="20" fill="#969696"></rect><rect x="360" y="0" width="60" height="20" fill="#AFAFAF"></rect><rect x="420" y="0" width="60" height="20" fill="#CDCDCD"></rect>
+</g></svg>
+</button>
+<span style="font-size: 11px; color: #B5ADA9">{{t.caption}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+renderVals() {
+const P = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+const arcs = (k, step, wide) => { const s = []; for (let r = 36; r <= 156; r += step) { const a = []; for (let t = 0; t <= 24; t++) { const th = Math.PI * (1 - (t / 24) * (0.55 + 0.45 * k)); a.push([240 + r * wide * Math.cos(th), 208 - r * Math.sin(th)]); } s.push(P(a)); } return s.join(' '); };
+const tags = { pass: 'background: rgba(255,255,255,0.09); color: #F2EEEC', warn: 'box-shadow: inset 0 0 0 1px #F2EEEC; color: #F2EEEC', fail: 'background: #FFB340; color: #1A1A1A', wait: 'box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); color: #B5ADA9' };
+const chip = (state, text) => ({ text: state + ' · ' + text, tag: tags[state] });
+const names = [['Trace the concept', 'Arithmetic'], ['Interpret it', 'Vision model'], ['Draw the body', 'Code model'], ['Lint', 'Arithmetic'], ['Compare with the concept', 'Arithmetic'], ['Look again, if borderline', 'Vision model']];
+const stages = names.map((s, i) => ({ n: String(i + 1), name: s[0], kind: s[1], rule: i < names.length - 1 ? '1px solid rgba(255,255,255,0.08)' : '0 solid transparent' }));
+const solid = 'stroke-width: 1.5px';
+const raw = [
+{ id: 1, title: 'Even fan', d: arcs(0.5, 24, 1.25), line: solid, caption: '01 · Ready', story: 'Drawn on the first try.', ok: true, chips: [chip('pass', 'lint'), chip('pass', 'matches the concept'), chip('pass', 'no second look needed')] },
+{ id: 2, title: 'Wide open', d: arcs(1, 24, 1.25), line: solid, caption: '02 · Ready', story: 'Sent back once: the arcs had closed into rings. Reopened on the right.', ok: true, chips: [chip('pass', 'lint'), chip('warn', 'match was borderline'), chip('pass', 'second look, one round')] },
+{ id: 3, title: 'Dense fan', d: arcs(0.5, 10, 1.25), line: 'stroke-width: 1px', caption: '03 · Needs you', story: 'Still over budget after two rounds, so it stopped. Edit it, or leave it out of the pick.', ok: false, chips: [chip('fail', 'lint: over node budget'), chip('wait', 'match not run'), chip('wait', 'second look not run')] },
+{ id: 4, title: 'Narrow fan', d: arcs(0.05, 24, 0.8), line: 'stroke-width: 1.5px; stroke-dasharray: 3 5', caption: '04 · Ready', story: 'Narrower than the concept and dashed. It passes, and the difference is yours to judge.', ok: true, chips: [chip('pass', 'lint'), chip('warn', 'drifted from the concept'), chip('pass', 'second look, two rounds')] },
+{ id: 5, title: 'Fifth direction', d: 'M0 0', line: solid, caption: '05 · Drawing', story: 'The header is already in place. The body arrives when the model finishes.', ok: false, chips: [chip('wait', 'lint'), chip('wait', 'match'), chip('wait', 'second look')] }
+];
+const sel = this.state.sel ?? 1;
+const cur = raw.find((v) => v.id === sel) || raw[0];
+const thumbs = raw.map((v) => ({ d: v.d, caption: v.caption, pressed: v.id === sel ? 'true' : 'false', label: 'Frame ' + v.id + ': ' + v.title, ring: v.id === sel ? '2px solid #F2EEEC' : '0 solid transparent', pick: () => this.setState({ sel: v.id }) }));
+return { stages, thumbs, conceptD: arcs(0.5, 24, 1.25), d: cur.d, line: cur.line, title: cur.title, story: cur.story, chips: cur.chips,
+pill: cur.ok ? 'Frame · drawn and linted' : 'Frame · not ready to pick', pillDot: cur.ok ? '#30D158' : '#FFB340', pickLabel: cur.ok ? 'Pick Frame ' + cur.id : 'Pick Another Frame',
+alt: 'Drawn frame ' + cur.id + ': ' + cur.title + ', 480 by 220 with the stock header' };
+}
+}
+</script>
+</body>
+</html>

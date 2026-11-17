@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Play: turn the encoders</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#F2EEEC}a:hover{color:#FFFFFF}
+input[type=range]{accent-color:#E6E6E6}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; overflow: hidden; border-radius: 14px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); background: #161616; color: #F2EEEC; font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif; font-size: 13px; line-height: 1.35">
+
+<section aria-label="Controls" style="flex: none; width: 412px; box-sizing: border-box; margin: 8px 0 8px 8px; padding: 0 14px; background: #2B2321; border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); overflow: hidden; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; height: 52px; flex: none; padding: 0 4px">
+<span aria-hidden="true" style="display: flex; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5F57"></span><span style="width: 12px; height: 12px; border-radius: 50%; background: #FEBC2E"></span><span style="width: 12px; height: 12px; border-radius: 50%; background: #28C840"></span></span>
+<button type="button" aria-label="Hide the sidebar" style="margin-left: auto; width: 32px; height: 28px; padding: 0; background: transparent; color: #B5ADA9; border: 0; border-radius: 6px; cursor: pointer"><svg width="16" height="16" aria-hidden="true" style="display: block; margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 1.4px"><rect x="1.5" y="3" width="13" height="10" rx="2.5"></rect><path d="M6 3v10"></path></svg></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="padding: 0 6px; font-size: 11px; font-weight: 600; color: #B5ADA9">Encoders</div>
+<div style="background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 8px; padding: 0 12px">
+<sc-for list="{{knobs}}" as="k" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 10px; min-height: 38px; border-bottom: {{k.rule}}">
+<svg width="22" height="22" aria-hidden="true" style="display: block; flex: none">
+<circle cx="11" cy="11" r="10" fill="{{k.cap}}" stroke="#000000"></circle>
+<path d="{{k.mark}}" fill="none" stroke="{{k.ink}}" style="stroke-width: 2px; stroke-linecap: round"></path>
+</svg>
+<label for="{{k.id}}" style="width: 48px">{{k.title}}</label>
+<input id="{{k.id}}" type="range" min="0" max="1" step="0.25" value="{{k.v}}" onChange="{{k.set}}" style="flex: 1; min-width: 80px; height: 24px; margin: 0">
+<span style="width: 36px; text-align: right; font-variant-numeric: tabular-nums; color: #B5ADA9">{{k.shown}}</span>
+</div>
+</sc-for>
+</div>
+<div style="padding: 0 6px; font-size: 11px; color: #B5ADA9">Keyframes only: each encoder snaps between five drawn positions. Live easing needs a generator script beside the frames.</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="padding: 0 6px; font-size: 11px; font-weight: 600; color: #B5ADA9">Hold</div>
+<div style="background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 8px; padding: 0 12px">
+<div style="display: flex; align-items: center; min-height: 36px; border-bottom: 1px solid rgba(255,255,255,0.08)"><span>A note</span><button type="button" role="switch" aria-checked="{{noteOn}}" aria-label="Hold a note" onClick="{{toggleNote}}" style="margin-left: auto; width: 38px; height: 24px; padding: 2px; border: 0; border-radius: 999px; cursor: pointer; display: flex; justify-content: {{noteSide}}; background: {{noteTrack}}"><span style="width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF"></span></button></div>
+<div style="display: flex; align-items: center; min-height: 36px"><span>Shift</span><button type="button" role="switch" aria-checked="{{shiftOn}}" aria-label="Hold Shift" onClick="{{toggleShift}}" style="margin-left: auto; width: 38px; height: 24px; padding: 2px; border: 0; border-radius: 999px; cursor: pointer; display: flex; justify-content: {{shiftSide}}; background: {{shiftTrack}}"><span style="width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF"></span></button></div>
+</div>
+<div style="padding: 0 6px; font-size: 11px; color: #B5ADA9">Shift swaps what the four header slots show. It never adds a row.</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="padding: 0 6px; font-size: 11px; font-weight: 600; color: #B5ADA9">MIDI</div>
+<div style="background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 8px; padding: 0 12px">
+<div style="display: flex; align-items: center; min-height: 34px"><span>Controller</span><span style="margin-left: auto; color: #B5ADA9">[CONTROLLER NAME]</span></div>
+</div>
+</div>
+
+<div style="margin: auto -14px 0; padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; background: #211A18; border-top: 1px solid rgba(0,0,0,0.6)">
+<div style="font-size: 12px; color: #B5ADA9">The sweep video is these exact frames in order, encoded on the Mac. No model draws it.</div>
+<button type="button" style="height: 28px; font: 500 13px -apple-system, system-ui, sans-serif; background: #4A413E; color: #F2EEEC; border: 0; border-radius: 7px; cursor: pointer">Record a Sweep Video</button>
+<button type="button" style="height: 36px; font: 600 13px -apple-system, system-ui, sans-serif; background: #E6E6E6; color: #1A1A1A; border: 0; border-radius: 9px; cursor: pointer">Write the Handoff</button>
+</div>
+</section>
+
+<section aria-label="Result" style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 10px; height: 52px; flex: none; padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,0.07)">
+<nav aria-label="Stage" style="display: flex; padding: 2px; background: rgba(255,255,255,0.07); border-radius: 8px">
+<a href="Main.dc.html" style="height: 24px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; text-decoration: none">Concept</a>
+<a href="Translate.dc.html" style="height: 24px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; text-decoration: none">Frames</a>
+<a href="Play.dc.html" aria-current="step" style="height: 24px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; background: #5A5A5A; color: #FFFFFF; text-decoration: none; font-weight: 500">Play</a>
+</nav>
+<div style="margin: 0 auto; display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px; background: rgba(255,255,255,0.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); border-radius: 999px; font-size: 12px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #30D158"></span>Preview on this Mac · not the OP-XY</div>
+<div role="group" aria-label="Lens" style="display: flex; padding: 2px; background: rgba(255,255,255,0.07); border-radius: 8px">
+<sc-for list="{{lenses}}" as="l" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{l.pressed}}" onClick="{{l.pick}}" style="height: 24px; padding: 0 10px; font: 400 13px -apple-system, system-ui, sans-serif; border: 0; border-radius: 6px; cursor: pointer; {{l.btn}}">{{l.name}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="flex: 1; min-height: 0; position: relative; display: flex; align-items: center; justify-content: center">
+<div style="width: 480px; height: 220px; background: #000000; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,0.08)">
+<svg width="480" height="220" role="img" aria-label="The picked frame: five arcs that open as depth rises, under the stock header" style="display: block; {{lensStyle}}">
+<rect x="0" y="0" width="480" height="220" fill="#000000"></rect>
+<path d="{{d}}" fill="none" stroke="{{innerGrey}}" style="{{line}}"></path>
+<path d="{{dOuter}}" fill="none" stroke="{{outerGrey}}" style="{{line}}"></path>
+<rect x="0" y="0" width="60" height="20" fill="#000000"></rect><rect x="60" y="0" width="60" height="20" fill="#323232"></rect><rect x="120" y="0" width="60" height="20" fill="#4B4B4B"></rect><rect x="180" y="0" width="60" height="20" fill="#646464"></rect><rect x="240" y="0" width="60" height="20" fill="#7D7D7D"></rect><rect x="300" y="0" width="60" height="20" fill="#969696"></rect><rect x="360" y="0" width="60" height="20" fill="#AFAFAF"></rect><rect x="420" y="0" width="60" height="20" fill="#CDCDCD"></rect>
+<text x="5" y="10" fill="#CBCBCB" style="font: 300 10px system-ui, sans-serif">{{t0}}</text><text x="65" y="17.4" fill="#CBCBCB" style="font: 300 20px system-ui, sans-serif">{{v0}}</text>
+<text x="125" y="10" fill="#CBCBCB" style="font: 300 10px system-ui, sans-serif">{{t1}}</text><text x="185" y="17.4" fill="#CBCBCB" style="font: 300 20px system-ui, sans-serif">{{v1}}</text>
+<text x="245" y="10" fill="#000000" style="font: 300 10px system-ui, sans-serif">{{t2}}</text><text x="305" y="17.4" fill="#000000" style="font: 300 20px system-ui, sans-serif">{{v2}}</text>
+<text x="365" y="10" fill="#000000" style="font: 300 10px system-ui, sans-serif">{{t3}}</text><text x="425" y="17.4" fill="#000000" style="font: 300 20px system-ui, sans-serif">{{v3}}</text>
+</svg>
+</div>
+<div style="position: absolute; right: 12px; bottom: 10px; height: 26px; display: flex; align-items: center; padding: 0 12px; background: rgba(255,255,255,0.07); border-radius: 999px; font-size: 12px">Actual size · 100%</div>
+</div>
+
+<div style="flex: none; margin: 0 12px; padding: 10px 12px; background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: 10px; display: flex; flex-direction: column; gap: 8px">
+<div><span style="font-weight: 600">Even fan.</span> {{lensNote}}</div>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px">
+<li style="font-size: 11px; border-radius: 5px; padding: 2px 7px; background: rgba(255,255,255,0.09)">pass · lint, every keyframe</li>
+<li style="font-size: 11px; border-radius: 5px; padding: 2px 7px; background: rgba(255,255,255,0.09)">pass · body black, 40 % floor</li>
+<li style="font-size: 11px; border-radius: 5px; padding: 2px 7px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); color: #B5ADA9">pending · photo of the real screen</li>
+</ul>
+</div>
+
+<div style="flex: none; margin-top: 12px; padding: 10px 14px 12px; background: #1E1E1E; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: baseline; gap: 6px"><span style="font-weight: 600">Keyframes</span><span style="font-size: 11px; color: #B5ADA9">5 · depth</span></div>
+<div style="display: flex; gap: 8px; padding: 3px">
+<sc-for list="{{thumbs}}" as="t" hint-placeholder-count="5">
+<button type="button" aria-pressed="{{t.pressed}}" aria-label="{{t.label}}" onClick="{{t.pick}}" style="flex: none; width: 144px; height: 66px; padding: 0; border: 0; background: #000000; border-radius: 6px; overflow: hidden; outline: {{t.ring}}; outline-offset: 1px; cursor: pointer">
+<svg width="144" height="66" aria-hidden="true" style="display: block"><g style="transform: scale(0.3)">
+<path d="{{t.d}}" fill="none" stroke="#CDCDCD" style="stroke-width: 4px"></path>
+<rect x="0" y="0" width="60" height="20" fill="#000000"></rect><rect x="60" y="0" width="60" height="20" fill="#323232"></rect><rect x="120" y="0" width="60" height="20" fill="#4B4B4B"></rect><rect x="180" y="0" width="60" height="20" fill="#646464"></rect><rect x="240" y="0" width="60" height="20" fill="#7D7D7D"></rect><rect x="300" y="0" width="60" height="20" fill="#969696"></rect><rect x="360" y="0" width="60" height="20" fill="#AFAFAF"></rect><rect x="420" y="0" width="60" height="20" fill="#CDCDCD"></rect>
+</g></svg>
+</button>
+</sc-for>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+renderVals() {
+const st = this.state;
+const vals = st.vals ?? [0.5, 0.5, 0.25, 0.5];
+const svals = st.svals ?? [0.25, 0.75, 0.5, 0];
+const shift = !!st.shift;
+const note = !!st.note;
+const lens = st.lens ?? 'vector';
+const P = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+const arc = (r, k, wide) => { const a = []; for (let t = 0; t <= 24; t++) { const th = Math.PI * (1 - (t / 24) * (0.55 + 0.45 * k)); a.push([240 + r * wide * Math.cos(th), 208 - r * Math.sin(th)]); } return P(a); };
+const wide = 0.95 + vals[0] * 0.6;
+const body = (depth) => [36, 60, 84, 108].map((r) => arc(r, depth, wide)).join(' ');
+const greys = ['#4B4B4B', '#646464', '#7D7D7D', '#969696', '#AFAFAF'];
+const tones = ['lp', 'lp', 'bp', 'hp', 'hp'];
+const step = (v) => Math.round(v * 4);
+const titles = shift ? ['shape', 'drift', 'fold', 'bias'] : ['rate', 'depth', 'tone', 'mix'];
+const active = shift ? svals : vals;
+const shown = shift ? svals.map((v) => String(Math.round(v * 100))) : [vals[0].toFixed(2), String(Math.round(vals[1] * 24)), tones[step(vals[2])], String(Math.round(vals[3] * 100))];
+const key = shift ? 'svals' : 'vals';
+const caps = ['#323232', '#646464', '#969696', '#CDCDCD'];
+const inks = ['#F2EEEC', '#F2EEEC', '#000000', '#000000'];
+const mark = (v) => { const a = (-135 + v * 270) * Math.PI / 180; return 'M' + (11 + 2 * Math.sin(a)).toFixed(1) + ' ' + (11 - 2 * Math.cos(a)).toFixed(1) + ' L' + (11 + 7.5 * Math.sin(a)).toFixed(1) + ' ' + (11 - 7.5 * Math.cos(a)).toFixed(1); };
+const knobs = titles.map((title, i) => ({ id: 'knob' + i, title, v: active[i], shown: shown[i], cap: caps[i], ink: inks[i], mark: mark(active[i]), rule: i < 3 ? '1px solid rgba(255,255,255,0.08)' : '0 solid transparent', set: (e) => { const next = active.slice(); next[i] = parseFloat(e.target.value); this.setState({ [key]: next }); } }));
+const segOn = 'background: #5A5A5A; color: #FFFFFF';
+const segOff = 'background: transparent; color: #F2EEEC';
+const lensDefs = [
+{ id: 'vector', name: 'Vector', style: '', note: 'The drawing as the Mac renders it, at 480 × 220.' },
+{ id: 'device', name: 'Device', style: 'image-rendering: pixelated', note: 'Rasterised and shown pixel for pixel.' },
+{ id: 'arm', name: 'Arm’s Length', style: 'filter: blur(1.4px)', note: 'Softened, as it reads from where you play.' },
+{ id: 'value', name: 'Value Map', style: 'filter: contrast(9) brightness(0.62)', note: 'Only the brightest grey survives.' }
+];
+const cur = lensDefs.find((l) => l.id === lens) || lensDefs[0];
+const thumbs = [0, 0.25, 0.5, 0.75, 1].map((dv, i) => ({ d: body(dv) + ' ' + arc(132 + dv * 24, dv, wide), pressed: dv === vals[1] ? 'true' : 'false', label: 'Depth keyframe ' + (i + 1) + ' of 5', ring: dv === vals[1] ? '2px solid #F2EEEC' : '0 solid transparent', pick: () => { const next = vals.slice(); next[1] = dv; this.setState({ vals: next }); } }));
+return {
+d: body(vals[1]), dOuter: arc(132 + vals[1] * 24, vals[1], wide), innerGrey: greys[step(vals[3])], outerGrey: note ? '#CDCDCD' : '#969696',
+line: 'stroke-width: ' + (1 + step(vals[2]) * 0.5) + 'px',
+t0: titles[0], t1: titles[1], t2: titles[2], t3: titles[3], v0: shown[0], v1: shown[1], v2: shown[2], v3: shown[3],
+knobs, thumbs, lensStyle: cur.style, lensNote: cur.note,
+lenses: lensDefs.map((l) => ({ name: l.name, pressed: l.id === lens ? 'true' : 'false', btn: l.id === lens ? segOn : segOff, pick: () => this.setState({ lens: l.id }) })),
+noteOn: note ? 'true' : 'false', noteSide: note ? 'flex-end' : 'flex-start', noteTrack: note ? '#30D158' : '#5A504C', toggleNote: () => this.setState({ note: !note }),
+shiftOn: shift ? 'true' : 'false', shiftSide: shift ? 'flex-end' : 'flex-start', shiftTrack: shift ? '#30D158' : '#5A504C', toggleShift: () => this.setState({ shift: !shift })
+};
+}
+}
+</script>
+</body>
+</html>

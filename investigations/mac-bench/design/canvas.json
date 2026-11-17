@@ -1,0 +1,18 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-11-17T12:00:00Z"},
+  "title": "OP-XY Mac Bench",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 800, "title": "1 · Concept: five pictures", "radius": 14, "is_interactive": true},
+    "Translate.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 800, "title": "2 · Frames: concept to drawing", "radius": 14, "is_interactive": true},
+    "Play.dc.html": {"x": 0, "y": 920, "w": 1280, "h": 800, "title": "3 · Play: turn the encoders", "radius": 14, "is_interactive": true},
+    "Engines.dc.html": {"x": 1360, "y": 920, "w": 760, "h": 640, "title": "4 · Settings window: engines", "radius": 14}
+  },
+  "order": ["Main.dc.html", "Translate.dc.html", "Play.dc.html", "Engines.dc.html"],
+  "notes": {
+    "heading": {"x": 0, "y": -300, "text": "OP-XY Mac Bench: UI direction for review", "kind": "title1", "maxW": 2640}
+  },
+  "designSystems": []
+}
