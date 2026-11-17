@@ -28,7 +28,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from .. import passes
-from ..paths import ROOT, ToolError, colour_policy, rel, screens_dir, shift_policy, tokens
+from ..paths import ROOT, ToolError, colour_policy, pick_preview, rel, screens_dir, shift_policy, tokens
 from . import model
 from .events import Hub
 from .generator import Generators
@@ -231,7 +231,8 @@ class Handler(BaseHTTPRequestHandler):
                 t = tokens()
                 return self._json({"canvas": t["canvas"], "header": t["header"], "motion": t["motion"],
                                    "greys": list(t["greys"]), "colour": colour_policy(), "shift": shift_policy(),
-                                   "verbs": VERBS, "renderer": _renderer_name()})
+                                   "verbs": VERBS, "renderer": _renderer_name(),
+                                   "pickPreview": pick_preview()})
             if path == "/api/machines":
                 return self._json(model.machines())
             parts = path.strip("/").split("/")

@@ -150,6 +150,8 @@ How uniqueness is judged (numbers in `catalog.json` → `iterations`):
 
 A pass with fewer than five variants, or with two that fail the uniqueness check, doesn't close. Revise the weakest duplicate into a new direction; never drop to four. If the person wants none of the five, `design_pass_reject` records why and closes the pass, and the next pass takes that reason as its focus.
 
+**Knob sweeps before the pick.** A still can't show how a control feels, and that's half of what's being chosen. So by default each variant also ships a `bench.py` (`frame(values, notes) -> svg`, the same contract as a machine's own) and `design_pass_submit` draws it into the protocol's keyframes, `c<N>-000/050/100.svg` plus `playing.svg`, linted like the rest frame. On the bench the knobs then move all five at once. It costs a generator per variant, so the harness can defer it with `OPXY_PICK_PREVIEW=after-pick` (or one pass with `design_pass_start(preview="after-pick")`): the knobs then wait for the picked variant's frame set.
+
 Cleaning up a picked variant (removing a label, fixing a clip, tidying spacing) isn't a generative pass: it edits the pick and doesn't need five.
 
 Layout: `screens/<id>/passes/<nn>-<kind>/v1…v5/` plus `pass.json` (directions, uniqueness results, the pick and why).

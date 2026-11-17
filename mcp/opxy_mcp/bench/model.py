@@ -109,12 +109,14 @@ def pass_view(machine_id: str, pass_name: str) -> dict:
     kind = r.get("kind", "subject")
     submitted = {v.get("variant"): v for v in r.get("variants") or []}
     pairs = (r.get("uniqueness") or {}).get("pairs") or []
+    ctrls = controls(machine_id)
     variants = []
     for direction in r.get("directions") or []:
         vid = direction["variant"]
         vdir = pdir / vid
         cand = submitted.get(vid) or _json(vdir / "candidate.json")
         rest = vdir / "rest.svg"
+        kf = keyframes(vdir, ctrls) if vdir.is_dir() else {"controls": {}, "playing": None}
         variants.append({
             "variant": vid,
             "direction": _direction_words(kind, direction),
@@ -126,11 +128,16 @@ def pass_view(machine_id: str, pass_name: str) -> dict:
             "risks": cand.get("risks") or [],
             "frame": rel(rest) if rest.exists() else None,
             "pairs": [p for p in pairs if "pair" in p and vid in p["pair"].split("–")],
+            # the Play view's frame-set id for this variant, when it has a knob sweep to play
+            "set": f"{pass_name}/{vid}" if (kf["controls"] or kf["playing"]) and rest.exists() else None,
+            "sweep": {"controls": len(kf["controls"]),
+                      "steps": sorted({int(v) for c in kf["controls"].values() for v in c})},
         })
     return {"machine": machine_id, "pass": pass_name, "kind": kind, "state": r.get("state"), "focus": r.get("focus"),
             "subject": r.get("subject"), "variants": variants,
             "notes": [p["note"] for p in pairs if "note" in p] + ((r.get("uniqueness") or {}).get("problems") or []),
             "selection": r.get("selection"), "rejection": r.get("rejection"),
+            "preview": r.get("preview") or {"mode": "after-pick", "steps": [], "set": "opened before knob sweeps"},
             "pickable": r.get("state") == "ready_for_pick",
             "rejectable": r.get("state") not in ("selected", "rejected")}
 

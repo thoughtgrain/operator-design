@@ -46,6 +46,11 @@ HAS_RSVG = RENDERER is not None
 SERVER = COPY / "mcp/server.py"
 
 
+def runner_cli(name: str, argv: list) -> tuple[int, str, str]:
+    from opxy_mcp import runner
+    return runner.run_cli(name, [str(x) for x in argv])
+
+
 def call(name: str, args: dict) -> tuple[bool, object]:
     r = rpc.Server(out=io.StringIO()).tools_call({"name": name, "arguments": args})
     text = r["content"][0]["text"]
@@ -272,8 +277,109 @@ class TestPasses(unittest.TestCase):
         self.assertTrue(any("v3 and v4" in x for x in r["problems"]), r["problems"])
         shutil.copy(lib / "c2-000.svg", p / "v4" / "rest.svg")
         _, r = call("design_pass_submit", {"machine_id": "passtest", "two_page": True})
-        bad = [x for x in r["pairs"] if not x["ok"]]
+        bad = [x for x in r["pairs"] if "pair" in x and not x["ok"]]
         self.assertEqual(r["state"] == "ready_for_pick", not bad)
+
+
+SWEEP_SRCS = ["rest.svg", "c1-000.svg", "c3-100.svg", "c2-000.svg", "c2-100.svg"]  # theseus-tower frames that differ
+
+
+class TestSweeps(unittest.TestCase):
+    """Knob sweeps: each variant's bench.py drawn into keyframes before the pick, or deferred to after it."""
+
+    def setUp(self):
+        shutil.rmtree(ROOT / "screens/passtest", ignore_errors=True)
+        call("screen_init", {"machine_id": "passtest", "category": "engine"})
+        (ROOT / "screens/passtest/definition.json").write_text(json.dumps({"parameters": [
+            {"id": "size", "label": "Size", "default": 0.5}, {"id": "tilt", "label": "Tilt", "default": 0.0}]}),
+            encoding="utf-8")
+        self.env = os.environ.pop("OPXY_PICK_PREVIEW", None)
+
+    def tearDown(self):
+        os.environ.pop("OPXY_PICK_PREVIEW", None)
+        if self.env is not None:
+            os.environ["OPXY_PICK_PREVIEW"] = self.env
+
+    def frames_pass(self, preview=None) -> Path:
+        _, s0 = call("design_pass_start", {"machine_id": "passtest", "kind": "subject", "preview": "after-pick"})
+        draw_variants(s0["pass"])
+        submit_subjects()
+        call("design_pass_select", {"machine_id": "passtest", "variant": "v1", "reason": "r", "chosen_by": "me"})
+        args = {"machine_id": "passtest", "kind": "frames", **({"preview": preview} if preview else {})}
+        err, s = call("design_pass_start", args)
+        self.assertFalse(err, s)
+        self.assertEqual(s["preview"]["mode"], preview or "sweep")
+        self.started = s
+        return ROOT / s["pass"]
+
+    def bench(self, folder: Path, src: str):
+        lib = ROOT / "library/theseus-tower/frames" / src
+        (folder / "bench.py").write_text(
+            "from pathlib import Path\n"
+            f"SRC = Path({str(lib)!r})\n"
+            "def frame(values, notes):\n"
+            "    print('chatty generators stay off the reply')\n"
+            "    return SRC.read_text(encoding='utf-8')\n", encoding="utf-8")
+
+    def test_cli_writes_the_protocol_names(self):
+        d = Path(tempfile.mkdtemp(dir=ROOT / "screens/passtest"))
+        self.bench(d, "rest.svg")
+        (d / "c1-025.svg").write_text("<svg/>", encoding="utf-8")  # an older five-step sweep
+        code, out, err = runner_cli("sweep", [d, "--definition", ROOT / "screens/passtest/definition.json", "--json"])
+        self.assertEqual(code, 0, err)
+        r = json.loads(out)
+        self.assertEqual(r["written"], sorted(["rest.svg", "playing.svg"] + [f"c{n}-{v:03d}.svg" for n in (1, 2)
+                                                                             for v in (0, 50, 100)]))
+        self.assertFalse((d / "c1-025.svg").exists())
+        (d / "rest.svg").write_text("<svg>hand drawn</svg>", encoding="utf-8")
+        _, out, _ = runner_cli("sweep", [d, "--definition", ROOT / "screens/passtest/definition.json", "--json"])
+        self.assertTrue(any("rest.svg isn't" in w for w in json.loads(out)["warnings"]))
+        (d / "bench.py").write_text("def frame(values, notes):\n    return 'not svg'\n", encoding="utf-8")
+        code, out, _ = runner_cli("sweep", [d, "--definition", ROOT / "screens/passtest/definition.json", "--json"])
+        self.assertEqual(code, 1)
+        self.assertIn("not SVG", json.loads(out)["error"])
+
+    @unittest.skipUnless(HAS_RSVG, "no SVG renderer (opxy-raster or rsvg-convert)")
+    def test_a_sweep_pass_needs_every_bench(self):
+        p = self.frames_pass()
+        self.assertTrue(all("bench.py" in b["brief"] for b in self.started["agentBriefs"]))
+        for i, src in enumerate(SWEEP_SRCS, 1):
+            if i < 5:
+                self.bench(p / f"v{i}", src)
+        shutil.copy(ROOT / "library/theseus-tower/frames" / SWEEP_SRCS[4], p / "v5" / "rest.svg")
+        _, r = call("design_pass_submit", {"machine_id": "passtest", "two_page": True})
+        self.assertEqual(r["state"], "needs_revision")
+        self.assertTrue(any(x.startswith("v5: no bench.py") for x in r["problems"]), r["problems"])
+        self.bench(p / "v5", SWEEP_SRCS[4])
+        _, r = call("design_pass_submit", {"machine_id": "passtest", "two_page": True})
+        self.assertEqual(r["state"], "ready_for_pick", r["problems"])
+        self.assertIn("knob sweep", r["next"])
+        self.assertTrue((p / "v3" / "c2-100.svg").exists())
+        rec = json.loads((p / "pass.json").read_text())
+        self.assertEqual(rec["variants"][0]["preview"]["frames"], 7)
+        from opxy_mcp.bench import model
+        view = model.pass_view("passtest", p.name)
+        self.assertEqual(view["variants"][2]["set"], f"{p.name}/v3")
+        self.assertEqual(view["variants"][2]["sweep"], {"controls": 2, "steps": [0, 50, 100]})
+
+    @unittest.skipUnless(HAS_RSVG, "no SVG renderer (opxy-raster or rsvg-convert)")
+    def test_after_pick_skips_the_sweep(self):
+        p = self.frames_pass(preview="after-pick")
+        self.assertFalse(any("bench.py" in b["brief"] for b in self.started["agentBriefs"]))
+        for i, src in enumerate(SWEEP_SRCS, 1):
+            shutil.copy(ROOT / "library/theseus-tower/frames" / src, p / f"v{i}" / "rest.svg")
+        _, r = call("design_pass_submit", {"machine_id": "passtest", "two_page": True})
+        self.assertEqual(r["state"], "ready_for_pick", r["problems"])
+        self.assertFalse(list(p.glob("v*/c*-*.svg")))
+
+    def test_preview_setting(self):
+        from opxy_mcp.paths import pick_preview
+        self.assertEqual(pick_preview()["mode"], "sweep")
+        os.environ["OPXY_PICK_PREVIEW"] = "after-pick"
+        self.assertEqual(pick_preview()["mode"], "after-pick")
+        self.assertEqual(pick_preview("sweep")["set"], "this pass")
+        err, text = call("design_pass_start", {"machine_id": "passtest", "kind": "subject", "preview": "maybe"})
+        self.assertTrue(err)
 
 
 PATTERN = """## P16 · Cable field

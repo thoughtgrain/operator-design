@@ -146,6 +146,15 @@ def designer_brief(record: dict, direction: dict, pdir: Path) -> dict:
                 + (f": {subj.get('subject')} ({subj.get('angle') or subj.get('pattern')}, {subj.get('drawing_language')})" if subj else "")
                 + ". Lint it with zero errors and look at it at 1:1.")
         reply = "Reply with the frame as one ```svg block."
+    if (record.get("preview") or {}).get("mode") == "sweep":
+        steps = ", ".join(str(x) for x in record["preview"].get("steps") or [0, 50, 100])
+        task += (f" Knob sweep (this pass previews before the pick): also write {out_dir}/bench.py defining "
+                 "frame(values: dict[str, float], notes: float) -> str, which returns the 480 × 220 SVG for any control "
+                 "values (definition ids, 0..1) and a note level (0 rest, 1 held). Draw rest.svg from it at the defaults "
+                 "so the two match. Then run python3 opxy/tools/sweep.py "
+                 f"{out_dir} --definition screens/{record['machine']}/definition.json --steps {steps.replace(' ', '')} "
+                 "and lint what it writes (c<N>-NNN.svg, playing.svg): every frame the knobs reach is held to the same "
+                 "rules as rest.svg. Each control should visibly move the drawing the way your direction says it does.")
     from .paths import colour_policy, shift_policy
     pol, sh = colour_policy(), shift_policy()
     brief = "\n".join([

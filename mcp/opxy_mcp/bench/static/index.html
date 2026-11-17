@@ -28,7 +28,7 @@
   <nav class="views" role="tablist" aria-label="View">
     <button role="tab" id="tab-board" aria-controls="view-board" data-view="board">Board <kbd>B</kbd></button>
     <button role="tab" id="tab-cycle" aria-controls="view-cycle" data-view="cycle">Cycle <kbd>C</kbd></button>
-    <button role="tab" id="tab-play" aria-controls="view-play" data-view="play">Play <kbd>K</kbd></button>
+    <button role="tab" id="tab-play" aria-controls="view-play" data-view="play" hidden>Play <kbd>K</kbd></button>
   </nav>
 
   <div class="lens" role="group" aria-label="How frames are drawn">
@@ -40,7 +40,7 @@
     <button class="toggle" id="valuemap" aria-pressed="false" title="Keep only the brightest grey: there should be one brightest element.">Value map <kbd>V</kbd></button>
   </div>
 
-  <button class="midi" id="midi" aria-describedby="midi-status">
+  <button class="midi" id="midi" aria-describedby="midi-status" hidden>
     <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><circle cx="6" cy="9" r="1.1"/><circle cx="14" cy="9" r="1.1"/><circle cx="7.6" cy="13" r="1.1"/><circle cx="12.4" cy="13" r="1.1"/><circle cx="10" cy="6.4" r="1.1"/></svg>
     <span id="midi-status">MIDI off</span>
   </button>
@@ -68,6 +68,7 @@
     <div class="play">
       <div class="play-head">
         <label class="field"><span>frames</span><select id="frameset" aria-label="Frame set"></select></label>
+        <div class="seg switcher" id="switcher" role="radiogroup" aria-label="Variant, knobs kept" hidden></div>
         <p class="source" id="play-source"></p>
       </div>
       <div class="frame-well" id="play-well"></div>

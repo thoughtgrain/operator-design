@@ -50,6 +50,7 @@ const S = {
   valueMap: false,
   frames: [],          // every FrameView on the page, so a lens change reaches all of them
   cycle: { index: 0, previous: null, view: null },
+  cards: [],           // board cards that follow the knobs: { v, fv, url }
   play: null,
   events: null,
 };
@@ -73,6 +74,7 @@ const headerBottom = () => (S.machine && S.machine.controls.length > 4 ? S.confi
 
 // ── views ────────────────────────────────────────────────────────────────────
 function setView(view) {
+  if (view === "play" && !playable()) view = "board";
   S.view = view;
   store.set("view", view);
   for (const tab of document.querySelectorAll("[role=tab]")) {
@@ -119,9 +121,19 @@ async function loadPass(name) {
   if (name) $("#pass").value = name;
   S.pass = name ? await api(`/api/pass/${encodeURIComponent(S.machine.id)}/${encodeURIComponent(name)}`) : null;
   S.cycle.index = Math.min(S.cycle.index, Math.max(0, (S.pass?.variants.length || 1) - 1));
+  if (S.play && S.pass) {  // open on the pass's own sweeps, not an older frame set
+    const first = S.pass.variants.find((v) => v.set);
+    const cur = currentSet();
+    if (first && !(cur && S.pass.variants.some((v) => v.set === cur.id))) {
+      S.play.setId = first.set;
+      $("#frameset").value = first.set;
+      describeSource();
+    }
+  }
   renderPassline();
   renderBoard();
   renderRail();
+  if (S.play) renderSwitcher();
   if (S.view === "cycle") showCycle(S.cycle.index);
   syncUrl();
 }
@@ -147,6 +159,21 @@ function renderPassline() {
     : p.rejection ? `Turned down by ${p.rejection.chosenBy}: ${p.rejection.reason}` : p.focus ? `Focus: ${p.focus}` : null;
   if (said) line.append(h("p", { className: "focus" }, h("span", { textContent: said })));
   if (p.notes.length) line.append(h("ul", { className: "problems" }, p.notes.map((n) => h("li", { textContent: n }))));
+  const sweep = previewLine(p);
+  if (sweep) line.append(h("p", { className: "focus preview" }, h("span", { textContent: sweep })));
+}
+
+// What the knobs can do on this pass, in one sentence. Nothing is said when every variant has a sweep: the knobs show it.
+function previewLine(p) {
+  const swept = p.variants.filter((v) => v.set).length;
+  if (swept === p.variants.length && swept) return null;
+  if (p.preview.mode === "after-pick") {
+    return p.selection
+      ? "This pass skipped knob sweeps; the knobs and MIDI arrive with the frame set drawn from the pick."
+      : "Knob sweeps wait for the pick on this pass (" + p.preview.set + "), so there's nothing for the knobs to move yet. They and MIDI appear once frames are drawn.";
+  }
+  if (!swept) return "Knob sweeps arrive when the five are submitted: each variant's bench.py draws them. Until then the knobs have nothing to move.";
+  return `${swept} of ${p.variants.length} variants have a knob sweep; the others stay on their rest frame when you turn a knob.`;
 }
 
 function altFor(v) {
@@ -162,11 +189,12 @@ function pairText(v, pair) {
 function renderBoard() {
   const board = $("#board");
   board.replaceChildren();
+  S.cards = [];
   if (!S.pass) return;
   const top = headerBottom();
   S.pass.variants.forEach((v, i) => {
     const fv = track(new FrameView({ alt: altFor(v), headerBottom: top }));
-    if (v.frame) fv.setSource(fileUrl(v.frame));
+    if (v.frame) S.cards.push({ v, fv, url: null });
     else fv.missing("not drawn yet");
     const well = h("div", { className: "frame-well" }, fv.el);
     const head = h("div", { className: "card-head" },
@@ -179,6 +207,7 @@ function renderBoard() {
       const { text, ok } = pairText(v, pair);
       checks.append(h("span", { textContent: text, className: ok ? "" : "bad" }));
     }
+    if (v.set) checks.append(h("span", { textContent: `sweep ${v.sweep.controls} × ${v.sweep.steps.join("/")}`, title: "Turn a knob (or a bound MIDI knob) and this card follows" }));
     if (v.frame) lintInto(checks, v.frame);
     const card = h("li", { className: "card" }, well, fv.meter, head);
     card.dataset.picked = picked ? "1" : "0";
@@ -197,9 +226,11 @@ function renderBoard() {
     if (!S.pass.pickable) pick.title = `This pass is ${S.pass.state.replaceAll("_", " ")}; a pick needs five unique variants submitted.`;
     card.append(h("div", { className: "card-actions" },
       h("button", { className: "quiet", textContent: "Cycle from here", onclick: () => { S.cycle.index = i; setView("cycle"); } }),
+      v.set ? h("button", { className: "quiet", textContent: `Play ${v.variant}`, onclick: () => playSet(v.set) }) : null,
       pick));
     board.append(card);
   });
+  followKnobs();
 }
 
 async function lintInto(el, frame) {
@@ -242,7 +273,8 @@ function showCycle(i, remember = true) {
   const v = S.pass.variants[i];
   const fv = S.cycle.view;
   fv.setAlt(altFor(v));
-  if (v.frame) fv.setSource(fileUrl(v.frame));
+  S.cycle.url = null;
+  if (v.frame) followKnobs();
   else fv.missing("not drawn yet");
   document.querySelectorAll("#rail button").forEach((b, k) => b.setAttribute("aria-current", String(k === i)));
   const out = $("#cycle-readout");
@@ -251,7 +283,83 @@ function showCycle(i, remember = true) {
   if (v.controls.length) out.append(h("ul", {}, v.controls.map((c) => h("li", { textContent: c }))));
   const pick = h("button", { textContent: `Pick ${v.variant}…`, onclick: () => openDecide("pick", v.variant) });
   pick.disabled = !S.pass.pickable;
-  out.append(h("div", { className: "card-actions" }, pick));
+  out.append(h("div", { className: "card-actions" },
+    v.set ? h("button", { className: "quiet", textContent: `Play ${v.variant}`, onclick: () => playSet(v.set) }) : null, pick));
+}
+
+// ── the knobs drive every view ───────────────────────────────────────────────
+// One knob state (S.play) for the whole page: the board's five cards, the cycle stage and Play all show the frame each
+// variant drew for it. Five designs under the same twist is the comparison a still can't give.
+function keyframeFor(kf) {
+  const p = S.play;
+  if (!kf || !p) return kf?.rest ?? null;
+  if (p.held.size && kf.playing) return kf.playing;
+  if (p.last === null) return kf.rest;
+  const off = Math.abs(p.targets[p.last] - S.machine.controls[p.last].default) > 0.004;
+  const snap = off ? snapIn(kf, p.last) : null;
+  return snap === null ? kf.rest : kf.controls[String(p.last + 1)][String(snap)];
+}
+
+function snapIn(kf, i) {
+  const drawn = kf.controls[String(i + 1)];
+  if (!drawn) return null;
+  const target = S.play.targets[i] * 100;
+  return Object.keys(drawn).map(Number).reduce((a, b) => (Math.abs(b - target) < Math.abs(a - target) ? b : a));
+}
+
+const setFor = (v) => (v.set && S.play ? S.play.sets.find((x) => x.id === v.set) : null);
+
+function followKnobs() {
+  for (const c of S.cards) {
+    const set = setFor(c.v);
+    const rel = set ? keyframeFor(set.keyframes) : c.v.frame;
+    if (rel && rel !== c.url) { c.url = rel; c.fv.setSource(fileUrl(rel)); }
+  }
+  const v = S.pass?.variants[S.cycle.index];
+  if (S.view === "cycle" && v?.frame && S.cycle.view) {
+    const set = setFor(v);
+    const rel = set ? keyframeFor(set.keyframes) : v.frame;
+    if (rel !== S.cycle.url) { S.cycle.url = rel; S.cycle.view.setSource(fileUrl(rel)); }
+  }
+}
+
+function playable() {
+  return !!S.play && S.play.sets.length > 0;
+}
+
+// Nothing to move means no Play tab and no MIDI button: a knob that turns and changes nothing reads as broken.
+function syncPlayable() {
+  const on = playable();
+  $("#tab-play").hidden = !on;
+  $("#midi").hidden = !on;
+  if (!on && S.view === "play") setView("board");
+}
+
+function playSet(id) {
+  S.play.setId = id;
+  $("#frameset").value = id;
+  S.play.url = null;
+  describeSource();
+  renderSwitcher();
+  paintKnobs();
+  setView("play");
+}
+
+// In Play, a variant from the open pass gets a v1–v5 switch that keeps the knobs where they are.
+function renderSwitcher() {
+  const box = $("#switcher");
+  box.replaceChildren();
+  const set = currentSet();
+  const mine = S.pass?.variants.filter((v) => v.set) || [];
+  if (!set || !mine.some((v) => v.set === set.id)) { box.hidden = true; return; }
+  box.hidden = false;
+  mine.forEach((v, k) => {
+    const on = v.set === set.id;
+    const b = h("button", { textContent: v.variant, title: `${v.direction.join(" × ")} (key ${k + 1})`, onclick: () => playSet(v.set) });
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", String(on));
+    box.append(b);
+  });
 }
 
 // ── play: knobs, MIDI, notes ─────────────────────────────────────────────────
@@ -294,6 +402,7 @@ function setupPlay() {
   well.after(S.play.view.meter);
   buildDeck();
   describeSource();
+  syncPlayable();
   if (S.view === "play") startPlay();
 }
 
@@ -312,7 +421,12 @@ function describeSource() {
     p.innerHTML = "<b>Live.</b> Every knob position is drawn by the machine's own generator, the same code as the stills. Moves settle the way the device eases them.";
   } else {
     const n = Object.keys(set.keyframes.controls).length;
-    p.innerHTML = `<b>Drawn frames only.</b> ${n} control${n === 1 ? "" : "s"} drawn at 0, 50 and 100: a knob snaps to the nearest drawn frame and nothing is blended. Add <code>screens/${S.machine.id}/bench.py</code> for every position.`;
+    const steps = [...new Set(Object.values(set.keyframes.controls).flatMap((c) => Object.keys(c).map(Number)))].sort((a, b) => a - b);
+    const list = steps.length > 1 ? steps.slice(0, -1).join(", ") + " and " + steps.at(-1) : String(steps[0] ?? "");
+    const swept = S.pass?.variants.some((v) => v.set === set.id);
+    p.innerHTML = swept
+      ? `<b>Knob sweep.</b> ${n} control${n === 1 ? "" : "s"} drawn at ${list} by this variant's own generator: a knob snaps to the nearest drawn frame and nothing is blended. Keys <kbd>1</kbd>–<kbd>5</kbd> swap variants and keep the knobs where they are; the Board follows the knobs too.`
+      : `<b>Drawn frames only.</b> ${n} control${n === 1 ? "" : "s"} drawn at ${list}: a knob snaps to the nearest drawn frame and nothing is blended. Add <code>screens/${S.machine.id}/bench.py</code> for every position.`;
   }
 }
 
@@ -422,11 +536,7 @@ function setControl(i, v) {
 function snapFor(i) {
   const set = currentSet();
   if (!set || set.id === "live") return null;
-  const drawn = set.keyframes.controls[String(i + 1)];
-  if (!drawn) return null;
-  const vals = Object.keys(drawn).map(Number);
-  const target = S.play.targets[i] * 100;
-  return vals.reduce((a, b) => (Math.abs(b - target) < Math.abs(a - target) ? b : a));
+  return snapIn(set.keyframes, i);
 }
 
 function paintKnobs() {
@@ -477,6 +587,7 @@ function paintKnobs() {
   const held = p.held.size;
   $("#note-state").textContent = held ? `${held} note${held === 1 ? "" : "s"} held` : "no notes";
   $("#hold").setAttribute("aria-pressed", String(p.held.has("key") || p.held.has("button")));
+  followKnobs();
 }
 
 function holdNote(id, on) {
@@ -524,15 +635,7 @@ function showPlayFrame() {
     const q = (x) => (Math.round(x * 200) / 200).toFixed(3);
     url = `/gen/${encodeURIComponent(S.machine.id)}.svg?v=${p.shown.map(q).join(",")}&n=${q(p.env)}&r=${p.nonce}`;
   } else {
-    const kf = set.keyframes;
-    let rel = kf.rest;
-    if (p.held.size && kf.playing) rel = kf.playing;
-    else if (p.last !== null) {
-      const off = Math.abs(p.targets[p.last] - S.machine.controls[p.last].default) > 0.004;
-      const snap = snapFor(p.last);
-      if (off && snap !== null) rel = kf.controls[String(p.last + 1)][String(snap)];
-    }
-    url = fileUrl(rel);
+    url = fileUrl(keyframeFor(set.keyframes));
   }
   if (url === p.url || p.inflight) return;
   p.inflight = true;
@@ -586,7 +689,7 @@ midi.addEventListener("cc", ({ detail: { channel, cc, value } }) => {
   }
   const b = p.bindings[key];
   setControl(b.index, b.rel ? p.targets[b.index] + relativeStep(value) / 127 : value / 127);
-  if (S.view !== "play" && !hinted) {
+  if (S.view !== "play" && !hinted && !S.cards.some((c) => c.v.set)) {
     hinted = true;
     toast("Knobs move the screen in Play (K)");
   }
@@ -688,7 +791,7 @@ document.addEventListener("keydown", (e) => {
   const k = e.key.toLowerCase();
   if (k === "b") setView("board");
   else if (k === "c") setView("cycle");
-  else if (k === "k") setView("play");
+  else if (k === "k" && playable()) setView("play");
   else if (k === "d") setLens(S.mode === "device" ? "vector" : "device");
   else if (k === "a") setLens(S.mode === "arm" ? "vector" : "arm");
   else if (k === "v") setLens(S.mode, !S.valueMap);
@@ -699,7 +802,10 @@ document.addEventListener("keydown", (e) => {
     S.cycle.flick = S.cycle.index;
     showCycle(S.cycle.previous, false);
   } else if (S.view === "play" && e.key === " " && !e.repeat) holdNote("key", true);
-  else if (S.view === "play" && k === "0") S.machine.controls.forEach((c, i) => setControl(i, c.default));
+  else if (S.view === "play" && /^[1-9]$/.test(k) && !$("#switcher").hidden) {
+    const b = $("#switcher").children[Number(k) - 1];
+    if (b) b.click();
+  } else if (playable() && k === "0") S.machine.controls.forEach((c, i) => setControl(i, c.default));
   else return;
   e.preventDefault();
 });
@@ -723,7 +829,7 @@ async function boot() {
   for (const tab of document.querySelectorAll("[role=tab]")) tab.addEventListener("click", () => setView(tab.dataset.view));
   $(".views").addEventListener("keydown", (e) => {
     if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return;
-    const tabs = [...document.querySelectorAll("[role=tab]")];
+    const tabs = [...document.querySelectorAll("[role=tab]")].filter((t) => !t.hidden);
     const i = tabs.findIndex((t) => t.dataset.view === S.view);
     const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
     setView(next.dataset.view);
@@ -738,6 +844,7 @@ async function boot() {
     S.play.setId = e.target.value;
     S.play.url = null;
     describeSource();
+    renderSwitcher();
     paintKnobs();
   });
   const hold = $("#hold");

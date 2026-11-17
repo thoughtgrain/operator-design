@@ -194,9 +194,12 @@ The person left these to me. What I chose and why:
 | Bench server | `mcp/opxy_mcp/bench/` | `server.py` (routes, token, CSP), `model.py` (machines, passes, frame sets, both frame-naming schemes), `events.py` (SSE, agent queue, journal), `generator.py` + `worker.py` (live frames in a separate process, restarted on code changes) |
 | Bench page | `mcp/opxy_mcp/bench/static/` | board, cycle, play; vector / device / arm's-length lenses; value map; body-black meter; Web MIDI with auto-bind, learn and relative encoders |
 | Entry points | MCP `bench_open`, `bench_poll`, `bench_close`; `opxy/tools/bench.py` | the bench tools stay out of the compact profile (16-tool cap for small local models) |
-| Tests | `mcp/tests/test_server.py` → `TestBench`, `TestRenderer` | token and confinement, a pick refused before the pass is ready and accepted after, notes, keyframe naming, live generator and its error path |
+| Knob sweeps before the pick | `opxy/tools/sweep.py`, `passes._sweeps`, `paths.pick_preview` | each variant's `bench.py` drawn into `c<N>-000/050/100` + `playing` at submit, linted like the rest frame; `OPXY_PICK_PREVIEW=after-pick` (or `design_pass_start(preview=…)`) defers it to save the generator work. On the bench one knob state drives the board, cycle and play, `1`–`5` swap variants in Play with the knobs kept, and the Play tab and MIDI button stay hidden while nothing can move |
+| Tests | `mcp/tests/test_server.py` → `TestBench`, `TestRenderer`, `TestSweeps` | token and confinement, a pick refused before the pass is ready and accepted after, notes, keyframe naming, live generator and its error path |
 
 With `opxy-raster` built, the six tests that used to skip for want of `rsvg-convert` now run, including both precedents. All 48 pass.
+
+Why sweeps instead of live generators per variant: a sweep is plain files, so it lints, diffs and opens without Python, and the frame set drawn after the pick can start from the same `bench.py`. Three steps per control is enough to feel which way a knob pushes the drawing; `OPXY_PICK_PREVIEW_STEPS=5` doubles the resolution when a control's middle matters. Sweeps are on by default because the interaction is half of what's being chosen; turning them off is a cost decision, so unlike colour it can be made per pass from a conversation.
 
 ## Not built yet
 

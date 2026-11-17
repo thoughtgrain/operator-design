@@ -65,6 +65,7 @@ textarea { resize: vertical; width: 100%; }
 .views button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 6px 10px; color: var(--ink-soft); }
 .views button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--bright); }
 .lens { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+[hidden] { display: none !important; }
 .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 5px; padding: 2px; gap: 2px; }
 .seg button { border-color: transparent; padding: 4px 10px; min-height: 30px; color: var(--ink-soft); }
 .seg button[aria-checked="true"] { border-color: var(--bright); color: var(--ink); }
@@ -198,3 +199,6 @@ dialog h2 { margin: 0 0 4px; font: 600 24px/1.15 var(--display); font-stretch: 7
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+.switcher { align-self: end; }
+.passline .preview span { color: var(--ink-soft); }

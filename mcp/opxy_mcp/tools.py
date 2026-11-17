@@ -150,16 +150,19 @@ TOOLS: list[Tool] = [
     Tool("design_pass_start", "Open a design pass for a screen. Every pass (subject, frames, revision) is exactly five unique "
          "variants: this assigns each its own direction (an angle on the machine's own idea × a way of drawing for subjects, with fitting patterns offered as inspiration only; composition × camera × "
          "emphasis for frames) and returns five designer briefs to run in parallel. run=true runs them on "
-         "OPXY_AGENT_ENDPOINT instead.",
+         "OPXY_AGENT_ENDPOINT instead. preview: 'sweep' (each variant also ships a bench.py and a short knob sweep the "
+         "person plays before picking) or 'after-pick' (saves the generator work; knobs arrive with the picked variant's "
+         "frames). Leave it out to use the harness's OPXY_PICK_PREVIEW (default sweep); set it only when the person asks.",
          _p(machine_id=STR, kind={"type": S, "enum": ["subject", "frames", "revision"]}, category=CATEGORY, focus=STR,
-            exclude_patterns=STRS, run=BOOL),
+            exclude_patterns=STRS, run=BOOL, preview={"type": S, "enum": ["sweep", "after-pick"]}),
          lambda a: passes.design_pass_start(a["machine_id"], a["kind"], a.get("category"), a.get("focus"),
-                                            a.get("exclude_patterns"), a.get("run", False)),
+                                            a.get("exclude_patterns"), a.get("run", False), a.get("preview")),
          ["machine_id", "kind"], compact=True, read_only=False,
          short="Open a five-variant design pass and get five designer briefs."),
     Tool("design_pass_submit", "Submit the five variants of the open pass and check they're unique. Subject variants: "
          "[{variant, angle, drawing_language, subject, controls, reference, risks, pattern (optional inspiration)}] (or leave out to read each "
-         "v<N>/candidate.json). Frames: each v<N>/rest.svg is linted and compared pairwise at 1:1.",
+         "v<N>/candidate.json). Frames: each v<N>/rest.svg is linted and compared pairwise at 1:1. With the pass's preview "
+         "on 'sweep', each v<N>/bench.py is run to draw its knob sweep, which is linted too.",
          _p(machine_id=STR, variants={"type": "array", "items": {"type": "object"}}, pass_name=STR, two_page=BOOL, definition=STR),
          lambda a: passes.design_pass_submit(a["machine_id"], a.get("variants"), a.get("pass_name"), a.get("two_page", False),
                                              a.get("definition")),
