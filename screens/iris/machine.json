@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.4",
+  "kind": "synth",
+  "description": "Four waveforms at one pitch, sine, triangle, square and saw, laid side by side like the bands of a rainbow: Morph slides along them, Overlap lets neighbours bleed together, Spread detunes the bands so they beat."
+}

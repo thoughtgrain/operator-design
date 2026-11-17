@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "id": "iris",
+  "name": "Iris",
+  "parameters": [
+    {
+      "id": "morph",
+      "label": "Morph",
+      "default": 0.3333,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "overlap",
+      "label": "Overlap",
+      "default": 0.25,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "spread",
+      "label": "Spread",
+      "default": 0.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "tone",
+      "label": "Tone",
+      "default": 0.7,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "skew",
+      "label": "Skew",
+      "default": 0.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent",
+      "control": 0
+    },
+    {
+      "id": "phase",
+      "label": "Phase",
+      "default": 0.0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent",
+      "control": 1
+    }
+  ],
+  "presets": {
+    "Arc": {
+      "morph": 0.3333,
+      "overlap": 0.25,
+      "spread": 0,
+      "tone": 0.7,
+      "skew": 0,
+      "phase": 0
+    },
+    "Glass": {
+      "morph": 0.0,
+      "overlap": 0.6,
+      "spread": 0.15,
+      "tone": 0.55,
+      "skew": 0,
+      "phase": 0
+    },
+    "Prism": {
+      "morph": 0.5,
+      "overlap": 1.0,
+      "spread": 0.35,
+      "tone": 0.8,
+      "skew": 0,
+      "phase": 0.3
+    },
+    "Reed": {
+      "morph": 0.6667,
+      "overlap": 0.2,
+      "spread": 0.05,
+      "tone": 0.6,
+      "skew": 0.7,
+      "phase": 0
+    },
+    "Bow": {
+      "morph": 0.85,
+      "overlap": 0.45,
+      "spread": 0.6,
+      "tone": 0.75,
+      "skew": 0.2,
+      "phase": 0.5
+    },
+    "Hollow": {
+      "morph": 0.6667,
+      "overlap": 0.7,
+      "spread": 0,
+      "tone": 0.9,
+      "skew": 0,
+      "phase": 1.0
+    }
+  },
+  "resources": {
+    "voiceBytes": 44,
+    "voiceAlignment": 4,
+    "voiceCapacity": 8,
+    "sharedBytes": 4,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 4,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 1,
+      "texts": 0,
+      "palette": 1
+    }
+  },
+  "press": "page"
+}

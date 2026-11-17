@@ -1,0 +1,24 @@
+{
+  "variant": "v4",
+  "angle": "the material the sound acts on, seen close: one water surface that the four waveforms cross as four wave trains",
+  "pattern": "none",
+  "drawing_language": "edge-lit silhouette: a 3D heightfield sliced into rows of constant depth and projected through one low camera, each row a black mass with a dark hairline rim, the crest tops that nothing nearer hides lit as short grey lips (brighter the taller and nearer), and the front row's whole edge the one brightest line",
+  "subject": "A low, close view across a water surface where four wave trains, one per waveform (sine, triangle, square, saw), arrive from four directions and cross, the crests catching a light along their edges.",
+  "controls": [
+    "morph moves the mixing window across the four trains, so the dominant swell changes direction and crest shape as it turns: long smooth head-on rows (sine), peaked diagonal ridges (triangle), flat-topped plateaus (square), long ramps that break off in cliffs (saw).",
+    "overlap lets the other trains into the surface, so clean parallel ridges break into a crossing, choppy lattice where crests meet and stack.",
+    "spread pulls the trains' wavelengths apart, so the crossing pattern drifts into a moire of tall chop and flat calm patches that beat across the surface.",
+    "tone sets how many harmonics each train keeps, so crests go from soft rounded swells at 0 to sharp knife-edged lips at 100, with more and narrower lit edges.",
+    "skew moves each shaped train's breakpoint, so sine and triangle crests lean over into ramps and the square's plateaus narrow to thin spikes; the saw train doesn't change.",
+    "phase slides each train against the one before, so where they overlap the tall crossing peaks move and fill or hollow out; with one train sounding the surface stays as it is."
+  ],
+  "reference": "opxy/reference/field-and-figure.jpg (one subject filling the body, quiet ground); library/theseus-tower for a modelled 3D form drawn in grey line under the two-page header",
+  "risks": [
+    "Sliced heightfields are close to the familiar 'ridgeline' or terrain-plot look; without the lit lips and the four-direction crossing it could read as a landscape or any synth's waveform plot rather than this machine's four trains.",
+    "Which train is which is told only by direction and crest shape; at overlap 100% the four merge and no single waveform is legible, which is honest to the sound but harder to read.",
+    "Every control rewrites the whole surface: 12 row masses of up to 62 points plus ~30 lip ribbons are all static artwork in the sketch. On the device this needs either pre-drawn variants or a handful of mutable outlines (max 4 paths x 64 points), so the row count would have to shrink a lot, which is the main fight with the direction.",
+    "Phase only shows with overlap open; at the default (one train plus a touch of its neighbours) it moves very little and may fail the perceptibility floor.",
+    "The sine train comes head-on and at morph 0 the surface is a calm, almost flat swell with few lit lips: correct, but the quietest frame of the set.",
+    "The note response isn't designed yet; the natural one is the surface swelling (row amplitude) and the lips brightening while notes are held."
+  ]
+}
