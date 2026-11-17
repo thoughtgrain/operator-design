@@ -60,6 +60,8 @@ MIX_HELD = "#CDCDCD"
 BAND_GREYS = ["#4B4B4B", "#646464", "#7D7D7D", "#969696"]
 HORIZON_GREY = "#4B4B4B"
 PARK = (640, 320)
+EDGE = 0.08                     # a band edge's share of its cycle (square, saw drop)
+FLAT = 0.03                     # the saw's flat crest and trough
 
 
 # ---------------------------------------------------------------- the engine
@@ -163,6 +165,31 @@ def ribbon(line, w):
     return left + right[::-1]
 
 
+def clean(poly, gap=0.3, min_turn=8.0):
+    """Drop ribbon vertices that sit too close to a neighbour or fold back on it
+    (the inner side of a sharp corner); used on static band cycles only."""
+    pts = list(poly)
+    changed = True
+    while changed and len(pts) > 4:
+        changed = False
+        n = len(pts)
+        for j in range(n):
+            a, b, c = pts[j - 1], pts[j], pts[(j + 1) % n]
+            if math.dist(a, b) < gap:
+                del pts[j]
+                changed = True
+                break
+            v1 = (a[0] - b[0], a[1] - b[1])
+            v2 = (c[0] - b[0], c[1] - b[1])
+            l1, l2 = math.hypot(*v1), math.hypot(*v2)
+            cosang = (v1[0] * v2[0] + v1[1] * v2[1]) / (l1 * l2)
+            if math.degrees(math.acos(max(-1, min(1, cosang)))) < min_turn:
+                del pts[j]
+                changed = True
+                break
+    return pts
+
+
 def fmt(v):
     s = f"{v:.3f}".rstrip("0").rstrip(".")
     return "0" if s in ("-0", "") else s
@@ -181,8 +208,9 @@ def node(idx, origin, poly, fill):
 
 def cycle_ts(kind, skew):
     b = 0.5 - 0.45 * skew
-    e = 0.035
-    keys = {"sine": [], "tri": [b], "square": [e, b, b + e], "saw": [1 - e]}[kind]
+    e, f = EDGE, FLAT
+    keys = {"sine": [], "tri": [b], "square": [e, b, b + e],
+            "saw": [1 - e - f, 1 - e, 1 - f]}[kind]
     grid = list(np.linspace(0, 1, 21))
     ts = sorted(set([round(x, 4) for x in grid + keys]))
     out = [ts[0]]
@@ -199,7 +227,7 @@ def cycle_ts(kind, skew):
 def cycle_shape(kind, t, skew):
     """Raw band wave for drawing, with steep finite edges (no vertical reversals)."""
     b = 0.5 - 0.45 * skew
-    e = 0.035
+    e, f = EDGE, FLAT
     if kind == "square":
         if t <= e:
             return -1 + 2 * t / e
@@ -209,7 +237,14 @@ def cycle_shape(kind, t, skew):
             return 1 - 2 * (t - b) / e
         return -1.0
     if kind == "saw":
-        return -1 + 2 * t / (1 - e) if t <= 1 - e else 1 - 2 * (t - (1 - e)) / e
+        # ramp, a short flat crest, the drop, a short flat trough (flat tips, no reversal)
+        if t <= 1 - e - f:
+            return -1 + 2 * t / (1 - e - f)
+        if t <= 1 - e:
+            return 1.0
+        if t <= 1 - f:
+            return 1 - 2 * (t - (1 - e)) / (e - f)
+        return -1.0
     return float(raw(kind, np.array([t]), skew)[0])
 
 
@@ -230,7 +265,7 @@ def band_nodes(i, k, c, grey):
         mid = to_screen(radius(th), phi0 + 0.5 * dphi)
         origin = (round(mid[0], 2), round(mid[1], 2))
         visible = (phi0 < math.pi and origin[0] > -40 and origin[1] < HORIZON + 30)
-        poly = ribbon(line, W_BAND)
+        poly = clean(ribbon(line, W_BAND))
         if visible:
             out.append(node(4 + 16 * i + slot, origin, poly, grey))
         else:

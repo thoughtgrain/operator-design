@@ -171,7 +171,7 @@ def band_nodes(i, w, c):
     shift = P["phase"] * i / 8               # cycles
     ts = cycle_ts(kind)
     nodes = []
-    k = -1
+    k = -2                                   # first pass makes k = -1: the cycle crossing the foot
     while True:
         k += 1
         t0 = k + SEAM[kind] - shift
@@ -188,8 +188,8 @@ def band_nodes(i, w, c):
         xs = [p[0] for p in pts]
         if min(ys) < TOP or max(xs) < 0 or min(xs) > W:
             continue                        # hidden: header band or off-screen
-        if max(ys) > HY + 0.5 and min(ys) > HY:
-            continue                        # wholly below the horizon
+        if sum(1 for y in ys if y < HY - 0.5) < 2:
+            continue                        # below the horizon
         mid = polar(r0, (k + 0.5 + SEAM[kind] - shift) * dphi)
         ox, oy = round(mid[0], 2), round(mid[1], 2)
         nodes.append((ox, oy, ribbon(pts, LINE / 2)))
