@@ -45,10 +45,56 @@ G0, G1, G2, G3, G4, G5, G6, G7 = sk.G0, sk.G1, sk.G2, sk.G3, sk.G4, sk.G5, sk.G6
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.0
 W, H = 480, 220
 FONT = sk.FONT
-HEADER = [("ratio", "3:2"), ("teeth", "8"), ("mesh", "100%"), ("scale", "maj")]
+DEFINITION = HERE.parent.parent.parent / "definition.json"
+RATIOS = [(1, 1), (5, 4), (4, 3), (7, 5), (3, 2), (5, 3), (7, 4), (2, 1), (3, 1)]
+RATIO_LABELS = ["1:1", "5:4", "4:3", "7:5", "3:2", "5:3", "7:4", "2:1", "3:1"]
+TEETH = list(range(3, 17))
+SCALES = [("maj", {0, 2, 4, 5, 7, 9, 11}), ("min", {0, 2, 3, 5, 7, 8, 10}),
+          ("dor", {0, 2, 3, 5, 7, 9, 10}), ("phr", {0, 1, 3, 5, 7, 8, 10}),
+          ("lyd", {0, 2, 4, 6, 7, 9, 11}), ("mix", {0, 2, 4, 5, 7, 9, 10}),
+          ("pent", {0, 2, 4, 7, 9}), ("hira", {0, 2, 3, 7, 8})]   # positions of twelve
+DEFAULTS = {"ratio": 0.5, "teeth": 0.3846, "mesh": 1.0, "scale": 0.0}
+RP_A = 4.0          # A's pitch radius stays put; teeth re-cut it at a new module
 
-TEETH_A, TEETH_B = 8, 12
-SCALE = {0, 2, 4, 5, 7, 9, 11}          # maj, as positions of twelve
+
+def pick(v, n):
+    return min(n - 1, max(0, round(min(1.0, max(0.0, float(v))) * (n - 1))))
+
+
+def model(values=None):
+    """Control values (0..1 by definition id) to the drawing's numbers."""
+    vals = {**DEFAULTS, **(values or {})}
+    p, q = RATIOS[pick(vals["ratio"], len(RATIOS))]
+    na = TEETH[pick(vals["teeth"], len(TEETH))]
+    nb = max(3, round(na * p / q))
+    m = 8 / na                                  # module: A keeps its size
+    md = min(m, 0.35 * RP_A)                    # tooth depth, kept off the bore at 3 teeth
+    mesh = min(1.0, max(0.0, float(vals["mesh"])))
+    sname, scale = SCALES[pick(vals["scale"], len(SCALES))]
+    header = [("ratio", RATIO_LABELS[pick(vals["ratio"], len(RATIOS))]), ("teeth", str(na)),
+              ("mesh", f"{round(mesh * 100)}%"), ("scale", sname)]
+    return dict(na=na, nb=nb, rpA=na * m / 2, rpB=nb * m / 2, md=md, mesh=mesh,
+                scale=scale, header=header)
+
+
+def euclid(n, k):
+    """Which of n teeth keep their full face: k of them, evenly, tooth 0 always."""
+    k = max(1, min(n, k))
+    return [(t * k) % n < k for t in range(n)]
+
+
+def gear2d(N, rp, md, rot=0.0, tips=None):
+    """sketch.gear2d with the tooth depth apart from the pitch (identical at md = 1)."""
+    ra, rr = rp + md, rp - 1.25 * md
+    pitch = 2 * math.pi / N
+    pts = []
+    for t in range(N):
+        a = rot + t * pitch
+        rt = rr + (ra - rr) * (1 if tips is None else tips[t])
+        for da, r in ((-0.31, rr), (-0.17, rt), (0.17, rt), (0.31, rr)):
+            ang = a + da * pitch
+            pts.append((r * math.cos(ang), r * math.sin(ang)))
+    return pts
 
 
 class Ortho:

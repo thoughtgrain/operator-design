@@ -11,6 +11,8 @@ What it gives a client:
 
 ## Setup
 
+The step-by-step guide, including the bench and MIDI, is [`docs/setup.md`](../docs/setup.md). This is the reference.
+
 Pick your client. Every command merges into the existing config (other servers stay), keeps the old file as `.bak`, and takes `--dry-run` to show what it would write.
 
 ### Claude Code
@@ -96,8 +98,8 @@ Set these in the client's `env` block for the server (the setup flags write them
 | `OPXY_APPROVERS` | Comma-separated names allowed to approve training proposals over MCP. Unset by default, so approval happens in a terminal |
 | `OPXY_COLOUR` | `allow` lets this harness design in colour. Unset by default: grey only, which is the OP-XY's own look. Red is refused either way, and a colour machine also ships a designed grayscale version (`--colour` on setup) |
 | `OPXY_SHIFT_HEADER` | `stack` shows Shift as open-xy's stacked header rows in this harness (`--shift-stack` on setup). Unset by default: `replace`, where Shift swaps the header's four slots for the Shift controls of the page being edited, the OP-XY's own way |
-| `OPXY_PICK_PREVIEW` | `sweep` (default): every variant in a pass also ships a `bench.py`, and submit draws it into a short knob sweep the person plays on the bench before picking. `after-pick` skips that work on the four variants that won't be picked; the knobs and MIDI then arrive with the picked variant's frame set. A pass can override it with `design_pass_start(preview=...)` when the person asks |
-| `OPXY_PICK_PREVIEW_STEPS` | `5` draws each control at 0/25/50/75/100 instead of 0/50/100 |
+| `OPXY_PICK_PREVIEW` | `--pick-preview`. `sweep` (default): every variant in a pass also ships a `bench.py`, and submit draws it into a short knob sweep the person plays on the bench before picking. `after-pick` skips that work on the four variants that won't be picked; the knobs and MIDI then arrive with the picked variant's frame set. A pass can override it with `design_pass_start(preview=...)` when the person asks |
+| `OPXY_PICK_PREVIEW_STEPS` | `--sweep-steps 5` draws each control at 0/25/50/75/100 instead of 0/50/100 |
 | `OPXY_SDK` | Path to a local open-xy checkout, so `sdk_test` can run open-xy's own `sdk.py test --machine` (`--sdk` on setup) |
 
 ## Tools

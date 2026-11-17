@@ -29,10 +29,14 @@ HAIR, LINE, SUBJ = 1.0, 1.5, 2.0
 TOP = 22.0                      # nothing above this row: the stock header owns y 0-20
 X0, X1, Y1 = 0.0, 480.0, 220.0
 
-TEETH_A = 8
-TEETH_B = 12
-SCALE = {0, 2, 4, 5, 7, 9, 11}  # maj: drilled positions of twelve
-S = 24.0                        # px per module
+RATIOS = [("1:1", 1.0), ("5:4", 5 / 4), ("4:3", 4 / 3), ("7:5", 7 / 5), ("3:2", 3 / 2),
+          ("5:3", 5 / 3), ("7:4", 7 / 4), ("2:1", 2.0), ("3:1", 3.0)]
+TEETH = list(range(3, 17))
+SCALES = [("maj", {0, 2, 4, 5, 7, 9, 11}), ("min", {0, 2, 3, 5, 7, 8, 10}), ("dor", {0, 2, 3, 5, 7, 9, 10}),
+          ("phr", {0, 1, 3, 5, 7, 8, 10}), ("lyd", {0, 2, 4, 6, 7, 9, 11}), ("mix", {0, 2, 4, 5, 7, 9, 10}),
+          ("pent", {0, 2, 4, 7, 9}), ("hira", {0, 2, 3, 7, 8})]   # drilled positions of twelve
+RA_PX = 96.0                    # A's pitch radius on screen: teeth re-cut the wheel, they don't resize it
+S = 24.0                        # px per module (set per frame: RA_PX / A's pitch radius)
 M = 1.0
 SHADOW = (11.0, 9.5)             # the wheels' thickness, cast down-right by light from the upper left
 ARBOR_SHADOW = (5.0, 4.5)       # the arbors stand a little above the faces
@@ -76,15 +80,15 @@ def loop(pts, w, fill):
 
 
 # ------------------------------------------------------------- geometry
-def gear(N, rp, rot):
-    """Involute spur outline (module 1, units), root lands rounded; tooth t at rot + t * pitch."""
+def gear_parts(N, rp, rot):
+    """Involute spur outline (module 1, units) as [(tooth, land)] per tooth; tooth t at rot + t * pitch."""
     rr = rp - 1.25 * M
-    pts = []
+    parts = []
     pitch = 2 * math.pi / N
     for t in range(N):
         c = rot + t * pitch
         tooth = s02.involute_tooth(rp, M, c, n=6)
-        pts += tooth
+        land = []
         # root land to the next tooth
         a0 = math.atan2(tooth[-1][1], tooth[-1][0])
         nxt = s02.involute_tooth(rp, M, c + pitch, n=6)[0]
@@ -93,9 +97,38 @@ def gear(N, rp, rot):
             a1 += 2 * math.pi
         for k in (1, 2):
             a = a0 + (a1 - a0) * k / 3
-            pts.append((rr * math.cos(a), rr * math.sin(a)))
+            land.append((rr * math.cos(a), rr * math.sin(a)))
+        parts.append((tooth, land))
+    return parts
+
+
+def gear(N, rp, rot):
+    pts = []
+    for tooth, land in gear_parts(N, rp, rot):
+        pts += tooth + land
     return pts
 
+
+def milled_outline(N, rp, rot, high):
+    """The full-height outline: a milled tooth is cut back to the root circle, so the step shows as an arc."""
+    rr = rp - 1.25 * M
+    pts = []
+    for t, (tooth, land) in enumerate(gear_parts(N, rp, rot)):
+        if high[t]:
+            pts += tooth
+        else:
+            a0 = math.atan2(tooth[0][1], tooth[0][0])
+            a1 = math.atan2(tooth[-1][1], tooth[-1][0])
+            while a1 < a0:
+                a1 += 2 * math.pi
+            pts += [(rr * math.cos(a0 + (a1 - a0) * k / 4), rr * math.sin(a0 + (a1 - a0) * k / 4)) for k in range(5)]
+        pts += land
+    return pts
+
+
+def euclid(k, n):
+    """Euclidean hits of k in n, tooth 0 always a hit when k > 0."""
+    return [(i * k) % n < k for i in range(n)]
 
 def circle(r, n=40, c=(0.0, 0.0)):
     return [(c[0] + r * math.cos(2 * math.pi * k / n), c[1] + r * math.sin(2 * math.pi * k / n)) for k in range(n)]
@@ -119,57 +152,6 @@ def inside(p, P):
 
 
 # ------------------------------------------------------------- the scene
-# Line of centres falls a few degrees to the right so the pair sits on a slant.
-TILT = math.radians(-5)
-rpA, rpB = TEETH_A / 2, TEETH_B / 2
-e = (math.cos(TILT), math.sin(TILT))
-CA = (98.0, 132.0)
-CB = (CA[0] + S * (rpA + rpB) * e[0], CA[1] + S * (rpA + rpB) * e[1])
-th = math.atan2(e[1], e[0])
-rotA = th + math.pi / TEETH_A          # A shows a gap to B
-rotB = th + math.pi                    # B's tooth 0 sits in it
-OA = to_screen(CA, gear(TEETH_A, rpA, rotA))
-OB = to_screen(CB, gear(TEETH_B, rpB, rotB))
-HOLE_R, HOLE_AT = 0.66, 3.35
-holes, spots = [], []
-for k in range(12):
-    a = rotB + 2 * math.pi * k / 12          # position 0 behind the meshing tooth, then clockwise on screen
-    hc = (HOLE_AT * math.cos(a), HOLE_AT * math.sin(a))
-    (holes if k in SCALE else spots).append(hc)
-HOLES = [to_screen(CB, circle(HOLE_R, 32, h)) for h in holes]
-ARBOR_A = to_screen(CA, circle(0.62, 28))
-ARBOR_B = to_screen(CB, circle(0.75, 32))
-
-
-def solid(p):
-    if inside(p, OA):
-        return True
-    if inside(p, OB):
-        return not any(inside(p, h) for h in HOLES)
-    return False
-
-
-def in_cast(p, d, src):
-    for t in (0.2, 0.4, 0.6, 0.8, 1.0):
-        if src((p[0] - d[0] * t, p[1] - d[1] * t)):
-            return True
-    return False
-
-
-def plate_shadow(p):
-    """Plate seen past the wheels, in the wheels' cast shadow."""
-    return not solid(p) and in_cast(p, SHADOW, solid)
-
-
-def arbor(p):
-    return inside(p, ARBOR_A) or inside(p, ARBOR_B)
-
-
-def face_shadow(p):
-    """A top face, in the shadow of its arbor."""
-    return solid(p) and not arbor(p) and in_cast(p, ARBOR_SHADOW, arbor)
-
-
 def hatch_by(pred, box, spacing=3.2, w=HAIR, fill=G3):
     """45-degree hairlines (rising to the right) wherever pred holds, sampled along each line."""
     x0, y0, x1, y1 = box
@@ -197,41 +179,127 @@ def hatch_by(pred, box, spacing=3.2, w=HAIR, fill=G3):
     return out
 
 
-def body():
+def in_cast(p, d, src):
+    for t in (0.2, 0.4, 0.6, 0.8, 1.0):
+        if src((p[0] - d[0] * t, p[1] - d[1] * t)):
+            return True
+    return False
+
+
+def body(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
+    """The plan. ratio_i, teeth_i, scale_i are enum indices; mesh and notes run 0..1."""
+    global S
+    TEETH_A = TEETH[teeth_i]
+    TEETH_B = max(3, round(TEETH_A * RATIOS[ratio_i][1]))
+    SCALE = SCALES[scale_i][1]
+    rpA, rpB = TEETH_A / 2, TEETH_B / 2
+    S = RA_PX / rpA
+    k = 24.0 / S                     # hub, arbor and hole sizes stay put on screen
+    kb = rpB / 6.0                   # the ring of holes follows B's size
+    # Line of centres falls a few degrees to the right so the pair sits on a slant.
+    TILT = math.radians(-5)
+    e = (math.cos(TILT), math.sin(TILT))
+    CA = (98.0, 132.0)
+    CB = (CA[0] + S * (rpA + rpB) * e[0], CA[1] + S * (rpA + rpB) * e[1])
+    th = math.atan2(e[1], e[0])
+    rotA = th + math.pi / TEETH_A          # A shows a gap to B
+    rotB = th + math.pi                    # B's tooth 0 sits in it
+    if notes > 0:
+        # the note: the pair drives a quarter of a tooth further into contact
+        d = notes * 0.25 * 2 * math.pi / TEETH_A
+        rotA += d
+        rotB -= d * TEETH_A / TEETH_B
+    # mesh: A's teeth that don't engage are milled down, in Euclidean order
+    hits = round(mesh * TEETH_A)
+    high = euclid(hits, TEETH_A) if hits < TEETH_A else [True] * TEETH_A
+    milled = not all(high)
+    OA = to_screen(CA, gear(TEETH_A, rpA, rotA))
+    OB = to_screen(CB, gear(TEETH_B, rpB, rotB))
+    OA_HIGH = to_screen(CA, milled_outline(TEETH_A, rpA, rotA, high)) if milled else OA
+    HOLE_R, HOLE_AT = 0.66 * k, 3.35 * kb
+    holes, spots = [], []
+    for j in range(12):
+        a = rotB + 2 * math.pi * j / 12          # position 0 behind the meshing tooth, then clockwise on screen
+        hc = (HOLE_AT * math.cos(a), HOLE_AT * math.sin(a))
+        (holes if j in SCALE else spots).append(hc)
+    HOLES = [to_screen(CB, circle(HOLE_R, 32, h)) for h in holes]
+    ARBOR_A = to_screen(CA, circle(0.62 * k, 28))
+    ARBOR_B = to_screen(CB, circle(0.75 * k, 32))
+
+    def solid_b(p):
+        return inside(p, OB) and not any(inside(p, h) for h in HOLES)
+
+    def solid(p):
+        if inside(p, OA):
+            return True
+        if inside(p, OB):
+            return not any(inside(p, h) for h in HOLES)
+        return False
+
+    def high_solid(p):
+        return inside(p, OA_HIGH) or solid_b(p)
+
+    def plate_shadow(p):
+        """Plate seen past the wheels, in the wheels' cast shadow."""
+        if not milled:
+            return not solid(p) and in_cast(p, SHADOW, solid)
+        if solid(p):
+            # a milled tooth's top face, in the shadow of the full-height step
+            return not high_solid(p) and in_cast(p, (SHADOW[0] / 2, SHADOW[1] / 2), high_solid)
+        return in_cast(p, SHADOW, high_solid) or in_cast(p, (SHADOW[0] / 2, SHADOW[1] / 2), solid)
+
+    def arbor(p):
+        return inside(p, ARBOR_A) or inside(p, ARBOR_B)
+
+    def face_shadow(p):
+        """A top face, in the shadow of its arbor."""
+        return solid(p) and not arbor(p) and in_cast(p, ARBOR_SHADOW, arbor)
+
     out = []
     box = (X0, TOP + 0.5, X1, Y1)
     # cast shadows on the plate: the wheels' mass
     out += hatch_by(plate_shadow, box)
     # arbor shadows on the faces (small, same hatch)
-    for C, r in ((CA, 0.62), (CB, 0.75)):
+    for C, r in ((CA, 0.62 * k), (CB, 0.75 * k)):
         R = S * r + 8
         out += hatch_by(face_shadow, (C[0] - R, max(TOP + 0.5, C[1] - R), C[0] + R + 8, C[1] + R + 8))
     # top faces: outlines only, the face stays black
-    for O in (OA, OB):
+    for O in (OA_HIGH, OB):
         out.append(ribbon(O + [O[0]], LINE, G5))
+    # milled teeth: their lower top faces in hairline, below the step
+    if milled:
+        for t, (tooth, _) in enumerate(gear_parts(TEETH_A, rpA, rotA)):
+            if not high[t]:
+                out.append(ribbon(to_screen(CA, tooth), HAIR, G4))
     # web detail: rim and hub turned on each face, hairlines
-    out.append(loop(to_screen(CA, circle(rpA - 1.25 - 0.55, 56)), HAIR, G3))
-    out.append(loop(to_screen(CA, circle(1.35, 36)), HAIR, G3))
-    out.append(loop(to_screen(CB, circle(rpB - 1.25 - 0.55, 72)), HAIR, G3))
-    out.append(loop(to_screen(CB, circle(1.75, 40)), HAIR, G3))
+    for C, rp, hub, n_rim, n_hub in ((CA, rpA, 1.35 * k, 56, 36), (CB, rpB, 1.75 * k, 72, 40)):
+        rim = rp - 1.25 - 0.55
+        if rim > hub + 0.4 * k:
+            out.append(loop(to_screen(C, circle(rim, n_rim)), HAIR, G3))
+        out.append(loop(to_screen(C, circle(hub, n_hub)), HAIR, G3))
     # arbors: the shaft ends, standing proud of the faces
     out.append(loop(ARBOR_A, LINE, G4))
     out.append(loop(ARBOR_B, LINE, G4))
     # B's web: drilled through at the scale's degrees, a spot-face where it isn't
-    for H in HOLES:
-        out.append(loop(H, LINE, G4))
+    for i, H in enumerate(HOLES):
+        # playing: the hole for the sounding degree (position 0, beside the meshing tooth) lights
+        out.append(loop(H, LINE, G6 if (notes > 0 and i == 0) else G4))
     for h in spots:
-        out.append(loop(to_screen(CB, circle(0.28, 16, h)), HAIR, G3))
+        out.append(loop(to_screen(CB, circle(0.28 * k, 16, h)), HAIR, G3))
     # the sound source: B's tooth in A's gap, its top edge the one bright line
     tooth = to_screen(CB, s02.involute_tooth(rpB, M, rotB, n=6))
     out.append(ribbon(tooth, SUBJ, G7))
     return out
 
 
+def draw(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
+    s02.HEADER = [("ratio", RATIOS[ratio_i][0]), ("teeth", str(TEETH[teeth_i])),
+                  ("mesh", f"{round(mesh * 100)}%"), ("scale", SCALES[scale_i][0])]
+    return s02.frame(body(ratio_i, teeth_i, mesh, scale_i, notes))
+
+
 def main():
-    s02.HEADER = [("ratio", "3:2"), ("teeth", "8"), ("mesh", "100%"), ("scale", "maj")]
-    svg = s02.frame(body())
-    (HERE / "rest.svg").write_text(svg)
+    (HERE / "rest.svg").write_text(draw())
     print(HERE / "rest.svg")
 
 

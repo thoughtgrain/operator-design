@@ -55,6 +55,10 @@ def env_for(args, local: str | None = None) -> dict:
         env["OPXY_COLOUR"] = "allow"
     if getattr(args, "shift_stack", False):
         env["OPXY_SHIFT_HEADER"] = "stack"
+    if getattr(args, "pick_preview", None):
+        env["OPXY_PICK_PREVIEW"] = args.pick_preview
+    if getattr(args, "sweep_steps", None):
+        env["OPXY_PICK_PREVIEW_STEPS"] = str(args.sweep_steps)
     if getattr(args, "sdk", None):
         env["OPXY_SDK"] = str(Path(args.sdk).expanduser().resolve())
     return env
@@ -218,6 +222,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="allow colour in this harness (grey is the default; red stays reserved)")
     ap.add_argument("--shift-stack", action="store_true",
                     help="show Shift as open-xy's stacked header rows in this harness (default: Shift replaces the header's four slots)")
+    ap.add_argument("--pick-preview", choices=["sweep", "after-pick"],
+                    help="knob sweeps on every variant before the pick (sweep, the default) or only after it (after-pick: fewer tokens)")
+    ap.add_argument("--sweep-steps", type=int, choices=[3, 5], help="steps per control in a knob sweep (default 3: 0/50/100)")
     ap.add_argument("--sdk", help="path to a local open-xy checkout, for the sdk_test tool")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)

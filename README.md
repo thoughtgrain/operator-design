@@ -8,6 +8,8 @@ It's also an **MCP server** (`mcp/`), so Claude Code, Claude Desktop, Codex, LM 
 
 ## Set up the MCP server
 
+The full walkthrough (install, each harness, every setting, the bench and MIDI) is in [`docs/setup.md`](docs/setup.md). The short version follows.
+
 Everything runs on Python 3.10+ with no packages to install. Rendering frames to PNG, so agents can look at them and the uniqueness check can measure them, needs one renderer: either build the Rust one in `crates/opxy-raster` (`cargo build --release`; no system libraries, the same pixels everywhere) or install `rsvg-convert` (macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`). Rust is optional; the tools use whichever they find.
 
 Clone the repo first, then pick your client. Every setup command merges into your existing config (other servers stay put), saves the old file as `.bak`, and takes `--dry-run` if you want to see what it'll write first.
@@ -55,9 +57,11 @@ ollmcp -j ~/.config/ollmcp/mcp-servers/operator-design.json -m qwen3:8b
 python3 mcp/setup.py print
 ```
 
-**Optional settings.** Two flags work with any of the commands above:
+**Optional settings.** These flags work with any of the commands above:
 
 - `--colour` lets that client design in colour. Grey is the default because it's the OP-XY's own look; colour is an override you set per client, here, and an agent can't switch it on. Red stays off-limits either way.
+- `--pick-preview after-pick` saves tokens: the five variants of a pass come without knob sweeps, and the knobs (and MIDI) arrive with the picked variant's frames instead. The default, `sweep`, lets you play all five before you pick. `--sweep-steps 5` draws each control at five positions instead of three.
+- `--shift-stack` shows Shift as open-xy's stacked header rows instead of swapping the header's four slots.
 - `--sdk ../open-xy` points the server at a local checkout of [open-xy](https://github.com/etcetc000/open-xy), so it can run open-xy's own `sdk.py test` on a finished machine.
 
 **Check it worked.** This lists what's in place for each client; a missing client is fine if you don't use it.
@@ -94,7 +98,25 @@ If a review sends something back, the fix is another pass of five, never a quick
 
 > Open the bench for `beacon`.
 
-The agent starts a local page and gives you its URL (or run `python3 opxy/tools/bench.py beacon` yourself). There you see the pass's five variants at 1:1, side by side or flipped in place, through a device-pixel or arm's-length lens if you want; you pick one, or turn the pass down, with your name and a reason, and the agent hears about it. In **Play**, the machine's controls are knobs: drag them, use the arrow keys, or plug in a MIDI controller (Chrome or Edge) and turn real ones, with notes from it holding the screen's note state. Machines with a `bench.py` draw every knob position live from their own generator. During a pass, each of the five variants comes with a short knob sweep, so a knob turned on your controller moves all five cards on the board at once and you choose with the interaction in hand, not just the still. If you'd rather save that work until after the pick, set `OPXY_PICK_PREVIEW=after-pick` (or ask for it on one pass); the knobs and MIDI then stay hidden until there are frames to move. The full tour is in [`mcp/README.md`](mcp/README.md#the-bench).
+The agent starts a local page and gives you its URL (or run `python3 opxy/tools/bench.py beacon` yourself). There you see the pass's five variants at 1:1, side by side or flipped in place, through a device-pixel or arm's-length lens if you want; you pick one, or turn the pass down, with your name and a reason, and the agent hears about it. In **Play**, the machine's controls are knobs: drag them, use the arrow keys, or plug in a MIDI controller (Chrome or Edge) and turn real ones, with notes from it holding the screen's note state. Machines with a `bench.py` draw every knob position live from their own generator. During a pass, each of the five variants comes with a short knob sweep, so a knob turned on your controller moves all five cards on the board at once and you choose with the interaction in hand, not just the still. If you'd rather save that work until after the pick, set `OPXY_PICK_PREVIEW=after-pick` (or ask for it on one pass); the knobs and MIDI then stay hidden until there are frames to move. The full tour is in [`mcp/README.md`](mcp/README.md#the-bench), and MIDI binding (auto-bind, learn, relative encoders, the OP-XY as its own controller) is in [`docs/setup.md`](docs/setup.md#5-midi).
+
+These are from a real pass: `gears`, a player whose subject is two meshed spur wheels, on its five-variant frames pass. Every image is the bench as it renders, frames at 1:1.
+
+![Board: the five variants side by side at 1:1, each with its direction, pairwise uniqueness and lint result, and a Pick button](docs/images/bench-board.png)
+
+*Board.* Five directions on one subject (low horizon, column-affine, off-axis diagonal, full-bleed plan, section cut), with what the checks found under each.
+
+![Board with a knob turned: all five cards redrawn for the same ratio setting](docs/images/bench-board-ratio.png)
+
+*The same board with Ratio turned to 3:1.* One knob state drives every card, so a MIDI knob shows all five designs answering the same twist at once.
+
+![Play: one variant's frame above four knobs for ratio, teeth, mesh and scale, with a v1–v5 switch and MIDI bindings](docs/images/bench-play.png)
+
+*Play.* The definition's controls as knobs, a held note, and `1`–`5` to swap variants without losing the knob positions.
+
+![Cycle with the device lens: one variant rasterised at 480 × 220 and shown pixel for pixel](docs/images/bench-cycle.png)
+
+*Cycle, device lens.* One variant at a time in the same spot, rasterised at the panel's real resolution, which takes away a high-DPI screen's flattery.
 
 ### Audit a screen
 
