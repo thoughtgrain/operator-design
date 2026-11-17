@@ -39,10 +39,10 @@ for a in sys.argv[1:]:
         P[k] = float(v)
 
 W, H = 480, 220
-CX, HY = 240.0, 204.0            # bow centre: on the horizon, mid-frame
+CX, HY = 240.0, 211.0            # bow centre: on the horizon, mid-frame
 TOP = 40.0                       # nothing above this (two-page header band)
-R = [252.0, 226.0, 200.0, 174.0] # sine (outer) .. saw (inner); spacing 26 px
-AMP = 7.0                        # wave amplitude, px, radial
+R = [246.0, 214.0, 182.0, 150.0] # sine (outer) .. saw (inner); spacing 32 px
+AMP = 8.0                        # wave amplitude, px, radial
 CYCLES = 13                      # cycles round the half-turn at spread 0
 KINDS = ["sine", "tri", "square", "saw"]
 
