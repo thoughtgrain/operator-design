@@ -13,7 +13,7 @@ from typing import Callable
 
 from . import knowledge, passes, preview, screens, sdk, training
 from .agents import roles
-from .paths import colour_policy
+from .paths import colour_policy, shift_policy
 
 S = "string"
 STR = {"type": S}
@@ -78,6 +78,10 @@ TOOLS: list[Tool] = [
     Tool("colour_policy", "Whether this harness allows colour (grey is the default; colour is an override set in the MCP "
          "config, never from a tool call) and the rules that apply.",
          {}, lambda a: colour_policy(), compact=True, short="Grey or colour for this harness, and the rules."),
+    Tool("shift_policy", "How the header shows Shift controls in this harness: replace (default: Shift swaps the header's "
+         "four slots for the Shift controls of the page being edited) or stack (open-xy's stacked rows). Set in the MCP "
+         "config (OPXY_SHIFT_HEADER), never from a tool call.",
+         {}, lambda a: shift_policy(), compact=False, short="How Shift shows in the header for this harness."),
     Tool("opxy_tokens", "The device numbers from opxy/tokens.json, whole or at a JSON pointer (e.g. /perceptibility/channelFloors).",
          _p(pointer=STR), lambda a: knowledge.token_value(a.get("pointer"))),
     Tool("opxy_library", "Audited reference screens: list them (optionally by category) or read one entry's card, audit and files.",

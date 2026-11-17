@@ -13,6 +13,7 @@ Environment:
     OPXY_AGENT_API_KEY    bearer token, if the endpoint needs one
     OPXY_APPROVERS        comma-separated names allowed to approve training proposals over MCP (off by default)
     OPXY_COLOUR           allow: this harness may design in colour (grey is the default; red is always refused)
+    OPXY_SHIFT_HEADER     stack: Shift shows open-xy's stacked header rows (default replace: Shift swaps the header's four slots)
     OPXY_SDK              path to a local open-xy checkout, for sdk_test
 """
 from __future__ import annotations

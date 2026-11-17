@@ -90,13 +90,14 @@ Set these in the client's `env` block for the server (the setup flags write them
 | `OPXY_AGENT_TIMEOUT` | Seconds per agent call (default 300) |
 | `OPXY_APPROVERS` | Comma-separated names allowed to approve training proposals over MCP. Unset by default, so approval happens in a terminal |
 | `OPXY_COLOUR` | `allow` lets this harness design in colour. Unset by default: grey only, which is the OP-XY's own look. Red is refused either way, and a colour machine also ships a designed grayscale version (`--colour` on setup) |
+| `OPXY_SHIFT_HEADER` | `stack` shows Shift as open-xy's stacked header rows in this harness (`--shift-stack` on setup). Unset by default: `replace`, where Shift swaps the header's four slots for the Shift controls of the page being edited, the OP-XY's own way |
 | `OPXY_SDK` | Path to a local open-xy checkout, so `sdk_test` can run open-xy's own `sdk.py test --machine` (`--sdk` on setup) |
 
 ## Tools
 
 | Group | Tools | Compact |
 | --- | --- | --- |
-| Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `colour_policy`, `opxy_tokens`, `opxy_library` | guide, search, patterns, colour_policy |
+| Knowledge | `opxy_guide`, `opxy_search`, `opxy_categories`, `opxy_patterns`, `colour_policy`, `shift_policy`, `opxy_tokens`, `opxy_library` | guide, search, patterns, colour_policy |
 | Screens | `screen_init`, `screen_status`, `lint_definition`, `lint_frames`, `check_perceptibility`, `contact_sheet`, `render_frame`, `audit_run`, `preview_brief`, `sdk_test` | status, lint_frames, perceptibility, render, preview |
 | Design passes | `design_pass_start`, `design_pass_submit`, `design_pass_select`, `design_pass_reject`, `design_pass_get` | start, submit, select or reject |
 | Training | `training_propose`, `training_revise`, `training_list`, `training_get`, `training_advance`, `training_record`, `training_gate`, `training_approve`, `training_reject`, `training_roles` | propose, get, advance, record |

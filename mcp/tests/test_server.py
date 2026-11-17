@@ -78,6 +78,15 @@ class TestProtocol(unittest.TestCase):
         self.assertEqual(by_id[5]["error"]["code"], -32601)
         self.assertNotIn(None, by_id)  # notifications get no reply
 
+    def test_shift_policy_defaults_to_replace(self):
+        os.environ.pop("OPXY_SHIFT_HEADER", None)
+        self.assertEqual(call("shift_policy", {})[1]["mode"], "replace")
+        os.environ["OPXY_SHIFT_HEADER"] = "stack"
+        try:
+            self.assertEqual(call("shift_policy", {})[1]["mode"], "stack")
+        finally:
+            os.environ.pop("OPXY_SHIFT_HEADER", None)
+
     def test_compact_profile(self):
         out = session([INIT, {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}], {"OPXY_PROFILE": "compact"})
         names = [t["name"] for t in out[1]["result"]["tools"]]

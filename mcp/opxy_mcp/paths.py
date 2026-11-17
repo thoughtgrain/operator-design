@@ -103,6 +103,30 @@ def colour_policy() -> dict:
                                        "(python3 mcp/setup.py <client> --colour). An agent can't turn it on."}
 
 
+def shift_header_mode() -> str:
+    """How the header shows Shift controls, set in the harness's MCP config (OPXY_SHIFT_HEADER), never from a tool call.
+    replace (default): Shift swaps the header's four slots for the Shift controls of the page being edited.
+    stack: open-xy's stacked rows (page 1's Shift controls over page 2's), as the SDK's page_header draws them."""
+    v = os.environ.get("OPXY_SHIFT_HEADER", "").strip().lower()
+    return "stack" if v in ("stack", "stacked") else "replace"
+
+
+def shift_policy() -> dict:
+    if shift_header_mode() == "stack":
+        return {"mode": "stack", "set": "OPXY_SHIFT_HEADER=stack in this harness's MCP config",
+                "rules": ["while Shift is held, the header shows the Shift rows stacked as open-xy's page_header draws them: "
+                          "page 1's over page 2's, the page the encoders are on bright",
+                          "release restores the page titles and values; nothing below the header moves"]}
+    return {"mode": "replace", "set": "default; stacked Shift rows need OPXY_SHIFT_HEADER=stack in the harness's MCP config "
+                                      "(python3 mcp/setup.py <client> --shift-stack). An agent can't change it.",
+            "rules": ["while Shift is held, the header's four slots show the Shift controls of the page the encoders are on "
+                      "(entries 4 * line .. 4 * line + 3), in the same single-row layout, titles and values; no second row",
+                      "release puts the page's own titles and values back; Shift changes only the header's texts and bars, "
+                      "in one frame, and nothing below the header moves",
+                      "on device: the machine draws its own header and, while draw::shift_row(input).held, passes that page's "
+                      "Shift titles and values in place of its own (don't pass the row to page_header, which would stack it)"]}
+
+
 def catalog() -> dict:
     return load_json(OPXY / "catalog.json")
 
