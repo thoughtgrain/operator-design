@@ -1,0 +1,24 @@
+{
+  "variant": "v3",
+  "angle": "the mechanism that makes it happen: the moving parts, the thing in the hand",
+  "pattern": "none",
+  "drawing_language": "hatched mass: a bench mechanism modelled in 3D and seen through one orthographic camera (65 degrees down), solid bodies as black masses hatched at 45 degrees in mid grey (fixed housing one diagonal, moving carriage and blades the other), outlines at 1.5 px, engraved tracks as 1.5 px grooves, only what shows through the aperture at #CDCDCD",
+  "subject": "An iris diaphragm fixed over a sliding plate engraved with four waveform tracks (sine farthest, saw nearest), riding on two rails, where what shows through the aperture is what sounds.",
+  "controls": [
+    "Morph slides the plate carriage along its rails (72 px of travel, away from you towards saw), so a different track sits under the aperture.",
+    "Overlap opens the nine hatched blades, the aperture growing from a slit over one track to an opening that takes in all four.",
+    "Spread changes each track's engraved wavelength, the outer tracks pulling apart from the inner ones so their crests no longer line up down the plate.",
+    "Tone turns the focus lever on the housing ring through 240 degrees and rounds the corners of every engraved wave as it closes.",
+    "Skew moves the breakpoint in each track's cycle: the sine leans, the triangle tips towards a ramp, the square narrows to a pulse, the saw stays put.",
+    "Phase slides the four tracks sideways against each other, each a further quarter cycle up to three quarters for the saw."
+  ],
+  "reference": "library/toro-blocks (hidden-line 3D body over black, mid-grey edges, one bright part)",
+  "risks": [
+    "The bright subject is small at rest (overlap 25% leaves a ~50 px aperture), so the eye lands on the right thing but the drawing's mass is the grey housing.",
+    "Spread, skew and phase all reshape the same four tracks (wavelength, cycle form, sideways offset); distinct on the contact sheet, but they share the tracks as their object.",
+    "Tone's lever is a small part on a ring; its rounding of the waves is honest but subtle, so perceptibility for tone (score 4) may lean on the lever's 240-degree sweep alone.",
+    "Device cost: the aperture is a clip (bright tracks inside, dim outside) that the device doesn't do; it needs the bright run pre-cut per morph/overlap state or rebuilt in display(), and the hatching is many static nodes against the 512 budget.",
+    "Four tracks plus a bright run exceed the 4 mutable outlines if every track reshapes live; tracks may need to be pre-drawn variants or translated nodes.",
+    "At overlap 0 the aperture is a ~22 px opening, only just above the legibility floor for a waveform."
+  ]
+}

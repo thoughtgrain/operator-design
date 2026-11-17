@@ -29,8 +29,8 @@ GROUND = "#323232"
 HAIR, LINE, SUBJ = 1.0, 1.5, 2.2
 
 # ---- camera --------------------------------------------------------------
-TARGET = (165.0, 60.0, 20.0)
-DIST, AZ, EL = 1300.0, math.radians(-14), math.radians(31)
+TARGET = (170.0, 0.0, 20.0)
+DIST, AZ, EL = 1300.0, math.radians(-12), math.radians(38)
 CAM = (TARGET[0] + DIST * math.cos(EL) * math.sin(AZ),
        TARGET[1] - DIST * math.cos(EL) * math.cos(AZ),
        TARGET[2] + DIST * math.sin(EL))
@@ -50,7 +50,7 @@ RIGHT = _norm(_cross(FWD, (0, 0, 1)))
 UP = _cross(RIGHT, FWD)
 FOCAL = 1.0
 # screen fit (pixels per unit of the image plane, and where the target lands)
-K, CX, CY = 1480.0, 246.0, 128.0
+K, CX, CY = 1500.0, 250.0, 132.0
 
 
 def proj(p):
@@ -129,19 +129,29 @@ def box(x0, x1, y0, y1, z0, z1, edge, inner, fill="#000000"):
 
 
 # ---- scene geometry ------------------------------------------------------
-ZR = 26.0                      # ray height above the bench
-PRISM_Z = (8.0, 52.0)          # prism sits on a small table
-S = 34.0                       # prism side
-apex = (0.0, -S / math.sqrt(3))
-bl = (-S / 2, S / (2 * math.sqrt(3)))
-br = (S / 2, S / (2 * math.sqrt(3)))
+ZR = 32.0                      # ray height above the bench
+PRISM_Z = (8.0, 60.0)          # prism sits on a small table
+S = 46.0                       # prism side
+BASE_DEV = math.radians(9)
+STEP = math.radians(8.5)
+BETA = BASE_DEV + 1.5 * STEP          # half the mean deviation
+RHO = -BETA                            # turn the prism so the fan's centre runs along x
+
+
+def rot(p, a=RHO):
+    return (p[0] * math.cos(a) - p[1] * math.sin(a), p[0] * math.sin(a) + p[1] * math.cos(a))
+
+
+apex = rot((0.0, -S / math.sqrt(3)))
+bl = rot((-S / 2, S / (2 * math.sqrt(3))))
+br = rot((S / 2, S / (2 * math.sqrt(3))))
 entry = ((apex[0] + bl[0]) / 2, (apex[1] + bl[1]) / 2)
 exitp = ((apex[0] + br[0]) / 2, (apex[1] + br[1]) / 2)
 
-BASE_DEV = math.radians(9)
-ANG = [BASE_DEV + math.radians(7.5) * i for i in range(4)]   # sine .. saw
+ANG = [BASE_DEV + STEP * i + RHO for i in range(4)]   # sine .. saw
+IN_ANG = -BETA + RHO                                   # incoming beam heading
 XC = 290.0                                                     # slit plane
-BENCH_Y = (-70.0, 190.0)
+BENCH_Y = (-110.0, 150.0)
 
 
 def ray_y(i, x):
@@ -153,8 +163,8 @@ SPACING = (ray_y(3, XC) - ray_y(0, XC)) / 3
 # slit: morph slides the centre along the fan, overlap opens the jaws
 slit_c = ray_y(0, XC) + P["morph"] * 3 * SPACING
 slit_h = SPACING * (0.5 + 2.6 * P["overlap"])
-JAW = 46.0
-JAW_Z = 58.0
+JAW = 22.0
+JAW_Z = 62.0
 JAW_T = 5.0
 
 
@@ -188,7 +198,7 @@ def ray_points(i, x0, x1):
     step = 0.6
     while x <= x1 + 1e-6:
         t = math.hypot(x - exitp[0], ray_y(i, x) - exitp[1])
-        env = min(1.0, max(0.0, (t - 6) / 46))
+        env = min(1.0, max(0.0, (t - 10) / 70))
         env = env * env * (3 - 2 * env)
         ph = ph0 + t / lam
         # box-filter the waveform: the low-pass softens edges, hits saw/square hardest
@@ -223,19 +233,46 @@ def ray_style(i):
 # ---- draw ----------------------------------------------------------------
 els.append('<rect x="0" y="0" width="480" height="220" fill="#000000" stroke="none"/>')
 
+def clip_line(a, b, x0=-2.0, x1=482.0, y0=40.0, y1=222.0):
+    """Liang-Barsky: a 2D segment clipped to the body."""
+    (ax, ay), (bx, by) = a, b
+    dx, dy = bx - ax, by - ay
+    t0, t1 = 0.0, 1.0
+    for p, q in ((-dx, ax - x0), (dx, x1 - ax), (-dy, ay - y0), (dy, y1 - ay)):
+        if p == 0:
+            if q < 0:
+                return None
+            continue
+        r = q / p
+        if p < 0:
+            t0 = max(t0, r)
+        else:
+            t1 = min(t1, r)
+    if t0 >= t1:
+        return None
+    return [(ax + t0 * dx, ay + t0 * dy), (ax + t1 * dx, ay + t1 * dy)]
+
+
+def line3(a, b, stroke, w):
+    seg = clip_line(proj(a), proj(b))
+    if seg:
+        poly(seg, stroke, w, two_d=True)
+
+
 # bench: top face and front edge, grain in the ground grey
 X0, X1 = -400.0, 900.0
 poly([(X0, BENCH_Y[0], 0), (X1, BENCH_Y[0], 0), (X1, BENCH_Y[0], -16), (X0, BENCH_Y[0], -16)],
      "#000000", 0.01, fill="#000000", close=True)
-for yy in (-20.0, 150.0):
-    poly([(X0, yy, 0), (X1, yy, 0)], GROUND, HAIR)
-poly([(X0, BENCH_Y[0], -16), (X1, BENCH_Y[0], -16)], G5, HAIR)
-poly([(X0, BENCH_Y[0], 0), (X1, BENCH_Y[0], 0)], G4, LINE)
-poly([(X0, BENCH_Y[1], 0), (X1, BENCH_Y[1], 0)], G5, HAIR)
+for yy in (-60.0, 100.0):
+    line3((X0, yy, 0), (X1, yy, 0), GROUND, HAIR)
+line3((X0, BENCH_Y[0], -16), (X1, BENCH_Y[0], -16), G5, HAIR)
+line3((X0, BENCH_Y[0], 0), (X1, BENCH_Y[0], 0), G4, LINE)
+line3((X0, BENCH_Y[1], 0), (X1, BENCH_Y[1], 0), G5, HAIR)
 
 # rail the slit rides on (morph slides it along y)
 for dx in (-7.0, 13.0):
-    poly([(XC + dx, BENCH_Y[0] + 6, 0), (XC + dx, BENCH_Y[1] - 6, 0)], G5, HAIR)
+    poly([(XC + dx, max(BENCH_Y[0] + 6, ray_y(0, XC) - JAW - 30), 0),
+          (XC + dx, min(BENCH_Y[1] - 6, ray_y(3, XC) + JAW + 30), 0)], G5, HAIR)
 
 # rays beyond the slit (behind the jaws from this camera)
 for i in range(4):
@@ -259,7 +296,7 @@ for i in range(4):
     polyline_chunks(ray_points(i, exitp[0], x_end), pre_col, pre_w)
 
 # prism table: a low disc on a short post
-R_T = 30.0
+R_T = 34.0
 
 
 def ring(r, z, n=48):
@@ -301,8 +338,6 @@ for a, b in faces:
 poly([(p[0], p[1], z1) for p in tri], "#000000", 0.01, fill="#000000", close=True)
 # glass detail: the beam's path through the glass, and a bevel line inside the top face
 poly([(entry[0], entry[1], ZR), (exitp[0], exitp[1], ZR)], G4, HAIR)
-inset = [(p[0] * 0.78, p[1] * 0.78 + 0.0, z1) for p in tri]
-poly(inset, G5, HAIR, close=True)
 # visible vertical edges between visible faces = inner edges
 vis_edges_inner = [apex]  # apex edge sits between the two visible faces
 for p in vis_edges_inner:
@@ -315,9 +350,7 @@ poly([(bl[0], bl[1], z1), (br[0], br[1], z1), (br[0], br[1], z0), (apex[0], apex
       (bl[0], bl[1], z0)], G2, LINE, close=True)
 
 # incoming beam: one line from off the bench's left, ending at the entry face
-dirx = math.cos(BASE_DEV + math.radians(9.75))
-diry = math.sin(BASE_DEV + math.radians(9.75))
-start = (entry[0] - 400 * dirx, entry[1] + 400 * diry, ZR)
+start = (entry[0] - 500 * math.cos(IN_ANG), entry[1] - 500 * math.sin(IN_ANG), ZR)
 poly([start, (entry[0], entry[1], ZR)], G2, LINE)
 
 svg = ['<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',

@@ -90,12 +90,15 @@ def proj(p):
 def depth(p): return dot(sub(p, CAM), FWD)
 
 # ---- scene ------------------------------------------------------------------
-W2, H_TOP, H_BOT = 1.12, 1.22, -1.5     # plate half width, top, bottom
+# Every part is a lamination: a sheet whose top edge is cut to one period of its
+# wave, flat below, with a bore for the shaft. The assembled part (front) is the
+# four sheets together, so its top edge is the mix.
+W2, H_BOT = 1.3, -1.75                  # half width, flat bottom
+PER = 1.16                              # half a period's width on the sheet
+AMP = 0.5
 BORE_Y = -1.2
-AMP = 0.92
-Z_MIX = 0.0
-THICK = 0.22                            # the assembled part has body
-Z_COMP = [2.5, 3.95, 5.4, 6.85]
+Z_MIX, THICK = 0.0, 0.32
+Z_COMP = [2.3, 3.25, 4.2, 5.15]         # sine, triangle, square, saw
 
 def fmt(v):
     s = f"{v:.2f}".rstrip("0").rstrip(".")
@@ -142,7 +145,9 @@ def line(pts, w, col):
 
 def dashed(a, b, col, w=1.0, dash=7.0, gap=4.0, chain=False):
     """dashed / chain line between two screen points, as small ribbons."""
-    L = math.dist(a, b); ux, uy = (b[0] - a[0]) / L, (b[1] - a[1]) / L
+    L = math.dist(a, b)
+    if L < 1: return
+    ux, uy = (b[0] - a[0]) / L, (b[1] - a[1]) / L
     s = 0.0; pat = [dash, gap, 2.0, gap] if chain else [dash, gap]; k = 0
     while s < L:
         e = min(L, s + pat[k % len(pat)])
@@ -150,11 +155,6 @@ def dashed(a, b, col, w=1.0, dash=7.0, gap=4.0, chain=False):
             line([(a[0] + ux * s, a[1] + uy * s), (a[0] + ux * e, a[1] + uy * e)], w, col)
         s = e; k += 1
 
-def plate(z, i, active, near_ok=True):
-    pass
-
-# window / emphasis
-w = weights(P["morph"], P["overlap"])
 c = P["morph"] * 3
 half = 0.5 + 1.5 * P["overlap"]
 def style(i):
@@ -163,88 +163,112 @@ def style(i):
     if d <= half + 0.5: return 1.5, G4
     return 1.2, G3
 
-T = [k / 60 for k in range(61)]
+def profile(i, t):
+    if i < 0: return AMP * mixed(t, P)
+    return AMP * wave(i, t, P["skew"])
 
-def card_corners(z, rot=0.0, dx=0.0):
+def ts(i):
+    if i == 2:
+        b = 0.5 - 0.45 * P["skew"]
+        return [0.0, 0.25, b - 0.006, b + 0.006, 0.75, 1.0]
+    if i == 3:
+        return [0.0, 0.5, 0.994, 1.0]
+    return [k / 56 for k in range(57)]
+
+def sheet(i, z, rot=0.0, dx=0.0):
+    """world points of the sheet's top profile and its outline."""
     def R(x, y):
-        # spread: each plate turns about the shaft (bore) in its own plane
         yy = y - BORE_Y
         return (x * math.cos(rot) - yy * math.sin(rot) + dx, BORE_Y + x * math.sin(rot) + yy * math.cos(rot), z)
-    return R
+    T = ts(i)
+    if i == 3:  # saw: the drop is a riser, give it a sliver of slope
+        top = [R(-PER, profile(3, 0)), R(0, 0), R(PER - 0.012, profile(3, 0.994)), R(PER + 0.012, AMP)]
+    else:
+        top = [R(-PER + 2 * PER * t, profile(i, t)) for t in T]
+    y0, y1 = top[0][1], top[-1][1]
+    outline = [R(-W2, H_BOT), R(W2, H_BOT), R(W2, y1)] + top[::-1] + [R(-W2, y0)]
+    return top, outline, R
 
-draw = []   # (depth, fn)
+draw = []
 
-# components, far to near
 for i in range(4):
     z = Z_COMP[i]
-    rot = (i - 1.5) * 0.06 * P["spread"]
-    dx = i * 0.18 * P["phase"]
-    R = card_corners(z, rot, dx)
-    def fn(i=i, R=R):
-        corners = [proj(R(-W2, H_BOT)), proj(R(W2, H_BOT)), proj(R(W2, H_TOP)), proj(R(-W2, H_TOP))]
-        poly(corners, "#000000", G2, 1.2)
-        # zero line, hairline
-        line([proj(R(-1.0, 0)), proj(R(1.0, 0))], 1.0, G1)
-        # bore
-        bo = [proj(R(0.13 * math.cos(a * math.pi / 8), BORE_Y + 0.13 * math.sin(a * math.pi / 8))) for a in range(16)]
+    rot = (i - 1.5) * 0.08 * P["spread"]
+    dx = i * 0.2 * P["phase"]
+    def fn(i=i, z=z, rot=rot, dx=dx):
+        top, outline, R = sheet(i, z, rot, dx)
+        poly([proj(p) for p in outline], "#000000", G2, 1.2)
+        bo = [proj(R(0.12 * math.cos(a * math.pi / 8), BORE_Y + 0.12 * math.sin(a * math.pi / 8))) for a in range(16)]
         poly(bo, "#000000", G2, 1.2)
         sw, col = style(i)
-        pts = [proj(R(-1 + 2 * t, AMP * wave(i, t, P["skew"]))) for t in T]
-        if i == 2:  # square: give the risers a sliver of slope
-            pts = []
-            b = 0.5 - 0.45 * P["skew"]
-            for t, v in [(0, 1), (b - 0.004, 1), (b + 0.004, -1), (0.996, -1)]:
-                pts.append(proj(R(-1 + 2 * t, AMP * v)))
-            # dense enough for the mitre
-        if i == 3:
-            pts = [proj(R(-1 + 2 * t, AMP * wave(3, t))) for t in (0, 0.5, 0.998)]
-        line(pts, sw, col)
+        line([proj(p) for p in top], sw, col)
     draw.append((depth((0, 0, z)), fn))
 
-# shaft (chain line) and the window sleeve, split per gap
-zs = [Z_MIX + THICK] + Z_COMP + [Z_COMP[-1] + 1.4]
+# shaft: chain line through the bores, split per gap so plates hide it
+zs = [Z_MIX + THICK] + Z_COMP + [Z_COMP[-1] + 1.2]
 for k in range(len(zs) - 1):
     za, zb = zs[k], zs[k + 1]
     def fn(za=za, zb=zb):
         dashed(proj((0, BORE_Y, za)), proj((0, BORE_Y, zb)), G3, 1.0, chain=True)
-    draw.append((depth((0, 0, (za + zb) / 2)) + 0.01, fn))
+    draw.append((depth((0, 0, (za + zb) / 2)), fn))
 
-# sleeve = mixing window on the shaft
+# sleeve on the shaft = the mixing window
 zc = Z_COMP[0] + c * (Z_COMP[1] - Z_COMP[0])
 hz = half * (Z_COMP[1] - Z_COMP[0])
 z0, z1 = zc - hz, zc + hz
-SR = 0.26
+SR = 0.22
 def ring(z):
     return [proj((SR * math.cos(a * math.pi / 12), BORE_Y + SR * math.sin(a * math.pi / 12), z)) for a in range(24)]
-# sleeve pieces between plates
 cuts = sorted(set([z0, z1] + [zz for zz in Z_COMP if z0 < zz < z1]))
 for a, b in zip(cuts, cuts[1:]):
     def fn(a=a, b=b):
         ra, rb = ring(a), ring(b)
-        # silhouette: extreme points across the shaft direction
         ax = proj((0, BORE_Y, a)); bx = proj((0, BORE_Y, b))
         ux, uy = bx[0] - ax[0], bx[1] - ax[1]; l = math.hypot(ux, uy) or 1
         nx, ny = -uy / l, ux / l
-        hi_a = max(ra, key=lambda p: p[0] * nx + p[1] * ny); lo_a = min(ra, key=lambda p: p[0] * nx + p[1] * ny)
-        hi_b = max(rb, key=lambda p: p[0] * nx + p[1] * ny); lo_b = min(rb, key=lambda p: p[0] * nx + p[1] * ny)
+        key = lambda p: p[0] * nx + p[1] * ny
+        hi_a, lo_a = max(ra, key=key), min(ra, key=key)
+        hi_b, lo_b = max(rb, key=key), min(rb, key=key)
         poly([hi_a, hi_b, lo_b, lo_a], "#000000", G5, 1.5)
         if b == z1:
             poly(rb, "#000000", G5, 1.5)
-    draw.append((depth((0, 0, (a + b) / 2)) - 0.02, fn))
+    draw.append((depth((0, 0, (a + b) / 2)) - 0.01, fn))
 
-# the assembled part (mix), front, with body
+# the assembled part, front, with body
 def mixfn():
-    Rf = lambda x, y: (x, y, Z_MIX)
-    Rb = lambda x, y: (x, y, Z_MIX + THICK)
-    # visible side: top and right faces
-    poly([proj(Rf(-W2, H_TOP)), proj(Rf(W2, H_TOP)), proj(Rb(W2, H_TOP)), proj(Rb(-W2, H_TOP))], "#000000", G3, 1.5)
-    poly([proj(Rf(W2, H_BOT)), proj(Rb(W2, H_BOT)), proj(Rb(W2, H_TOP)), proj(Rf(W2, H_TOP))], "#000000", G3, 1.5)
-    poly([proj(Rf(-W2, H_BOT)), proj(Rf(W2, H_BOT)), proj(Rf(W2, H_TOP)), proj(Rf(-W2, H_TOP))], "#000000", G3, 1.5)
-    line([proj(Rf(-1.0, 0)), proj(Rf(1.0, 0))], 1.0, G2)
-    bo = [proj((0.13 * math.cos(a * math.pi / 8), BORE_Y + 0.13 * math.sin(a * math.pi / 8), Z_MIX)) for a in range(16)]
+    T = [k / 90 for k in range(91)]
+    front = [(-PER + 2 * PER * t, profile(-1, t), Z_MIX) for t in T]
+    back = [(x, y, Z_MIX + THICK) for x, y, _ in front]
+    fo = [(-W2, H_BOT, Z_MIX), (W2, H_BOT, Z_MIX), (W2, front[-1][1], Z_MIX)] + front[::-1] + [(-W2, front[0][1], Z_MIX)]
+    bo = [(x, y, Z_MIX + THICK) for x, y, _ in fo]
+    # back face, then the top surface edge, then the front face
+    for part in (bo[:3] + bo[3:3 + 30][::-1][::-1],):
+        pass
+    for k in range(0, len(fo), 30):
+        pass
+    for chunk in (bo,):
+        pts = [proj(p) for p in chunk]
+        # too many points: draw as two halves
+        poly(pts[:3] + pts[3:3 + 46] + [proj((back[45][0], H_BOT, Z_MIX + THICK))], "#000000", G2, 1.2) if False else None
+    # back face outline (split into halves so each path stays <= 64 points)
+    hb = 45
+    left = [(-W2, H_BOT), (back[hb][0], H_BOT)] + [(p[0], p[1]) for p in back[:hb + 1]][::-1] + [(-W2, back[0][1])]
+    right = [(back[hb][0], H_BOT), (W2, H_BOT), (W2, back[-1][1])] + [(p[0], p[1]) for p in back[hb:]][::-1]
+    for half_ in (left, right):
+        poly([proj((x, y, Z_MIX + THICK)) for x, y in half_], "#000000", "#000000", 0.6)
+    line([proj(p) for p in back], 1.0, G3)
+    line([proj((W2, back[-1][1], Z_MIX + THICK)), proj((W2, H_BOT, Z_MIX + THICK))], 1.0, G3)
+    # front face
+    leftf = [(-W2, H_BOT), (front[hb][0], H_BOT)] + [(p[0], p[1]) for p in front[:hb + 1]][::-1] + [(-W2, front[0][1])]
+    rightf = [(front[hb][0], H_BOT), (W2, H_BOT), (W2, front[-1][1])] + [(p[0], p[1]) for p in front[hb:]][::-1]
+    for half_ in (leftf, rightf):
+        poly([proj((x, y, Z_MIX)) for x, y in half_], "#000000", "#000000", 0.6)
+    line([proj((W2, front[-1][1], Z_MIX)), proj((W2, H_BOT, Z_MIX))], 1.5, G3)
+    line([proj((-W2, front[0][1], Z_MIX)), proj((-PER, front[0][1], Z_MIX))], 1.5, G3)
+    line([proj((PER, front[-1][1], Z_MIX)), proj((W2, front[-1][1], Z_MIX))], 1.5, G3)
+    bo = [proj((0.12 * math.cos(a * math.pi / 8), BORE_Y + 0.12 * math.sin(a * math.pi / 8), Z_MIX)) for a in range(16)]
     poly(bo, "#000000", G3, 1.2)
-    pts = [proj(Rf(-1 + 2 * t, AMP * mixed(t, P))) for t in [k / 90 for k in range(91)]]
-    line(pts, 2.5, G7)
+    line([proj(p) for p in front], 2.5, G7)
 draw.append((depth((0, 0, Z_MIX)) - 1, mixfn))
 
 for _, fn in sorted(draw, key=lambda d: -d[0]):
