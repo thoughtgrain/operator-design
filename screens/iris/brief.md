@@ -76,3 +76,30 @@ Scored from the DSP and the host render in `operators-xy/machines/iris/tests/` (
 | 4 tone | key-tracked low-pass from almost a sine to fully open, the same at every pitch | 4 |
 | 5 skew | sine and triangle grow a sharp edge, square thins to a nasal pulse; small on the saw | 3 |
 | 6 phase | hollows and fills harmonics, but only where bands overlap; inaudible on one band | 2 |
+
+## 3 · Subject
+
+Five candidates, one per direction from `design_pass_start`, drawn by five parallel `opxy-designer` agents. Pass record: `passes/01-subject/pass.json` (submitted 0 problems; every pair differs in angle and language, subject overlap ≤ 0.16; body pixels differ 10.8–25.4 % pairwise at 1:1, measured from Playwright renders since rsvg-convert isn't installed). Side by side: `passes/01-subject/sheet.png`.
+
+| candidate | angle | drawing language | subject in one sentence | verdict |
+| --- | --- | --- | --- | --- |
+| v1 | one detail at large scale | exploded view, hidden-line 3D | the mixed wave as a block's cut edge, its four wave laminations slid off along a pin | crowded to the right; the mix isn't large |
+| v2 | the object in the name | single-weight contour | a rainbow of four bands over a horizon, each band its waveform bent along its cone of light, the morph band lit | **chosen** |
+| v3 | the mechanism | hatched mass | an iris diaphragm over a sliding plate engraved with the four waves; what shows through is what sounds | strong idea; the housing outweighs the lit wave |
+| v4 | the material, close | edge-lit silhouette | four wave trains crossing one water surface | reads as a terrain plot |
+| v5 | one scene | detailed line art | a prism splits one beam into four wave rays; a slit on a rail picks which pass | jaws leave the frame at the extremes; busy at the prism |
+
+Chosen: **v2, the rainbow**, picked by the owner on 2026-11-17. It's the machine's name drawn literally, it reads at once at 1:1, and every control has its own part. Grey only (owner's decision), so it's a rainbow by its form.
+
+Angle: the object in the name. Pattern: none. Language: single-weight contour, every line a 1.5 px closed ribbon projected from one 3D model (four cones of light round the anti-solar point, one camera at the horizon); the lit band is the one brightest element. Reference: `library/theseus-tower`.
+
+| control | what moves |
+| --- | --- |
+| morph | the light moves across the bands, sine (outer) to saw (inner); the band under the window is lit, the others set by their mix weight |
+| overlap | the neighbouring bands' cone angles pull toward the lit band, from four arcs standing apart to arcs crowding one radius with their waves crossing |
+| spread | each band takes its own cycle count round the bow, so waves that line up radially at 0 drift out of step along the arc |
+| tone | the drawn waves lose their corners: sharp at 100, smooth humps at 0 |
+| skew | the square's teeth narrow to pulses, the triangle leans into a ramp, the sine bunches; the saw arc doesn't change |
+| phase | each band's wave slides along the arc against the band outside it, so aligned crests shear into a diagonal (up to an eighth of a cycle per band, matching the engine) |
+
+Carried into the frames pass from v2's risks: the target-ring look when waves are smooth (overlap 0, tone low), the saw band faint at rest, the lit band getting shorter as morph rises, and a device question: each band's wave at up to 64 points per mutable outline, four outlines in all.
