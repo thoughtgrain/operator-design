@@ -76,6 +76,9 @@ def frame_sets(machine_id: str) -> list[dict]:
     sets = []
     if (d / "frames").is_dir():
         sets.append({"id": "frames", "label": "frames", "keyframes": keyframes(d / "frames", ctrls)})
+    for sub in sorted(x for x in d.glob("*/frames") if x.is_dir() and x.parent.name != "passes"):
+        # an alternative drawing kept beside the main one (toro's blocks/), on the same controls
+        sets.append({"id": f"{sub.parent.name}/frames", "label": sub.parent.name, "keyframes": keyframes(sub, ctrls)})
     for pj in sorted((d / "passes").glob("*/pass.json")) if (d / "passes").is_dir() else []:
         for v in sorted(pj.parent.glob("v[0-9]*")):
             kf = keyframes(v, ctrls)
@@ -98,6 +101,13 @@ def _direction_words(kind: str, direction: dict) -> list[str]:
     if kind == "subject":
         return [w for w in (direction.get("angle") or direction.get("patternName"), direction.get("drawingLanguage")) if w]
     return [w for w in (direction.get("composition"), direction.get("camera"), direction.get("emphasis")) if w]
+
+
+def _as_list(v) -> list[str]:
+    """candidate.json says controls and risks as a list or as one paragraph; the page wants a list either way."""
+    if not v:
+        return []
+    return [str(x) for x in v] if isinstance(v, list) else [str(v)]
 
 
 def pass_view(machine_id: str, pass_name: str) -> dict:
@@ -124,8 +134,8 @@ def pass_view(machine_id: str, pass_name: str) -> dict:
             "subject": cand.get("subject"),
             "drawingLanguage": cand.get("drawing_language"),
             "angle": cand.get("angle"),
-            "controls": cand.get("controls") or [],
-            "risks": cand.get("risks") or [],
+            "controls": _as_list(cand.get("controls")),
+            "risks": _as_list(cand.get("risks")),
             "frame": rel(rest) if rest.exists() else None,
             "pairs": [p for p in pairs if "pair" in p and vid in p["pair"].split("–")],
             # the Play view's frame-set id for this variant, when it has a knob sweep to play
@@ -137,7 +147,7 @@ def pass_view(machine_id: str, pass_name: str) -> dict:
             "subject": r.get("subject"), "variants": variants,
             "notes": [p["note"] for p in pairs if "note" in p] + ((r.get("uniqueness") or {}).get("problems") or []),
             "selection": r.get("selection"), "rejection": r.get("rejection"),
-            "preview": r.get("preview") or {"mode": "after-pick", "steps": [], "set": "opened before knob sweeps"},
+            "preview": r.get("preview") or {"mode": "none", "steps": [], "set": "opened before knob sweeps existed"},
             "pickable": r.get("state") == "ready_for_pick",
             "rejectable": r.get("state") not in ("selected", "rejected")}
 

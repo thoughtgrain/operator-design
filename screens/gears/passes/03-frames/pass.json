@@ -64,23 +64,88 @@
   "variants": [
     {
       "variant": "v1",
-      "frame": "screens/gears/passes/03-frames/v1/rest.svg"
+      "frame": "screens/gears/passes/03-frames/v1/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "At 16 teeth or 3:1 the note's bright pinch at the mesh gets small and faint at 1:1.",
+        "Ratios that don't divide the tooth count round B's teeth, so the drawn ratio is approximate."
+      ]
     },
     {
       "variant": "v2",
-      "frame": "screens/gears/passes/03-frames/v2/rest.svg"
+      "frame": "screens/gears/passes/03-frames/v2/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "Column affinity breaks at the ratio ends: B's drilled web leaves the scale column at 1:1 and 3:1.",
+        "Playing reads only through hatch density (subtle at 1:1); teeth 3 is degenerate."
+      ]
     },
     {
       "variant": "v3",
-      "frame": "screens/gears/passes/03-frames/v3/rest.svg"
+      "frame": "screens/gears/passes/03-frames/v3/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "While playing, A's bright tooth edges draw over B's face where they overlap (not strict hidden-line).",
+        "Teeth 3 gives star-like wheels; 3:1 with 16 teeth adds small-part legibility warnings."
+      ]
     },
     {
       "variant": "v4",
-      "frame": "screens/gears/passes/03-frames/v4/rest.svg"
+      "frame": "screens/gears/passes/03-frames/v4/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "Mesh mills only A, and from straight above a milled tooth shows only by weight and shadow: quiet at 50%.",
+        "Playing is mostly a quarter-tooth turn; teeth 3 draws three- and four-lobed stars."
+      ]
     },
     {
       "variant": "v5",
-      "frame": "screens/gears/passes/03-frames/v5/rest.svg"
+      "frame": "screens/gears/passes/03-frames/v5/rest.svg",
+      "preview": {
+        "frames": 13,
+        "steps": [
+          0,
+          50,
+          100
+        ],
+        "warnings": []
+      },
+      "risks": [
+        "The section cut hides half the scale ring: maj looks like mix, min like dor.",
+        "3:1 pushes the pair off centre, against 'centred hero'; teeth 3 only just reads as gears."
+      ]
     }
   ],
   "uniqueness": {
@@ -137,7 +202,16 @@
       }
     ],
     "problems": [],
-    "checked": "2026-11-17T15:19:00"
+    "checked": "2026-11-17T17:08:58"
   },
-  "selection": null
+  "selection": null,
+  "preview": {
+    "mode": "sweep",
+    "steps": [
+      0,
+      50,
+      100
+    ],
+    "set": "default"
+  }
 }

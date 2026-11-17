@@ -137,11 +137,11 @@ class Ortho:
         return dot(n, self.eye_dir) > 0
 
 
-def frame(body):
+def frame(body, header):
     steps = [G0, G1, G2, G3, G4, G5, G6, G7]
     hdr = [f'<rect x="{60 * i}" y="0" width="60" height="20" fill="{c}" stroke="none"/>'
            for i, c in enumerate(steps)]
-    for i, (t, v) in enumerate(HEADER):
+    for i, (t, v) in enumerate(header):
         ink = "#CBCBCB" if i < 2 else G0
         hdr.append(f'<text transform="matrix(1 0 0 1 {5 + 120 * i} 10)" fill="{ink}" stroke="none" '
                    f'font-family="{FONT}" font-size="10px">{t}</text>')
@@ -157,10 +157,15 @@ def frame(body):
         '</svg>', ""])
 
 
-def build():
-    rpA, rpB = TEETH_A / 2, TEETH_B / 2
+T = 2.2                                       # face width (wheel thickness)
+ARB = 1.6                                     # arbor rise above the top face
+BOX = (40, 60, 440, 208)
+
+
+def geometry(M):
+    """Camera and the two wheels' placement for a model."""
+    rpA, rpB, md = M["rpA"], M["rpB"], M["md"]
     dAB = rpA + rpB
-    T = 2.2                                   # face width (wheel thickness)
     cam = Ortho(yaw_deg=34, elev_deg=21)
     # wheels lie flat: outline plane (u, v) horizontal, n = +y up
     u, v = (1, 0, 0), (0, 0, -1)
@@ -169,24 +174,86 @@ def build():
     phi = math.atan2(-cam.rt[2], cam.rt[0]) + math.radians(9)
     cB2 = (dAB * math.cos(phi), dAB * math.sin(phi))
     rotA = phi                                 # A's tooth 0 points into B's gap
-    rotB = phi + math.pi + math.pi / TEETH_B   # B presents a gap to A
-    gA = Disc((0, 0, 0), u, v, gear2d(TEETH_A, rpA, rot=rotA), T)
+    rotB = phi + math.pi + math.pi / M["nb"]   # B presents a gap to A
+    gA = Disc((0, 0, 0), u, v, gear2d(M["na"], rpA, md, rot=rotA), T)
     cB = gA.w(*cB2, 0)
-    gB = Disc(cB, u, v, gear2d(TEETH_B, rpB, rot=rotB), T)
-    ARB = 1.6                                  # arbor rise above the top face
-    pts = [gA.w(x, y, z) for x, y in ring(rpA + 1, 24) for z in (0, T)] + \
-          [gB.w(x, y, z) for x, y in ring(rpB + 1, 24) for z in (0, T + ARB)]
-    cam.fit_scale(pts, (40, 60, 440, 208))
+    gB = Disc(cB, u, v, gear2d(M["nb"], rpB, md, rot=rotB), T)
+    pts = [gA.w(x, y, z) for x, y in ring(rpA + md, 24) for z in (0, T)] + \
+          [gB.w(x, y, z) for x, y in ring(rpB + md, 24) for z in (0, T + ARB)]
+    return cam, gA, gB, rotA, rotB, pts
+
+
+_S_REF = None
+
+
+def s_ref():
+    """The rest frame's scale: wheels never draw larger than this, so B visibly
+    grows and shrinks against A instead of the fit cancelling the ratio."""
+    global _S_REF
+    if _S_REF is None:
+        cam, *_, pts = geometry(model())
+        cam.fit_scale(pts, BOX)
+        _S_REF = cam.s
+    return _S_REF
+
+
+def build(values=None, notes=0.0):
+    M = model(values)
+    na, nb, rpA, rpB, md = M["na"], M["nb"], M["rpA"], M["rpB"], M["md"]
+    cam, gA, gB, rotA, rotB, pts = geometry(M)
+    probe = Ortho(yaw_deg=34, elev_deg=21)
+    probe.fit_scale(pts, BOX)
+    cam.fit_scale(pts, BOX, s=min(probe.s, s_ref()))
     light = norm((-1.0, 1.1, 0.5))
     out = []
+    keepA = euclid(na, round(M["mesh"] * na))
+    keepB = euclid(nb, round(M["mesh"] * nb))
+
+    def shade(sq, nw):
+        o = [poly(sq, G0, G4, LINE)]
+        if dot(nw, light) < 0.15:
+            o += hatch([sq], spacing=3.3, fill=G3)
+        return o
 
     def sides(g):
         o = []
         for _, q, nw in g.sides(cam):
-            sq = cam.ps(q)
-            o.append(poly(sq, G0, G4, LINE))
-            if dot(nw, light) < 0.15:
-                o += hatch([sq], spacing=3.3, fill=G3)
+            o += shade(cam.ps(q), nw)
+        return o
+
+    def milled(g, keep):
+        """A wheel whose non-engaging teeth are milled to half the face width:
+        their faces stop at T/2 and the full-height body steps back to the root."""
+        o4, n = g.o, len(g.o) // 4
+        quads = []
+
+        def side(a, b, z0, z1):
+            ex, ey = b[0] - a[0], b[1] - a[1]
+            L = math.hypot(ex, ey)
+            if L < 1e-6:
+                return
+            nw = add(mul(g.u, ey / L), mul(g.v, -ex / L))
+            mid = g.w((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (z0 + z1) / 2)
+            if dot(nw, cam.eye_dir) > 0.06:                # skip walls seen edge-on
+                quads.append((cam.dist(mid), [g.w(*a, z0), g.w(*b, z0), g.w(*b, z1), g.w(*a, z1)], nw))
+        roots = []
+        for t in range(n):
+            rl, tl, tr, rr_ = o4[4 * t:4 * t + 4]
+            nxt = o4[(4 * t + 4) % len(o4)]
+            top = T if keep[t] else T / 2
+            for a, b in ((rl, tl), (tl, tr), (tr, rr_)):
+                side(a, b, 0, top)
+            side(rr_, nxt, 0, T)                       # root land, full height
+            if not keep[t]:
+                # the step: the full body's wall across the tooth's root, T/2 up to T
+                side(rl, rr_, T / 2, T)
+                roots.append([rl, tl, tr, rr_])
+        quads.sort(key=lambda r: -r[0])
+        o = []
+        for _, q, nw in quads:
+            o += shade(cam.ps(q), nw)
+        for tooth in roots:                            # milled faces at T/2
+            o.append(poly(cam.ps([g.w(x, y, T / 2) for x, y in tooth]), G0, G5, LINE))
         return o
 
     def arbor(g, r, rise):
@@ -196,42 +263,58 @@ def build():
         hull = sk.convex_hull(cam.ps(top + bot))
         return [poly(hull, G0, G4, LINE), poly(cam.ps(top), G0, G5, LINE)]
 
-    def web(g, rp, bore, boss):
-        cap = cam.ps([g.w(x, y, T) for x, y in g.o])
-        o = [poly(cap, G0, G5, LINE)]
-        o.append(loop(cam.ps([g.w(x, y, T) for x, y in ring(rp - 1.25 - 0.55, 60)]), HAIR, G3))
+    def web(g, rp, boss, outline):
+        cap = cam.ps([g.w(x, y, T) for x, y in outline])
+        o = [poly(cap, G0, G5, LINE) if len(cap) <= 64 else sk.big_poly(cap, G0, G5, LINE)]
+        o.append(loop(cam.ps([g.w(x, y, T) for x, y in ring(rp - 1.25 * md - 0.55, 60)]), HAIR, G3))
         o.append(loop(cam.ps([g.w(x, y, T) for x, y in ring(boss, 36)]), HAIR, G3))
         return o
 
+    def body(g, keep, N, rp, rot, boss):
+        if all(keep):
+            return sides(g) + web(g, rp, boss, g.o)
+        top = [p for t, k in enumerate(keep) for p in (g.o[4 * t:4 * t + 4] if k else
+                                                       (g.o[4 * t], g.o[4 * t + 3]))]
+        return milled(g, keep) + web(g, rp, boss, top)
+
+    # web furniture follows each wheel's root circle (1.0 at the rest frame's wheels)
+    kA = (rpA - 1.25 * md) / 2.75
+    kB = (rpB - 1.25 * md) / 4.75
+
     # ---- B, the far wheel
-    out += sides(gB)
-    out += web(gB, rpB, 0.7, 1.75)
+    out += body(gB, keepB, nb, rpB, rotB, 1.75 * kB)
     for k in range(12):
         a = rotB - 2 * math.pi * k / 12 + math.pi / 2
-        hx, hy = 3.4 * math.cos(a), 3.4 * math.sin(a)
-        if k in SCALE:
-            hole = [(hx + 0.66 * math.cos(t), hy + 0.66 * math.sin(t))
+        hx, hy = 3.4 * kB * math.cos(a), 3.4 * kB * math.sin(a)
+        if k in M["scale"]:
+            hole = [(hx + 0.66 * kB * math.cos(t), hy + 0.66 * kB * math.sin(t))
                     for t in [2 * math.pi * i / 28 for i in range(28)]]
             hs = cam.ps([gB.w(x, y, T) for x, y in hole])
             out.append(poly(hs, G0, G4, LINE))
             out += hatch([hs], spacing=3.3, fill=G3)      # the bore wall, in shade
         else:
-            mark = [(hx + 0.46 * math.cos(t), hy + 0.46 * math.sin(t))
+            mark = [(hx + 0.46 * kB * math.cos(t), hy + 0.46 * kB * math.sin(t))
                     for t in [2 * math.pi * i / 14 for i in range(14)]]
             out.append(loop(cam.ps([gB.w(x, y, T) for x, y in mark]), HAIR, G3))
-    out += arbor(gB, 0.7, ARB)
+    out += arbor(gB, 0.7 * kB, ARB)
+
+    if notes >= 0.5:
+        # a note held (drawn under A, which stands in front of it): the gap in B that the tooth lands in lights too, so the
+        # meshing pair reads as one bright pinch at the pitch point
+        oB = gB.o
+        gap = [oB[-3], oB[-2], oB[-1], oB[0], oB[1], oB[2]]
+        out.append(ribbon(cam.ps([gB.w(x, y, T) for x, y in gap]), 2.5, G7))
 
     # ---- A, the near driver
-    out += sides(gA)
-    out += web(gA, rpA, 0.6, 1.3)
-    out += arbor(gA, 0.6, ARB * 0.8)
+    out += body(gA, keepA, na, rpA, rotA, 1.3 * kA)
+    out += arbor(gA, 0.6 * kA, ARB * 0.8)
 
     # ---- where the note lands: A's tooth 0 in B's gap, its top face's edge
     # at the subject weight, the one #CDCDCD mark in the frame
-    tA = gear2d(TEETH_A, rpA, rot=rotA)
+    tA = gA.o
     tooth = [tA[-1]] + tA[0:4] + [tA[4]]
     out.append(ribbon(cam.ps([gA.w(x, y, T) for x, y in tooth]), 2.5, G7))
-    return frame(out)
+    return frame(out, M["header"])
 
 
 def main():

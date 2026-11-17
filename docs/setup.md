@@ -2,7 +2,7 @@
 
 This is the whole setup in one place, in the order I'd do it on a fresh machine. The short version lives in the [README](../README.md#set-up-the-mcp-server); the tool-by-tool reference is in [`mcp/README.md`](../mcp/README.md).
 
-![The bench's board: five variants of gears' frames pass at 1:1, each with its direction, uniqueness and lint results](images/bench-board.png)
+![The bench's board: lichen's five subject candidates at 1:1, each with its direction, uniqueness and lint results](images/bench-board.png)
 
 ## 1. Install
 
@@ -91,13 +91,15 @@ What's on it:
 - **Play**: the machine's controls as knobs, plus a held note.
 - **Lenses**, on every frame: *vector* (the browser's SVG), *device* (`D`, rasterised at 480 × 220 and shown pixel for pixel), *arm's length* (`A`, downsampled and softened), and *value map* (`V`, keeps only the brightest grey, since there should be one brightest element). A meter under each frame gives body black against the 40% floor.
 
-![Cycle view: one variant at 1:1 with the rail of five directions beside it](images/bench-cycle.png)
+![Cycle view on tide with the device lens: one candidate at 1:1 beside the rail of five directions](images/bench-cycle.png)
 
 ### Knobs drive every view
 
 There's one knob state for the whole page. Turn a knob, on screen or on a MIDI controller, and the Board's five cards, the Cycle stage and Play all show each variant's frame for that position. That's the point of the sweep: you see five designs answer the same twist at once, which a still can't show. In Play, `1`–`5` swap variants and keep the knobs where they are, and `0` puts every knob back to its default.
 
-![Play view: knobs for ratio, teeth, mesh and scale under one variant's frame, with the v1–v5 switch](images/bench-play.png)
+![The gears frames pass with Ratio turned to 3:1: all five cards redraw](images/bench-sweep-ratio.png)
+
+![Play view on gears: knobs for ratio, teeth, mesh and scale under variant v1's frame, with the v1–v5 switch](images/bench-play-gears.png)
 
 What a knob shows depends on what exists:
 
@@ -108,6 +110,8 @@ What a knob shows depends on what exists:
 | none of these | **no Play tab and no MIDI button.** A knob that turns and changes nothing reads as broken, so it isn't offered. The pass line says when the knobs will arrive (after submit, or after the pick with `after-pick`) |
 
 ## 5. MIDI
+
+![Play view on toro: eight knobs on two pages, each with a learn button for MIDI binding](images/bench-play.png)
 
 The bench reads MIDI input through **Web MIDI**. It sends nothing back.
 

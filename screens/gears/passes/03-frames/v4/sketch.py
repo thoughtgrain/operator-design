@@ -216,7 +216,14 @@ def body(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
     OA = to_screen(CA, gear(TEETH_A, rpA, rotA))
     OB = to_screen(CB, gear(TEETH_B, rpB, rotB))
     OA_HIGH = to_screen(CA, milled_outline(TEETH_A, rpA, rotA, high)) if milled else OA
-    HOLE_R, HOLE_AT = 0.66 * k, 3.35 * kb
+    f = min(1.0, rpB * S / 144.0)      # B smaller than at rest: its hub, arbor and holes shrink with it
+    hubB = 1.75 * k * f
+    if f == 1.0:
+        HOLE_R, HOLE_AT = 0.66 * k, 3.35 * kb
+    else:
+        rimB = rpB - 1.25 - 0.55
+        HOLE_AT = hubB + (max(rimB, hubB) - hubB) * 0.55
+        HOLE_R = min(0.66 * k * f, max(0.12, (max(rimB, hubB) - hubB) * 0.38))
     holes, spots = [], []
     for j in range(12):
         a = rotB + 2 * math.pi * j / 12          # position 0 behind the meshing tooth, then clockwise on screen
@@ -224,7 +231,7 @@ def body(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
         (holes if j in SCALE else spots).append(hc)
     HOLES = [to_screen(CB, circle(HOLE_R, 32, h)) for h in holes]
     ARBOR_A = to_screen(CA, circle(0.62 * k, 28))
-    ARBOR_B = to_screen(CB, circle(0.75 * k, 32))
+    ARBOR_B = to_screen(CB, circle(0.75 * k * f, 32))
 
     def solid_b(p):
         return inside(p, OB) and not any(inside(p, h) for h in HOLES)
@@ -260,7 +267,7 @@ def body(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
     # cast shadows on the plate: the wheels' mass
     out += hatch_by(plate_shadow, box)
     # arbor shadows on the faces (small, same hatch)
-    for C, r in ((CA, 0.62 * k), (CB, 0.75 * k)):
+    for C, r in ((CA, 0.62 * k), (CB, 0.75 * k * f)):
         R = S * r + 8
         out += hatch_by(face_shadow, (C[0] - R, max(TOP + 0.5, C[1] - R), C[0] + R + 8, C[1] + R + 8))
     # top faces: outlines only, the face stays black
@@ -272,7 +279,7 @@ def body(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
             if not high[t]:
                 out.append(ribbon(to_screen(CA, tooth), HAIR, G4))
     # web detail: rim and hub turned on each face, hairlines
-    for C, rp, hub, n_rim, n_hub in ((CA, rpA, 1.35 * k, 56, 36), (CB, rpB, 1.75 * k, 72, 40)):
+    for C, rp, hub, n_rim, n_hub in ((CA, rpA, 1.35 * k, 56, 36), (CB, rpB, hubB, 72, 40)):
         rim = rp - 1.25 - 0.55
         if rim > hub + 0.4 * k:
             out.append(loop(to_screen(C, circle(rim, n_rim)), HAIR, G3))
@@ -285,7 +292,7 @@ def body(ratio_i=4, teeth_i=5, mesh=1.0, scale_i=0, notes=0.0):
         # playing: the hole for the sounding degree (position 0, beside the meshing tooth) lights
         out.append(loop(H, LINE, G6 if (notes > 0 and i == 0) else G4))
     for h in spots:
-        out.append(loop(to_screen(CB, circle(0.28 * k, 16, h)), HAIR, G3))
+        out.append(loop(to_screen(CB, circle(0.28 * k * f, 16, h)), HAIR, G3))
     # the sound source: B's tooth in A's gap, its top edge the one bright line
     tooth = to_screen(CB, s02.involute_tooth(rpB, M, rotB, n=6))
     out.append(ribbon(tooth, SUBJ, G7))

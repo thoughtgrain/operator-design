@@ -133,7 +133,7 @@ async function loadPass(name) {
   renderPassline();
   renderBoard();
   renderRail();
-  if (S.play) renderSwitcher();
+  if (S.play) { describeSource(); renderSwitcher(); }
   if (S.view === "cycle") showCycle(S.cycle.index);
   syncUrl();
 }
@@ -167,6 +167,7 @@ function renderPassline() {
 function previewLine(p) {
   const swept = p.variants.filter((v) => v.set).length;
   if (swept === p.variants.length && swept) return null;
+  if (!["sweep", "after-pick"].includes(p.preview.mode)) return null;  // a pass from before sweeps: nothing to explain
   if (p.preview.mode === "after-pick") {
     return p.selection
       ? "This pass skipped knob sweeps; the knobs and MIDI arrive with the frame set drawn from the pick."
@@ -426,7 +427,7 @@ function describeSource() {
     const swept = S.pass?.variants.some((v) => v.set === set.id);
     p.innerHTML = swept
       ? `<b>Knob sweep.</b> ${n} control${n === 1 ? "" : "s"} drawn at ${list} by this variant's own generator: a knob snaps to the nearest drawn frame and nothing is blended. Keys <kbd>1</kbd>–<kbd>5</kbd> swap variants and keep the knobs where they are; the Board follows the knobs too.`
-      : `<b>Drawn frames only.</b> ${n} control${n === 1 ? "" : "s"} drawn at ${list}: a knob snaps to the nearest drawn frame and nothing is blended. Add <code>screens/${S.machine.id}/bench.py</code> for every position.`;
+      : `<b>Drawn frames only.</b> ${n} control${n === 1 ? "" : "s"} drawn at ${list}: a knob snaps to the nearest drawn frame and nothing is blended. ${S.machine.generator ? "The <i>live</i> set draws every position." : `Add <code>screens/${S.machine.id}/bench.py</code> for every position.`}`;
   }
 }
 

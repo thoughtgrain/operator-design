@@ -133,6 +133,23 @@ def spacing_for(lit):
     return 3.2 + t * t * 10.0
 
 
+def area(P):
+    return abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(P, P[1:] + P[:1]))) / 2
+
+
+def capface(P):
+    """A wheel's top face: one black body under 64 points, or (many teeth)
+    black wedges from the centre with the outline as ribbons."""
+    if len(P) <= 62:
+        return [poly(P, G0, G5, LINE)]
+    cx, cy = sum(x for x, _ in P) / len(P), sum(y for _, y in P) / len(P)
+    o = []
+    for i in range(0, len(P), 40):
+        o.append(poly([(cx, cy)] + P[i:i + 41] + ([P[0]] if i + 41 > len(P) else []), G0))
+    o.append(loop(P, LINE, G5))
+    return o
+
+
 def build(values=None, notes=0.0):
     ps = {p["id"]: p for p in params()}
     vals = {**defaults(), **(values or {})}
@@ -149,11 +166,12 @@ def build(values=None, notes=0.0):
     pcs = SCALES[slab]
 
     # module eased so A at 3:2 keeps the rest frame's pair width; capped for
-    # very few teeth so a three-tooth wheel reads small, not bloated
+    # very few teeth so a three-tooth wheel reads small, not bloated (the
+    # screen scale is fixed by the rest frame's pair, so the cap shows)
     m = min(1.6, 10.0 / (NA * 1.25))
     rpA, rpB = NA * m / 2, NB * m / 2
     dAB = rpA + rpB
-    dRef = rpA * 2.5                             # where B's centre is at 3:2
+    dRef = 10.0                                  # B's centre at the rest frame (8 teeth, 3:2)
     T = 2.3
     yaw = math.radians(18)                       # B sits behind and right of A
     u = (math.cos(yaw), 0.0, -math.sin(yaw))
@@ -196,7 +214,7 @@ def build(values=None, notes=0.0):
 
     # playing: hatch density gathers toward the tooth in contact
     hot = cam.p(add(mul(u, rpA), (0.0, T, 0.0)))
-    reach = 0.30 * cam.s * dAB
+    reach = 0.62 * cam.s * dAB
 
     def heat(q):
         if notes <= 0:
@@ -210,15 +228,17 @@ def build(values=None, notes=0.0):
         o = []
         for _, q, nw in g.sides(cam):
             sq = cam.ps(q)
+            if area(sq) < 2.0:                    # edge-on flank: nothing to draw
+                continue
             o.append(poly(sq, G0, G4, LINE))
             sp = spacing_for(dot(nw, light))
             h = heat(q)
             if h > 0:
-                sp = max(2.4, (sp or 9.0) * (1 - 0.6 * h)) if (sp or h > 0.35) else sp
+                sp = max(2.2, (sp or 8.0) * (1 - 0.8 * h)) if (sp or h > 0.2) else sp
             if sp:
                 o += axial_hatch(cam, q, sp)
         cap = g.cap(cam, g.o)
-        o.append(poly(cap, G0, G5, LINE))
+        o += capface(cap)
         return o
 
     def wheel(c, N, rp, rot, hits):
@@ -232,6 +252,16 @@ def build(values=None, notes=0.0):
                      S.gear2d(N, rp, m=m, rot=rot, tips=[1 if h else 0 for h in hits]), T / 2)
         return top, prism(low) + prism(top)
 
+    def hub(g, ring_args, w, ink):
+        """A turned ring on a top face; left off when too small to read."""
+        r, n = ring_args
+        if r < 0.9 * m and n > 32:               # web ring with no web left (few teeth)
+            return []
+        P = g.cap(cam, S.ring(r, n))
+        if max(x for x, _ in P) - min(x for x, _ in P) < 6:
+            return []
+        return [loop(P, w, ink)]
+
     hitsA = euclid(round(mesh * NA), NA)
     hitsB = euclid(round(mesh * NB), NB)
 
@@ -239,11 +269,11 @@ def build(values=None, notes=0.0):
     gB, o = wheel(cB, NB, rpB, rotB, hitsB)
     out += o
     rrB = rpB - 1.25 * m
-    out.append(loop(gB.cap(cam, S.ring(rpB - 1.25 * m - 0.55 * m, 60)), HAIR, G3))
-    out.append(loop(gB.cap(cam, S.ring(min(1.6, 0.27 * rpB), 32)), HAIR, G3))
-    out.append(loop(gB.cap(cam, S.ring(min(0.7, 0.12 * rpB), 20)), LINE, G4))
-    rh = 3.3 * (rpB / 6.0)                        # the drilled web's pitch circle
-    hr = min(0.6, 0.2 * rh, 0.4 * (rrB - rh))
+    out += hub(gB, (rpB - 1.25 * m - 0.55 * m, 60), HAIR, G3)
+    rh = min(3.3 * (rpB / 6.0), 0.7 * rrB)        # the drilled web's pitch circle
+    out += hub(gB, (min(1.6, 0.27 * rpB, 0.5 * rh), 32), HAIR, G3)
+    out += hub(gB, (min(0.7, 0.12 * rpB, 0.22 * rh), 20), LINE, G4)
+    hr = min(0.6, 0.2 * rh, 0.45 * (rrB - rh))
     for k in range(12):
         a = rotB - 2 * math.pi * k / 12 + math.pi / 2
         hx, hy = rh * math.cos(a), rh * math.sin(a)
@@ -258,13 +288,15 @@ def build(values=None, notes=0.0):
             mr = 0.32 * hr / 0.6
             mark = [(hx + mr * math.cos(t), hy + mr * math.sin(t))
                     for t in [2 * math.pi * i / 12 for i in range(12)]]
-            out.append(loop(gB.cap(cam, mark), HAIR, G3))
+            ms = gB.cap(cam, mark)
+            if max(x for x, _ in ms) - min(x for x, _ in ms) >= 6:   # too small to read: leave blank
+                out.append(loop(ms, HAIR, G3))
     gA, o = wheel((0, 0, 0), NA, rpA, rotA, hitsA)
     out += o
     rrA = rpA - 1.25 * m
-    out.append(loop(gA.cap(cam, S.ring(rpA - 1.25 * m - 0.5 * m, 40)), HAIR, G3))
-    out.append(loop(gA.cap(cam, S.ring(min(1.2, 0.5 * rrA), 28)), HAIR, G3))
-    out.append(loop(gA.cap(cam, S.ring(min(0.55, 0.25 * rrA), 20)), LINE, G4))
+    out += hub(gA, (rpA - 1.25 * m - 0.5 * m, 40), HAIR, G3)
+    out += hub(gA, (min(1.2, 0.5 * rrA), 28), HAIR, G3)
+    out += hub(gA, (min(0.55, 0.25 * rrA), 20), LINE, G4)
     # brightest: the top edge of B's tooth standing in A's gap (the mesh)
     tB = S.gear2d(NB, rpB, m=m, rot=rotB)[0:4]
     if hitsB[0]:
