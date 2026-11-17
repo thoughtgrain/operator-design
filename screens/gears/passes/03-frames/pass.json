@@ -3,7 +3,7 @@
   "category": "player",
   "kind": "frames",
   "number": 3,
-  "state": "open",
+  "state": "ready_for_pick",
   "created": "2026-11-17T15:08:07",
   "focus": null,
   "subject": {
@@ -61,7 +61,83 @@
       "brief": "centred hero; section cut; negative space carries the subject."
     }
   ],
-  "variants": [],
-  "uniqueness": null,
+  "variants": [
+    {
+      "variant": "v1",
+      "frame": "screens/gears/passes/03-frames/v1/rest.svg"
+    },
+    {
+      "variant": "v2",
+      "frame": "screens/gears/passes/03-frames/v2/rest.svg"
+    },
+    {
+      "variant": "v3",
+      "frame": "screens/gears/passes/03-frames/v3/rest.svg"
+    },
+    {
+      "variant": "v4",
+      "frame": "screens/gears/passes/03-frames/v4/rest.svg"
+    },
+    {
+      "variant": "v5",
+      "frame": "screens/gears/passes/03-frames/v5/rest.svg"
+    }
+  ],
+  "uniqueness": {
+    "pairs": [
+      {
+        "pair": "v1–v2",
+        "bodyDiffPct": 20.49,
+        "ok": true
+      },
+      {
+        "pair": "v1–v3",
+        "bodyDiffPct": 17.56,
+        "ok": true
+      },
+      {
+        "pair": "v1–v4",
+        "bodyDiffPct": 20.72,
+        "ok": true
+      },
+      {
+        "pair": "v1–v5",
+        "bodyDiffPct": 16.16,
+        "ok": true
+      },
+      {
+        "pair": "v2–v3",
+        "bodyDiffPct": 19.87,
+        "ok": true
+      },
+      {
+        "pair": "v2–v4",
+        "bodyDiffPct": 22.65,
+        "ok": true
+      },
+      {
+        "pair": "v2–v5",
+        "bodyDiffPct": 18.27,
+        "ok": true
+      },
+      {
+        "pair": "v3–v4",
+        "bodyDiffPct": 20.52,
+        "ok": true
+      },
+      {
+        "pair": "v3–v5",
+        "bodyDiffPct": 16.3,
+        "ok": true
+      },
+      {
+        "pair": "v4–v5",
+        "bodyDiffPct": 19.28,
+        "ok": true
+      }
+    ],
+    "problems": [],
+    "checked": "2026-11-17T15:19:00"
+  },
   "selection": null
 }
