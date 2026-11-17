@@ -90,6 +90,18 @@ def decode_png(data: bytes) -> list[list[int]]:
     return rows
 
 
+def decode_pgm(data: bytes) -> list[list[int]]:
+    """opxy-raster --luma output (binary PGM, 8-bit) → rows of luminance. Same values decode_png gives for the PNG."""
+    parts = data.split(maxsplit=4)
+    if len(parts) < 5 or parts[0] != b"P5" or parts[3] != b"255":
+        raise PerceptError("not an 8-bit binary PGM")
+    width, height = int(parts[1]), int(parts[2])
+    px = parts[4]
+    if len(px) != width * height:
+        raise PerceptError(f"PGM holds {len(px)} bytes, expected {width * height}")
+    return [list(px[y * width:(y + 1) * width]) for y in range(height)]
+
+
 def png_size(data: bytes) -> tuple[int, int]:
     return struct.unpack(">II", data[16:24])
 
@@ -100,8 +112,11 @@ def downsample2(rows: list[list[int]]) -> list[list[int]]:
              for x in range(W)] for y in range(H)]
 
 
-def render(frame: Path, out_dir: Path, tool: str | None) -> list[list[int]]:
-    """An SVG frame rendered at 1:1, or a PNG capture at 1:1 or exactly 2×."""
+def render(frame: Path, out_dir: Path, tool: str | None, fast: bool = True) -> list[list[int]]:
+    """An SVG frame rendered at 1:1, or a PNG capture at 1:1 or exactly 2×.
+
+    With opxy-raster the renderer hands back brightness directly (--luma), so nothing is decoded here; with
+    rsvg-convert, or fast=False, it writes a PNG and decode_png reads it. Both give the same numbers (a test pins it)."""
     if frame.suffix.lower() == ".png":
         data = frame.read_bytes()
         size = png_size(data)
@@ -112,6 +127,13 @@ def render(frame: Path, out_dir: Path, tool: str | None) -> list[list[int]]:
         raise PerceptError(f"{frame} is {size[0]}×{size[1]}; captures must be 480×220 or 960×440 (crop to the screen)")
     if not tool:
         raise PerceptError("no SVG renderer (opxy-raster or rsvg-convert); build or install one, or pass PNG captures")
+    if fast and raster.speaks_luma(tool):
+        pgm = out_dir / (frame.stem + ".pgm")
+        res = subprocess.run([tool, "--luma", "-w", str(W), "-h", str(H), "-b", "black", "-o", str(pgm), str(frame)],
+                             capture_output=True, text=True)
+        if res.returncode != 0:
+            raise PerceptError(f"{Path(tool).stem} failed on {frame}: {res.stderr.strip()}")
+        return decode_pgm(pgm.read_bytes())
     png = out_dir / (frame.stem + ".png")
     res = subprocess.run([tool, "-w", str(W), "-h", str(H), "-b", "black", "-o", str(png), str(frame)],
                          capture_output=True, text=True)
@@ -132,6 +154,8 @@ def diff(a, b, top: int, step: int) -> tuple[float, int]:
     changed, x0, y0, x1, y1 = 0, W, H, -1, -1
     for y in range(top, H):
         ra, rb = a[y], b[y]
+        if ra == rb:  # most rows don't change between two frames; comparing whole rows is done in C
+            continue
         for x in range(W):
             if abs(ra[x] - rb[x]) >= step:
                 changed += 1

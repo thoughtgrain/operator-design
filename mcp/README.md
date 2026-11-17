@@ -79,7 +79,7 @@ Rendering frames to PNG (`render_frame`, contact-sheet PNGs, perceptibility on S
 1. `opxy-raster`, the Rust renderer in `crates/opxy-raster` (resvg: no system libraries, the same pixels on every platform). `cargo build --release` from the repo root puts it in `target/release/`, where the tools find it. `OPXY_RASTER` points at another copy.
 2. `rsvg-convert` (librsvg): macOS `brew install librsvg`, Debian/Ubuntu `apt install librsvg2-bin`.
 
-Both take the same flags, so nothing else cares which one it got. Without either, `design_pass_submit` records `pixel check skipped` instead of measuring, so build or install one.
+Both take the same flags, so nothing else cares which one it got. `opxy-raster` also takes `--luma`, which writes each pixel's brightness instead of a PNG; perceptibility and the pass uniqueness check use it when they can, which skips decoding PNGs in pure Python (about 3× faster on a full frame set). A test holds the two paths to identical pixels. Without either, `design_pass_submit` records `pixel check skipped` instead of measuring, so build or install one.
 
 ## Configuration
 

@@ -664,6 +664,20 @@ class TestRenderer(unittest.TestCase):
             area, _ = percept.diff(now, golden, 38, step)
             self.assertLess(area, 0.5, f"{name}: {area:.2f}% of the body renders differently from the golden")
 
+    def test_luma_matches_the_png_decoder(self):
+        """opxy-raster --luma must give exactly the pixels decode_png reads from the same frame as a PNG, so the
+        fast path can't move a perceptibility or uniqueness number."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("percept_parity", REAL / "opxy/tools/perceptibility.py")
+        percept = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(percept)
+        frames = sorted((REAL / "screens/toro/blocks/frames").glob("*.svg"))[:6] + [REAL / self.FRAMES["theseus-tower"]]
+        for frame in frames:
+            with tempfile.TemporaryDirectory() as tmp:
+                fast = percept.render(frame, Path(tmp), RENDERER, fast=True)
+                slow = percept.render(frame, Path(tmp), RENDERER, fast=False)
+            self.assertEqual(fast, slow, f"{frame.name}: --luma and the PNG decoder disagree")
+
 
 class TestGreyByDefault(unittest.TestCase):
     def test_every_frame_in_the_repo_is_grey(self):

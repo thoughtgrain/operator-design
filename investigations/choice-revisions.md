@@ -189,6 +189,7 @@ The person left these to me. What I chose and why:
 | Piece | Where | Notes |
 | --- | --- | --- |
 | Renderer | `crates/opxy-raster/`, `Cargo.toml`, `opxy/tools/raster.py` | resvg 0.45, sans fallback for the licensed device face; `cargo test` covers its flags |
+| Brightness from Rust | `opxy-raster --luma`, `perceptibility.render` | writes brightness as a binary PGM with the decoder's exact formula, so the checks skip pure-Python PNG decoding; unchanged rows are skipped in the diff too. toro-blocks' perceptibility went from 2.7 s to 0.9 s with an identical report, and the test suite from 59 s to 26 s. A parity test requires identical pixels from both paths |
 | Golden images | `mcp/tests/golden/` | toro-blocks and theseus-tower rest frames; the test compares the body (not the header, whose fallback font differs by machine) with perceptibility's own measure |
 | Bench server | `mcp/opxy_mcp/bench/` | `server.py` (routes, token, CSP), `model.py` (machines, passes, frame sets, both frame-naming schemes), `events.py` (SSE, agent queue, journal), `generator.py` + `worker.py` (live frames in a separate process, restarted on code changes) |
 | Bench page | `mcp/opxy_mcp/bench/static/` | board, cycle, play; vector / device / arm's-length lenses; value map; body-black meter; Web MIDI with auto-bind, learn and relative encoders |

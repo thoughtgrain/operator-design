@@ -9,8 +9,10 @@ same flags (-w -h -b -o), so callers don't care which one they got.
 """
 from __future__ import annotations
 
+import functools
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -32,6 +34,18 @@ def find() -> str | None:
 
 def name(tool: str | None) -> str:
     return Path(tool).stem if tool else "none"
+
+
+@functools.lru_cache(maxsize=8)
+def speaks_luma(tool: str | None) -> bool:
+    """True when the renderer is opxy-raster, which can write brightness (--luma) instead of a PNG to decode."""
+    if not tool:
+        return False
+    try:
+        out = subprocess.run([tool, "--version"], capture_output=True, text=True, timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return out.startswith("opxy-raster")
 
 
 if __name__ == "__main__":
