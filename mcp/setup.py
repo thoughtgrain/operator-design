@@ -53,6 +53,8 @@ def env_for(args, local: str | None = None) -> dict:
         env["OPXY_APPROVERS"] = args.approver
     if getattr(args, "colour", False):
         env["OPXY_COLOUR"] = "allow"
+    if getattr(args, "shift_stack", False):
+        env["OPXY_SHIFT_HEADER"] = "stack"
     if getattr(args, "sdk", None):
         env["OPXY_SDK"] = str(Path(args.sdk).expanduser().resolve())
     return env
@@ -211,6 +213,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--approver", help="name allowed to approve training proposals over MCP")
     ap.add_argument("--colour", "--color", action="store_true",
                     help="allow colour in this harness (grey is the default; red stays reserved)")
+    ap.add_argument("--shift-stack", action="store_true",
+                    help="show Shift as open-xy's stacked header rows in this harness (default: Shift replaces the header's four slots)")
     ap.add_argument("--sdk", help="path to a local open-xy checkout, for the sdk_test tool")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)

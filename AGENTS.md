@@ -23,6 +23,7 @@ If the `operator-design` MCP server is connected (`.mcp.json`, or `python3 mcp/s
 - When a decision is the person's (which subject, which control gets the most travel, which of five variants, whether a training proposal lands), ask. Don't guess past the brief.
 - Every generative design pass is exactly five unique variants, each from its own direction (`opxy/protocol.md`, Iterations). Run them as five parallel `opxy-designer` agents when you can.
 - Know the machine's category (`opxy/categories.md`) before proposing subjects. The patterns that fit it inspire; they don't decide. The direction comes from the machine's own idea, and five subjects that could belong to any machine are wrong.
+- Shift replaces the header's contents with the Shift controls; it never adds a second row or a sub-header. Stacked Shift rows are an override set in the harness's MCP config (`OPXY_SHIFT_HEADER=stack`), like colour; check `shift_policy`.
 - No text or numbers in the drawing; names and values live in the header. Show a state with line, movement or hatching, not a flat grey fill.
 - toro-blocks and theseus-tower are precedents: audited screens that work. Don't change the guidelines or the tools in a way that makes either fail; the test suite checks their frames, and the reviewer checks the prose.
 - Stock-look guidance is defaults, not law. Break one with a sentence saying why; keep room for ways of drawing that aren't on any list yet.

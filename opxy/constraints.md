@@ -20,6 +20,8 @@ Sources, pinned to what I read on 2026-11-05:
 | Stock header | y 0–20: a stepped grey bar, eight 60 × 20 steps; four titles (10 px) over four values (20 px) | [tmpl] |
 | Machine artwork | Starts below y = 20. Covering the top 20 px hides the stock header (then I draw my own). | [display] |
 | Two-page header | Occupies y 0–38. Keep other artwork below ~38. | [ux] |
+| Shift in the header | Shift **replaces** the header's contents: while Shift is held, the four slots show the Shift controls of the page the encoders are on (entries `4 × line` to `4 × line + 3`), titles and values, in the same single-row layout; release puts the page back. No second row and no sub-header on the page. open-xy's `page_header` can stack both Shift rows instead (SDK 1.13); that's an override a person sets per harness (`OPXY_SHIFT_HEADER=stack`), never from a conversation. Check `shift_policy`. On device: draw your own header and, while `draw::shift_row(input).held`, pass that page's Shift titles and values in place of your own rather than passing the row to `page_header`. Either way Shift changes only the header's texts and bars, in one frame; nothing below the header moves | [display], house |
+| Drum kit held-pad strip | Holding a pad (without Shift) for 0.3 s slides stock's strip up from the bottom edge naming scramble, copy, paste and reset; it covers the bottom of the kit's art until the pad is let go, and the display gets no input for it. Keep a kit's essential art out of the bottom band | [display] |
 | Control columns | Four, 120 px wide. Titles at x `5 + 120i`, values at x `65 + 120i`. | [ux] |
 | Coordinate range | Nodes/texts may sit at x −64..640, y −64..320 (Q10). Hidden parks at (640, 320). | [display] |
 
@@ -142,8 +144,8 @@ Design-time floors per channel, the travel a control needs before it has a chanc
 | Synth | Its engine page, any SDK | The display input below | [display] |
 | Effect | Its send page, from SDK 1.7 (replaces stock's FX page on M1 of the send) | `slots` with all eight controls, `track` 14 or 15, `shift` and the shift row's `choices`. **No browser preview yet**, so design from stills and check on a device | [api], [display] |
 | Sample engine | Over the sampler's page, from SDK 1.8, when it forks the sampler (`"base": "sampler"`) | The sample overview: 96 min/max bins over the whole sample, the outer markers, reverse, and `assigned`/`loaded` states (say how to load one when nothing's assigned; show nothing stale while it loads). From SDK 1.10, also the sample's `gain` and the track's `amp` envelope. The screen takes over the sampler page's encoders, so stock's start, end, loop and gain are gone from that page unless `stockShift` (SDK 1.10) hands them back on Shift + encoder; otherwise they need the engine's own controls | [api], [display] |
-| Drum kit | SDK 1.8 | `shift`, the selected key's `model`, and `choices` (model group, place in group, choke group) whether or not Shift is held; a press always switches the key's first four and last four controls | [display], [ux] |
-| Track control (player, sequencer, function) | SDK 1.9: a synth with `resources.trackControl` runs on aux track 12 (CV's track, kept silent) and steers other tracks. Unique, chosen with Shift + M1 on track 12, its own page on M1; M2/M3 come to it as actions, M4 is the shared LFO only with `sharedLfo` | The usual display input for its own page, plus four words a tick from its control code (`Overlay::display`, read with `from_control`). Show when the track is muted: mute is its bypass, and the control sees `muted` and passes it on | [api], [ux] |
+| Drum kit | SDK 1.8 | `shift`, the selected key's `model`, and `choices` (model group, place in group, choke group) whether or not Shift is held; a press always switches the key's first four and last four controls. From SDK 1.10, `line` (the row the encoders edit, the Shift row too) and, for a `padMix` kit, the selected key's `pan` (-100..100) and `level` (-30..0 dB) and its `pad` fields | [display], [ux] |
+| Track control (player, sequencer, function) | SDK 1.9: a synth with `resources.trackControl` runs on aux track 12 (CV's track, kept silent) and steers other tracks. Unique, chosen with Shift + M1 on track 12, its own page on M1; M2/M3 come to it as actions, M4 is the shared LFO only with `sharedLfo` | The usual display input for its own page, plus four words a tick from its control code (`Overlay::display`, read with `from_control`). Show when the track is muted: mute is its bypass, and the control sees `muted` and passes it on. A note player with 5–8 parameters pages them, and the SDK draws its two-page header (SDK 1.16). A player's Shift layer (SDK 1.16) gets no Shift captions in the header, so the player's page names the row's choices itself; this is the one place a page carries text the header doesn't | [api], [ux] |
 
 ## Definition (`definition.json`)
 
@@ -161,6 +163,8 @@ Source **[api]**: open-xy `docs/api.md` § Definition, Own screen and Effect pag
 | Display formats | `ratio`, `percent`, `bipolar`, `duration`, `semitones`, `enum`, `division` (division maps linear 0..1) | [api] |
 | Two pages | `"press": "page"`: synth or effect, 5–8 parameters, ≤ 1 alternate per position. Synth: 8 parameters need sdk 1.3, 5–7 need sdk 1.4. Effect: sdk 1.7 | [api] |
 | Effect shift row | `"shift"`: 1–4 enum controls chosen with Shift + encoders (sdk 1.7); all choices together ≤ 1,048,576 combinations; with a shift row, Shift no longer gives fine steps | [api] |
+| Synth Shift row | `synth_shift` (SDK 1.13): 1–8 controls, entry `i` under page `i / 4`'s encoder `i % 4`, turned with Shift held; presets and step locks keep them. Read on the page through `opxy/synth_shift.hpp` (`held`, `line`, `values`). For a synth needing more than eight controls: keep what's played on the pages and what's set less often on the row. In the header, Shift replaces (see Shift in the header) | [api], [display], [ux] |
+| Player Shift layer | SDK 1.16: one to four enums of 2..255 choices on the player's encoders with Shift; no Shift captions in the header, a press with Shift held doesn't switch a paged player's page, and the values aren't saved with the project | [api], [ux] |
 | Text slots | > 4 need sdk 1.3; > 16 need sdk 1.7 | [api] |
 | Voice capacity | 1–256; 8 covers one track (stock plays ≤ 8 notes per track) | [api] |
 | Saved sounds | Order and mapping changes affect saved sounds; a new slot at 0 must sound as before | [api], [ux] |
@@ -170,5 +174,5 @@ Source **[api]**: open-xy `docs/api.md` § Definition, Own screen and Effect pag
 | Rule | Value | Source |
 | --- | --- | --- |
 | Direction | Clockwise makes the shown number rise; name the control for what rises | [ux] |
-| Count | ≤ 4 uses the stock header; 5–8 uses two pages (`"press": "page"`) via `page_header.hpp` | [ux] |
+| Count | ≤ 4 uses the stock header; 5–8 uses two pages (`"press": "page"`) via `page_header.hpp` (a note player's two pages get their header from the SDK, SDK 1.16); more than 8 on a synth goes on a Shift row (SDK 1.13) | [ux] |
 | Scope | The engine page holds the sound's own parameters, not another envelope/LFO/mod amount | [ux] |

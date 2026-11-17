@@ -57,7 +57,9 @@ Use the stock header, flush with the top of the screen (y 0–20). Reserve the t
 
 Text and numbers belong in the header. The drawing carries no labels, values, captions, scale numbers, axis ticks with figures, "fig. 1", "plan" or letters at points. The header already names every control and shows its value, so a number in the picture says the same thing twice, and labels turn a picture back into a panel. If a part needs telling apart from another (two channels, an input and an output), I draw the difference: a small mark, a shape, a position, subtle iconography in the drawing's own line language, never letters.
 
-`lint_frame.py` flags text below the header (`text-in-drawing`). It's a stock-look default, so it can be broken, but only with a sentence saying why; stock does it on a page where the picture is a measuring scale the person sets, like the filter page's frequency axis.
+`lint_frame.py` flags text below the header (`text-in-drawing`). It's a stock-look default, so it can be broken, but only with a sentence saying why; stock does it on a page where the picture is a measuring scale the person sets, like the filter page's frequency axis. One case open-xy requires: a note player's Shift layer (SDK 1.16) gets no captions in the header, so the player's page names those choices itself, small and quiet, only while they matter.
+
+Shift doesn't add a header. While Shift is held, the header's four slots show the Shift controls of the page being edited, and release puts the page back (`constraints.md`, Shift in the header). A second row or a sub-header on the page reads as a different instrument; the OP-XY swaps what the header says and leaves the page alone.
 
 ## Motion
 
