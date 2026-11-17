@@ -102,37 +102,39 @@ The agent starts a local page and gives you its URL (or run `python3 opxy/tools/
 
 #### What it looks like
 
-Everything below is a screenshot of the bench or a contact sheet the tools wrote, from machines in this repo. Frames are shown at 1:1 (the screenshots are at 2× pixel density, so they stay sharp on a high-DPI screen).
+The bench screenshots are all one real pass: `gears`, a player whose subject is two meshed spur wheels, on its five-variant frames pass with knob sweeps. Frames are at 1:1 (the screenshots are at 2× pixel density, so they stay sharp on a high-DPI screen).
 
-![Board: lichen's subject pass, five candidates at 1:1 with their directions, subjects, uniqueness and lint results](docs/images/bench-board.png)
+![Board: gears' five frame variants at 1:1, each with its direction, pairwise difference, sweep, lint result and Pick button](docs/images/bench-board.png)
 
-**Board, `lichen` subject pass.** Each card is a candidate subject from its own direction (the machine's rule as a physical thing × cutaway, a cutaway of the object at work × exploded view, and so on), with the designer's subject sentence, what each control would do, and the checks: pairwise uniqueness and lint. The picked one carries a thicker outline, not a colour.
+**Board.** Five directions on one subject: low horizon, column-affine, off-axis diagonal, full-bleed plan, section cut. Under each card are its direction, how far it differs from each of the others (Δ, share of the body), its knob sweep, its lint count, and the risks its designer named. **Pick vN…** records your choice with your name and a reason; **None of these…** turns the pass down.
 
-![gears frames pass: five variants at rest](docs/images/bench-sweep-rest.png)
+![The five variants at rest](docs/images/bench-sweep-rest.png)
 ![The same five with Ratio turned to 3:1: every card redraws](docs/images/bench-sweep-ratio.png)
 
-**Knob sweeps, `gears` frames pass.** The five rest-frame variants of one subject (two meshed spur wheels), then the same row after one turn of **Ratio** to 3:1. Every card follows the same knob, so you compare five designs answering the same twist, from the screen or from a MIDI controller.
+**One knob, five answers.** The row at rest, then after one turn of **Ratio** to 3:1. Every card follows the same knob, so a MIDI controller shows all five designs answering the same twist at once.
 
-![Play on toro: the blocks frame set under eight knobs on two pages, fold turned all the way up](docs/images/bench-play.png)
+![Play: variant v4 with Teeth turned to 16, four knobs, and the v1–v5 switch](docs/images/bench-play.png)
 
-**Play, `toro`.** Toro's eight controls as two pages of four knobs, here playing its blocks frames with **fold** turned up. Machines with a `bench.py` also get a *live* set, where every knob position is drawn by the machine's own generator and eased like the device.
+**Play.** The definition's controls as knobs (mouse, arrow keys or MIDI), a held note, and `1`–`5` to swap variants without losing the knob positions. Here v4 with **Teeth** at 16.
 
-![Play on gears: one variant's knob sweep with the v1–v5 switch](docs/images/bench-play-gears.png)
+![Cycle through the device lens: v3 rasterised at 480 × 220 and shown pixel for pixel](docs/images/bench-cycle.png)
 
-**Play, `gears` variant v1.** On a pass with sweeps, `1`–`5` (or the switch) swap variants and keep the knobs where they are.
+**Cycle, device lens.** One variant at a time in the same spot, rasterised at the panel's real resolution, which takes away a high-DPI screen's flattery.
 
-![Cycle on tide with the device lens: one candidate rasterised at 480 × 220 and shown pixel for pixel](docs/images/bench-cycle.png)
+#### Generated frames
 
-**Cycle, `tide`, device lens.** One candidate at a time in the same spot, rasterised at the panel's real resolution, which takes away a high-DPI screen's flattery.
+Contact sheets the tools wrote (`python3 opxy/tools/contact_sheet.py <folder> --out sheet.svg --png`): rest, playing, and each control at 0, 50 and 100 with the others at default.
 
-![Contact sheet: gears v4's knob sweep, each control at 0, 50 and 100 plus rest and playing](docs/images/gears-v4-sweep.png)
+![gears v4's knob sweep as a contact sheet](docs/images/gears-v4-sweep.png)
 
-**A knob sweep as a contact sheet.** What `design_pass_submit` drew from gears v4's `bench.py`: rest, playing, and each control at 0, 50 and 100 with the others at default. `python3 opxy/tools/contact_sheet.py <folder> --out sheet.svg --png` makes these for any frame folder.
+*`gears` v4: the sweep `design_pass_submit` drew from the variant's `bench.py` before the pick.*
 
-| Finished frame sets | |
+| | |
 | --- | --- |
-| ![silt contact sheet](screens/silt/frames/contact.png) | ![spool contact sheet](screens/spool/frames/contact.png) |
-| `silt`: grains settling in a bowl, each control at 0, 50 and 100 | `spool`: a loop of tape read pass after pass as it wears |
+| ![toro blocks contact sheet](docs/images/toro-blocks-sweep.png) | ![silt contact sheet](screens/silt/frames/contact.png) |
+| `toro`: the blocks drawing, eight controls across two header pages | `silt`: grains settling in a bowl |
+| ![spool contact sheet](screens/spool/frames/contact.png) | ![lichen contact sheet](screens/lichen/frames/contact.png) |
+| `spool`: a loop of tape read pass after pass as it wears | `lichen`: a colony spreading across a lattice of scale degrees |
 
 ### Audit a screen
 
