@@ -3,7 +3,7 @@
   "category": "engine",
   "kind": "revision",
   "number": 3,
-  "state": "ready_for_pick",
+  "state": "selected",
   "created": "2026-11-17T17:10:13",
   "focus": "Owner feedback: more overlap between the rings; the rainbow ends must not be visible at the bottom; rings taking part in the blend should change more.",
   "subject": {
@@ -86,5 +86,12 @@
     "problems": [],
     "checked": "2026-11-17T17:11:33"
   },
-  "selection": null
+  "selection": {
+    "variant": "v3",
+    "reason": "Strongest reaction to the blend with two cues (rings slide onto the bright line and swell to full height; rings out of the blend shrink to a ripple).",
+    "chosenBy": "owner",
+    "at": "2026-11-17T17:13:46",
+    "frame": "screens/iris/passes/03-revision/v3/rest.svg",
+    "ring_response": "slide + swell"
+  }
 }

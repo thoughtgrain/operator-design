@@ -188,3 +188,28 @@ The owner asked to remove the second header and show skew and phase on Shift, re
 - Engine: unchanged. It reads skew and phase as `p[4]` and `p[5]`, after the four page parameters, in definition order. **Pending a check against the SDK**: that a synth's Shift-row values reach `render()` after its page parameters.
 
 This change didn't need a five-variant pass. It changes the header's layout, not the drawing.
+
+## Revision · 2026-11-17 · rings overlap, ends off the bottom, rings react to the blend
+
+The owner's feedback: more overlap between the rings, the rainbow's ends must not show at the bottom, and the rings in the blend should change more. That went through revision pass 03 (`passes/03-revision/`, five ring responses, every pair 4.1–5.6 % apart at rest). The owner picked **v3, slide + swell**.
+
+- **The ends run off the bottom.** The bow's centre is at (240, 232), below the screen, and there's no horizon or ground mask now: the screen's edge cuts the bands. The bow can't grow, because every quarter of the mix line has to stay within ±64 px of its node, which caps the outer radius near 158 px.
+- **Overlap.** Radii 156, 146, 136, 126: 10 px apart, with waves of ±5.5 px when full height, so neighbouring crests interlock.
+- **Rings react to the blend.** A ring with a share of the mix slides onto the bright line by wₙ (0.6 + 0.6 · overlap), where wₙ is its weight over the top weight, capped at all the way, and stands at full height. A ring out of the blend shrinks to a 0.8 px ripple and stays at its own radius. Morph and Overlap now move rings, not just the bright line.
+- **64 KiB.** At the six chains per band I'd planned (raw or rounded × three heights), `panel.svg.fragment` came to 303 KB against the SDK preview's 64 KiB. The version before this revision was already over the cap at 107 KB, and I missed it. Now each band has three chains (a ripple, full height, full height rounded for Tone's cut), cycles are drawn by their corners (a sine at 12 points), and the band chains are written at one decimal: 62,972 bytes. Partly-blended rings go straight to full height; the slide carries the continuous part of the reaction.
+- **Tone.** Band cuts now land at 25 % (triangle), 60 % (square) and 65 % (saw), so each half of the range cuts a ring that's in the blend at the defaults. The mix line's drawn bandwidth now starts at the fundamental (0–3.5 octaves, 1 to 11 harmonics), so a closed Tone visibly loses level. The engine's own range is unchanged (0.5–7.5 octaves); the drawing is fitted to what a line of about 10 points per cycle can show.
+- Display block: `nodes` 204 (4 mix + 8 header + 3 chains × 4 bands × 16), `texts` 8, `palette` 5.
+
+Gates after the revision:
+
+| control | need % | 0→100 % | 0→50 % | 50→100 % | |
+| --- | --- | --- | --- | --- | --- |
+| morph | 2.50 | 8.32 | 9.03 | 8.82 | ok |
+| overlap | 1.60 | 6.43 | 6.23 | 5.69 | ok |
+| spread | 1.60 | 7.04 | 6.44 | 6.57 | ok |
+| tone | 1.60 | 2.95 | 1.33 | 1.91 | ok |
+| skew | 1.20 | 2.36 | 1.99 | 1.81 | ok |
+| phase | 0.80 | 5.73 | 3.86 | 4.82 | ok |
+| note response | 2.00 | 3.22 | | | ok |
+
+21 frames lint with 0 errors and 0 warnings. `display()` on the host differs from the frames by 0.1–2.2 % of the body (`playing` 3.0 %, a different moment of the motion), and also passes `perceptibility.py` (tone 3.02, morph 8.30).

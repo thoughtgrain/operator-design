@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""iris · frame generator (from frames pass 02, v3: centred hero, density gradient, picked by the owner).
+"""iris · frame generator (revision 03, v3 "slide + swell", picked by the owner; first built from frames pass 02 v3, (from frames pass 02, v3: centred hero, density gradient, picked by the owner).
 
 The bow is seen square-on from above the anti-solar point, so every band is a
 full half-circle about one centre on the horizon, centred in the body. Four
@@ -31,10 +31,15 @@ P = dict(DEFAULTS)
 CONTROLS = ["morph", "overlap", "spread", "tone", "skew", "phase"]
 
 W, H = 480, 220
-CX, CY = 240.0, 204.0                 # bow centre on the horizon, centred
-RADII = [156.0, 140.0, 124.0, 108.0]  # sine, tri, square, saw (16 px apart)
+CX, CY = 240.0, 232.0                 # bow centre below the screen: the feet run off the bottom edge
+RADII = [156.0, 146.0, 136.0, 126.0]  # sine, tri, square, saw: 10 px apart, so neighbouring crests interlock
 CYCLES = [11, 13, 14, 16]             # denser inward: wavelength 44 -> 21 px
-AMP_BAND = 4.5                        # px, radial
+AMP_BAND = 5.0                        # px, radial (full height)
+AMP_LEVELS = [0.8, 5.5]                # pre-drawn chain heights: out of the blend (a ripple), in it (full height).
+                                       # Two, not three: panel.svg has to fit 64 KiB, so a band carries three chains
+                                       # (ripple, full, full rounded) of 16 cycles
+WIDTHS = [1.0, 1.6, 2.2]               # pre-drawn chain weights for "weight"
+MODE = "both"                          # revision 03 v3: blended rings slide onto the bright line and swell
 AMP_MIX = 5.0
 BAND_W = 1.5                          # Line weight
 MIX_W = 2.5                           # Subject weight
@@ -72,10 +77,11 @@ def ideal(kind, t, skew=0.0):
 
 
 def gain(n, tone):
-    # Drawn bandwidth, not the engine's: the engine's cutoff runs 0.5 .. 7.5 octaves above the note, but a mix
-    # line at ~10 points per cycle can only show harmonics up to about the 5th, so 0.5 .. 3.5 octaves (1.4 .. 11
-    # harmonics) is the part of Tone's sweep the line can draw. Same curve, fitted to what the screen resolves.
-    fc = 2 ** (0.5 + 3 * tone)
+    # Drawn bandwidth, not the engine's: the engine's cutoff runs 0.5 .. 7.5 octaves above the note, but a mix line at
+    # ~10 points per cycle can only show harmonics up to about the 5th. So the drawing spans 0 .. 3.5 octaves (from the
+    # note itself to 11 harmonics): the same curve, fitted to what the screen resolves, with its low end at the
+    # fundamental so a closed Tone visibly loses level (the engine's 0.5 octave already costs the fundamental ~1 dB).
+    fc = 2 ** (3.5 * tone)
     return 1 / math.sqrt(1 + (n / fc) ** 4)
 
 
@@ -155,10 +161,18 @@ def d_of(poly, ox=0.0, oy=0.0):
 
 
 # ---------------------------------------------------------------- parts
-def band_radius(i, c):
-    """overlap pulls every band toward the mix radius, up to 80 %."""
+def band_radius(i, c, wn):
+    """wn: this band's mix weight over the top weight (0..1). How far it moves depends on MODE."""
     target = lerp_band(RADII, c)
-    return RADII[i] + (target - RADII[i]) * 0.8 * P["overlap"]
+    pull = min(1.0, wn * (0.6 + 0.6 * P["overlap"]))              # blended rings slide onto the bright line
+    if MODE in ("slide", "both"):
+        return RADII[i] + (target - RADII[i]) * pull
+    if MODE == "gather":
+        if wn > 0:                                                 # any share of the blend: onto the line
+            return target
+        away = 1 if RADII[i] > target else -1                      # out of the blend: pushed away from the line
+        return RADII[i] + away * (12 + 8 * P["overlap"])
+    return RADII[i] + (target - RADII[i]) * 0.8 * P["overlap"]    # swell / weight: overlap alone moves the rings
 
 
 def band_cycles(i):
@@ -169,37 +183,24 @@ def band_cycles(i):
 START = {"sine": 0.0, "tri": 0.0, "square": 0.25, "saw": 0.0}
 
 
-def cycle_line(kind, r, phi0, dphi, t0, skew):
-    """One cycle's centreline from phi0 over dphi (negative = clockwise).
-
-    Straight-sided waves are built from their corners, each side split into
-    pieces about 3 px long so the arc still bends them; a jump leans by a
-    hair (0.02 cycle) so the ribbon has a flat end, not a fold."""
+def cycle_line(kind, r, phi0, dphi, t0, skew, amp=None):
+    """One cycle's centreline from phi0 over dphi (negative = clockwise), as the panel authors it: a sine at 12
+    points, straight-sided waves by their corners only (a jump leans by a hair, 0.02 cycle, so the ribbon has a flat
+    end, not a fold). Few points, because panel.svg has to fit 64 KiB."""
     e = 0.01
+    a = AMP_BAND if amp is None else amp
     if kind == "sine":
-        keys = [(k / 24, None) for k in range(25)]
+        pts = [(k / 12, math.sin(2 * math.pi * (t0 + k / 12))) for k in range(13)]
     else:
         b = 0.5 - 0.45 * skew
         if kind == "tri":
-            keys = [(0, 0), (b / 2, 1), (b + (1 - b) / 2, -1), (1, 0)]
+            pts = [(0, 0), (b / 2, 1), (b + (1 - b) / 2, -1), (1, 0)]
         elif kind == "square":     # starts on the high plateau (t0 = 0.25)
             q = b / 2
-            keys = [(0, 1), (q - e, 1), (q + e, -1), (q + 1 - b - e, -1), (q + 1 - b + e, 1), (1, 1)]
+            pts = [(0, 1), (q - e, 1), (q + e, -1), (q + 1 - b - e, -1), (q + 1 - b + e, 1), (1, 1)]
         else:
-            keys = [(0, 0), (0.5 - e, 1), (0.5 + e, -1), (1, 0)]
-    pts = []
-    if kind == "sine":
-        pts = [(u, math.sin(2 * math.pi * (t0 + u))) for u, _ in keys]
-    else:
-        seg_len = abs(dphi) * r
-        for (u0, v0), (u1, v1) in zip(keys, keys[1:]):
-            L = math.hypot((u1 - u0) * seg_len, (v1 - v0) * AMP_BAND)
-            m = max(1, int(math.ceil(L / 3.0)))
-            for s in range(m):
-                f = s / m
-                pts.append((u0 + (u1 - u0) * f, v0 + (v1 - v0) * f))
-        pts.append(keys[-1])
-    line = [polar(r + AMP_BAND * v, phi0 + dphi * u) for u, v in pts]
+            pts = [(0, 0), (0.5 - e, 1), (0.5 + e, -1), (1, 0)]
+    line = [polar(r + a * v, phi0 + dphi * u) for u, v in pts]
     return dedupe(line)
 
 
@@ -212,18 +213,28 @@ def main(out, held=False, travel=0.0, shift_held=False):
     # bands: chains of one-cycle nodes, left foot -> right foot
     band_nodes = []
     for i, kind in enumerate(KINDS):
-        r = band_radius(i, c)
+        lvl3 = int(round(3 * w[i] / wmax))                        # 0..3, as the device picks it
+        r = band_radius(i, c, w[i] / wmax)
+        amp, width = AMP_BAND, BAND_W
+        ripple = False
+        if MODE in ("swell", "both"):
+            ripple = lvl3 == 0
+            amp = AMP_LEVELS[0 if ripple else 1]
+        if MODE == "weight":
+            width = WIDTHS[0 if lvl3 == 0 else 1 if lvl3 < 3 else 2]
         n = band_cycles(i)
         dphi = -math.pi / n
         shift = P["phase"] * i / 8.0
         grey = GREYS[int(round(3 * w[i] / wmax))]
+        if MODE == "weight":
+            grey = GREYS[0] if lvl3 == 0 else GREYS[3] if lvl3 == 3 else GREYS[2]
         # Tone's second channel: the bands run plain (outside) to bright (inside), so a low-pass is drawn as the
         # cut sweeping outward band by band as Tone closes: a cut band is drawn as the rounded hump that gets
         # through. Nothing cut at 100, everything but the sine cut at 0. On the device that's a second, pre-drawn
         # hump chain per band, shown in place of the raw one.
-        # By band, not by drawn radius (Overlap moves the radii): saw cut below 65 %, square below 45 %, triangle
-        # below 20 %; the sine is never cut. All four stand raw at the 70 % default.
-        cut = P["tone"] < (0.0, 0.20, 0.45, 0.65)[i]
+        # By band, not by drawn radius (Overlap moves the radii): saw cut below 65 %, square below 60 %, triangle
+        # below 25 %; the sine is never cut. All four stand raw at the 70 % default.
+        cut = P["tone"] < (0.0, 0.25, 0.60, 0.65)[i]
         if cut:                                     # rounded to the hump that gets through, one grey step down
             grey = GREYS[max(0, int(round(3 * w[i] / wmax)) - 1)]
         # whole cycles only; phase slides the chain along the arc and the
@@ -238,8 +249,8 @@ def main(out, held=False, travel=0.0, shift_held=False):
             mid = phi0 + dphi / 2
             ox, oy = polar(r, mid)
             # skew 0: the bands are fixed one-cycle nodes on the device and can't lean; Skew acts on the mix line only
-            line = cycle_line("sine" if cut else kind, r, phi0, dphi, START[kind], 0.0)
-            poly = ribbon(line, BAND_W / 2)
+            line = cycle_line("sine" if (cut or ripple) else kind, r, phi0, dphi, START[kind], 0.0, amp)
+            poly = ribbon(line, width / 2)
             band_nodes.append(
                 f'<path id="iris_node_{nid}" transform="matrix(1 0 0 1 {fmt(ox)} {fmt(oy)})" '
                 f'd="{d_of(poly, ox, oy)}" fill="{grey}" stroke="none"/>')
@@ -280,7 +291,7 @@ def main(out, held=False, travel=0.0, shift_held=False):
     hy = CY + 0.6
     hz = [(CX - 200, hy - HAIR_W / 2), (CX + 200, hy - HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX - 200, hy + HAIR_W / 2)]
     mask = [(CX - 200, hy + HAIR_W / 2), (CX + 200, hy + HAIR_W / 2), (CX + 200, 220), (CX - 200, 220)]
-    ground = [
+    ground = [] and [  # revision 03: no horizon or mask, the screen edge cuts the bow (kept for reference)
         # static art, not nodes (as on the device: a bound black mask would take its palette entry's paint)
         f'<path transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(mask, CX, hy)}" fill="#000000" stroke="none"/>',
         f'<path transform="matrix(1 0 0 1 {fmt(CX)} {fmt(hy)})" d="{d_of(hz, CX, hy)}" fill="{HORIZON}" stroke="none"/>',

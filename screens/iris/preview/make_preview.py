@@ -19,6 +19,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 MACHINE = Path('/home/user/operators-xy/machines/iris')     # the machine's own repository checkout
 FPS, SR, BLOCK = 30, 44100, 64
+NODES = 204                                                  # nodes.h N_TOTAL
 DEFAULTS = [0.3333, 0.25, 0.0, 0.7, 0.0, 0.0]
 NAMES = ['morph', 'overlap', 'spread', 'tone', 'skew', 'phase']
 PAL = ['#AFAFAF', '#CDCDCD', '#646464', '#7D7D7D', '#969696']
@@ -117,11 +118,11 @@ def main():
     for f, line in enumerate(dump):
         a = list(map(int, line.split()))
         keys.append(a[-1])
-        nodes = [a[7 * n: 7 * n + 7] for n in range(140)]
-        pts = a[980:-1]
+        nodes = [a[7 * n: 7 * n + 7] for n in range(NODES)]
+        pts = a[7 * NODES:-1]
         o = ['<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220">',
              '<rect width="480" height="220" fill="#000000"/>', header(*knob_rows[f])]
-        for n in range(12, 140):
+        for n in range(12, NODES):
             x, y, s, p, c, si, on = nodes[n]
             if not on: continue
             k = s / 1024; cc, ss = c / 1024 * k, si / 1024 * k

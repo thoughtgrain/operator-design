@@ -1,5 +1,7 @@
 # Iris · handoff
 
+**2026-11-17 (revision 03):** the bow's centre moved below the screen (ends run off the bottom, no horizon), rings 10 px apart, and rings in the blend slide onto the bright line and swell while the rest shrink to a ripple. Node map, cut thresholds and Tone's drawn range below are current; `operators-xy/machines/iris/display.cpp` implements them.
+
 **2026-11-17:** skew and phase moved from a second page to the Shift row, and the second header row is gone (brief, Revision).
 
 This is for whoever writes `display.cpp` in `operators-xy/machines/iris/`. With this file and `frames/`, you shouldn't need the brief. The geometry comes from `gen_frames.py`, so `gen_panel.py` should share its constants rather than retype them.
@@ -8,14 +10,14 @@ This is for whoever writes `display.cpp` in `operators-xy/machines/iris/`. With 
 
 ```json
 "display": {"stateBytes": 60, "stateAlignment": 4,
-            "paths": 4, "points": 64, "nodes": 140, "texts": 8, "palette": 5}
+            "paths": 4, "points": 64, "nodes": 204, "texts": 8, "palette": 5}
 ```
 
 `sdk` 1.13 in `machine.json` (the synth Shift row). Implemented: `operators-xy/machines/iris/display.cpp`, `display.h`, `gen_panel.py` (writes `panel.svg.fragment` and `nodes.h`).
 
 ## The model, in one paragraph
 
-The bow is a family of circles about one centre on the horizon, at (240, 204). Bands run sine, triangle, square, saw at radii 156, 140, 124, 108 with 11, 13, 14, 16 cycles across the half-turn, and every wave is ±4.5 px radially. The **mix line** sits at radius `lerp(RADII, morph·3)` with `lerp(CYCLES, morph·3)` cycles. Its radial offset at arc position u (0 = left foot, 1 = right foot) is 5 px × Σ wᵢ · waveᵢ(n_mix · u · (1 + 0.12 · spread · (i − 1.5)) − travel + phase · i/8), with skew applied to every wave except the saw and Tone's drawn low-pass on top (harmonic n × 1/√(1 + (n / 2^(0.5 + 3·tone))⁴)). The weights wᵢ are the engine's: a triangle kernel of width 1 + 3·overlap about morph·3, normalised to sum 1.
+The bow is a family of circles about one centre below the screen, at (240, 232), so the bands run off the bottom edge. Bands run sine, triangle, square, saw at radii 156, 146, 136, 126 with 11, 13, 14, 16 cycles across the half-turn. A band's wave is ±5.5 px when it's in the blend and a 0.8 px ripple when it isn't. The **mix line** sits at radius `lerp(RADII, morph·3)` with `lerp(CYCLES, morph·3)` cycles. Its radial offset at arc position u (0 = left foot, 1 = right foot) is 5 px × Σ wᵢ · waveᵢ(n_mix · u · (1 + 0.12 · spread · (i − 1.5)) − travel + phase · i/8), with skew applied to every wave except the saw and Tone's drawn low-pass on top (harmonic n × 1/√(1 + (n / 2^(3.5·tone))⁴), the engine's curve fitted to what the line can resolve). The weights wᵢ are the engine's: a triangle kernel of width 1 + 3·overlap about morph·3, normalised to sum 1.
 
 ## Nodes
 
@@ -23,17 +25,17 @@ The bow is a family of circles about one centre on the horizon, at (240, 204). B
 | --- | --- | --- | --- |
 | 0–3 | the mix line, a quarter of the half-turn each: a closed ribbon round 32 centreline points (64 points) | morph, overlap, spread, tone, skew, phase, `travel` | path rewrite: the four outlines share one key |
 | 4–11 | the header bar, one row (`page_header.hpp`, first node 4) | slots; Shift swaps the texts | stock |
-| 12–75 | raw band cycles: band b, cycle k → 12 + 16b + k | overlap (radius), spread (scale 0.82–1.18 and angular step), phase (angle offset), tone (shown when the band isn't cut) | translate + turn + uniform scale; palette by weight |
-| 76–139 | rounded band cycles, the same layout from 76 | tone (shown when the band is cut) | same |
-| — | ground mask (black) and horizon (1.2 px, `#4B4B4B`) | — | static art, authored after the bands; not nodes, because a bound black mask would take its palette entry's paint |
+| 12–203 | band chains, 16 one-cycle nodes each: chain = kind · 4 + band, kind 0 ripple (out of the blend), 1 full height, 2 full height rounded (in the blend, cut by Tone) | morph and overlap (weights → radius, kind), spread (scale and angular step), phase (angle offset), tone (cut) | translate + turn + uniform scale; palette by weight; the band's other two chains hidden |
 
-A band cycle node is authored as one cycle at the band's rest radius, centred on its own origin at the cycle's mid-angle, with the wave running along +x (the tangent) and its height along −y (outward). `display()` places it at `polar(r_b, φ_k)` and turns it by `90° − φ_k` (tenths of a degree, `rotation()`). Cycle k's mid-angle is φ_k = π − (k + ½ + shift_b) · π / n_b, where n_b = CYCLES[b] / (1 + 0.12·spread·(b − 1.5)) and shift_b = phase · b / 8, wrapped so the chain stays continuous. Show cycles with φ in (0, π) and hide the rest; the ground mask (static, authored after the bands) covers what dips below the horizon. Scale each cycle by r_b · CYCLES[b] / (RADII[b] · n_b) so the chain tiles its arc; that also scales the line a little (up to ~1.35× in the worst corner). Skew doesn't touch the bands: they're fixed shapes, so Skew acts on the mix line only.
+A band cycle node is authored as one cycle at the band's rest radius, centred on its own origin at the cycle's mid-angle, with the wave running along +x (the tangent) and its height along −y (outward). `display()` places it at `polar(r_b, φ_k)` and turns it by `90° − φ_k` (tenths of a degree, `rotation()`). Cycle k's mid-angle is φ_k = π − (k + ½ + shift_b) · π / n_b, where n_b = CYCLES[b] / (1 + 0.12·spread·(b − 1.5)) and shift_b = phase · b / 8, wrapped so the chain stays continuous. Show cycles with φ in (0, π) and hide the rest; below φ ≈ 5° they're off the bottom edge anyway. Scale each cycle by r_b · CYCLES[b] / (RADII[b] · n_b) so the chain tiles its arc; that also scales the line a little (up to ~1.35× in the worst corner). Skew doesn't touch the bands: they're fixed shapes, so Skew acts on the mix line only.
 
-Radii when Overlap pulls: r_b = RADII[b] + (r_mix − RADII[b]) · 0.8 · overlap.
+Radii: r_b = RADII[b] + (r_mix − RADII[b]) · min(1, wₙ · (0.6 + 0.6 · overlap)), where wₙ = w_b / max w. A band out of the blend (level 0) keeps its own radius and shows its ripple chain.
 
 `rotation()` is assumed to turn clockwise on screen for positive tenths (as theseus's cymbals use it), and a cycle authored at the top of the bow is turned by `900 − φ` tenths. **Check that sign against the SDK first**: if it's the other way round, every cycle will lean against its arc.
 
-Tone's cut: band b is cut when tone < (0, 0.20, 0.45, 0.65)[b]. The sine is never cut. A cut band shows its rounded chain in place of the raw one.
+Tone's cut: band b is cut when tone < (0, 0.25, 0.60, 0.65)[b]. The sine is never cut. A cut band in the blend shows its rounded chain; a band out of the blend shows its ripple either way.
+
+`panel.svg.fragment` must stay under the SDK preview's 64 KiB (it's 62,972 bytes): band chains are written at one decimal, the mix at two. Don't add chains without taking bytes out elsewhere.
 
 ## Palette
 

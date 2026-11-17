@@ -21,7 +21,7 @@ One thing I watched: at 1:1 the square band can read as battlements at the crown
 ## Tools
 
 - `lint_definition.py definition.json`: 0 errors, 0 warnings.
-- `lint_frame.py frames/*.svg --definition definition.json`: 21 frames (with `shift.svg`), 0 errors, 0 warnings (this includes mutable outlines within ±64 px of their origin).
+- `lint_frame.py frames/*.svg --definition definition.json`: 21 frames (with `shift.svg`), 0 errors, 0 warnings (after revision 03) (this includes mutable outlines within ±64 px of their origin).
 - `perceptibility.py --scores 5,4,4,4,3,2`: **pass** on the design frames (table in `brief.md` §5) and on `display()`'s own output run on the host (§5, Frames against the device code). Frames were rendered at 1:1 with Playwright, because rsvg-convert isn't installed here.
 
 ## Accessibility checklist (opxy/accessibility.md)
@@ -30,7 +30,7 @@ One thing I watched: at 1:1 the square band can read as battlements at the crown
 - [x] Text ≥ 8 px everywhere, ≥ 10 px for anything read during play: header text only, stock sizes (10 / 20 / 13 px)
 - [x] Text greys ≥ 4.5:1 on their background: stock header, apart from the stock inactive row
 - [x] Meaningful non-text parts ≥ 3:1: bands `#646464` (3.55:1) to `#969696` (7.1:1), mix `#AFAFAF` (9.6:1). The horizon `#4B4B4B` is ground by design
-- [x] No part under ~3 px; no repeated lines closer than ~3 px: band spacing 16 px, wave amplitude ±4.5 px, so neighbouring bands' crests stay ≥ 7 px apart at rest. At Overlap 100 the bands are meant to cross (that is the sound), and they cross rather than run parallel
+- [x] No part under ~3 px; no repeated lines closer than ~3 px: since revision 03 the bands are 10 px apart and their crests interlock on purpose (the owner asked for overlap). They cross at an angle rather than running parallel, and a ring out of the blend is a near-plain arc 10 px from its neighbour. The ripple (0.8 px) is a shape on a 1.5 px line, not a part of its own
 - [x] No state or control effect shown by shade alone: a band's mix weight shows as grey *and* as the mix line's shape and the bands' radii; Tone's cut is a change of shape
 - [x] Each control visibly different at 0 / 50 / 100 on the contact sheet, and `perceptibility.py` passes
 - [x] Visual travel matches the audible score: morph (5) has the largest change at 10.2 %, phase (2) is above its floor without being the loudest. Phase is visually large for a score of 2 (7.2 %), because sliding a wave even a little moves a lot of pixels. I'm keeping it, because it's what phase does to the inputs
@@ -49,3 +49,7 @@ One thing I watched: at 1:1 the square band can read as battlements at the crown
 - [x] The screen shows every control, and every control changes the screen
 - [ ] Redraw budget measured on the device (4 mutable outlines × 64 points rewritten per frame while held): **pending device**
 - [ ] CPU on the device: **pending device**. Host checks: `tests/sound.cpp` passes against a stand-in for the SDK header; `sdk.py test` hasn't been run against the real SDK yet
+
+## Revision 03 (2026-11-17)
+
+Rings 10 px apart and interlocking, the ends off the bottom edge, and rings in the blend sliding onto the bright line and swelling. Craft answers unchanged: one language, one brightest element (the mix line), no text in the drawing. `panel.svg.fragment` is under the 64 KiB preview cap (62,972 bytes). The version before this revision wasn't (107 KB), and I missed it then.
