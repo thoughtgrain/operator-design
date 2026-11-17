@@ -9,7 +9,7 @@ I put the rest frame beside `library/theseus-tower` at 1:1.
 | Question | Answer |
 | --- | --- |
 | Every element drawn in the named language (single-weight contour, projected from one model)? | Yes. Bands, the mix and the horizon are all closed ribbons projected from one model: a sunset bow, every band a circle about one centre on the horizon |
-| Line weights match the table at every setting? | Yes. Horizon 1.2 px (hairline), bands 1.5 px (line), the mix 2.5 px (subject). Band nodes scale only with Spread (0.82–1.18), so a band stays between 1.2 and 1.8 px |
+| Line weights match the table at every setting? | Mostly. Horizon 1.2 px (hairline), bands 1.5 px (line), the mix 2.5 px (subject). On the device a band cycle scales with its radius and Spread, so in the worst corner (the saw band pulled out by Overlap 100 and stretched by Spread 100) it reaches about 1.35×, ~2 px: still under the subject weight, and the mix stays the brightest and heaviest line. If it reads as too heavy on hardware, pre-draw a thinner chain for the inner bands |
 | Exactly one brightest element? | Yes. The mix line, `#AFAFAF` at rest and `#CDCDCD` held. The brightest band is `#969696` |
 | Anything look like an icon? | No. The risk was a target, and the cycle density rising inward (11 → 16) keeps it from reading as one |
 | Text or numbers outside the header? Any state shown as a grey fill? | No and no. Nothing is filled; a band Tone has cut changes shape (rounded) as well as dropping a grey step |
@@ -22,7 +22,7 @@ One thing I watched: at 1:1 the square band can read as battlements at the crown
 
 - `lint_definition.py definition.json`: 0 errors, 0 warnings.
 - `lint_frame.py frames/*.svg --two-page --definition definition.json`: 20 frames, 0 errors, 0 warnings (this includes mutable outlines within ±64 px of their origin).
-- `perceptibility.py --scores 5,4,4,4,3,2`: **pass** (table in `brief.md` §5). The frames were rendered at 1:1 with Playwright, because rsvg-convert isn't installed here.
+- `perceptibility.py --scores 5,4,4,4,3,2`: **pass** on the design frames (table in `brief.md` §5) and on `display()`'s own output run on the host (§5, Frames against the device code). Frames were rendered at 1:1 with Playwright, because rsvg-convert isn't installed here.
 
 ## Accessibility checklist (opxy/accessibility.md)
 

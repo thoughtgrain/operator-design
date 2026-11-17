@@ -237,7 +237,8 @@ def main(out, held=False, travel=0.0):
                 continue                        # wholly below the horizon
             mid = phi0 + dphi / 2
             ox, oy = polar(r, mid)
-            line = cycle_line("sine" if cut else kind, r, phi0, dphi, START[kind], P["skew"])
+            # skew 0: the bands are fixed one-cycle nodes on the device and can't lean; Skew acts on the mix line only
+            line = cycle_line("sine" if cut else kind, r, phi0, dphi, START[kind], 0.0)
             poly = ribbon(line, BAND_W / 2)
             band_nodes.append(
                 f'<path id="iris_node_{nid}" transform="matrix(1 0 0 1 {fmt(ox)} {fmt(oy)})" '
