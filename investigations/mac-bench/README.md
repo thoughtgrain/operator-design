@@ -20,6 +20,24 @@ The header is never generated. The app stamps it from `opxy/templates/frame.svg`
 
 `design/` holds the source of the mockup canvas: `canvas.json` is the index and each `.dc.html` is one screen (Concept, Frames, Play, and the Settings window). The machine, its controls and all the frame art in them are invented stand-ins drawn by code, and the check results are illustrative.
 
+## The SwiftUI prototype
+
+`prototype/` is the same three screens and the Settings window written in SwiftUI, with stub data and no models or engine behind it. I wrote it because an HTML mockup kept reading as a web app however I styled it: TurboMLX looks native because it's assembled from stock parts (a split view, a window toolbar, grouped forms, system sliders, switches and pop-up buttons), so the prototype uses those same parts and lets macOS draw them.
+
+To run it on a Mac with Xcode 15 or later (macOS 14 or later):
+
+```bash
+cd investigations/mac-bench/prototype
+```
+
+```bash
+swift run
+```
+
+Or open `Package.swift` in Xcode and press Run. Settings is under ⌘,.
+
+It has not been compiled. I wrote it in a Linux container with no Swift toolchain and no Mac attached, so expect to fix a compile error or two on the first build. It's a look-and-feel check, not the start of the app: the real one would be an Xcode project with an engine process, the way TurboMLX is laid out.
+
 ## Still open
 
 - Whether the pick needs all five variants side by side at 1:1, or flipping through the strip is enough.
